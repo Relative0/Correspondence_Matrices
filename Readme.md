@@ -1,4 +1,6 @@
-## CM_Computation – Boolean backends, benchmarks, and correctness checks
+## CM_Computation â€“ Boolean backends, benchmarks, and correctness checks
+
+See my original paper here: https://www.b-theory.com/CorrespondenceMatrices.pdf
 
 This repo contains a compact framework for generating random Boolean expressions and benchmarking multiple ways to compute them. It focuses on a Correspondence-Matrix (CM) method and compares it against other backends such as SymPy logic simplification, a tiny in-repo ROBDD, optional dd.autoref (from the dd package), and Espresso (via pyeda). All backends are validated by truth-table equivalence checks that do not contaminate timing measurements.
 
@@ -12,18 +14,19 @@ This repo contains a compact framework for generating random Boolean expressions
 ---
 
 ## Project layout (root)
-- cm_bench.py – main benchmark driver; orchestrates expression generation, backend runs, timing, correctness checks, CSVs, and HTML.
-- cm_build.py – eager CM builder used as fallback if lazy is disabled.
-- cm_build_lazy.py – lazy CM compiler (recommended): broadcasts shapes during AST combines and materializes once at the end.
-- cm_normalize.py – canonical lift, bit-permutation utilities (with LRU-cached permutation indexers), and pointwise CM ops.
-- cm_exprlib.py – typed AST for Boolean expressions and vectorized truth-table evaluation (eval_expr_tt), plus Tseitin CNF (used only in theory here).
-- expr_simplify.py – SymPy conversion and simplify wrapper; a canonical (non-minimized) BDD?SOP baseline.
-- equirements.txt – minimal set of packages to run all backends (optional ones included).
+- cm_bench.py â€“ main benchmark driver; orchestrates expression generation, backend runs, timing, correctness checks, CSVs, and HTML.
+- cm_build.py â€“ eager CM builder used as fallback if lazy is disabled.
+- cm_build_lazy.py â€“ lazy CM compiler (recommended): broadcasts shapes during AST combines and materializes once at the end.
+- cm_normalize.py â€“ canonical lift, bit-permutation utilities (with LRU-cached permutation indexers), and pointwise CM ops.
+- cm_exprlib.py â€“ typed AST for Boolean expressions and vectorized truth-table evaluation (eval_expr_tt), plus Tseitin CNF (used only in theory here).
+- expr_simplify.py â€“ SymPy conversion and simplify wrapper; a canonical (non-minimized) BDD?SOP baseline.
+- 
+equirements.txt â€“ minimal set of packages to run all backends (optional ones included).
 
 Output artifacts (created by cm_bench.py):
-- *_raw.csv – per-trial rows (timings and correctness for each run).
-- *_summary.csv – per-n_vars medians and aggregate OK columns.
-- *.html – a consolidated, styled report suitable for sharing.
+- *_raw.csv â€“ per-trial rows (timings and correctness for each run).
+- *_summary.csv â€“ per-n_vars medians and aggregate OK columns.
+- *.html â€“ a consolidated, styled report suitable for sharing.
 
 ---
 
@@ -44,7 +47,8 @@ The optional backends are:
 - pyeda (enables Espresso minimization and validation)
 - dd (enables dd.autoref BDD backend)
 
-If you prefer CM+SymPy only, you can remove those from equirements.txt.
+If you prefer CM+SymPy only, you can remove those from 
+equirements.txt.
 
 ---
 
@@ -109,7 +113,7 @@ What you get:
 
 ## What each backend does
 - **CM (Correspondence Matrix)**
-  - A 2^(|R|) × 2^(|C|) bit matrix representing the function in a canonical product space. The lazy compiler performs broadcast-only alignment at combine time and materializes once at the end, saving memory traffic on deep trees.
+  - A 2^(|R|) Ã— 2^(|C|) bit matrix representing the function in a canonical product space. The lazy compiler performs broadcast-only alignment at combine time and materializes once at the end, saving memory traffic on deep trees.
   - Timing reported: compilation time (matrix construction). Correctness reported as CM_OK by comparing the CM truth table to an independent vectorized evaluation (eval_expr_tt).
 - **SymPy**
   - Converts the AST to SymPy, calls simplify_logic(..., form= dnf), and validates by evaluating the simplified expression over the TT grid.
@@ -128,7 +132,7 @@ All correctness checks are done with vectorized evaluation and are not included 
 
 ---
 
-## Output columns – how to read the summary
+## Output columns â€“ how to read the summary
 For each 
 _vars, the console and HTML tables report:
 - Timings (median of non-NaN per-trial values):
@@ -166,14 +170,15 @@ python cm_bench.py --sizes 4,8,16 --trials 10 --max-depth 3 --verbose --print-su
 
 ## Reproducibility & fairness
 - Randomness is controlled by --seed (default 123). Use the same seed to reproduce a run.
-- Each backend’s primary timing excludes its correctness check and excludes TT grid assembly (the TT grid is cached per n for fairness and speed; correctness checks apply it uniformly across backends).
+- Each backendâ€™s primary timing excludes its correctness check and excludes TT grid assembly (the TT grid is cached per n for fairness and speed; correctness checks apply it uniformly across backends).
 - CM correctness (CM_OK) is validated independently against eval_expr_tt to ensure the CM pipeline is self-consistent.
 
 ---
 
 ## Troubleshooting
-- Command not recognized or Python code showing in your console: Make sure you’re running the commands from PowerShell, not from the Python REPL. If you see >>>, type exit() first.
-- pyeda or dd not found: Install from equirements.txt or run pip install pyeda dd.
+- Command not recognized or Python code showing in your console: Make sure youâ€™re running the commands from PowerShell, not from the Python REPL. If you see >>>, type exit() first.
+- pyeda or dd not found: Install from 
+equirements.txt or run pip install pyeda dd.
 - Very slow runs at 16 vars with BDD?SOP: That backend is automatically limited to n = 8.
 - CSVs/HTML not appearing: Ensure the working directory is the project root and that you have write permissions.
 
@@ -188,3 +193,4 @@ python cm_bench.py --sizes 4,8,16 --trials 10 --max-depth 3 --verbose --print-su
 
 ## License
 This repository includes third-party libraries under their respective licenses (SymPy, pyeda/Espresso, dd). The benchmark glue code here is provided as-is for experimentation and evaluation.
+
