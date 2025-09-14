@@ -1,0 +1,549 @@
+<html><head><meta charset='utf-8'>
+    <style>
+    body { font-family: Segoe UI, Roboto, Arial, sans-serif; padding: 20px; color: #222; }
+    h1 { margin: 0 0 8px 0; font-size: 22px; }
+    h2 { margin: 16px 0 8px 0; font-size: 18px; }
+    .sub { color: #666; margin-bottom: 16px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: right; }
+    th { background: #f7f7f9; font-weight: 600; }
+    td:first-child, th:first-child { text-align: left; }
+    .ok { color: #0a7f16; font-weight: 600; }
+    .no { color: #b00020; font-weight: 600; }
+    .dash { color: #888; }
+    </style>
+    </head><body><h1>Boolean Backends Benchmark</h1><div class='sub'>sizes=[4, 8, 16], depths=[2, 3, 4, 5, 6, 7], trials=10</div><h2>max_depth = 2</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.000105</td>
+      <td>0.000039</td>
+      <td>NaN</td>
+      <td>0.000100</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000084</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.000139</td>
+      <td>0.000343</td>
+      <td>NaN</td>
+      <td>0.000101</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000319</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.000272</td>
+      <td>0.089045</td>
+      <td>NaN</td>
+      <td>0.000211</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table><h2>max_depth = 3</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.000112</td>
+      <td>0.000040</td>
+      <td>NaN</td>
+      <td>0.000443</td>
+      <td>4.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>9</td>
+      <td>0.000084</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.000183</td>
+      <td>0.000407</td>
+      <td>NaN</td>
+      <td>0.000333</td>
+      <td>4.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000315</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.000278</td>
+      <td>0.092758</td>
+      <td>NaN</td>
+      <td>0.000745</td>
+      <td>5.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table><h2>max_depth = 4</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.000155</td>
+      <td>0.000040</td>
+      <td>NaN</td>
+      <td>0.000637</td>
+      <td>5.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000085</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.000235</td>
+      <td>0.000427</td>
+      <td>NaN</td>
+      <td>0.001268</td>
+      <td>7.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000377</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.000501</td>
+      <td>0.094152</td>
+      <td>NaN</td>
+      <td>0.003712</td>
+      <td>22.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table><h2>max_depth = 5</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.00019</td>
+      <td>0.000039</td>
+      <td>NaN</td>
+      <td>0.001074</td>
+      <td>5.5</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>9</td>
+      <td>0.000100</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.00038</td>
+      <td>0.000402</td>
+      <td>NaN</td>
+      <td>0.010010</td>
+      <td>21.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000357</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.00066</td>
+      <td>0.098309</td>
+      <td>NaN</td>
+      <td>0.001912</td>
+      <td>34.5</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table><h2>max_depth = 6</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.000391</td>
+      <td>0.000043</td>
+      <td>NaN</td>
+      <td>0.002352</td>
+      <td>7.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>9</td>
+      <td>0.000152</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.000526</td>
+      <td>0.000404</td>
+      <td>NaN</td>
+      <td>0.040519</td>
+      <td>30.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000534</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.000848</td>
+      <td>0.107316</td>
+      <td>NaN</td>
+      <td>0.001637</td>
+      <td>79.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table><h2>max_depth = 7</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_vars</th>
+      <th>cm_time_s_median</th>
+      <th>bdd_time_s_median</th>
+      <th>dd_time_s_median</th>
+      <th>sympy_time_s_median</th>
+      <th>bdd_nodes_median</th>
+      <th>dd_nodes_median</th>
+      <th>espresso_time_s_median</th>
+      <th>cm_ok_all</th>
+      <th>sympy_ok_all</th>
+      <th>robdd_ok_all</th>
+      <th>sympy_ok_count</th>
+      <th>bdd_sop_time_s_median</th>
+      <th>bdd_sop_ok_all</th>
+      <th>espresso_ok_all</th>
+      <th>trials</th>
+      <th>backend_dd</th>
+      <th>backend_espresso</th>
+      <th>max_depth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4</td>
+      <td>0.000608</td>
+      <td>0.000044</td>
+      <td>NaN</td>
+      <td>0.004394</td>
+      <td>8.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000200</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>0.000838</td>
+      <td>0.000409</td>
+      <td>NaN</td>
+      <td>0.071751</td>
+      <td>42.5</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>0.000457</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>0.001271</td>
+      <td>0.100644</td>
+      <td>NaN</td>
+      <td>0.002217</td>
+      <td>190.5</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td><span class="ok">OK</span></td>
+      <td>10</td>
+      <td>NaN</td>
+      <td><span class="dash">--</span></td>
+      <td><span class="no">NO</span></td>
+      <td>10</td>
+      <td>True</td>
+      <td>True</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table></body></html>
