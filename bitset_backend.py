@@ -80,7 +80,7 @@ def bitset_to_bool_array(bits: int, n_vars: int) -> np.ndarray:
     n_bytes = (n_rows + 7) // 8
     raw = bits.to_bytes(n_bytes, byteorder="little", signed=False)
     unpacked = np.unpackbits(np.frombuffer(raw, dtype=np.uint8), bitorder="little")
-    return unpacked[:n_rows].astype(np.uint8)
+    return unpacked[:n_rows]
 
 
 def bitset_to_bool_hypercube(bits: int, n_vars: int) -> np.ndarray:
