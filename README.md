@@ -1,190 +1,180 @@
-## CM_Computation – Boolean backends, benchmarks, and correctness checks
+ï»¿# CM_Computation
 
-This repo contains a compact framework for generating random Boolean expressions and benchmarking multiple ways to compute them. It focuses on a Correspondence-Matrix (CM) method and compares it against other backends such as SymPy logic simplification, a tiny in-repo ROBDD, optional dd.autoref (from the dd package), and Espresso (via pyeda). All backends are validated by truth-table equivalence checks that do not contaminate timing measurements.
+See the original paper here:
+https://www.b-theory.com/CorrespondenceMatrices.pdf
 
-### What you can do here
-- Build an ambient CM representation (matrix) of a Boolean expression quickly and memory-efficiently (with a lazy compiler).
-- Evaluate, simplify, or canonicalize the same expressions using multiple backends.
-- Benchmark per-backend performance across numbers of variables and expression depths.
-- Verify correctness with explicit truth-table comparisons and per-backend OK/NO status.
-- Generate detailed CSVs and a pretty HTML report summarizing timings and correctness.
+This repository benchmarks and validates several Boolean-expression backends, centered on the Correspondence Matrix (CM) representation. The code in this repo is the source of truth for the benchmark flow, compiler options, and correctness checks.
 
----
+## What the project does
 
-## Project layout (root)
-- cm_bench.py – main benchmark driver; orchestrates expression generation, backend runs, timing, correctness checks, CSVs, and HTML.
-- cm_build.py – eager CM builder used as fallback if lazy is disabled.
-- cm_build_lazy.py – lazy CM compiler (recommended): broadcasts shapes during AST combines and materializes once at the end.
-- cm_normalize.py – canonical lift, bit-permutation utilities (with LRU-cached permutation indexers), and pointwise CM ops.
-- cm_exprlib.py – typed AST for Boolean expressions and vectorized truth-table evaluation (eval_expr_tt), plus Tseitin CNF (used only in theory here).
-- expr_simplify.py – SymPy conversion and simplify wrapper; a canonical (non-minimized) BDD?SOP baseline.
-- equirements.txt – minimal set of packages to run all backends (optional ones included).
+- Builds CM representations for Boolean expressions with eager, lazy, pair-aware, and parallelized compilation paths.
+- Compares CM against SymPy, a small in-repo ROBDD, optional `dd.autoref`, Espresso via `pyeda`, a bitset evaluator, a Numba evaluator, and a canonical `BDD->SOP` baseline.
+- Verifies backend correctness against explicit truth-table evaluation without contaminating the main timing windows.
+- Writes per-trial CSV output, per-size summary CSV output, and an HTML report.
 
-Output artifacts (created by cm_bench.py):
-- *_raw.csv – per-trial rows (timings and correctness for each run).
-- *_summary.csv – per-n_vars medians and aggregate OK columns.
-- *.html – a consolidated, styled report suitable for sharing.
+## Project layout
 
----
+- `cm_bench.py`: main benchmark driver and report generator.
+- `cm_build.py`: standard CM compiler through the shared CM IR.
+- `cm_build_lazy.py`: lazy CM compiler that defers materialization.
+- `cm_build_pair.py`: experimental pair-aware CM compiler for row/column two-variable subproblems.
+- `cm_parallel.py`: parallel CM materialization path.
+- `cm_normalize.py`: layout, lifting, permutation caching, and pointwise CM operations.
+- `cm_exprlib.py`: Boolean AST, random expression generation, and vectorized truth-table evaluation.
+- `cm_token.py` / `cm_pair.py`: small utilities used by the pair-aware path.
+- `cm_render.py` / `cm_lm.py`: helper utilities for rendering and language-model related experiments.
+- `expr_simplify.py`: SymPy simplification and `BDD->SOP` baseline support.
+- `requirements.txt`: optional and required Python dependencies.
+
+Output artifacts written by `cm_bench.py`:
+
+- `*_raw.csv`: per-trial timings, correctness flags, and diagnostic fields.
+- `*_summary.csv`: per-`n_vars` medians and aggregate status flags.
+- `*.html`: consolidated benchmark report.
 
 ## Installation
 
-### 1) Create and activate a virtual environment (Windows PowerShell)
-`powershell
+### 1. Create and activate a virtual environment
+
+```powershell
 python -m venv .venv
 . .\.venv\Scripts\Activate.ps1
-`
+```
 
-### 2) Install dependencies
-`powershell
+### 2. Install dependencies
+
+```powershell
 pip install -r requirements.txt
-`
+```
 
-The optional backends are:
-- pyeda (enables Espresso minimization and validation)
-- dd (enables dd.autoref BDD backend)
+Optional packages:
 
-If you prefer CM+SymPy only, you can remove those from equirements.txt.
-
----
+- `pyeda` enables the Espresso backend.
+- `dd` enables the `dd.autoref` backend.
+- `numba` enables the Numba evaluator.
 
 ## Quick start
 
-Run a depth sweep at depths 2,3,4,5 across 4, 8, and 16 variables, with 10 trials each, using the lazy CM compiler. Print a console summary and write an HTML report:
+Run a small depth sweep with the lazy compiler, console summary, and HTML output:
 
-`powershell
+```powershell
 python cm_bench.py --sizes 4,8,16 --trials 10 --depth-sweep 2,3,4,5 --verbose --print-summary --cm-lazy --out-prefix bench_sweep --html bench_sweep.html
-`
+```
 
-What you get:
-- Per-depth CSVs: ench_sweep_d{depth}_raw.csv, ench_sweep_d{depth}_summary.csv
-- A consolidated HTML report: ench_sweep.html with one table per depth (timings + correctness)
-- A verbose progress log in the console for each backend and trial
+This produces:
 
----
+- `bench_sweep_d{depth}_raw.csv`
+- `bench_sweep_d{depth}_summary.csv`
+- `bench_sweep.html`
 
-## Command-line reference (cm_bench.py)
+## Command-line notes
 
-### Core arguments
-- --sizes 4,8,16
-  - Comma-separated list of numbers of variables to test.
-  - For n = 16, CM builds a full truth table and enables correctness checks that rely on it.
-- --trials 10
-  - Number of random expressions per (n, depth).
-- --max-depth 3
-  - Maximum expression tree depth (if you are not using --depth-sweep).
-- --depth-sweep 2,3,4,5
-  - Comma-separated list of depths to sweep; each depth is run independently, and gets its own CSV pair. If this flag is omitted, only --max-depth is used.
-- --seed 123
-  - RNG seed to reproduce runs.
-- --verbose
-  - Print a progress line for each backend as it runs.
-- --print-summary
-  - Print a formatted table to the console for each depth.
-- --out-prefix bench_sweep
-  - Prefix for output CSV files.
-- --html bench_sweep.html
-  - Optional: write an attractive consolidated HTML report with one table per depth (styled and shareable).
+Important core flags:
 
-### Backend toggles
-- --cm-lazy
-  - Use the lazy CM builder (recommended). Without it, the eager builder (cm_build.py) will be used.
-- --no-sympy
-  - Disable SymPy simplify backend.
-- --no-robdd
-  - Disable the tiny in-repo ROBDD built from the truth table.
-- --no-dd
-  - Disable the optional dd.autoref backend (requires the dd package).
-- --no-espresso
-  - Disable Espresso backend (requires pyeda).
-- --no-bdd-sop
-  - Disable the canonical BDD?SOP baseline. Note: even when enabled, it is automatically limited to n = 8 to avoid excessive runtime.
+- `--sizes 4,8,16`
+- `--trials 10`
+- `--max-depth 3`
+- `--depth-sweep 2,3,4,5`
+- `--seed 123`
+- `--verbose`
+- `--print-summary`
+- `--out-prefix bench_name`
+- `--html bench_name.html`
 
-### Performance notes and limits
-- The benchmark builds full truth tables for n = 16 to validate correctness; for larger n the TT-based checks are skipped by design.
-- BDD?SOP validation is intentionally capped at n = 8.
-- Espresso (pyeda) and SymPy correctness checks evaluate against the TT via NumPy vectorization; these checks run outside the timed windows of each backend.
+CM-specific flags:
 
----
+- `--cm-lazy`: use the lazy CM compiler instead of the eager path.
+- `--cm-pair`: run the baseline CM path through the pair-aware compiler when possible.
+- `--cm-layout {balanced,legacy_square}`: choose the row/column layout strategy.
+- `--cm-compare-hybrid`: also benchmark hybrid and partial-hybrid CM materialization modes.
+- `--cm-hybrid-threshold N`: threshold used by hybrid materialization.
+- `--cm-parallel`: enable the parallel CM path.
 
-## What each backend does
-- **CM (Correspondence Matrix)**
-  - A 2^(|R|) × 2^(|C|) bit matrix representing the function in a canonical product space. The lazy compiler performs broadcast-only alignment at combine time and materializes once at the end, saving memory traffic on deep trees.
-  - Timing reported: compilation time (matrix construction). Correctness reported as CM_OK by comparing the CM truth table to an independent vectorized evaluation (eval_expr_tt).
-- **SymPy**
-  - Converts the AST to SymPy, calls simplify_logic(..., form= dnf), and validates by evaluating the simplified expression over the TT grid.
-  - Timing includes only the SymPy simplification (not the validation grid evaluation).
-- **ROBDD (Python)**
-  - A tiny in-repo BDD built from the truth table (TT). Size and build time are reported. ROBDD_OK is OK when constructed from TT (it must match by construction).
-- **dd.autoref (optional)**
-  - Builds a BDD from the AST using the dd package; timing and node count are reported. (This is optional and depends on the dd package.)
-- **Espresso (optional)**
-  - Runs Espresso via pyeda to simplify the TT, converts the result to SymPy, evaluates it on the TT grid, and reports correctness.
-- **BDD?SOP baseline**
-  - A canonical DNF string derived from the TT (not minimized). Converted to SymPy and validated against the TT.
-  - Automatically disabled at n > 8.
+Backend toggles:
 
-All correctness checks are done with vectorized evaluation and are not included in the timed sections for each backend.
+- `--no-sympy`
+- `--no-robdd`
+- `--no-dd`
+- `--no-espresso`
+- `--no-bdd-sop`
+- `--no-bitset`
+- `--no-numba`
 
----
+## Backend summary
 
-## Output columns – how to read the summary
-For each 
-_vars, the console and HTML tables report:
-- Timings (median of non-NaN per-trial values):
-  - CM_med_s, ROBDD_med_s, dd_med_s, Sympy_simpl_med_s, BDD_SOP_med_s, Espresso_med_s
-- Sizes:
-  - ROBDD_nodes_med, dd_nodes_med
-- Correctness flags:
-  - CM_OK, Sympy_OK, Sympy_OK_count/trials, ROBDD_OK, BDD_SOP_OK, Espresso_OK
-    - OK means the evaluated truth table equals the CM truth table.
-    - -- means not applicable (e.g., backend disabled or not run for this n).
-    - NO means a mismatch (should be investigated; random expressions can produce edge cases worth inspecting).
+- `CM`: the standard correspondence-matrix build and truth-table extraction path.
+- `CM pair`: experimental pair-aware acceleration for subexpressions that reduce to one row variable and one column variable after fixed assignments are applied.
+- `CM hybrid` / `CM partial hybrid`: alternative materialization modes for the same CM IR.
+- `CM parallel`: parallelized CM materialization.
+- `Bitset`: packed-bit evaluator used as a fast comparison point.
+- `Numba`: JIT-backed truth-table evaluator when `numba` is installed.
+- `SymPy`: symbolic simplification with vectorized validation.
+- `ROBDD`: small in-repo ROBDD built from the truth table.
+- `dd.autoref`: optional BDD package backend.
+- `Espresso`: optional `pyeda` minimization path.
+- `BDD->SOP`: canonical, non-minimized SOP baseline, automatically limited to `n <= 8`.
 
-Additionally, the *_raw.csv has per-trial rows that include the randomly generated expression (in a compact string form), and per-trial correctness booleans.
+All correctness checks are performed outside the main timed windows.
 
----
+## Output columns
 
-## Examples
+The summary tables report medians for timing and size columns plus aggregate correctness flags such as:
 
-### A quick smoke test
-`powershell
+- `CM_OK`
+- `CM_hybrid_OK`
+- `CM_partial_hybrid_OK`
+- `CM_parallel_OK`
+- `Bitset_OK`
+- `Numba_OK`
+- `Sympy_OK`
+- `ROBDD_OK`
+- `BDD_SOP_OK`
+- `Espresso_OK`
+
+When `--cm-pair` is enabled and pair collapses actually occur, the summary also includes:
+
+- `pair_attempts`
+- `pair_collapses`
+- `pairable_ratio`
+- `pair_nodes_total`
+
+`OK` means the backend matched the CM truth table. `NO` means a mismatch. `--` means the backend did not run for that configuration.
+
+## Example commands
+
+Quick smoke test:
+
+```powershell
 python cm_bench.py --sizes 4,8,16 --trials 3 --max-depth 3 --verbose --print-summary --cm-lazy --out-prefix bench_quick --html bench_quick.html
-`
+```
 
-### Turn off Espresso and dd (keep CM + ROBDD + SymPy only)
-`powershell
+Core run without Espresso or `dd`:
+
+```powershell
 python cm_bench.py --sizes 4,8,16 --trials 10 --max-depth 4 --verbose --print-summary --cm-lazy --no-espresso --no-dd --out-prefix bench_core --html bench_core.html
-`
+```
 
-### Disable SymPy as well (CM + ROBDD only)
-`powershell
-python cm_bench.py --sizes 4,8,16 --trials 10 --max-depth 3 --verbose --print-summary --cm-lazy --no-sympy --no-espresso --no-dd --out-prefix bench_cm --html bench_cm.html
-`
+Pair-aware CM run:
 
----
+```powershell
+python cm_bench.py --sizes 4,8 --trials 5 --max-depth 4 --cm-pair --no-dd --no-espresso --print-summary
+```
 
-## Reproducibility & fairness
-- Randomness is controlled by --seed (default 123). Use the same seed to reproduce a run.
-- Each backend’s primary timing excludes its correctness check and excludes TT grid assembly (the TT grid is cached per n for fairness and speed; correctness checks apply it uniformly across backends).
-- CM correctness (CM_OK) is validated independently against eval_expr_tt to ensure the CM pipeline is self-consistent.
+## Technical notes
 
----
+- The lazy CM compiler aligns subexpressions by variable name using shape insertion plus NumPy broadcasting, then materializes once at the end.
+- `cm_normalize.py` caches permutation metadata with `functools.lru_cache` to reduce repeated layout overhead.
+- The pair-aware compiler now honors fixed assignments and forwards diagnostics and materialization options through the standard CM compiler when it cannot collapse a subtree into a token pair.
+- Truth-table evaluation uses a consistent MSB-first convention where `x0` is the slowest-changing bit.
 
 ## Troubleshooting
-- Command not recognized or Python code showing in your console: Make sure you’re running the commands from PowerShell, not from the Python REPL. If you see >>>, type exit() first.
-- pyeda or dd not found: Install from equirements.txt or run pip install pyeda dd.
-- Very slow runs at 16 vars with BDD?SOP: That backend is automatically limited to n = 8.
-- CSVs/HTML not appearing: Ensure the working directory is the project root and that you have write permissions.
 
----
-
-## How it works (quick technical notes)
-- The lazy CM compiler aligns sub-expressions by variable name using size-1 axis insertion and NumPy broadcasting. It avoids intermediate duplication during recursive combines and materializes at the end into the canonical (2^|R|, 2^|C|) bit matrix.
-- cm_normalize.py caches bit-permutation index arrays via unctools.lru_cache to lower overhead when (re)ordering axes repeatedly.
-- Correctness uses vectorized NumPy truth-table evaluation (eval_expr_tt) in the same MSB-first convention (x0 slowest-changing bit) across all backends.
-
----
+- If a command appears in a Python REPL, exit the REPL first and run it from PowerShell.
+- If `pyeda`, `dd`, or `numba` are missing, install them with `pip` or via `requirements.txt`.
+- If HTML or CSV output does not appear, make sure you are running from the repository root and have write permission.
+- If a backend is very slow at higher variable counts, disable it with the corresponding `--no-*` flag and compare the remaining backends first.
 
 ## License
-This repository includes third-party libraries under their respective licenses (SymPy, pyeda/Espresso, dd). The benchmark glue code here is provided as-is for experimentation and evaluation.
+
+This repository depends on third-party libraries under their own licenses, including SymPy, `pyeda`/Espresso, `dd`, and optionally Numba. The project code here is intended for experimentation, validation, and benchmarking.
+
