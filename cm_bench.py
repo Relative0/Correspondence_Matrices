@@ -34,6 +34,14 @@ except Exception:
     lazy_align_cache_stats = None  # type: ignore[assignment]
     clear_lazy_align_cache = None  # type: ignore[assignment]
 
+try:
+    from cm_build_pair import compile_expr_to_cm_pair
+
+    HAS_PAIR = True
+except Exception:
+    HAS_PAIR = False
+    compile_expr_to_cm_pair = None  # type: ignore[assignment]
+
 
 args = None
 
@@ -72,6 +80,13 @@ def cm_matrix_to_tt(M_cm: np.ndarray, R: List[str], C: List[str], n_vars: int) -
     return arr.reshape(-1).astype(np.uint8, copy=False)
 
 
+def _bit_reverse(i: int, nbits: int) -> int:
+    x = 0
+    for k in range(nbits):
+        x = (x << 1) | ((int(i) >> k) & 1)
+    return x
+
+
 def time_backends_on_expr(
     n: int,
     expr,
@@ -101,6 +116,10 @@ def time_backends_on_expr(
     cm_parallel_ok = None
     node_count = count_expr_nodes(expr)
     bitset_extract_time = None
+    pair_attempts: Optional[int] = None
+    pair_collapses: Optional[int] = None
+    pair_ratio: Optional[float] = None
+    pair_nodes_total: Optional[int] = None
 
     cm_diag: Dict[str, int] = {}
     cm_hybrid_diag: Dict[str, int] = {}
@@ -116,7 +135,25 @@ def time_backends_on_expr(
             print(f"[n={n}] CM compile ...")
         R, C = canonical_layout([f"x{i}" for i in range(n)], mode=args.cm_layout)
 
-        def run_cm(materialize_mode: str, diag: Dict[str, int]) -> np.ndarray:
+        def run_cm(materialize_mode: str, diag: Dict[str, int], *, use_pair_backend: bool = False) -> np.ndarray:
+            if use_pair_backend and HAS_PAIR and callable(compile_expr_to_cm_pair):
+                M_pair, pm = compile_expr_to_cm_pair(
+                    expr,
+                    R,
+                    C,
+                    fixed={},
+                    diagnostics=diag,
+                    materialize_mode=materialize_mode,
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                )
+                # Record metrics only once; we run this function multiple times in compare modes.
+                nonlocal pair_attempts, pair_collapses, pair_ratio, pair_nodes_total
+                if pair_attempts is None:
+                    pair_attempts = int(pm.get("pair_attempts", 0))
+                    pair_collapses = int(pm.get("pair_collapses", 0))
+                    pair_ratio = float(pm.get("pairable_ratio", 0.0))
+                    pair_nodes_total = int(pm.get("nodes_total", 0))
+                return M_pair
             if use_lazy_builder:
                 return compile_expr_to_cm_lazy(
                     expr,
@@ -139,7 +176,7 @@ def time_backends_on_expr(
 
         cm_mode = "numpy" if args.cm_compare_hybrid else "partial_hybrid"
         t0 = time.perf_counter()
-        M_cm = run_cm(cm_mode, cm_diag)
+        M_cm = run_cm(cm_mode, cm_diag, use_pair_backend=bool(args.cm_pair))
         t_cm = time.perf_counter() - t0
         ttt0 = time.perf_counter()
         tt = cm_matrix_to_tt(M_cm, R, C, n)
@@ -399,20 +436,45 @@ def time_backends_on_expr(
             if run_espresso and (not args.no_espresso) and (pyeda is not None):
                 if verbose:
                     print(f"[n={n}] Espresso (pyeda) simplify ...")
-                from pyeda.inter import espresso_exprs, truthtable, ttvars
-                import sympy as sp
+                from pyeda.inter import espresso_exprs, truthtable, truthtable2expr, ttvars
 
                 t6 = time.perf_counter()
                 xs = ttvars("x", n)
-                ones_idx = np.flatnonzero(tt)
-                T = truthtable(xs, ones_idx.tolist())
-                (f_simplified,) = espresso_exprs(T.to_expr())
-                espresso_time = time.perf_counter() - t6
-                esp_expr = sp.sympify(str(f_simplified), evaluate=False)
-                f3 = sp.lambdify([sp.symbols(f"x{i}") for i in range(n)], esp_expr, "numpy")
                 A = get_eval_grid(n)
-                tt_esp = np.array(f3(*[A[:, i] for i in range(n)])).astype(np.uint8).reshape(-1)
+                if np.all(tt == 0):
+                    espresso_time = time.perf_counter() - t6
+                    tt_esp = np.zeros_like(tt)
+                elif np.all(tt == 1):
+                    espresso_time = time.perf_counter() - t6
+                    tt_esp = np.ones_like(tt)
+                else:
+                    # PyEDA interprets truth-table strings in the opposite variable-significance
+                    # order from our x0-slowest TT, so we bit-reverse the full output vector.
+                    tt_str = "".join("1" if int(tt[_bit_reverse(i, n)]) else "0" for i in range(1 << n))
+                    T = truthtable(xs, tt_str)
+                    (f_simplified,) = espresso_exprs(truthtable2expr(T))
+                    espresso_time = time.perf_counter() - t6
+
+                    support_map = {str(v): v for v in f_simplified.support}
+                    support_items = []
+                    for name, var in support_map.items():
+                        if name.startswith("x[") and name.endswith("]") and name[2:-1].isdigit():
+                            support_items.append((int(name[2:-1]), var))
+                    support_items.sort()
+
+                    tt_esp = np.empty(1 << n, dtype=np.uint8)
+                    for k in range(1 << n):
+                        point = {var: int(A[k, idx]) for idx, var in support_items}
+                        tt_esp[k] = int(f_simplified.restrict(point).is_one())
                 espresso_ok = bool(np.array_equal(tt, tt_esp))
+                if verbose and (not espresso_ok):
+                    mismatch_indices = np.flatnonzero(tt != tt_esp)
+                    if mismatch_indices.size:
+                        k = int(mismatch_indices[0])
+                        print(
+                            f"[espresso-debug] first mismatch at idx={k}, "
+                            f"cm={int(tt[k])}, espresso={int(tt_esp[k])}, expr={expr}"
+                        )
         except Exception:
             espresso_time = None
             espresso_ok = False
@@ -494,6 +556,10 @@ def time_backends_on_expr(
         "cm_tt_extract_time_s": cm_tt_extract_time,
         "cm_ok": cm_ok,
         "cm_nodes": node_count,
+        "pair_attempts": pair_attempts,
+        "pair_collapses": pair_collapses,
+        "pairable_ratio": pair_ratio,
+        "pair_nodes_total": pair_nodes_total,
         "cm_hybrid_time_s": cm_hybrid_time,
         "cm_hybrid_tt_extract_time_s": cm_hybrid_tt_extract_time,
         "cm_hybrid_ok": cm_hybrid_ok,
@@ -595,6 +661,10 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
         .agg(
             cm_time_s_median=("cm_time_s", safe_median),
             cm_tt_extract_time_s_median=("cm_tt_extract_time_s", safe_median),
+            pair_attempts_median=("pair_attempts", safe_median),
+            pair_collapses_median=("pair_collapses", safe_median),
+            pairable_ratio_median=("pairable_ratio", safe_median),
+            pair_nodes_total_median=("pair_nodes_total", safe_median),
             cm_hybrid_time_s_median=("cm_hybrid_time_s", safe_median),
             cm_hybrid_tt_extract_time_s_median=("cm_hybrid_tt_extract_time_s", safe_median),
             cm_partial_hybrid_time_s_median=("cm_partial_hybrid_time_s", safe_median),
@@ -760,15 +830,20 @@ def print_summary_table(agg):
         "cm_partial_hybrid_time_s_median" in agg.columns and agg["cm_partial_hybrid_time_s_median"].notna().any()
     )
     has_parallel = "cm_parallel_time_s_median" in agg.columns and agg["cm_parallel_time_s_median"].notna().any()
+    has_pair_metrics = "pair_attempts_median" in agg.columns and agg["pair_attempts_median"].notna().any()
     print(
         "Timing policy: `cm_time_s`, `cm_hybrid_time_s`, `cm_partial_hybrid_time_s`, `cm_parallel_time_s`, "
         "and `bitset_time_s` are backend compute-only (TT extraction/conversion is excluded and reported separately)."
     )
+    if has_pair_metrics:
+        print("Pair metrics: attempts/collapses/ratio/nodes are reported for the baseline CM run when `--cm-pair` is enabled.")
+    pair_header = "Pair_attempts_med | Pair_collapses_med | Pair_ratio_med | Pair_nodes_med | " if has_pair_metrics else ""
     if has_hybrid_compare or has_partial_compare:
         print(
             "Columns: n | CM_med_s | CM_hybrid_med_s | CM_partial_hybrid_med_s | CM_parallel_med_s | Bitset_med_s | "
             "CM_hybrid/CM | CM_hybrid/Bitset | CM_partial_hybrid/CM | CM_partial_hybrid/Bitset | "
             "CM_parallel/CM | CM_parallel/Bitset | "
+            f"{pair_header}"
             "Numba_compile_med_s | Numba_med_s | ROBDD_med_s | dd_med_s | "
             "Sympy_simpl_med_s | BDD_SOP_med_s | Espresso_med_s | ROBDD_nodes_med | "
             "dd_nodes_med | CM_nodes_med | CM_OK | CM_hybrid_OK | CM_partial_hybrid_OK | CM_parallel_OK | Bitset_OK | "
@@ -778,6 +853,7 @@ def print_summary_table(agg):
         print(
             "Columns: n | CM_med_s | CM_parallel_med_s | Bitset_med_s | "
             "CM_parallel/CM | CM_parallel/Bitset | "
+            f"{pair_header}"
             "Numba_compile_med_s | Numba_med_s | ROBDD_med_s | dd_med_s | "
             "Sympy_simpl_med_s | BDD_SOP_med_s | Espresso_med_s | ROBDD_nodes_med | "
             "dd_nodes_med | CM_nodes_med | CM_OK | CM_parallel_OK | Bitset_OK | "
@@ -793,6 +869,12 @@ def print_summary_table(agg):
         fbool = lambda x: "OK" if x is True else ("--" if x is None else "NO")
         trials = int(row["trials"] or 0)
         okc = int(row.get("sympy_ok_count") or 0)
+        pair_values = (
+            f"{fnum(row.get('pair_attempts_median'))} | {fnum(row.get('pair_collapses_median'))} | "
+            f"{fnum(row.get('pairable_ratio_median'))} | {fnum(row.get('pair_nodes_total_median'))} | "
+            if has_pair_metrics
+            else ""
+        )
         if has_hybrid_compare or has_partial_compare:
             print(
                 f"{int(row['n_vars']):>2} | {fnum(row['cm_time_s_median'])} | {fnum(row['cm_hybrid_time_s_median'])} | "
@@ -801,6 +883,7 @@ def print_summary_table(agg):
                 f"{fnum(row['ratio_cm_hybrid_over_cm'])} | {fnum(row['ratio_cm_hybrid_over_bitset'])} | "
                 f"{fnum(row['ratio_cm_partial_hybrid_over_cm'])} | {fnum(row['ratio_cm_partial_hybrid_over_bitset'])} | "
                 f"{fnum(row['ratio_cm_parallel_over_cm'])} | {fnum(row['ratio_cm_parallel_over_bitset'])} | "
+                f"{pair_values}"
                 f"{fnum(row['numba_compile_time_s_median'])} | {fnum(row['numba_time_s_median'])} | "
                 f"{fnum(row['bdd_time_s_median'])} | {fnum(row['dd_time_s_median'])} | {fnum(row['sympy_time_s_median'])} | "
                 f"{fnum(row['bdd_sop_time_s_median'])} | {fnum(row['espresso_time_s_median'])} | "
@@ -816,7 +899,8 @@ def print_summary_table(agg):
             print(
                 f"{int(row['n_vars']):>2} | {fnum(row['cm_time_s_median'])} | {fnum(row['cm_parallel_time_s_median'])} | "
                 f"{fnum(row['bitset_time_s_median'])} | {fnum(row['ratio_cm_parallel_over_cm'])} | "
-                f"{fnum(row['ratio_cm_parallel_over_bitset'])} | {fnum(row['numba_compile_time_s_median'])} | "
+                f"{fnum(row['ratio_cm_parallel_over_bitset'])} | {pair_values}"
+                f"{fnum(row['numba_compile_time_s_median'])} | "
                 f"{fnum(row['numba_time_s_median'])} | {fnum(row['bdd_time_s_median'])} | {fnum(row['dd_time_s_median'])} | "
                 f"{fnum(row['sympy_time_s_median'])} | {fnum(row['bdd_sop_time_s_median'])} | {fnum(row['espresso_time_s_median'])} | "
                 f"{fint(row['bdd_nodes_median']):>15} | {fint(row['dd_nodes_median']):>12} | {fint(row['cm_nodes_median']):>12} | "
@@ -873,6 +957,32 @@ def write_html_report(html_path: str, agg_all: "pd.DataFrame", depths: List[int]
             ]:
                 if col in section.columns:
                     section[col] = section[col].map(lambda v: fmt_bool(v))
+            for col in [
+                "pair_attempts_median",
+                "pair_collapses_median",
+                "pairable_ratio_median",
+                "pair_nodes_total_median",
+            ]:
+                if col in section.columns and section[col].isna().all():
+                    section = section.drop(columns=[col])
+            preferred = [
+                "n_vars",
+                "cm_time_s_median",
+                "cm_parallel_time_s_median",
+                "bitset_time_s_median",
+                "pair_attempts_median",
+                "pair_collapses_median",
+                "pairable_ratio_median",
+                "pair_nodes_total_median",
+                "cm_ok_all",
+                "cm_parallel_ok_all",
+                "bitset_ok_all",
+                "sympy_ok_all",
+                "espresso_ok_all",
+                "trials",
+            ]
+            ordered = [c for c in preferred if c in section.columns] + [c for c in section.columns if c not in preferred]
+            section = section[ordered]
             f.write(f"<h2>max_depth = {d}</h2>")
             f.write(section.to_html(index=False, escape=False))
         f.write("</body></html>")
@@ -899,6 +1009,7 @@ def main():
     ap.add_argument("--no-bitset", action="store_true")
     ap.add_argument("--no-numba", action="store_true")
     ap.add_argument("--cm-lazy", action="store_true")
+    ap.add_argument("--cm-pair", action="store_true", help="Use pair-aware token backend when applicable (experimental)")
     ap.add_argument("--cm-layout", type=str, default="balanced", choices=["balanced", "legacy_square"])
     ap.add_argument("--cm-hybrid-threshold", type=int, default=7)
     ap.add_argument("--cm-compare-hybrid", action="store_true")
