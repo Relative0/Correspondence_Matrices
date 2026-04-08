@@ -515,12 +515,43 @@ def time_backends_on_expr(
         "materialization_live_vars_total",
         "hybrid_depth_max",
         "full_collapse_occurred",
+        "decision_bitset_k_le_threshold",
+        "decision_numpy_k_gt_threshold",
+        "decision_numpy_root_forced",
+        "decision_numpy_mode_forced",
+        "decision_bitset_fixed_var_reduction_helped",
+        "decision_cache_hit",
+    )
+    boundary_float_fields = (
+        "boundary_bitset_eval_time_s",
+        "boundary_bitset_to_hypercube_time_s",
+        "boundary_align_time_s",
+        "boundary_dispatch_time_s",
+    )
+    boundary_int_fields = (
+        "boundary_bitset_eval_calls",
+        "boundary_bitset_to_hypercube_calls",
+        "boundary_elements_converted",
+        "boundary_align_calls",
+        "boundary_align_transpose_calls",
+        "boundary_align_insert_axes_total",
+        "boundary_bitset_const_fastpath_calls",
     )
     for field in diag_fields:
         debug_row[f"cm_{field}"] = int(cm_diag.get(field, 0))
         debug_row[f"cm_hybrid_{field}"] = int(cm_hybrid_diag.get(field, 0))
         debug_row[f"cm_partial_hybrid_{field}"] = int(cm_partial_hybrid_diag.get(field, 0))
         debug_row[f"cm_parallel_{field}"] = int(cm_parallel_diag.get(field, 0))
+    for field in boundary_int_fields:
+        debug_row[f"cm_{field}"] = int(cm_diag.get(field, 0))
+        debug_row[f"cm_hybrid_{field}"] = int(cm_hybrid_diag.get(field, 0))
+        debug_row[f"cm_partial_hybrid_{field}"] = int(cm_partial_hybrid_diag.get(field, 0))
+        debug_row[f"cm_parallel_{field}"] = int(cm_parallel_diag.get(field, 0))
+    for field in boundary_float_fields:
+        debug_row[f"cm_{field}"] = float(cm_diag.get(field, 0.0))
+        debug_row[f"cm_hybrid_{field}"] = float(cm_hybrid_diag.get(field, 0.0))
+        debug_row[f"cm_partial_hybrid_{field}"] = float(cm_partial_hybrid_diag.get(field, 0.0))
+        debug_row[f"cm_parallel_{field}"] = float(cm_parallel_diag.get(field, 0.0))
     for prefix, diag_map in (
         ("cm", cm_diag),
         ("cm_hybrid", cm_hybrid_diag),
@@ -705,6 +736,26 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
             cm_materialization_avg_k_median=("cm_materialization_avg_k", safe_median),
             cm_hybrid_depth_max_median=("cm_hybrid_depth_max", safe_median),
             cm_full_collapse_occurred_median=("cm_full_collapse_occurred", safe_median),
+            cm_decision_bitset_k_le_threshold_median=("cm_decision_bitset_k_le_threshold", safe_median),
+            cm_decision_numpy_k_gt_threshold_median=("cm_decision_numpy_k_gt_threshold", safe_median),
+            cm_decision_numpy_root_forced_median=("cm_decision_numpy_root_forced", safe_median),
+            cm_decision_numpy_mode_forced_median=("cm_decision_numpy_mode_forced", safe_median),
+            cm_decision_bitset_fixed_var_reduction_helped_median=(
+                "cm_decision_bitset_fixed_var_reduction_helped",
+                safe_median,
+            ),
+            cm_decision_cache_hit_median=("cm_decision_cache_hit", safe_median),
+            cm_boundary_bitset_eval_time_s_median=("cm_boundary_bitset_eval_time_s", safe_median),
+            cm_boundary_bitset_to_hypercube_time_s_median=("cm_boundary_bitset_to_hypercube_time_s", safe_median),
+            cm_boundary_align_time_s_median=("cm_boundary_align_time_s", safe_median),
+            cm_boundary_dispatch_time_s_median=("cm_boundary_dispatch_time_s", safe_median),
+            cm_boundary_bitset_eval_calls_median=("cm_boundary_bitset_eval_calls", safe_median),
+            cm_boundary_bitset_to_hypercube_calls_median=("cm_boundary_bitset_to_hypercube_calls", safe_median),
+            cm_boundary_elements_converted_median=("cm_boundary_elements_converted", safe_median),
+            cm_boundary_align_calls_median=("cm_boundary_align_calls", safe_median),
+            cm_boundary_align_transpose_calls_median=("cm_boundary_align_transpose_calls", safe_median),
+            cm_boundary_align_insert_axes_total_median=("cm_boundary_align_insert_axes_total", safe_median),
+            cm_boundary_bitset_const_fastpath_calls_median=("cm_boundary_bitset_const_fastpath_calls", safe_median),
             cm_hybrid_subtree_cache_hits_median=("cm_hybrid_subtree_cache_hits", safe_median),
             cm_hybrid_canonical_rewrites_median=("cm_hybrid_canonical_rewrites", safe_median),
             cm_hybrid_pruned_branches_median=("cm_hybrid_pruned_branches", safe_median),
@@ -718,6 +769,32 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
             cm_hybrid_materialization_avg_k_median=("cm_hybrid_materialization_avg_k", safe_median),
             cm_hybrid_hybrid_depth_max_median=("cm_hybrid_hybrid_depth_max", safe_median),
             cm_hybrid_full_collapse_occurred_median=("cm_hybrid_full_collapse_occurred", safe_median),
+            cm_hybrid_decision_bitset_k_le_threshold_median=("cm_hybrid_decision_bitset_k_le_threshold", safe_median),
+            cm_hybrid_decision_numpy_k_gt_threshold_median=("cm_hybrid_decision_numpy_k_gt_threshold", safe_median),
+            cm_hybrid_decision_numpy_root_forced_median=("cm_hybrid_decision_numpy_root_forced", safe_median),
+            cm_hybrid_decision_numpy_mode_forced_median=("cm_hybrid_decision_numpy_mode_forced", safe_median),
+            cm_hybrid_decision_bitset_fixed_var_reduction_helped_median=(
+                "cm_hybrid_decision_bitset_fixed_var_reduction_helped",
+                safe_median,
+            ),
+            cm_hybrid_decision_cache_hit_median=("cm_hybrid_decision_cache_hit", safe_median),
+            cm_hybrid_boundary_bitset_eval_time_s_median=("cm_hybrid_boundary_bitset_eval_time_s", safe_median),
+            cm_hybrid_boundary_bitset_to_hypercube_time_s_median=(
+                "cm_hybrid_boundary_bitset_to_hypercube_time_s",
+                safe_median,
+            ),
+            cm_hybrid_boundary_align_time_s_median=("cm_hybrid_boundary_align_time_s", safe_median),
+            cm_hybrid_boundary_dispatch_time_s_median=("cm_hybrid_boundary_dispatch_time_s", safe_median),
+            cm_hybrid_boundary_bitset_eval_calls_median=("cm_hybrid_boundary_bitset_eval_calls", safe_median),
+            cm_hybrid_boundary_bitset_to_hypercube_calls_median=("cm_hybrid_boundary_bitset_to_hypercube_calls", safe_median),
+            cm_hybrid_boundary_elements_converted_median=("cm_hybrid_boundary_elements_converted", safe_median),
+            cm_hybrid_boundary_align_calls_median=("cm_hybrid_boundary_align_calls", safe_median),
+            cm_hybrid_boundary_align_transpose_calls_median=("cm_hybrid_boundary_align_transpose_calls", safe_median),
+            cm_hybrid_boundary_align_insert_axes_total_median=("cm_hybrid_boundary_align_insert_axes_total", safe_median),
+            cm_hybrid_boundary_bitset_const_fastpath_calls_median=(
+                "cm_hybrid_boundary_bitset_const_fastpath_calls",
+                safe_median,
+            ),
             cm_partial_hybrid_subtree_cache_hits_median=("cm_partial_hybrid_subtree_cache_hits", safe_median),
             cm_partial_hybrid_canonical_rewrites_median=("cm_partial_hybrid_canonical_rewrites", safe_median),
             cm_partial_hybrid_pruned_branches_median=("cm_partial_hybrid_pruned_branches", safe_median),
@@ -737,6 +814,59 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
                 "cm_partial_hybrid_full_collapse_occurred",
                 safe_median,
             ),
+            cm_partial_hybrid_decision_bitset_k_le_threshold_median=(
+                "cm_partial_hybrid_decision_bitset_k_le_threshold",
+                safe_median,
+            ),
+            cm_partial_hybrid_decision_numpy_k_gt_threshold_median=(
+                "cm_partial_hybrid_decision_numpy_k_gt_threshold",
+                safe_median,
+            ),
+            cm_partial_hybrid_decision_numpy_root_forced_median=(
+                "cm_partial_hybrid_decision_numpy_root_forced",
+                safe_median,
+            ),
+            cm_partial_hybrid_decision_numpy_mode_forced_median=(
+                "cm_partial_hybrid_decision_numpy_mode_forced",
+                safe_median,
+            ),
+            cm_partial_hybrid_decision_bitset_fixed_var_reduction_helped_median=(
+                "cm_partial_hybrid_decision_bitset_fixed_var_reduction_helped",
+                safe_median,
+            ),
+            cm_partial_hybrid_decision_cache_hit_median=("cm_partial_hybrid_decision_cache_hit", safe_median),
+            cm_partial_hybrid_boundary_bitset_eval_time_s_median=(
+                "cm_partial_hybrid_boundary_bitset_eval_time_s",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_bitset_to_hypercube_time_s_median=(
+                "cm_partial_hybrid_boundary_bitset_to_hypercube_time_s",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_align_time_s_median=("cm_partial_hybrid_boundary_align_time_s", safe_median),
+            cm_partial_hybrid_boundary_dispatch_time_s_median=(
+                "cm_partial_hybrid_boundary_dispatch_time_s",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_bitset_eval_calls_median=("cm_partial_hybrid_boundary_bitset_eval_calls", safe_median),
+            cm_partial_hybrid_boundary_bitset_to_hypercube_calls_median=(
+                "cm_partial_hybrid_boundary_bitset_to_hypercube_calls",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_elements_converted_median=("cm_partial_hybrid_boundary_elements_converted", safe_median),
+            cm_partial_hybrid_boundary_align_calls_median=("cm_partial_hybrid_boundary_align_calls", safe_median),
+            cm_partial_hybrid_boundary_align_transpose_calls_median=(
+                "cm_partial_hybrid_boundary_align_transpose_calls",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_align_insert_axes_total_median=(
+                "cm_partial_hybrid_boundary_align_insert_axes_total",
+                safe_median,
+            ),
+            cm_partial_hybrid_boundary_bitset_const_fastpath_calls_median=(
+                "cm_partial_hybrid_boundary_bitset_const_fastpath_calls",
+                safe_median,
+            ),
             cm_parallel_subtree_cache_hits_median=("cm_parallel_subtree_cache_hits", safe_median),
             cm_parallel_canonical_rewrites_median=("cm_parallel_canonical_rewrites", safe_median),
             cm_parallel_pruned_branches_median=("cm_parallel_pruned_branches", safe_median),
@@ -750,6 +880,38 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
             cm_parallel_materialization_avg_k_median=("cm_parallel_materialization_avg_k", safe_median),
             cm_parallel_hybrid_depth_max_median=("cm_parallel_hybrid_depth_max", safe_median),
             cm_parallel_full_collapse_occurred_median=("cm_parallel_full_collapse_occurred", safe_median),
+            cm_parallel_decision_bitset_k_le_threshold_median=("cm_parallel_decision_bitset_k_le_threshold", safe_median),
+            cm_parallel_decision_numpy_k_gt_threshold_median=("cm_parallel_decision_numpy_k_gt_threshold", safe_median),
+            cm_parallel_decision_numpy_root_forced_median=("cm_parallel_decision_numpy_root_forced", safe_median),
+            cm_parallel_decision_numpy_mode_forced_median=("cm_parallel_decision_numpy_mode_forced", safe_median),
+            cm_parallel_decision_bitset_fixed_var_reduction_helped_median=(
+                "cm_parallel_decision_bitset_fixed_var_reduction_helped",
+                safe_median,
+            ),
+            cm_parallel_decision_cache_hit_median=("cm_parallel_decision_cache_hit", safe_median),
+            cm_parallel_boundary_bitset_eval_time_s_median=("cm_parallel_boundary_bitset_eval_time_s", safe_median),
+            cm_parallel_boundary_bitset_to_hypercube_time_s_median=(
+                "cm_parallel_boundary_bitset_to_hypercube_time_s",
+                safe_median,
+            ),
+            cm_parallel_boundary_align_time_s_median=("cm_parallel_boundary_align_time_s", safe_median),
+            cm_parallel_boundary_dispatch_time_s_median=("cm_parallel_boundary_dispatch_time_s", safe_median),
+            cm_parallel_boundary_bitset_eval_calls_median=("cm_parallel_boundary_bitset_eval_calls", safe_median),
+            cm_parallel_boundary_bitset_to_hypercube_calls_median=(
+                "cm_parallel_boundary_bitset_to_hypercube_calls",
+                safe_median,
+            ),
+            cm_parallel_boundary_elements_converted_median=("cm_parallel_boundary_elements_converted", safe_median),
+            cm_parallel_boundary_align_calls_median=("cm_parallel_boundary_align_calls", safe_median),
+            cm_parallel_boundary_align_transpose_calls_median=("cm_parallel_boundary_align_transpose_calls", safe_median),
+            cm_parallel_boundary_align_insert_axes_total_median=(
+                "cm_parallel_boundary_align_insert_axes_total",
+                safe_median,
+            ),
+            cm_parallel_boundary_bitset_const_fastpath_calls_median=(
+                "cm_parallel_boundary_bitset_const_fastpath_calls",
+                safe_median,
+            ),
             espresso_time_s_median=("espresso_time_s", safe_median),
             cm_ok_all=("cm_ok", safe_all),
             cm_hybrid_ok_all=("cm_hybrid_ok", safe_all),

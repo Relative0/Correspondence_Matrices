@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
+import time
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 
 import numpy as np
 
@@ -19,6 +20,17 @@ def _bump(diag: Optional[Dict[str, int]], key: str, inc: int = 1) -> None:
     if diag is None:
         return
     diag[key] = int(diag.get(key, 0)) + inc
+
+
+def _add_float(diag: Optional[Dict[str, Any]], key: str, inc: float) -> None:
+    if diag is None:
+        return
+    cur = diag.get(key, 0.0)
+    try:
+        base = float(cur)
+    except Exception:
+        base = 0.0
+    diag[key] = base + float(inc)
 
 
 def _var_sort_key(name: str) -> Tuple[int, object]:
@@ -380,12 +392,62 @@ def align_to_vars(arr: np.ndarray, source_vars: Tuple[str, ...], target_vars: Tu
     transpose_axes, insert_positions = _alignment_plan(source_vars, target_vars)
     if transpose_axes and transpose_axes != tuple(range(len(transpose_axes))):
         out = np.transpose(out, axes=transpose_axes)
-    for axis in insert_positions:
-        out = np.expand_dims(out, axis=axis)
+    if insert_positions:
+        if (not transpose_axes or transpose_axes == tuple(range(len(transpose_axes)))) and out.flags.c_contiguous:
+            src_i = 0
+            ins_i = 0
+            new_shape: List[int] = []
+            for axis in range(len(target_vars)):
+                if ins_i < len(insert_positions) and insert_positions[ins_i] == axis:
+                    new_shape.append(1)
+                    ins_i += 1
+                else:
+                    new_shape.append(int(out.shape[src_i]) if src_i < out.ndim else 1)
+                    src_i += 1
+            if src_i == out.ndim:
+                out = out.reshape(tuple(new_shape))
+            else:
+                for axis in insert_positions:
+                    out = np.expand_dims(out, axis=axis)
+        else:
+            for axis in insert_positions:
+                out = np.expand_dims(out, axis=axis)
     return out
 
 
-def _serial_combine(left: np.ndarray, right: np.ndarray, op: str, diagnostics: Optional[Dict[str, int]]) -> np.ndarray:
+def align_to_vars_with_stats(
+    arr: np.ndarray, source_vars: Tuple[str, ...], target_vars: Tuple[str, ...]
+) -> Tuple[np.ndarray, bool, int]:
+    out = arr
+    transpose_axes, insert_positions = _alignment_plan(source_vars, target_vars)
+    did_transpose = False
+    if transpose_axes and transpose_axes != tuple(range(len(transpose_axes))):
+        out = np.transpose(out, axes=transpose_axes)
+        did_transpose = True
+    if insert_positions:
+        if (not did_transpose) and out.flags.c_contiguous:
+            src_i = 0
+            ins_i = 0
+            new_shape: List[int] = []
+            for axis in range(len(target_vars)):
+                if ins_i < len(insert_positions) and insert_positions[ins_i] == axis:
+                    new_shape.append(1)
+                    ins_i += 1
+                else:
+                    new_shape.append(int(out.shape[src_i]) if src_i < out.ndim else 1)
+                    src_i += 1
+            if src_i == out.ndim:
+                out = out.reshape(tuple(new_shape))
+            else:
+                for axis in insert_positions:
+                    out = np.expand_dims(out, axis=axis)
+        else:
+            for axis in insert_positions:
+                out = np.expand_dims(out, axis=axis)
+    return out, did_transpose, len(insert_positions)
+
+
+def _serial_combine(left: np.ndarray, right: np.ndarray, op: str, diagnostics: Optional[Dict[str, Any]]) -> np.ndarray:
     _ = diagnostics
     if op == "AND":
         return left & right
@@ -410,15 +472,43 @@ def materialize_ir(
     node: CMNode,
     *,
     fixed: Optional[Dict[str, int]] = None,
-    diagnostics: Optional[Dict[str, int]] = None,
-    combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, int]]], np.ndarray]] = None,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, Any]]], np.ndarray]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
 ) -> Tuple[np.ndarray, Tuple[str, ...], Optional[int]]:
+    res = _materialize_ir_tagged(
+        node,
+        fixed=fixed,
+        diagnostics=diagnostics,
+        combine_fn=combine_fn,
+        materialize_mode=materialize_mode,
+        hybrid_threshold=hybrid_threshold,
+    )
+    return res.arr, res.vars, res.const_value
+
+
+@dataclass(frozen=True)
+class _MatRes:
+    arr: np.ndarray
+    vars: Tuple[str, ...]
+    const_value: Optional[int]
+    backend: str
+    boundary_source: bool = False
+
+
+def _materialize_ir_tagged(
+    node: CMNode,
+    *,
+    fixed: Optional[Dict[str, int]] = None,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, Any]]], np.ndarray]] = None,
+    materialize_mode: str = "partial_hybrid",
+    hybrid_threshold: int = 7,
+) -> _MatRes:
     fixed_map = fixed or {}
     combine = combine_fn or _serial_combine
-    memo: Dict[Tuple[CMNode, Tuple[Tuple[str, int], ...], bool], Tuple[np.ndarray, Tuple[str, ...], Optional[int]]] = {}
-    memo_backend: Dict[Tuple[CMNode, Tuple[Tuple[str, int], ...], bool], str] = {}
+    memo: Dict[Tuple[CMNode, Tuple[Tuple[str, int], ...], bool], _MatRes] = {}
 
     if materialize_mode not in {"hybrid", "partial_hybrid", "numpy"}:
         raise ValueError(f"Unknown materialize_mode: {materialize_mode}")
@@ -427,50 +517,126 @@ def materialize_ir(
     if diagnostics is not None:
         diagnostics.setdefault("hybrid_depth_max", 0)
         diagnostics.setdefault("full_collapse_occurred", 0)
+        diagnostics.setdefault("boundary_bitset_eval_time_s", 0.0)
+        diagnostics.setdefault("boundary_bitset_to_hypercube_time_s", 0.0)
+        diagnostics.setdefault("boundary_align_time_s", 0.0)
+        diagnostics.setdefault("boundary_dispatch_time_s", 0.0)
+        diagnostics.setdefault("boundary_bitset_eval_calls", 0)
+        diagnostics.setdefault("boundary_bitset_to_hypercube_calls", 0)
+        diagnostics.setdefault("boundary_elements_converted", 0)
+        diagnostics.setdefault("boundary_align_calls", 0)
+        diagnostics.setdefault("boundary_align_transpose_calls", 0)
+        diagnostics.setdefault("boundary_align_insert_axes_total", 0)
+        diagnostics.setdefault("boundary_bitset_const_fastpath_calls", 0)
 
-    def materialize_bitset(cur: CMNode, live_vars: Tuple[str, ...], live_k: int) -> Tuple[np.ndarray, Tuple[str, ...], Optional[int]]:
+    def materialize_bitset(cur: CMNode, live_vars: Tuple[str, ...], live_k: int) -> _MatRes:
+        t_dispatch0 = time.perf_counter()
+        _bump(diagnostics, "boundary_bitset_eval_calls")
+        t_eval0 = time.perf_counter()
         bits = eval_cm_node_bitset(cur, live_vars, fixed=fixed_map)
+        t_eval1 = time.perf_counter()
+        _add_float(diagnostics, "boundary_bitset_eval_time_s", t_eval1 - t_eval0)
         if live_k == 0:
             const_value = int(bool(bits & 1))
-            return (np.array(bool(const_value), dtype=bool), tuple(), const_value)
+            _bump(diagnostics, "boundary_bitset_const_fastpath_calls")
+            t_dispatch1 = time.perf_counter()
+            _add_float(diagnostics, "boundary_dispatch_time_s", (t_dispatch1 - t_dispatch0) - (t_eval1 - t_eval0))
+            return _MatRes(
+                arr=np.array(bool(const_value), dtype=bool),
+                vars=tuple(),
+                const_value=const_value,
+                backend="bitset",
+                boundary_source=False,
+            )
 
         full_mask = (1 << (1 << live_k)) - 1
         if bits == 0:
-            return (np.array(False, dtype=bool), tuple(), 0)
+            _bump(diagnostics, "boundary_bitset_const_fastpath_calls")
+            t_dispatch1 = time.perf_counter()
+            _add_float(diagnostics, "boundary_dispatch_time_s", (t_dispatch1 - t_dispatch0) - (t_eval1 - t_eval0))
+            return _MatRes(
+                arr=np.array(False, dtype=bool),
+                vars=tuple(),
+                const_value=0,
+                backend="bitset",
+                boundary_source=False,
+            )
         if bits == full_mask:
-            return (np.array(True, dtype=bool), tuple(), 1)
-        return (bitset_to_bool_hypercube(bits, live_k), live_vars, None)
+            _bump(diagnostics, "boundary_bitset_const_fastpath_calls")
+            t_dispatch1 = time.perf_counter()
+            _add_float(diagnostics, "boundary_dispatch_time_s", (t_dispatch1 - t_dispatch0) - (t_eval1 - t_eval0))
+            return _MatRes(
+                arr=np.array(True, dtype=bool),
+                vars=tuple(),
+                const_value=1,
+                backend="bitset",
+                boundary_source=False,
+            )
+
+        _bump(diagnostics, "boundary_bitset_to_hypercube_calls")
+        _bump(diagnostics, "boundary_elements_converted", 1 << live_k)
+        t_conv0 = time.perf_counter()
+        arr = bitset_to_bool_hypercube(bits, live_k)
+        t_conv1 = time.perf_counter()
+        _add_float(diagnostics, "boundary_bitset_to_hypercube_time_s", t_conv1 - t_conv0)
+
+        t_dispatch1 = time.perf_counter()
+        _add_float(
+            diagnostics,
+            "boundary_dispatch_time_s",
+            (t_dispatch1 - t_dispatch0) - (t_eval1 - t_eval0) - (t_conv1 - t_conv0),
+        )
+        return _MatRes(
+            arr=arr,
+            vars=live_vars,
+            const_value=None,
+            backend="bitset",
+            boundary_source=True,
+        )
 
     def finalize(
         cur: CMNode,
         key: Tuple[CMNode, Tuple[Tuple[str, int], ...], bool],
-        out: Tuple[np.ndarray, Tuple[str, ...], Optional[int]],
+        out: _MatRes,
         *,
         backend: str,
         live_k: int,
         depth: int,
         full_collapse: bool = False,
-    ) -> Tuple[np.ndarray, Tuple[str, ...], Optional[int]]:
+    ) -> _MatRes:
         memo[key] = out
-        memo_backend[key] = backend
         _bump(diagnostics, "materializations")
         _bump(diagnostics, f"{backend}_materializations")
         _bump(diagnostics, f"{backend}_nodes")
         _bump(diagnostics, "materialization_live_vars_total", live_k)
         if diagnostics is not None:
-            diagnostics["live_vars_max"] = max(int(diagnostics.get("live_vars_max", 0)), len(out[1]))
+            diagnostics["live_vars_max"] = max(int(diagnostics.get("live_vars_max", 0)), len(out.vars))
             if backend == "bitset":
                 diagnostics["hybrid_depth_max"] = max(int(diagnostics.get("hybrid_depth_max", 0)), depth)
             if full_collapse:
                 diagnostics["full_collapse_occurred"] = 1
         return out
 
-    def rec(cur: CMNode, *, depth: int, allow_bitset_collapse: bool) -> Tuple[np.ndarray, Tuple[str, ...], Optional[int]]:
+    def _align_for_combine(piece: _MatRes, target_vars: Tuple[str, ...]) -> np.ndarray:
+        if piece.boundary_source and piece.const_value is None:
+            t0 = time.perf_counter()
+            out, did_transpose, inserted = align_to_vars_with_stats(piece.arr, piece.vars, target_vars)
+            t1 = time.perf_counter()
+            _add_float(diagnostics, "boundary_align_time_s", t1 - t0)
+            _bump(diagnostics, "boundary_align_calls")
+            if did_transpose:
+                _bump(diagnostics, "boundary_align_transpose_calls")
+            _bump(diagnostics, "boundary_align_insert_axes_total", inserted)
+            return out
+        return align_to_vars(piece.arr, piece.vars, target_vars)
+
+    def rec(cur: CMNode, *, depth: int, allow_bitset_collapse: bool) -> _MatRes:
         key = (cur, _fixed_key_for_node(cur, fixed_map), allow_bitset_collapse)
         cached = memo.get(key)
         if cached is not None:
             _bump(diagnostics, "materialization_cache_hits")
-            if diagnostics is not None and memo_backend.get(key) == "bitset":
+            _bump(diagnostics, "decision_cache_hit")
+            if diagnostics is not None and cached.backend == "bitset":
                 diagnostics["hybrid_depth_max"] = max(int(diagnostics.get("hybrid_depth_max", 0)), depth)
             return cached
 
@@ -478,11 +644,22 @@ def materialize_ir(
         live_k = len(live_vars)
         use_bitset = False
         if materialize_mode == "hybrid":
-            use_bitset = live_k <= hybrid_threshold
+            use_bitset = allow_bitset_collapse and live_k <= hybrid_threshold
         elif materialize_mode == "partial_hybrid":
             use_bitset = allow_bitset_collapse and live_k <= hybrid_threshold
 
+        if materialize_mode == "numpy":
+            _bump(diagnostics, "decision_numpy_mode_forced")
+        elif materialize_mode == "partial_hybrid" and depth == 0 and (live_k <= hybrid_threshold):
+            _bump(diagnostics, "decision_numpy_root_forced")
+
+        if (not use_bitset) and allow_bitset_collapse and (live_k > hybrid_threshold):
+            _bump(diagnostics, "decision_numpy_k_gt_threshold")
+
         if use_bitset:
+            _bump(diagnostics, "decision_bitset_k_le_threshold")
+            if len(cur.vars) > hybrid_threshold and live_k <= hybrid_threshold:
+                _bump(diagnostics, "decision_bitset_fixed_var_reduction_helped")
             out = materialize_bitset(cur, live_vars, live_k)
             return finalize(
                 cur,
@@ -495,23 +672,35 @@ def materialize_ir(
             )
 
         if cur.kind == "const":
-            out = (np.array(bool(cur.const_value), dtype=bool), tuple(), cur.const_value)
+            out = _MatRes(np.array(bool(cur.const_value), dtype=bool), tuple(), cur.const_value, "numpy", False)
         elif cur.kind == "var":
             if cur.var_name in fixed_map:
                 bit = int(bool(fixed_map[cur.var_name]))
-                out = (np.array(bool(bit), dtype=bool), tuple(), bit)
+                out = _MatRes(np.array(bool(bit), dtype=bool), tuple(), bit, "numpy", False)
             else:
-                out = (AXIS.copy(), (cur.var_name,), None)
+                out = _MatRes(AXIS.copy(), (cur.var_name,), None, "numpy", False)
         elif cur.kind == "not":
-            arr, vars_now, cval = rec(
+            child = rec(
                 cur.args[0],
                 depth=depth + 1,
                 allow_bitset_collapse=(materialize_mode == "partial_hybrid"),
             )
-            if cval is not None:
-                out = (np.array(bool(1 - cval), dtype=bool), tuple(), int(1 - cval))
+            if child.const_value is not None:
+                out = _MatRes(
+                    np.array(bool(1 - child.const_value), dtype=bool),
+                    tuple(),
+                    int(1 - child.const_value),
+                    "numpy",
+                    False,
+                )
             else:
-                out = (np.logical_not(arr), vars_now, None)
+                out = _MatRes(
+                    np.logical_not(child.arr),
+                    child.vars,
+                    None,
+                    "numpy",
+                    bool(child.boundary_source),
+                )
         else:
             pieces = [
                 rec(
@@ -523,117 +712,139 @@ def materialize_ir(
             ]
 
             if cur.op == "AND":
-                for _, _, cval in pieces:
-                    if cval == 0:
+                for piece in pieces:
+                    if piece.const_value == 0:
                         _bump(diagnostics, "pruned_branches")
-                        out = (np.array(False, dtype=bool), tuple(), 0)
+                        out = _MatRes(np.array(False, dtype=bool), tuple(), 0, "numpy", False)
                         break
                 else:
-                    kept = [(a, vs, c) for a, vs, c in pieces if c != 1]
+                    kept = [p for p in pieces if p.const_value != 1]
                     if len(kept) != len(pieces):
                         _bump(diagnostics, "pruned_branches", len(pieces) - len(kept))
                     if not kept:
-                        out = (np.array(True, dtype=bool), tuple(), 1)
+                        out = _MatRes(np.array(True, dtype=bool), tuple(), 1, "numpy", False)
                     elif len(kept) == 1:
                         out = kept[0]
                     else:
-                        acc = align_to_vars(kept[0][0], kept[0][1], live_vars)
-                        for arr, vars_now, _ in kept[1:]:
-                            acc = combine(acc, align_to_vars(arr, vars_now, live_vars), "AND", diagnostics)
-                        out = (acc, live_vars, None)
+                        acc = _align_for_combine(kept[0], live_vars)
+                        for piece in kept[1:]:
+                            acc = combine(acc, _align_for_combine(piece, live_vars), "AND", diagnostics)
+                        out = _MatRes(acc, live_vars, None, "numpy", False)
             elif cur.op == "OR":
-                for _, _, cval in pieces:
-                    if cval == 1:
+                for piece in pieces:
+                    if piece.const_value == 1:
                         _bump(diagnostics, "pruned_branches")
-                        out = (np.array(True, dtype=bool), tuple(), 1)
+                        out = _MatRes(np.array(True, dtype=bool), tuple(), 1, "numpy", False)
                         break
                 else:
-                    kept = [(a, vs, c) for a, vs, c in pieces if c != 0]
+                    kept = [p for p in pieces if p.const_value != 0]
                     if len(kept) != len(pieces):
                         _bump(diagnostics, "pruned_branches", len(pieces) - len(kept))
                     if not kept:
-                        out = (np.array(False, dtype=bool), tuple(), 0)
+                        out = _MatRes(np.array(False, dtype=bool), tuple(), 0, "numpy", False)
                     elif len(kept) == 1:
                         out = kept[0]
                     else:
-                        acc = align_to_vars(kept[0][0], kept[0][1], live_vars)
-                        for arr, vars_now, _ in kept[1:]:
-                            acc = combine(acc, align_to_vars(arr, vars_now, live_vars), "OR", diagnostics)
-                        out = (acc, live_vars, None)
+                        acc = _align_for_combine(kept[0], live_vars)
+                        for piece in kept[1:]:
+                            acc = combine(acc, _align_for_combine(piece, live_vars), "OR", diagnostics)
+                        out = _MatRes(acc, live_vars, None, "numpy", False)
             elif cur.op == "XOR":
                 parity = 0
                 kept = []
-                for arr, vars_now, cval in pieces:
-                    if cval is None:
-                        kept.append((arr, vars_now, cval))
+                for piece in pieces:
+                    if piece.const_value is None:
+                        kept.append(piece)
                     else:
                         _bump(diagnostics, "pruned_branches")
-                        parity ^= int(cval)
+                        parity ^= int(piece.const_value)
                 if not kept:
-                    out = (np.array(bool(parity), dtype=bool), tuple(), parity)
+                    out = _MatRes(np.array(bool(parity), dtype=bool), tuple(), parity, "numpy", False)
                 elif len(kept) == 1 and parity == 0:
                     out = kept[0]
                 else:
-                    acc = align_to_vars(kept[0][0], kept[0][1], live_vars)
-                    for arr, vars_now, _ in kept[1:]:
-                        acc = combine(acc, align_to_vars(arr, vars_now, live_vars), "XOR", diagnostics)
+                    acc = _align_for_combine(kept[0], live_vars)
+                    for piece in kept[1:]:
+                        acc = combine(acc, _align_for_combine(piece, live_vars), "XOR", diagnostics)
                     if parity == 1:
                         acc = np.logical_not(acc)
-                    out = (acc, live_vars, None)
+                    out = _MatRes(acc, live_vars, None, "numpy", False)
             elif cur.op == "EQV":
-                left_arr, left_vars, left_const = pieces[0]
-                right_arr, right_vars, right_const = pieces[1]
-                if left_const is not None or right_const is not None:
+                left = pieces[0]
+                right = pieces[1]
+                if left.const_value is not None or right.const_value is not None:
                     _bump(diagnostics, "pruned_branches")
-                if left_const == 1:
-                    out = pieces[1]
-                elif right_const == 1:
-                    out = pieces[0]
-                elif left_const == 0:
-                    if right_const is not None:
-                        out = (np.array(bool(1 - right_const), dtype=bool), tuple(), int(1 - right_const))
+                if left.const_value == 1:
+                    out = right
+                elif right.const_value == 1:
+                    out = left
+                elif left.const_value == 0:
+                    if right.const_value is not None:
+                        out = _MatRes(
+                            np.array(bool(1 - right.const_value), dtype=bool),
+                            tuple(),
+                            int(1 - right.const_value),
+                            "numpy",
+                            False,
+                        )
                     else:
-                        out = (np.logical_not(right_arr), right_vars, None)
-                elif right_const == 0:
-                    if left_const is not None:
-                        out = (np.array(bool(1 - left_const), dtype=bool), tuple(), int(1 - left_const))
+                        out = _MatRes(np.logical_not(right.arr), right.vars, None, "numpy", bool(right.boundary_source))
+                elif right.const_value == 0:
+                    if left.const_value is not None:
+                        out = _MatRes(
+                            np.array(bool(1 - left.const_value), dtype=bool),
+                            tuple(),
+                            int(1 - left.const_value),
+                            "numpy",
+                            False,
+                        )
                     else:
-                        out = (np.logical_not(left_arr), left_vars, None)
+                        out = _MatRes(np.logical_not(left.arr), left.vars, None, "numpy", bool(left.boundary_source))
                 else:
-                    out = (
+                    out = _MatRes(
                         combine(
-                            align_to_vars(left_arr, left_vars, live_vars),
-                            align_to_vars(right_arr, right_vars, live_vars),
+                            _align_for_combine(left, live_vars),
+                            _align_for_combine(right, live_vars),
                             "EQV",
                             diagnostics,
                         ),
                         live_vars,
                         None,
+                        "numpy",
+                        False,
                     )
             elif cur.op == "IMP":
-                left_arr, left_vars, left_const = pieces[0]
-                right_arr, right_vars, right_const = pieces[1]
-                if left_const is not None or right_const is not None:
+                left = pieces[0]
+                right = pieces[1]
+                if left.const_value is not None or right.const_value is not None:
                     _bump(diagnostics, "pruned_branches")
-                if left_const == 0 or right_const == 1:
-                    out = (np.array(True, dtype=bool), tuple(), 1)
-                elif left_const == 1:
-                    out = pieces[1]
-                elif right_const == 0:
-                    if left_const is not None:
-                        out = (np.array(bool(1 - left_const), dtype=bool), tuple(), int(1 - left_const))
+                if left.const_value == 0 or right.const_value == 1:
+                    out = _MatRes(np.array(True, dtype=bool), tuple(), 1, "numpy", False)
+                elif left.const_value == 1:
+                    out = right
+                elif right.const_value == 0:
+                    if left.const_value is not None:
+                        out = _MatRes(
+                            np.array(bool(1 - left.const_value), dtype=bool),
+                            tuple(),
+                            int(1 - left.const_value),
+                            "numpy",
+                            False,
+                        )
                     else:
-                        out = (np.logical_not(left_arr), left_vars, None)
+                        out = _MatRes(np.logical_not(left.arr), left.vars, None, "numpy", bool(left.boundary_source))
                 else:
-                    out = (
+                    out = _MatRes(
                         combine(
-                            align_to_vars(left_arr, left_vars, live_vars),
-                            align_to_vars(right_arr, right_vars, live_vars),
+                            _align_for_combine(left, live_vars),
+                            _align_for_combine(right, live_vars),
                             "IMP",
                             diagnostics,
                         ),
                         live_vars,
                         None,
+                        "numpy",
+                        False,
                     )
             else:
                 raise ValueError(cur.op)
@@ -649,13 +860,13 @@ def materialize_cm(
     C: Sequence[str],
     fixed: Optional[Dict[str, int]] = None,
     *,
-    diagnostics: Optional[Dict[str, int]] = None,
-    combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, int]]], np.ndarray]] = None,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, Any]]], np.ndarray]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
 ) -> np.ndarray:
     target_vars = tuple(list(R) + list(C))
-    arr, live_vars, const_value = materialize_ir(
+    res = _materialize_ir_tagged(
         node,
         fixed=fixed,
         diagnostics=diagnostics,
@@ -663,9 +874,25 @@ def materialize_cm(
         materialize_mode=materialize_mode,
         hybrid_threshold=hybrid_threshold,
     )
+    arr, live_vars, const_value = res.arr, res.vars, res.const_value
     if const_value is not None:
         arr = np.array(bool(const_value), dtype=bool)
         live_vars = tuple()
+
+    if res.boundary_source and const_value is None and diagnostics is not None:
+        t0 = time.perf_counter()
+        arr, did_transpose, inserted = align_to_vars_with_stats(arr, live_vars, target_vars)
+        _bump(diagnostics, "boundary_align_calls")
+        if did_transpose:
+            _bump(diagnostics, "boundary_align_transpose_calls")
+        _bump(diagnostics, "boundary_align_insert_axes_total", inserted)
+        expand_shape = tuple(2 for _ in target_vars)
+        arr = np.broadcast_to(arr, expand_shape)
+        out = arr.reshape(1 << len(R), 1 << len(C)).copy()
+        t1 = time.perf_counter()
+        _add_float(diagnostics, "boundary_align_time_s", t1 - t0)
+        return out
+
     arr = align_to_vars(arr, live_vars, target_vars)
     expand_shape = tuple(2 for _ in target_vars)
     arr = np.broadcast_to(arr, expand_shape)
