@@ -271,6 +271,26 @@ class CMOptimizationTests(unittest.TestCase):
         self.assertEqual(partial_diag.get("full_collapse_occurred", 0), 0)
         self.assertGreaterEqual(partial_diag.get("hybrid_depth_max", 0), 1)
 
+    def test_partial_hybrid_root_forced_counter_increments_when_root_is_threshold_eligible(self) -> None:
+        expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
+        node = compile_expr_to_cm_ir(expr)
+        R, C = canonical_layout([f"x{i}" for i in range(4)])
+
+        partial_diag = {}
+        _ = materialize_cm(
+            node,
+            R,
+            C,
+            fixed={},
+            diagnostics=partial_diag,
+            materialize_mode="partial_hybrid",
+            hybrid_threshold=4,
+        )
+        self.assertEqual(partial_diag.get("decision_numpy_root_forced", 0), 1)
+        self.assertGreaterEqual(partial_diag.get("bitset_materializations", 0), 1)
+        self.assertGreaterEqual(partial_diag.get("numpy_materializations", 0), 1)
+        self.assertEqual(partial_diag.get("full_collapse_occurred", 0), 0)
+
     def test_hybrid_dispatch_can_be_forced_to_numpy_only(self) -> None:
         expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
         node = compile_expr_to_cm_ir(expr)
@@ -349,6 +369,50 @@ class CMOptimizationTests(unittest.TestCase):
         self.assertGreaterEqual(partial_diag.get("bitset_materializations", 0), 2)
         self.assertGreaterEqual(partial_diag.get("numpy_materializations", 0), 1)
         self.assertEqual(partial_diag.get("full_collapse_occurred", 0), 0)
+
+    def test_boundary_instrumentation_fields_exist_and_are_numeric(self) -> None:
+        expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
+        node = compile_expr_to_cm_ir(expr)
+        R, C = canonical_layout([f"x{i}" for i in range(4)])
+
+        diag = {}
+        _ = materialize_cm(
+            node,
+            R,
+            C,
+            fixed={},
+            diagnostics=diag,
+            materialize_mode="partial_hybrid",
+            hybrid_threshold=2,
+        )
+
+        float_keys = [
+            "boundary_bitset_eval_time_s",
+            "boundary_bitset_to_hypercube_time_s",
+            "boundary_align_time_s",
+            "boundary_dispatch_time_s",
+        ]
+        int_keys = [
+            "boundary_bitset_eval_calls",
+            "boundary_bitset_to_hypercube_calls",
+            "boundary_elements_converted",
+            "boundary_align_calls",
+            "boundary_align_transpose_calls",
+            "boundary_align_insert_axes_total",
+            "boundary_bitset_const_fastpath_calls",
+        ]
+        for key in float_keys:
+            self.assertIn(key, diag)
+            self.assertGreaterEqual(float(diag[key]), 0.0)
+        for key in int_keys:
+            self.assertIn(key, diag)
+            self.assertGreaterEqual(int(diag[key]), 0)
+
+        self.assertGreaterEqual(int(diag.get("boundary_bitset_eval_calls", 0)), 1)
+        self.assertGreaterEqual(
+            int(diag.get("boundary_bitset_to_hypercube_calls", 0)) + int(diag.get("boundary_bitset_const_fastpath_calls", 0)),
+            1,
+        )
 
     def test_cache_reuse_stats_are_observable(self) -> None:
         n = 8
