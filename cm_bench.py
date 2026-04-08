@@ -229,6 +229,8 @@ def time_backends_on_expr(
                     min_n=args.cm_parallel_min_n,
                     min_nodes=args.cm_parallel_min_nodes,
                     chunk_rows=args.cm_parallel_chunk_rows,
+                    chunk_elems=args.cm_parallel_chunk_elems,
+                    min_parallel_work_elems=args.cm_parallel_min_work_elems,
                     reuse_pool=not args.cm_parallel_no_reuse_pool,
                     use_shared_memory=not args.cm_parallel_no_shared_memory,
                     shared_min_cells=args.cm_parallel_shared_min_cells,
@@ -531,6 +533,15 @@ def time_backends_on_expr(
             float(live_total / materializations) if materializations > 0 else None
         )
     if args.cm_debug_stats:
+        def _coerce_diag_value(v: Any) -> Any:
+            if v is None:
+                return None
+            if isinstance(v, (bool, int, np.integer)):
+                return int(v)
+            if isinstance(v, (float, np.floating)):
+                return float(v)
+            return str(v)
+
         norm_after = cm_normalize_cache_stats()
         for k, v in norm_after.items():
             before = int(norm_before.get(k, 0)) if norm_before is not None else 0
@@ -543,13 +554,13 @@ def time_backends_on_expr(
                 debug_row[f"cm_lazy_{k}_delta"] = int(v) - int(lazy_before_map.get(k, 0))
 
         for k, v in cm_diag.items():
-            debug_row[f"cm_diag_{k}"] = int(v)
+            debug_row[f"cm_diag_{k}"] = _coerce_diag_value(v)
         for k, v in cm_hybrid_diag.items():
-            debug_row[f"cm_hybrid_diag_{k}"] = int(v)
+            debug_row[f"cm_hybrid_diag_{k}"] = _coerce_diag_value(v)
         for k, v in cm_partial_hybrid_diag.items():
-            debug_row[f"cm_partial_hybrid_diag_{k}"] = int(v)
+            debug_row[f"cm_partial_hybrid_diag_{k}"] = _coerce_diag_value(v)
         for k, v in cm_parallel_diag.items():
-            debug_row[f"cm_parallel_diag_{k}"] = int(v)
+            debug_row[f"cm_parallel_diag_{k}"] = _coerce_diag_value(v)
 
     return {
         "cm_time_s": t_cm,
@@ -1017,7 +1028,16 @@ def main():
     ap.add_argument("--cm-parallel-workers", type=int, default=0)
     ap.add_argument("--cm-parallel-min-n", type=int, default=8)
     ap.add_argument("--cm-parallel-min-nodes", type=int, default=40)
-    ap.add_argument("--cm-parallel-chunk-rows", type=int, default=1024)
+    ap.add_argument("--cm-parallel-chunk-rows", type=int, default=1024, help="Legacy (no longer used for scheduling).")
+    ap.add_argument("--cm-parallel-chunk-elems", type=int, default=(1 << 17))
+    ap.add_argument("--cm-parallel-min-work-elems", dest="cm_parallel_min_work_elems", type=int, default=(1 << 18))
+    ap.add_argument(
+        "--cm-parallel-min-chunk-cells",
+        dest="cm_parallel_min_work_elems",
+        type=int,
+        default=argparse.SUPPRESS,
+        help="Legacy alias for --cm-parallel-min-work-elems.",
+    )
     ap.add_argument("--cm-parallel-no-reuse-pool", action="store_true")
     ap.add_argument("--cm-parallel-no-shared-memory", action="store_true")
     ap.add_argument("--cm-parallel-shared-min-cells", type=int, default=(1 << 20))
