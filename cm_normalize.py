@@ -104,6 +104,7 @@ def clear_cm_normalize_caches() -> None:
     _row_lift_meta.cache_clear()
     _col_lift_meta.cache_clear()
 
+
 def _permute_bits_rows(M: np.ndarray, perm: List[int]) -> np.ndarray:
     rperm = tuple(perm)
     if len(rperm) <= 1:
@@ -140,36 +141,44 @@ def lift_cm(Ms: np.ndarray,
     _, r_small = _row_lift_meta(tRows, tR)
     _, c_small = _col_lift_meta(tCols, tC)
     out = Ms.reshape((2,)*r_small + (2,)*c_small).astype(bool, copy=False)
-    for i, v in enumerate(R):
-        if v in vars_rows:
-            pass
-        elif v in fixed:
-            out = np.take(out, int(fixed[v]), axis=i)
-        else:
-            out = np.expand_dims(out, axis=i)
-            out = np.repeat(out, 2, axis=i)
-    base = len(R)
-    for j, v in enumerate(C):
-        aj = base + j
-        if v in vars_cols:
-            pass
-        elif v in fixed:
-            out = np.take(out, int(fixed[v]), axis=aj)
-        else:
-            out = np.expand_dims(out, axis=aj)
-            out = np.repeat(out, 2, axis=aj)
-    return out.reshape(1 << len(R), 1 << len(C))
+    # `fixed` values have already been folded into the smaller CM. To lift back to
+    # the ambient CM layout used elsewhere in the project, we reinsert missing
+    # axes as broadcast dimensions, matching `materialize_cm(...)`.
+    live_target = [v for v in R if v in vars_rows] + [v for v in C if v in vars_cols]
+    full_target = list(R) + list(C)
+    live_set = set(live_target)
+    for axis, v in enumerate(full_target):
+        if v not in live_set:
+            out = np.expand_dims(out, axis=axis)
+    out = np.broadcast_to(out, (2,) * len(full_target))
+    # Materialize to ensure writeable array for downstream in-place ops.
+    return out.reshape(1 << len(R), 1 << len(C)).copy()
 
 def combine_pointwise(M1: np.ndarray, M2: np.ndarray, op: str) -> np.ndarray:
     if M1.shape != M2.shape:
         raise ValueError("shapes must match")
-    a = M1.astype(bool, copy=False); b = M2.astype(bool, copy=False)
-    if op == "AND":  out = a & b
-    elif op == "OR": out = a | b
-    elif op == "XOR": out = a ^ b
-    elif op == "IMP": out = (~a) | b
-    elif op == "EQV": out = ~(a ^ b)
-    elif op == "NAND": out = ~(a & b)
-    elif op == "NOR":  out = ~(a | b)
-    else: raise ValueError(op)
-    return out
+    # Own the output buffer so in-place bitwise ops remain safe even when inputs
+    # originate from broadcasted views.
+    a = np.array(M1, dtype=bool, copy=True)
+    b = M2.astype(bool, copy=False)
+    if op == "AND":
+        np.bitwise_and(a, b, out=a)
+    elif op == "OR":
+        np.bitwise_or(a, b, out=a)
+    elif op == "XOR":
+        np.bitwise_xor(a, b, out=a)
+    elif op == "IMP":
+        np.bitwise_not(a, out=a)
+        np.bitwise_or(a, b, out=a)
+    elif op == "EQV":
+        np.bitwise_xor(a, b, out=a)
+        np.bitwise_not(a, out=a)
+    elif op == "NAND":
+        np.bitwise_and(a, b, out=a)
+        np.bitwise_not(a, out=a)
+    elif op == "NOR":
+        np.bitwise_or(a, b, out=a)
+        np.bitwise_not(a, out=a)
+    else:
+        raise ValueError(op)
+    return a

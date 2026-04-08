@@ -9,6 +9,14 @@ from cm_normalize import canonical_layout
 from cm_parallel import compile_expr_to_cm_parallel
 
 try:
+    from cm_build_pair import compile_expr_to_cm_pair
+
+    HAS_PAIR = True
+except Exception:
+    HAS_PAIR = False
+    compile_expr_to_cm_pair = None  # type: ignore[assignment]
+
+try:
     from cm_build_lazy import (
         clear_lazy_align_cache,
         compile_expr_to_cm_lazy,
@@ -40,6 +48,51 @@ def _cm_matrix_to_tt(M_cm: np.ndarray, R, C, n_vars: int) -> np.ndarray:
 
 
 class CMOptimizationTests(unittest.TestCase):
+    @unittest.skipUnless(HAS_PAIR, "cm_build_pair is not available")
+    def test_pair_backend_respects_fixed_assignments(self) -> None:
+        expr = Or(And(Var(0), Var(2)), Var(1))
+        R, C = canonical_layout([f"x{i}" for i in range(4)])
+        fixed = {"x1": 0}
+
+        mat_pair, metrics = compile_expr_to_cm_pair(expr, R, C, fixed=fixed)
+        mat_eager = compile_expr_to_cm(expr, R, C, fixed=fixed)
+
+        self.assertTrue(np.array_equal(mat_pair, mat_eager))
+        self.assertGreaterEqual(metrics["pair_attempts"], 1)
+        self.assertGreaterEqual(metrics["pair_collapses"], 1)
+
+    @unittest.skipUnless(HAS_PAIR, "cm_build_pair is not available")
+    def test_pair_backend_forwards_materialization_options_on_fallback(self) -> None:
+        expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
+        R, C = canonical_layout([f"x{i}" for i in range(4)])
+
+        pair_diag = {}
+        base_diag = {}
+        mat_pair, metrics = compile_expr_to_cm_pair(
+            expr,
+            R,
+            C,
+            fixed={},
+            diagnostics=pair_diag,
+            materialize_mode="hybrid",
+            hybrid_threshold=4,
+        )
+        mat_base = compile_expr_to_cm(
+            expr,
+            R,
+            C,
+            fixed={},
+            diagnostics=base_diag,
+            materialize_mode="hybrid",
+            hybrid_threshold=4,
+        )
+
+        self.assertTrue(np.array_equal(mat_pair, mat_base))
+        self.assertGreater(pair_diag.get("materializations", 0), 0)
+        self.assertGreater(base_diag.get("materializations", 0), 0)
+        self.assertEqual(metrics["pair_attempts"], 0)
+        self.assertEqual(metrics["pair_collapses"], 0)
+
     def test_balanced_and_legacy_square_layouts_are_correct(self) -> None:
         rng = np.random.default_rng(77)
         for n in (5, 12):
