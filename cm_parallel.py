@@ -208,6 +208,8 @@ def compile_expr_to_cm_parallel(
     diagnostics: Optional[Dict[str, Any]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
+    reuse_compiled_ir: bool = False,
+    use_persistent_cache: bool = False,
 ) -> np.ndarray:
     fixed_map = fixed or {}
     node_count = count_expr_nodes(expr)
@@ -235,7 +237,12 @@ def compile_expr_to_cm_parallel(
         diagnostics.setdefault("chunk_size_avg", 0.0)
         diagnostics.setdefault("parallel_speedup_estimate", 0.0)
 
-    node = compile_expr_to_cm_ir(expr, diagnostics=diagnostics)
+    node = compile_expr_to_cm_ir(
+        expr,
+        diagnostics=diagnostics,
+        reuse_cache=reuse_compiled_ir,
+        persistent_cache=use_persistent_cache,
+    )
     if max_workers < 2 or (len(R) + len(C)) < min_n or node_count < min_nodes:
         if diagnostics is not None:
             diagnostics["parallel_activated"] = 0
