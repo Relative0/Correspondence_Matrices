@@ -31,8 +31,15 @@ def compile_expr_to_cm_lazy(
     diagnostics: Optional[Dict[str, int]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
+    reuse_compiled_ir: bool = False,
+    use_persistent_cache: bool = False,
 ) -> np.ndarray:
-    node = compile_expr_to_cm_ir(e, diagnostics=diagnostics)
+    node = compile_expr_to_cm_ir(
+        e,
+        diagnostics=diagnostics,
+        reuse_cache=reuse_compiled_ir,
+        persistent_cache=use_persistent_cache,
+    )
     return materialize_cm(
         node,
         R,

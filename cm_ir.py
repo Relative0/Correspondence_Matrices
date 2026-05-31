@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
 from functools import lru_cache
+import hashlib
 import time
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -31,6 +33,206 @@ def _add_float(diag: Optional[Dict[str, Any]], key: str, inc: float) -> None:
     except Exception:
         base = 0.0
     diag[key] = base + float(inc)
+
+
+def _ir_timing_enabled(diag: Optional[Dict[str, Any]]) -> bool:
+    try:
+        return bool(diag is not None and int(diag.get("ir_timing_enabled", 0)) == 1)
+    except Exception:
+        return False
+
+
+def _init_ir_compile_diagnostics(diag: Optional[Dict[str, Any]]) -> None:
+    if diag is None:
+        return
+    diag.setdefault("ir_compile_time_s", 0.0)
+    diag.setdefault("ir_compile_cache_hit", 0)
+    diag.setdefault("ir_compile_cache_hits", 0)
+    diag.setdefault("ir_compile_cache_misses", 0)
+
+
+def _init_ir_persistent_cache_diagnostics(diag: Optional[Dict[str, Any]]) -> None:
+    if diag is None:
+        return
+    diag.setdefault("ir_persistent_cache_hits", 0)
+    diag.setdefault("ir_persistent_cache_misses", 0)
+    diag.setdefault("ir_persistent_cache_size", 0)
+
+
+_COMPILED_IR_CACHE_MAXSIZE = 4096
+_COMPILED_IR_CACHE: "OrderedDict[Expr, CMNode]" = OrderedDict()
+
+
+def clear_cm_ir_compile_cache() -> None:
+    _COMPILED_IR_CACHE.clear()
+
+
+_PERSISTENT_IR_CACHE_MAXSIZE = 16384
+_PERSISTENT_IR_CACHE: "OrderedDict[str, CMNode]" = OrderedDict()
+
+
+def clear_cm_ir_persistent_cache() -> None:
+    _PERSISTENT_IR_CACHE.clear()
+
+
+def cm_ir_persistent_cache_stats() -> Dict[str, int]:
+    return {"ir_persistent_cache_size": int(len(_PERSISTENT_IR_CACHE))}
+
+
+def _expr_var_name(expr: Any) -> str:
+    name = getattr(expr, "name", None)
+    if isinstance(name, str):
+        return name
+    i = getattr(expr, "i", None)
+    if isinstance(i, int):
+        return f"x{i}"
+    try:
+        return f"x{int(i)}"
+    except Exception:
+        return str(i)
+
+
+def expr_structural_hash(expr: Expr) -> str:
+    """Deterministic structural hash for Expr, independent of object identity.
+
+    This hash canonicalizes associative+commutative nodes (AND/OR/XOR) by flattening and sorting
+    child hashes, and canonicalizes EQV by sorting its two children. IMP preserves order.
+    """
+
+    def digest_for(e: Expr) -> bytes:
+        h = hashlib.blake2b(digest_size=16)
+        if isinstance(e, Var):
+            h.update(b"VAR:")
+            h.update(_expr_var_name(e).encode("utf-8"))
+            return h.digest()
+        if isinstance(e, Not):
+            h.update(b"NOT:")
+            h.update(digest_for(e.a))
+            return h.digest()
+        if isinstance(e, (And, Or, Xor)):
+            if isinstance(e, And):
+                tag = b"AND:"
+                cls = And
+            elif isinstance(e, Or):
+                tag = b"OR:"
+                cls = Or
+            else:
+                tag = b"XOR:"
+                cls = Xor
+
+            # Flatten associative ops, then sort child digests for commutativity.
+            stack: List[Expr] = [e]
+            parts: List[bytes] = []
+            while stack:
+                z = stack.pop()
+                if isinstance(z, cls):
+                    stack.append(z.b)
+                    stack.append(z.a)
+                else:
+                    parts.append(digest_for(z))
+            parts.sort()
+            h.update(tag)
+            for p in parts:
+                h.update(p)
+            return h.digest()
+        if isinstance(e, Eqv):
+            a = digest_for(e.a)
+            b = digest_for(e.b)
+            if b < a:
+                a, b = b, a
+            h.update(b"EQV:")
+            h.update(a)
+            h.update(b)
+            return h.digest()
+        if isinstance(e, Imp):
+            h.update(b"IMP:")
+            h.update(digest_for(e.a))
+            h.update(digest_for(e.b))
+            return h.digest()
+        raise TypeError(e)
+
+    return digest_for(expr).hex()
+
+
+def compile_expr_to_cm_ir_persistent(
+    expr: Expr,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    *,
+    reuse_cache: bool = False,
+) -> CMNode:
+    """Compile Expr → CM IR with a process-level persistent cache keyed by structural hash."""
+    _init_ir_compile_diagnostics(diagnostics)
+    _init_ir_persistent_cache_diagnostics(diagnostics)
+
+    key = expr_structural_hash(expr)
+    cached = _PERSISTENT_IR_CACHE.get(key)
+    if cached is not None:
+        _PERSISTENT_IR_CACHE.move_to_end(key)
+        _bump(diagnostics, "ir_persistent_cache_hits")
+        if diagnostics is not None:
+            diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
+        return cached
+
+    _bump(diagnostics, "ir_persistent_cache_misses")
+    node = compile_expr_to_cm_ir_cached(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
+    _PERSISTENT_IR_CACHE[key] = node
+    _PERSISTENT_IR_CACHE.move_to_end(key)
+    if len(_PERSISTENT_IR_CACHE) > _PERSISTENT_IR_CACHE_MAXSIZE:
+        _PERSISTENT_IR_CACHE.popitem(last=False)
+    if diagnostics is not None:
+        diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
+    return node
+
+
+def compile_expr_cached(expr: Expr, diagnostics: Optional[Dict[str, Any]] = None, *, reuse_cache: bool = False) -> CMNode:
+    return compile_expr_to_cm_ir_persistent(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
+
+
+def _init_final_output_diagnostics(diag: Optional[Dict[str, Any]]) -> None:
+    if diag is None:
+        return
+    diag.setdefault("final_cm_materialization_performed", 0)
+    diag.setdefault("final_cm_materialization_time_s", 0.0)
+    diag.setdefault("final_truth_table_materialization_time_s", 0.0)
+    diag.setdefault("final_bitset_returned", 0)
+    diag.setdefault("final_output_elements", 0)
+    diag.setdefault("final_output_nominal_elements", 0)
+    diag.setdefault("final_output_vars_count", 0)
+    diag.setdefault("final_output_reduced", 0)
+    diag.setdefault("large_n_output_guard_triggered", 0)
+    diag.setdefault("final_output_representation_code", -1)
+
+
+def _record_final_output_diagnostics(
+    diag: Optional[Dict[str, Any]],
+    *,
+    final_cm_materialization_performed: int,
+    final_cm_materialization_time_s: float,
+    final_truth_table_materialization_time_s: float,
+    final_bitset_returned: int,
+    final_output_elements: int,
+    final_output_representation_code: int,
+    final_output_nominal_elements: Optional[int] = None,
+    final_output_vars_count: Optional[int] = None,
+    final_output_reduced: int = 0,
+    large_n_output_guard_triggered: int = 0,
+) -> None:
+    if diag is None:
+        return
+    diag["final_cm_materialization_performed"] = int(final_cm_materialization_performed)
+    diag["final_cm_materialization_time_s"] = float(final_cm_materialization_time_s)
+    diag["final_truth_table_materialization_time_s"] = float(final_truth_table_materialization_time_s)
+    diag["final_bitset_returned"] = int(final_bitset_returned)
+    diag["final_output_elements"] = int(final_output_elements)
+    diag["final_output_nominal_elements"] = int(
+        final_output_elements if final_output_nominal_elements is None else final_output_nominal_elements
+    )
+    diag["final_output_vars_count"] = int(
+        0 if final_output_vars_count is None else final_output_vars_count
+    )
+    diag["final_output_reduced"] = int(final_output_reduced)
+    diag["large_n_output_guard_triggered"] = int(large_n_output_guard_triggered)
+    diag["final_output_representation_code"] = int(final_output_representation_code)
 
 
 def _var_sort_key(name: str) -> Tuple[int, object]:
@@ -81,6 +283,17 @@ class CMIRBuilder:
         self.diagnostics = diagnostics
         self._interned: Dict[Tuple[object, ...], CMNode] = {}
 
+    def _maybe_time(self, *, calls_key: str, time_key: str) -> Optional[float]:
+        if not _ir_timing_enabled(self.diagnostics):
+            return None
+        _bump(self.diagnostics, calls_key)
+        return time.perf_counter()
+
+    def _maybe_add_elapsed(self, t0: Optional[float], *, time_key: str) -> None:
+        if t0 is None or self.diagnostics is None:
+            return
+        _add_float(self.diagnostics, time_key, time.perf_counter() - t0)
+
     def _intern(
         self,
         *,
@@ -92,9 +305,15 @@ class CMIRBuilder:
         args: Tuple[CMNode, ...] = (),
         var_name: str = "",
     ) -> CMNode:
+        t0 = None
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_intern_calls")
+            t0 = time.perf_counter()
         cached = self._interned.get(key)
         if cached is not None:
             _bump(self.diagnostics, "subtree_cache_hits")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_intern_time_s", time.perf_counter() - t0)
             return cached
         _bump(self.diagnostics, "subtree_cache_misses")
         node = CMNode(
@@ -107,6 +326,8 @@ class CMIRBuilder:
             var_name=var_name,
         )
         self._interned[key] = node
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_intern_time_s", time.perf_counter() - t0)
         return node
 
     def const(self, value: int) -> CMNode:
@@ -123,13 +344,26 @@ class CMIRBuilder:
         )
 
     def negate(self, node: CMNode) -> CMNode:
+        # Keep rewrite timing non-overlapping with interning/live-vars/canonicalization timers.
+        t0 = None
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
+            t0 = time.perf_counter()
+
         if node.const_value is not None:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.const(1 - node.const_value)
         if node.kind == "not":
             _bump(self.diagnostics, "canonical_rewrites")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return node.args[0]
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
         return self._intern(
             kind="not",
             key=("NOT", node.key),
@@ -139,32 +373,59 @@ class CMIRBuilder:
             args=(node,),
         )
 
+    def _live_vars_union(self, nodes: Sequence[CMNode]) -> Tuple[str, ...]:
+        t0 = None
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_live_vars_calls")
+            _bump(self.diagnostics, "ir_live_vars_total_inputs", sum(len(n.vars) for n in nodes))
+            t0 = time.perf_counter()
+        out = _sorted_unique_vars(v for node in nodes for v in node.vars)
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_live_vars_time_s", time.perf_counter() - t0)
+        return out
+
+    def _live_vars_pair(self, left: CMNode, right: CMNode) -> Tuple[str, ...]:
+        return self._live_vars_union((left, right))
+
+    def _live_vars_single(self, node: CMNode) -> Tuple[str, ...]:
+        return self._live_vars_union((node,))
+
+    def _canonicalize_commutative_args(self, op: str, args: Sequence[CMNode]) -> Tuple[CMNode, ...]:
+        t0 = self._maybe_time(calls_key="ir_canonicalize_calls", time_key="ir_canonicalize_time_s")
+        try:
+            out: List[CMNode] = []
+            changed = False
+            for node in args:
+                if node.kind == "binary" and node.op == op and op in ASSOCIATIVE_OPS:
+                    out.extend(node.args)
+                    changed = True
+                else:
+                    out.append(node)
+            sorted_out = sorted(out, key=lambda node: node.key)
+            if changed or tuple(sorted_out) != tuple(args):
+                _bump(self.diagnostics, "canonical_rewrites")
+            return tuple(sorted_out)
+        finally:
+            self._maybe_add_elapsed(t0, time_key="ir_canonicalize_time_s")
+
     @staticmethod
     def _is_negation_of(a: CMNode, b: CMNode) -> bool:
         return (a.kind == "not" and a.args[0] == b) or (b.kind == "not" and b.args[0] == a)
 
-    def _canonicalize_commutative_args(self, op: str, args: Sequence[CMNode]) -> Tuple[CMNode, ...]:
-        out: List[CMNode] = []
-        changed = False
-        for node in args:
-            if node.kind == "binary" and node.op == op and op in ASSOCIATIVE_OPS:
-                out.extend(node.args)
-                changed = True
-            else:
-                out.append(node)
-        sorted_out = sorted(out, key=lambda node: node.key)
-        if changed or tuple(sorted_out) != tuple(args):
-            _bump(self.diagnostics, "canonical_rewrites")
-        return tuple(sorted_out)
-
     def make_and(self, args: Sequence[CMNode]) -> CMNode:
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
         ordered = self._canonicalize_commutative_args("AND", args)
+
+        t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
         out: List[CMNode] = []
         seen = set()
         for node in ordered:
             if node.const_value == 0:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
+                if t0 is not None:
+                    _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(0)
             if node.const_value == 1:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -176,15 +437,21 @@ class CMIRBuilder:
             if any(self._is_negation_of(node, prev) for prev in out):
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
+                if t0 is not None:
+                    _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(0)
             out.append(node)
             seen.add(node)
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
+
         if not out:
             return self.const(1)
         if len(out) == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             return out[0]
-        live_vars = _sorted_unique_vars(v for node in out for v in node.vars)
+        live_vars = self._live_vars_union(tuple(out))
         key = ("AND",) + tuple(node.key for node in out)
         return self._intern(
             kind="binary",
@@ -196,13 +463,19 @@ class CMIRBuilder:
         )
 
     def make_or(self, args: Sequence[CMNode]) -> CMNode:
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
         ordered = self._canonicalize_commutative_args("OR", args)
+
+        t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
         out: List[CMNode] = []
         seen = set()
         for node in ordered:
             if node.const_value == 1:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
+                if t0 is not None:
+                    _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(1)
             if node.const_value == 0:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -214,15 +487,21 @@ class CMIRBuilder:
             if any(self._is_negation_of(node, prev) for prev in out):
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
+                if t0 is not None:
+                    _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(1)
             out.append(node)
             seen.add(node)
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
+
         if not out:
             return self.const(0)
         if len(out) == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             return out[0]
-        live_vars = _sorted_unique_vars(v for node in out for v in node.vars)
+        live_vars = self._live_vars_union(tuple(out))
         key = ("OR",) + tuple(node.key for node in out)
         return self._intern(
             kind="binary",
@@ -234,7 +513,11 @@ class CMIRBuilder:
         )
 
     def make_xor(self, args: Sequence[CMNode]) -> CMNode:
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
         ordered = self._canonicalize_commutative_args("XOR", args)
+
+        t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
         counts: Dict[CMNode, int] = {}
         parity = 0
         for node in ordered:
@@ -248,6 +531,10 @@ class CMIRBuilder:
         out = [node for node in sorted(counts, key=lambda n: n.key) if (counts[node] % 2) == 1]
         if len(out) != len(counts) or any(v > 1 for v in counts.values()):
             _bump(self.diagnostics, "canonical_rewrites")
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
+
         if not out:
             return self.const(parity)
         if len(out) == 1:
@@ -258,7 +545,7 @@ class CMIRBuilder:
             _bump(self.diagnostics, "pruned_branches")
             return self.negate(out[0])
 
-        live_vars = _sorted_unique_vars(v for node in out for v in node.vars)
+        live_vars = self._live_vars_union(tuple(out))
         base = self._intern(
             kind="binary",
             key=("XOR",) + tuple(node.key for node in out),
@@ -274,34 +561,55 @@ class CMIRBuilder:
         return base
 
     def make_eqv(self, left: CMNode, right: CMNode) -> CMNode:
+        t0 = None
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
+            t0 = time.perf_counter()
+
         if left == right:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.const(1)
         if self._is_negation_of(left, right):
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.const(0)
         if left.const_value == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return right
         if right.const_value == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return left
         if left.const_value == 0:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.negate(right)
         if right.const_value == 0:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.negate(left)
         ordered = tuple(sorted((left, right), key=lambda node: node.key))
         if ordered != (left, right):
             _bump(self.diagnostics, "canonical_rewrites")
-        live_vars = _sorted_unique_vars(v for node in ordered for v in node.vars)
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
+
+        live_vars = self._live_vars_union(ordered)
         key = ("EQV", ordered[0].key, ordered[1].key)
         return self._intern(
             kind="binary",
@@ -313,23 +621,39 @@ class CMIRBuilder:
         )
 
     def make_imp(self, left: CMNode, right: CMNode) -> CMNode:
+        t0 = None
+        if _ir_timing_enabled(self.diagnostics):
+            _bump(self.diagnostics, "ir_rewrite_calls")
+            t0 = time.perf_counter()
+
         if left == right:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.const(1)
         if left.const_value == 0 or right.const_value == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.const(1)
         if left.const_value == 1:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return right
         if right.const_value == 0:
             _bump(self.diagnostics, "canonical_rewrites")
             _bump(self.diagnostics, "pruned_branches")
+            if t0 is not None:
+                _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
             return self.negate(left)
-        live_vars = _sorted_unique_vars(v for node in (left, right) for v in node.vars)
+
+        if t0 is not None:
+            _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
+        live_vars = self._live_vars_pair(left, right)
         key = ("IMP", left.key, right.key)
         return self._intern(
             kind="binary",
@@ -361,9 +685,116 @@ class CMIRBuilder:
         raise TypeError(expr)
 
 
-def compile_expr_to_cm_ir(expr: Expr, diagnostics: Optional[Dict[str, int]] = None) -> CMNode:
-    builder = CMIRBuilder(diagnostics)
-    return builder.build(expr)
+def compile_expr_to_cm_ir(
+    expr: Expr,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    *,
+    reuse_cache: bool = False,
+    persistent_cache: bool = False,
+) -> CMNode:
+    """Compile a boolean expression AST into a canonicalized, interned CM IR DAG.
+
+    If ``reuse_cache=True``, the compiled IR may be reused across calls for identical immutable
+    Expr objects. This is an explicit opt-in behavior to preserve benchmark semantics.
+
+    If ``persistent_cache=True``, a process-level persistent cache keyed by structural hash is used.
+    """
+    if persistent_cache:
+        return compile_expr_to_cm_ir_persistent(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
+    return compile_expr_to_cm_ir_cached(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
+
+
+def compile_expr_to_cm_ir_cached(
+    expr: Expr,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    *,
+    reuse_cache: bool = False,
+) -> CMNode:
+    _init_ir_compile_diagnostics(diagnostics)
+    if reuse_cache:
+        if diagnostics is not None:
+            diagnostics["ir_compile_cache_hit"] = 0
+        cached = _COMPILED_IR_CACHE.get(expr)
+        if cached is not None:
+            if diagnostics is not None:
+                _bump(diagnostics, "ir_compile_cache_hits")
+                diagnostics["ir_compile_cache_hit"] = 1
+            _COMPILED_IR_CACHE.move_to_end(expr)
+            return cached
+        if diagnostics is not None:
+            _bump(diagnostics, "ir_compile_cache_misses")
+            diagnostics["ir_compile_cache_hit"] = 0
+
+    if _ir_timing_enabled(diagnostics):
+        t0 = time.perf_counter()
+        builder = CMIRBuilder(diagnostics)
+        node = builder.build(expr)
+        _add_float(diagnostics, "ir_compile_time_s", time.perf_counter() - t0)
+    else:
+        builder = CMIRBuilder(diagnostics)
+        node = builder.build(expr)
+
+    if reuse_cache:
+        _COMPILED_IR_CACHE[expr] = node
+        _COMPILED_IR_CACHE.move_to_end(expr)
+        if len(_COMPILED_IR_CACHE) > _COMPILED_IR_CACHE_MAXSIZE:
+            _COMPILED_IR_CACHE.popitem(last=False)
+    return node
+
+
+@dataclass(frozen=True)
+class CompiledExpr:
+    """Reusable compiled expression container.
+
+    This object is safe to reuse across calls to `evaluate_compiled(...)` without recompilation.
+    """
+
+    expr_hash: str
+    node: "CMNode"
+
+
+def compile_expr(
+    expr: Expr,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    *,
+    use_persistent_cache: bool = False,
+    reuse_cache: bool = False,
+) -> CompiledExpr:
+    """Public reusable API: compile an Expr into CM IR (optionally using persistent caching)."""
+    h = expr_structural_hash(expr)
+    node = compile_expr_to_cm_ir(
+        expr,
+        diagnostics=diagnostics,
+        reuse_cache=reuse_cache,
+        persistent_cache=use_persistent_cache,
+    )
+    return CompiledExpr(expr_hash=h, node=node)
+
+
+def evaluate_compiled(
+    compiled: CompiledExpr,
+    *,
+    mode: str = "hybrid_no_reinflate",
+    vars_all: Optional[Sequence[str]] = None,
+    fixed: Optional[Dict[str, int]] = None,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    hybrid_threshold: int = 7,
+):
+    """Public reusable API: evaluate a compiled expression in a chosen mode.
+
+    Currently supports:
+      - mode="hybrid_no_reinflate": returns `FinalNoReinflateResult`
+    """
+    if mode != "hybrid_no_reinflate":
+        raise ValueError(f"unsupported mode: {mode!r}")
+    vars_seq: Sequence[str] = vars_all if vars_all is not None else tuple(compiled.node.vars)
+    return materialize_hybrid_no_reinflate(
+        compiled.node,
+        vars_seq,
+        fixed=fixed,
+        diagnostics=diagnostics,
+        hybrid_threshold=hybrid_threshold,
+    )
 
 
 @lru_cache(maxsize=4096)
@@ -865,6 +1296,8 @@ def materialize_cm(
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
 ) -> np.ndarray:
+    # Stable, benchmark-friendly final-output diagnostics (representation_code=0 for dense CM matrix).
+    _init_final_output_diagnostics(diagnostics)
     target_vars = tuple(list(R) + list(C))
     res = _materialize_ir_tagged(
         node,
@@ -880,7 +1313,7 @@ def materialize_cm(
         live_vars = tuple()
 
     if res.boundary_source and const_value is None and diagnostics is not None:
-        t0 = time.perf_counter()
+        t_final0 = time.perf_counter()
         arr, did_transpose, inserted = align_to_vars_with_stats(arr, live_vars, target_vars)
         _bump(diagnostics, "boundary_align_calls")
         if did_transpose:
@@ -889,14 +1322,237 @@ def materialize_cm(
         expand_shape = tuple(2 for _ in target_vars)
         arr = np.broadcast_to(arr, expand_shape)
         out = arr.reshape(1 << len(R), 1 << len(C)).copy()
-        t1 = time.perf_counter()
-        _add_float(diagnostics, "boundary_align_time_s", t1 - t0)
+        t_final1 = time.perf_counter()
+        _add_float(diagnostics, "boundary_align_time_s", t_final1 - t_final0)
+        _record_final_output_diagnostics(
+            diagnostics,
+            final_cm_materialization_performed=1,
+            final_cm_materialization_time_s=(t_final1 - t_final0),
+            final_truth_table_materialization_time_s=0.0,
+            final_bitset_returned=0,
+            final_output_elements=(1 << len(target_vars)),
+            final_output_representation_code=0,
+            final_output_vars_count=len(target_vars),
+        )
         return out
 
+    t_final0 = time.perf_counter()
     arr = align_to_vars(arr, live_vars, target_vars)
     expand_shape = tuple(2 for _ in target_vars)
     arr = np.broadcast_to(arr, expand_shape)
-    return arr.reshape(1 << len(R), 1 << len(C)).copy()
+    out = arr.reshape(1 << len(R), 1 << len(C)).copy()
+    t_final1 = time.perf_counter()
+    _record_final_output_diagnostics(
+        diagnostics,
+        final_cm_materialization_performed=1,
+        final_cm_materialization_time_s=(t_final1 - t_final0),
+        final_truth_table_materialization_time_s=0.0,
+        final_bitset_returned=0,
+        final_output_elements=(1 << len(target_vars)),
+        final_output_representation_code=0,
+        final_output_vars_count=len(target_vars),
+    )
+    return out
+
+
+@dataclass(frozen=True)
+class FinalNoReinflateResult:
+    """Result for the explicit no-reinflation hybrid path.
+
+    Representation code mapping:
+      1: truth-table vector (1D uint8) in MSB-first ``vars_all`` order
+      2: packed bitset (Python int) in MSB-first ``vars_all`` order
+      3: reduced packed bitset over ``output_vars``
+      4: reduced truth-table vector over ``output_vars``
+    """
+
+    final_output_representation_code: int
+    bits: Optional[int] = None
+    tt: Optional[np.ndarray] = None
+    output_vars: Tuple[str, ...] = tuple()
+
+
+def materialize_hybrid_no_reinflate(
+    node: CMNode,
+    vars_all: Sequence[str],
+    fixed: Optional[Dict[str, int]] = None,
+    *,
+    diagnostics: Optional[Dict[str, Any]] = None,
+    hybrid_threshold: int = 7,
+    allow_reduced_output: bool = False,
+    max_full_output_vars: Optional[int] = None,
+) -> FinalNoReinflateResult:
+    """Hybrid materialization that avoids dense CM reinflation.
+
+    If the live variable count is <= ``hybrid_threshold`` we return a packed bitset directly.
+    Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+    (never a 2D dense CM matrix).
+    """
+    profile = diagnostics is not None and bool(diagnostics.get("cached_exec_profile_enabled", 0))
+    t_total0 = time.perf_counter() if profile else None
+    profile_base = (
+        {
+            "cached_exec_fixed_handling_time_s": float(diagnostics.get("cached_exec_fixed_handling_time_s", 0.0)),
+            "cached_exec_var_order_time_s": float(diagnostics.get("cached_exec_var_order_time_s", 0.0)),
+            "cached_exec_bitset_eval_time_s": float(diagnostics.get("cached_exec_bitset_eval_time_s", 0.0)),
+            "cached_exec_result_wrap_time_s": float(diagnostics.get("cached_exec_result_wrap_time_s", 0.0)),
+        }
+        if profile and diagnostics is not None
+        else {}
+    )
+    _init_final_output_diagnostics(diagnostics)
+    if profile:
+        _bump(diagnostics, "cached_exec_evaluations")
+
+    t_fixed0 = time.perf_counter() if profile else None
+    fixed_map = fixed or {}
+    if t_fixed0 is not None:
+        _add_float(diagnostics, "cached_exec_fixed_handling_time_s", time.perf_counter() - t_fixed0)
+
+    t_vars0 = time.perf_counter() if profile else None
+    vars_key = tuple(vars_all)
+    live_vars = tuple(v for v in node.vars if v not in fixed_map)
+    live_k = len(live_vars)
+    n = len(vars_key)
+    nominal_out_elems = 1 << n
+    guard_full_output = max_full_output_vars is not None and n > int(max_full_output_vars)
+    use_reduced_output = bool(allow_reduced_output and guard_full_output)
+    output_vars = live_vars if use_reduced_output else vars_key
+    output_k = len(output_vars)
+    out_elems = 1 << output_k
+    if t_vars0 is not None:
+        _add_float(diagnostics, "cached_exec_var_order_time_s", time.perf_counter() - t_vars0)
+
+    if hybrid_threshold < 0:
+        raise ValueError("hybrid_threshold must be >= 0")
+    if guard_full_output and not allow_reduced_output:
+        raise ValueError(
+            f"refusing to materialize full no-reinflate output for {n} variables; "
+            "pass allow_reduced_output=True for structural large-n validation"
+        )
+
+    if live_k <= hybrid_threshold:
+        t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
+        t_profile_eval0 = time.perf_counter() if profile else None
+        bits = eval_cm_node_bitset(node, output_vars, fixed=fixed_map)
+        if t_profile_eval0 is not None:
+            _bump(diagnostics, "cached_exec_bitset_eval_calls")
+            _add_float(diagnostics, "cached_exec_bitset_eval_time_s", time.perf_counter() - t_profile_eval0)
+        if t_eval0 is not None:
+            _bump(diagnostics, "nr_bitset_eval_calls")
+            _add_float(diagnostics, "nr_bitset_eval_time_s", time.perf_counter() - t_eval0)
+        t_wrap0 = time.perf_counter() if profile else None
+        _record_final_output_diagnostics(
+            diagnostics,
+            final_cm_materialization_performed=0,
+            final_cm_materialization_time_s=0.0,
+            final_truth_table_materialization_time_s=0.0,
+            final_bitset_returned=1,
+            final_output_elements=out_elems,
+            final_output_representation_code=3 if use_reduced_output else 2,
+            final_output_nominal_elements=nominal_out_elems,
+            final_output_vars_count=output_k,
+            final_output_reduced=1 if use_reduced_output else 0,
+            large_n_output_guard_triggered=1 if guard_full_output else 0,
+        )
+        result = FinalNoReinflateResult(
+            final_output_representation_code=3 if use_reduced_output else 2,
+            bits=bits,
+            tt=None,
+            output_vars=output_vars,
+        )
+        if profile:
+            _bump(diagnostics, "cached_exec_result_wrap_count")
+            _bump(diagnostics, "cached_exec_packed_bitset_return_count")
+            if use_reduced_output:
+                _bump(diagnostics, "cached_exec_reduced_output_count")
+            if t_wrap0 is not None:
+                _add_float(diagnostics, "cached_exec_result_wrap_time_s", time.perf_counter() - t_wrap0)
+            if t_total0 is not None:
+                elapsed = time.perf_counter() - t_total0
+                _add_float(diagnostics, "cached_exec_total_time_s", elapsed)
+                known = (
+                    float(diagnostics.get("cached_exec_fixed_handling_time_s", 0.0))
+                    - profile_base["cached_exec_fixed_handling_time_s"]
+                    + float(diagnostics.get("cached_exec_var_order_time_s", 0.0))
+                    - profile_base["cached_exec_var_order_time_s"]
+                    + float(diagnostics.get("cached_exec_bitset_eval_time_s", 0.0))
+                    - profile_base["cached_exec_bitset_eval_time_s"]
+                    + float(diagnostics.get("cached_exec_result_wrap_time_s", 0.0))
+                    - profile_base["cached_exec_result_wrap_time_s"]
+                )
+                dispatch = max(0.0, elapsed - known)
+                _add_float(diagnostics, "cached_exec_dispatch_time_s", dispatch)
+                _add_float(diagnostics, "cached_exec_other_time_s", 0.0)
+        return result
+
+    t_fallback0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
+    if profile:
+        _bump(diagnostics, "cached_exec_fallback_to_tt_vector_count")
+    arr, live_vars, const_value = materialize_ir(
+        node,
+        fixed=fixed_map,
+        diagnostics=diagnostics,
+        materialize_mode="hybrid",
+        hybrid_threshold=hybrid_threshold,
+    )
+    if t_fallback0 is not None:
+        _add_float(diagnostics, "nr_fallback_materialize_ir_time_s", time.perf_counter() - t_fallback0)
+    if const_value is not None:
+        arr = np.array(bool(const_value), dtype=bool)
+        live_vars = tuple()
+
+    t_mat0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
+    target_vars = output_vars if use_reduced_output else vars_key
+    aligned = align_to_vars(arr, live_vars, target_vars)
+    full = np.broadcast_to(aligned, (2,) * len(target_vars))
+    tt = full.reshape(-1).astype(np.uint8, copy=False)
+    t_mat1 = time.perf_counter() if t_mat0 is not None else None
+    if t_mat0 is not None and t_mat1 is not None:
+        _add_float(diagnostics, "nr_tt_vector_build_time_s", t_mat1 - t_mat0)
+    t_wrap0 = time.perf_counter() if profile else None
+    _record_final_output_diagnostics(
+        diagnostics,
+        final_cm_materialization_performed=0,
+        final_cm_materialization_time_s=0.0,
+        final_truth_table_materialization_time_s=(t_mat1 - t_mat0) if (t_mat0 is not None and t_mat1 is not None) else 0.0,
+        final_bitset_returned=0,
+        final_output_elements=out_elems,
+        final_output_representation_code=4 if use_reduced_output else 1,
+        final_output_nominal_elements=nominal_out_elems,
+        final_output_vars_count=output_k,
+        final_output_reduced=1 if use_reduced_output else 0,
+        large_n_output_guard_triggered=1 if guard_full_output else 0,
+    )
+    result = FinalNoReinflateResult(
+        final_output_representation_code=4 if use_reduced_output else 1,
+        bits=None,
+        tt=tt,
+        output_vars=target_vars,
+    )
+    if profile:
+        _bump(diagnostics, "cached_exec_result_wrap_count")
+        if use_reduced_output:
+            _bump(diagnostics, "cached_exec_reduced_output_count")
+        if t_wrap0 is not None:
+            _add_float(diagnostics, "cached_exec_result_wrap_time_s", time.perf_counter() - t_wrap0)
+        if t_total0 is not None:
+            elapsed = time.perf_counter() - t_total0
+            _add_float(diagnostics, "cached_exec_total_time_s", elapsed)
+            known = (
+                float(diagnostics.get("cached_exec_fixed_handling_time_s", 0.0))
+                - profile_base["cached_exec_fixed_handling_time_s"]
+                + float(diagnostics.get("cached_exec_var_order_time_s", 0.0))
+                - profile_base["cached_exec_var_order_time_s"]
+                + float(diagnostics.get("cached_exec_bitset_eval_time_s", 0.0))
+                - profile_base["cached_exec_bitset_eval_time_s"]
+                + float(diagnostics.get("cached_exec_result_wrap_time_s", 0.0))
+                - profile_base["cached_exec_result_wrap_time_s"]
+            )
+            dispatch = max(0.0, elapsed - known)
+            _add_float(diagnostics, "cached_exec_dispatch_time_s", dispatch)
+            _add_float(diagnostics, "cached_exec_other_time_s", 0.0)
+    return result
 
 
 def expr_vars(expr: Expr) -> List[str]:
