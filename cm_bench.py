@@ -19,6 +19,7 @@ pyeda = try_import("pyeda")
 from bitset_backend import build_bitset_env, eval_expr_bitset, bitset_to_bool_array
 from cm_build import compile_expr_to_cm
 from cm_exprlib import And, Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
+from cm_ir import compile_expr_to_cm_ir, materialize_cm, materialize_hybrid_no_reinflate
 from cm_normalize import canonical_layout, cm_normalize_cache_stats
 from cm_parallel import compile_expr_to_cm_parallel, count_expr_nodes
 from expr_simplify import bdd_sop, simplify_via_sympy
@@ -95,9 +96,18 @@ def time_backends_on_expr(
     verbose: bool,
     bit_env: Optional[Mapping[str, int]] = None,
 ) -> Dict[str, Any]:
-    build_tt = n <= 16
-    run_sympy = n <= 16
-    run_espresso = use_espresso and (n <= 16)
+    full_tt_max_n = int(getattr(args, "full_tt_max_n", 16))
+    build_tt = n <= full_tt_max_n
+    large_n_safe = (
+        bool(getattr(args, "large_n_safe", False))
+        and (not build_tt)
+        and bool(getattr(args, "cm_compare_no_reinflate", False))
+    )
+    eval_repeat = int(getattr(args, "cm_eval_repeat", 1))
+    if eval_repeat < 1:
+        raise ValueError("--cm-eval-repeat must be >= 1")
+    run_sympy = build_tt
+    run_espresso = use_espresso and build_tt
     use_lazy_builder = HAS_LAZY and args.cm_lazy
 
     tt = None
@@ -105,17 +115,37 @@ def time_backends_on_expr(
     t_cm = None
     cm_tt_extract_time = None
     cm_ok = None
+    cm_exec_only_time = None
     cm_hybrid_time = None
     cm_hybrid_tt_extract_time = None
     cm_hybrid_ok = None
+    cm_hybrid_exec_only_time = None
     cm_partial_hybrid_time = None
     cm_partial_hybrid_tt_extract_time = None
     cm_partial_hybrid_ok = None
+    cm_partial_hybrid_exec_only_time = None
+    cm_hybrid_no_reinflate_time = None
+    cm_hybrid_no_reinflate_tt_extract_time = None
+    cm_hybrid_no_reinflate_ok = None
+    cm_hybrid_no_reinflate_exec_only_time = None
+    cm_hybrid_no_reinflate_cached_exec_only_time = None
     cm_parallel_time = None
     cm_parallel_tt_extract_time = None
     cm_parallel_ok = None
     node_count = count_expr_nodes(expr)
     bitset_extract_time = None
+    bitset_cached_exec_only_time = None
+    bitset_time = None
+    bitset_ok = None
+    numba_time = None
+    numba_ok = None
+    numba_compile_time = None
+    sympy_time = None
+    sympy_ok = None
+    bdd_sop_time = None
+    bdd_sop_ok = None
+    espresso_time = None
+    espresso_ok = None
     pair_attempts: Optional[int] = None
     pair_collapses: Optional[int] = None
     pair_ratio: Optional[float] = None
@@ -124,18 +154,37 @@ def time_backends_on_expr(
     cm_diag: Dict[str, int] = {}
     cm_hybrid_diag: Dict[str, int] = {}
     cm_partial_hybrid_diag: Dict[str, int] = {}
+    cm_hybrid_no_reinflate_diag: Dict[str, Any] = {}
     cm_parallel_diag: Dict[str, int] = {}
     norm_before = cm_normalize_cache_stats() if args.cm_debug_stats else None
     lazy_before = (
         lazy_align_cache_stats() if (args.cm_debug_stats and HAS_LAZY and callable(lazy_align_cache_stats)) else None
     )
+    enable_ir_timing = bool(
+        getattr(args, "cm_report_ir_breakdown", False)
+        or getattr(args, "cm_compile_once_per_expression", False)
+    )
+
+    def _enable_ir(diag: Dict[str, Any]) -> None:
+        if enable_ir_timing:
+            diag["ir_timing_enabled"] = 1
+
+    for d in (cm_diag, cm_hybrid_diag, cm_partial_hybrid_diag, cm_hybrid_no_reinflate_diag, cm_parallel_diag):
+        try:
+            _enable_ir(d)  # type: ignore[arg-type]
+        except Exception:
+            pass
 
     if build_tt:
         if verbose:
             print(f"[n={n}] CM compile ...")
         R, C = canonical_layout([f"x{i}" for i in range(n)], mode=args.cm_layout)
 
-        def run_cm(materialize_mode: str, diag: Dict[str, int], *, use_pair_backend: bool = False) -> np.ndarray:
+        use_compile_once = bool(getattr(args, "cm_compile_once_per_expression", False)) and (not bool(args.cm_pair))
+        reuse_compiled_ir = bool(getattr(args, "cm_reuse_compiled_ir", False))
+        use_persistent_cache = bool(getattr(args, "cm_use_persistent_cache", False))
+
+        def run_cm(materialize_mode: str, diag: Dict[str, Any], *, use_pair_backend: bool = False) -> np.ndarray:
             if use_pair_backend and HAS_PAIR and callable(compile_expr_to_cm_pair):
                 M_pair, pm = compile_expr_to_cm_pair(
                     expr,
@@ -163,6 +212,8 @@ def time_backends_on_expr(
                     diagnostics=diag,
                     materialize_mode=materialize_mode,
                     hybrid_threshold=args.cm_hybrid_threshold,
+                    reuse_compiled_ir=reuse_compiled_ir,
+                    use_persistent_cache=use_persistent_cache,
                 )
             return compile_expr_to_cm(
                 expr,
@@ -172,12 +223,51 @@ def time_backends_on_expr(
                 diagnostics=diag,
                 materialize_mode=materialize_mode,
                 hybrid_threshold=args.cm_hybrid_threshold,
+                reuse_compiled_ir=reuse_compiled_ir,
+                use_persistent_cache=use_persistent_cache,
             )
 
         cm_mode = "numpy" if args.cm_compare_hybrid else "partial_hybrid"
-        t0 = time.perf_counter()
-        M_cm = run_cm(cm_mode, cm_diag, use_pair_backend=bool(args.cm_pair))
-        t_cm = time.perf_counter() - t0
+
+        if use_compile_once:
+            if verbose:
+                print(f"[n={n}] CM IR compile-once enabled")
+            compile_diag: Dict[str, Any] = {}
+            _enable_ir(compile_diag)
+            node = compile_expr_to_cm_ir(
+                expr,
+                diagnostics=compile_diag,
+                reuse_cache=reuse_compiled_ir,
+                persistent_cache=use_persistent_cache,
+            )
+            ir_compile_time = float(compile_diag.get("ir_compile_time_s", 0.0))
+
+            def _stamp_compile_reuse(diag: Dict[str, Any]) -> None:
+                if enable_ir_timing:
+                    for k, v in compile_diag.items():
+                        if isinstance(k, str) and k.startswith("ir_"):
+                            diag[k] = v
+                    diag["ir_compile_calls_per_expr"] = 1
+                    diag["ir_compile_reused_for_mode"] = 1
+
+            _stamp_compile_reuse(cm_diag)
+            t_exec0 = time.perf_counter()
+            M_cm = materialize_cm(
+                node,
+                R,
+                C,
+                fixed={},
+                diagnostics=cm_diag,
+                materialize_mode=cm_mode,
+                hybrid_threshold=args.cm_hybrid_threshold,
+            )
+            cm_exec_only_time = time.perf_counter() - t_exec0
+            t_cm = ir_compile_time + cm_exec_only_time
+        else:
+            t0 = time.perf_counter()
+            M_cm = run_cm(cm_mode, cm_diag, use_pair_backend=bool(args.cm_pair))
+            t_cm = time.perf_counter() - t0
+
         ttt0 = time.perf_counter()
         tt = cm_matrix_to_tt(M_cm, R, C, n)
         cm_tt_extract_time = time.perf_counter() - ttt0
@@ -187,12 +277,92 @@ def time_backends_on_expr(
         except Exception:
             cm_ok = False
 
+        if getattr(args, "cm_compare_no_reinflate", False):
+            if verbose:
+                print(f"[n={n}] CM hybrid (no reinflate) compile ...")
+            vars_all = [f"x{i}" for i in range(n)]
+            if use_compile_once:
+                _stamp_compile_reuse(cm_hybrid_no_reinflate_diag)
+                t_exec0 = time.perf_counter()
+                res_nr = materialize_hybrid_no_reinflate(
+                    node,
+                    vars_all,
+                    fixed={},
+                    diagnostics=cm_hybrid_no_reinflate_diag,
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                )
+                cm_hybrid_no_reinflate_exec_only_time = time.perf_counter() - t_exec0
+                cm_hybrid_no_reinflate_time = ir_compile_time + cm_hybrid_no_reinflate_exec_only_time
+            else:
+                t0nr = time.perf_counter()
+                node_nr = compile_expr_to_cm_ir(
+                    expr,
+                    diagnostics=cm_hybrid_no_reinflate_diag,
+                    reuse_cache=reuse_compiled_ir,
+                    persistent_cache=use_persistent_cache,
+                )
+                res_nr = materialize_hybrid_no_reinflate(
+                    node_nr,
+                    vars_all,
+                    fixed={},
+                    diagnostics=cm_hybrid_no_reinflate_diag,
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                )
+                cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
+            cm_hybrid_no_reinflate_tt_extract_time = 0.0
+            if tt_ref is not None:
+                if res_nr.bits is not None:
+                    tt_nr = bitset_to_bool_array(int(res_nr.bits), n)
+                else:
+                    tt_nr = res_nr.tt
+                cm_hybrid_no_reinflate_ok = bool(tt_nr is not None and np.array_equal(tt_nr, tt_ref))
+            else:
+                cm_hybrid_no_reinflate_ok = False
+
+            if eval_repeat > 1:
+                node_repeat = node if use_compile_once else node_nr
+                profile_diag: Optional[Dict[str, Any]]
+                profile_diag = (
+                    {"cached_exec_profile_enabled": 1}
+                    if bool(getattr(args, "cm_profile_cached_exec", False))
+                    else None
+                )
+                t_rep0 = time.perf_counter()
+                for _ in range(eval_repeat):
+                    _ = materialize_hybrid_no_reinflate(
+                        node_repeat,
+                        vars_all,
+                        fixed={},
+                        diagnostics=profile_diag,
+                        hybrid_threshold=args.cm_hybrid_threshold,
+                    )
+                cm_hybrid_no_reinflate_cached_exec_only_time = (time.perf_counter() - t_rep0) / float(eval_repeat)
+                if profile_diag is not None:
+                    for k, v in profile_diag.items():
+                        if k.startswith("cached_exec_"):
+                            cm_hybrid_no_reinflate_diag[k] = v
+
         if args.cm_compare_hybrid:
             if verbose:
                 print(f"[n={n}] CM hybrid compile ...")
-            t0h = time.perf_counter()
-            M_cmh = run_cm("hybrid", cm_hybrid_diag)
-            cm_hybrid_time = time.perf_counter() - t0h
+            if use_compile_once:
+                _stamp_compile_reuse(cm_hybrid_diag)
+                t_exec0 = time.perf_counter()
+                M_cmh = materialize_cm(
+                    node,
+                    R,
+                    C,
+                    fixed={},
+                    diagnostics=cm_hybrid_diag,
+                    materialize_mode="hybrid",
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                )
+                cm_hybrid_exec_only_time = time.perf_counter() - t_exec0
+                cm_hybrid_time = ir_compile_time + cm_hybrid_exec_only_time
+            else:
+                t0h = time.perf_counter()
+                M_cmh = run_cm("hybrid", cm_hybrid_diag)
+                cm_hybrid_time = time.perf_counter() - t0h
             thtt0 = time.perf_counter()
             tt_cmh = cm_matrix_to_tt(M_cmh, R, C, n)
             cm_hybrid_tt_extract_time = time.perf_counter() - thtt0
@@ -203,9 +373,24 @@ def time_backends_on_expr(
 
             if verbose:
                 print(f"[n={n}] CM partial hybrid compile ...")
-            t0ph = time.perf_counter()
-            M_cmph = run_cm("partial_hybrid", cm_partial_hybrid_diag)
-            cm_partial_hybrid_time = time.perf_counter() - t0ph
+            if use_compile_once:
+                _stamp_compile_reuse(cm_partial_hybrid_diag)
+                t_exec0 = time.perf_counter()
+                M_cmph = materialize_cm(
+                    node,
+                    R,
+                    C,
+                    fixed={},
+                    diagnostics=cm_partial_hybrid_diag,
+                    materialize_mode="partial_hybrid",
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                )
+                cm_partial_hybrid_exec_only_time = time.perf_counter() - t_exec0
+                cm_partial_hybrid_time = ir_compile_time + cm_partial_hybrid_exec_only_time
+            else:
+                t0ph = time.perf_counter()
+                M_cmph = run_cm("partial_hybrid", cm_partial_hybrid_diag)
+                cm_partial_hybrid_time = time.perf_counter() - t0ph
             tph_tt0 = time.perf_counter()
             tt_cmph = cm_matrix_to_tt(M_cmph, R, C, n)
             cm_partial_hybrid_tt_extract_time = time.perf_counter() - tph_tt0
@@ -237,6 +422,8 @@ def time_backends_on_expr(
                     diagnostics=cm_parallel_diag,
                     materialize_mode="partial_hybrid",
                     hybrid_threshold=args.cm_hybrid_threshold,
+                    reuse_compiled_ir=reuse_compiled_ir,
+                    use_persistent_cache=use_persistent_cache,
                 )
                 cm_parallel_time = time.perf_counter() - t0p
                 tptt0 = time.perf_counter()
@@ -250,6 +437,84 @@ def time_backends_on_expr(
                 cm_parallel_time = None
                 cm_parallel_tt_extract_time = None
                 cm_parallel_ok = False
+
+    if large_n_safe:
+        if verbose:
+            print(f"[n={n}] CM hybrid (no reinflate, large-n safe) compile ...")
+        vars_all = [f"x{i}" for i in range(n)]
+        use_persistent_cache = bool(getattr(args, "cm_use_persistent_cache", False))
+        reuse_compiled_ir = bool(getattr(args, "cm_reuse_compiled_ir", False))
+        max_full_output_vars = int(getattr(args, "cm_max_full_output_vars", full_tt_max_n))
+        try:
+            t0nr = time.perf_counter()
+            node_nr = compile_expr_to_cm_ir(
+                expr,
+                diagnostics=cm_hybrid_no_reinflate_diag,
+                reuse_cache=reuse_compiled_ir,
+                persistent_cache=use_persistent_cache,
+            )
+            res_nr = materialize_hybrid_no_reinflate(
+                node_nr,
+                vars_all,
+                fixed={},
+                diagnostics=cm_hybrid_no_reinflate_diag,
+                hybrid_threshold=args.cm_hybrid_threshold,
+                allow_reduced_output=True,
+                max_full_output_vars=max_full_output_vars,
+            )
+            cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
+            cm_hybrid_no_reinflate_tt_extract_time = 0.0
+
+            output_vars = tuple(res_nr.output_vars)
+            if not args.no_bitset:
+                local_bit_env = build_bitset_env(output_vars)
+                t7 = time.perf_counter()
+                bitset_tt = eval_expr_bitset(expr, local_bit_env)
+                bitset_time = time.perf_counter() - t7
+                if res_nr.bits is not None:
+                    cm_hybrid_no_reinflate_ok = bool(int(res_nr.bits) == int(bitset_tt))
+                elif res_nr.tt is not None and len(output_vars) <= full_tt_max_n:
+                    tt_bitset = bitset_to_bool_array(bitset_tt, len(output_vars))
+                    cm_hybrid_no_reinflate_ok = bool(np.array_equal(res_nr.tt, tt_bitset))
+                else:
+                    cm_hybrid_no_reinflate_ok = True
+                bitset_ok = True
+
+                if eval_repeat > 1:
+                    t7r = time.perf_counter()
+                    for _ in range(eval_repeat):
+                        _ = eval_expr_bitset(expr, local_bit_env)
+                    bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
+            else:
+                cm_hybrid_no_reinflate_ok = True
+
+            if eval_repeat > 1:
+                profile_diag: Optional[Dict[str, Any]]
+                profile_diag = (
+                    {"cached_exec_profile_enabled": 1}
+                    if bool(getattr(args, "cm_profile_cached_exec", False))
+                    else None
+                )
+                t_rep0 = time.perf_counter()
+                for _ in range(eval_repeat):
+                    _ = materialize_hybrid_no_reinflate(
+                        node_nr,
+                        vars_all,
+                        fixed={},
+                        diagnostics=profile_diag,
+                        hybrid_threshold=args.cm_hybrid_threshold,
+                        allow_reduced_output=True,
+                        max_full_output_vars=max_full_output_vars,
+                    )
+                cm_hybrid_no_reinflate_cached_exec_only_time = (time.perf_counter() - t_rep0) / float(eval_repeat)
+                if profile_diag is not None:
+                    for k, v in profile_diag.items():
+                        if k.startswith("cached_exec_"):
+                            cm_hybrid_no_reinflate_diag[k] = v
+        except Exception:
+            cm_hybrid_no_reinflate_time = None
+            cm_hybrid_no_reinflate_tt_extract_time = None
+            cm_hybrid_no_reinflate_ok = False
 
     bdd_time = None
     bdd_nodes = None
@@ -357,18 +622,6 @@ def time_backends_on_expr(
             dd_time = None
             dd_nodes = None
 
-    sympy_time = None
-    sympy_ok = None
-    bdd_sop_time = None
-    bdd_sop_ok = None
-    espresso_time = None
-    espresso_ok = None
-    bitset_time = None
-    bitset_ok = None
-    numba_time = None
-    numba_ok = None
-    numba_compile_time = None
-
     if build_tt and (not args.no_bitset):
         try:
             if verbose:
@@ -377,6 +630,11 @@ def time_backends_on_expr(
             t7 = time.perf_counter()
             bitset_tt = eval_expr_bitset(expr, local_bit_env)
             bitset_time = time.perf_counter() - t7
+            if eval_repeat > 1:
+                t7r = time.perf_counter()
+                for _ in range(eval_repeat):
+                    _ = eval_expr_bitset(expr, local_bit_env)
+                bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             if tt_ref is not None:
                 t7x = time.perf_counter()
                 tt_bitset = bitset_to_bool_array(bitset_tt, n)
@@ -521,12 +779,22 @@ def time_backends_on_expr(
         "decision_numpy_mode_forced",
         "decision_bitset_fixed_var_reduction_helped",
         "decision_cache_hit",
+        "final_cm_materialization_performed",
+        "final_bitset_returned",
+        "final_output_elements",
+        "final_output_nominal_elements",
+        "final_output_vars_count",
+        "final_output_reduced",
+        "large_n_output_guard_triggered",
+        "final_output_representation_code",
     )
     boundary_float_fields = (
         "boundary_bitset_eval_time_s",
         "boundary_bitset_to_hypercube_time_s",
         "boundary_align_time_s",
         "boundary_dispatch_time_s",
+        "final_cm_materialization_time_s",
+        "final_truth_table_materialization_time_s",
     )
     boundary_int_fields = (
         "boundary_bitset_eval_calls",
@@ -537,21 +805,40 @@ def time_backends_on_expr(
         "boundary_align_insert_axes_total",
         "boundary_bitset_const_fastpath_calls",
     )
+    def _int_diag(diag: Mapping[str, Any], key: str, default: int = 0) -> int:
+        try:
+            return int(diag.get(key, default))
+        except Exception:
+            return int(default)
+
+    def _float_diag(diag: Mapping[str, Any], key: str, default: float = 0.0) -> float:
+        try:
+            return float(diag.get(key, default))
+        except Exception:
+            return float(default)
+
     for field in diag_fields:
-        debug_row[f"cm_{field}"] = int(cm_diag.get(field, 0))
-        debug_row[f"cm_hybrid_{field}"] = int(cm_hybrid_diag.get(field, 0))
-        debug_row[f"cm_partial_hybrid_{field}"] = int(cm_partial_hybrid_diag.get(field, 0))
-        debug_row[f"cm_parallel_{field}"] = int(cm_parallel_diag.get(field, 0))
+        default = -1 if field == "final_output_representation_code" else 0
+        debug_row[f"cm_{field}"] = _int_diag(cm_diag, field, default)
+        debug_row[f"cm_hybrid_{field}"] = _int_diag(cm_hybrid_diag, field, default)
+        debug_row[f"cm_partial_hybrid_{field}"] = _int_diag(cm_partial_hybrid_diag, field, default)
+        debug_row[f"cm_parallel_{field}"] = _int_diag(cm_parallel_diag, field, default)
+        if getattr(args, "cm_compare_no_reinflate", False):
+            debug_row[f"cm_hybrid_no_reinflate_{field}"] = _int_diag(cm_hybrid_no_reinflate_diag, field, default)
     for field in boundary_int_fields:
-        debug_row[f"cm_{field}"] = int(cm_diag.get(field, 0))
-        debug_row[f"cm_hybrid_{field}"] = int(cm_hybrid_diag.get(field, 0))
-        debug_row[f"cm_partial_hybrid_{field}"] = int(cm_partial_hybrid_diag.get(field, 0))
-        debug_row[f"cm_parallel_{field}"] = int(cm_parallel_diag.get(field, 0))
+        debug_row[f"cm_{field}"] = _int_diag(cm_diag, field, 0)
+        debug_row[f"cm_hybrid_{field}"] = _int_diag(cm_hybrid_diag, field, 0)
+        debug_row[f"cm_partial_hybrid_{field}"] = _int_diag(cm_partial_hybrid_diag, field, 0)
+        debug_row[f"cm_parallel_{field}"] = _int_diag(cm_parallel_diag, field, 0)
+        if getattr(args, "cm_compare_no_reinflate", False):
+            debug_row[f"cm_hybrid_no_reinflate_{field}"] = _int_diag(cm_hybrid_no_reinflate_diag, field, 0)
     for field in boundary_float_fields:
-        debug_row[f"cm_{field}"] = float(cm_diag.get(field, 0.0))
-        debug_row[f"cm_hybrid_{field}"] = float(cm_hybrid_diag.get(field, 0.0))
-        debug_row[f"cm_partial_hybrid_{field}"] = float(cm_partial_hybrid_diag.get(field, 0.0))
-        debug_row[f"cm_parallel_{field}"] = float(cm_parallel_diag.get(field, 0.0))
+        debug_row[f"cm_{field}"] = _float_diag(cm_diag, field, 0.0)
+        debug_row[f"cm_hybrid_{field}"] = _float_diag(cm_hybrid_diag, field, 0.0)
+        debug_row[f"cm_partial_hybrid_{field}"] = _float_diag(cm_partial_hybrid_diag, field, 0.0)
+        debug_row[f"cm_parallel_{field}"] = _float_diag(cm_parallel_diag, field, 0.0)
+        if getattr(args, "cm_compare_no_reinflate", False):
+            debug_row[f"cm_hybrid_no_reinflate_{field}"] = _float_diag(cm_hybrid_no_reinflate_diag, field, 0.0)
     for prefix, diag_map in (
         ("cm", cm_diag),
         ("cm_hybrid", cm_hybrid_diag),
@@ -563,6 +850,91 @@ def time_backends_on_expr(
         debug_row[f"{prefix}_materialization_avg_k"] = (
             float(live_total / materializations) if materializations > 0 else None
         )
+    if getattr(args, "cm_report_ir_breakdown", False):
+        ir_int_fields = (
+            "ir_intern_calls",
+            "ir_canonicalize_calls",
+            "ir_rewrite_calls",
+            "ir_live_vars_calls",
+            "ir_live_vars_total_inputs",
+            "ir_compile_cache_hit",
+            "ir_compile_cache_hits",
+            "ir_compile_cache_misses",
+            "ir_persistent_cache_hits",
+            "ir_persistent_cache_misses",
+            "ir_persistent_cache_size",
+            "ir_compile_calls_per_expr",
+            "ir_compile_reused_for_mode",
+        )
+        ir_float_fields = (
+            "ir_compile_time_s",
+            "ir_intern_time_s",
+            "ir_canonicalize_time_s",
+            "ir_rewrite_time_s",
+            "ir_live_vars_time_s",
+        )
+        nr_int_fields = ("nr_bitset_eval_calls",)
+        nr_float_fields = (
+            "nr_bitset_eval_time_s",
+            "nr_fallback_materialize_ir_time_s",
+            "nr_tt_vector_build_time_s",
+        )
+
+        diag_sets: List[Tuple[str, Mapping[str, Any]]] = [
+            ("cm", cm_diag),
+            ("cm_hybrid", cm_hybrid_diag),
+            ("cm_partial_hybrid", cm_partial_hybrid_diag),
+            ("cm_parallel", cm_parallel_diag),
+        ]
+        if getattr(args, "cm_compare_no_reinflate", False):
+            diag_sets.append(("cm_hybrid_no_reinflate", cm_hybrid_no_reinflate_diag))
+
+        for prefix, diag_map in diag_sets:
+            for field in ir_int_fields:
+                debug_row[f"{prefix}_{field}"] = _int_diag(diag_map, field, 0)
+            for field in ir_float_fields:
+                debug_row[f"{prefix}_{field}"] = _float_diag(diag_map, field, 0.0)
+
+            other = max(
+                0.0,
+                _float_diag(diag_map, "ir_compile_time_s", 0.0)
+                - (
+                    _float_diag(diag_map, "ir_intern_time_s", 0.0)
+                    + _float_diag(diag_map, "ir_canonicalize_time_s", 0.0)
+                    + _float_diag(diag_map, "ir_rewrite_time_s", 0.0)
+                    + _float_diag(diag_map, "ir_live_vars_time_s", 0.0)
+                ),
+            )
+            debug_row[f"{prefix}_ir_other_time_s"] = float(other)
+
+        if getattr(args, "cm_compare_no_reinflate", False):
+            for field in nr_int_fields:
+                debug_row[f"cm_hybrid_no_reinflate_{field}"] = _int_diag(cm_hybrid_no_reinflate_diag, field, 0)
+            for field in nr_float_fields:
+                debug_row[f"cm_hybrid_no_reinflate_{field}"] = _float_diag(cm_hybrid_no_reinflate_diag, field, 0.0)
+    if getattr(args, "cm_profile_cached_exec", False) and getattr(args, "cm_compare_no_reinflate", False):
+        cached_exec_int_fields = (
+            "cached_exec_evaluations",
+            "cached_exec_bitset_eval_calls",
+            "cached_exec_result_wrap_count",
+            "cached_exec_fallback_to_tt_vector_count",
+            "cached_exec_packed_bitset_return_count",
+            "cached_exec_reduced_output_count",
+        )
+        cached_exec_float_fields = (
+            "cached_exec_total_time_s",
+            "cached_exec_dispatch_time_s",
+            "cached_exec_var_order_time_s",
+            "cached_exec_fixed_handling_time_s",
+            "cached_exec_bitset_eval_time_s",
+            "cached_exec_result_wrap_time_s",
+            "cached_exec_correctness_or_extract_time_s",
+            "cached_exec_other_time_s",
+        )
+        for field in cached_exec_int_fields:
+            debug_row[f"cm_hybrid_no_reinflate_{field}"] = _int_diag(cm_hybrid_no_reinflate_diag, field, 0)
+        for field in cached_exec_float_fields:
+            debug_row[f"cm_hybrid_no_reinflate_{field}"] = _float_diag(cm_hybrid_no_reinflate_diag, field, 0.0)
     if args.cm_debug_stats:
         def _coerce_diag_value(v: Any) -> Any:
             if v is None:
@@ -592,10 +964,36 @@ def time_backends_on_expr(
             debug_row[f"cm_partial_hybrid_diag_{k}"] = _coerce_diag_value(v)
         for k, v in cm_parallel_diag.items():
             debug_row[f"cm_parallel_diag_{k}"] = _coerce_diag_value(v)
+        if getattr(args, "cm_compare_no_reinflate", False):
+            for k, v in cm_hybrid_no_reinflate_diag.items():
+                debug_row[f"cm_hybrid_no_reinflate_diag_{k}"] = _coerce_diag_value(v)
 
     return {
         "cm_time_s": t_cm,
+        **(
+            {
+                "cm_exec_only_time_s": cm_exec_only_time,
+                "cm_hybrid_exec_only_time_s": cm_hybrid_exec_only_time,
+                "cm_partial_hybrid_exec_only_time_s": cm_partial_hybrid_exec_only_time,
+                "cm_hybrid_no_reinflate_exec_only_time_s": cm_hybrid_no_reinflate_exec_only_time,
+            }
+            if bool(getattr(args, "cm_compile_once_per_expression", False))
+            else {}
+        ),
         "cm_tt_extract_time_s": cm_tt_extract_time,
+        **(
+            {
+                "cm_eval_repeat": eval_repeat,
+                "bitset_cached_exec_only_time_s": bitset_cached_exec_only_time,
+            }
+            if ((build_tt or large_n_safe) and eval_repeat > 1)
+            else {}
+        ),
+        **(
+            {"cm_hybrid_no_reinflate_cached_exec_only_time_s": cm_hybrid_no_reinflate_cached_exec_only_time}
+            if ((build_tt or large_n_safe) and eval_repeat > 1 and getattr(args, "cm_compare_no_reinflate", False))
+            else {}
+        ),
         "cm_ok": cm_ok,
         "cm_nodes": node_count,
         "pair_attempts": pair_attempts,
@@ -608,6 +1006,15 @@ def time_backends_on_expr(
         "cm_partial_hybrid_time_s": cm_partial_hybrid_time,
         "cm_partial_hybrid_tt_extract_time_s": cm_partial_hybrid_tt_extract_time,
         "cm_partial_hybrid_ok": cm_partial_hybrid_ok,
+        **(
+            {
+                "cm_hybrid_no_reinflate_time_s": cm_hybrid_no_reinflate_time,
+                "cm_hybrid_no_reinflate_tt_extract_time_s": cm_hybrid_no_reinflate_tt_extract_time,
+                "cm_hybrid_no_reinflate_ok": cm_hybrid_no_reinflate_ok,
+            }
+            if getattr(args, "cm_compare_no_reinflate", False)
+            else {}
+        ),
         "cm_parallel_time_s": cm_parallel_time,
         "cm_parallel_tt_extract_time_s": cm_parallel_tt_extract_time,
         "cm_parallel_ok": cm_parallel_ok,
@@ -617,6 +1024,11 @@ def time_backends_on_expr(
         "cm_time_excludes_tt_extract": True,
         "cm_hybrid_time_excludes_tt_extract": True,
         "cm_partial_hybrid_time_excludes_tt_extract": True,
+        **(
+            {"cm_hybrid_no_reinflate_time_excludes_tt_extract": True}
+            if getattr(args, "cm_compare_no_reinflate", False)
+            else {}
+        ),
         "cm_parallel_time_excludes_tt_extract": True,
         "bitset_time_excludes_tt_extract": True,
         "numba_compile_time_s": numba_compile_time,
@@ -635,6 +1047,10 @@ def time_backends_on_expr(
         "robdd_ok": robdd_ok,
         "cm_layout": args.cm_layout,
         "cm_compare_hybrid": bool(args.cm_compare_hybrid),
+        "cm_compare_no_reinflate": bool(getattr(args, "cm_compare_no_reinflate", False)),
+        "cm_report_ir_breakdown": bool(getattr(args, "cm_report_ir_breakdown", False)),
+        "cm_compile_once_per_expression": bool(getattr(args, "cm_compile_once_per_expression", False)),
+        "cm_reuse_compiled_ir": bool(getattr(args, "cm_reuse_compiled_ir", False)),
         "cm_hybrid_threshold": int(args.cm_hybrid_threshold),
         **debug_row,
     }
@@ -650,15 +1066,16 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
 
     # Ensure bitset env is prepared once per variable set and reused per trial.
     bit_env_by_n: Dict[int, Mapping[str, int]] = {}
+    full_tt_max_n = int(getattr(args, "full_tt_max_n", 16))
     if not args.no_bitset:
         for n in sizes:
-            if n <= 16:
+            if n <= full_tt_max_n:
                 bit_env_by_n[n] = build_bitset_env([f"x{i}" for i in range(n)])
 
     for n in sizes:
         if verbose:
             print(f"\n=== n = {n} ===")
-            if n > 16:
+            if n > full_tt_max_n:
                 print("[info] n>16: skipping Sympy/Espresso/TT")
         exprs = [random_expr(n, rng, max_depth=max_depth, p_unary=0.25) for _ in range(trials)]
         for t, expr in enumerate(exprs):
@@ -930,6 +1347,167 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
         .reset_index()
     )
 
+    # Optional additional aggregates: no-reinflate mode + final-output diagnostics.
+    def _maybe_merge_group_medians(extra_spec: Dict[str, Any]) -> None:
+        nonlocal agg
+        if not extra_spec:
+            return
+        extra = df.groupby("n_vars").agg(**extra_spec).reset_index()
+        agg = agg.merge(extra, on="n_vars", how="left")
+
+    if getattr(args, "cm_compare_no_reinflate", False) and "cm_hybrid_no_reinflate_time_s" in df.columns:
+        _maybe_merge_group_medians(
+            {
+                "cm_hybrid_no_reinflate_time_s_median": ("cm_hybrid_no_reinflate_time_s", safe_median),
+                "cm_hybrid_no_reinflate_tt_extract_time_s_median": (
+                    "cm_hybrid_no_reinflate_tt_extract_time_s",
+                    safe_median,
+                ),
+                "cm_hybrid_no_reinflate_ok_all": ("cm_hybrid_no_reinflate_ok", safe_all),
+            }
+        )
+
+    if bool(getattr(args, "cm_compile_once_per_expression", False)) and "cm_exec_only_time_s" in df.columns:
+        _maybe_merge_group_medians(
+            {
+                "cm_exec_only_time_s_median": ("cm_exec_only_time_s", safe_median),
+                "cm_hybrid_exec_only_time_s_median": ("cm_hybrid_exec_only_time_s", safe_median),
+                "cm_partial_hybrid_exec_only_time_s_median": ("cm_partial_hybrid_exec_only_time_s", safe_median),
+                "cm_hybrid_no_reinflate_exec_only_time_s_median": (
+                    "cm_hybrid_no_reinflate_exec_only_time_s",
+                    safe_median,
+                ),
+            }
+        )
+
+    if "cm_hybrid_no_reinflate_cached_exec_only_time_s" in df.columns:
+        _maybe_merge_group_medians(
+            {
+                "cm_eval_repeat_median": ("cm_eval_repeat", safe_median),
+                "cm_hybrid_no_reinflate_cached_exec_only_time_s_median": (
+                    "cm_hybrid_no_reinflate_cached_exec_only_time_s",
+                    safe_median,
+                ),
+                "bitset_cached_exec_only_time_s_median": ("bitset_cached_exec_only_time_s", safe_median),
+            }
+        )
+
+    final_fields_median = (
+        "final_cm_materialization_performed",
+        "final_cm_materialization_time_s",
+        "final_truth_table_materialization_time_s",
+        "final_bitset_returned",
+        "final_output_elements",
+        "final_output_nominal_elements",
+        "final_output_vars_count",
+        "final_output_reduced",
+        "large_n_output_guard_triggered",
+        "final_output_representation_code",
+    )
+    extra_spec: Dict[str, Any] = {}
+    prefixes = ["cm", "cm_hybrid", "cm_partial_hybrid", "cm_parallel"]
+    if getattr(args, "cm_compare_no_reinflate", False) and "cm_hybrid_no_reinflate_time_s" in df.columns:
+        prefixes.append("cm_hybrid_no_reinflate")
+    for prefix in prefixes:
+        for field in final_fields_median:
+            col = f"{prefix}_{field}"
+            if col in df.columns:
+                extra_spec[f"{col}_median"] = (col, safe_median)
+    _maybe_merge_group_medians(extra_spec)
+
+    if getattr(args, "cm_report_ir_breakdown", False):
+        ir_int_fields = (
+            "ir_intern_calls",
+            "ir_canonicalize_calls",
+            "ir_rewrite_calls",
+            "ir_live_vars_calls",
+            "ir_live_vars_total_inputs",
+            "ir_compile_cache_hit",
+            "ir_compile_cache_hits",
+            "ir_compile_cache_misses",
+            "ir_persistent_cache_hits",
+            "ir_persistent_cache_misses",
+            "ir_persistent_cache_size",
+            "ir_compile_calls_per_expr",
+            "ir_compile_reused_for_mode",
+        )
+        ir_float_fields = (
+            "ir_compile_time_s",
+            "ir_intern_time_s",
+            "ir_canonicalize_time_s",
+            "ir_rewrite_time_s",
+            "ir_live_vars_time_s",
+            "ir_other_time_s",
+        )
+        nr_int_fields = ("nr_bitset_eval_calls",)
+        nr_float_fields = (
+            "nr_bitset_eval_time_s",
+            "nr_fallback_materialize_ir_time_s",
+            "nr_tt_vector_build_time_s",
+        )
+
+        extra_spec = {}
+        prefixes = ["cm", "cm_hybrid", "cm_partial_hybrid", "cm_parallel"]
+        if getattr(args, "cm_compare_no_reinflate", False) and "cm_hybrid_no_reinflate_time_s" in df.columns:
+            prefixes.append("cm_hybrid_no_reinflate")
+
+        for prefix in prefixes:
+            for field in ir_int_fields:
+                col = f"{prefix}_{field}"
+                if col in df.columns:
+                    extra_spec[f"{col}_median"] = (col, safe_median)
+            for field in ir_float_fields:
+                col = f"{prefix}_{field}"
+                if col in df.columns:
+                    extra_spec[f"{col}_median"] = (col, safe_median)
+
+        # No-reinflate-only execute/output stage breakdown.
+        if "cm_hybrid_no_reinflate_nr_bitset_eval_time_s" in df.columns:
+            for field in nr_int_fields:
+                col = f"cm_hybrid_no_reinflate_{field}"
+                if col in df.columns:
+                    extra_spec[f"{col}_median"] = (col, safe_median)
+            for field in nr_float_fields:
+                col = f"cm_hybrid_no_reinflate_{field}"
+                if col in df.columns:
+                    extra_spec[f"{col}_median"] = (col, safe_median)
+
+        # A few IR-compile structural counters for no-reinflate (useful for reports).
+        for col in (
+            "cm_hybrid_no_reinflate_subtree_cache_hits",
+            "cm_hybrid_no_reinflate_subtree_cache_misses",
+            "cm_hybrid_no_reinflate_canonical_rewrites",
+            "cm_hybrid_no_reinflate_pruned_branches",
+        ):
+            if col in df.columns:
+                extra_spec[f"{col}_median"] = (col, safe_median)
+
+        _maybe_merge_group_medians(extra_spec)
+
+    if getattr(args, "cm_profile_cached_exec", False):
+        cached_exec_fields = (
+            "cached_exec_evaluations",
+            "cached_exec_bitset_eval_calls",
+            "cached_exec_result_wrap_count",
+            "cached_exec_fallback_to_tt_vector_count",
+            "cached_exec_packed_bitset_return_count",
+            "cached_exec_reduced_output_count",
+            "cached_exec_total_time_s",
+            "cached_exec_dispatch_time_s",
+            "cached_exec_var_order_time_s",
+            "cached_exec_fixed_handling_time_s",
+            "cached_exec_bitset_eval_time_s",
+            "cached_exec_result_wrap_time_s",
+            "cached_exec_correctness_or_extract_time_s",
+            "cached_exec_other_time_s",
+        )
+        extra_spec = {}
+        for field in cached_exec_fields:
+            col = f"cm_hybrid_no_reinflate_{field}"
+            if col in df.columns:
+                extra_spec[f"{col}_median"] = (col, safe_median)
+        _maybe_merge_group_medians(extra_spec)
+
     def ratio(a: Optional[float], b: Optional[float]) -> Optional[float]:
         if a is None or b is None:
             return None
@@ -959,6 +1537,27 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
     agg["ratio_cm_partial_hybrid_over_bitset"] = agg.apply(
         lambda r: ratio(r["cm_partial_hybrid_time_s_median"], r["bitset_time_s_median"]), axis=1
     )
+    if "cm_hybrid_no_reinflate_time_s_median" in agg.columns:
+        agg["ratio_cm_hybrid_no_reinflate_over_cm"] = agg.apply(
+            lambda r: ratio(r["cm_hybrid_no_reinflate_time_s_median"], r["cm_time_s_median"]), axis=1
+        )
+        agg["ratio_cm_hybrid_no_reinflate_over_cm_hybrid"] = agg.apply(
+            lambda r: ratio(r["cm_hybrid_no_reinflate_time_s_median"], r["cm_hybrid_time_s_median"]), axis=1
+        )
+        agg["ratio_cm_hybrid_no_reinflate_over_bitset"] = agg.apply(
+            lambda r: ratio(r["cm_hybrid_no_reinflate_time_s_median"], r["bitset_time_s_median"]), axis=1
+        )
+    if (
+        "cm_hybrid_no_reinflate_cached_exec_only_time_s_median" in agg.columns
+        and "bitset_cached_exec_only_time_s_median" in agg.columns
+    ):
+        agg["ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached"] = agg.apply(
+            lambda r: ratio(
+                r["cm_hybrid_no_reinflate_cached_exec_only_time_s_median"],
+                r["bitset_cached_exec_only_time_s_median"],
+            ),
+            axis=1,
+        )
     agg["ratio_cm_plus_extract_over_bitset_plus_extract"] = agg.apply(
         lambda r: ratio(
             (
@@ -988,6 +1587,7 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
     agg["backend_numba"] = (not args.no_numba) and HAS_NUMBA
     agg["backend_cm_parallel"] = bool(args.cm_parallel)
     agg["backend_cm_compare_hybrid"] = bool(args.cm_compare_hybrid)
+    agg["backend_cm_compare_no_reinflate"] = bool(getattr(args, "cm_compare_no_reinflate", False))
     agg["cm_hybrid_threshold"] = int(args.cm_hybrid_threshold)
     agg["cm_default_materialize_mode"] = "numpy" if args.cm_compare_hybrid else "partial_hybrid"
     agg["cm_layout"] = args.cm_layout
@@ -1002,6 +1602,10 @@ def print_summary_table(agg):
     has_partial_compare = (
         "cm_partial_hybrid_time_s_median" in agg.columns and agg["cm_partial_hybrid_time_s_median"].notna().any()
     )
+    has_no_reinflate = (
+        "cm_hybrid_no_reinflate_time_s_median" in agg.columns
+        and agg["cm_hybrid_no_reinflate_time_s_median"].notna().any()
+    )
     has_parallel = "cm_parallel_time_s_median" in agg.columns and agg["cm_parallel_time_s_median"].notna().any()
     has_pair_metrics = "pair_attempts_median" in agg.columns and agg["pair_attempts_median"].notna().any()
     print(
@@ -1011,17 +1615,21 @@ def print_summary_table(agg):
     if has_pair_metrics:
         print("Pair metrics: attempts/collapses/ratio/nodes are reported for the baseline CM run when `--cm-pair` is enabled.")
     pair_header = "Pair_attempts_med | Pair_collapses_med | Pair_ratio_med | Pair_nodes_med | " if has_pair_metrics else ""
-    if has_hybrid_compare or has_partial_compare:
-        print(
+    if has_hybrid_compare or has_partial_compare or has_no_reinflate:
+        header = (
             "Columns: n | CM_med_s | CM_hybrid_med_s | CM_partial_hybrid_med_s | CM_parallel_med_s | Bitset_med_s | "
-            "CM_hybrid/CM | CM_hybrid/Bitset | CM_partial_hybrid/CM | CM_partial_hybrid/Bitset | "
-            "CM_parallel/CM | CM_parallel/Bitset | "
-            f"{pair_header}"
-            "Numba_compile_med_s | Numba_med_s | ROBDD_med_s | dd_med_s | "
-            "Sympy_simpl_med_s | BDD_SOP_med_s | Espresso_med_s | ROBDD_nodes_med | "
-            "dd_nodes_med | CM_nodes_med | CM_OK | CM_hybrid_OK | CM_partial_hybrid_OK | CM_parallel_OK | Bitset_OK | "
-            "Numba_OK | Sympy_OK | Sympy_OK_count/trials | ROBDD_OK | BDD_SOP_OK | Espresso_OK | trials"
+            + ("CM_hybrid_no_reinflate_med_s | " if has_no_reinflate else "")
+            + "CM_hybrid/CM | CM_hybrid/Bitset | CM_partial_hybrid/CM | CM_partial_hybrid/Bitset | "
+            + ("NoReinflate/CM | NoReinflate/Hybrid | NoReinflate/Bitset | " if has_no_reinflate else "")
+            + "CM_parallel/CM | CM_parallel/Bitset | "
+            + f"{pair_header}"
+            + "Numba_compile_med_s | Numba_med_s | ROBDD_med_s | dd_med_s | "
+            + "Sympy_simpl_med_s | BDD_SOP_med_s | Espresso_med_s | ROBDD_nodes_med | "
+            + "dd_nodes_med | CM_nodes_med | CM_OK | CM_hybrid_OK | CM_partial_hybrid_OK | CM_parallel_OK | Bitset_OK | "
+            + ("CM_hybrid_no_reinflate_OK | " if has_no_reinflate else "")
+            + "Numba_OK | Sympy_OK | Sympy_OK_count/trials | ROBDD_OK | BDD_SOP_OK | Espresso_OK | trials"
         )
+        print(header)
     else:
         print(
             "Columns: n | CM_med_s | CM_parallel_med_s | Bitset_med_s | "
@@ -1048,13 +1656,28 @@ def print_summary_table(agg):
             if has_pair_metrics
             else ""
         )
-        if has_hybrid_compare or has_partial_compare:
+        if has_hybrid_compare or has_partial_compare or has_no_reinflate:
+            no_reinflate_time = (
+                f"{fnum(row.get('cm_hybrid_no_reinflate_time_s_median'))} | " if has_no_reinflate else ""
+            )
+            no_reinflate_ratios = (
+                f"{fnum(row.get('ratio_cm_hybrid_no_reinflate_over_cm'))} | "
+                f"{fnum(row.get('ratio_cm_hybrid_no_reinflate_over_cm_hybrid'))} | "
+                f"{fnum(row.get('ratio_cm_hybrid_no_reinflate_over_bitset'))} | "
+                if has_no_reinflate
+                else ""
+            )
+            no_reinflate_ok = (
+                f"{fbool(row.get('cm_hybrid_no_reinflate_ok_all')):>23} | " if has_no_reinflate else ""
+            )
             print(
                 f"{int(row['n_vars']):>2} | {fnum(row['cm_time_s_median'])} | {fnum(row['cm_hybrid_time_s_median'])} | "
                 f"{fnum(row['cm_partial_hybrid_time_s_median'])} | {fnum(row['cm_parallel_time_s_median'])} | "
                 f"{fnum(row['bitset_time_s_median'])} | "
+                f"{no_reinflate_time}"
                 f"{fnum(row['ratio_cm_hybrid_over_cm'])} | {fnum(row['ratio_cm_hybrid_over_bitset'])} | "
                 f"{fnum(row['ratio_cm_partial_hybrid_over_cm'])} | {fnum(row['ratio_cm_partial_hybrid_over_bitset'])} | "
+                f"{no_reinflate_ratios}"
                 f"{fnum(row['ratio_cm_parallel_over_cm'])} | {fnum(row['ratio_cm_parallel_over_bitset'])} | "
                 f"{pair_values}"
                 f"{fnum(row['numba_compile_time_s_median'])} | {fnum(row['numba_time_s_median'])} | "
@@ -1064,6 +1687,7 @@ def print_summary_table(agg):
                 f"{fbool(row.get('cm_ok_all')):>5} | {fbool(row.get('cm_hybrid_ok_all')):>12} | "
                 f"{fbool(row.get('cm_partial_hybrid_ok_all')):>20} | {fbool(row.get('cm_parallel_ok_all')):>14} | "
                 f"{fbool(row.get('bitset_ok_all')):>9} | "
+                f"{no_reinflate_ok}"
                 f"{fbool(row.get('numba_ok_all')):>8} | {fbool(row['sympy_ok_all']):>7} | {okc}/{trials:>5} | "
                 f"{fbool(row.get('robdd_ok_all')):>9} | {fbool(row['bdd_sop_ok_all']):>11} | "
                 f"{fbool(row['espresso_ok_all']):>11} | {trials:>6}"
@@ -1081,6 +1705,67 @@ def print_summary_table(agg):
                 f"{fbool(row.get('bitset_ok_all')):>9} | {fbool(row.get('numba_ok_all')):>8} | {fbool(row['sympy_ok_all']):>7} | "
                 f"{okc}/{trials:>5} | {fbool(row.get('robdd_ok_all')):>9} | {fbool(row['bdd_sop_ok_all']):>11} | "
                 f"{fbool(row['espresso_ok_all']):>11} | {trials:>6}"
+            )
+
+    if "cm_hybrid_no_reinflate_ir_compile_time_s_median" in agg.columns and agg[
+        "cm_hybrid_no_reinflate_ir_compile_time_s_median"
+    ].notna().any():
+        def fnum_small(x):
+            if x is None:
+                return f"{'--':>10}"
+            try:
+                xf = float(x)
+                if xf != xf:
+                    return f"{'nan':>10}"
+                return f"{xf:>10.6f}"
+            except Exception:
+                return f"{'--':>10}"
+
+        print("\n=== IR Breakdown (CM_hybrid_no_reinflate medians) ===")
+        print(
+            "Columns: n | ir_compile | ir_intern | ir_canon | ir_rewrite | ir_live_vars | ir_other | "
+            "nr_bitset_eval | nr_fallback_mat_ir | nr_tt_vector_build"
+        )
+        for _, row in agg.sort_values("n_vars").iterrows():
+            print(
+                f"{int(row['n_vars']):>2} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_compile_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_intern_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_canonicalize_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_rewrite_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_live_vars_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_ir_other_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_nr_bitset_eval_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_nr_fallback_materialize_ir_time_s_median'))} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_nr_tt_vector_build_time_s_median'))}"
+            )
+
+    if (
+        "cm_hybrid_no_reinflate_cached_exec_only_time_s_median" in agg.columns
+        and agg["cm_hybrid_no_reinflate_cached_exec_only_time_s_median"].notna().any()
+    ):
+        def fnum_small(x):
+            if x is None:
+                return f"{'--':>10}"
+            try:
+                xf = float(x)
+                if xf != xf:
+                    return f"{'nan':>10}"
+                return f"{xf:>10.6f}"
+            except Exception:
+                return f"{'--':>10}"
+
+        print("\n=== Cached Execution (per-eval medians) ===")
+        repeat = int(agg.iloc[0].get("cm_eval_repeat_median") or 0)
+        if repeat:
+            print(f"Repeat count: {repeat}")
+        print("Columns: n | CM_hybrid_no_reinflate_cached_exec_only | Bitset_cached_exec_only | ratio_cached/bitset_cached")
+        for _, row in agg.sort_values("n_vars").iterrows():
+            print(
+                f"{int(row['n_vars']):>2} | "
+                f"{fnum_small(row.get('cm_hybrid_no_reinflate_cached_exec_only_time_s_median'))} | "
+                f"{fnum_small(row.get('bitset_cached_exec_only_time_s_median'))} | "
+                f"{fnum_small(row.get('ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached'))}"
             )
 
 
@@ -1119,6 +1804,7 @@ def write_html_report(html_path: str, agg_all: "pd.DataFrame", depths: List[int]
             for col in [
                 "cm_ok_all",
                 "cm_hybrid_ok_all",
+                "cm_hybrid_no_reinflate_ok_all",
                 "cm_partial_hybrid_ok_all",
                 "cm_parallel_ok_all",
                 "bitset_ok_all",
@@ -1141,6 +1827,7 @@ def write_html_report(html_path: str, agg_all: "pd.DataFrame", depths: List[int]
             preferred = [
                 "n_vars",
                 "cm_time_s_median",
+                "cm_hybrid_no_reinflate_time_s_median",
                 "cm_parallel_time_s_median",
                 "bitset_time_s_median",
                 "pair_attempts_median",
@@ -1148,6 +1835,7 @@ def write_html_report(html_path: str, agg_all: "pd.DataFrame", depths: List[int]
                 "pairable_ratio_median",
                 "pair_nodes_total_median",
                 "cm_ok_all",
+                "cm_hybrid_no_reinflate_ok_all",
                 "cm_parallel_ok_all",
                 "bitset_ok_all",
                 "sympy_ok_all",
@@ -1186,6 +1874,16 @@ def main():
     ap.add_argument("--cm-layout", type=str, default="balanced", choices=["balanced", "legacy_square"])
     ap.add_argument("--cm-hybrid-threshold", type=int, default=7)
     ap.add_argument("--cm-compare-hybrid", action="store_true")
+    ap.add_argument("--cm-compare-no-reinflate", dest="cm_compare_no_reinflate", action="store_true")
+    ap.add_argument("--cm-report-ir-breakdown", action="store_true")
+    ap.add_argument("--cm-compile-once-per-expression", dest="cm_compile_once_per_expression", action="store_true")
+    ap.add_argument("--cm-reuse-compiled-ir", dest="cm_reuse_compiled_ir", action="store_true")
+    ap.add_argument("--cm-use-persistent-cache", dest="cm_use_persistent_cache", action="store_true")
+    ap.add_argument("--cm-eval-repeat", dest="cm_eval_repeat", type=int, default=1)
+    ap.add_argument("--cm-profile-cached-exec", dest="cm_profile_cached_exec", action="store_true")
+    ap.add_argument("--large-n-safe", dest="large_n_safe", action="store_true")
+    ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
+    ap.add_argument("--cm-max-full-output-vars", dest="cm_max_full_output_vars", type=int, default=16)
     ap.add_argument("--cm-parallel", action="store_true")
     ap.add_argument("--cm-parallel-workers", type=int, default=0)
     ap.add_argument("--cm-parallel-min-n", type=int, default=8)
@@ -1215,6 +1913,8 @@ def main():
         args.cm_parallel = True
         args.no_bitset = False
     if args.cm_compare_hybrid:
+        args.no_bitset = False
+    if getattr(args, "cm_compare_no_reinflate", False):
         args.no_bitset = False
 
     sizes = [int(s) for s in args.sizes.split(",") if s]
