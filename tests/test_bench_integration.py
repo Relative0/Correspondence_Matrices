@@ -401,6 +401,25 @@ class BenchIntegrationTests(unittest.TestCase):
             ]:
                 self.assertIn(col, row)
 
+    def test_expr_style_and_sampled_correctness_columns(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            tmpdir = Path(td)
+            row = self._run_and_read_summary(
+                tmpdir,
+                "bench_sampled",
+                [
+                    "--cm-compare-no-reinflate",
+                    "--expr-style",
+                    "low-reuse",
+                    "--sampled-correctness",
+                    "25",
+                ],
+            )
+            self.assertEqual(row["expr_style"], "low-reuse")
+            self.assertEqual(row["sampled_correctness_samples_median"], "25.0")
+            self.assertEqual(row["sampled_correctness_mismatches_median"], "0.0")
+            self.assertEqual(row["sampled_correctness_mismatch_rate_median"], "0.0")
+
 
 if __name__ == "__main__":
     unittest.main()

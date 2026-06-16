@@ -64,6 +64,23 @@ class CMNoReinflateTests(unittest.TestCase):
         self.assertEqual(int(diag.get("final_output_vars_count", -1)), 2)
         self.assertEqual(int(diag.get("final_output_elements", -1)), 4)
 
+    def test_large_n_guard_rejects_too_many_reduced_live_vars(self) -> None:
+        n = 20
+        expr = Var(0)
+        for i in range(1, 17):
+            expr = Xor(expr, Var(i))
+        node = compile_expr_to_cm_ir(expr)
+
+        with self.assertRaises(ValueError):
+            materialize_hybrid_no_reinflate(
+                node,
+                [f"x{i}" for i in range(n)],
+                fixed={},
+                hybrid_threshold=7,
+                allow_reduced_output=True,
+                max_full_output_vars=16,
+            )
+
     def test_no_reinflate_fallback_returns_tt_vector_and_avoids_cm_matrix(self) -> None:
         rng = np.random.default_rng(2026)
         n = 8
