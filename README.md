@@ -90,6 +90,45 @@ CM-specific flags:
 - `--cm-hybrid-threshold N`: threshold used by hybrid materialization.
 - `--cm-parallel`: enable the parallel CM path.
 
+RunPod execution is optional and never selected by default. It delegates the no-reinflate CM path to a remote worker that calls the same compiler/evaluator APIs:
+
+```powershell
+python cm_remote_worker.py --host 0.0.0.0 --port 8080
+python cm_bench.py --cm-exec-target runpod --cm-compare-no-reinflate --sizes 4 --trials 1
+python cm_runpod_smoke_test.py
+```
+
+Configure RunPod with `.env.runpod` or environment variables based on `.env.runpod.example`:
+
+```env
+RUNPOD_API_KEY=
+RUNPOD_POD_ID=
+CM_RUNPOD_BASE_URL=
+CM_RUNPOD_PERSISTENT_ROOT=/workspace/cm-computation
+CM_RUNPOD_START_TIMEOUT_SECONDS=300
+CM_RUNPOD_STOP_AFTER_RUN=false
+```
+
+The direct RunPod smoke test checks only connectivity and worker discovery before any remote CM execution is attempted:
+
+```bash
+python cm_runpod_smoke_test.py
+```
+
+Expected status output:
+
+```text
+RunPod API: OK / FAILED
+Pod status: RUNNING / STOPPED / UNKNOWN
+Proxy URL: OK / FAILED
+CM worker: FOUND / NOT FOUND
+Next step: deploy cm_remote_worker.py if worker not found
+```
+
+If the proxy is serving JupyterLab instead of the CM worker, the smoke test reports: `RunPod pod reachable, but CM worker service is not deployed yet.`
+
+`--cm-runpod-start` and `--cm-runpod-stop` manage pod lifecycle when `RUNPOD_POD_ID` and `RUNPOD_API_KEY` are configured. `--cm-runpod-fallback-local` is required for fallback; otherwise unavailable RunPod execution is reported as offline and not silently replaced with local results. RunPod benchmark output labels readiness wait, request roundtrip, remote CM execution time, and total wall time separately.
+
 Backend toggles:
 
 - `--no-sympy`

@@ -1430,6 +1430,11 @@ def materialize_hybrid_no_reinflate(
             f"refusing to materialize full no-reinflate output for {n} variables; "
             "pass allow_reduced_output=True for structural large-n validation"
         )
+    if use_reduced_output and max_full_output_vars is not None and output_k > int(max_full_output_vars):
+        raise ValueError(
+            f"refusing to materialize reduced no-reinflate output for {output_k} live variables; "
+            f"max_full_output_vars={int(max_full_output_vars)}"
+        )
 
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None

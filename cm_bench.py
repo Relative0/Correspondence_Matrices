@@ -16,12 +16,15 @@ def try_import(name: str):
 dd = try_import("dd")
 pyeda = try_import("pyeda")
 
-from bitset_backend import build_bitset_env, eval_expr_bitset, bitset_to_bool_array
+from bitset_backend import build_bitset_env, eval_cm_node_bitset, eval_expr_bitset, bitset_to_bool_array
 from cm_build import compile_expr_to_cm
 from cm_exprlib import And, Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import compile_expr_to_cm_ir, materialize_cm, materialize_hybrid_no_reinflate
 from cm_normalize import canonical_layout, cm_normalize_cache_stats
 from cm_parallel import compile_expr_to_cm_parallel, count_expr_nodes
+from cm_remote_executor import LocalMockCMRemoteExecutor, RunPodCMRemoteExecutor, build_remote_request
+from cm_runpod_client import CMRunPodClient
+from cm_runpod_config import load_runpod_config
 from expr_simplify import bdd_sop, simplify_via_sympy
 from numba_backend import HAS_NUMBA, eval_expr_numba, flatten_expr_numba
 
@@ -47,6 +50,148 @@ except Exception:
 args = None
 
 _GRID_CACHE: Dict[int, np.ndarray] = {}
+
+
+def eval_expr_assignment(expr, assignment: Mapping[str, int]) -> int:
+    if isinstance(expr, Var):
+        return int(bool(assignment[f"x{expr.i}"]))
+    if isinstance(expr, Not):
+        return 1 - eval_expr_assignment(expr.a, assignment)
+    if isinstance(expr, And):
+        return eval_expr_assignment(expr.a, assignment) & eval_expr_assignment(expr.b, assignment)
+    if isinstance(expr, Or):
+        return eval_expr_assignment(expr.a, assignment) | eval_expr_assignment(expr.b, assignment)
+    if isinstance(expr, Xor):
+        return eval_expr_assignment(expr.a, assignment) ^ eval_expr_assignment(expr.b, assignment)
+    if isinstance(expr, Imp):
+        return (1 - eval_expr_assignment(expr.a, assignment)) | eval_expr_assignment(expr.b, assignment)
+    if isinstance(expr, Eqv):
+        return 1 - (eval_expr_assignment(expr.a, assignment) ^ eval_expr_assignment(expr.b, assignment))
+    raise TypeError(expr)
+
+
+def result_value_for_assignment(res, assignment: Mapping[str, int]) -> int:
+    idx = 0
+    for name in res.output_vars:
+        idx = (idx << 1) | int(bool(assignment[name]))
+    if res.bits is not None:
+        return (int(res.bits) >> idx) & 1
+    if res.tt is not None:
+        return int(res.tt[idx])
+    raise ValueError("no result payload available for sampled correctness")
+
+
+def sampled_correctness_check(expr, res, n: int, samples: int, rng: np.random.Generator) -> Dict[str, Any]:
+    if samples <= 0:
+        return {
+            "sampled_correctness_samples": 0,
+            "sampled_correctness_mismatches": None,
+            "sampled_correctness_mismatch_rate": None,
+        }
+    mismatches = 0
+    names = [f"x{i}" for i in range(n)]
+    for _ in range(samples):
+        vals = rng.integers(0, 2, size=n, dtype=np.uint8)
+        assignment = {name: int(vals[i]) for i, name in enumerate(names)}
+        expected = eval_expr_assignment(expr, assignment)
+        actual = result_value_for_assignment(res, assignment)
+        if expected != actual:
+            mismatches += 1
+    return {
+        "sampled_correctness_samples": int(samples),
+        "sampled_correctness_mismatches": int(mismatches),
+        "sampled_correctness_mismatch_rate": float(mismatches / samples),
+    }
+
+
+def remote_response_matches_tt(response, tt_ref: Optional[np.ndarray], n: int) -> Optional[bool]:
+    if not response.ok or tt_ref is None or not response.result:
+        return False if not response.ok else None
+    if response.result_repr == "packed_bitset" and "bits_hex" in response.result:
+        tt_remote = bitset_to_bool_array(int(str(response.result["bits_hex"]), 16), n)
+        return bool(np.array_equal(tt_remote, tt_ref))
+    if response.result_repr == "truth_table" and "tt" in response.result:
+        tt_remote = np.asarray(response.result["tt"], dtype=np.uint8).reshape(-1)
+        return bool(np.array_equal(tt_remote, tt_ref))
+    return None
+
+
+def execute_remote_cm(expr, n: int, *, large_n_safe: bool):
+    request = build_remote_request(
+        expr,
+        n,
+        hybrid_threshold=int(getattr(args, "cm_hybrid_threshold", 7)),
+        use_persistent_cache=bool(getattr(args, "cm_use_persistent_cache", False)),
+        eval_repeat=int(getattr(args, "cm_eval_repeat", 1)),
+        large_n_safe=large_n_safe,
+        max_full_output_vars=int(getattr(args, "cm_max_full_output_vars", getattr(args, "full_tt_max_n", 16))),
+    )
+    if bool(getattr(args, "cm_runpod_local_mock", False)):
+        return LocalMockCMRemoteExecutor().execute(request)
+    config = load_runpod_config()
+    executor = RunPodCMRemoteExecutor(config)
+    stop_after_run = True if bool(getattr(args, "cm_runpod_stop_after_run", False)) else None
+    return executor.execute(request, stop_after_run=stop_after_run)
+
+
+def random_expr_broad(n_vars: int, rng: np.random.Generator, max_depth: int = 3) -> Any:
+    """Generate a broader tree with more distinct leaves before reuse."""
+    counter = [0]
+
+    def leaf() -> Var:
+        i = counter[0] % n_vars
+        counter[0] += 1
+        return Var(i)
+
+    def rec(depth: int):
+        if depth <= 0:
+            return leaf()
+        op = rng.choice((And, Or, Xor, Imp, Eqv))
+        left = rec(depth - 1)
+        right = rec(depth - 1)
+        if rng.random() < 0.15:
+            left = Not(left)
+        if rng.random() < 0.15:
+            right = Not(right)
+        return op(left, right)
+
+    return rec(max_depth)
+
+
+def random_expr_low_reuse(n_vars: int, rng: np.random.Generator, max_depth: int = 3) -> Any:
+    """Generate a low-reuse tree with shuffled variable order and mostly non-idempotent ops."""
+    leaves = list(range(n_vars))
+    rng.shuffle(leaves)
+    pos = [0]
+
+    def leaf() -> Var:
+        v = leaves[pos[0] % len(leaves)]
+        pos[0] += 1
+        return Var(int(v))
+
+    def rec(depth: int):
+        if depth <= 0:
+            return leaf()
+        op = rng.choice((Xor, Imp, Eqv, And, Or), p=(0.26, 0.24, 0.24, 0.13, 0.13))
+        a = rec(depth - 1)
+        b = rec(depth - 1)
+        if rng.random() < 0.25:
+            a = Not(a)
+        return op(a, b)
+
+    return rec(max_depth)
+
+
+def random_expr_for_style(n_vars: int, rng: np.random.Generator, max_depth: int, style: str):
+    if style == "ordinary":
+        return random_expr(n_vars, rng, max_depth=max_depth, p_unary=0.25)
+    if style == "broad":
+        return random_expr_broad(n_vars, rng, max_depth=max_depth)
+    if style == "low-reuse":
+        return random_expr_low_reuse(n_vars, rng, max_depth=max_depth)
+    if style == "anti-reduction":
+        return random_expr_low_reuse(n_vars, rng, max_depth=max_depth)
+    raise ValueError(f"unknown expression style: {style!r}")
 
 
 def get_eval_grid(n: int) -> np.ndarray:
@@ -95,6 +240,7 @@ def time_backends_on_expr(
     use_espresso: bool,
     verbose: bool,
     bit_env: Optional[Mapping[str, int]] = None,
+    sample_rng: Optional[np.random.Generator] = None,
 ) -> Dict[str, Any]:
     full_tt_max_n = int(getattr(args, "full_tt_max_n", 16))
     build_tt = n <= full_tt_max_n
@@ -129,6 +275,19 @@ def time_backends_on_expr(
     cm_hybrid_no_reinflate_ok = None
     cm_hybrid_no_reinflate_exec_only_time = None
     cm_hybrid_no_reinflate_cached_exec_only_time = None
+    cm_runpod_pod_started = None
+    cm_runpod_ready_wait_time_s = None
+    cm_runpod_request_time_s = None
+    cm_runpod_remote_exec_time_s = None
+    cm_runpod_total_wall_time_s = None
+    cm_runpod_result_repr = None
+    cm_runpod_final_cm_materialized = None
+    cm_runpod_fallback_local = False
+    cm_runpod_status = None
+    cm_runpod_error = None
+    sampled_correctness_samples = 0
+    sampled_correctness_mismatches = None
+    sampled_correctness_mismatch_rate = None
     cm_parallel_time = None
     cm_parallel_tt_extract_time = None
     cm_parallel_ok = None
@@ -174,6 +333,9 @@ def time_backends_on_expr(
             _enable_ir(d)  # type: ignore[arg-type]
         except Exception:
             pass
+
+    cm_exec_target = str(getattr(args, "cm_exec_target", "local"))
+    use_remote_no_reinflate = cm_exec_target == "runpod" and bool(getattr(args, "cm_compare_no_reinflate", False))
 
     if build_tt:
         if verbose:
@@ -277,7 +439,7 @@ def time_backends_on_expr(
         except Exception:
             cm_ok = False
 
-        if getattr(args, "cm_compare_no_reinflate", False):
+        if getattr(args, "cm_compare_no_reinflate", False) and not use_remote_no_reinflate:
             if verbose:
                 print(f"[n={n}] CM hybrid (no reinflate) compile ...")
             vars_all = [f"x{i}" for i in range(n)]
@@ -318,6 +480,19 @@ def time_backends_on_expr(
                 cm_hybrid_no_reinflate_ok = bool(tt_nr is not None and np.array_equal(tt_nr, tt_ref))
             else:
                 cm_hybrid_no_reinflate_ok = False
+
+            sampled_k = int(getattr(args, "sampled_correctness", 0))
+            if sampled_k > 0:
+                check = sampled_correctness_check(
+                    expr,
+                    res_nr,
+                    n,
+                    sampled_k,
+                    sample_rng if sample_rng is not None else np.random.default_rng(0),
+                )
+                sampled_correctness_samples = check["sampled_correctness_samples"]
+                sampled_correctness_mismatches = check["sampled_correctness_mismatches"]
+                sampled_correctness_mismatch_rate = check["sampled_correctness_mismatch_rate"]
 
             if eval_repeat > 1:
                 node_repeat = node if use_compile_once else node_nr
@@ -438,7 +613,76 @@ def time_backends_on_expr(
                 cm_parallel_tt_extract_time = None
                 cm_parallel_ok = False
 
-    if large_n_safe:
+    if use_remote_no_reinflate and (build_tt or large_n_safe):
+        if verbose:
+            print(f"[n={n}] CM hybrid (no reinflate, RunPod) request ...")
+        try:
+            remote = execute_remote_cm(expr, n, large_n_safe=large_n_safe)
+            response = remote.response
+            cm_runpod_pod_started = int(bool(remote.pod_started))
+            cm_runpod_ready_wait_time_s = float(remote.ready_wait_time_s)
+            cm_runpod_request_time_s = float(remote.request_time_s)
+            cm_runpod_total_wall_time_s = float(remote.total_wall_time_s)
+            cm_runpod_remote_exec_time_s = float(response.timing.get("remote_exec_time_s", 0.0))
+            cm_runpod_result_repr = response.result_repr
+            cm_runpod_status = remote.status
+            cm_runpod_error = response.error
+            cm_runpod_final_cm_materialized = int(response.diagnostics.get("final_cm_materialization_performed", 0))
+            cm_hybrid_no_reinflate_time = float(response.timing.get("remote_compile_time_s", 0.0)) + float(
+                response.timing.get("remote_exec_time_s", 0.0)
+            )
+            cm_hybrid_no_reinflate_exec_only_time = float(response.timing.get("remote_exec_time_s", 0.0))
+            cm_hybrid_no_reinflate_tt_extract_time = 0.0
+            cm_hybrid_no_reinflate_ok = remote_response_matches_tt(response, tt_ref, n)
+            for k, v in response.diagnostics.items():
+                cm_hybrid_no_reinflate_diag[k] = v
+        except Exception as exc:
+            cm_runpod_status = "offline"
+            cm_runpod_error = str(exc)
+            if bool(getattr(args, "cm_runpod_fallback_local", False)):
+                cm_runpod_fallback_local = True
+                if verbose:
+                    print(f"RunPod execution requested, but pod is unavailable/offline. Falling back to local: {exc}")
+            else:
+                if verbose:
+                    print(f"RunPod execution requested, but pod is unavailable/offline. {exc}")
+
+        if cm_runpod_fallback_local:
+            vars_all = [f"x{i}" for i in range(n)]
+            use_persistent_cache = bool(getattr(args, "cm_use_persistent_cache", False))
+            reuse_compiled_ir = bool(getattr(args, "cm_reuse_compiled_ir", False))
+            try:
+                t0nr = time.perf_counter()
+                node_nr = compile_expr_to_cm_ir(
+                    expr,
+                    diagnostics=cm_hybrid_no_reinflate_diag,
+                    reuse_cache=reuse_compiled_ir,
+                    persistent_cache=use_persistent_cache,
+                )
+                res_nr = materialize_hybrid_no_reinflate(
+                    node_nr,
+                    vars_all,
+                    fixed={},
+                    diagnostics=cm_hybrid_no_reinflate_diag,
+                    hybrid_threshold=args.cm_hybrid_threshold,
+                    allow_reduced_output=large_n_safe,
+                    max_full_output_vars=int(getattr(args, "cm_max_full_output_vars", full_tt_max_n)),
+                )
+                cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
+                cm_hybrid_no_reinflate_exec_only_time = cm_hybrid_no_reinflate_time
+                cm_hybrid_no_reinflate_tt_extract_time = 0.0
+                if tt_ref is not None and res_nr.bits is not None:
+                    cm_hybrid_no_reinflate_ok = bool(np.array_equal(bitset_to_bool_array(int(res_nr.bits), n), tt_ref))
+                elif tt_ref is not None and res_nr.tt is not None:
+                    cm_hybrid_no_reinflate_ok = bool(np.array_equal(res_nr.tt, tt_ref))
+                else:
+                    cm_hybrid_no_reinflate_ok = True if large_n_safe else None
+            except Exception as fallback_exc:
+                cm_runpod_status = "fallback_error"
+                cm_runpod_error = f"{cm_runpod_error}; fallback failed: {fallback_exc}"
+                cm_hybrid_no_reinflate_ok = False
+
+    if large_n_safe and not use_remote_no_reinflate:
         if verbose:
             print(f"[n={n}] CM hybrid (no reinflate, large-n safe) compile ...")
         vars_all = [f"x{i}" for i in range(n)]
@@ -467,9 +711,8 @@ def time_backends_on_expr(
 
             output_vars = tuple(res_nr.output_vars)
             if not args.no_bitset:
-                local_bit_env = build_bitset_env(output_vars)
                 t7 = time.perf_counter()
-                bitset_tt = eval_expr_bitset(expr, local_bit_env)
+                bitset_tt = eval_cm_node_bitset(node_nr, output_vars, fixed={})
                 bitset_time = time.perf_counter() - t7
                 if res_nr.bits is not None:
                     cm_hybrid_no_reinflate_ok = bool(int(res_nr.bits) == int(bitset_tt))
@@ -483,10 +726,23 @@ def time_backends_on_expr(
                 if eval_repeat > 1:
                     t7r = time.perf_counter()
                     for _ in range(eval_repeat):
-                        _ = eval_expr_bitset(expr, local_bit_env)
+                        _ = eval_cm_node_bitset(node_nr, output_vars, fixed={})
                     bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             else:
                 cm_hybrid_no_reinflate_ok = True
+
+            sampled_k = int(getattr(args, "sampled_correctness", 0))
+            if sampled_k > 0:
+                check = sampled_correctness_check(
+                    expr,
+                    res_nr,
+                    n,
+                    sampled_k,
+                    sample_rng if sample_rng is not None else np.random.default_rng(0),
+                )
+                sampled_correctness_samples = check["sampled_correctness_samples"]
+                sampled_correctness_mismatches = check["sampled_correctness_mismatches"]
+                sampled_correctness_mismatch_rate = check["sampled_correctness_mismatch_rate"]
 
             if eval_repeat > 1:
                 profile_diag: Optional[Dict[str, Any]]
@@ -1048,10 +1304,30 @@ def time_backends_on_expr(
         "cm_layout": args.cm_layout,
         "cm_compare_hybrid": bool(args.cm_compare_hybrid),
         "cm_compare_no_reinflate": bool(getattr(args, "cm_compare_no_reinflate", False)),
+        "cm_exec_target": cm_exec_target,
         "cm_report_ir_breakdown": bool(getattr(args, "cm_report_ir_breakdown", False)),
         "cm_compile_once_per_expression": bool(getattr(args, "cm_compile_once_per_expression", False)),
         "cm_reuse_compiled_ir": bool(getattr(args, "cm_reuse_compiled_ir", False)),
         "cm_hybrid_threshold": int(args.cm_hybrid_threshold),
+        **(
+            {
+                "cm_runpod_pod_started": cm_runpod_pod_started,
+                "cm_runpod_ready_wait_time_s": cm_runpod_ready_wait_time_s,
+                "cm_runpod_request_time_s": cm_runpod_request_time_s,
+                "cm_runpod_remote_exec_time_s": cm_runpod_remote_exec_time_s,
+                "cm_runpod_total_wall_time_s": cm_runpod_total_wall_time_s,
+                "cm_runpod_result_repr": cm_runpod_result_repr,
+                "cm_runpod_final_cm_materialized": cm_runpod_final_cm_materialized,
+                "cm_runpod_fallback_local": cm_runpod_fallback_local,
+                "cm_runpod_status": cm_runpod_status,
+                "cm_runpod_error": cm_runpod_error,
+            }
+            if cm_exec_target == "runpod"
+            else {}
+        ),
+        "sampled_correctness_samples": sampled_correctness_samples,
+        "sampled_correctness_mismatches": sampled_correctness_mismatches,
+        "sampled_correctness_mismatch_rate": sampled_correctness_mismatch_rate,
         **debug_row,
     }
 
@@ -1060,6 +1336,8 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
     import pandas as pd
 
     rng = np.random.default_rng(seed)
+    sample_rng = np.random.default_rng(seed + 1_000_003)
+    expr_style = str(getattr(args, "expr_style", "ordinary"))
     use_dd = dd is not None and hasattr(dd, "autoref")
     use_espresso = pyeda is not None
     rows = []
@@ -1077,7 +1355,7 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
             print(f"\n=== n = {n} ===")
             if n > full_tt_max_n:
                 print("[info] n>16: skipping Sympy/Espresso/TT")
-        exprs = [random_expr(n, rng, max_depth=max_depth, p_unary=0.25) for _ in range(trials)]
+        exprs = [random_expr_for_style(n, rng, max_depth=max_depth, style=expr_style) for _ in range(trials)]
         for t, expr in enumerate(exprs):
             if verbose:
                 print(f"  Trial {t + 1}/{trials}")
@@ -1088,9 +1366,11 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
                 use_espresso=use_espresso,
                 verbose=verbose,
                 bit_env=bit_env_by_n.get(n),
+                sample_rng=sample_rng,
             )
             res["n_vars"] = n
             res["trial"] = t
+            res["expr_style"] = expr_style
             rows.append(res)
 
     df = pd.DataFrame(rows)
@@ -1342,6 +1622,9 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
             bdd_sop_time_s_median=("bdd_sop_time_s", safe_median),
             bdd_sop_ok_all=("bdd_sop_ok", safe_all),
             espresso_ok_all=("espresso_ok", safe_all),
+            sampled_correctness_samples_median=("sampled_correctness_samples", safe_median),
+            sampled_correctness_mismatches_median=("sampled_correctness_mismatches", safe_median),
+            sampled_correctness_mismatch_rate_median=("sampled_correctness_mismatch_rate", safe_median),
             trials=("trial", "count"),
         )
         .reset_index()
@@ -1366,6 +1649,27 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
                 "cm_hybrid_no_reinflate_ok_all": ("cm_hybrid_no_reinflate_ok", safe_all),
             }
         )
+
+    if str(getattr(args, "cm_exec_target", "local")) == "runpod" and "cm_runpod_request_time_s" in df.columns:
+        _maybe_merge_group_medians(
+            {
+                "cm_runpod_pod_started_median": ("cm_runpod_pod_started", safe_median),
+                "cm_runpod_ready_wait_time_s_median": ("cm_runpod_ready_wait_time_s", safe_median),
+                "cm_runpod_request_time_s_median": ("cm_runpod_request_time_s", safe_median),
+                "cm_runpod_remote_exec_time_s_median": ("cm_runpod_remote_exec_time_s", safe_median),
+                "cm_runpod_total_wall_time_s_median": ("cm_runpod_total_wall_time_s", safe_median),
+                "cm_runpod_final_cm_materialized_median": ("cm_runpod_final_cm_materialized", safe_median),
+            }
+        )
+        agg["cm_exec_target"] = "runpod"
+        if "cm_runpod_result_repr" in df.columns:
+            result_repr = df.groupby("n_vars")["cm_runpod_result_repr"].first().reset_index()
+            agg = agg.merge(result_repr, on="n_vars", how="left")
+        if "cm_runpod_status" in df.columns:
+            status = df.groupby("n_vars")["cm_runpod_status"].first().reset_index()
+            agg = agg.merge(status, on="n_vars", how="left")
+    else:
+        agg["cm_exec_target"] = "local"
 
     if bool(getattr(args, "cm_compile_once_per_expression", False)) and "cm_exec_only_time_s" in df.columns:
         _maybe_merge_group_medians(
@@ -1591,6 +1895,7 @@ def run_bench(sizes: List[int], trials: int, seed: int, max_depth: int, verbose:
     agg["cm_hybrid_threshold"] = int(args.cm_hybrid_threshold)
     agg["cm_default_materialize_mode"] = "numpy" if args.cm_compare_hybrid else "partial_hybrid"
     agg["cm_layout"] = args.cm_layout
+    agg["expr_style"] = expr_style
     return df, agg
 
 
@@ -1858,6 +2163,13 @@ def main():
     ap.add_argument("--trials", type=int, default=10)
     ap.add_argument("--seed", type=int, default=123)
     ap.add_argument("--max-depth", type=int, default=3)
+    ap.add_argument(
+        "--expr-style",
+        type=str,
+        default="ordinary",
+        choices=["ordinary", "broad", "low-reuse", "anti-reduction"],
+        help="Random expression generator style for robustness and stress runs.",
+    )
     ap.add_argument("--depth-sweep", type=str, default="")
     ap.add_argument("--out-prefix", type=str, default="bench_random_ops")
     ap.add_argument("--print-summary", action="store_true")
@@ -1881,7 +2193,21 @@ def main():
     ap.add_argument("--cm-use-persistent-cache", dest="cm_use_persistent_cache", action="store_true")
     ap.add_argument("--cm-eval-repeat", dest="cm_eval_repeat", type=int, default=1)
     ap.add_argument("--cm-profile-cached-exec", dest="cm_profile_cached_exec", action="store_true")
+    ap.add_argument("--cm-exec-target", choices=["local", "runpod"], default="local")
+    ap.add_argument("--cm-runpod-smoke-test", action="store_true")
+    ap.add_argument("--cm-runpod-start", action="store_true")
+    ap.add_argument("--cm-runpod-stop", action="store_true")
+    ap.add_argument("--cm-runpod-stop-after-run", action="store_true")
+    ap.add_argument("--cm-runpod-fallback-local", action="store_true")
+    ap.add_argument("--cm-runpod-local-mock", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--large-n-safe", dest="large_n_safe", action="store_true")
+    ap.add_argument(
+        "--sampled-correctness",
+        dest="sampled_correctness",
+        type=int,
+        default=0,
+        help="Sample K full assignments and compare original AST evaluation with no-reinflate output projection.",
+    )
     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
     ap.add_argument("--cm-max-full-output-vars", dest="cm_max_full_output_vars", type=int, default=16)
     ap.add_argument("--cm-parallel", action="store_true")
@@ -1908,6 +2234,28 @@ def main():
     global args
     args = ap.parse_args()
 
+    if args.cm_runpod_smoke_test:
+        from cm_runpod_smoke_test import run_smoke_test
+
+        raise SystemExit(run_smoke_test(local_mock=bool(args.cm_runpod_local_mock)))
+
+    if args.cm_runpod_start or args.cm_runpod_stop:
+        client = CMRunPodClient(load_runpod_config())
+        if args.cm_runpod_start:
+            status, _, wait_s = client.wait_for_pod_ready(start_if_stopped=True)
+            print(
+                "RunPod pod ready: "
+                f"desired={status.desired_status or 'unknown'} runtime={status.runtime_status or 'unknown'} "
+                f"wait_s={wait_s:.1f}"
+            )
+        if args.cm_runpod_stop:
+            status = client.stop_pod()
+            print(
+                "RunPod pod stop requested: "
+                f"desired={status.desired_status or 'unknown'} runtime={status.runtime_status or 'unknown'}"
+            )
+        return
+
     if args.experiment == "cm_vs_bitset":
         # Force apples-to-apples experiment collection.
         args.cm_parallel = True
@@ -1916,6 +2264,8 @@ def main():
         args.no_bitset = False
     if getattr(args, "cm_compare_no_reinflate", False):
         args.no_bitset = False
+    if args.cm_exec_target == "runpod":
+        args.cm_compare_no_reinflate = True
 
     sizes = [int(s) for s in args.sizes.split(",") if s]
     depths = [int(d) for d in args.depth_sweep.split(",") if d] if args.depth_sweep else [args.max_depth]
