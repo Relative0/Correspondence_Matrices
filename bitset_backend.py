@@ -17,14 +17,24 @@ def _build_bitset_env_cached(vars_key: Tuple[str, ...]) -> Mapping[str, int]:
     n_vars = len(vars_key)
     n_rows = 1 << n_vars
     env: Dict[str, int] = {}
-    for v, name in enumerate(vars_key):
-        block = 1 << (n_vars - 1 - v)
-        stride = block << 1
-        mask = 0
-        one_block = (1 << block) - 1
-        for start in range(block, n_rows, stride):
-            mask |= one_block << start
-        env[name] = mask
+    if n_vars > 10:
+        # The pure-Python block loop below is O(2^n) bigint shifts per variable and
+        # becomes a first-touch cliff (~130 ms at n=16, ~1.5 s at n=18). Vectorize:
+        # bit k of a variable's mask is that variable's value in assignment row k.
+        rows = np.arange(n_rows, dtype=np.uint32)
+        for v, name in enumerate(vars_key):
+            bits = ((rows >> (n_vars - 1 - v)) & 1).astype(np.uint8)
+            packed = np.packbits(bits, bitorder="little")
+            env[name] = int.from_bytes(packed.tobytes(), "little")
+    else:
+        for v, name in enumerate(vars_key):
+            block = 1 << (n_vars - 1 - v)
+            stride = block << 1
+            mask = 0
+            one_block = (1 << block) - 1
+            for start in range(block, n_rows, stride):
+                mask |= one_block << start
+            env[name] = mask
     # Freeze to prevent external mutation of cached state.
     return MappingProxyType(env)
 
@@ -104,10 +114,13 @@ def eval_cm_node_bitset(
     fixed_map = fixed or {}
     n_rows = 1 << len(vars_key)
     full_mask = (1 << n_rows) - 1
-    memo: Dict[object, int] = {}
+    # Memo keyed by id(node): nodes are kept alive by the DAG for the whole call, and
+    # structural hashing of CMNode keys is O(subtree) — id lookup is O(1). Two
+    # structurally-equal but distinct node objects only cost a memo miss, never correctness.
+    memo: Dict[int, int] = {}
 
     def rec(cur: "CMNode") -> int:
-        cached = memo.get(cur)
+        cached = memo.get(id(cur))
         if cached is not None:
             return cached
 
@@ -146,7 +159,7 @@ def eval_cm_node_bitset(
         else:
             raise TypeError(cur)
 
-        memo[cur] = out
+        memo[id(cur)] = out
         return out
 
     return rec(node)
