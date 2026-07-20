@@ -6,6 +6,7 @@ from bitset_backend import bitset_to_bool_array
 from cm_exprlib import And, Or, Var, Xor, eval_expr_tt
 from cm_ir import (
     clear_cm_ir_persistent_cache,
+    cm_ir_persistent_cache_stats,
     compile_expr,
     compile_expr_to_cm_ir,
     evaluate_compiled,
@@ -27,14 +28,46 @@ class CMPersistentIRCacheTests(unittest.TestCase):
         d1 = {}
         n1 = compile_expr_to_cm_ir(expr1, diagnostics=d1, persistent_cache=True)
         self.assertEqual(int(d1.get("ir_persistent_cache_hits", 0)), 0)
-        self.assertEqual(int(d1.get("ir_persistent_cache_misses", 0)), 1)
+        self.assertGreaterEqual(int(d1.get("ir_persistent_cache_misses", 0)), 1)
         self.assertGreaterEqual(int(d1.get("ir_persistent_cache_size", 0)), 1)
 
         d2 = {}
         n2 = compile_expr_to_cm_ir(expr2, diagnostics=d2, persistent_cache=True)
-        self.assertEqual(int(d2.get("ir_persistent_cache_hits", 0)), 1)
+        self.assertGreaterEqual(int(d2.get("ir_persistent_cache_hits", 0)), 1)
         self.assertEqual(int(d2.get("ir_persistent_cache_misses", 0)), 0)
         self.assertIs(n1, n2)
+
+    def test_persistent_cache_stats_and_clear(self) -> None:
+        clear_cm_ir_persistent_cache()
+        self.assertEqual(cm_ir_persistent_cache_stats()["ir_persistent_cache_size"], 0)
+
+        expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
+        diag = {}
+        compile_expr_to_cm_ir(expr, diagnostics=diag, persistent_cache=True)
+        self.assertGreater(cm_ir_persistent_cache_stats()["ir_persistent_cache_size"], 0)
+        self.assertEqual(
+            cm_ir_persistent_cache_stats()["ir_persistent_cache_size"],
+            int(diag.get("ir_persistent_cache_size", 0)),
+        )
+
+        clear_cm_ir_persistent_cache()
+        self.assertEqual(cm_ir_persistent_cache_stats()["ir_persistent_cache_size"], 0)
+
+    def test_related_expressions_hit_shared_subtrees(self) -> None:
+        clear_cm_ir_persistent_cache()
+        shared = And(Var(0), Var(1))
+        expr1 = Or(shared, Xor(Var(2), Var(3)))
+        expr2 = Xor(shared, Or(Var(2), Var(4)))
+
+        d1 = {}
+        compile_expr_to_cm_ir(expr1, diagnostics=d1, persistent_cache=True)
+        size_after_first = cm_ir_persistent_cache_stats()["ir_persistent_cache_size"]
+        self.assertGreater(size_after_first, 0)
+
+        d2 = {}
+        compile_expr_to_cm_ir(expr2, diagnostics=d2, persistent_cache=True)
+        self.assertGreaterEqual(int(d2.get("ir_persistent_cache_hits", 0)), 1)
+        self.assertGreaterEqual(cm_ir_persistent_cache_stats()["ir_persistent_cache_size"], size_after_first)
 
     def test_compile_expr_and_evaluate_compiled_hybrid_no_reinflate(self) -> None:
         n = 8
@@ -51,4 +84,3 @@ class CMPersistentIRCacheTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

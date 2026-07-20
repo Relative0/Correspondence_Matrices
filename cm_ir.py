@@ -160,25 +160,58 @@ def compile_expr_to_cm_ir_persistent(
     *,
     reuse_cache: bool = False,
 ) -> CMNode:
-    """Compile Expr → CM IR with a process-level persistent cache keyed by structural hash."""
+    """Compile Expr -> CM IR with persistent structural-hash caching for subtrees."""
     _init_ir_compile_diagnostics(diagnostics)
     _init_ir_persistent_cache_diagnostics(diagnostics)
 
-    key = expr_structural_hash(expr)
-    cached = _PERSISTENT_IR_CACHE.get(key)
-    if cached is not None:
+    def cache_get(key: str) -> Optional[CMNode]:
+        cached = _PERSISTENT_IR_CACHE.get(key)
+        if cached is None:
+            _bump(diagnostics, "ir_persistent_cache_misses")
+            return None
         _PERSISTENT_IR_CACHE.move_to_end(key)
         _bump(diagnostics, "ir_persistent_cache_hits")
-        if diagnostics is not None:
-            diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
         return cached
 
-    _bump(diagnostics, "ir_persistent_cache_misses")
-    node = compile_expr_to_cm_ir_cached(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
-    _PERSISTENT_IR_CACHE[key] = node
-    _PERSISTENT_IR_CACHE.move_to_end(key)
-    if len(_PERSISTENT_IR_CACHE) > _PERSISTENT_IR_CACHE_MAXSIZE:
-        _PERSISTENT_IR_CACHE.popitem(last=False)
+    def cache_put(key: str, node: CMNode) -> CMNode:
+        _PERSISTENT_IR_CACHE[key] = node
+        _PERSISTENT_IR_CACHE.move_to_end(key)
+        if len(_PERSISTENT_IR_CACHE) > _PERSISTENT_IR_CACHE_MAXSIZE:
+            _PERSISTENT_IR_CACHE.popitem(last=False)
+        return node
+
+    builder = CMIRBuilder(diagnostics)
+
+    def build(e: Expr) -> CMNode:
+        key = expr_structural_hash(e)
+        cached = cache_get(key)
+        if cached is not None:
+            return cached
+        if isinstance(e, Var):
+            name = getattr(e, "name", None)
+            node = builder.var(name if isinstance(name, str) else f"x{int(e.i)}")
+        elif isinstance(e, Not):
+            node = builder.negate(build(e.a))
+        elif isinstance(e, And):
+            node = builder.make_and((build(e.a), build(e.b)))
+        elif isinstance(e, Or):
+            node = builder.make_or((build(e.a), build(e.b)))
+        elif isinstance(e, Xor):
+            node = builder.make_xor((build(e.a), build(e.b)))
+        elif isinstance(e, Imp):
+            node = builder.make_imp(build(e.a), build(e.b))
+        elif isinstance(e, Eqv):
+            node = builder.make_eqv(build(e.a), build(e.b))
+        else:
+            raise TypeError(e)
+        return cache_put(key, node)
+
+    if _ir_timing_enabled(diagnostics):
+        t0 = time.perf_counter()
+        node = build(expr)
+        _add_float(diagnostics, "ir_compile_time_s", time.perf_counter() - t0)
+    else:
+        node = build(expr)
     if diagnostics is not None:
         diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
     return node
