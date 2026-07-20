@@ -92,66 +92,77 @@ def _expr_var_name(expr: Any) -> str:
         return str(i)
 
 
+def _structural_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
+    """blake2b structural digest for one Expr node, memoized by ``id(e)``.
+
+    ``memo`` must keep every hashed Expr alive for its lifetime (callers pass a dict
+    scoped to a single hash/compile call, during which the Expr tree is referenced).
+    """
+    cached = memo.get(id(e))
+    if cached is not None:
+        return cached
+    h = hashlib.blake2b(digest_size=16)
+    if isinstance(e, Var):
+        h.update(b"VAR:")
+        h.update(_expr_var_name(e).encode("utf-8"))
+        d = h.digest()
+    elif isinstance(e, Not):
+        h.update(b"NOT:")
+        h.update(_structural_digest(e.a, memo))
+        d = h.digest()
+    elif isinstance(e, (And, Or, Xor)):
+        if isinstance(e, And):
+            tag = b"AND:"
+            cls = And
+        elif isinstance(e, Or):
+            tag = b"OR:"
+            cls = Or
+        else:
+            tag = b"XOR:"
+            cls = Xor
+
+        # Flatten associative ops, then sort child digests for commutativity.
+        stack: List[Expr] = [e]
+        parts: List[bytes] = []
+        while stack:
+            z = stack.pop()
+            if isinstance(z, cls):
+                stack.append(z.b)
+                stack.append(z.a)
+            else:
+                parts.append(_structural_digest(z, memo))
+        parts.sort()
+        h.update(tag)
+        for p in parts:
+            h.update(p)
+        d = h.digest()
+    elif isinstance(e, Eqv):
+        a = _structural_digest(e.a, memo)
+        b = _structural_digest(e.b, memo)
+        if b < a:
+            a, b = b, a
+        h.update(b"EQV:")
+        h.update(a)
+        h.update(b)
+        d = h.digest()
+    elif isinstance(e, Imp):
+        h.update(b"IMP:")
+        h.update(_structural_digest(e.a, memo))
+        h.update(_structural_digest(e.b, memo))
+        d = h.digest()
+    else:
+        raise TypeError(e)
+    memo[id(e)] = d
+    return d
+
+
 def expr_structural_hash(expr: Expr) -> str:
     """Deterministic structural hash for Expr, independent of object identity.
 
     This hash canonicalizes associative+commutative nodes (AND/OR/XOR) by flattening and sorting
     child hashes, and canonicalizes EQV by sorting its two children. IMP preserves order.
     """
-
-    def digest_for(e: Expr) -> bytes:
-        h = hashlib.blake2b(digest_size=16)
-        if isinstance(e, Var):
-            h.update(b"VAR:")
-            h.update(_expr_var_name(e).encode("utf-8"))
-            return h.digest()
-        if isinstance(e, Not):
-            h.update(b"NOT:")
-            h.update(digest_for(e.a))
-            return h.digest()
-        if isinstance(e, (And, Or, Xor)):
-            if isinstance(e, And):
-                tag = b"AND:"
-                cls = And
-            elif isinstance(e, Or):
-                tag = b"OR:"
-                cls = Or
-            else:
-                tag = b"XOR:"
-                cls = Xor
-
-            # Flatten associative ops, then sort child digests for commutativity.
-            stack: List[Expr] = [e]
-            parts: List[bytes] = []
-            while stack:
-                z = stack.pop()
-                if isinstance(z, cls):
-                    stack.append(z.b)
-                    stack.append(z.a)
-                else:
-                    parts.append(digest_for(z))
-            parts.sort()
-            h.update(tag)
-            for p in parts:
-                h.update(p)
-            return h.digest()
-        if isinstance(e, Eqv):
-            a = digest_for(e.a)
-            b = digest_for(e.b)
-            if b < a:
-                a, b = b, a
-            h.update(b"EQV:")
-            h.update(a)
-            h.update(b)
-            return h.digest()
-        if isinstance(e, Imp):
-            h.update(b"IMP:")
-            h.update(digest_for(e.a))
-            h.update(digest_for(e.b))
-            return h.digest()
-        raise TypeError(e)
-
-    return digest_for(expr).hex()
+    return _structural_digest(expr, {}).hex()
 
 
 def compile_expr_to_cm_ir_persistent(
@@ -181,9 +192,13 @@ def compile_expr_to_cm_ir_persistent(
         return node
 
     builder = CMIRBuilder(diagnostics)
+    # One digest memo shared across the whole compile: each subtree is hashed once
+    # (bottom-up) instead of re-walked by every enclosing expr_structural_hash call.
+    # Digest values are unchanged, so persistent-cache keys are unaffected.
+    digest_memo: Dict[int, bytes] = {}
 
     def build(e: Expr) -> CMNode:
-        key = expr_structural_hash(e)
+        key = _structural_digest(e, digest_memo).hex()
         cached = cache_get(key)
         if cached is not None:
             return cached
@@ -309,6 +324,16 @@ class CMNode:
     op: str = ""
     args: Tuple["CMNode", ...] = ()
     var_name: str = ""
+
+    def __hash__(self) -> int:
+        # Same value the dataclass-generated __hash__ would produce, but computed once:
+        # ``key``/``args`` are deep structural tuples, so the generated hash is O(subtree)
+        # on every memo/set lookup. Cached lazily; __eq__ stays field-wise structural.
+        h = self.__dict__.get("_cached_hash")
+        if h is None:
+            h = hash((self.kind, self.key, self.vars, self.const_value, self.op, self.args, self.var_name))
+            object.__setattr__(self, "_cached_hash", h)
+        return h
 
 
 class CMIRBuilder:
@@ -1104,7 +1129,7 @@ def _materialize_ir_tagged(
                 diagnostics["hybrid_depth_max"] = max(int(diagnostics.get("hybrid_depth_max", 0)), depth)
             return cached
 
-        live_vars = tuple(v for v in cur.vars if v not in fixed_map)
+        live_vars = cur.vars if not fixed_map else tuple(v for v in cur.vars if v not in fixed_map)
         live_k = len(live_vars)
         use_bitset = False
         if materialize_mode == "hybrid":
@@ -1444,7 +1469,7 @@ def materialize_hybrid_no_reinflate(
 
     t_vars0 = time.perf_counter() if profile else None
     vars_key = tuple(vars_all)
-    live_vars = tuple(v for v in node.vars if v not in fixed_map)
+    live_vars = node.vars if not fixed_map else tuple(v for v in node.vars if v not in fixed_map)
     live_k = len(live_vars)
     n = len(vars_key)
     nominal_out_elems = 1 << n
