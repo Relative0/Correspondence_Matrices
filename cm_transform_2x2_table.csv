@@ -1,0 +1,17 @@
+operator,matrix,transpose_name,complement_name,rotate90_name,rotate180_name,rotate270_name,negate_left_operand_name,negate_right_operand_name,negate_both_operands_name,swap_operands_name,negate_expression_name,transpose_correct,complement_correct,negate_left_correct,negate_right_correct,negate_both_correct
+TRUE,11;11,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,True,True,True,True,True
+FALSE,00;00,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,True,True,True,True,True
+EQV,10;01,EQV,XOR,XOR,EQV,XOR,XOR,XOR,EQV,EQV,XOR,True,True,True,True,True
+XOR,01;10,XOR,EQV,EQV,XOR,EQV,EQV,EQV,XOR,XOR,EQV,True,True,True,True,True
+AND,10;00,AND,NAND,X_AND_NOT_Y,NOR,NOT_X_AND_Y,NOT_X_AND_Y,X_AND_NOT_Y,NOR,AND,NAND,True,True,True,True,True
+NOR,00;01,NOR,OR,NOT_X_AND_Y,AND,X_AND_NOT_Y,X_AND_NOT_Y,NOT_X_AND_Y,AND,NOR,OR,True,True,True,True,True
+X_AND_NOT_Y,01;00,NOT_X_AND_Y,IMP,NOR,NOT_X_AND_Y,AND,NOR,AND,NOT_X_AND_Y,NOT_X_AND_Y,IMP,True,True,True,True,True
+NOT_X_AND_Y,00;10,X_AND_NOT_Y,RIMP,AND,X_AND_NOT_Y,NOR,AND,NOR,X_AND_NOT_Y,X_AND_NOT_Y,RIMP,True,True,True,True,True
+IMP,10;11,RIMP,X_AND_NOT_Y,OR,RIMP,NAND,OR,NAND,RIMP,RIMP,X_AND_NOT_Y,True,True,True,True,True
+RIMP,11;01,IMP,NOT_X_AND_Y,NAND,IMP,OR,NAND,OR,IMP,IMP,NOT_X_AND_Y,True,True,True,True,True
+OR,11;10,OR,NOR,RIMP,NAND,IMP,IMP,RIMP,NAND,OR,NOR,True,True,True,True,True
+NAND,01;11,NAND,AND,IMP,OR,RIMP,RIMP,IMP,OR,NAND,AND,True,True,True,True,True
+R,10;10,L,NOT_R,L,NOT_R,NOT_L,R,NOT_R,NOT_R,L,NOT_R,True,True,True,True,True
+NOT_R,01;01,NOT_L,R,NOT_L,R,L,NOT_R,R,R,NOT_L,R,True,True,True,True,True
+L,11;00,R,NOT_L,NOT_R,NOT_L,R,NOT_L,L,NOT_L,R,NOT_L,True,True,True,True,True
+NOT_L,00;11,NOT_R,L,R,L,NOT_R,L,NOT_L,L,NOT_R,L,True,True,True,True,True
