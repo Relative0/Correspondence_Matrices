@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import numpy as np
+
 
 class BenchIntegrationTests(unittest.TestCase):
     def _run_and_read_summary(self, tmpdir: Path, out_prefix: str, extra_args):
@@ -419,6 +421,218 @@ class BenchIntegrationTests(unittest.TestCase):
             self.assertEqual(row["sampled_correctness_samples_median"], "25.0")
             self.assertEqual(row["sampled_correctness_mismatches_median"], "0.0")
             self.assertEqual(row["sampled_correctness_mismatch_rate_median"], "0.0")
+
+    def test_expression_diagnostics_and_nontrivial_filter_columns(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            tmpdir = Path(td)
+            row = self._run_and_read_summary(
+                tmpdir,
+                "bench_expr_diag",
+                [
+                    "--expr-style",
+                    "balanced_all_vars",
+                    "--require-nontrivial-expr",
+                    "--min-used-var-fraction",
+                    "0.75",
+                    "--min-tt-density",
+                    "0.05",
+                    "--max-tt-density",
+                    "0.95",
+                ],
+            )
+            self.assertEqual(row["expr_style"], "balanced_all_vars")
+            for col in [
+                "expr_depth_actual_median",
+                "expr_node_count_median",
+                "expr_unique_var_count_median",
+                "pct_uses_all_vars",
+                "tt_density_median",
+                "pct_constant_tt",
+                "expr_regeneration_attempts_median",
+                "expr_filter_reason",
+            ]:
+                self.assertIn(col, row)
+
+    def test_robdd_diagnostic_columns_when_disabled(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            tmpdir = Path(td)
+            row = self._run_and_read_summary(tmpdir, "bench_robdd_diag", [])
+            for col in [
+                "robdd_node_count_median",
+                "robdd_nodes_per_expr_node_median",
+                "robdd_nodes_per_used_var_median",
+                "robdd_log2_nodes_median",
+                "robdd_timeout_or_error_rate",
+                "robdd_status",
+            ]:
+                self.assertIn(col, row)
+
+    def test_robdd_tt_extract_matches_reference_for_small_n(self) -> None:
+        import cm_bench
+        from cm_exprlib import Xor, Var, eval_expr_tt
+
+        expr = Xor(Var(0), Var(1))
+        tt_ref = eval_expr_tt(expr, 4)
+        row = cm_bench.run_robdd_dd_backend(
+            expr,
+            4,
+            backend_preference="autoref",
+            tt_ref=tt_ref,
+            measure_tt_extract=True,
+            tt_extract_max_n=16,
+        )
+        if row["robdd_status"] == "unavailable":
+            self.skipTest("dd.autoref is unavailable in this environment")
+        self.assertEqual(row["robdd_status"], "ok")
+        self.assertEqual(row["robdd_tt_extract_status"], "ok")
+        self.assertEqual(row["robdd_tt_extract_elements"], int(tt_ref.size))
+        self.assertTrue(row["robdd_tt_extract_ok"])
+        self.assertIsNotNone(row["robdd_build_time_s"])
+        self.assertIsNotNone(row["robdd_total_build_plus_extract_time_s"])
+
+    def test_robdd_tt_extract_skips_large_n(self) -> None:
+        import cm_bench
+        from cm_exprlib import Var
+
+        row = cm_bench.run_robdd_dd_backend(
+            Var(0),
+            17,
+            backend_preference="autoref",
+            measure_tt_extract=True,
+            tt_extract_max_n=16,
+        )
+        if row["robdd_status"] == "unavailable":
+            self.skipTest("dd.autoref is unavailable in this environment")
+        self.assertEqual(row["robdd_status"], "ok")
+        self.assertEqual(row["robdd_tt_extract_status"], "skipped_large_n")
+        self.assertIsNone(row["robdd_tt_extract_time_s"])
+        self.assertIsNone(row["robdd_total_build_plus_extract_time_s"])
+
+    def test_missing_cudd_is_reported_not_crashed(self) -> None:
+        import cm_bench
+        from cm_exprlib import Var
+
+        row = cm_bench.run_robdd_dd_backend(Var(0), 2, backend_preference="cudd")
+        if row["robdd_status"] == "ok":
+            self.assertTrue(row["robdd_is_cudd"])
+            self.assertEqual(row["robdd_backend"], "dd.cudd")
+            self.assertNotEqual(row["robdd_backend"], "dd.autoref")
+        else:
+            self.assertEqual(row["robdd_status"], "unavailable")
+            self.assertFalse(row["robdd_is_cudd"])
+            self.assertIn("dd.cudd", row["robdd_error"])
+
+    def test_robdd_build_timing_persists_if_extract_fails(self) -> None:
+        import cm_bench
+        from cm_exprlib import Var
+
+        row = cm_bench.run_robdd_dd_backend(
+            Var(0),
+            3,
+            backend_preference="autoref",
+            measure_tt_extract=True,
+            tt_extract_method="invalid-method",
+            tt_ref=np.zeros(8, dtype=np.uint8),
+        )
+        if row["robdd_status"] == "unavailable":
+            self.skipTest("dd.autoref is unavailable in this environment")
+        self.assertEqual(row["robdd_status"], "ok")
+        self.assertIsNotNone(row["robdd_build_time_s"])
+        self.assertEqual(row["robdd_tt_extract_status"], "error")
+        self.assertIsNone(row["robdd_total_build_plus_extract_time_s"])
+
+    def test_equivalence_pair_generation_expected_styles(self) -> None:
+        import cm_bench
+        from cm_exprlib import And, Var, eval_expr_tt
+
+        rng = np.random.default_rng(42)
+        expr = And(Var(0), Var(1))
+        for style in ["identical", "rewritten_equiv", "semantic_equiv"]:
+            g, expected = cm_bench.generate_equiv_pair(expr, 3, rng, 2, "ordinary", style)
+            self.assertTrue(expected)
+            self.assertTrue(np.array_equal(eval_expr_tt(expr, 3), eval_expr_tt(g, 3)))
+        g, expected = cm_bench.generate_equiv_pair(expr, 3, rng, 2, "ordinary", "near_miss")
+        self.assertFalse(expected)
+        self.assertFalse(np.array_equal(eval_expr_tt(expr, 3), eval_expr_tt(g, 3)))
+
+    def test_robdd_equivalence_semantics(self) -> None:
+        import cm_bench
+        from cm_exprlib import And, Not, Var
+
+        row = cm_bench.robdd_equivalence_check(
+            And(Var(0), Var(1)),
+            And(Var(1), Var(0)),
+            2,
+            backend="autoref",
+            compare_repeat=10,
+            expected=True,
+        )
+        if row["robdd_equiv_status"] == "unavailable":
+            self.skipTest("dd.autoref is unavailable in this environment")
+        self.assertEqual(row["robdd_equiv_status"], "ok")
+        self.assertTrue(row["robdd_equiv_result"])
+        self.assertTrue(row["robdd_equiv_ok"])
+
+        row = cm_bench.robdd_equivalence_check(Var(0), Not(Var(0)), 1, backend="autoref", compare_repeat=10, expected=False)
+        self.assertEqual(row["robdd_equiv_status"], "ok")
+        self.assertFalse(row["robdd_equiv_result"])
+        self.assertTrue(row["robdd_equiv_ok"])
+
+        row = cm_bench.robdd_equivalence_check(Var(0), Not(Not(Var(0))), 1, backend="autoref", compare_repeat=10, expected=True)
+        self.assertEqual(row["robdd_equiv_status"], "ok")
+        self.assertTrue(row["robdd_equiv_result"])
+
+    def test_bitset_and_cm_equivalence_match_expected(self) -> None:
+        import cm_bench
+        from cm_exprlib import And, Not, Var
+
+        row = cm_bench.bitset_equivalence_check(And(Var(0), Var(1)), And(Var(1), Var(0)), 2, expected=True)
+        self.assertTrue(row["bitset_equiv_result"])
+        self.assertTrue(row["bitset_equiv_ok"])
+
+        row = cm_bench.cm_equivalence_check(Var(0), Not(Var(0)), 1, expected=False)
+        self.assertEqual(row["cm_equiv_status"], "ok")
+        self.assertFalse(row["cm_equiv_result"])
+        self.assertTrue(row["cm_equiv_ok"])
+
+    def test_robdd_equivalence_missing_cudd_auto_does_not_crash(self) -> None:
+        import cm_bench
+        from cm_exprlib import Var
+
+        row = cm_bench.robdd_equivalence_check(Var(0), Var(0), 1, backend="auto", compare_repeat=2, expected=True)
+        self.assertIn(row["robdd_equiv_status"], {"ok", "unavailable"})
+        if row["robdd_equiv_status"] == "ok":
+            self.assertTrue(row["robdd_equiv_result"])
+
+    def test_bench_equivalence_outputs_expected_csv_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            tmpdir = Path(td)
+            row = self._run_and_read_summary(
+                tmpdir,
+                "bench_equiv",
+                [
+                    "--bench-equivalence",
+                    "--equiv-pair-style",
+                    "rewritten_equiv",
+                    "--equiv-backends",
+                    "bitset,cm",
+                    "--cm-use-persistent-cache",
+                ],
+            )
+            for col in [
+                "equiv_pair_style",
+                "expr_f_depth_median",
+                "expr_g_depth_median",
+                "expr_pair_unique_var_count_median",
+                "bitset_equiv_eval_total_time_s_median",
+                "bitset_equiv_compare_time_s_median",
+                "cm_equiv_compile_total_time_s_median",
+                "cm_equiv_eval_total_time_s_median",
+                "cm_equiv_compare_time_s_median",
+                "cm_equiv_ok_all",
+            ]:
+                self.assertIn(col, row)
+            self.assertEqual(row["equiv_pair_style"], "rewritten_equiv")
 
 
 if __name__ == "__main__":
