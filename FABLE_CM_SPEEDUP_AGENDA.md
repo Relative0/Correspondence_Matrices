@@ -162,18 +162,19 @@ scaffolding at once.
 
 The large-n story rests on **reduced live-var output** (repr code 3): at n=32 only ~5 output vars
 materialize. Runtime tracks reduced structure, not nominal n (`CM_final_robustness_report.md`).
-This is where CM can plausibly *beat naive bitset at large n* because bitset would try to build
-`2^n`.
+This is where CM can avoid a full `2^n` output by explicitly returning a reduced live-variable
+representation.  A naive nominal-width bitset would build `2^n`, but a fair bitset baseline can
+traverse the AST once, discover the same live-variable scope, and evaluate only that scope.
 
 ### D1. Optimize the reduced-output packed-bitset path
 - **Where:** `materialize_hybrid_no_reinflate` reduced-output branch,
   [`cm_ir.py:1447-1525`](cm_ir.py); guard at [`cm_ir.py:1461`](cm_ir.py).
 - **Hypothesis:** the reduced path still routes through `eval_cm_node_bitset` over `output_vars`;
-  the same B1/C1 wins apply, but here the *win vs bitset is structural* — quantify the crossover n
-  where reduced-CM beats a bitset that must enumerate all nominal vars.
+  the same B1/C1 wins apply. Quantify both capability versus a nominal-width baseline and speed
+  versus a fair matched-scope flat bitset; do not conflate those comparisons.
 - **Measure:** run `--large-n-safe --sizes 16,20,24,28,32`; report cached ratio *and* an
-  apples-to-apples "bitset would need 2^n" comparison (bitset is disabled above the full-TT cap —
-  add an explicit note, don't silently skip).
+  explicitly labeled nominal-width comparison plus a matched-scope flat-bitset comparison
+  (if the former is disabled above the full-TT cap, say so rather than silently skipping it).
 - **Payoff:** this is the **strongest large-n narrative** and directly supports the paper's
   "larger-n validation" open question. **Risk:** medium — keep the anti-materialization guard;
   never enumerate 2^n.

@@ -30,6 +30,9 @@
 
 ## 3. Before/after — the headline
 
+> **Do not quote this section without §4.1.** Its `raw bitset` comparator is the recursive
+> AST walk.  The publishable comparison is CM-flat versus raw-AST-flat in §4.1.
+
 ### (A) Full-output convergence table (the chart's regime: full arity, `live_k = n`, cached per-eval, same seeds as the pre-C1a audit)
 
 | n | recursive/bitset (before) | **flat/bitset (after)** |

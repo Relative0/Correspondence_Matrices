@@ -9,7 +9,9 @@ from bitset_backend import (
     build_bitset_env,
     clear_bitset_env_cache,
     eval_cm_node_bitset,
+    eval_cm_node_flat,
     eval_expr_bitset,
+    eval_expr_flat_bitset,
 )
 from cm_exprlib import Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import compile_expr_to_cm_ir
@@ -29,6 +31,19 @@ class BitsetBackendTests(unittest.TestCase):
                     np.array_equal(tt_ref, tt_bitset),
                     msg=f"bitset ordering mismatch at n={n}",
                 )
+                for free_dead_slots in (False, True):
+                    tt_flat = bitset_to_bool_array(
+                        eval_expr_flat_bitset(
+                            expr,
+                            tuple(f"x{i}" for i in range(n)),
+                            free_dead_slots=free_dead_slots,
+                        ),
+                        n,
+                    )
+                    self.assertTrue(
+                        np.array_equal(tt_ref, tt_flat),
+                        msg=f"flat bitset ordering mismatch at n={n}, free={free_dead_slots}",
+                    )
 
     def test_full_mask_clipping_for_not_imp_eqv(self) -> None:
         n = 16
@@ -82,6 +97,23 @@ class BitsetBackendTests(unittest.TestCase):
         cube = bitset_to_bool_hypercube(bits, 1)
         expected = np.array([1, 0], dtype=np.uint8)
         self.assertTrue(np.array_equal(expected, cube.reshape(-1).astype(np.uint8)))
+        self.assertEqual(
+            bits,
+            eval_cm_node_flat(node, ("x1",), fixed={"x0": 1, "x2": 0}, free_dead_slots=False),
+        )
+        self.assertEqual(
+            bits,
+            eval_cm_node_flat(node, ("x1",), fixed={"x0": 1, "x2": 0}, free_dead_slots=True),
+        )
+        self.assertEqual(
+            bits,
+            eval_expr_flat_bitset(
+                expr,
+                ("x1",),
+                fixed={"x0": 1, "x2": 0},
+                free_dead_slots=True,
+            ),
+        )
 
 
 if __name__ == "__main__":

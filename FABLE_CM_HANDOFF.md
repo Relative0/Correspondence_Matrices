@@ -39,8 +39,9 @@
 
 ## 1. Repository shape
 
-Root is a single-package Python project (`C:\Users\brian\Documents\CM_Computation`), Python
-3.10, `.venv` present. Two things share the name `cm_bench.py`: the **root** one (208 KB, the
+Root is a single-package Python project (`C:\Users\brian\Documents\CM_Computation`). The
+benchmark `.venv` is Python 3.13.5; system tests use Python 3.10.11. Two things share the name
+`cm_bench.py`: the **root** one (208 KB, the
 real driver) and a small legacy copy inside `Correspondence_Matrices/` (an older git submodule
 snapshot — ignore it for perf work).
 

@@ -1,5 +1,10 @@
 # Tier C Re-scope — Flat CM Evaluator After R1/R2/R3
 
+> **Framing correction (2026-07-21 audit):** the headline below compares CM-flat with the
+> recursive `eval_expr_bitset`, not with a compiled raw-AST flat bitset.  The later fair
+> flat-vs-flat control supersedes the speed claim: CM is generally at parity to modestly
+> faster because of DAG sharing; this report remains useful as the pre-implementation probe.
+
 > Follow-up to `CM_speedup_phase2_report.md`. Question: is C1 (flatten/codegen the IR
 > evaluator) still worth building now that R1 removed the hash/memo overhead it was
 > originally aimed at? **Answer: yes — and the verdict got *stronger*, not weaker.**

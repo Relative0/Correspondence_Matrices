@@ -1,5 +1,9 @@
 # CM ↔ Bitset Convergence at Larger n (full output) — Audited
 
+> **Scope correction (2026-07-21):** this is a pre-C1a study of the recursive CM kernel
+> against the recursive raw-AST bitset walk.  It explains the old trend but is not the
+> current flat-vs-flat performance result; use the C1a fairness control and the later audit.
+
 > Answers: "does CM No-Reinflate converge closer to Bitset past n=16, and are there
 > improvements that would push it further?" Measured this session on your machine
 > (Python 3.13.5, post-R1/R2/R3), **full-output, genuine full-arity expressions**
