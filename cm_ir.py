@@ -1451,13 +1451,56 @@ def materialize_hybrid_no_reinflate(
     allow_reduced_output: bool = False,
     max_full_output_vars: Optional[int] = None,
     flat_eval: Optional[bool] = None,
+    flat_fast_path: bool = True,
 ) -> FinalNoReinflateResult:
     """Hybrid materialization that avoids dense CM reinflation.
 
     If the live variable count is <= ``hybrid_threshold`` we return a packed bitset directly.
     Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
-    (never a 2D dense CM matrix).
+    (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+    controlled before/after measurements; it does not change result semantics.
     """
+    # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+    # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+    # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+    use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+    if diagnostics is None and use_flat and flat_fast_path:
+        if hybrid_threshold < 0:
+            raise ValueError("hybrid_threshold must be >= 0")
+        fast_fixed_map = fixed or {}
+        fast_vars_key = tuple(vars_all)
+        fast_live_vars = (
+            node.vars
+            if not fast_fixed_map
+            else tuple(v for v in node.vars if v not in fast_fixed_map)
+        )
+        fast_n = len(fast_vars_key)
+        fast_guard_full = max_full_output_vars is not None and fast_n > int(max_full_output_vars)
+        fast_reduced = bool(allow_reduced_output and fast_guard_full)
+        fast_output_vars = fast_live_vars if fast_reduced else fast_vars_key
+        fast_output_k = len(fast_output_vars)
+        if fast_guard_full and not allow_reduced_output:
+            raise ValueError(
+                f"refusing to materialize full no-reinflate output for {fast_n} variables; "
+                "pass allow_reduced_output=True for structural large-n validation"
+            )
+        if (
+            fast_reduced
+            and max_full_output_vars is not None
+            and fast_output_k > int(max_full_output_vars)
+        ):
+            raise ValueError(
+                f"refusing to materialize reduced no-reinflate output for {fast_output_k} live variables; "
+                f"max_full_output_vars={int(max_full_output_vars)}"
+            )
+        if len(fast_live_vars) <= hybrid_threshold:
+            return FinalNoReinflateResult(
+                final_output_representation_code=3 if fast_reduced else 2,
+                bits=eval_cm_node_flat(node, fast_output_vars, fixed=fast_fixed_map),
+                tt=None,
+                output_vars=fast_output_vars,
+            )
+
     profile = diagnostics is not None and bool(diagnostics.get("cached_exec_profile_enabled", 0))
     t_total0 = time.perf_counter() if profile else None
     profile_base = (
@@ -1509,7 +1552,6 @@ def materialize_hybrid_no_reinflate(
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
         t_profile_eval0 = time.perf_counter() if profile else None
-        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
         if use_flat:
             bits = eval_cm_node_flat(node, output_vars, fixed=fixed_map)
         else:

@@ -28,6 +28,7 @@ class BackendResult:
     timing: TimingBreakdown = field(default_factory=TimingBreakdown)
     ok: bool | None = None
     correctness_mode: str | None = None
+    declined: bool | None = None
     result: Any | None = None
     metrics: dict[str, Any] = field(default_factory=dict)
     diagnostics: dict[str, Any] = field(default_factory=dict)

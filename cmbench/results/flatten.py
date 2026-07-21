@@ -13,6 +13,7 @@ def flatten_backend_result(result: BackendResult, prefix: str | None = None) -> 
         f"{base}_error": result.error,
         f"{base}_ok": result.ok,
         f"{base}_correctness_mode": result.correctness_mode,
+        f"{base}_declined": result.declined,
     }
     for key, value in asdict(result.timing).items():
         row[f"{base}_{key}"] = value

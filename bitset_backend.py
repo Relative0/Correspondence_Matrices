@@ -187,6 +187,10 @@ _FLAT_OPCODE = {"AND": _FLAT_OP_AND, "OR": _FLAT_OP_OR, "XOR": _FLAT_OP_XOR,
                 "IMP": _FLAT_OP_IMP, "EQV": _FLAT_OP_EQV}
 
 _FLAT_BOUND_CACHE_MAX = 64
+# At 2**16 bits, clearing references was neutral for CM and slowed raw-flat on the
+# audit workload.  It becomes consistently worthwhile from 2**18-bit outputs.
+_FLAT_FREE_MIN_VARS = 18
+_FLAT_FREE_MIN_SLOTS = 64
 
 
 class FlatProgram:
@@ -194,18 +198,42 @@ class FlatProgram:
 
     ``loads``: tuple of (slot, kind, payload) with kind in {"var", "const"}.
     ``ops``:   tuple of (slot, opcode, arg_slots) in dependency order.
+    ``release_after``: dead input slots to clear after each operation.
     ``bound_cache``: {(vars_key, fixed_items): (slot_template, full_mask)} —
     small FIFO-evicted cache of resolved input masks.
     """
 
-    __slots__ = ("n_slots", "root_slot", "loads", "ops", "bound_cache")
+    __slots__ = ("n_slots", "root_slot", "loads", "ops", "release_after", "bound_cache")
 
     def __init__(self, n_slots: int, root_slot: int, loads, ops) -> None:
         self.n_slots = n_slots
         self.root_slot = root_slot
         self.loads = loads
         self.ops = ops
+        self.release_after = _last_use_releases(n_slots, root_slot, ops)
         self.bound_cache: Dict[tuple, tuple] = {}
+
+
+def _last_use_releases(n_slots: int, root_slot: int, ops) -> tuple:
+    """Return input slots whose final use occurs at each operation.
+
+    Slots are never reused, which keeps lowering simple and makes the old retained-slot
+    behavior available for measurement.  Clearing the references is enough to let CPython
+    reclaim wide bigint intermediates promptly.
+    """
+    remaining = [0] * n_slots
+    for _slot, _opcode, arg_slots in ops:
+        for arg_slot in arg_slots:
+            remaining[arg_slot] += 1
+    releases = []
+    for _slot, _opcode, arg_slots in ops:
+        dead = []
+        for arg_slot in arg_slots:
+            remaining[arg_slot] -= 1
+            if remaining[arg_slot] == 0 and arg_slot != root_slot:
+                dead.append(arg_slot)
+        releases.append(tuple(dead))
+    return tuple(releases)
 
 
 def compile_flat(node: "CMNode") -> FlatProgram:
@@ -285,12 +313,25 @@ def eval_cm_node_flat(
     live_vars: Sequence[str],
     *,
     fixed: Optional[Mapping[str, int]] = None,
+    free_dead_slots: bool = True,
 ) -> int:
-    """Flat-program equivalent of eval_cm_node_bitset (bit-identical output)."""
+    """Flat-program equivalent of eval_cm_node_bitset (bit-identical output).
+
+    ``free_dead_slots=False`` retains the original C1a behavior for controlled
+    before/after measurements.  When enabled, freeing is selected only for wide programs
+    (at least 18 variables and 64 slots), where reduced peak liveness repays its loop cost.
+    The default is safe because the whole flat evaluator is already opt-in at the public
+    CM wrapper.
+    """
     prog = get_flat_program(node)
     template, full_mask = _bind_flat_program(prog, tuple(live_vars), fixed or {})
     values = template.copy()
-    for slot, opcode, arg_slots in prog.ops:
+    release_dead = bool(
+        free_dead_slots
+        and len(live_vars) >= _FLAT_FREE_MIN_VARS
+        and prog.n_slots >= _FLAT_FREE_MIN_SLOTS
+    )
+    for op_index, (slot, opcode, arg_slots) in enumerate(prog.ops):
         if opcode == _FLAT_OP_AND:
             acc = values[arg_slots[0]]
             for i in arg_slots[1:]:
@@ -312,4 +353,88 @@ def eval_cm_node_flat(
             values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
         else:  # _FLAT_OP_EQV
             values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+        if release_dead:
+            for dead_slot in prog.release_after[op_index]:
+                values[dead_slot] = None
+    return values[prog.root_slot]
+
+
+def compile_expr_flat(expr: Expr) -> FlatProgram:
+    """Lower a raw Expr tree to a flat program without CM canonicalization/sharing."""
+    loads = []
+    ops = []
+
+    def rec(cur: Expr) -> int:
+        if isinstance(cur, Var):
+            slot = len(loads) + len(ops)
+            loads.append((slot, "var", f"x{cur.i}"))
+            return slot
+        if isinstance(cur, Not):
+            arg_slots = (rec(cur.a),)
+            opcode = _FLAT_OP_NOT
+        elif isinstance(cur, (And, Or, Xor, Imp, Eqv)):
+            arg_slots = (rec(cur.a), rec(cur.b))
+            opcode = {
+                And: _FLAT_OP_AND,
+                Or: _FLAT_OP_OR,
+                Xor: _FLAT_OP_XOR,
+                Imp: _FLAT_OP_IMP,
+                Eqv: _FLAT_OP_EQV,
+            }[type(cur)]
+        else:
+            raise TypeError(cur)
+        slot = len(loads) + len(ops)
+        ops.append((slot, opcode, arg_slots))
+        return slot
+
+    root_slot = rec(expr)
+    return FlatProgram(len(loads) + len(ops), root_slot, tuple(loads), tuple(ops))
+
+
+def get_expr_flat_program(expr: Expr) -> FlatProgram:
+    """Return a raw-AST flat program cached on the root expression object."""
+    prog = expr.__dict__.get("_bitset_flat_program")
+    if prog is None:
+        prog = compile_expr_flat(expr)
+        object.__setattr__(expr, "_bitset_flat_program", prog)
+    return prog
+
+
+def eval_expr_flat_bitset(
+    expr: Expr,
+    vars_all: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+    free_dead_slots: bool = True,
+) -> int:
+    """Evaluate a compile-once raw Expr flat program over packed bigint columns.
+
+    This is the fair flat-vs-flat bitset control: it uses no CM rewrites or DAG
+    canonicalization, while sharing the same cached input-mask builder and last-use policy.
+    The bound cache contains inputs only; operation outputs are always recomputed.
+    """
+    prog = get_expr_flat_program(expr)
+    template, full_mask = _bind_flat_program(prog, tuple(vars_all), fixed or {})
+    values = template.copy()
+    release_dead = bool(
+        free_dead_slots
+        and len(vars_all) >= _FLAT_FREE_MIN_VARS
+        and prog.n_slots >= _FLAT_FREE_MIN_SLOTS
+    )
+    for op_index, (slot, opcode, arg_slots) in enumerate(prog.ops):
+        if opcode == _FLAT_OP_AND:
+            values[slot] = values[arg_slots[0]] & values[arg_slots[1]]
+        elif opcode == _FLAT_OP_OR:
+            values[slot] = values[arg_slots[0]] | values[arg_slots[1]]
+        elif opcode == _FLAT_OP_XOR:
+            values[slot] = values[arg_slots[0]] ^ values[arg_slots[1]]
+        elif opcode == _FLAT_OP_NOT:
+            values[slot] = (~values[arg_slots[0]]) & full_mask
+        elif opcode == _FLAT_OP_IMP:
+            values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
+        else:  # _FLAT_OP_EQV
+            values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+        if release_dead:
+            for dead_slot in prog.release_after[op_index]:
+                values[dead_slot] = None
     return values[prog.root_slot]

@@ -23,7 +23,13 @@ def try_import(name: str):
 dd = try_import("dd")
 pyeda = try_import("pyeda")
 
-from bitset_backend import build_bitset_env, eval_cm_node_bitset, eval_expr_bitset, bitset_to_bool_array
+from bitset_backend import (
+    bitset_to_bool_array,
+    build_bitset_env,
+    eval_cm_node_bitset,
+    eval_expr_bitset,
+    eval_expr_flat_bitset,
+)
 from cm_build import compile_expr_to_cm
 from cmbench.availability import detect_backends
 from cmbench.backends.bitset_utils import bitset_equivalence_check
@@ -1351,6 +1357,7 @@ def time_backends_on_expr(
     cm_hybrid_no_reinflate_time = None
     cm_hybrid_no_reinflate_tt_extract_time = None
     cm_hybrid_no_reinflate_ok = None
+    cm_hybrid_no_reinflate_declined = False if config.cm_compare_no_reinflate else None
     cm_hybrid_no_reinflate_exec_only_time = None
     cm_hybrid_no_reinflate_cached_exec_only_time = None
     cm_runpod_pod_started = None
@@ -1363,6 +1370,7 @@ def time_backends_on_expr(
     cm_runpod_fallback_local = False
     cm_runpod_status = None
     cm_runpod_error = None
+    bitset_baseline_kind = "raw_ast_recursive"
     sampled_correctness_samples = 0
     sampled_correctness_mismatches = None
     sampled_correctness_mismatch_rate = None
@@ -1748,6 +1756,9 @@ def time_backends_on_expr(
                 else:
                     cm_hybrid_no_reinflate_ok = True if large_n_safe else None
             except Exception as fallback_exc:
+                cm_hybrid_no_reinflate_declined = isinstance(fallback_exc, ValueError) and str(
+                    fallback_exc
+                ).startswith("refusing to materialize reduced no-reinflate output")
                 cm_runpod_status = "fallback_error"
                 cm_runpod_error = f"{cm_runpod_error}; fallback failed: {fallback_exc}"
                 cm_hybrid_no_reinflate_ok = False
@@ -1781,8 +1792,13 @@ def time_backends_on_expr(
 
             output_vars = tuple(res_nr.output_vars)
             if not config.no_bitset:
+                # Fair matched-scope control: flatten the original Expr, not the already
+                # canonicalized CM DAG. Variables proven irrelevant by CM are fixed to an
+                # arbitrary value; invariance is checked against the CM result below.
+                raw_fixed = {name: 0 for name in vars_all if name not in output_vars}
+                bitset_baseline_kind = "raw_ast_flat_matched_scope"
                 t7 = time.perf_counter()
-                bitset_tt = eval_cm_node_bitset(node_nr, output_vars, fixed={})
+                bitset_tt = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
                 bitset_time = time.perf_counter() - t7
                 if res_nr.bits is not None:
                     cm_hybrid_no_reinflate_ok = bool(int(res_nr.bits) == int(bitset_tt))
@@ -1796,7 +1812,7 @@ def time_backends_on_expr(
                 if eval_repeat > 1:
                     t7r = time.perf_counter()
                     for _ in range(eval_repeat):
-                        _ = eval_cm_node_bitset(node_nr, output_vars, fixed={})
+                        _ = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
                     bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             else:
                 cm_hybrid_no_reinflate_ok = True
@@ -1837,7 +1853,10 @@ def time_backends_on_expr(
                     for k, v in profile_diag.items():
                         if k.startswith("cached_exec_"):
                             cm_hybrid_no_reinflate_diag[k] = v
-        except Exception:
+        except Exception as exc:
+            cm_hybrid_no_reinflate_declined = isinstance(exc, ValueError) and str(exc).startswith(
+                "refusing to materialize reduced no-reinflate output"
+            )
             cm_hybrid_no_reinflate_time = None
             cm_hybrid_no_reinflate_tt_extract_time = None
             cm_hybrid_no_reinflate_ok = False
@@ -1998,13 +2017,24 @@ def time_backends_on_expr(
             if verbose:
                 print(f"[n={n}] Bitset eval ...")
             local_bit_env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n)])
+            bitset_vars = tuple(f"x{i}" for i in range(n))
+            use_flat_bitset = bool(config.cm_flat_eval)
+            if use_flat_bitset:
+                bitset_baseline_kind = "raw_ast_flat"
             t7 = time.perf_counter()
-            bitset_tt = eval_expr_bitset(expr, local_bit_env)
+            bitset_tt = (
+                eval_expr_flat_bitset(expr, bitset_vars)
+                if use_flat_bitset
+                else eval_expr_bitset(expr, local_bit_env)
+            )
             bitset_time = time.perf_counter() - t7
             if eval_repeat > 1:
                 t7r = time.perf_counter()
                 for _ in range(eval_repeat):
-                    _ = eval_expr_bitset(expr, local_bit_env)
+                    if use_flat_bitset:
+                        _ = eval_expr_flat_bitset(expr, bitset_vars)
+                    else:
+                        _ = eval_expr_bitset(expr, local_bit_env)
                 bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             if tt_ref is not None:
                 t7x = time.perf_counter()
@@ -2428,6 +2458,7 @@ def time_backends_on_expr(
                 "cm_hybrid_no_reinflate_time_s": cm_hybrid_no_reinflate_time,
                 "cm_hybrid_no_reinflate_tt_extract_time_s": cm_hybrid_no_reinflate_tt_extract_time,
                 "cm_hybrid_no_reinflate_ok": cm_hybrid_no_reinflate_ok,
+                "cm_hybrid_no_reinflate_declined": cm_hybrid_no_reinflate_declined,
             }
             if config.cm_compare_no_reinflate
             else {}
@@ -2438,6 +2469,7 @@ def time_backends_on_expr(
         "bitset_time_s": bitset_time,
         "bitset_extract_time_s": bitset_extract_time,
         "bitset_ok": bitset_ok,
+        "bitset_baseline_kind": bitset_baseline_kind,
         "cm_time_excludes_tt_extract": True,
         "cm_hybrid_time_excludes_tt_extract": True,
         "cm_partial_hybrid_time_excludes_tt_extract": True,
@@ -2998,6 +3030,10 @@ def run_bench(
                     safe_median,
                 ),
                 "cm_hybrid_no_reinflate_ok_all": ("cm_hybrid_no_reinflate_ok", safe_all),
+                "cm_hybrid_no_reinflate_declined_count": (
+                    "cm_hybrid_no_reinflate_declined",
+                    count_true,
+                ),
                 "cm_materializations_median_alias": ("cm_materializations", safe_median),
                 "cm_final_repr_median": ("cm_final_repr", safe_median),
                 "cm_final_cm_materialized_median": ("cm_final_cm_materialized", safe_median),
