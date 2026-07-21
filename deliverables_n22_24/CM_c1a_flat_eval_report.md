@@ -73,6 +73,41 @@ is why it can be *faster* than the flat lower bound for *uncompiled* input, not 
 (The fair flat-vs-flat control — a flattened raw-Expr evaluator — remains the numba stack
 machine, per the Tier-C report §4.)
 
+## 4.1 Fairness control: what if bitset users apply the same trick? (READ BEFORE QUOTING §3)
+
+The §3 bitset baseline (`eval_expr_bitset`) has its variable-mask env **cached** (same
+shared LRU both sides use — it is not handicapped there), but it **re-walks the raw AST
+recursively every eval**. A practitioner in a compile-once regime could flatten their raw
+AST with zero CM machinery. To not discount that, a **raw-flat bitset** control was built
+(postorder program over the *uncompiled* tree — no canonicalization, no sharing), verified
+bit-exact (32/32 vs recursive bitset *and* the oracle). Data:
+`CM_fair_bitset_control.csv`. Result:
+
+**Cached regime (depth-4), per-eval µs:**
+
+| n | raw recursive | **raw FLAT (fair)** | CM flat | CM vs fair flat |
+|--:|--:|--:|--:|--:|
+| 4 | 5.4 | 3.0 | 3.2 | 1.06× |
+| 8 | 9.5 | 4.6 | 4.1 | **0.89×** |
+| 12 | 11.8 | 7.5 | 5.5 | **0.73×** |
+| 16 | 65.1 | 59.6 | 57.1 | **0.96×** |
+
+- Generic executor flattening speeds the raw bitset ~1.3–1.8× at small n — i.e. **a chunk
+  of §3's "CM 2× faster than bitset" is available to any bitset user** who compiles once.
+- Against the *fair* flat baseline, CM is **parity to ~1.4× faster** (the residual win =
+  the canonicalized DAG's node sharing). That is the honest headline:
+  **"CM ≈ matches best-practice bitset and adds structure,"** not "CM beats bitset 2×."
+
+**Full-output full-arity (n=16–24):** naive flattening actually *hurts* the raw bitset
+(raw-flat holds all ~300 intermediate 2^n-bit values alive → memory pressure; recursion
+frees them at O(depth) liveness). CM-flat beat raw-flat in every row (0.82–0.94×, node
+sharing again), and sat near raw-recursive within run variance. Two honesty notes:
+(1) large-n per-eval ratios vary ±30–50% between sessions (the §3(A) n=20 flat ratio 0.97×
+measured 1.47× in this control's session with a *faster* raw baseline) — at 2^20-bit widths,
+allocator/machine state dominates µs-level ratios, so treat all large-n full-output ratios
+as "≈ parity," not as precise constants; (2) the raw-flat memory penalty directly supports
+speedup candidate #1 below (last-use slot freeing) — it bites CM's flat program too.
+
 ## 5. Further speedup candidates spotted while implementing ("keeping an eye out")
 
 1. **Memory-lean slots (last-use freeing).** The flat `values` list still holds every
