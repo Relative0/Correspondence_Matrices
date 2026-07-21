@@ -163,3 +163,153 @@ def eval_cm_node_bitset(
         return out
 
     return rec(node)
+
+
+# ---------------------------------------------------------------------------
+# C1a: flat (linearized) CM-node evaluator — opt-in alternative to the
+# recursive kernel above. The interned CMNode DAG is lowered ONCE into a
+# linear postorder instruction list (one instruction per unique DAG node, so
+# sharing is exploited at compile time and the eval loop needs no memo), and
+# per-(vars_key, fixed) variable/constant masks are resolved ONCE into a
+# "bound" slot template (legitimate compile-once reuse, same class as the
+# build_bitset_env LRU: it stores resolved *input* masks, never outputs).
+# Bit-identical to eval_cm_node_bitset by construction and by test sweep.
+# ---------------------------------------------------------------------------
+
+_FLAT_OP_NOT = 0
+_FLAT_OP_AND = 1
+_FLAT_OP_OR = 2
+_FLAT_OP_XOR = 3
+_FLAT_OP_IMP = 4
+_FLAT_OP_EQV = 5
+
+_FLAT_OPCODE = {"AND": _FLAT_OP_AND, "OR": _FLAT_OP_OR, "XOR": _FLAT_OP_XOR,
+                "IMP": _FLAT_OP_IMP, "EQV": _FLAT_OP_EQV}
+
+_FLAT_BOUND_CACHE_MAX = 64
+
+
+class FlatProgram:
+    """Linear postorder program lowered from a CMNode DAG.
+
+    ``loads``: tuple of (slot, kind, payload) with kind in {"var", "const"}.
+    ``ops``:   tuple of (slot, opcode, arg_slots) in dependency order.
+    ``bound_cache``: {(vars_key, fixed_items): (slot_template, full_mask)} —
+    small FIFO-evicted cache of resolved input masks.
+    """
+
+    __slots__ = ("n_slots", "root_slot", "loads", "ops", "bound_cache")
+
+    def __init__(self, n_slots: int, root_slot: int, loads, ops) -> None:
+        self.n_slots = n_slots
+        self.root_slot = root_slot
+        self.loads = loads
+        self.ops = ops
+        self.bound_cache: Dict[tuple, tuple] = {}
+
+
+def compile_flat(node: "CMNode") -> FlatProgram:
+    """Lower a CMNode DAG to a FlatProgram (iterative postorder, id-memoized)."""
+    slot_of: Dict[int, int] = {}
+    loads = []
+    ops = []
+    stack = [(node, False)]
+    while stack:
+        cur, processed = stack.pop()
+        if id(cur) in slot_of:
+            continue
+        if not processed:
+            stack.append((cur, True))
+            for arg in cur.args:
+                if id(arg) not in slot_of:
+                    stack.append((arg, False))
+            continue
+        slot = len(slot_of)
+        slot_of[id(cur)] = slot
+        if cur.kind == "const":
+            loads.append((slot, "const", int(cur.const_value or 0)))
+        elif cur.kind == "var":
+            loads.append((slot, "var", cur.var_name))
+        elif cur.kind == "not":
+            ops.append((slot, _FLAT_OP_NOT, (slot_of[id(cur.args[0])],)))
+        else:
+            opcode = _FLAT_OPCODE.get(cur.op)
+            if opcode is None:
+                raise TypeError(cur)
+            ops.append((slot, opcode, tuple(slot_of[id(a)] for a in cur.args)))
+    return FlatProgram(len(slot_of), slot_of[id(node)], tuple(loads), tuple(ops))
+
+
+def get_flat_program(node: "CMNode") -> FlatProgram:
+    """Return the node's FlatProgram, lowering and caching it on first use.
+
+    Cached on the (frozen) node instance itself via object.__setattr__ — the
+    same lifetime-correct pattern CMNode.__hash__ uses for its cached hash.
+    """
+    prog = node.__dict__.get("_flat_program")
+    if prog is None:
+        prog = compile_flat(node)
+        object.__setattr__(node, "_flat_program", prog)
+    return prog
+
+
+def _bind_flat_program(prog: FlatProgram, vars_key: Tuple[str, ...],
+                       fixed_map: Mapping[str, int]) -> tuple:
+    key = (vars_key, tuple(sorted(fixed_map.items())))
+    bound = prog.bound_cache.get(key)
+    if bound is None:
+        env = build_bitset_env(vars_key)
+        full_mask = (1 << (1 << len(vars_key))) - 1
+        template = [0] * prog.n_slots
+        for slot, kind, payload in prog.loads:
+            if kind == "const":
+                template[slot] = full_mask if payload else 0
+            elif payload in fixed_map:
+                template[slot] = full_mask if int(bool(fixed_map[payload])) else 0
+            else:
+                try:
+                    template[slot] = int(env[payload])
+                except KeyError as exc:
+                    raise KeyError(
+                        f"missing live/fixed value for variable {payload!r}"
+                    ) from exc
+        if len(prog.bound_cache) >= _FLAT_BOUND_CACHE_MAX:
+            prog.bound_cache.pop(next(iter(prog.bound_cache)))
+        bound = (template, full_mask)
+        prog.bound_cache[key] = bound
+    return bound
+
+
+def eval_cm_node_flat(
+    node: "CMNode",
+    live_vars: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+) -> int:
+    """Flat-program equivalent of eval_cm_node_bitset (bit-identical output)."""
+    prog = get_flat_program(node)
+    template, full_mask = _bind_flat_program(prog, tuple(live_vars), fixed or {})
+    values = template.copy()
+    for slot, opcode, arg_slots in prog.ops:
+        if opcode == _FLAT_OP_AND:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc &= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_OR:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc |= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_XOR:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc ^= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_NOT:
+            values[slot] = (~values[arg_slots[0]]) & full_mask
+        elif opcode == _FLAT_OP_IMP:
+            values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
+        else:  # _FLAT_OP_EQV
+            values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+    return values[prog.root_slot]
