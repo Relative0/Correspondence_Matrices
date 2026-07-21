@@ -9,7 +9,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 
 import numpy as np
 
-from bitset_backend import bitset_to_bool_hypercube, eval_cm_node_bitset
+from bitset_backend import bitset_to_bool_hypercube, eval_cm_node_bitset, eval_cm_node_flat
 from cm_exprlib import And, Eqv, Expr, Imp, Not, Or, Var, Xor
 
 
@@ -77,6 +77,17 @@ def clear_cm_ir_persistent_cache() -> None:
 
 def cm_ir_persistent_cache_stats() -> Dict[str, int]:
     return {"ir_persistent_cache_size": int(len(_PERSISTENT_IR_CACHE))}
+
+
+# C1a flat evaluator (see bitset_backend.eval_cm_node_flat). Off by default; the
+# per-call ``flat_eval`` parameter overrides this module default when not None.
+_FLAT_EVAL_DEFAULT = False
+
+
+def set_flat_eval_default(enabled: bool) -> None:
+    """Set the process-wide default for the no-reinflate flat evaluator (C1a)."""
+    global _FLAT_EVAL_DEFAULT
+    _FLAT_EVAL_DEFAULT = bool(enabled)
 
 
 def _expr_var_name(expr: Any) -> str:
@@ -1439,6 +1450,7 @@ def materialize_hybrid_no_reinflate(
     hybrid_threshold: int = 7,
     allow_reduced_output: bool = False,
     max_full_output_vars: Optional[int] = None,
+    flat_eval: Optional[bool] = None,
 ) -> FinalNoReinflateResult:
     """Hybrid materialization that avoids dense CM reinflation.
 
@@ -1497,7 +1509,11 @@ def materialize_hybrid_no_reinflate(
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
         t_profile_eval0 = time.perf_counter() if profile else None
-        bits = eval_cm_node_bitset(node, output_vars, fixed=fixed_map)
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        if use_flat:
+            bits = eval_cm_node_flat(node, output_vars, fixed=fixed_map)
+        else:
+            bits = eval_cm_node_bitset(node, output_vars, fixed=fixed_map)
         if t_profile_eval0 is not None:
             _bump(diagnostics, "cached_exec_bitset_eval_calls")
             _add_float(diagnostics, "cached_exec_bitset_eval_time_s", time.perf_counter() - t_profile_eval0)

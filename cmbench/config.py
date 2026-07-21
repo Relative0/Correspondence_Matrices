@@ -44,6 +44,7 @@ class BenchmarkConfig:
     cm_compile_once_per_expression: bool = False
     cm_eval_repeat: int = 1
     cm_max_full_output_vars: int = 16
+    cm_flat_eval: bool = False
     cm_exec_target: Literal["local", "runpod"] = "local"
     cm_runpod_local_mock: bool = False
     cm_runpod_smoke_test: bool = False
@@ -183,6 +184,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         cm_compile_once_per_expression=bool(getattr(args, "cm_compile_once_per_expression", False)),
         cm_eval_repeat=int(getattr(args, "cm_eval_repeat", 1)),
         cm_max_full_output_vars=int(getattr(args, "cm_max_full_output_vars", 16)),
+        cm_flat_eval=bool(getattr(args, "cm_flat_eval", False)),
         cm_exec_target=getattr(args, "cm_exec_target", "local"),
         cm_runpod_local_mock=bool(getattr(args, "cm_runpod_local_mock", False)),
         cm_runpod_smoke_test=bool(getattr(args, "cm_runpod_smoke_test", False)),

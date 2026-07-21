@@ -4511,6 +4511,12 @@ def main():
     )
     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
     ap.add_argument("--cm-max-full-output-vars", dest="cm_max_full_output_vars", type=int, default=16)
+    ap.add_argument(
+        "--cm-flat-eval",
+        dest="cm_flat_eval",
+        action="store_true",
+        help="Use the C1a flat (linearized) evaluator for the no-reinflate bitset branch.",
+    )
     ap.add_argument("--cm-parallel", action="store_true")
     ap.add_argument("--cm-parallel-workers", type=int, default=0)
     ap.add_argument("--cm-parallel-min-n", type=int, default=8)
@@ -4536,6 +4542,10 @@ def main():
     args = ap.parse_args()
     config, _ctx = build_config_and_context(args)
     _ACTIVE_CONFIG = config
+    if config.cm_flat_eval:
+        from cm_ir import set_flat_eval_default
+
+        set_flat_eval_default(True)
 
     if config.cm_runpod_smoke_test:
         from cm_runpod_smoke_test import run_smoke_test
