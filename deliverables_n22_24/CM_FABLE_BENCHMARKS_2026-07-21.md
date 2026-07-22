@@ -204,6 +204,48 @@ scales with the problem's true support, the raw formula with its nominal size �
 these µs magnitudes a substantial share of the gap is fixed-binding bookkeeping in the
 control, so we report it as a drift with a mechanism, not as "CM dominates at n=32".
 
+## 7d. Comprehensive full-variable campaign (2026-07-22): nothing reduced, nothing pruned
+
+Two regimes, requested to cover the populations the earlier campaigns didn't: formulas
+where **every ambient variable is live** (computed at full 2^n output, n=16–32), and
+formulas the guard previously **declined** (live_k 17–26, computed exactly over their
+true support). Ran on RunPod: head on the standing $0.06/hr pod (n≤26; its container
+RAM killed the n=28 attempt — recovered from the volume, nothing lost), tail + Regime B
+on a temporary 16-vCPU/128 GB pod ($0.88/hr, ~25 min, terminated after download).
+Data: `CM_FABLE_comprehensive_{fullvars,beyondguard}.csv` (+ `RECOVERED_*`, `*_tail_*`
+provenance files); worker: `fable_comprehensive_worker_2026_07_22.py`.
+
+**Correctness: every row bit-exact.** All methods agree over the complete computed
+output (exhaustive by packed equality — including the full 2^32-row output at n=32),
+and every formula passes a 2,000-row independent scalar oracle that re-evaluates the
+original expression from scratch.
+
+**Regime A — all-variables-live, full output (words engine medians):**
+
+| n | CM | Bitset | CM advantage | | n | CM | Bitset | CM advantage |
+|--:|--:|--:|--:|---|--:|--:|--:|--:|
+| 16 | 0.07 ms | 0.13 ms | 1.9× | | 26 | 45 ms | 112 ms | 2.5× |
+| 18 | 0.16 ms | 0.29 ms | 1.9× | | 28 | 219 ms | 731 ms | 3.3× |
+| 20 | 0.49 ms | 0.70 ms | 1.4× | | 30 | 0.97 s | 1.90 s | 2.0× |
+| 22 | 2.3 ms | 4.0 ms | 1.7× | | 32 | **3.86 s** | **7.78 s** | **2.0×** |
+| 24 | 10 ms | 15 ms | 1.4× | | | | | |
+
+Bigint-engine ratios (n≤28) run 1.9–4.3× in CM's favor on the same formulas. **Family
+caveat (the honest mechanism):** this generator builds XOR-joined trees with deliberate
+subformula reuse, so it is a sharing-rich family — CM's interning collapses repeats
+that the raw-AST Bitset re-executes. It brackets CM's structural advantage from above,
+as the sparse random family (§7b: ~parity) brackets it from below. Both are true; a
+paper should show both. Full 2^32-row exact computation with bit-verified agreement is
+itself a first for this project.
+
+**Regime B — beyond the guard, computed not pruned:** 72 formulas with live_k 17–26
+(depths 6/8, n=24/28/32) — the population `--cm-max-full-output-vars 16` declines —
+computed exactly over their true support (2^17–2^26 rows, up to ~30 ms each via words).
+CM/Bitset ratio: median 0.96, p10–p90 0.90–1.03 — parity with a slight CM edge,
+uniform across n and live_k. **Conclusion: the guard is a policy cap on output size,
+not a capability wall; lifting it (a parameter) computes these formulas exactly at
+ordinary cost.**
+
 ## 8. Variance statement
 
 Full-arity large-n session CVs in this session's runs were 7–16% (consistent with the
