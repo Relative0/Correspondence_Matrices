@@ -201,12 +201,34 @@
       bit-verified), which replaced an earlier 8-formula pass; that small sample had shown
       0.84 at n=24, corrected here to 1.02 (sampling luck). The campaign also fixed a
       mis-tuned routing threshold that made ~20% of formulas ~40× slower on the CM side —
-      the bars show the corrected best-honest configuration of both sides. Full detail on
-      the standalone explainer page.</p>
+      the bars show the corrected best-honest configuration of both sides. The wrapper
+      series now extends to n=32 (extended RunPod campaign): it drifts steadily in CM's
+      favor with ambient size, crossing to a CM win from n≈26 (0.84 at n=32). Kernel bars
+      end at n=24 (that family wasn't rerun beyond it). Full detail on the standalone
+      explainer page.</p>
       <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas)
       than the other kernel bars (25 samples each); an independent larger run measured 0.83
       there. Treat n=16 kernel-bigint as the noisiest number on this chart.</p>
       <details><summary>Data table (CM ÷ Bitset)</summary><div id="t6"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>Full-output computation to n=32: every variable live, nothing pruned</h2>
+      <p class="sub">Formulas built so no variable can be simplified away, computed to the
+      complete 2ⁿ-row truth table (4.3 billion rows at n=32) and verified bit-exact.
+      Log time scale. Family caveat: rich in repeated subformulas — CM's best regime.</p>
+      <span class="howto">⬇ Lower line = faster</span>
+      <div class="legend" id="lg7"></div>
+      <div id="c7"></div>
+      <p class="takeaway"><b>Takeaway:</b> CM computed the full n=32 truth table in
+      <b>3.9 s</b> vs Bitset's <b>7.8 s</b>, with 1.4–3.3× advantages across n=16–32 —
+      because this family repeats subformulas that CM computes once and Bitset
+      re-executes (the sparse-family kernels sit at ~parity, bracketing the honest
+      range). A companion test computed 72 formulas the safety guard normally refuses
+      (17–26 live variables) exactly over their true support: CM/Bitset ≈ 0.96 — the
+      guard is a policy cap, not a capability wall. Run on RunPod (n≥28 needed a
+      temporary 128 GB pod; ~$0.35).</p>
+      <details><summary>Data table (ms, median)</summary><div id="t7"></div></details>
     </section>
 
     <section class="card" style="grid-column: 1 / -1;">
@@ -319,10 +341,14 @@ const c3 = { n: [16,18,20,22,24],
   "old comparator (CM DAG, mislabeled Bitset)": [51.5,17.6,20.4,23.1,10.3],
   "corrected Bitset baseline (flat)": [42.2,8.5,9.9,10.5,7.7] };
 // CM / Bitset ratios on identical expressions, matched engines (null = not measured)
-const cmOverBitset = { n: [16,18,20,22,24],
-  "kernel, bigint engine (full output)": [0.61, 0.87, 0.89, 0.98, 0.92],
-  "kernel, words engine (full output)":  [0.78, 0.90, 0.90, 0.92, 0.96],
-  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02] };
+const cmOverBitset = { n: [16,18,20,22,24,26,28,30,32],
+  "kernel, bigint engine (full output)": [0.61, 0.87, 0.89, 0.98, 0.92, null, null, null, null],
+  "kernel, words engine (full output)":  [0.78, 0.90, 0.90, 0.92, 0.96, null, null, null, null],
+  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84] };
+// Comprehensive campaign: all-variables-live formulas at FULL 2^n output (words, µs)
+const fullVars = { n: [16,18,20,22,24,26,28,30,32],
+  "CM words": [70, 160, 490, 2340, 10210, 44780, 218610, 969530, 3855590],
+  "Bitset words": [130, 290, 700, 3970, 14600, 111850, 731120, 1897050, 7778040] };
 const envMs = { n: [14,16,18,20], "old builder": [13.6,117.3,1176,16269], "vectorized": [1.32,5.78,35.2,123] };
 
 /* ---------- renderers ---------- */
@@ -438,8 +464,15 @@ groupedBars("c6", cmOverBitset.n, {
 table("t6", ["n", "kernel bigint", "kernel words", "wrapper (reduced)"],
   cmOverBitset.n.map((n,i) => [n,
     cmOverBitset["kernel, bigint engine (full output)"][i] ?? "—",
-    cmOverBitset["kernel, words engine (full output)"][i],
-    cmOverBitset["wrapper vs fair Bitset (reduced scope)"][i]]));
+    cmOverBitset["kernel, words engine (full output)"][i] ?? "—",
+    cmOverBitset["wrapper vs fair Bitset (reduced scope)"][i] ?? "—"]));
+
+legend("lg7", [["CM words", C[0]], ["Bitset words", C[1]]]);
+logLineChart("c7", fullVars.n, {"CM words": fullVars["CM words"], "Bitset words": fullVars["Bitset words"]}, [C[0], C[1]]);
+table("t7", ["n", "CM (ms)", "Bitset (ms)", "CM advantage"],
+  fullVars.n.map((n,i) => [n, (fullVars["CM words"][i]/1000).toFixed(2),
+    (fullVars["Bitset words"][i]/1000).toFixed(2),
+    (fullVars["Bitset words"][i]/fullVars["CM words"][i]).toFixed(2) + "×"]));
 
 legend("lg5", [["old builder", C[0]], ["vectorized (R3)", C[1]]]);
 logLineChart("c5", envMs.n, {"old builder": envMs["old builder"].map(v => v*1000), "vectorized (R3)": envMs["vectorized"].map(v => v*1000)}, [C[0], C[1]]);

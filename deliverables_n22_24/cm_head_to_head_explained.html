@@ -5,7 +5,7 @@
     --surface: #fcfcfb; --page: #f9f9f7;
     --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
     --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
-    --s1: #2a78d6; --s2: #1baf7a; --s3: #eda100;
+    --s1: #2a78d6; --s2: #1baf7a; --s3: #eda100; --s4: #008300; --s5: #4a3aa7;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
@@ -21,7 +21,7 @@
     --surface: #1a1a19; --page: #0d0d0d;
     --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
-    --s1: #3987e5; --s2: #199e70; --s3: #c98500;
+    --s1: #3987e5; --s2: #199e70; --s3: #c98500; --s4: #008300; --s5: #9085e9;
   }
   * { box-sizing: border-box; }
   body {
@@ -122,13 +122,16 @@
     <div id="chart"></div>
     <p class="takeaway"><b>Takeaway:</b> in the core number-crunching ("kernel", blue and
     teal bars) CM is consistently <b>faster</b> — up to ~20–40% quicker. In the complete
-    function a user actually calls ("wrapper", yellow bars), CM's fixed bookkeeping cost
-    makes it 2–25% <b>slower</b> on these microsecond-scale outputs, converging toward a
-    statistical dead heat at n=24 (1.02). Within the wrapper regime, formulas that
-    simplify hard (≤4 relevant variables) tip end-to-end CM ahead of the Bitset even so.
-    <b>Neither side dominates on raw speed.</b> CM's decisive advantage lies elsewhere:
-    it can return exact, compressed answers for formulas so large that the direct
-    approach is refused outright.</p>
+    function a user actually calls ("wrapper", yellow bars, now measured to n=32), CM
+    starts 2–25% <b>slower</b> on microsecond-scale outputs but the ratio drifts steadily
+    in CM's favor as the ambient variable count grows — crossing to a CM win from n≈26
+    on (0.84 at n=32). The green bars are the new full-output tests on formulas where
+    <b>every</b> variable matters: CM is ~1.4–3.3× faster there — but that family is
+    deliberately rich in repeated subformulas (CM's home turf; see note). The violet bars
+    are formulas the safety guard used to refuse, now <b>computed exactly</b> over their
+    true support: a near-perfect tie (~0.96). Overall: <b>kernel-for-kernel CM leads;
+    end-to-end results range from slightly behind to well ahead depending on formula
+    structure and size — and everything, everywhere, was bit-exact.</b></p>
     <p class="note"><b style="color:var(--ink-2)">Read the bar groups carefully — they are
     three separate contests, not one.</b> Within any single computation the wrapper can
     never beat its own kernel (wrapper time = kernel time + packaging). The bars compare
@@ -150,6 +153,18 @@
     <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas vs
     25 for the other kernel bars); an independent larger run measured 0.83 there. Treat it
     as the noisiest number on this chart.</p>
+    <p class="note"><b style="color:var(--ink-2)">About the two new series (n=16–32).</b>
+    <em>Full output, all variables live</em> (green): expressions constructed so that no
+    variable can be simplified away, computed to the complete 2<sup>n</sup>-row answer —
+    including all 4.3 billion rows at n=32, bit-verified (CM 3.86 s vs Bitset 7.78 s).
+    This family deliberately contains repeated subformulas, which CM computes once and
+    the Bitset re-executes — so treat its 1.4–3.3× CM advantage as the <em>sharing-rich
+    upper bracket</em>, with the sparse-formula kernel bars (~parity) as the lower
+    bracket. <em>Beyond-guard</em> (violet): 72 formulas keeping 17–26 relevant variables
+    — the population the safety guard normally refuses — computed exactly over their true
+    support at n=24/28/32. Ratio ≈ 0.96 everywhere: the guard is a policy cap on output
+    size, not a limit on what CM can compute. Kernel bars (blue/teal) end at n=24: that
+    formula family wasn't rerun beyond it.</p>
     <details><summary>Data table (CM ÷ Bitset)</summary><div id="tbl"></div></details>
   </section>
 
@@ -397,11 +412,13 @@ function el(tag, attrs, parent) {
   return e;
 }
 
-const data = { n: [16, 18, 20, 22, 24],
-  "kernel, bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92],
-  "kernel, words engine": [0.78, 0.90, 0.90, 0.92, 0.96],
-  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02] };
-const C = [css("--s1"), css("--s2"), css("--s3")];
+const data = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
+  "kernel, bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92, null, null, null, null],
+  "kernel, words engine": [0.78, 0.90, 0.90, 0.92, 0.96, null, null, null, null],
+  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84],
+  "full output, all variables live (sharing-rich)": [0.57, 0.46, 0.67, 0.49, 0.70, 0.40, 0.43, 0.51, 0.50],
+  "beyond-guard formulas, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
+const C = [css("--s1"), css("--s2"), css("--s3"), css("--s4"), css("--s5")];
 const names = Object.keys(data).filter(k => k !== "n");
 
 const lg = document.getElementById("lg");
@@ -416,7 +433,7 @@ const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getEleme
 const maxV = 1.45;
 const x0 = M.l, xw = W - M.l - M.r;
 const gw = xw / data.n.length;
-const bw = Math.min(34, (gw - 22) / names.length - 3);
+const bw = Math.min(34, (gw - 12) / names.length - 2);
 const y = v => M.t + (1 - v / maxV) * (H - M.t - M.b);
 for (let v = 0; v <= maxV; v += 0.25) {
   el("line", {x1: x0, x2: x0 + xw, y1: y(v), y2: y(v), stroke: "var(--grid)"}, svg);
@@ -427,13 +444,12 @@ data.n.forEach((n, gi) => {
   el("text", {x: gx, y: H - M.b + 18, "text-anchor": "middle"}, svg).textContent = "n=" + n;
   names.forEach((name, si) => {
     const v = data[name][gi];
-    const bx = gx - (names.length * (bw + 3)) / 2 + si * (bw + 3) + 1.5;
-    const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v), rx: 3, fill: C[si]}, svg);
+    if (v == null) return;
+    const bx = gx - (names.length * (bw + 2)) / 2 + si * (bw + 2) + 1;
+    const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v), rx: 2, fill: C[si]}, svg);
     r.addEventListener("mousemove", ev => showTip(ev,
       `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CM ÷ Bitset)</b> — ${v < 1 ? "CM faster" : v > 1 ? "Bitset faster" : "tie"}`));
     r.addEventListener("mouseleave", hideTip);
-    el("text", {x: bx + bw/2, y: y(v) - 5, "text-anchor": "middle", class: "val"}, svg)
-      .textContent = v.toFixed(2);
   });
 });
 el("line", {x1: x0, x2: x0 + xw, y1: H - M.b, y2: H - M.b, stroke: "var(--axis)"}, svg);
@@ -446,5 +462,5 @@ el("text", {x: x0 + 6, y: y(1) - 6, "text-anchor": "start",
 document.getElementById("tbl").innerHTML = "<table><tr><th>n</th>" +
   names.map(nm => `<th>${nm}</th>`).join("") + "</tr>" +
   data.n.map((n, i) => `<tr><td>${n}</td>` +
-    names.map(nm => `<td>${data[nm][i].toFixed(2)}</td>`).join("") + "</tr>").join("") + "</table>";
+    names.map(nm => `<td>${data[nm][i] == null ? "—" : data[nm][i].toFixed(2)}</td>`).join("") + "</tr>").join("") + "</table>";
 </script>
