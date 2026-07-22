@@ -100,7 +100,7 @@
 
 <main>
   <h1>Correspondence Matrices vs Bitset: the head-to-head verdict, explained</h1>
-  <p class="dek">One chart, fully unpacked — first for any curious reader, then in full
+  <p class="dek">Three charts, fully unpacked — first for any curious reader, then in full
   technical depth. Every number comes from audited benchmark runs in which both methods
   computed the <em>exact same formulas</em> and every answer was verified bit-for-bit
   against an independent brute-force check.</p>
@@ -110,62 +110,67 @@
   Brian Theory (Droncheff) — contact for questions · analysis &amp; benchmarks with
   Claude Fable 5 (Anthropic)</p>
 
-  <!-- ======================= THE CHART ======================= -->
+  <!-- ======================= THE CHARTS ======================= -->
+  <p class="dek" style="margin-top:24px;"><b style="color:var(--ink)">How to read all
+  three charts:</b> each bar divides CM's time by the best Bitset's time on identical
+  formulas. 1.00 = dead heat; 0.90 = CM took only 90% as long (CM wins); 1.25 = CM took
+  25% longer (Bitset wins). "n" is the number of variables; each step up doubles the
+  problem size. The three charts are three different contests — the formulas and the
+  amount of work differ between them, so compare bars within a chart, not across
+  charts.</p>
+
   <section class="card">
-    <h2>The head-to-head verdict: CM time ÷ Bitset time</h2>
-    <p class="sub">For each scenario we divide CM's computation time by the best Bitset's
-    time on identical formulas. 1.00 = dead heat. 0.90 = CM took only 90% as long (CM
-    wins). 1.25 = CM took 25% longer (Bitset wins). "n" is the number of variables in the
-    test formulas — each step up doubles the problem size.</p>
+    <h2>1 · The kernel contest: pure number-crunching</h2>
+    <p class="sub">Bare computation loops only, no packaging. Ordinary random formulas
+    where all variables matter, computed at full output. Measured to n=24.</p>
     <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
-    <div class="legend" id="lg"></div>
-    <div id="chart"></div>
-    <p class="takeaway"><b>Takeaway:</b> in the core number-crunching ("kernel", blue and
-    teal bars) CM is consistently <b>faster</b> — up to ~20–40% quicker. In the complete
-    function a user actually calls ("wrapper", yellow bars, now measured to n=32), CM
-    starts 2–25% <b>slower</b> on microsecond-scale outputs but the ratio drifts steadily
-    in CM's favor as the ambient variable count grows — crossing to a CM win from n≈26
-    on (0.84 at n=32). The green bars are the new full-output tests on formulas where
-    <b>every</b> variable matters: CM is ~1.4–3.3× faster there — but that family is
-    deliberately rich in repeated subformulas (CM's home turf; see note). The violet bars
-    are formulas the safety guard used to refuse, now <b>computed exactly</b> over their
-    true support: a near-perfect tie (~0.96). Overall: <b>kernel-for-kernel CM leads;
-    end-to-end results range from slightly behind to well ahead depending on formula
-    structure and size — and everything, everywhere, was bit-exact.</b></p>
-    <p class="note"><b style="color:var(--ink-2)">Read the bar groups carefully — they are
-    three separate contests, not one.</b> Within any single computation the wrapper can
-    never beat its own kernel (wrapper time = kernel time + packaging). The bars compare
-    different benchmark regimes: the kernel bars (blue, teal) use deep formulas where all
-    n variables matter and both sides compute the full 2<sup>n</sup>-row answer
-    (~0.1–1 s each at n=24); the wrapper bar (yellow) uses shallow formulas that CM
-    simplified down to a handful of relevant variables, evaluated at that reduced scope
-    (~6 µs each). Each bar is an honest CM ÷ Bitset ratio for its own regime.</p>
-    <p class="note"><b style="color:var(--ink-2)">Statistical robustness.</b> The wrapper
-    bars are medians over <b>300 random formulas per n</b> (1,500 total, every one
-    verified bit-correct), replacing an earlier 8-formula pass. The small sample had
-    shown 0.84 at n=24 — that turned out to be sampling luck (all 8 draws happened to
-    simplify to ≤6 relevant variables) and is corrected to 1.02 here. The large campaign
-    also exposed a mis-tuned setting: formulas keeping 8+ relevant variables (~20% of
-    draws) were being routed to a slow fallback path, running ~40× behind; raising the
-    routing threshold from 7 to 16 relevant variables eliminated that cliff entirely
-    (worst stratum now ~1.2–1.4×). The bars show the corrected configuration — the best
-    honest setup on both sides.</p>
-    <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas vs
-    25 for the other kernel bars); an independent larger run measured 0.83 there. Treat it
-    as the noisiest number on this chart.</p>
-    <p class="note"><b style="color:var(--ink-2)">About the two new series (n=16–32).</b>
-    <em>Full output, all variables live</em> (green): expressions constructed so that no
-    variable can be simplified away, computed to the complete 2<sup>n</sup>-row answer —
-    including all 4.3 billion rows at n=32, bit-verified (CM 3.86 s vs Bitset 7.78 s).
-    This family deliberately contains repeated subformulas, which CM computes once and
-    the Bitset re-executes — so treat its 1.4–3.3× CM advantage as the <em>sharing-rich
-    upper bracket</em>, with the sparse-formula kernel bars (~parity) as the lower
-    bracket. <em>Beyond-guard</em> (violet): 72 formulas keeping 17–26 relevant variables
-    — the population the safety guard normally refuses — computed exactly over their true
-    support at n=24/28/32. Ratio ≈ 0.96 everywhere: the guard is a policy cap on output
-    size, not a limit on what CM can compute. Kernel bars (blue/teal) end at n=24: that
-    formula family wasn't rerun beyond it.</p>
-    <details><summary>Data table (CM ÷ Bitset)</summary><div id="tbl"></div></details>
+    <div class="legend" id="lg-k"></div>
+    <div id="chart-k"></div>
+    <p class="takeaway"><b>Takeaway:</b> engine for engine, CM's kernel is consistently
+    a bit <b>faster</b> — roughly 5–20% (up to ~40% in the noisiest cell*) — because CM
+    computes each repeated sub-formula once where Bitset re-executes every occurrence.
+    Modest, but consistent across both arithmetic engines.</p>
+    <p class="note">* The n=16 bigint bar (0.61) comes from a 3-formula sample (others:
+    25 formulas); an independent larger run measured 0.83 there — treat it as this
+    chart's noisiest number.</p>
+  </section>
+
+  <section class="card">
+    <h2>2 · The end-to-end contest: what a user actually calls</h2>
+    <p class="sub">The complete CM function — safety guard, scope planning, result
+    packaging and all — against the fair Bitset, on shallow formulas that simplify to a
+    handful of relevant variables (microsecond-scale computations). 300 formulas per n,
+    every one bit-verified; measured to n=32.</p>
+    <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
+    <div id="chart-w"></div>
+    <p class="takeaway"><b>Takeaway:</b> CM's fixed few-microsecond packaging cost makes
+    it 2–25% <b>slower</b> at first — but the ratio drifts steadily in CM's favor as the
+    ambient variable count grows, crossing to a <b>CM win from n≈26</b> (0.84 at n=32).
+    The reason: CM's simplified program doesn't care how many variables the surrounding
+    space has, while the Bitset must still bookkeep every dropped variable.</p>
+    <p class="note">An earlier 8-formula pass showed 0.84 at n=24; the 300-formula rerun
+    corrected that to 1.02 (sampling luck) and also fixed a mis-tuned routing threshold
+    that had made ~20% of formulas ~40× slower on the CM side. These bars show the
+    corrected best-honest configuration of both sides.</p>
+  </section>
+
+  <section class="card">
+    <h2>3 · The frontier: huge formulas, nothing pruned</h2>
+    <p class="sub">Two hard populations, measured to n=32. Green: formulas built so
+    <em>every</em> variable matters, computed to the complete 2ⁿ-row answer — 4.3
+    billion rows at n=32. Violet: formulas the safety guard normally refuses (17–26
+    relevant variables), computed exactly over their true support.</p>
+    <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
+    <div class="legend" id="lg-f"></div>
+    <div id="chart-f"></div>
+    <p class="takeaway"><b>Takeaway:</b> on the all-variables-live formulas (green) CM is
+    <b>1.4–3.3× faster</b> — at n=32, 3.86 s vs 7.78 s for the full 4.3-billion-row
+    table, bit-verified. Honest caveat: this family deliberately repeats sub-formulas,
+    CM's best case; together with chart 1 (~parity on sparse formulas) it brackets CM's
+    true kernel advantage. The beyond-guard formulas (violet) land at ≈0.96 — a tie —
+    proving the guard is a <b>policy cap on output size, not a limit on what CM can
+    compute</b>: lift the parameter and the same kernels produce the exact answer.</p>
+    <details><summary>Data table — all three charts (CM ÷ Bitset)</summary><div id="tbl"></div></details>
   </section>
 
   <!-- ======================= LAY EXPLANATION ======================= -->
@@ -207,7 +212,7 @@
   up is only the original <em>phrasing</em> of your formula — the way it was
   parenthesized and ordered — never its meaning.</p>
 
-  <h3>What the chart shows, in words</h3>
+  <h3>What the charts show, in words</h3>
   <ul>
     <li><b>The engine room (kernel, blue &amp; teal bars):</b> stripped to pure
     computation, CM is the faster machine — typically 5–20% quicker, sometimes more. Its
@@ -230,6 +235,13 @@
     a mis-tuned internal setting that had been making ~20% of formulas ~40× slower on
     the CM side; with it fixed, no pathological cases remain. Bigger samples made the
     result both fairer to Bitset <em>and</em> kinder to CM's worst case.</li>
+    <li><b>The frontier (chart 3):</b> when formulas are built so that <em>every</em>
+    variable genuinely matters, CM computes the complete answer 1.4–3.3× faster all the
+    way to n=32 — 4.3 billion rows in 3.9 seconds versus Bitset's 7.8 — though that
+    family plays to CM's strength (repeated sub-formulas). And the formulas the safety
+    guard normally refuses turn out to be perfectly computable: computed exactly over
+    the variables that matter, they land in a dead heat (≈0.96). The refusal was always
+    a size policy, never an inability.</li>
   </ul>
 
   <h3>So where is CM's real value?</h3>
@@ -317,7 +329,7 @@
   <h2>The wrapper economics</h2>
   <p>The public entry point (<code>materialize_hybrid_no_reinflate</code>) adds guard
   checks, live-variable scope planning, and result-object construction: a roughly fixed
-  <b>3–5 µs per call</b>. Against a 2–6 µs kernel (the reduced-scope regime in the chart)
+  <b>3–5 µs per call</b>. Against a 2–6 µs kernel (chart 2's reduced-scope regime)
   that is a 1.02–1.25× end-to-end deficit at the medians (300 formulas/n); against an
   84 ms full-output computation at n=22 it measured ~0.5%. The audit also landed a
   diagnostics-off fast path that trims this, verified path-equivalent to the
@@ -342,7 +354,7 @@
     surfaced. The bitset kernel handles 2<sup>16</sup>-bit outputs cheaply, so raising
     the threshold to 16 eliminates the cliff (that stratum: 38–45× → 1.12–1.38×) while
     leaving all other strata unchanged and all outputs bit-identical. Recommendation:
-    make <code>--cm-hybrid-threshold 16</code> the benchmark default; the chart above
+    make <code>--cm-hybrid-threshold 16</code> the benchmark default; chart 2 above
     uses it, as the best honest configuration of both sides.</li>
   </ul>
   <p>Data: <code>CM_FABLE_wrapper_stats300_{raw,summary}.csv</code> (threshold 7) and
@@ -412,55 +424,83 @@ function el(tag, attrs, parent) {
   return e;
 }
 
-const data = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "kernel, bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92, null, null, null, null],
-  "kernel, words engine": [0.78, 0.90, 0.90, 0.92, 0.96, null, null, null, null],
-  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84],
-  "full output, all variables live (sharing-rich)": [0.57, 0.46, 0.67, 0.49, 0.70, 0.40, 0.43, 0.51, 0.50],
-  "beyond-guard formulas, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
-const C = [css("--s1"), css("--s2"), css("--s3"), css("--s4"), css("--s5")];
-const names = Object.keys(data).filter(k => k !== "n");
+const KERNEL = { n: [16, 18, 20, 22, 24],
+  "bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92],
+  "words engine": [0.78, 0.90, 0.90, 0.92, 0.96] };
+const WRAPPER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
+  "end-to-end wrapper vs fair Bitset": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84] };
+const FRONTIER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
+  "full output, all variables live": [0.57, 0.46, 0.67, 0.49, 0.70, 0.40, 0.43, 0.51, 0.50],
+  "beyond-guard, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
 
-const lg = document.getElementById("lg");
-names.forEach((name, i) => {
-  const s = document.createElement("span");
-  s.innerHTML = `<i style="background:${C[i]}"></i>${name}`;
-  lg.appendChild(s);
-});
-
-const W = 820, H = 380, M = {l: 46, r: 14, t: 16, b: 34};
-const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getElementById("chart"));
-const maxV = 1.45;
-const x0 = M.l, xw = W - M.l - M.r;
-const gw = xw / data.n.length;
-const bw = Math.min(34, (gw - 12) / names.length - 2);
-const y = v => M.t + (1 - v / maxV) * (H - M.t - M.b);
-for (let v = 0; v <= maxV; v += 0.25) {
-  el("line", {x1: x0, x2: x0 + xw, y1: y(v), y2: y(v), stroke: "var(--grid)"}, svg);
-  el("text", {x: x0 - 8, y: y(v) + 4, "text-anchor": "end"}, svg).textContent = v.toFixed(2);
-}
-data.n.forEach((n, gi) => {
-  const gx = x0 + gi * gw + gw / 2;
-  el("text", {x: gx, y: H - M.b + 18, "text-anchor": "middle"}, svg).textContent = "n=" + n;
-  names.forEach((name, si) => {
-    const v = data[name][gi];
-    if (v == null) return;
-    const bx = gx - (names.length * (bw + 2)) / 2 + si * (bw + 2) + 1;
-    const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v), rx: 2, fill: C[si]}, svg);
-    r.addEventListener("mousemove", ev => showTip(ev,
-      `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CM ÷ Bitset)</b> — ${v < 1 ? "CM faster" : v > 1 ? "Bitset faster" : "tie"}`));
-    r.addEventListener("mouseleave", hideTip);
+function legendInto(id, names, colors) {
+  const box = document.getElementById(id);
+  if (!box) return;
+  names.forEach((name, i) => {
+    const s = document.createElement("span");
+    s.innerHTML = `<i style="background:${colors[i]}"></i>${name}`;
+    box.appendChild(s);
   });
-});
-el("line", {x1: x0, x2: x0 + xw, y1: H - M.b, y2: H - M.b, stroke: "var(--axis)"}, svg);
-el("line", {x1: x0, x2: x0 + xw, y1: y(1), y2: y(1), stroke: "var(--ink-2)",
-            "stroke-width": 1.5, "stroke-dasharray": "5 4"}, svg);
-el("text", {x: x0 + 6, y: y(1) - 6, "text-anchor": "start",
-  style: "fill:var(--ink); font-weight:600; paint-order:stroke; stroke:var(--surface); stroke-width:3px;"}, svg)
-  .textContent = "1× — parity (below = CM faster)";
+}
 
+function ratioChart(mountId, data, colors, opts = {}) {
+  const names = Object.keys(data).filter(k => k !== "n");
+  const W = 820, H = 340, M = {l: 46, r: 14, t: 16, b: 34};
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getElementById(mountId));
+  const maxV = opts.maxV || 1.45;
+  const x0 = M.l, xw = W - M.l - M.r;
+  const gw = xw / data.n.length;
+  const bw = Math.min(40, (gw - 14) / names.length - 3);
+  const y = v => M.t + (1 - v / maxV) * (H - M.t - M.b);
+  for (let v = 0; v <= maxV; v += 0.25) {
+    el("line", {x1: x0, x2: x0 + xw, y1: y(v), y2: y(v), stroke: "var(--grid)"}, svg);
+    el("text", {x: x0 - 8, y: y(v) + 4, "text-anchor": "end"}, svg).textContent = v.toFixed(2);
+  }
+  data.n.forEach((n, gi) => {
+    const gx = x0 + gi * gw + gw / 2;
+    el("text", {x: gx, y: H - M.b + 18, "text-anchor": "middle"}, svg).textContent = "n=" + n;
+    names.forEach((name, si) => {
+      const v = data[name][gi];
+      if (v == null) return;
+      const bx = gx - (names.length * (bw + 3)) / 2 + si * (bw + 3) + 1.5;
+      const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v), rx: 3, fill: colors[si]}, svg);
+      r.addEventListener("mousemove", ev => showTip(ev,
+        `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CM ÷ Bitset)</b> — ${v < 1 ? "CM faster" : v > 1 ? "Bitset faster" : "tie"}`));
+      r.addEventListener("mouseleave", hideTip);
+      if (names.length <= 2 && bw >= 24) {
+        el("text", {x: bx + bw/2, y: y(v) - 5, "text-anchor": "middle", class: "val"}, svg)
+          .textContent = v.toFixed(2);
+      }
+    });
+  });
+  el("line", {x1: x0, x2: x0 + xw, y1: H - M.b, y2: H - M.b, stroke: "var(--axis)"}, svg);
+  el("line", {x1: x0, x2: x0 + xw, y1: y(1), y2: y(1), stroke: "var(--ink-2)",
+              "stroke-width": 1.5, "stroke-dasharray": "5 4"}, svg);
+  el("text", {x: x0 + 6, y: y(1) - 6, "text-anchor": "start",
+    style: "fill:var(--ink); font-weight:600; paint-order:stroke; stroke:var(--surface); stroke-width:3px;"}, svg)
+    .textContent = "1× — parity (below = CM faster)";
+}
+
+legendInto("lg-k", ["bigint engine", "words engine"], [css("--s1"), css("--s2")]);
+ratioChart("chart-k", KERNEL, [css("--s1"), css("--s2")], {maxV: 1.2});
+ratioChart("chart-w", WRAPPER, [css("--s3")], {maxV: 1.45});
+legendInto("lg-f", ["full output, all variables live", "beyond-guard, computed over support"],
+           [css("--s4"), css("--s5")]);
+ratioChart("chart-f", FRONTIER, [css("--s4"), css("--s5")], {maxV: 1.2});
+
+const ALL_NS = [16, 18, 20, 22, 24, 26, 28, 30, 32];
+const TBL_COLS = [
+  ["kernel bigint", KERNEL, "bigint engine"],
+  ["kernel words", KERNEL, "words engine"],
+  ["wrapper", WRAPPER, "end-to-end wrapper vs fair Bitset"],
+  ["full output all-live", FRONTIER, "full output, all variables live"],
+  ["beyond-guard", FRONTIER, "beyond-guard, computed over support"],
+];
 document.getElementById("tbl").innerHTML = "<table><tr><th>n</th>" +
-  names.map(nm => `<th>${nm}</th>`).join("") + "</tr>" +
-  data.n.map((n, i) => `<tr><td>${n}</td>` +
-    names.map(nm => `<td>${data[nm][i] == null ? "—" : data[nm][i].toFixed(2)}</td>`).join("") + "</tr>").join("") + "</table>";
+  TBL_COLS.map(([label]) => `<th>${label}</th>`).join("") + "</tr>" +
+  ALL_NS.map(n => "<tr><td>" + n + "</td>" + TBL_COLS.map(([_, data, key]) => {
+    const i = data.n.indexOf(n);
+    const v = i >= 0 ? data[key][i] : null;
+    return `<td>${v == null ? "—" : v.toFixed(2)}</td>`;
+  }).join("") + "</tr>").join("") + "</table>";
 </script>
