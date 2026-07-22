@@ -203,7 +203,8 @@ class FlatProgram:
     small FIFO-evicted cache of resolved input masks.
     """
 
-    __slots__ = ("n_slots", "root_slot", "loads", "ops", "release_after", "bound_cache")
+    __slots__ = ("n_slots", "root_slot", "loads", "ops", "release_after", "bound_cache",
+                 "word_plan", "word_scratch")
 
     def __init__(self, n_slots: int, root_slot: int, loads, ops) -> None:
         self.n_slots = n_slots
@@ -212,6 +213,8 @@ class FlatProgram:
         self.ops = ops
         self.release_after = _last_use_releases(n_slots, root_slot, ops)
         self.bound_cache: Dict[tuple, tuple] = {}
+        self.word_plan = None
+        self.word_scratch: Dict[int, list] = {}
 
 
 def _last_use_releases(n_slots: int, root_slot: int, ops) -> tuple:
@@ -438,3 +441,176 @@ def eval_expr_flat_bitset(
             for dead_slot in prog.release_after[op_index]:
                 values[dead_slot] = None
     return values[prog.root_slot]
+
+
+# ---------------------------------------------------------------------------
+# numpy-uint64 word backend (Tier-C C1b-lite)
+#
+# Executes the same FlatProgram over 64-bit word vectors instead of Python
+# bigints.  Op outputs go into a small pool of scratch buffers colored by the
+# existing last-use schedule (peak-live buffers, not one per slot), with out=
+# so the steady state performs zero allocations.  Word width requires the
+# packed width to be a multiple of 64, i.e. at least 6 live variables; below
+# that the public entry points fall back to the bigint flat kernel, so the
+# words functions are bit-compatible drop-ins at every size.
+# ---------------------------------------------------------------------------
+
+_WORDS_MIN_VARS = 6           # 2**6 bits = one uint64 word
+_WORDS_ENV_CACHE_MAX = 4      # an n=24 entry holds n arrays of 2 MB each
+_WORDS_SCRATCH_WIDTHS_MAX = 2  # widths cached per program (FIFO)
+
+
+@lru_cache(maxsize=_WORDS_ENV_CACHE_MAX)
+def _build_words_env_cached(vars_key: Tuple[str, ...]) -> Mapping[str, np.ndarray]:
+    """var -> read-only little-endian uint64 view of its truth-column mask."""
+    env = build_bitset_env(vars_key)
+    n_words = (1 << len(vars_key)) // 64
+    out: Dict[str, np.ndarray] = {}
+    for name in vars_key:
+        out[name] = np.frombuffer(
+            int(env[name]).to_bytes(n_words * 8, "little"), dtype="<u8"
+        )
+    return MappingProxyType(out)
+
+
+@lru_cache(maxsize=8)
+def _words_const(n_words: int, value: int) -> np.ndarray:
+    byte = b"\xff" if value else b"\x00"
+    return np.frombuffer(byte * (n_words * 8), dtype="<u8")
+
+
+def _compute_word_plan(prog: FlatProgram) -> tuple:
+    """Color op outputs onto a minimal scratch-buffer pool via release_after.
+
+    Returns (steps, n_buffers, root_loc, load_info) where each step is
+    (out_buffer, opcode, arg_locs) and a location is ("l", load_slot) for a
+    shared read-only input array or ("s", buffer_index) for scratch.  A dying
+    argument's buffer is recycled only after its consuming op completes, so an
+    op's output buffer can never alias any of its inputs (required because
+    IMP/EQV/n-ary ops execute as multi-step in-place sequences).
+    """
+    load_info = {slot: (kind, payload) for slot, kind, payload in prog.loads}
+    buffer_of: Dict[int, int] = {}
+    free: list = []
+    n_buffers = 0
+    steps = []
+    for op_index, (slot, opcode, args) in enumerate(prog.ops):
+        arg_locs = tuple(
+            ("l", a) if a in load_info else ("s", buffer_of[a]) for a in args
+        )
+        if free:
+            out = free.pop()
+        else:
+            out = n_buffers
+            n_buffers += 1
+        buffer_of[slot] = out
+        steps.append((out, opcode, arg_locs))
+        for dead in prog.release_after[op_index]:
+            recycled = buffer_of.pop(dead, None)
+            if recycled is not None:
+                free.append(recycled)
+    if prog.root_slot in load_info:
+        root_loc = ("l", prog.root_slot)
+    else:
+        root_loc = ("s", buffer_of[prog.root_slot])
+    return steps, n_buffers, root_loc, load_info
+
+
+def _eval_words(prog: FlatProgram, vars_key: Tuple[str, ...],
+                fixed_map: Mapping[str, int]) -> int:
+    if prog.word_plan is None:
+        prog.word_plan = _compute_word_plan(prog)
+    steps, n_buffers, root_loc, load_info = prog.word_plan
+    n_words = (1 << len(vars_key)) // 64
+    env = _build_words_env_cached(vars_key)
+    scratch = prog.word_scratch.get(n_words)
+    if scratch is None:
+        if len(prog.word_scratch) >= _WORDS_SCRATCH_WIDTHS_MAX:
+            prog.word_scratch.pop(next(iter(prog.word_scratch)))
+        scratch = [np.empty(n_words, dtype="<u8") for _ in range(n_buffers)]
+        prog.word_scratch[n_words] = scratch
+
+    def resolve(loc):
+        tag, x = loc
+        if tag == "s":
+            return scratch[x]
+        kind, payload = load_info[x]
+        if kind == "const":
+            return _words_const(n_words, int(payload))
+        if payload in fixed_map:
+            return _words_const(n_words, int(bool(fixed_map[payload])))
+        try:
+            return env[payload]
+        except KeyError as exc:
+            raise KeyError(f"missing live/fixed value for variable {payload!r}") from exc
+
+    for out, opcode, arg_locs in steps:
+        dst = scratch[out]
+        a0 = resolve(arg_locs[0])
+        if opcode == _FLAT_OP_NOT:
+            np.bitwise_not(a0, out=dst)
+            continue
+        a1 = resolve(arg_locs[1]) if len(arg_locs) > 1 else None
+        if opcode == _FLAT_OP_AND:
+            if a1 is None:
+                np.copyto(dst, a0)
+            else:
+                np.bitwise_and(a0, a1, out=dst)
+                for extra in arg_locs[2:]:
+                    np.bitwise_and(dst, resolve(extra), out=dst)
+        elif opcode == _FLAT_OP_OR:
+            if a1 is None:
+                np.copyto(dst, a0)
+            else:
+                np.bitwise_or(a0, a1, out=dst)
+                for extra in arg_locs[2:]:
+                    np.bitwise_or(dst, resolve(extra), out=dst)
+        elif opcode == _FLAT_OP_XOR:
+            if a1 is None:
+                np.copyto(dst, a0)
+            else:
+                np.bitwise_xor(a0, a1, out=dst)
+                for extra in arg_locs[2:]:
+                    np.bitwise_xor(dst, resolve(extra), out=dst)
+        elif opcode == _FLAT_OP_IMP:
+            np.bitwise_not(a0, out=dst)
+            np.bitwise_or(dst, a1, out=dst)
+        else:  # _FLAT_OP_EQV
+            np.bitwise_xor(a0, a1, out=dst)
+            np.bitwise_not(dst, out=dst)
+    return int.from_bytes(resolve(root_loc).tobytes(), "little")
+
+
+def eval_cm_node_words(
+    node: "CMNode",
+    live_vars: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+) -> int:
+    """numpy-words twin of eval_cm_node_flat (bit-identical output).
+
+    Falls back to the bigint flat kernel below 6 live variables, where the
+    packed width is narrower than one 64-bit word.
+    """
+    vars_key = tuple(live_vars)
+    if len(vars_key) < _WORDS_MIN_VARS:
+        return eval_cm_node_flat(node, vars_key, fixed=fixed)
+    return _eval_words(get_flat_program(node), vars_key, fixed or {})
+
+
+def eval_expr_words_bitset(
+    expr: Expr,
+    vars_all: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+) -> int:
+    """numpy-words twin of eval_expr_flat_bitset — the fair raw-AST control."""
+    vars_key = tuple(vars_all)
+    if len(vars_key) < _WORDS_MIN_VARS:
+        return eval_expr_flat_bitset(expr, vars_key, fixed=fixed)
+    return _eval_words(get_expr_flat_program(expr), vars_key, fixed or {})
+
+
+def clear_words_env_cache() -> None:
+    _build_words_env_cached.cache_clear()
+    _words_const.cache_clear()

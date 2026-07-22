@@ -10,8 +10,10 @@ from bitset_backend import (
     clear_bitset_env_cache,
     eval_cm_node_bitset,
     eval_cm_node_flat,
+    eval_cm_node_words,
     eval_expr_bitset,
     eval_expr_flat_bitset,
+    eval_expr_words_bitset,
 )
 from cm_exprlib import Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import compile_expr_to_cm_ir
@@ -43,6 +45,25 @@ class BitsetBackendTests(unittest.TestCase):
                     self.assertTrue(
                         np.array_equal(tt_ref, tt_flat),
                         msg=f"flat bitset ordering mismatch at n={n}, free={free_dead_slots}",
+                    )
+                # numpy-words twins (covers both the >=6-var word path and the
+                # small-n bigint fallback); second call exercises scratch reuse.
+                node = compile_expr_to_cm_ir(expr)
+                vars_key = tuple(f"x{i}" for i in range(n))
+                for _repeat in range(2):
+                    tt_words_raw = bitset_to_bool_array(
+                        eval_expr_words_bitset(expr, vars_key), n
+                    )
+                    tt_words_cm = bitset_to_bool_array(
+                        eval_cm_node_words(node, vars_key), n
+                    )
+                    self.assertTrue(
+                        np.array_equal(tt_ref, tt_words_raw),
+                        msg=f"raw words ordering mismatch at n={n}",
+                    )
+                    self.assertTrue(
+                        np.array_equal(tt_ref, tt_words_cm),
+                        msg=f"cm words ordering mismatch at n={n}",
                     )
 
     def test_full_mask_clipping_for_not_imp_eqv(self) -> None:
@@ -113,6 +134,23 @@ class BitsetBackendTests(unittest.TestCase):
                 fixed={"x0": 1, "x2": 0},
                 free_dead_slots=True,
             ),
+        )
+        self.assertEqual(
+            bits, eval_cm_node_words(node, ("x1",), fixed={"x0": 1, "x2": 0})
+        )
+        self.assertEqual(
+            bits, eval_expr_words_bitset(expr, ("x1",), fixed={"x0": 1, "x2": 0})
+        )
+        # genuine word path (>= 6 live vars) with a fixed variable
+        wide = Imp(Xor(Var(0), Var(3)), Or(Var(5), Eqv(Var(6), Var(1))))
+        wide_node = compile_expr_to_cm_ir(wide)
+        wide_live = tuple(f"x{i}" for i in range(7) if i != 3)
+        wide_ref = eval_cm_node_bitset(wide_node, wide_live, fixed={"x3": 1})
+        self.assertEqual(
+            wide_ref, eval_cm_node_words(wide_node, wide_live, fixed={"x3": 1})
+        )
+        self.assertEqual(
+            wide_ref, eval_expr_words_bitset(wide, wide_live, fixed={"x3": 1})
         )
 
 
