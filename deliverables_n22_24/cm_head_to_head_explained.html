@@ -128,6 +128,17 @@
     dominates on raw speed.</b> CM's decisive advantage lies elsewhere: it can return
     exact, compressed answers for formulas so large that the direct approach is refused
     outright.</p>
+    <p class="note"><b style="color:var(--ink-2)">Read the bar groups carefully — they are
+    three separate contests, not one.</b> Within any single computation the wrapper can
+    never beat its own kernel (wrapper time = kernel time + packaging). The bars compare
+    different benchmark regimes: the kernel bars (blue, teal) use deep formulas where all
+    n variables matter and both sides compute the full 2<sup>n</sup>-row answer
+    (~0.1–1 s each at n=24); the wrapper bar (yellow) uses shallow formulas that CM
+    simplified down to a handful of relevant variables, evaluated at that reduced scope
+    (~6 µs each). That is why the yellow bar can sit <em>below</em> the kernel bars at
+    n=24: on that sample the formulas collapsed so thoroughly (≤6 live variables) that
+    CM's simplification saving outweighed its packaging cost — each bar is an honest
+    CM ÷ Bitset ratio for its own regime.</p>
     <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas vs
     25 for the other kernel bars); an independent larger run measured 0.83 there. Treat it
     as the noisiest number on this chart.</p>
