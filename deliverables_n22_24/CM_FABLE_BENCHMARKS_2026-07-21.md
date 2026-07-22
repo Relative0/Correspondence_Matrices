@@ -167,6 +167,43 @@ Findings:
   strata. **Recommendation: adopt threshold 16 as the benchmark default** (config change
   only; no library-default change made).
 
+## 7c. Extended campaign on RunPod (2026-07-22): n=24–32, depths 4–8
+
+Run remotely (pod `x82z2pbpofhcgz`, 2 vCPU, $0.06/hr, ~3 min wall-clock) to keep the
+local machine free: 300 formulas per (n, depth) cell, n ∈ {24,26,28,30,32} ×
+depths {4,5,6,8} = 6,000 formulas, threshold 16, guard 16, same protocol as §7b.
+**All 4,183 accepted results bit-correct; every decline explicitly counted.**
+Data: `CM_FABLE_extended_n32_{raw,summary}.csv`; runner:
+`fable_extended_campaign_worker_2026_07_22.py` (+ push/poll scripts).
+
+Wrapper CM/Bitset medians (accepted trials):
+
+| n \ depth | 4 | 5 | 6 | 8 (survivors only) |
+|--:|--:|--:|--:|--:|
+| 24 | 1.01 | 1.04 | 0.99 | 0.92 |
+| 26 | 0.98 | 1.00 | 0.96 | 0.90 |
+| 28 | 0.92 | 0.97 | 0.94 | 0.84 |
+| 30 | 0.89 | 0.94 | 0.93 | 0.85 |
+| 32 | **0.84** | 0.92 | 0.91 | 0.88 |
+
+Decline rates: 0% at depth 4 everywhere; ≤1.3% at depth 5; 24→37% at depth 6
+(rising with n); 89–94% at depth 8 — the depth-8 rows are survivor-only medians over
+18–33 formulas and carry the documented selection bias (declined counts published
+alongside). live_k distributions: median 5–6 / 9–10 / 14–15 / 22–28 at depths
+4/5/6/8 — depth, not n, controls live_k, confirming §7b at 4× the ambient size.
+
+**New finding — the ratio drifts in CM's favor as ambient n grows** (e.g. depth 4:
+1.01 → 0.84 from n=24 → 32; the same monotone drift at every depth; by n=30–32 CM's
+end-to-end median is ahead at every depth). Mechanism (honest reading): CM's canonical
+reduced program is size-independent of the ambient variable count, so its per-call cost
+stays flat (~3.3 µs at depth 4), while the matched-scope Bitset control's per-call cost
+grows with n (3.3 → 4.0 µs) — its raw AST and fixed-variable binding still reference
+all n − live_k dropped variables (the bound-template cache key alone sorts ~26 fixed
+entries at n=32). This is a real structural decoupling — the reduced representation
+scales with the problem's true support, the raw formula with its nominal size — but at
+these µs magnitudes a substantial share of the gap is fixed-binding bookkeeping in the
+control, so we report it as a drift with a mechanism, not as "CM dominates at n=32".
+
 ## 8. Variance statement
 
 Full-arity large-n session CVs in this session's runs were 7–16% (consistent with the
