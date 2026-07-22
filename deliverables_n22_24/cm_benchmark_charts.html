@@ -1,0 +1,439 @@
+<title>CM Benchmarks — Fable Audit V2</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #fcfcfb; --page: #f9f9f7;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #1baf7a; --s3: #eda100; --s4: #008300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface: #1a1a19; --page: #0d0d0d;
+      --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #199e70; --s3: #c98500; --s4: #008300;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface: #1a1a19; --page: #0d0d0d;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #199e70; --s3: #c98500; --s4: #008300;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px; }
+  header.pg { margin-bottom: 28px; }
+  header.pg h1 { font-size: 24px; font-weight: 650; margin: 0 0 6px; text-wrap: balance; }
+  header.pg p { color: var(--ink-2); margin: 0; max-width: 72ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 20px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface); border: 1px solid var(--ring); border-radius: 8px;
+    padding: 18px 18px 10px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .card h2 { font-size: 15.5px; font-weight: 650; margin: 0; }
+  .card .sub { font-size: 12.5px; color: var(--ink-2); margin: 0 0 6px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-2); margin: 2px 0 4px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--muted); }
+  svg text.val { fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  svg text.endlab { fill: var(--ink-2); font-weight: 600; }
+  details { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); }
+  details summary { cursor: pointer; color: var(--muted); }
+  table { border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 3px 10px; border-bottom: 1px solid var(--grid); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; }
+  #tip {
+    position: fixed; pointer-events: none; z-index: 10; display: none;
+    background: var(--surface); border: 1px solid var(--ring); border-radius: 6px;
+    padding: 6px 9px; font-size: 12px; color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18); font-variant-numeric: tabular-nums;
+  }
+  #tip .t { color: var(--muted); }
+  .note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+  .howto {
+    display: inline-block; font-size: 11.5px; font-weight: 600; color: var(--ink-2);
+    background: color-mix(in srgb, var(--s1) 9%, transparent);
+    border: 1px solid color-mix(in srgb, var(--s1) 25%, transparent);
+    border-radius: 999px; padding: 2px 10px; margin: 2px 0 4px; width: fit-content;
+  }
+  .takeaway {
+    margin: 8px 0 4px; padding: 9px 12px; font-size: 13px; color: var(--ink-2);
+    border-left: 3px solid var(--s1); background: color-mix(in srgb, var(--s1) 5%, transparent);
+    border-radius: 0 6px 6px 0;
+  }
+  .takeaway b { color: var(--ink); }
+</style>
+
+<main>
+  <header class="pg">
+    <h1>CM benchmark results — endorsed state after Fable Audit V2</h1>
+    <p>Medians from the 2026-07-21/22 audit session, benchmark venv Python 3.13.5,
+    instrumentation off, oracle checks outside timed windows. Every kernel shown is
+    bit-identical to <code>eval_expr_tt</code>. Source data:
+    <code>deliverables_n22_24/CM_FABLE_BENCHMARKS_2026-07-21.md</code>.<br>
+    <span style="color:var(--muted); font-size:13px;">Brian Theory (Droncheff) — contact
+    for questions · charts &amp; analysis with Claude Fable 5 (Anthropic).</span></p>
+    <div style="margin-top:14px; padding:12px 16px; background:var(--surface); border:1px solid var(--ring); border-radius:8px; font-size:13.5px; color:var(--ink-2); max-width:78ch;">
+      <b style="color:var(--ink)">What the labels mean.</b> Every chart times the <em>same
+      expressions</em> two ways: <b style="color:var(--ink)">CM</b> = the expression compiled
+      to a correspondence-matrix DAG, then evaluated; <b style="color:var(--ink)">Bitset</b> =
+      the plain expression tree evaluated directly with packed-bitset arithmetic — no CM
+      machinery (previously labeled "raw"). Both sides then have a choice of arithmetic
+      engine: <b style="color:var(--ink)">bigint</b> (Python big integers) or
+      <b style="color:var(--ink)">words</b> (numpy uint64 vectors). Engines are always
+      matched CM-vs-Bitset, so each pair is an apples-to-apples comparison of the best
+      available implementation on each side.
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>How long one full computation takes: CM vs Bitset</h2>
+      <p class="sub">Each point is the time to compute the complete truth table of the same
+      test formula, by four methods. "n" is the number of variables in the formula — each
+      step up in n doubles the amount of work. The time axis is logarithmic: each gridline
+      is 10× the one below.</p>
+      <span class="howto">⬇ Lower line = faster method</span>
+      <div class="legend" id="lg1"></div>
+      <div id="c1"></div>
+      <p class="takeaway"><b>Takeaway:</b> CM and Bitset are nearly tied at every size —
+      the two lines of each color pair sit almost on top of each other. What really matters
+      is the arithmetic engine: at n=24, both methods take roughly <b>1 second</b> with the
+      standard engine ("bigint") but only about <b>0.14 seconds</b> with the new numpy
+      engine ("words"). Neither CM nor Bitset dominates the other here.</p>
+      <details><summary>Data table (µs, median)</summary><div id="t1"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>How much the new numpy engine speeds things up</h2>
+      <p class="sub">Same formulas as the left chart. Each bar says how many times faster
+      the numpy ("words") engine is than the standard ("bigint") engine — one bar for CM,
+      one for Bitset. The dashed line at 1× means "no change".</p>
+      <span class="howto">⬆ Taller bar = bigger speed-up · below the dashed line = numpy was actually slower</span>
+      <div class="legend" id="lg2"></div>
+      <div id="c2"></div>
+      <p class="takeaway"><b>Takeaway:</b> for small formulas (n=12–14) the numpy engine is
+      actually <b>slower</b> — its bars fall below the 1× line — so the standard engine
+      remains the default there. From n=16 up it wins, growing to about <b>7× faster at
+      n=24</b>. Crucially, CM and Bitset get almost the same boost, so switching engines
+      doesn't tilt the CM-vs-Bitset contest either way.</p>
+      <details><summary>Data table (speedup ×)</summary><div id="t2"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>Effect of the memory-freeing tweak</h2>
+      <p class="sub">A change that throws away intermediate results as soon as they're no
+      longer needed, instead of keeping them all until the end. Each bar shows how many
+      times faster the computation ran with the tweak on — for CM and for Bitset.</p>
+      <span class="howto">⬆ Taller bar = bigger speed-up · dashed line at 1× = no change</span>
+      <div class="legend" id="lg3"></div>
+      <div id="c3"></div>
+      <p class="takeaway"><b>Takeaway:</b> the tweak's big win is at n=22, where CM ran
+      <b>2.1× faster</b> (Bitset: 1.7×). At n=24 it makes essentially <b>no speed
+      difference</b> (0.99×) — though it still cuts peak memory use by 12–27×, which is why
+      it's kept. Honest reading: this tweak helps at some sizes and is neutral at others.</p>
+      <details><summary>Data table (speedup ×)</summary><div id="t3"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>The fairness bug we found: CM was being compared to the wrong Bitset</h2>
+      <p class="sub">Time per computation on the same formulas, three ways: the CM method,
+      the flawed reference the old benchmark used (it accidentally timed a slow walk of
+      CM's own data structure and called it "Bitset"), and the genuine, properly-built
+      Bitset it should have used.</p>
+      <span class="howto">⬇ Shorter bar = faster</span>
+      <div class="legend" id="lg4"></div>
+      <div id="c4"></div>
+      <p class="takeaway"><b>Takeaway:</b> the genuine Bitset (yellow) is roughly <b>twice
+      as fast</b> as the flawed reference (teal) at n=18–22 — e.g. 8.5 µs vs 17.6 µs at
+      n=18. Earlier published numbers compared CM to the slow flawed reference, which made
+      CM look better than it is. Against the honest Bitset, CM (blue) is slightly
+      <b>slower</b> at most sizes here (e.g. 10.4 µs vs 8.5 µs at n=18) and slightly faster
+      at n=24. All corrected tables have been re-issued.</p>
+      <details><summary>Data table (µs, median)</summary><div id="t4"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>The one-time setup cost that used to block big formulas</h2>
+      <p class="sub">Before any computation runs, a lookup table must be built once per
+      formula size. The old way of building it got catastrophically slow as n grew; the
+      rewritten version produces the exact same table, fast. Log time scale.</p>
+      <span class="howto">⬇ Lower line = faster</span>
+      <div class="legend" id="lg5"></div>
+      <div id="c5"></div>
+      <p class="takeaway"><b>Takeaway:</b> at n=20 the old builder took <b>16 seconds</b>;
+      the rewrite takes <b>0.12 seconds</b> — about 130× faster, with byte-for-byte
+      identical output. This one fix, not CM itself, is what made formulas beyond 16
+      variables practical at all. It benefits CM and Bitset equally, since both need the
+      same table.</p>
+      <details><summary>Data table (ms, median)</summary><div id="t5"></div></details>
+    </section>
+
+    <section class="card">
+      <h2>The head-to-head verdict: CM time ÷ Bitset time</h2>
+      <p class="sub">The most direct comparison on this page. For each scenario we divide
+      CM's time by the best Bitset's time on identical formulas. A value of 1.00 means a
+      dead heat; 0.90 means CM took only 90% as long (CM wins); 1.25 means CM took 25%
+      longer (Bitset wins).</p>
+      <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
+      <div class="legend" id="lg6"></div>
+      <div id="c6"></div>
+      <p class="takeaway"><b>Takeaway:</b> in the core number-crunching ("kernel" bars,
+      blue and teal) CM is consistently <b>faster</b> — ratios of roughly 0.6–1.0, i.e. up
+      to ~20–40% quicker, thanks to CM re-using repeated sub-formulas. But in the full
+      end-to-end path a user actually calls ("wrapper", yellow), CM's extra bookkeeping
+      makes it <b>slower</b> — ratios of 1.14–1.26 (14–26% behind) except at n=24 (0.84;
+      explained in the last section below). Honest bottom line: <b>neither side dominates
+      on speed</b>. CM's real advantage is that it can return an exact, compressed answer
+      for huge formulas that would otherwise be refused — not that it computes faster.</p>
+      <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas)
+      than the other kernel bars (25 samples each); an independent larger run measured 0.83
+      there. Treat n=16 kernel-bigint as the noisiest number on this chart.</p>
+      <details><summary>Data table (CM ÷ Bitset)</summary><div id="t6"></div></details>
+    </section>
+
+    <section class="card" style="grid-column: 1 / -1;">
+      <h2>Why the wrapper slows CM down — and why it didn't at n=24</h2>
+      <p class="sub">The story behind the yellow bars in the head-to-head chart, in plain terms.</p>
+      <div style="color:var(--ink-2); font-size:13.5px; max-width:100ch;">
+        <p style="margin:6px 0;"><b style="color:var(--ink)">What the "wrapper" is.</b>
+        The kernel is the bare number-crunching loop. The wrapper is the complete function a
+        user actually calls: it checks the safety guard, works out which variables still
+        matter, runs the kernel, and packages the answer into a result object. That
+        housekeeping costs a roughly fixed <b style="color:var(--ink)">3–5 microseconds per
+        call</b>, regardless of how big the computation is.</p>
+        <p style="margin:6px 0;"><b style="color:var(--ink)">When it matters.</b> For the
+        tiny reduced computations in the head-to-head chart, the kernel itself only takes
+        2–6 µs — so a 3–5 µs surcharge nearly doubles the bill, and CM ends up 14–26%
+        behind the plain Bitset (which has almost no packaging to do). For big computations
+        the same surcharge vanishes into the noise: at n=22 full output the wrapper costs
+        about 0.5% (84.1 ms with vs 84.6 ms without in this session's run). So:
+        <b style="color:var(--ink)">kernel-vs-kernel, CM is the faster method (ratios ~0.6–1.0);
+        it is only the fixed per-call packaging cost that puts the end-to-end CM path behind
+        on microsecond-scale outputs.</b></p>
+        <p style="margin:6px 0;"><b style="color:var(--ink)">Why n=24 flipped in CM's favor
+        (0.84).</b> Two reasons, verified in the per-trial data. First, sample luck: the
+        random n=24 formulas happened to simplify down to at most 6 relevant variables, so
+        none of them hit the slower fallback path that inflated some n=20/22 trials.
+        Second, a real structural effect: the fewer variables that survive simplification,
+        the smaller CM's compiled formula becomes — while the Bitset must still execute
+        <em>every operation of the original formula</em>, just over a narrower range. With
+        very small surviving formulas, CM's simplification saving outgrows its packaging
+        surcharge, and CM won 5 of the 8 trials outright.</p>
+        <p style="margin:6px 0;"><b style="color:var(--ink)">How this compares to the older
+        published numbers.</b> Before this work, CM's kernel was genuinely
+        <b style="color:var(--ink)">slower</b> than Bitset: the original recursive CM
+        evaluator ran about 1.5–2.5× behind the Bitset on cached small formulas
+        (2.47× at n=4 down to 1.53× at n=16, from the earlier session's tables). Two changes
+        reversed that: compiling CM's formula once into a flat program (the "C1a"
+        evaluator), and this audit's corrected comparison. Note the correction cut both
+        ways: the old benchmark also compared CM against a <em>flawed, too-slow</em>
+        "Bitset", so some older ratios flattered CM. With the flawed baseline replaced and
+        both sides given the same engine upgrades, today's honest picture is the one above:
+        CM's kernel modestly ahead, its wrapper modestly behind on tiny outputs.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Reading the results together</h2>
+      <p class="sub">The honest headline, in one place.</p>
+      <ul style="margin:6px 0 10px; padding-left:20px; color:var(--ink-2); font-size:13.5px;">
+        <li><b style="color:var(--ink)">Kernel:</b> CM runs at parity to modestly faster than the best-practice flat Bitset (0.87–0.98× this session) — the residual edge is DAG sharing.</li>
+        <li><b style="color:var(--ink)">Wrapper:</b> for microsecond-scale reduced outputs the public CM wrapper is parity to ~1.4× <em>slower</em> than the fair Bitset baseline. CM's large-n value is the exact reduced representation and the explicit guard, not raw speed.</li>
+        <li><b style="color:var(--ink)">Both sides speed up together:</b> liveness freeing and numpy-words were applied to CM and Bitset alike, so every comparison stays fair.</li>
+        <li><b style="color:var(--ink)">Variance:</b> large-n session CVs ran 7–16%; treat single ratios as ranges, and disclose the repr-3/4 mix behind any median.</li>
+      </ul>
+    </section>
+  </div>
+</main>
+<div id="tip"></div>
+
+<script>
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS = "http://www.w3.org/2000/svg";
+const tip = document.getElementById("tip");
+function showTip(ev, html) {
+  tip.innerHTML = html; tip.style.display = "block";
+  const pad = 14, w = tip.offsetWidth;
+  let x = ev.clientX + pad; if (x + w > innerWidth - 8) x = ev.clientX - w - pad;
+  tip.style.left = x + "px"; tip.style.top = (ev.clientY + pad) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function fmt(v) {
+  if (v >= 1e6) return parseFloat((v/1e6).toFixed(2)) + " s";
+  if (v >= 1e3) return parseFloat((v/1e3).toFixed(v >= 1e4 ? 0 : 1)) + " ms";
+  return parseFloat(v.toFixed(0)) + " µs";
+}
+function legend(id, items) {
+  const box = document.getElementById(id);
+  for (const [name, color] of items) {
+    const s = document.createElement("span");
+    s.innerHTML = `<i style="background:${color}"></i>${name}`;
+    box.appendChild(s);
+  }
+}
+function table(id, header, rows) {
+  const d = document.getElementById(id);
+  d.innerHTML = "<table><tr>" + header.map(h => `<th>${h}</th>`).join("") + "</tr>" +
+    rows.map(r => "<tr>" + r.map(c => `<td>${c}</td>`).join("") + "</tr>").join("") + "</table>";
+}
+
+/* ---------- data (session medians) ---------- */
+const N = [12, 14, 16, 18, 20, 22, 24];
+const evalUs = {   // full-output eval, µs
+  "CM bigint":     [245.9, 571.6, 2008.2, 6828.3, 37300.1, 139403.3, 945180.7],
+  "Bitset bigint": [283.0, 740.4, 3304.2, 7564.3, 38925.1, 148559.9, 1029785.3],
+  "CM words":      [541.4, 769.9, 1097.6, 2600.8, 9169.5, 27842.1, 135406.8],
+  "Bitset words":  [603.7, 888.4, 1410.3, 2879.7, 10164.2, 30115.5, 141445.3],
+};
+const wordsSpeedup = { n: N, "CM": [0.45,0.74,1.83,2.63,4.07,5.01,6.98], "Bitset": [0.47,0.83,2.34,2.63,3.83,4.93,7.28] };
+const liveSpeedup  = { n: [18,20,22,24], "CM": [1.11,1.23,2.10,0.99], "Bitset": [1.28,1.09,1.73,0.98] };
+const c3 = { n: [16,18,20,22,24],
+  "CM wrapper": [48.0,10.4,12.4,13.0,6.5],
+  "old comparator (CM DAG, mislabeled Bitset)": [51.5,17.6,20.4,23.1,10.3],
+  "corrected Bitset baseline (flat)": [42.2,8.5,9.9,10.5,7.7] };
+// CM / Bitset ratios on identical expressions, matched engines (null = not measured)
+const cmOverBitset = { n: [16,18,20,22,24],
+  "kernel, bigint engine (full output)": [0.61, 0.87, 0.89, 0.98, 0.92],
+  "kernel, words engine (full output)":  [0.78, 0.90, 0.90, 0.92, 0.96],
+  "wrapper vs fair Bitset (reduced scope)": [1.14, 1.23, 1.26, 1.24, 0.84] };
+const envMs = { n: [14,16,18,20], "old builder": [13.6,117.3,1176,16269], "vectorized": [1.32,5.78,35.2,123] };
+
+/* ---------- renderers ---------- */
+const W = 620, H = 330, M = {l: 52, r: 96, t: 14, b: 34};
+
+function logLineChart(mount, ns, series, colors, unit) {
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getElementById(mount));
+  const all = Object.values(series).flat();
+  const lo = Math.floor(Math.log10(Math.min(...all))), hi = Math.ceil(Math.log10(Math.max(...all)));
+  const x = i => M.l + i * (W - M.l - M.r) / (ns.length - 1);
+  const y = v => M.t + (hi - Math.log10(v)) * (H - M.t - M.b) / (hi - lo);
+  for (let p = lo; p <= hi; p++) {
+    el("line", {x1: M.l, x2: W - M.r, y1: y(10**p), y2: y(10**p), stroke: "var(--grid)", "stroke-width": 1}, svg);
+    el("text", {x: M.l - 8, y: y(10**p) + 4, "text-anchor": "end"}, svg).textContent = fmt(10**p);
+  }
+  el("line", {x1: M.l, x2: W - M.r, y1: H - M.b, y2: H - M.b, stroke: "var(--axis)"}, svg);
+  ns.forEach((n, i) => el("text", {x: x(i), y: H - M.b + 18, "text-anchor": "middle"}, svg).textContent = "n=" + n);
+  Object.keys(series).forEach((name, si) => {
+    const vs = series[name], c = colors[si];
+    el("path", {d: vs.map((v,i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" "),
+                fill: "none", stroke: c, "stroke-width": 2, "stroke-linejoin": "round"}, svg);
+    vs.forEach((v, i) => {
+      const dot = el("circle", {cx: x(i), cy: y(v), r: 3.5, fill: c, stroke: "var(--surface)", "stroke-width": 2}, svg);
+      const hit = el("circle", {cx: x(i), cy: y(v), r: 11, fill: "transparent"}, svg);
+      hit.addEventListener("mousemove", ev => showTip(ev, `<span class="t">${name} · n=${ns[i]}</span><br><b>${fmt(v)}</b>`));
+      hit.addEventListener("mouseleave", hideTip);
+    });
+    const t = el("text", {x: W - M.r + 8, y: y(vs[vs.length-1]) + 4, class: "endlab"}, svg);
+    t.textContent = name;
+  });
+  // nudge overlapping end labels apart
+  const labs = [...svg.querySelectorAll("text.endlab")].sort((a,b) => +a.getAttribute("y") - +b.getAttribute("y"));
+  for (let i = 1; i < labs.length; i++) {
+    const prev = +labs[i-1].getAttribute("y"), cur = +labs[i].getAttribute("y");
+    if (cur - prev < 13) labs[i].setAttribute("y", prev + 13);
+  }
+}
+
+function groupedBars(mount, ns, series, colors, opts) {
+  const {refLine, refLabel, unit, fmtV} = opts;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getElementById(mount));
+  const names = Object.keys(series);
+  const maxV = Math.max(...names.flatMap(k => series[k]).filter(v => v != null)) * 1.15;
+  const x0 = M.l, xw = W - M.l - 16;
+  const gw = xw / ns.length;
+  const bw = Math.min(26, (gw - 14) / names.length - 2);
+  const y = v => M.t + (1 - v / maxV) * (H - M.t - M.b);
+  const step = maxV > 40 ? 10 : (maxV > 8 ? 2 : (maxV > 4 ? 1 : 0.5));
+  for (let v = 0; v <= maxV; v += step) {
+    el("line", {x1: x0, x2: x0 + xw, y1: y(v), y2: y(v), stroke: "var(--grid)"}, svg);
+    el("text", {x: x0 - 8, y: y(v) + 4, "text-anchor": "end"}, svg).textContent = fmtV ? fmtV(v) : v;
+  }
+  ns.forEach((n, gi) => {
+    const gx = x0 + gi * gw + gw / 2;
+    el("text", {x: gx, y: H - M.b + 18, "text-anchor": "middle"}, svg).textContent = "n=" + n;
+    names.forEach((name, si) => {
+      const v = series[name][gi];
+      if (v == null) return;
+      const bx = gx - (names.length * (bw + 2)) / 2 + si * (bw + 2) + 1;
+      const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v),
+                            rx: 3, fill: colors[si]}, svg);
+      r.addEventListener("mousemove", ev => showTip(ev, `<span class="t">${name} · n=${n}</span><br><b>${(fmtV ? fmtV(v) : v) + (unit || "")}</b>`));
+      r.addEventListener("mouseleave", hideTip);
+      if (names.length <= 2) {
+        el("text", {x: bx + bw/2, y: y(v) - 5, "text-anchor": "middle", class: "val"}, svg)
+          .textContent = fmtV ? fmtV(v) : v;
+      }
+    });
+  });
+  el("line", {x1: x0, x2: x0 + xw, y1: H - M.b, y2: H - M.b, stroke: "var(--axis)"}, svg);
+  if (refLine != null) {
+    // drawn after the bars so the guide and its label stay readable on top
+    el("line", {x1: x0, x2: x0 + xw, y1: y(refLine), y2: y(refLine), stroke: "var(--ink-2)",
+                "stroke-width": 1.5, "stroke-dasharray": "5 4"}, svg);
+    const lab = el("text", {x: x0 + 6, y: y(refLine) - 6, "text-anchor": "start",
+      style: "fill:var(--ink); font-weight:600; paint-order:stroke; stroke:var(--surface); stroke-width:3px;"}, svg);
+    lab.textContent = refLabel || (refLine + "× — no change");
+  }
+}
+
+/* ---------- build ---------- */
+const C = [css("--s1"), css("--s2"), css("--s3"), css("--s4")];
+
+legend("lg1", [["CM bigint", C[0]], ["Bitset bigint", C[1]], ["CM words", C[2]], ["Bitset words", C[3]]]);
+logLineChart("c1", N, evalUs, C);
+table("t1", ["n", ...Object.keys(evalUs)], N.map((n,i) =>
+  [n, ...Object.values(evalUs).map(v => v[i].toLocaleString())]));
+
+legend("lg2", [["CM: words / bigint", C[0]], ["Bitset: words / bigint", C[1]]]);
+groupedBars("c2", wordsSpeedup.n, {"CM: words / bigint": wordsSpeedup.CM, "Bitset: words / bigint": wordsSpeedup.Bitset},
+  [C[0], C[1]], {refLine: 1, unit: "×", fmtV: v => (+v).toFixed(2).replace(/\.?0+$/, m => m === ".00" ? "" : m.replace(/0+$/,""))});
+table("t2", ["n", "CM", "Bitset"], wordsSpeedup.n.map((n,i) => [n, wordsSpeedup.CM[i]+"×", wordsSpeedup.Bitset[i]+"×"]));
+
+legend("lg3", [["CM flat (last-use / retained)", C[0]], ["Bitset flat (last-use / retained)", C[1]]]);
+groupedBars("c3", liveSpeedup.n, {"CM last-use / retained": liveSpeedup.CM, "Bitset last-use / retained": liveSpeedup.Bitset},
+  [C[0], C[1]], {refLine: 1, unit: "×", fmtV: v => (+v).toFixed(2).replace(/\.00$/,"")});
+table("t3", ["n", "CM", "Bitset"], liveSpeedup.n.map((n,i) => [n, liveSpeedup.CM[i]+"×", liveSpeedup.Bitset[i]+"×"]));
+
+legend("lg4", [["CM wrapper", C[0]], ["old comparator (CM DAG, mislabeled Bitset)", C[1]], ["corrected Bitset baseline (flat)", C[2]]]);
+groupedBars("c4", c3.n, {"CM wrapper": c3["CM wrapper"],
+  "old comparator (CM DAG, mislabeled Bitset)": c3["old comparator (CM DAG, mislabeled Bitset)"],
+  "corrected Bitset baseline (flat)": c3["corrected Bitset baseline (flat)"]},
+  [C[0], C[1], C[2]], {unit: " µs", fmtV: v => Math.round(v * 10) / 10});
+table("t4", ["n", "CM wrapper", "old comparator (CM DAG)", "corrected Bitset baseline"],
+  c3.n.map((n,i) => [n, c3["CM wrapper"][i], c3["old comparator (CM DAG, mislabeled Bitset)"][i], c3["corrected Bitset baseline (flat)"][i]]));
+
+legend("lg6", [["kernel, bigint engine", C[0]], ["kernel, words engine", C[1]], ["wrapper vs fair Bitset (reduced)", C[2]]]);
+groupedBars("c6", cmOverBitset.n, {
+  "kernel, bigint engine (full output)": cmOverBitset["kernel, bigint engine (full output)"],
+  "kernel, words engine (full output)": cmOverBitset["kernel, words engine (full output)"],
+  "wrapper vs fair Bitset (reduced scope)": cmOverBitset["wrapper vs fair Bitset (reduced scope)"]},
+  [C[0], C[1], C[2]], {refLine: 1, refLabel: "1× — parity (below = CM faster)", unit: "× (CM ÷ Bitset)", fmtV: v => (+v).toFixed(2)});
+table("t6", ["n", "kernel bigint", "kernel words", "wrapper (reduced)"],
+  cmOverBitset.n.map((n,i) => [n,
+    cmOverBitset["kernel, bigint engine (full output)"][i] ?? "—",
+    cmOverBitset["kernel, words engine (full output)"][i],
+    cmOverBitset["wrapper vs fair Bitset (reduced scope)"][i]]));
+
+legend("lg5", [["old builder", C[0]], ["vectorized (R3)", C[1]]]);
+logLineChart("c5", envMs.n, {"old builder": envMs["old builder"].map(v => v*1000), "vectorized (R3)": envMs["vectorized"].map(v => v*1000)}, [C[0], C[1]]);
+table("t5", ["n", "old builder (ms)", "vectorized (ms)", "ratio"],
+  envMs.n.map((n,i) => [n, envMs["old builder"][i].toLocaleString(), envMs["vectorized"][i], Math.round(envMs["old builder"][i]/envMs["vectorized"][i]) + "×"]));
+</script>

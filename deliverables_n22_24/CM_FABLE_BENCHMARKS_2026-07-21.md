@@ -1,5 +1,8 @@
 # Fable Benchmarks — Endorsed Code State (post-audit), 2026-07-21/22
 
+Project contact: **Brian Theory (Droncheff)** — direct questions about this work to him.
+Benchmarks and analysis prepared with Claude Fable 5 (Anthropic).
+
 Companion to `CM_FABLE_AUDIT_V2_2026-07-21.md` (repo root). All headline timings:
 instrumentation off, medians over ≥5 interleaved rounds, oracle checks outside timed
 windows, benchmark interpreter `.venv` Python 3.13.5 unless stated. Correctness re-runs

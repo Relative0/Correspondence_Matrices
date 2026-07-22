@@ -1,7 +1,8 @@
 # Fable Audit V2 — Review of the Third-Party Agent's Code Changes and Results
 
 Date: 2026-07-21
-Auditor: Fable (this document), reviewing the unreviewed third-party changes preserved on
+Project contact: **Brian Theory (Droncheff)** — direct questions about this work to him.
+Auditor: Claude Fable 5 (this document), reviewing the unreviewed third-party changes preserved on
 `audit/third-party-snapshot` (`00c8ac3`) against the committed Opus baseline (`fe73f82`).
 Benchmark interpreter: `.venv` Python 3.13.5 / NumPy 2.3.2. Test interpreter: system
 Python 3.10.11.
