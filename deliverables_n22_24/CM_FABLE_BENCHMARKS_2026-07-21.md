@@ -136,6 +136,37 @@ Verification artifacts: `fable_words_verify_2026_07_21.py` (this directory).
   survivor-only median — the selection bias can no longer hide.
   `fable_decline_d6_{raw,summary}.csv`.
 
+## 7b. Robust wrapper campaign (2026-07-22 follow-up): 300 formulas/n + threshold fix
+
+The §3/§7 wrapper ratios came from 8 depth-4 formulas per n. A follow-up campaign ran
+**300 formulas per n** (1,500 total, 5 interleaved rounds each, every trial verified
+bit-correct; `CM_FABLE_wrapper_stats300_{raw,summary}.csv` and `..._t16_...`):
+
+| n | wrapper CM/Bitset median (thr=7) | median (thr=16) | p10–p90 (thr=16) | live_k median/p90/max |
+|--:|--:|--:|:--|:--|
+| 16 | 1.08 | 1.04 | 0.61–1.34 | 5 / 8 / 11 |
+| 18 | 1.28 | 1.25 | 0.95–1.56 | 5 / 8 / 10 |
+| 20 | 1.25 | 1.18 | 0.89–1.51 | 6 / 9 / 11 |
+| 22 | 1.17 | 1.12 | 0.79–1.43 | 6 / 9 / 12 |
+| 24 | 1.06 | **1.02** | 0.78–1.36 | 6 / 9 / 12 |
+
+Findings:
+
+- **The §3 n=24 value (0.84) was sampling luck** — all 8 draws had live_k ≤ 6
+  (a few-percent event). Robust n=24 median: 1.02. The §3 table remains as the paired
+  old-vs-new comparator record; this table supersedes its CM/corrected column as the
+  wrapper headline.
+- **live_k is n-independent** (median 5–6, p90 8–9 at every n), as the depth-4 leaf-count
+  argument predicts.
+- **Stratified (thr=16):** live_k ≤ 4 → CM ahead/tied end-to-end (0.87–1.06);
+  5–7 → Bitset modestly ahead (1.05–1.28); ≥ 8 → 1.12–1.38.
+- **Threshold mis-tuning found and fixed in configuration:** under `hybrid_threshold=7`,
+  live_k ≥ 8 formulas (~20% of draws) fell to the numpy TT-vector path at **~40× behind**
+  the fair Bitset. `--cm-hybrid-threshold 16` keeps them on the bitset kernel: that
+  stratum drops to 1.12–1.38× with bit-identical outputs and no regression in the other
+  strata. **Recommendation: adopt threshold 16 as the benchmark default** (config change
+  only; no library-default change made).
+
 ## 8. Variance statement
 
 Full-arity large-n session CVs in this session's runs were 7–16% (consistent with the

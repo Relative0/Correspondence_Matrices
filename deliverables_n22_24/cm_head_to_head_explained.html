@@ -123,11 +123,12 @@
     <p class="takeaway"><b>Takeaway:</b> in the core number-crunching ("kernel", blue and
     teal bars) CM is consistently <b>faster</b> — up to ~20–40% quicker. In the complete
     function a user actually calls ("wrapper", yellow bars), CM's fixed bookkeeping cost
-    makes it 14–26% <b>slower</b> on these microsecond-scale outputs — except at n=24,
-    where the sampled formulas simplified so much that CM won anyway. <b>Neither side
-    dominates on raw speed.</b> CM's decisive advantage lies elsewhere: it can return
-    exact, compressed answers for formulas so large that the direct approach is refused
-    outright.</p>
+    makes it 2–25% <b>slower</b> on these microsecond-scale outputs, converging toward a
+    statistical dead heat at n=24 (1.02). Within the wrapper regime, formulas that
+    simplify hard (≤4 relevant variables) tip end-to-end CM ahead of the Bitset even so.
+    <b>Neither side dominates on raw speed.</b> CM's decisive advantage lies elsewhere:
+    it can return exact, compressed answers for formulas so large that the direct
+    approach is refused outright.</p>
     <p class="note"><b style="color:var(--ink-2)">Read the bar groups carefully — they are
     three separate contests, not one.</b> Within any single computation the wrapper can
     never beat its own kernel (wrapper time = kernel time + packaging). The bars compare
@@ -135,10 +136,17 @@
     n variables matter and both sides compute the full 2<sup>n</sup>-row answer
     (~0.1–1 s each at n=24); the wrapper bar (yellow) uses shallow formulas that CM
     simplified down to a handful of relevant variables, evaluated at that reduced scope
-    (~6 µs each). That is why the yellow bar can sit <em>below</em> the kernel bars at
-    n=24: on that sample the formulas collapsed so thoroughly (≤6 live variables) that
-    CM's simplification saving outweighed its packaging cost — each bar is an honest
-    CM ÷ Bitset ratio for its own regime.</p>
+    (~6 µs each). Each bar is an honest CM ÷ Bitset ratio for its own regime.</p>
+    <p class="note"><b style="color:var(--ink-2)">Statistical robustness.</b> The wrapper
+    bars are medians over <b>300 random formulas per n</b> (1,500 total, every one
+    verified bit-correct), replacing an earlier 8-formula pass. The small sample had
+    shown 0.84 at n=24 — that turned out to be sampling luck (all 8 draws happened to
+    simplify to ≤6 relevant variables) and is corrected to 1.02 here. The large campaign
+    also exposed a mis-tuned setting: formulas keeping 8+ relevant variables (~20% of
+    draws) were being routed to a slow fallback path, running ~40× behind; raising the
+    routing threshold from 7 to 16 relevant variables eliminated that cliff entirely
+    (worst stratum now ~1.2–1.4×). The bars show the corrected configuration — the best
+    honest setup on both sides.</p>
     <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas vs
     25 for the other kernel bars); an independent larger run measured 0.83 there. Treat it
     as the noisiest number on this chart.</p>
@@ -196,11 +204,17 @@
     this chart are themselves only a few millionths of a second, so it nearly doubles the
     bill and CM falls 14–26% behind. On big computations the same overhead is around
     half a percent: irrelevant.</li>
-    <li><b>The n=24 surprise (yellow bar below the line):</b> by luck of the draw, the
-    random n=24 test formulas simplified down to at most 6 variables that mattered. The
-    more a formula collapses, the less work CM has left — while Bitset still executes
-    every operation of the original formula. Past that tipping point CM wins outright,
-    front desk and all.</li>
+    <li><b>The tipping point:</b> the more a formula collapses under simplification, the
+    less work CM has left — while Bitset still executes every operation of the original
+    formula. In the 300-formula campaign, formulas that kept only ≤4 relevant variables
+    tipped end-to-end CM ahead of the Bitset (ratios 0.87–1.0 at the larger sizes),
+    front desk and all; formulas that stayed complex left Bitset modestly ahead.</li>
+    <li><b>A lesson in sample size (and honesty):</b> an early 8-formula pass showed CM
+    winning outright at n=24 (0.84). Rerunning with 300 formulas per size showed that was
+    luck — the true n=24 figure is 1.02, a statistical tie. The big campaign also caught
+    a mis-tuned internal setting that had been making ~20% of formulas ~40× slower on
+    the CM side; with it fixed, no pathological cases remain. Bigger samples made the
+    result both fairer to Bitset <em>and</em> kinder to CM's worst case.</li>
   </ul>
 
   <h3>So where is CM's real value?</h3>
@@ -289,22 +303,35 @@
   <p>The public entry point (<code>materialize_hybrid_no_reinflate</code>) adds guard
   checks, live-variable scope planning, and result-object construction: a roughly fixed
   <b>3–5 µs per call</b>. Against a 2–6 µs kernel (the reduced-scope regime in the chart)
-  that is a 1.14–1.26× end-to-end deficit; against an 84 ms full-output computation at
-  n=22 it measured ~0.5%. The audit also landed a diagnostics-off fast path that trims
-  this, verified path-equivalent to the instrumented reference.</p>
+  that is a 1.02–1.25× end-to-end deficit at the medians (300 formulas/n); against an
+  84 ms full-output computation at n=22 it measured ~0.5%. The audit also landed a
+  diagnostics-off fast path that trims this, verified path-equivalent to the
+  instrumented reference.</p>
 
-  <h2>Why the n=24 batch had live_k ≤ 6 (and n=20/22 didn't)</h2>
-  <p>Sampling, not structure. live_k is a property of the random formula: a depth-4 tree
-  has ≤16 leaves, each drawing a variable uniformly from n, minus whatever
-  canonicalization eliminates. The audited 300-formula-per-cell sweep shows the same
-  distribution at n=20 and n=24 (median 6, max 12). The chart's batches are only 8
-  formulas per n; the n=24 seeds drew ≤6 while n=20/22 drew a few 8–10s — the latter
-  additionally crossing the <code>live_k &gt; 7</code> hybrid threshold into a slower
-  numpy fallback path on those trials. If anything, larger n mildly <em>raises</em>
-  expected live_k (leaf collisions rarer), underscoring that the reversal is chance.
-  Structurally, though, the direction is real: the smaller the surviving support, the
-  smaller CM's compiled program, while the matched-scope Bitset still executes the full
-  original AST — so sufficiently collapsible formulas flip the wrapper deficit.</p>
+  <h2>The 300-formula campaign: sampling, stratification, and a threshold fix</h2>
+  <p>An early 8-formula-per-n pass showed the wrapper ratio at 0.84 at n=24 — CM winning.
+  Suspicious of the sample size, we reran with <b>300 formulas per n</b> (1,500 total,
+  5 interleaved timing rounds each, every trial verified bit-correct). Findings:</p>
+  <ul>
+    <li><b>live_k is n-independent, as theory predicts:</b> a depth-4 tree has ≤16
+    leaves drawing uniformly from n variables, minus canonicalization's eliminations.
+    Measured: median live_k 5–6, p90 8–9, max 11–12 at <em>every</em> n from 16 to 24.
+    The early n=24 batch drawing all eight ≤6 was a few-percent-probability accident;
+    the robust n=24 median ratio is <b>1.02</b>, and the corrected chart shows it.</li>
+    <li><b>Stratified by live_k</b> (threshold-16 configuration): live_k ≤ 4 → CM ahead
+    or tied end-to-end (0.87–1.06 across sizes); live_k 5–7 → Bitset modestly ahead
+    (1.05–1.28); live_k ≥ 8 → Bitset ahead (1.12–1.38).</li>
+    <li><b>The threshold discovery:</b> under the published <code>hybrid_threshold=7</code>,
+    every live_k ≥ 8 formula (~20% of draws) was routed to the numpy TT-vector fallback
+    and ran <b>~40× slower</b> than the Bitset — a mis-tuning the 8-trial medians never
+    surfaced. The bitset kernel handles 2<sup>16</sup>-bit outputs cheaply, so raising
+    the threshold to 16 eliminates the cliff (that stratum: 38–45× → 1.12–1.38×) while
+    leaving all other strata unchanged and all outputs bit-identical. Recommendation:
+    make <code>--cm-hybrid-threshold 16</code> the benchmark default; the chart above
+    uses it, as the best honest configuration of both sides.</li>
+  </ul>
+  <p>Data: <code>CM_FABLE_wrapper_stats300_{raw,summary}.csv</code> (threshold 7) and
+  <code>CM_FABLE_wrapper_stats300_t16_{raw,summary}.csv</code> (threshold 16).</p>
 
   <h2>Fairness provenance (why these numbers can be trusted)</h2>
   <ul>
@@ -373,7 +400,7 @@ function el(tag, attrs, parent) {
 const data = { n: [16, 18, 20, 22, 24],
   "kernel, bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92],
   "kernel, words engine": [0.78, 0.90, 0.90, 0.92, 0.96],
-  "wrapper vs fair Bitset (reduced scope)": [1.14, 1.23, 1.26, 1.24, 0.84] };
+  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02] };
 const C = [css("--s1"), css("--s2"), css("--s3")];
 const names = Object.keys(data).filter(k => k !== "n");
 
