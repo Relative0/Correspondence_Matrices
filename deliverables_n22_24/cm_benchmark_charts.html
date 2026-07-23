@@ -209,6 +209,15 @@
       Kernel bars end at n=24.</p>
       <p class="note">Kernel bars are the Audit V3 3-formula × 5-round rerun; the n=16
       bigint cell is the noisiest.</p>
+      <p class="note"><b>The gray bars are a different metric</b>, added for context
+      (2026-07-23 RunPod rerun, identical seeds, its own same-session Bitset
+      denominator): CUDD — the industry-standard BDD engine, via <code>dd.cudd</code>
+      on Linux — building its <em>symbolic</em> ROBDD for the same 300 formulas per n,
+      divided by that session's Bitset time. A symbolic build returns a graph, not the
+      flat answer the other bars produce; extracting the flat answer from the BDD costs
+      thousands of times more (~0.36 s at n=16) and is infeasible at 2³². Every row
+      verified <code>robdd_is_cudd=True</code>, sampled correctness 300/300 per n
+      (<code>CM_FABLE_cudd_wrapper32_{raw,summary}.csv</code>).</p>
       <details><summary>Data table (CM ÷ Bitset)</summary><div id="t6"></div></details>
     </section>
 
@@ -346,7 +355,8 @@ const c3 = { n: [16,18,20,22,24],
 const cmOverBitset = { n: [16,18,20,22,24,26,28,30,32],
   "kernel, bigint engine (full output)": [0.56, 0.85, 0.89, 0.96, 0.87, null, null, null, null],
   "kernel, words engine (full output)":  [0.90, 0.89, 0.96, 0.94, 1.04, null, null, null, null],
-  "wrapper vs fair Bitset (reduced scope)": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84] };
+  "wrapper vs fair Bitset (reduced scope)": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84],
+  "CUDD symbolic build ÷ Bitset (different metric)": [0.63, 4.40, 4.62, 4.81, 3.41, 3.34, 3.18, 3.19, 3.24] };
 // Audit V3 corrected semantically all-live sharing-rich formulas (words, µs)
 const fullVars = { n: [16,18,20,22,24,26],
   "CM words": [164.45, 369.17, 1252.44, 6595.09, 32325.20, 184430.00],
@@ -457,17 +467,19 @@ groupedBars("c4", c3.n, {"CM wrapper": c3["CM wrapper"],
 table("t4", ["n", "CM wrapper", "old comparator (CM DAG)", "corrected Bitset baseline"],
   c3.n.map((n,i) => [n, c3["CM wrapper"][i], c3["old comparator (CM DAG, mislabeled Bitset)"][i], c3["corrected Bitset baseline (flat)"][i]]));
 
-legend("lg6", [["kernel, bigint engine", C[0]], ["kernel, words engine", C[1]], ["wrapper vs fair Bitset (reduced)", C[2]]]);
+legend("lg6", [["kernel, bigint engine", C[0]], ["kernel, words engine", C[1]], ["wrapper vs fair Bitset (reduced)", C[2]], ["CUDD symbolic build (different metric)", "#9aa2ad"]]);
 groupedBars("c6", cmOverBitset.n, {
   "kernel, bigint engine (full output)": cmOverBitset["kernel, bigint engine (full output)"],
   "kernel, words engine (full output)": cmOverBitset["kernel, words engine (full output)"],
-  "wrapper vs fair Bitset (reduced scope)": cmOverBitset["wrapper vs fair Bitset (reduced scope)"]},
-  [C[0], C[1], C[2]], {refLine: 1, refLabel: "1× — parity (below = CM faster)", unit: "× (CM ÷ Bitset)", fmtV: v => (+v).toFixed(2)});
-table("t6", ["n", "kernel bigint", "kernel words", "wrapper (reduced)"],
+  "wrapper vs fair Bitset (reduced scope)": cmOverBitset["wrapper vs fair Bitset (reduced scope)"],
+  "CUDD symbolic build ÷ Bitset (different metric)": cmOverBitset["CUDD symbolic build ÷ Bitset (different metric)"]},
+  [C[0], C[1], C[2], "#9aa2ad"], {refLine: 1, refLabel: "1× — parity (below = CM faster)", unit: "×", fmtV: v => (+v).toFixed(2)});
+table("t6", ["n", "kernel bigint", "kernel words", "wrapper (reduced)", "CUDD build (diff. metric)"],
   cmOverBitset.n.map((n,i) => [n,
     cmOverBitset["kernel, bigint engine (full output)"][i] ?? "—",
     cmOverBitset["kernel, words engine (full output)"][i] ?? "—",
-    cmOverBitset["wrapper vs fair Bitset (reduced scope)"][i] ?? "—"]));
+    cmOverBitset["wrapper vs fair Bitset (reduced scope)"][i] ?? "—",
+    cmOverBitset["CUDD symbolic build ÷ Bitset (different metric)"][i] ?? "—"]));
 
 legend("lg7", [["CM words", C[0]], ["Bitset words", C[1]]]);
 logLineChart("c7", fullVars.n, {"CM words": fullVars["CM words"], "Bitset words": fullVars["Bitset words"]}, [C[0], C[1]]);
