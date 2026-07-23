@@ -246,6 +246,86 @@ uniform across n and live_k. **Conclusion: the guard is a policy cap on output s
 not a capability wall; lifting it (a parameter) computes these formulas exactly at
 ordinary cost.**
 
+## 7e. CUDD/ROBDD apples-to-apples rerun on RunPod (2026-07-23)
+
+Prior ROBDD comparisons (`ROBDD_CM_fair_comparison_report.md`, `CUDD_ROBDD_extraction_report.md`)
+used `dd.autoref` or older CUDD-in-Docker numbers that were **not** run against the
+endorsed CM/Bitset code state. This section supersedes them for CUDD head-to-head.
+
+**Environment audit (2026-07-23):**
+
+- Native Windows (CPython 3.10.11): `dd 0.5.7` pure-Python wheel — `dd.autoref` OK,
+  `dd.cudd` **not importable**. Native Windows can never be labeled CUDD.
+- Docker Desktop (WSL2 `docker-desktop` distro, `python:3.10-slim`): `pip install dd`
+  selects the manylinux wheel; `dd.cudd` imports from
+  `dd/cudd.cpython-310-x86_64-linux-gnu.so`. Verified again this session (smoke run
+  `bench_cudd_docker_smoke_*.csv`, all rows `robdd_backend=dd.cudd`).
+- **RunPod pod `x82z2pbpofhcgz`** (cm-computation-worker, 2 vCPU / 4 GB, $0.06/hr,
+  Python 3.10.20, Linux 6.5): `dd.cudd` imports from the same manylinux wheel. All
+  headline numbers below are from this pod.
+
+**Method.** The endorsed repo state (root `*.py` + `cmbench/`) was pushed to the pod
+via the bootstrap `/put`+`/deploy` channel and `cm_bench.py` was run **twice in the
+same environment**, once per ROBDD backend, with CM, Bitset, and ROBDD computed inside
+each single invocation — so every row of a run uses the identical seeded expression,
+and the two runs use the identical expression stream (verified: per-(n, trial)
+`expr_node_count`/`expr_vars_used_count`/`expr_depth_actual` match exactly across runs):
+
+```
+python cm_bench.py --sizes 16,18,20,22,24 --trials 8 --max-depth 4 --seed 424242 \
+  --expr-style ordinary --cm-layout balanced --cm-compare-no-reinflate \
+  --cm-use-persistent-cache --cm-eval-repeat 50 --cm-hybrid-threshold 7 \
+  --cm-flat-eval --cm-max-full-output-vars 16 --large-n-safe \
+  --no-espresso --no-sympy --no-bdd-sop --no-numba \
+  --robdd-dd-backend {cudd|autoref} --robdd-order-policy best-of-k \
+  --robdd-order-sweeps 10 --robdd-measure-tt-extract --robdd-tt-extract-max-n 16 \
+  --print-summary --out-prefix bench_{cudd|autoref}_matched_headline_runpod
+```
+
+Outputs: `deliverables_n22_24/CM_FABLE_cudd_matched_headline_runpod_{raw,summary}.csv`,
+`CM_FABLE_autoref_matched_headline_runpod_{raw,summary}.csv` (same dir; the gitignored repo-root `bench_*_runpod_*.csv` copies are identical).
+
+**Backend identity validation (from the raw CSVs, all 40 rows each):** CUDD run has
+`robdd_backend = robdd_backend_module = dd.cudd`, `robdd_is_cudd = True`,
+`robdd_cudd_available = True`, `robdd_status = ok`, `robdd_ok = True`; autoref run has
+`dd.autoref` / `robdd_is_cudd = False` / `status ok`. All CM/Bitset/ROBDD correctness
+flags true in both runs. Note `--robdd-dd-backend cudd` does **not** fall back
+silently — if `dd.cudd` were missing the rows would read `robdd_status=unavailable`
+(demonstrated on native Windows in `smoke_robdd_cudd_required_raw.csv`).
+
+**Results (medians over 8 trials/n, RunPod pod, seconds):**
+
+| n | CUDD build | autoref build | CUDD build+TT-extract | autoref build+TT-extract | CM no-reinflate (full) | Bitset (full) |
+|--:|--:|--:|--:|--:|--:|--:|
+| 16 | 0.000025 | 0.000104 | 0.364 | 0.753 | 0.000090 | 0.000075 |
+| 18 | 0.000016 | 0.000090 | — | — | 0.000198 | 0.000027 |
+| 20 | 0.000013 | 0.000103 | — | — | 0.000220 | 0.000028 |
+| 22 | 0.000015 | 0.000110 | — | — | 0.000233 | 0.000031 |
+| 24 | 0.000020 | 0.000167 | — | — | 0.000457 | 0.000070 |
+
+Cached per-eval (µs, CUDD run): CM no-reinflate 17.1 / 3.9 / 3.8 / 4.0 / 243.2 vs
+Bitset 19.0 / 3.2 / 3.1 / 3.5 / 4.0 at n = 16/18/20/22/24 (the n=24 CM value is the
+known `hybrid_threshold=7` mis-tuning stratum; see §7b — thr=16 removes it).
+
+**Reading, kept deliberately conservative:**
+
+- **CUDD symbolic build and CUDD build+truth-table extraction are different metrics
+  and must not be collapsed.** Symbolic build (13–25 µs median) beats every flat-output
+  method — but it produces a BDD, not a truth table.
+- When the deliverable is the flat 2^n output, extraction dominates CUDD entirely:
+  0.364 s at n=16 (guarded off above n=16 by `--robdd-tt-extract-max-n 16`), roughly
+  4,000–5,000× the Bitset full-output time on the same expressions.
+- CUDD build is ~5–8× faster than `dd.autoref` build on identical expressions in the
+  identical environment; extraction is ~2× faster than autoref's at n=16.
+- Depth-4 `ordinary` expressions collapse to small BDDs (9–20 nodes), so build times
+  here measure the small-BDD regime only; no claim is made about hard/large-BDD
+  workloads.
+
+**Limitations:** the pod has 2 shared vCPUs — absolute times are noisier than a
+dedicated box (§8 variance statement applies); `best-of-k` ordering (10 sweeps) was
+granted to ROBDD, favoring it; TT extraction was measured only at n=16 by design;
+the RunPod numbers should not be mixed with the local-Docker smoke numbers.
+
 ## 8. Variance statement
 
 Full-arity large-n session CVs in this session's runs were 7–16% (consistent with the

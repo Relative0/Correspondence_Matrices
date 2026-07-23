@@ -2,6 +2,14 @@
 
 Date: 2026-06-26
 
+> **2026-07-23 update:** the CUDD numbers below predate the endorsed post-audit code
+> state and were run in local Docker. The current apples-to-apples CUDD vs autoref vs
+> CM vs Bitset comparison (matched expressions, single-invocation rows, RunPod pod)
+> is §7e of `deliverables_n22_24/CM_FABLE_BENCHMARKS_2026-07-21.md`, with outputs
+> `deliverables_n22_24/CM_FABLE_{cudd,autoref}_matched_headline_runpod_{raw,summary}.csv`. The environment
+> findings in this report (native Windows lacks `dd.cudd`; Linux manylinux wheel
+> provides it) were re-verified and still hold.
+
 ## 1. Executive Summary
 
 | Question | Result |
