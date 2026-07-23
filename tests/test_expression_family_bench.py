@@ -96,6 +96,27 @@ class ExpressionFamilyBenchTests(unittest.TestCase):
         self.assertEqual(row["family_cm_cache_ok_rate"], 1.0)
         self.assertIn("family_cm_cache_persistent_hits_total", row)
         self.assertIn("family_cm_cache_persistent_misses_total", row)
+        self.assertEqual(row["family_bitset_baseline_kind"], "raw_ast_recursive")
+
+        # Under --cm-words-eval the Bitset control must use the same engine as
+        # the CM side (latent-fix 1) and stay bit-exact against the references.
+        cm_bench.args = _family_args(cm_words_eval=True, cm_hybrid_threshold=16)
+        words_row = cm_bench.time_expression_family_workload(
+            4,
+            family,
+            family_id="test",
+            trial=0,
+            expr_style="mixed_no_constants",
+            variant_style="composition_mix",
+            mutation_rate=0.15,
+            bit_env=None,
+            sample_rng=np.random.default_rng(4),
+            robdd_order_seed=5,
+        )
+        self.assertEqual(words_row["family_bitset_baseline_kind"], "raw_ast_words")
+        self.assertEqual(words_row["family_bitset_ok_rate"], 1.0)
+        self.assertEqual(words_row["family_cm_no_cache_ok_rate"], 1.0)
+        self.assertEqual(words_row["family_cm_cache_ok_rate"], 1.0)
 
     def test_robdd_unavailable_or_disabled_does_not_crash(self) -> None:
         cm_bench.args = _family_args(no_dd=False, no_robdd_dd=False, robdd_dd_backend="cudd")

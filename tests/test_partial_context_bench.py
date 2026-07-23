@@ -77,6 +77,25 @@ class PartialContextBenchTests(unittest.TestCase):
         self.assertEqual(row["partial_cm_no_cache_ok_rate"], 1.0)
         self.assertEqual(row["partial_cm_cache_ok_rate"], 1.0)
         self.assertIn("partial_cm_cache_live_vars_median", row)
+        self.assertEqual(row["partial_bitset_baseline_kind"], "raw_ast_recursive")
+
+        # Under --cm-words-eval the Bitset controls must use the same engine as
+        # the CM side (latent-fix 1) and stay bit-exact against the references.
+        cm_bench.args = _partial_args(cm_words_eval=True, cm_hybrid_threshold=16)
+        words_row = cm_bench.time_partial_context_workload(
+            3,
+            expr,
+            contexts,
+            trial=0,
+            expr_style="test",
+            bit_env=None,
+            sample_rng=np.random.default_rng(2),
+            robdd_order_seed=3,
+        )
+        self.assertEqual(words_row["partial_bitset_baseline_kind"], "raw_ast_words")
+        self.assertEqual(words_row["partial_bitset_restricted_ok_rate"], 1.0)
+        self.assertEqual(words_row["partial_cm_no_cache_ok_rate"], 1.0)
+        self.assertEqual(words_row["partial_cm_cache_ok_rate"], 1.0)
 
     def test_large_n_does_not_force_full_reference_tables(self) -> None:
         cm_bench.args = _partial_args(full_tt_max_n=4, sampled_correctness=3)

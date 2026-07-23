@@ -601,13 +601,29 @@ def time_partial_context_workload(
         **partial_context_diagnostics(contexts, n_vars, str(config.partial_context_style)),
     }
     if not bool(config.no_bitset):
-        env_full = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n_vars)])
+        # Same engine precedence as the single-expression control: words > flat >
+        # recursive.  The engine changes with the CM-side flags; the scope of each
+        # control (full recompute vs restricted) does not.
+        names_full = tuple(f"x{i}" for i in range(n_vars))
+        use_words_bitset = bool(config.cm_words_eval)
+        use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
+        partial_bitset_baseline_kind = (
+            "raw_ast_words" if use_words_bitset else "raw_ast_flat" if use_flat_bitset else "raw_ast_recursive"
+        )
+        env_full = None
+        if not use_flat_bitset:
+            env_full = bit_env if bit_env is not None else build_bitset_env(list(names_full))
         times_full: List[float] = []
         oks_full: List[Any] = []
         total0 = time.perf_counter()
         for i, context in enumerate(contexts):
             t0 = time.perf_counter()
-            _ = eval_expr_bitset(expr, env_full)
+            if use_words_bitset:
+                _ = eval_expr_words_bitset(expr, names_full)
+            elif use_flat_bitset:
+                _ = eval_expr_flat_bitset(expr, names_full)
+            else:
+                _ = eval_expr_bitset(expr, env_full)
             times_full.append(time.perf_counter() - t0)
             if reference_arrays[i] is not None:
                 oks_full.append(True)
@@ -619,9 +635,18 @@ def time_partial_context_workload(
         restricted_total0 = time.perf_counter()
         for i, context in enumerate(contexts):
             out_vars = _partial_output_vars(n_vars, context, output_mode)
-            env = build_bitset_env(out_vars)
-            t0 = time.perf_counter()
-            bits = _eval_expr_bitset_fixed(expr, env, context)
+            if use_flat_bitset:
+                fixed_map = {str(k): int(v) for k, v in context.items()}
+                t0 = time.perf_counter()
+                bits = (
+                    eval_expr_words_bitset(expr, tuple(out_vars), fixed=fixed_map)
+                    if use_words_bitset
+                    else eval_expr_flat_bitset(expr, tuple(out_vars), fixed=fixed_map)
+                )
+            else:
+                env = build_bitset_env(out_vars)
+                t0 = time.perf_counter()
+                bits = _eval_expr_bitset_fixed(expr, env, context)
             restricted_times.append(time.perf_counter() - t0)
             ref = reference_arrays[i]
             if ref is not None:
@@ -630,6 +655,7 @@ def time_partial_context_workload(
                 restricted_oks.append(None)
         row.update(
             {
+                "partial_bitset_baseline_kind": partial_bitset_baseline_kind,
                 "partial_bitset_full_recompute_total_s": float(full_total),
                 "partial_bitset_full_recompute_per_context_median_s": _median_or_none(times_full),
                 "partial_bitset_ok_rate": _ok_rate(oks_full),
@@ -641,6 +667,7 @@ def time_partial_context_workload(
     else:
         row.update(
             {
+                "partial_bitset_baseline_kind": None,
                 "partial_bitset_full_recompute_total_s": None,
                 "partial_bitset_full_recompute_per_context_median_s": None,
                 "partial_bitset_ok_rate": None,
@@ -988,13 +1015,28 @@ def time_expression_family_workload(
     }
 
     if not bool(config.no_bitset):
-        env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n_vars)])
+        # Same engine precedence as the single-expression control: words > flat >
+        # recursive, so the family control matches the engine the CM side gets.
+        names = tuple(f"x{i}" for i in range(n_vars))
+        use_words_bitset = bool(config.cm_words_eval)
+        use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
+        family_bitset_baseline_kind = (
+            "raw_ast_words" if use_words_bitset else "raw_ast_flat" if use_flat_bitset else "raw_ast_recursive"
+        )
+        env = None
+        if not use_flat_bitset:
+            env = bit_env if bit_env is not None else build_bitset_env(list(names))
         times: List[float] = []
         oks: List[Any] = []
         total0 = time.perf_counter()
         for expr, tt_ref in zip(variants, tt_refs):
             t0 = time.perf_counter()
-            bits = eval_expr_bitset(expr, env)
+            if use_words_bitset:
+                bits = eval_expr_words_bitset(expr, names)
+            elif use_flat_bitset:
+                bits = eval_expr_flat_bitset(expr, names)
+            else:
+                bits = eval_expr_bitset(expr, env)
             times.append(time.perf_counter() - t0)
             if tt_ref is not None:
                 oks.append(bool(np.array_equal(bitset_to_bool_array(int(bits), n_vars), tt_ref)))
@@ -1002,6 +1044,7 @@ def time_expression_family_workload(
                 oks.append(None)
         row.update(
             {
+                "family_bitset_baseline_kind": family_bitset_baseline_kind,
                 "family_bitset_total_time_s": float(time.perf_counter() - total0),
                 "family_bitset_per_variant_median_s": _median_or_none(times),
                 "family_bitset_per_variant_mean_s": _mean_or_none(times),
@@ -1011,6 +1054,7 @@ def time_expression_family_workload(
     else:
         row.update(
             {
+                "family_bitset_baseline_kind": None,
                 "family_bitset_total_time_s": None,
                 "family_bitset_per_variant_median_s": None,
                 "family_bitset_per_variant_mean_s": None,
