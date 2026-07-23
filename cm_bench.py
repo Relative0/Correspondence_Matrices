@@ -29,6 +29,7 @@ from bitset_backend import (
     eval_cm_node_bitset,
     eval_expr_bitset,
     eval_expr_flat_bitset,
+    eval_expr_words_bitset,
 )
 from cm_build import compile_expr_to_cm
 from cmbench.availability import detect_backends
@@ -386,6 +387,7 @@ def _cm_partial_workload(
             fixed=context_map,
             diagnostics=diag,
             hybrid_threshold=config.cm_hybrid_threshold,
+            words_eval=config.cm_words_eval,
             allow_reduced_output=True,
             max_full_output_vars=config.cm_max_full_output_vars,
         )
@@ -859,6 +861,7 @@ def _cm_family_workload(
             fixed={},
             diagnostics=diag,
             hybrid_threshold=config.cm_hybrid_threshold,
+            words_eval=config.cm_words_eval,
             allow_reduced_output=bool(n_vars > config.cm_max_full_output_vars),
             max_full_output_vars=config.cm_max_full_output_vars,
         )
@@ -1530,6 +1533,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    words_eval=config.cm_words_eval,
                 )
                 cm_hybrid_no_reinflate_exec_only_time = time.perf_counter() - t_exec0
                 cm_hybrid_no_reinflate_time = ir_compile_time + cm_hybrid_no_reinflate_exec_only_time
@@ -1547,6 +1551,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    words_eval=config.cm_words_eval,
                 )
                 cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
             cm_hybrid_no_reinflate_tt_extract_time = 0.0
@@ -1588,6 +1593,7 @@ def time_backends_on_expr(
                         fixed={},
                         diagnostics=profile_diag,
                         hybrid_threshold=config.cm_hybrid_threshold,
+                        words_eval=config.cm_words_eval,
                     )
                 cm_hybrid_no_reinflate_cached_exec_only_time = (time.perf_counter() - t_rep0) / float(eval_repeat)
                 if profile_diag is not None:
@@ -1743,6 +1749,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    words_eval=config.cm_words_eval,
                     allow_reduced_output=large_n_safe,
                     max_full_output_vars=int(config.cm_max_full_output_vars),
                 )
@@ -1784,6 +1791,7 @@ def time_backends_on_expr(
                 fixed={},
                 diagnostics=cm_hybrid_no_reinflate_diag,
                 hybrid_threshold=config.cm_hybrid_threshold,
+                words_eval=config.cm_words_eval,
                 allow_reduced_output=True,
                 max_full_output_vars=max_full_output_vars,
             )
@@ -1796,9 +1804,18 @@ def time_backends_on_expr(
                 # canonicalized CM DAG. Variables proven irrelevant by CM are fixed to an
                 # arbitrary value; invariance is checked against the CM result below.
                 raw_fixed = {name: 0 for name in vars_all if name not in output_vars}
-                bitset_baseline_kind = "raw_ast_flat_matched_scope"
+                use_words_bitset = bool(config.cm_words_eval)
+                bitset_baseline_kind = (
+                    "raw_ast_words_matched_scope"
+                    if use_words_bitset
+                    else "raw_ast_flat_matched_scope"
+                )
                 t7 = time.perf_counter()
-                bitset_tt = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
+                bitset_tt = (
+                    eval_expr_words_bitset(expr, output_vars, fixed=raw_fixed)
+                    if use_words_bitset
+                    else eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
+                )
                 bitset_time = time.perf_counter() - t7
                 if res_nr.bits is not None:
                     cm_hybrid_no_reinflate_ok = bool(int(res_nr.bits) == int(bitset_tt))
@@ -1812,7 +1829,10 @@ def time_backends_on_expr(
                 if eval_repeat > 1:
                     t7r = time.perf_counter()
                     for _ in range(eval_repeat):
-                        _ = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
+                        if use_words_bitset:
+                            _ = eval_expr_words_bitset(expr, output_vars, fixed=raw_fixed)
+                        else:
+                            _ = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
                     bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             else:
                 cm_hybrid_no_reinflate_ok = True
@@ -1845,6 +1865,7 @@ def time_backends_on_expr(
                         fixed={},
                         diagnostics=profile_diag,
                         hybrid_threshold=config.cm_hybrid_threshold,
+                        words_eval=config.cm_words_eval,
                         allow_reduced_output=True,
                         max_full_output_vars=max_full_output_vars,
                     )
@@ -2018,12 +2039,17 @@ def time_backends_on_expr(
                 print(f"[n={n}] Bitset eval ...")
             local_bit_env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n)])
             bitset_vars = tuple(f"x{i}" for i in range(n))
-            use_flat_bitset = bool(config.cm_flat_eval)
-            if use_flat_bitset:
+            use_words_bitset = bool(config.cm_words_eval)
+            use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
+            if use_words_bitset:
+                bitset_baseline_kind = "raw_ast_words"
+            elif use_flat_bitset:
                 bitset_baseline_kind = "raw_ast_flat"
             t7 = time.perf_counter()
             bitset_tt = (
-                eval_expr_flat_bitset(expr, bitset_vars)
+                eval_expr_words_bitset(expr, bitset_vars)
+                if use_words_bitset
+                else eval_expr_flat_bitset(expr, bitset_vars)
                 if use_flat_bitset
                 else eval_expr_bitset(expr, local_bit_env)
             )
@@ -2031,7 +2057,9 @@ def time_backends_on_expr(
             if eval_repeat > 1:
                 t7r = time.perf_counter()
                 for _ in range(eval_repeat):
-                    if use_flat_bitset:
+                    if use_words_bitset:
+                        _ = eval_expr_words_bitset(expr, bitset_vars)
+                    elif use_flat_bitset:
                         _ = eval_expr_flat_bitset(expr, bitset_vars)
                     else:
                         _ = eval_expr_bitset(expr, local_bit_env)
@@ -2470,6 +2498,7 @@ def time_backends_on_expr(
         "bitset_extract_time_s": bitset_extract_time,
         "bitset_ok": bitset_ok,
         "bitset_baseline_kind": bitset_baseline_kind,
+        "cm_words_eval": bool(config.cm_words_eval),
         "cm_time_excludes_tt_extract": True,
         "cm_hybrid_time_excludes_tt_extract": True,
         "cm_partial_hybrid_time_excludes_tt_extract": True,
@@ -3312,6 +3341,7 @@ def run_bench(
     agg["backend_cm_compare_hybrid"] = bool(config.cm_compare_hybrid)
     agg["backend_cm_compare_no_reinflate"] = bool(config.cm_compare_no_reinflate)
     agg["cm_hybrid_threshold"] = int(config.cm_hybrid_threshold)
+    agg["cm_words_eval"] = bool(config.cm_words_eval)
     agg["cm_default_materialize_mode"] = "numpy" if config.cm_compare_hybrid else "partial_hybrid"
     agg["cm_layout"] = config.cm_layout
     agg["expr_style"] = expr_style
@@ -3758,6 +3788,7 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             fixed={},
             diagnostics=diag_a,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            words_eval=bool(bench_config.cm_words_eval),
         )
         eval_a = time.perf_counter() - t2
         t3 = time.perf_counter()
@@ -3767,6 +3798,7 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             fixed={},
             diagnostics=diag_b,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            words_eval=bool(bench_config.cm_words_eval),
         )
         eval_b = time.perf_counter() - t3
         t4 = time.perf_counter()
@@ -4521,7 +4553,7 @@ def main():
     ap.add_argument("--cm-lazy", action="store_true")
     ap.add_argument("--cm-pair", action="store_true", help="Use pair-aware token backend when applicable (experimental)")
     ap.add_argument("--cm-layout", type=str, default="balanced", choices=["balanced", "legacy_square"])
-    ap.add_argument("--cm-hybrid-threshold", type=int, default=7)
+    ap.add_argument("--cm-hybrid-threshold", type=int, default=16)
     ap.add_argument("--cm-compare-hybrid", action="store_true")
     ap.add_argument("--cm-compare-no-reinflate", dest="cm_compare_no_reinflate", action="store_true")
     ap.add_argument("--cm-report-ir-breakdown", action="store_true")
@@ -4553,6 +4585,12 @@ def main():
         action="store_true",
         help="Use the C1a flat (linearized) evaluator for the no-reinflate bitset branch.",
     )
+    ap.add_argument(
+        "--cm-words-eval",
+        dest="cm_words_eval",
+        action="store_true",
+        help="Use the numpy-uint64 words evaluator for CM and the matched raw-AST Bitset.",
+    )
     ap.add_argument("--cm-parallel", action="store_true")
     ap.add_argument("--cm-parallel-workers", type=int, default=0)
     ap.add_argument("--cm-parallel-min-n", type=int, default=8)
@@ -4582,6 +4620,10 @@ def main():
         from cm_ir import set_flat_eval_default
 
         set_flat_eval_default(True)
+    if config.cm_words_eval:
+        from cm_ir import set_words_eval_default
+
+        set_words_eval_default(True)
 
     if config.cm_runpod_smoke_test:
         from cm_runpod_smoke_test import run_smoke_test

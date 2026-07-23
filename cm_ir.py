@@ -9,7 +9,12 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 
 import numpy as np
 
-from bitset_backend import bitset_to_bool_hypercube, eval_cm_node_bitset, eval_cm_node_flat
+from bitset_backend import (
+    bitset_to_bool_hypercube,
+    eval_cm_node_bitset,
+    eval_cm_node_flat,
+    eval_cm_node_words,
+)
 from cm_exprlib import And, Eqv, Expr, Imp, Not, Or, Var, Xor
 
 
@@ -82,12 +87,19 @@ def cm_ir_persistent_cache_stats() -> Dict[str, int]:
 # C1a flat evaluator (see bitset_backend.eval_cm_node_flat). Off by default; the
 # per-call ``flat_eval`` parameter overrides this module default when not None.
 _FLAT_EVAL_DEFAULT = False
+_WORDS_EVAL_DEFAULT = False
 
 
 def set_flat_eval_default(enabled: bool) -> None:
     """Set the process-wide default for the no-reinflate flat evaluator (C1a)."""
     global _FLAT_EVAL_DEFAULT
     _FLAT_EVAL_DEFAULT = bool(enabled)
+
+
+def set_words_eval_default(enabled: bool) -> None:
+    """Set the process-wide CLI/harness default for the opt-in words evaluator."""
+    global _WORDS_EVAL_DEFAULT
+    _WORDS_EVAL_DEFAULT = bool(enabled)
 
 
 def _expr_var_name(expr: Any) -> str:
@@ -1451,6 +1463,7 @@ def materialize_hybrid_no_reinflate(
     allow_reduced_output: bool = False,
     max_full_output_vars: Optional[int] = None,
     flat_eval: Optional[bool] = None,
+    words_eval: Optional[bool] = None,
     flat_fast_path: bool = True,
 ) -> FinalNoReinflateResult:
     """Hybrid materialization that avoids dense CM reinflation.
@@ -1464,7 +1477,8 @@ def materialize_hybrid_no_reinflate(
     # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
     # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
     use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
-    if diagnostics is None and use_flat and flat_fast_path:
+    use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+    if diagnostics is None and (use_flat or use_words) and flat_fast_path:
         if hybrid_threshold < 0:
             raise ValueError("hybrid_threshold must be >= 0")
         fast_fixed_map = fixed or {}
@@ -1496,7 +1510,11 @@ def materialize_hybrid_no_reinflate(
         if len(fast_live_vars) <= hybrid_threshold:
             return FinalNoReinflateResult(
                 final_output_representation_code=3 if fast_reduced else 2,
-                bits=eval_cm_node_flat(node, fast_output_vars, fixed=fast_fixed_map),
+                bits=(
+                    eval_cm_node_words(node, fast_output_vars, fixed=fast_fixed_map)
+                    if use_words
+                    else eval_cm_node_flat(node, fast_output_vars, fixed=fast_fixed_map)
+                ),
                 tt=None,
                 output_vars=fast_output_vars,
             )
@@ -1552,7 +1570,9 @@ def materialize_hybrid_no_reinflate(
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
         t_profile_eval0 = time.perf_counter() if profile else None
-        if use_flat:
+        if use_words:
+            bits = eval_cm_node_words(node, output_vars, fixed=fixed_map)
+        elif use_flat:
             bits = eval_cm_node_flat(node, output_vars, fixed=fixed_map)
         else:
             bits = eval_cm_node_bitset(node, output_vars, fixed=fixed_map)

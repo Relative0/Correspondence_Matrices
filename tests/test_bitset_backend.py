@@ -14,6 +14,8 @@ from bitset_backend import (
     eval_expr_bitset,
     eval_expr_flat_bitset,
     eval_expr_words_bitset,
+    get_expr_flat_program,
+    get_flat_program,
 )
 from cm_exprlib import Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import compile_expr_to_cm_ir
@@ -152,6 +154,28 @@ class BitsetBackendTests(unittest.TestCase):
         self.assertEqual(
             wide_ref, eval_expr_words_bitset(wide, wide_live, fixed={"x3": 1})
         )
+
+        # Exercise the real >=18-variable, >=64-slot release branch in pytest.
+        expr = Var(0)
+        for index in range(24):
+            expr = Imp(
+                Xor(expr, Var((index + 1) % 18)),
+                Eqv(Var((index + 5) % 18), Or(Var((index + 9) % 18), Var((index + 13) % 18))),
+            )
+        node = compile_expr_to_cm_ir(expr)
+        vars_key = tuple(f"x{i}" for i in range(18))
+        self.assertGreaterEqual(get_expr_flat_program(expr).n_slots, 64)
+        self.assertGreaterEqual(get_flat_program(node).n_slots, 64)
+
+        raw_retained = eval_expr_flat_bitset(expr, vars_key, free_dead_slots=False)
+        raw_released = eval_expr_flat_bitset(expr, vars_key, free_dead_slots=True)
+        cm_retained = eval_cm_node_flat(node, vars_key, free_dead_slots=False)
+        cm_released = eval_cm_node_flat(node, vars_key, free_dead_slots=True)
+        recursive = eval_expr_bitset(expr, build_bitset_env(vars_key))
+        self.assertEqual(recursive, raw_retained)
+        self.assertEqual(raw_retained, raw_released)
+        self.assertEqual(raw_retained, cm_retained)
+        self.assertEqual(cm_retained, cm_released)
 
 
 if __name__ == "__main__":

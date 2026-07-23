@@ -36,7 +36,7 @@ class BenchmarkConfig:
     max_tt_density: float = 0.95
 
     cm_layout: str = "balanced"
-    cm_hybrid_threshold: int = 7
+    cm_hybrid_threshold: int = 16
     cm_compare_hybrid: bool = False
     cm_compare_no_reinflate: bool = False
     cm_use_persistent_cache: bool = False
@@ -45,6 +45,7 @@ class BenchmarkConfig:
     cm_eval_repeat: int = 1
     cm_max_full_output_vars: int = 16
     cm_flat_eval: bool = False
+    cm_words_eval: bool = False
     cm_exec_target: Literal["local", "runpod"] = "local"
     cm_runpod_local_mock: bool = False
     cm_runpod_smoke_test: bool = False
@@ -176,7 +177,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         min_tt_density=float(getattr(args, "min_tt_density", 0.05)),
         max_tt_density=float(getattr(args, "max_tt_density", 0.95)),
         cm_layout=str(getattr(args, "cm_layout", "balanced")),
-        cm_hybrid_threshold=int(getattr(args, "cm_hybrid_threshold", 7)),
+        cm_hybrid_threshold=int(getattr(args, "cm_hybrid_threshold", 16)),
         cm_compare_hybrid=bool(getattr(args, "cm_compare_hybrid", False)),
         cm_compare_no_reinflate=bool(getattr(args, "cm_compare_no_reinflate", False)),
         cm_use_persistent_cache=bool(getattr(args, "cm_use_persistent_cache", False)),
@@ -185,6 +186,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         cm_eval_repeat=int(getattr(args, "cm_eval_repeat", 1)),
         cm_max_full_output_vars=int(getattr(args, "cm_max_full_output_vars", 16)),
         cm_flat_eval=bool(getattr(args, "cm_flat_eval", False)),
+        cm_words_eval=bool(getattr(args, "cm_words_eval", False)),
         cm_exec_target=getattr(args, "cm_exec_target", "local"),
         cm_runpod_local_mock=bool(getattr(args, "cm_runpod_local_mock", False)),
         cm_runpod_smoke_test=bool(getattr(args, "cm_runpod_smoke_test", False)),

@@ -46,6 +46,7 @@ def test_single_expr_row_preserves_representative_schema_keys() -> None:
         "bitset_time_s",
         "bitset_ok",
         "bitset_baseline_kind",
+        "cm_words_eval",
         "numba_time_s",
         "numba_ok",
         "sympy_time_s",
@@ -84,6 +85,16 @@ def test_no_reinflate_row_preserves_representative_schema_keys() -> None:
         "sampled_correctness_mismatch_rate",
     }
     assert expected <= set(row)
+
+    words_row = _small_row(
+        cm_compare_no_reinflate=True,
+        cm_words_eval=True,
+        cm_hybrid_threshold=16,
+    )
+    assert words_row["cm_words_eval"] is True
+    assert words_row["bitset_baseline_kind"] == "raw_ast_words"
+    assert words_row["cm_hybrid_no_reinflate_ok"] is True
+    assert words_row["bitset_ok"] is True
 
 
 def test_single_expr_selected_values_stable_for_small_expression() -> None:

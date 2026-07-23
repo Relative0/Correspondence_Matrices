@@ -6,6 +6,10 @@ from cmbench.config import BenchmarkConfig, config_from_args
 
 
 def test_config_from_args_maps_phase3_fields():
+    defaults = BenchmarkConfig(sizes=(2,), trials=1, seed=1, max_depth=2)
+    assert defaults.cm_hybrid_threshold == 16
+    assert defaults.cm_words_eval is False
+
     args = SimpleNamespace(
         sizes="2,3",
         trials=1,
