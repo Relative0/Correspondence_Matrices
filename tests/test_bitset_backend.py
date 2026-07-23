@@ -83,6 +83,26 @@ class BitsetBackendTests(unittest.TestCase):
             bits = eval_expr_bitset(expr, env)
             self.assertEqual(bits & overflow_mask, 0, msg=f"overflow bits set for {type(expr).__name__}")
 
+        # Latent-fix 3: an unknown opcode must raise in every kernel instead of
+        # silently executing as EQV (hand-built program, unreachable from the
+        # compilers, which emit exactly the six known opcodes).
+        from bitset_backend import FlatProgram, _eval_words
+
+        bad = FlatProgram(2, 1, ((0, "var", "x0"),), ((1, 6, (0, 0)),))
+        bad_expr = Not(Var(0))
+        object.__setattr__(bad_expr, "_bitset_flat_program", bad)
+        with self.assertRaisesRegex(ValueError, "unknown flat opcode"):
+            eval_expr_flat_bitset(bad_expr, ("x0",))
+        bad_node = compile_expr_to_cm_ir(Not(Var(0)))
+        object.__setattr__(bad_node, "_flat_program", bad)
+        try:
+            with self.assertRaisesRegex(ValueError, "unknown flat opcode"):
+                eval_cm_node_flat(bad_node, ("x0",))
+        finally:
+            object.__setattr__(bad_node, "_flat_program", None)
+        with self.assertRaisesRegex(ValueError, "unknown flat opcode"):
+            _eval_words(bad, tuple(f"x{i}" for i in range(6)), {})
+
     def test_bitset_env_cache_hits(self) -> None:
         clear_bitset_env_cache()
         before = bitset_env_cache_stats()

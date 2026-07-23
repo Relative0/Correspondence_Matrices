@@ -354,8 +354,10 @@ def eval_cm_node_flat(
             values[slot] = (~values[arg_slots[0]]) & full_mask
         elif opcode == _FLAT_OP_IMP:
             values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
-        else:  # _FLAT_OP_EQV
+        elif opcode == _FLAT_OP_EQV:
             values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+        else:
+            raise ValueError(f"unknown flat opcode: {opcode!r}")
         if release_dead:
             for dead_slot in prog.release_after[op_index]:
                 values[dead_slot] = None
@@ -435,8 +437,10 @@ def eval_expr_flat_bitset(
             values[slot] = (~values[arg_slots[0]]) & full_mask
         elif opcode == _FLAT_OP_IMP:
             values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
-        else:  # _FLAT_OP_EQV
+        elif opcode == _FLAT_OP_EQV:
             values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+        else:
+            raise ValueError(f"unknown flat opcode: {opcode!r}")
         if release_dead:
             for dead_slot in prog.release_after[op_index]:
                 values[dead_slot] = None
@@ -575,9 +579,11 @@ def _eval_words(prog: FlatProgram, vars_key: Tuple[str, ...],
         elif opcode == _FLAT_OP_IMP:
             np.bitwise_not(a0, out=dst)
             np.bitwise_or(dst, a1, out=dst)
-        else:  # _FLAT_OP_EQV
+        elif opcode == _FLAT_OP_EQV:
             np.bitwise_xor(a0, a1, out=dst)
             np.bitwise_not(dst, out=dst)
+        else:
+            raise ValueError(f"unknown flat opcode: {opcode!r}")
     return int.from_bytes(resolve(root_loc).tobytes(), "little")
 
 
