@@ -8,6 +8,15 @@ instrumentation off, medians over ≥5 interleaved rounds, oracle checks outside
 windows, benchmark interpreter `.venv` Python 3.13.5 unless stated. Correctness re-runs
 also executed on system Python 3.10.11.
 
+> **Audit V3 correction (2026-07-23):** This document remains the record of what the
+> Fable session measured. `CM_AUDIT_V3_2026-07-23.md` supersedes three interpretations:
+> (1) fresh n=24 wrapper medians span 1.02–1.09 rather than one universal 1.02;
+> (2) the n=24→32 wrapper drift isolates to fixed-binding bookkeeping in the current
+> matched-scope control, not an inherently growing Bitset kernel; and (3) the §7d
+> “all-live” generator was semantically flawed—only 4/29 rows were truly all-live and
+> the n=32 formula had exact support 16. The corrected all-live V3 series runs through
+> n=26. Original CSVs below are preserved unchanged.
+
 ## 1. Exhaustive correctness (re-run of the audit harness, both interpreters)
 
 - Python 3.13.5: 30 expressions × n=16–24, **134,086,656 rows/method, 0 failures**
@@ -204,6 +213,14 @@ scales with the problem's true support, the raw formula with its nominal size �
 these µs magnitudes a substantial share of the gap is fixed-binding bookkeeping in the
 control, so we report it as a drift with a mechanism, not as "CM dominates at n=32".
 
+**Audit V3 isolation:** Holding the exact formula, support, and FlatProgram constant while
+increasing only ambient n from 24 to 32 raised the raw control by 1.83 µs. The cached
+binder rose by 1.50 µs, prebound operation evaluation changed by -0.08 µs, and the CM
+wrapper changed by -0.13 µs (`CM_V3AUDIT_F4_binding_profile_{raw,summary}.csv`). Thus the
+isolated drift is a property of fixed-map key construction/cache lookup in this control,
+not a growing raw-Bitset evaluation cost. The end-to-end measurements remain valid for
+the current harness; the claimed representation mechanism does not.
+
 ## 7d. Comprehensive full-variable campaign (2026-07-22): nothing reduced, nothing pruned
 
 Two regimes, requested to cover the populations the earlier campaigns didn't: formulas
@@ -221,6 +238,17 @@ and every formula passes a 2,000-row independent scalar oracle that re-evaluates
 original expression from scratch.
 
 **Regime A — all-variables-live, full output (words engine medians):**
+
+> **Audit V3 retraction of the liveness label:** `_balanced_all_vars_once` sometimes
+> constructs `Xor(Xor(a,b), Eqv(a,Not(b)))`, which is constant false. The retry checks
+> `CMNode.vars` (post-rewrite syntactic support), not semantic influence. Exact BDD
+> support found only 4/29 committed rows truly all-live; median semantic support was 16,
+> and the n=32 row's support was 16. The timings and bit-equality fields remain genuine
+> full-*ambient-output* measurements of a sharing-rich family, but they do not establish
+> all-variable liveness and must not be used as the n=32 all-live bracket. Audit V3's
+> corrected generator excludes the cancelling EQV mixer, verifies exact BDD support, and
+> finds CM 1.75–2.52× faster through n=26
+> (`CM_V3AUDIT_F5_corrected_all_live_{raw,summary}.csv`).
 
 | n | CM | Bitset | CM advantage | | n | CM | Bitset | CM advantage |
 |--:|--:|--:|--:|---|--:|--:|--:|--:|
@@ -245,6 +273,11 @@ CM/Bitset ratio: median 0.96, p10–p90 0.90–1.03 — parity with a slight CM 
 uniform across n and live_k. **Conclusion: the guard is a policy cap on output size,
 not a capability wall; lifting it (a parameter) computes these formulas exactly at
 ordinary cost.**
+
+Audit V3 terminology correction: `live_k` here is the safe post-rewrite retained scope,
+not a proof of globally minimal semantic support. Six local reproductions, including
+retained_k 24–26, were complete packed matches plus sampled scalar-oracle matches
+(`CM_V3AUDIT_F5_beyondguard_local.csv`); the policy-cap conclusion survives.
 
 ## 8. Variance statement
 

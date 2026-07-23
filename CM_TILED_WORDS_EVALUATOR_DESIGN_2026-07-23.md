@@ -1,6 +1,6 @@
 # Tiled numpy-words evaluator design
 
-Date: 2026-07-23  
+Date: 2026-07-23
 Status: Audit V3 design note; not implemented
 
 ## Objective

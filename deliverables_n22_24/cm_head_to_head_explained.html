@@ -104,9 +104,10 @@
   technical depth. Every number comes from audited benchmark runs in which both methods
   computed the <em>exact same formulas</em> and every answer was verified bit-for-bit
   against an independent brute-force check.</p>
-  <p class="meta">Data: Fable Audit V2, 2026-07-21/22 · Python 3.13.5 · medians of paired,
-  interleaved runs · sources: <code>CM_FABLE_AUDIT_V2_2026-07-21.md</code>,
-  <code>CM_FABLE_BENCHMARKS_2026-07-21.md</code><br>
+  <p class="meta">Data: Fable Audit V2 plus adversarial Audit V3 corrections,
+  2026-07-21/23 · Python 3.13.5 · medians of paired, interleaved runs · sources:
+  <code>CM_FABLE_BENCHMARKS_2026-07-21.md</code>,
+  <code>CM_AUDIT_V3_2026-07-23.md</code><br>
   Brian Theory (Droncheff) — contact for questions · analysis &amp; benchmarks with
   Claude Fable 5 (Anthropic)</p>
 
@@ -121,18 +122,17 @@
 
   <section class="card">
     <h2>1 · The kernel contest: pure number-crunching</h2>
-    <p class="sub">Bare computation loops only, no packaging. Ordinary random formulas
-    where all variables matter, computed at full output. Measured to n=24.</p>
+    <p class="sub">Bare computation loops only, no packaging. Balanced formulas evaluated
+    over the full n-variable output. Measured to n=24.</p>
     <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
     <div class="legend" id="lg-k"></div>
     <div id="chart-k"></div>
-    <p class="takeaway"><b>Takeaway:</b> engine for engine, CM's kernel is consistently
-    a bit <b>faster</b> — roughly 5–20% (up to ~40% in the noisiest cell*) — because CM
-    computes each repeated sub-formula once where Bitset re-executes every occurrence.
-    Modest, but consistent across both arithmetic engines.</p>
-    <p class="note">* The n=16 bigint bar (0.61) comes from a 3-formula sample (others:
-    25 formulas); an independent larger run measured 0.83 there — treat it as this
-    chart's noisiest number.</p>
+    <p class="takeaway"><b>Takeaway:</b> engine for engine, CM's kernel is usually at
+    parity to modestly <b>faster</b>, because CM computes each repeated sub-formula once
+    where Bitset re-executes every occurrence. The n=16 bigint cell is the noisy
+    exception with a much larger apparent edge; words at n=24 is a slight CM loss.</p>
+    <p class="note">Audit V3 rerun, 3 generated formulas × 5 paired rounds per n. Treat
+    individual cells as workload samples, not universal constants.</p>
   </section>
 
   <section class="card">
@@ -143,33 +143,37 @@
     every one bit-verified; measured to n=32.</p>
     <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
     <div id="chart-w"></div>
-    <p class="takeaway"><b>Takeaway:</b> CM's fixed few-microsecond packaging cost makes
-    it 2–25% <b>slower</b> at first — but the ratio drifts steadily in CM's favor as the
-    ambient variable count grows, crossing to a <b>CM win from n≈26</b> (0.84 at n=32).
-    The reason: CM's simplified program doesn't care how many variables the surrounding
-    space has, while the Bitset must still bookkeep every dropped variable.</p>
-    <p class="note">An earlier 8-formula pass showed 0.84 at n=24; the 300-formula rerun
-    corrected that to 1.02 (sampling luck) and also fixed a mis-tuned routing threshold
-    that had made ~20% of formulas ~40× slower on the CM side. These bars show the
-    corrected best-honest configuration of both sides.</p>
+    <p class="takeaway"><b>Takeaway:</b> CM is about 5–27% <b>slower</b> through n=24 in
+    the Audit V3 rerun. The archived RunPod series then crosses to a CM win from n≈26
+    (0.84 at n=32), but V3 profiling attributes essentially all isolated ambient-n drift
+    to fixed-binding key construction in the current matched-scope Bitset control—not to
+    an inherently growing Bitset kernel.</p>
+    <p class="note">An earlier 8-formula pass showed 0.84 at n=24. The original
+    300-formula rerun corrected that to 1.02; Audit V3 measured 1.05 on the same
+    population and 1.08–1.09 on two fresh 300-formula populations. The robust conclusion
+    is parity to a modest Bitset edge, not one universal constant. Threshold 16 also
+    removes the former ~40× fallback cliff.</p>
   </section>
 
   <section class="card">
-    <h2>3 · The frontier: huge formulas, nothing pruned</h2>
-    <p class="sub">Two hard populations, measured to n=32. Green: formulas built so
-    <em>every</em> variable matters, computed to the complete 2ⁿ-row answer — 4.3
-    billion rows at n=32. Violet: formulas the safety guard normally refuses (17–26
-    relevant variables), computed exactly over their true support.</p>
+    <h2>3 · The frontier: sharing-rich full output and beyond the guard</h2>
+    <p class="sub">Green: Audit V3's corrected, semantically all-live sharing-rich
+    formulas, computed to full output through n=26. Violet: formulas the safety guard
+    normally refuses (17–26 retained variables), computed exactly over that scope to
+    n=32.</p>
     <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
     <div class="legend" id="lg-f"></div>
     <div id="chart-f"></div>
-    <p class="takeaway"><b>Takeaway:</b> on the all-variables-live formulas (green) CM is
-    <b>1.4–3.3× faster</b> — at n=32, 3.86 s vs 7.78 s for the full 4.3-billion-row
-    table, bit-verified. Honest caveat: this family deliberately repeats sub-formulas,
-    CM's best case; together with chart 1 (~parity on sparse formulas) it brackets CM's
-    true kernel advantage. The beyond-guard formulas (violet) land at ≈0.96 — a tie —
-    proving the guard is a <b>policy cap on output size, not a limit on what CM can
-    compute</b>: lift the parameter and the same kernels produce the exact answer.</p>
+    <p class="takeaway"><b>Takeaway:</b> on corrected all-live formulas (green), CM is
+    <b>1.75–2.52× faster</b> through n=26. This family deliberately repeats
+    sub-formulas—CM's favorable bracket—and its raw-AST/CM-op compression strongly
+    predicts the speed advantage. The beyond-guard formulas (violet) land near 0.96,
+    confirming that the guard is a <b>policy cap on output size, not a kernel capability
+    wall</b>.</p>
+    <p class="note"><b>Audit V3 correction:</b> the former green n=16–32 series was
+    removed. Its generator checked only post-rewrite syntactic variables; an EQV/XOR
+    identity cancelled whole subtrees semantically. Only 4 of 29 rows were truly
+    all-live, and the n=32 row had exact BDD support 16, not 32.</p>
     <details><summary>Data table — all three charts (CM ÷ Bitset)</summary><div id="tbl"></div></details>
   </section>
 
@@ -215,8 +219,8 @@
   <h3>What the charts show, in words</h3>
   <ul>
     <li><b>The engine room (kernel, blue &amp; teal bars):</b> stripped to pure
-    computation, CM is the faster machine — typically 5–20% quicker, sometimes more. Its
-    edge comes from the merging step: if the same sub-formula appears five times, Bitset
+    computation, CM is usually at parity to modestly faster on this family. Its edge
+    comes from the merging step: if the same sub-formula appears five times, Bitset
     computes it five times, CM computes it once.</li>
     <li><b>The front desk (wrapper, yellow bars):</b> the complete CM function also
     checks safety limits, works out which variables matter, and packages the result. That
@@ -231,17 +235,15 @@
     front desk and all; formulas that stayed complex left Bitset modestly ahead.</li>
     <li><b>A lesson in sample size (and honesty):</b> an early 8-formula pass showed CM
     winning outright at n=24 (0.84). Rerunning with 300 formulas per size showed that was
-    luck — the true n=24 figure is 1.02, a statistical tie. The big campaign also caught
+    luck; repeated audits place the median at 1.02–1.09. The big campaign also caught
     a mis-tuned internal setting that had been making ~20% of formulas ~40× slower on
     the CM side; with it fixed, no pathological cases remain. Bigger samples made the
     result both fairer to Bitset <em>and</em> kinder to CM's worst case.</li>
-    <li><b>The frontier (chart 3):</b> when formulas are built so that <em>every</em>
-    variable genuinely matters, CM computes the complete answer 1.4–3.3× faster all the
-    way to n=32 — 4.3 billion rows in 3.9 seconds versus Bitset's 7.8 — though that
-    family plays to CM's strength (repeated sub-formulas). And the formulas the safety
-    guard normally refuses turn out to be perfectly computable: computed exactly over
-    the variables that matter, they land in a dead heat (≈0.96). The refusal was always
-    a size policy, never an inability.</li>
+    <li><b>The frontier (chart 3):</b> the corrected all-live sharing-rich family gives
+    CM a 1.75–2.52× advantage through n=26. The original n=32 point is retracted from
+    this claim because its formula had only 16 semantically live variables. Formulas the
+    safety guard normally refuses remain exactly computable over retained scopes and
+    land near a dead heat (≈0.96).</li>
   </ul>
 
   <h3>So where is CM's real value?</h3>
@@ -276,7 +278,9 @@
     logical identity); the original parenthesization, argument order, duplicate subterms,
     and eliminated branches are not recoverable from the IR. The result is still a
     <em>structural formula</em> (an operator DAG over named variables with a computed
-    live-variable set <code>node.vars</code>) — not a truth table.</li>
+    post-rewrite variable set <code>node.vars</code>) — not a truth table. This set is a
+    sound support over-approximation, not a guarantee that every retained variable is
+    semantically essential.</li>
     <li><b>C1a flat compilation (<code>compile_flat</code>).</b> <b>Fully lossless.</b>
     The interned DAG is topologically linearized into a slot program — one instruction
     per <em>unique</em> DAG node. No rewriting occurs here; it is purely an execution
@@ -310,8 +314,9 @@
 
   <h2>Why CM computes fast — three separable mechanisms</h2>
   <ol>
-    <li><b>Work scales with 2<sup>live_k</sup>, not 2<sup>n</sup>.</b> Canonicalization
-    computes the true support of the function. A 24-variable formula with 6 live
+    <li><b>Work scales with 2<sup>retained_k</sup>, not 2<sup>n</sup>.</b>
+    Canonicalization safely removes variables eliminated by its rewrite rules, but does
+    not compute globally minimal semantic support. A 24-variable formula reduced to 6
     variables costs a 64-bit-wide evaluation, not a 16.8M-bit one, and the output guard
     (<code>live_k ≤ 16</code>) makes infeasible requests an explicit, checkable refusal
     rather than an OOM. Note this is a <em>capability</em>, deliberately neutralized in
@@ -330,7 +335,8 @@
   <p>The public entry point (<code>materialize_hybrid_no_reinflate</code>) adds guard
   checks, live-variable scope planning, and result-object construction: a roughly fixed
   <b>3–5 µs per call</b>. Against a 2–6 µs kernel (chart 2's reduced-scope regime)
-  that is a 1.02–1.25× end-to-end deficit at the medians (300 formulas/n); against an
+  that is a roughly 1.02–1.27× end-to-end deficit at the medians (300 formulas/n);
+  Audit V3 cross-session n=24 values span 1.02–1.09. Against an
   84 ms full-output computation at n=22 it measured ~0.5%. The audit also landed a
   diagnostics-off fast path that trims this, verified path-equivalent to the
   instrumented reference.</p>
@@ -344,7 +350,8 @@
     leaves drawing uniformly from n variables, minus canonicalization's eliminations.
     Measured: median live_k 5–6, p90 8–9, max 11–12 at <em>every</em> n from 16 to 24.
     The early n=24 batch drawing all eight ≤6 was a few-percent-probability accident;
-    the robust n=24 median ratio is <b>1.02</b>, and the corrected chart shows it.</li>
+    the original robust n=24 median was <b>1.02</b>; Audit V3 measured 1.05 on the same
+    population and 1.08–1.09 on fresh seeds.</li>
     <li><b>Stratified by live_k</b> (threshold-16 configuration): live_k ≤ 4 → CM ahead
     or tied end-to-end (0.87–1.06 across sizes); live_k 5–7 → Bitset modestly ahead
     (1.05–1.28); live_k ≥ 8 → Bitset ahead (1.12–1.38).</li>
@@ -354,8 +361,9 @@
     surfaced. The bitset kernel handles 2<sup>16</sup>-bit outputs cheaply, so raising
     the threshold to 16 eliminates the cliff (that stratum: 38–45× → 1.12–1.38×) while
     leaving all other strata unchanged and all outputs bit-identical. Recommendation:
-    make <code>--cm-hybrid-threshold 16</code> the benchmark default; chart 2 above
-    uses it, as the best honest configuration of both sides.</li>
+    make <code>--cm-hybrid-threshold 16</code> the benchmark default. Audit V3 confirmed
+    the change on 1,500 paired formulas and adopted it as the harness default; the
+    lower-level library defaults remain unchanged.</li>
   </ul>
   <p>Data: <code>CM_FABLE_wrapper_stats300_{raw,summary}.csv</code> (threshold 7) and
   <code>CM_FABLE_wrapper_stats300_t16_{raw,summary}.csv</code> (threshold 16).</p>
@@ -425,12 +433,12 @@ function el(tag, attrs, parent) {
 }
 
 const KERNEL = { n: [16, 18, 20, 22, 24],
-  "bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92],
-  "words engine": [0.78, 0.90, 0.90, 0.92, 0.96] };
+  "bigint engine": [0.56, 0.85, 0.89, 0.96, 0.87],
+  "words engine": [0.90, 0.89, 0.96, 0.94, 1.04] };
 const WRAPPER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "end-to-end wrapper vs fair Bitset": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84] };
+  "end-to-end wrapper vs fair Bitset": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84] };
 const FRONTIER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "full output, all variables live": [0.57, 0.46, 0.67, 0.49, 0.70, 0.40, 0.43, 0.51, 0.50],
+  "corrected all-live, sharing-rich": [0.48, 0.53, 0.57, 0.48, 0.40, 0.53, null, null, null],
   "beyond-guard, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
 
 function legendInto(id, names, colors) {
@@ -484,7 +492,7 @@ function ratioChart(mountId, data, colors, opts = {}) {
 legendInto("lg-k", ["bigint engine", "words engine"], [css("--s1"), css("--s2")]);
 ratioChart("chart-k", KERNEL, [css("--s1"), css("--s2")], {maxV: 1.2});
 ratioChart("chart-w", WRAPPER, [css("--s3")], {maxV: 1.45});
-legendInto("lg-f", ["full output, all variables live", "beyond-guard, computed over support"],
+legendInto("lg-f", ["corrected all-live, sharing-rich", "beyond-guard, computed over support"],
            [css("--s4"), css("--s5")]);
 ratioChart("chart-f", FRONTIER, [css("--s4"), css("--s5")], {maxV: 1.2});
 
@@ -493,7 +501,7 @@ const TBL_COLS = [
   ["kernel bigint", KERNEL, "bigint engine"],
   ["kernel words", KERNEL, "words engine"],
   ["wrapper", WRAPPER, "end-to-end wrapper vs fair Bitset"],
-  ["full output all-live", FRONTIER, "full output, all variables live"],
+  ["corrected all-live", FRONTIER, "corrected all-live, sharing-rich"],
   ["beyond-guard", FRONTIER, "beyond-guard, computed over support"],
 ];
 document.getElementById("tbl").innerHTML = "<table><tr><th>n</th>" +

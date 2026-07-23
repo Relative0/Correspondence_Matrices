@@ -1,4 +1,4 @@
-<title>CM Benchmarks — Fable Audit V2</title>
+<title>CM Benchmarks — Audit V3 corrected</title>
 <style>
   :root {
     color-scheme: light;
@@ -77,11 +77,11 @@
 
 <main>
   <header class="pg">
-    <h1>CM benchmark results — endorsed state after Fable Audit V2</h1>
-    <p>Medians from the 2026-07-21/22 audit session, benchmark venv Python 3.13.5,
+    <h1>CM benchmark results — corrected by adversarial Audit V3</h1>
+    <p>Medians from the 2026-07-21/23 audit chain, benchmark venv Python 3.13.5,
     instrumentation off, oracle checks outside timed windows. Every kernel shown is
-    bit-identical to <code>eval_expr_tt</code>. Source data:
-    <code>deliverables_n22_24/CM_FABLE_BENCHMARKS_2026-07-21.md</code>.<br>
+    bit-identical to its independent control. Source map:
+    <code>deliverables_n22_24/CM_V3AUDIT_F6_chart_trace.csv</code>.<br>
     <span style="color:var(--muted); font-size:13px;">Brian Theory (Droncheff) — contact
     for questions · charts &amp; analysis with Claude Fable 5 (Anthropic).</span></p>
     <div style="margin-top:14px; padding:12px 16px; background:var(--surface); border:1px solid var(--ring); border-radius:8px; font-size:13.5px; color:var(--ink-2); max-width:78ch;">
@@ -109,9 +109,9 @@
       <div id="c1"></div>
       <p class="takeaway"><b>Takeaway:</b> CM and Bitset are nearly tied at every size —
       the two lines of each color pair sit almost on top of each other. What really matters
-      is the arithmetic engine: at n=24, both methods take roughly <b>1 second</b> with the
-      standard engine ("bigint") but only about <b>0.14 seconds</b> with the new numpy
-      engine ("words"). Neither CM nor Bitset dominates the other here.</p>
+      is the arithmetic engine: at n=24, both methods take roughly <b>0.9–1.0 seconds</b>
+      with the standard engine ("bigint") but only about <b>0.14 seconds</b> with the new
+      numpy engine ("words"). Neither CM nor Bitset dominates the other here.</p>
       <details><summary>Data table (µs, median)</summary><div id="t1"></div></details>
     </section>
 
@@ -125,9 +125,9 @@
       <div id="c2"></div>
       <p class="takeaway"><b>Takeaway:</b> for small formulas (n=12–14) the numpy engine is
       actually <b>slower</b> — its bars fall below the 1× line — so the standard engine
-      remains the default there. From n=16 up it wins, growing to about <b>7× faster at
-      n=24</b>. Crucially, CM and Bitset get almost the same boost, so switching engines
-      doesn't tilt the CM-vs-Bitset contest either way.</p>
+      remains the default there. From n=16 up it wins, reaching <b>6.3× for CM and 7.5×
+      for Bitset at n=24</b>. Both sides receive the same engine; their realized gains are
+      similar in scale, not numerically identical.</p>
       <details><summary>Data table (speedup ×)</summary><div id="t2"></div></details>
     </section>
 
@@ -190,44 +190,45 @@
       <div class="legend" id="lg6"></div>
       <div id="c6"></div>
       <p class="takeaway"><b>Takeaway:</b> in the core number-crunching ("kernel" bars,
-      blue and teal) CM is consistently <b>faster</b> — ratios of roughly 0.6–1.0, i.e. up
-      to ~20–40% quicker, thanks to CM re-using repeated sub-formulas. In the full
+      blue and teal) CM is usually at parity to <b>faster</b> on this family, thanks to CM
+      re-using repeated sub-formulas; one words cell is a slight CM loss. In the full
       end-to-end path a user actually calls ("wrapper", yellow), CM's extra bookkeeping
-      makes it modestly <b>slower</b> — ratios of 1.02–1.25, converging to a statistical
-      tie at n=24. Honest bottom line: <b>neither side dominates on speed</b>. CM's real
+      makes it modestly <b>slower</b> through n=24 — ratios of 1.05–1.27 in Audit V3.
+      Honest bottom line: <b>neither side dominates on speed</b>. CM's real
       advantage is that it can return an exact, compressed answer for huge formulas that
       would otherwise be refused — not that it computes faster.</p>
       <p class="note">The wrapper bars are medians over <b>300 formulas per n</b> (all
       bit-verified), which replaced an earlier 8-formula pass; that small sample had shown
-      0.84 at n=24, corrected here to 1.02 (sampling luck). The campaign also fixed a
+      0.84 at n=24; 300-formula runs now place it at 1.02–1.09 (sampling luck corrected).
+      The campaign also fixed a
       mis-tuned routing threshold that made ~20% of formulas ~40× slower on the CM side —
       the bars show the corrected best-honest configuration of both sides. The wrapper
-      series now extends to n=32 (extended RunPod campaign): it drifts steadily in CM's
-      favor with ambient size, crossing to a CM win from n≈26 (0.84 at n=32). Kernel bars
-      end at n=24 (that family wasn't rerun beyond it). Full detail on the standalone
-      explainer page.</p>
-      <p class="note">* The n=16 blue bar (0.61) comes from a smaller sample (3 formulas)
-      than the other kernel bars (25 samples each); an independent larger run measured 0.83
-      there. Treat n=16 kernel-bigint as the noisiest number on this chart.</p>
+      archived series extends to n=32 and crosses to a CM win from n≈26 (0.84 at n=32).
+      V3 isolation found that essentially all ambient-n drift comes from fixed-binding key
+      work in the current matched-scope control, not an inherently worsening Bitset kernel.
+      Kernel bars end at n=24.</p>
+      <p class="note">Kernel bars are the Audit V3 3-formula × 5-round rerun; the n=16
+      bigint cell is the noisiest.</p>
       <details><summary>Data table (CM ÷ Bitset)</summary><div id="t6"></div></details>
     </section>
 
     <section class="card">
-      <h2>Full-output computation to n=32: every variable live, nothing pruned</h2>
-      <p class="sub">Formulas built so no variable can be simplified away, computed to the
-      complete 2ⁿ-row truth table (4.3 billion rows at n=32) and verified bit-exact.
-      Log time scale. Family caveat: rich in repeated subformulas — CM's best regime.</p>
+      <h2>Corrected all-live, sharing-rich full-output computation</h2>
+      <p class="sub">Audit V3 formulas with exact BDD support equal to n, computed to the
+      complete 2ⁿ-row truth table through n=26 and verified bit-exact. Log time scale.
+      Family caveat: rich in repeated subformulas — CM's favorable regime.</p>
       <span class="howto">⬇ Lower line = faster</span>
       <div class="legend" id="lg7"></div>
       <div id="c7"></div>
-      <p class="takeaway"><b>Takeaway:</b> CM computed the full n=32 truth table in
-      <b>3.9 s</b> vs Bitset's <b>7.8 s</b>, with 1.4–3.3× advantages across n=16–32 —
-      because this family repeats subformulas that CM computes once and Bitset
-      re-executes (the sparse-family kernels sit at ~parity, bracketing the honest
-      range). A companion test computed 72 formulas the safety guard normally refuses
-      (17–26 live variables) exactly over their true support: CM/Bitset ≈ 0.96 — the
-      guard is a policy cap, not a capability wall. Run on RunPod (n≥28 needed a
-      temporary 128 GB pod; ~$0.35).</p>
+      <p class="takeaway"><b>Takeaway:</b> CM is <b>1.75–2.52× faster through n=26</b>
+      because this family repeats subformulas that CM computes once and Bitset re-executes
+      (the sparse-family kernels sit near parity, bracketing the honest range). A companion
+      test computed 72 formulas the safety guard normally refuses
+      (17–26 retained variables) exactly over that reduced scope: CM/Bitset ≈ 0.96 — the
+      guard is a policy cap, not a capability wall.</p>
+      <p class="note"><b>Audit V3 correction:</b> the former n=16–32 series was removed.
+      Only 4/29 formulas were semantically all-live; the n=32 formula's exact support was
+      16. Its full-output timing was bit-exact, but it did not support the all-live claim.</p>
       <details><summary>Data table (ms, median)</summary><div id="t7"></div></details>
     </section>
 
@@ -253,7 +254,8 @@
         <p style="margin:6px 0;"><b style="color:var(--ink)">What the 300-formula campaign
         found.</b> An early 8-formula pass had shown CM winning at n=24 (0.84); rerunning
         with 300 formulas per size (1,500 total, all bit-verified) showed that was sampling
-        luck — the robust n=24 median is 1.02, a statistical tie. The campaign confirmed
+        luck. The archived robust median was 1.02; Audit V3 found 1.05 on the same
+        population and 1.08–1.09 on fresh seeds. The campaign confirmed
         the structural effect behind the original hunch, though: formulas that simplify to
         ≤4 relevant variables put end-to-end CM ahead of the Bitset (0.87–1.0 at larger
         sizes), because CM's compiled formula shrinks while the Bitset still executes
@@ -280,7 +282,7 @@
       <h2>Reading the results together</h2>
       <p class="sub">The honest headline, in one place.</p>
       <ul style="margin:6px 0 10px; padding-left:20px; color:var(--ink-2); font-size:13.5px;">
-        <li><b style="color:var(--ink)">Kernel:</b> CM runs at parity to modestly faster than the best-practice flat Bitset (0.87–0.98× this session) — the residual edge is DAG sharing.</li>
+        <li><b style="color:var(--ink)">Kernel:</b> CM runs at parity to workload-dependent faster than the best-practice flat Bitset on sharing-bearing formulas; the residual edge tracks DAG compression.</li>
         <li><b style="color:var(--ink)">Wrapper:</b> for microsecond-scale reduced outputs the public CM wrapper is parity to ~1.4× <em>slower</em> than the fair Bitset baseline. CM's large-n value is the exact reduced representation and the explicit guard, not raw speed.</li>
         <li><b style="color:var(--ink)">Both sides speed up together:</b> liveness freeing and numpy-words were applied to CM and Bitset alike, so every comparison stays fair.</li>
         <li><b style="color:var(--ink)">Variance:</b> large-n session CVs ran 7–16%; treat single ratios as ranges, and disclose the repr-3/4 mix behind any median.</li>
@@ -329,12 +331,12 @@ function table(id, header, rows) {
 /* ---------- data (session medians) ---------- */
 const N = [12, 14, 16, 18, 20, 22, 24];
 const evalUs = {   // full-output eval, µs
-  "CM bigint":     [245.9, 571.6, 2008.2, 6828.3, 37300.1, 139403.3, 945180.7],
-  "Bitset bigint": [283.0, 740.4, 3304.2, 7564.3, 38925.1, 148559.9, 1029785.3],
-  "CM words":      [541.4, 769.9, 1097.6, 2600.8, 9169.5, 27842.1, 135406.8],
-  "Bitset words":  [603.7, 888.4, 1410.3, 2879.7, 10164.2, 30115.5, 141445.3],
+  "CM bigint":     [206.1, 398.5, 1254.6, 4996.6, 22458.4, 142092.2, 891702.4],
+  "Bitset bigint": [231.7, 492.5, 2250.7, 5863.9, 25275.2, 148364.4, 1019870.6],
+  "CM words":      [445.6, 472.6, 809.6, 1855.8, 6706.8, 27172.1, 141895.1],
+  "Bitset words":  [555.8, 587.2, 902.2, 2090.0, 7005.5, 28764.8, 136547.3],
 };
-const wordsSpeedup = { n: N, "CM": [0.45,0.74,1.83,2.63,4.07,5.01,6.98], "Bitset": [0.47,0.83,2.34,2.63,3.83,4.93,7.28] };
+const wordsSpeedup = { n: N, "CM": [0.46,0.84,1.55,2.69,3.35,5.23,6.28], "Bitset": [0.42,0.84,2.49,2.81,3.61,5.16,7.47] };
 const liveSpeedup  = { n: [18,20,22,24], "CM": [1.11,1.23,2.10,0.99], "Bitset": [1.28,1.09,1.73,0.98] };
 const c3 = { n: [16,18,20,22,24],
   "CM wrapper": [48.0,10.4,12.4,13.0,6.5],
@@ -342,13 +344,13 @@ const c3 = { n: [16,18,20,22,24],
   "corrected Bitset baseline (flat)": [42.2,8.5,9.9,10.5,7.7] };
 // CM / Bitset ratios on identical expressions, matched engines (null = not measured)
 const cmOverBitset = { n: [16,18,20,22,24,26,28,30,32],
-  "kernel, bigint engine (full output)": [0.61, 0.87, 0.89, 0.98, 0.92, null, null, null, null],
-  "kernel, words engine (full output)":  [0.78, 0.90, 0.90, 0.92, 0.96, null, null, null, null],
-  "wrapper vs fair Bitset (reduced scope)": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84] };
-// Comprehensive campaign: all-variables-live formulas at FULL 2^n output (words, µs)
-const fullVars = { n: [16,18,20,22,24,26,28,30,32],
-  "CM words": [70, 160, 490, 2340, 10210, 44780, 218610, 969530, 3855590],
-  "Bitset words": [130, 290, 700, 3970, 14600, 111850, 731120, 1897050, 7778040] };
+  "kernel, bigint engine (full output)": [0.56, 0.85, 0.89, 0.96, 0.87, null, null, null, null],
+  "kernel, words engine (full output)":  [0.90, 0.89, 0.96, 0.94, 1.04, null, null, null, null],
+  "wrapper vs fair Bitset (reduced scope)": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84] };
+// Audit V3 corrected semantically all-live sharing-rich formulas (words, µs)
+const fullVars = { n: [16,18,20,22,24,26],
+  "CM words": [164.45, 369.17, 1252.44, 6595.09, 32325.20, 184430.00],
+  "Bitset words": [308.55, 722.51, 2281.94, 14662.84, 81394.90, 353951.40] };
 const envMs = { n: [14,16,18,20], "old builder": [13.6,117.3,1176,16269], "vectorized": [1.32,5.78,35.2,123] };
 
 /* ---------- renderers ---------- */
