@@ -142,7 +142,16 @@
     handful of relevant variables (microsecond-scale computations). 300 formulas per n,
     every one bit-verified; measured to n=32.</p>
     <span class="howto">Below the dashed 1× line = CM faster · above it = Bitset faster</span>
+    <div class="legend" id="lg-w"></div>
     <div id="chart-w"></div>
+    <p class="note"><b>The gray bars are a different metric</b>, shown for context only:
+    CUDD (the industry-standard BDD engine, via <code>dd.cudd</code> on Linux) building
+    its <em>symbolic</em> ROBDD for the same 300 formulas per n, divided by the same
+    Bitset time. A symbolic build returns a graph, not the flat answer the CM/Bitset
+    contest produces — extracting the flat answer from the BDD costs thousands of times
+    more (0.36 s at n=16) and is infeasible at 2³². Same-session rerun, identical seeds,
+    every row verified <code>robdd_is_cudd=True</code> with sampled correctness 300/300
+    at every n (<code>CM_FABLE_cudd_wrapper32_{raw,summary}.csv</code>).</p>
     <p class="takeaway"><b>Takeaway:</b> CM's fixed few-microsecond packaging cost makes
     it 2–25% <b>slower</b> at first — but the ratio drifts steadily in CM's favor as the
     ambient variable count grows, crossing to a <b>CM win from n≈26</b> (0.84 at n=32).
@@ -428,7 +437,8 @@ const KERNEL = { n: [16, 18, 20, 22, 24],
   "bigint engine": [0.61, 0.87, 0.89, 0.98, 0.92],
   "words engine": [0.78, 0.90, 0.90, 0.92, 0.96] };
 const WRAPPER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "end-to-end wrapper vs fair Bitset": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84] };
+  "end-to-end wrapper vs fair Bitset": [1.04, 1.25, 1.18, 1.12, 1.02, 0.98, 0.92, 0.89, 0.84],
+  "CUDD symbolic build vs same Bitset (different metric)": [0.63, 4.40, 4.62, 4.81, 3.41, 3.34, 3.18, 3.19, 3.24] };
 const FRONTIER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
   "full output, all variables live": [0.57, 0.46, 0.67, 0.49, 0.70, 0.40, 0.43, 0.51, 0.50],
   "beyond-guard, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
@@ -448,11 +458,12 @@ function ratioChart(mountId, data, colors, opts = {}) {
   const W = 820, H = 340, M = {l: 46, r: 14, t: 16, b: 34};
   const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"}, document.getElementById(mountId));
   const maxV = opts.maxV || 1.45;
+  const step = opts.step || 0.25;
   const x0 = M.l, xw = W - M.l - M.r;
   const gw = xw / data.n.length;
   const bw = Math.min(40, (gw - 14) / names.length - 3);
   const y = v => M.t + (1 - v / maxV) * (H - M.t - M.b);
-  for (let v = 0; v <= maxV; v += 0.25) {
+  for (let v = 0; v <= maxV; v += step) {
     el("line", {x1: x0, x2: x0 + xw, y1: y(v), y2: y(v), stroke: "var(--grid)"}, svg);
     el("text", {x: x0 - 8, y: y(v) + 4, "text-anchor": "end"}, svg).textContent = v.toFixed(2);
   }
@@ -464,8 +475,10 @@ function ratioChart(mountId, data, colors, opts = {}) {
       if (v == null) return;
       const bx = gx - (names.length * (bw + 3)) / 2 + si * (bw + 3) + 1.5;
       const r = el("rect", {x: bx, y: y(v), width: bw, height: (H - M.b) - y(v), rx: 3, fill: colors[si]}, svg);
-      r.addEventListener("mousemove", ev => showTip(ev,
-        `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CM ÷ Bitset)</b> — ${v < 1 ? "CM faster" : v > 1 ? "Bitset faster" : "tie"}`));
+      const isCudd = name.startsWith("CUDD");
+      r.addEventListener("mousemove", ev => showTip(ev, isCudd
+        ? `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CUDD build ÷ Bitset)</b> — symbolic BDD, not a flat answer`
+        : `<span class="t">${name} · n=${n}</span><br><b>${v.toFixed(2)}× (CM ÷ Bitset)</b> — ${v < 1 ? "CM faster" : v > 1 ? "Bitset faster" : "tie"}`));
       r.addEventListener("mouseleave", hideTip);
       if (names.length <= 2 && bw >= 24) {
         el("text", {x: bx + bw/2, y: y(v) - 5, "text-anchor": "middle", class: "val"}, svg)
@@ -483,7 +496,10 @@ function ratioChart(mountId, data, colors, opts = {}) {
 
 legendInto("lg-k", ["bigint engine", "words engine"], [css("--s1"), css("--s2")]);
 ratioChart("chart-k", KERNEL, [css("--s1"), css("--s2")], {maxV: 1.2});
-ratioChart("chart-w", WRAPPER, [css("--s3")], {maxV: 1.45});
+legendInto("lg-w", ["end-to-end wrapper vs fair Bitset",
+                    "CUDD symbolic build vs same Bitset (different metric)"],
+           [css("--s3"), "#9aa2ad"]);
+ratioChart("chart-w", WRAPPER, [css("--s3"), "#9aa2ad"], {maxV: 5.25, step: 1});
 legendInto("lg-f", ["full output, all variables live", "beyond-guard, computed over support"],
            [css("--s4"), css("--s5")]);
 ratioChart("chart-f", FRONTIER, [css("--s4"), css("--s5")], {maxV: 1.2});
@@ -493,6 +509,7 @@ const TBL_COLS = [
   ["kernel bigint", KERNEL, "bigint engine"],
   ["kernel words", KERNEL, "words engine"],
   ["wrapper", WRAPPER, "end-to-end wrapper vs fair Bitset"],
+  ["CUDD build (diff. metric)", WRAPPER, "CUDD symbolic build vs same Bitset (different metric)"],
   ["full output all-live", FRONTIER, "full output, all variables live"],
   ["beyond-guard", FRONTIER, "beyond-guard, computed over support"],
 ];

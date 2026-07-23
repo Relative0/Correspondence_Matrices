@@ -321,6 +321,40 @@ known `hybrid_threshold=7` mis-tuning stratum; see §7b — thr=16 removes it).
   here measure the small-BDD regime only; no claim is made about hard/large-BDD
   workloads.
 
+**Wrapper-campaign extension to n=32 (2026-07-23, RunPod).** To put CUDD next to the
+§7b/§7c wrapper chart at every n including 32,
+`fable_cudd_wrapper32_campaign_2026_07_23.py` (this directory) regenerated the exact
+wrapper-campaign expression stream — `random_expr` depth 4, seeds
+`9_100_000 + 10_000·n + trial`, 300 formulas/n, threshold 16, guard 16, 5 interleaved
+rounds — for n ∈ {16…32}, and added per-formula ROBDD symbolic-build timing for both
+`dd.cudd` and `dd.autoref` (best-of-10 random orders, 64 sampled-assignment
+correctness checks per build; exhaustive checks are infeasible at 2^32). Outputs
+`CM_FABLE_cudd_wrapper32_{raw,summary}.csv`. Validation: 2,700/2,700 rows
+`robdd_is_cudd=True`/`status=ok` on the CUDD side, all sampled checks passed, all
+CM-vs-Bitset bit checks passed; same-session CM/Bitset medians reproduce the published
+wrapper curve (1.05/1.16/1.11/1.05/0.99/0.94/0.90/0.88/0.83 vs published
+1.04/1.25/1.18/1.12/1.02/0.98/0.92/0.89/0.84).
+
+| n | CM/Bitset (this rerun) | CUDD build µs | autoref build µs | CUDD-build/Bitset | CUDD nodes |
+|--:|--:|--:|--:|--:|--:|
+| 16 | 1.05 | 14.5 | 103.9 | 0.63 | 8 |
+| 18 | 1.16 | 13.8 | 105.1 | 4.40 | 9 |
+| 20 | 1.11 | 15.2 | 117.3 | 4.62 | 10 |
+| 22 | 1.05 | 17.3 | 110.9 | 4.81 | 10 |
+| 24 | 0.99 | 12.0 | 106.0 | 3.41 | 9 |
+| 26 | 0.94 | 12.1 | 112.4 | 3.34 | 10 |
+| 28 | 0.90 | 12.5 | 117.3 | 3.18 | 10 |
+| 30 | 0.88 | 13.1 | 123.0 | 3.19 | 12 |
+| 32 | 0.83 | 14.0 | 115.4 | 3.24 | 11 |
+
+Reading: on this reduced-scope regime (Bitset ≈ 3–4 µs at n≥18), CUDD's symbolic build
+runs ~3.2–4.8× the Bitset flat-output time — constant in n, as expected for the
+n-independent live support — while remaining ~8× faster than `dd.autoref`. At n=16 the
+comparison flips (0.63) only because the full 2^16 output makes Bitset slower, not
+because CUDD changed. **The CUDD bars are a different deliverable (a graph, not the
+flat answer)**: they are charted next to the wrapper bars on the two chart pages with
+that caveat stated, and no CUDD build+extract number exists beyond n=16 by design.
+
 **Limitations:** the pod has 2 shared vCPUs — absolute times are noisier than a
 dedicated box (§8 variance statement applies); `best-of-k` ordering (10 sweeps) was
 granted to ROBDD, favoring it; TT extraction was measured only at n=16 by design;
