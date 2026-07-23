@@ -2101,10 +2101,14 @@ def time_backends_on_expr(
         try:
             if verbose:
                 print(f"[n={n}] Bitset eval ...")
-            local_bit_env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n)])
             bitset_vars = tuple(f"x{i}" for i in range(n))
             use_words_bitset = bool(config.cm_words_eval)
             use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
+            # The full bigint environment feeds only the recursive engine; skip
+            # building it when the flat/words branch below will never use it.
+            local_bit_env = None
+            if not use_flat_bitset:
+                local_bit_env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n)])
             if use_words_bitset:
                 bitset_baseline_kind = "raw_ast_words"
             elif use_flat_bitset:
