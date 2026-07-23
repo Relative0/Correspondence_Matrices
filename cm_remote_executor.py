@@ -72,6 +72,7 @@ def build_remote_request(
     eval_repeat: int = 1,
     large_n_safe: bool = False,
     max_full_output_vars: int | None = None,
+    words_eval: bool = False,
 ) -> CMRemoteRequest:
     return CMRemoteRequest.from_expr(
         expr,
@@ -81,4 +82,5 @@ def build_remote_request(
         eval_repeat=eval_repeat,
         allow_reduced_output=large_n_safe,
         max_full_output_vars=max_full_output_vars,
+        words_eval=words_eval,
     )

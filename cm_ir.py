@@ -860,6 +860,7 @@ def evaluate_compiled(
     fixed: Optional[Dict[str, int]] = None,
     diagnostics: Optional[Dict[str, Any]] = None,
     hybrid_threshold: int = 7,
+    words_eval: Optional[bool] = None,
 ):
     """Public reusable API: evaluate a compiled expression in a chosen mode.
 
@@ -875,6 +876,7 @@ def evaluate_compiled(
         fixed=fixed,
         diagnostics=diagnostics,
         hybrid_threshold=hybrid_threshold,
+        words_eval=words_eval,
     )
 
 

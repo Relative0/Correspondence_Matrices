@@ -45,6 +45,13 @@ class CMRunPodTests(unittest.TestCase):
         self.assertEqual(expr_from_json(expr_to_json(expr)), expr)
         req = CMRemoteRequest.from_expr(expr, ["x0", "x1"], request_id="r1")
         self.assertEqual(CMRemoteRequest.from_dict(req.to_dict()), req)
+        self.assertFalse(req.words_eval)
+        req_words = CMRemoteRequest.from_expr(expr, ["x0", "x1"], request_id="r2", words_eval=True)
+        self.assertTrue(req_words.words_eval)
+        self.assertEqual(CMRemoteRequest.from_dict(req_words.to_dict()), req_words)
+        # A pre-words_eval payload (stale sender) still parses, defaulting off.
+        legacy = {k: v for k, v in req_words.to_dict().items() if k != "words_eval"}
+        self.assertFalse(CMRemoteRequest.from_dict(legacy).words_eval)
         resp = CMRemoteResponse.from_dict(
             {
                 "request_id": "r1",
@@ -64,6 +71,15 @@ class CMRunPodTests(unittest.TestCase):
         self.assertTrue(result.response.ok)
         self.assertEqual(result.response.result_repr, "packed_bitset")
         self.assertEqual(result.response.result["bits_hex"], "0x8")
+        # Words provenance round trip (latent-fix 2): the worker honors the
+        # forwarded flag, echoes it, and produces bit-identical output.
+        self.assertIs(result.response.diagnostics.get("remote_words_eval"), False)
+        req_words = build_remote_request(And(Var(0), Var(1)), 2, hybrid_threshold=7, words_eval=True)
+        self.assertTrue(req_words.words_eval)
+        result_words = LocalMockCMRemoteExecutor().execute(req_words)
+        self.assertTrue(result_words.response.ok)
+        self.assertIs(result_words.response.diagnostics.get("remote_words_eval"), True)
+        self.assertEqual(result_words.response.result["bits_hex"], "0x8")
 
     def test_smoke_test_missing_env(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -110,6 +126,7 @@ class CMRunPodTests(unittest.TestCase):
                     "--cm-exec-target",
                     "runpod",
                     "--cm-runpod-local-mock",
+                    "--cm-words-eval",
                     "--no-sympy",
                     "--no-robdd",
                     "--no-dd",
@@ -137,6 +154,10 @@ class CMRunPodTests(unittest.TestCase):
                 self.assertIn(col, row)
             self.assertEqual(row["cm_exec_target"], "runpod")
             self.assertEqual(row["cm_runpod_result_repr"], "packed_bitset")
+            # Words provenance (latent-fix 2): the row may claim words only
+            # because the (mock) worker confirmed it applied words_eval.
+            self.assertEqual(row["cm_words_eval"], "True")
+            self.assertEqual(row["cm_runpod_status"], "ok")
 
     def test_runpod_unavailable_does_not_fallback_by_default(self) -> None:
         root = Path(__file__).resolve().parents[1]

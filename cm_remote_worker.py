@@ -12,7 +12,10 @@ from cm_runpod_protocol import CMRemoteRequest, CMRemoteResponse, result_payload
 
 def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
     started = time.perf_counter()
-    diagnostics: dict[str, Any] = {}
+    # Echoed back so the client can verify words provenance: a worker that
+    # predates the words_eval field will not emit this key, and the client
+    # refuses to record a words run against such a worker.
+    diagnostics: dict[str, Any] = {"remote_words_eval": bool(request.words_eval)}
     try:
         expr = request.to_expr()
         t_compile = time.perf_counter()
@@ -33,6 +36,7 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
                     hybrid_threshold=request.hybrid_threshold,
                     allow_reduced_output=request.allow_reduced_output,
                     max_full_output_vars=request.max_full_output_vars,
+                    words_eval=bool(request.words_eval),
                 )
             else:
                 result = evaluate_compiled(
@@ -41,6 +45,7 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
                     vars_all=request.vars_all,
                     diagnostics=diagnostics,
                     hybrid_threshold=request.hybrid_threshold,
+                    words_eval=bool(request.words_eval),
                 )
         exec_s = time.perf_counter() - t_exec
         repr_name, payload = result_payload(result, return_format=request.return_format)

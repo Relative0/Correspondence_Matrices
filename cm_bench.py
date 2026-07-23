@@ -187,8 +187,25 @@ def remote_response_matches_tt(response, tt_ref: Optional[np.ndarray], n: int) -
     return None
 
 
+def _check_remote_words_provenance(result, words_requested: bool):
+    """Refuse to record a words-provenance row for a remote run without words.
+
+    A worker that predates the ``words_eval`` request field silently ignores it
+    and never echoes ``remote_words_eval`` in its diagnostics; recording such a
+    run would claim cm_words_eval=True while the pod evaluated without words.
+    """
+    if words_requested and result.response.ok and not bool(result.response.diagnostics.get("remote_words_eval")):
+        raise RuntimeError(
+            "remote worker did not confirm words_eval; refusing to record a words run "
+            "against a worker that evaluated without words (redeploy the worker or "
+            "drop --cm-words-eval)"
+        )
+    return result
+
+
 def execute_remote_cm(expr, n: int, *, large_n_safe: bool):
     bench_config = _current_config()
+    words_requested = bool(bench_config.cm_words_eval)
     request = build_remote_request(
         expr,
         n,
@@ -197,13 +214,16 @@ def execute_remote_cm(expr, n: int, *, large_n_safe: bool):
         eval_repeat=int(bench_config.cm_eval_repeat),
         large_n_safe=large_n_safe,
         max_full_output_vars=int(bench_config.cm_max_full_output_vars),
+        words_eval=words_requested,
     )
     if bool(bench_config.cm_runpod_local_mock):
-        return LocalMockCMRemoteExecutor().execute(request)
+        return _check_remote_words_provenance(LocalMockCMRemoteExecutor().execute(request), words_requested)
     config = load_runpod_config()
     executor = RunPodCMRemoteExecutor(config)
     stop_after_run = True if bool(bench_config.cm_runpod_stop_after_run) else None
-    return executor.execute(request, stop_after_run=stop_after_run)
+    return _check_remote_words_provenance(
+        executor.execute(request, stop_after_run=stop_after_run), words_requested
+    )
 
 
 def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = None) -> Dict[str, Any]:

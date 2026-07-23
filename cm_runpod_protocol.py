@@ -24,6 +24,7 @@ class CMRemoteRequest:
     return_format: str = "packed_bitset_or_summary"
     allow_reduced_output: bool = False
     max_full_output_vars: int | None = None
+    words_eval: bool = False
 
     @classmethod
     def from_expr(
@@ -39,6 +40,7 @@ class CMRemoteRequest:
         return_format: str = "packed_bitset_or_summary",
         allow_reduced_output: bool = False,
         max_full_output_vars: int | None = None,
+        words_eval: bool = False,
     ) -> "CMRemoteRequest":
         return cls(
             request_id=request_id or str(uuid.uuid4()),
@@ -51,6 +53,7 @@ class CMRemoteRequest:
             return_format=return_format,
             allow_reduced_output=bool(allow_reduced_output),
             max_full_output_vars=max_full_output_vars,
+            words_eval=bool(words_eval),
         )
 
     @classmethod
@@ -68,6 +71,7 @@ class CMRemoteRequest:
             max_full_output_vars=(
                 None if data.get("max_full_output_vars") is None else int(data.get("max_full_output_vars"))
             ),
+            words_eval=bool(data.get("words_eval", False)),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -82,6 +86,7 @@ class CMRemoteRequest:
             "return_format": self.return_format,
             "allow_reduced_output": self.allow_reduced_output,
             "max_full_output_vars": self.max_full_output_vars,
+            "words_eval": self.words_eval,
         }
 
     def to_expr(self) -> Expr:
