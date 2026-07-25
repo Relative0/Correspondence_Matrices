@@ -301,6 +301,7 @@
 </main>
 <div id="tip"></div>
 
+<script src="v4audit_public_chart_data_2026_07_24.js"></script>
 <script>
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const NS = "http://www.w3.org/2000/svg";
@@ -352,11 +353,11 @@ const c3 = { n: [16,18,20,22,24],
   "old comparator (CM DAG, mislabeled Bitset)": [51.5,17.6,20.4,23.1,10.3],
   "corrected Bitset baseline (flat)": [42.2,8.5,9.9,10.5,7.7] };
 // CM / Bitset ratios on identical expressions, matched engines (null = not measured)
-const cmOverBitset = { n: [16,18,20,22,24,26,28,30,32],
-  "kernel, bigint engine (full output)": [0.56, 0.85, 0.89, 0.96, 0.87, null, null, null, null],
-  "kernel, words engine (full output)":  [0.90, 0.89, 0.96, 0.94, 1.04, null, null, null, null],
-  "wrapper vs fair Bitset (reduced scope)": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84],
-  "CUDD symbolic build ÷ Bitset (different metric)": [0.63, 4.40, 4.62, 4.81, 3.41, 3.34, 3.18, 3.19, 3.24] };
+const cmOverBitset = { n: V4AUDIT_CHART_DATA.wrapper.n,
+  "kernel, bigint engine (full output)": [...V4AUDIT_CHART_DATA.kernel.bigint_engine, null, null, null, null],
+  "kernel, words engine (full output)":  [...V4AUDIT_CHART_DATA.kernel.words_engine, null, null, null, null],
+  "wrapper vs fair Bitset (reduced scope)": V4AUDIT_CHART_DATA.wrapper.cm_over_bitset,
+  "CUDD symbolic build ÷ Bitset (different metric)": V4AUDIT_CHART_DATA.wrapper.cudd_build_over_bitset_contextual };
 // Audit V3 corrected semantically all-live sharing-rich formulas (words, µs)
 const fullVars = { n: [16,18,20,22,24,26],
   "CM words": [164.45, 369.17, 1252.44, 6595.09, 32325.20, 184430.00],

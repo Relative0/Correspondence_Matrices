@@ -424,6 +424,7 @@
 </main>
 <div id="tip"></div>
 
+<script src="v4audit_public_chart_data_2026_07_24.js"></script>
 <script>
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const NS = "http://www.w3.org/2000/svg";
@@ -442,15 +443,15 @@ function el(tag, attrs, parent) {
   return e;
 }
 
-const KERNEL = { n: [16, 18, 20, 22, 24],
-  "bigint engine": [0.56, 0.85, 0.89, 0.96, 0.87],
-  "words engine": [0.90, 0.89, 0.96, 0.94, 1.04] };
-const WRAPPER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "end-to-end wrapper vs fair Bitset": [1.05, 1.27, 1.23, 1.15, 1.05, 0.98, 0.92, 0.89, 0.84],
-  "CUDD symbolic build vs same Bitset (different metric)": [0.63, 4.40, 4.62, 4.81, 3.41, 3.34, 3.18, 3.19, 3.24] };
-const FRONTIER = { n: [16, 18, 20, 22, 24, 26, 28, 30, 32],
-  "corrected all-live, sharing-rich": [0.48, 0.53, 0.57, 0.48, 0.40, 0.53, null, null, null],
-  "beyond-guard, computed over support": [null, null, null, null, 0.96, null, 0.97, null, 0.97] };
+const KERNEL = { n: V4AUDIT_CHART_DATA.kernel.n,
+  "bigint engine": V4AUDIT_CHART_DATA.kernel.bigint_engine,
+  "words engine": V4AUDIT_CHART_DATA.kernel.words_engine };
+const WRAPPER = { n: V4AUDIT_CHART_DATA.wrapper.n,
+  "end-to-end wrapper vs fair Bitset": V4AUDIT_CHART_DATA.wrapper.cm_over_bitset,
+  "CUDD symbolic build vs same Bitset (different metric)": V4AUDIT_CHART_DATA.wrapper.cudd_build_over_bitset_contextual };
+const FRONTIER = { n: V4AUDIT_CHART_DATA.frontier.n,
+  "corrected all-live, sharing-rich": V4AUDIT_CHART_DATA.frontier.corrected_all_live,
+  "beyond-guard, computed over support": V4AUDIT_CHART_DATA.frontier.beyond_guard_support };
 
 function legendInto(id, names, colors) {
   const box = document.getElementById(id);
