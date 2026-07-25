@@ -36,6 +36,7 @@ from cmbench.availability import detect_backends
 from cmbench.backends.bitset_utils import bitset_equivalence_check
 from cmbench.config import BenchmarkConfig, config_from_args
 from cmbench.context import BenchmarkRunContext, make_context
+from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, OutputStatus
 from cmbench.backends.robdd_dd import (
     _dd_cudd_available,
     _empty_robdd_dd_result,
@@ -175,6 +176,19 @@ def _current_config() -> BenchmarkConfig:
     return BenchmarkConfig(sizes=(), trials=1, seed=0, max_depth=3)
 
 
+def _cm_output_budget(
+    config: BenchmarkConfig,
+    *,
+    allow_reduced_output: bool = False,
+) -> OutputBudget:
+    return OutputBudget(
+        max_output_bytes=config.cm_max_output_bytes,
+        max_temporary_bytes=config.cm_max_temporary_bytes,
+        max_output_vars=int(config.cm_max_full_output_vars),
+        allow_reduced_output=allow_reduced_output,
+    )
+
+
 def remote_response_matches_tt(response, tt_ref: Optional[np.ndarray], n: int) -> Optional[bool]:
     if not response.ok or tt_ref is None or not response.result:
         return False if not response.ok else None
@@ -214,6 +228,8 @@ def execute_remote_cm(expr, n: int, *, large_n_safe: bool):
         eval_repeat=int(bench_config.cm_eval_repeat),
         large_n_safe=large_n_safe,
         max_full_output_vars=int(bench_config.cm_max_full_output_vars),
+        max_output_bytes=bench_config.cm_max_output_bytes,
+        max_temporary_bytes=bench_config.cm_max_temporary_bytes,
         words_eval=words_requested,
     )
     if bool(bench_config.cm_runpod_local_mock):
@@ -231,6 +247,7 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
     diag_f: Dict[str, Any] = {}
     diag_g: Dict[str, Any] = {}
     bench_config = _current_config()
+    output_budget = _cm_output_budget(bench_config)
     try:
         t0 = time.perf_counter()
         compiled_f = compile_expr(expr_f, diagnostics=diag_f, use_persistent_cache=bool(bench_config.cm_use_persistent_cache))
@@ -245,6 +262,7 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             vars_all=vars_all,
             diagnostics=diag_f,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            output_budget=output_budget,
         )
         eval_f = time.perf_counter() - t2
         t3 = time.perf_counter()
@@ -254,6 +272,7 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             vars_all=vars_all,
             diagnostics=diag_g,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            output_budget=output_budget,
         )
         eval_g = time.perf_counter() - t3
         t4 = time.perf_counter()
@@ -283,6 +302,14 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             "cm_equiv_structural_same": bool(compiled_f.node == compiled_g.node),
         }
     except Exception as e:
+        if isinstance(e, OutputBudgetExceeded):
+            status = OutputStatus.REFUSED.value
+        elif isinstance(e, TimeoutError):
+            status = OutputStatus.TIMEOUT.value
+        elif isinstance(e, MemoryError):
+            status = OutputStatus.OOM.value
+        else:
+            status = "error"
         return {
             "cm_equiv_compile_f_time_s": None,
             "cm_equiv_compile_g_time_s": None,
@@ -294,7 +321,7 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             "cm_equiv_total_time_s": None,
             "cm_equiv_result": None,
             "cm_equiv_ok": None,
-            "cm_equiv_status": "error",
+            "cm_equiv_status": status,
             "cm_equiv_error": repr(e),
             "cm_equiv_final_repr_f": None,
             "cm_equiv_final_repr_g": None,
@@ -410,6 +437,7 @@ def _cm_partial_workload(
             words_eval=config.cm_words_eval,
             allow_reduced_output=True,
             max_full_output_vars=config.cm_max_full_output_vars,
+            output_budget=_cm_output_budget(config, allow_reduced_output=True),
         )
         eval_times.append(time.perf_counter() - e0)
         per_context.append(time.perf_counter() - t_context)
@@ -911,6 +939,10 @@ def _cm_family_workload(
             words_eval=config.cm_words_eval,
             allow_reduced_output=bool(n_vars > config.cm_max_full_output_vars),
             max_full_output_vars=config.cm_max_full_output_vars,
+            output_budget=_cm_output_budget(
+                config,
+                allow_reduced_output=bool(n_vars > config.cm_max_full_output_vars),
+            ),
         )
         eval_wall = time.perf_counter() - e0
         per_variant.append(time.perf_counter() - t0)
@@ -1501,6 +1533,7 @@ def time_backends_on_expr(
                     diagnostics=diag,
                     materialize_mode=materialize_mode,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    output_budget=_cm_output_budget(config),
                 )
                 # Record metrics only once; we run this function multiple times in compare modes.
                 nonlocal pair_attempts, pair_collapses, pair_ratio, pair_nodes_total
@@ -1521,6 +1554,7 @@ def time_backends_on_expr(
                     hybrid_threshold=config.cm_hybrid_threshold,
                     reuse_compiled_ir=reuse_compiled_ir,
                     use_persistent_cache=use_persistent_cache,
+                    output_budget=_cm_output_budget(config),
                 )
             return compile_expr_to_cm(
                 expr,
@@ -1532,6 +1566,7 @@ def time_backends_on_expr(
                 hybrid_threshold=config.cm_hybrid_threshold,
                 reuse_compiled_ir=reuse_compiled_ir,
                 use_persistent_cache=use_persistent_cache,
+                output_budget=_cm_output_budget(config),
             )
 
         cm_mode = "numpy" if config.cm_compare_hybrid else "partial_hybrid"
@@ -1567,6 +1602,7 @@ def time_backends_on_expr(
                 diagnostics=cm_diag,
                 materialize_mode=cm_mode,
                 hybrid_threshold=config.cm_hybrid_threshold,
+                output_budget=_cm_output_budget(config),
             )
             cm_exec_only_time = time.perf_counter() - t_exec0
             t_cm = ir_compile_time + cm_exec_only_time
@@ -1598,6 +1634,7 @@ def time_backends_on_expr(
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
                     words_eval=config.cm_words_eval,
+                    output_budget=_cm_output_budget(config),
                 )
                 cm_hybrid_no_reinflate_exec_only_time = time.perf_counter() - t_exec0
                 cm_hybrid_no_reinflate_time = ir_compile_time + cm_hybrid_no_reinflate_exec_only_time
@@ -1616,6 +1653,7 @@ def time_backends_on_expr(
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
                     words_eval=config.cm_words_eval,
+                    output_budget=_cm_output_budget(config),
                 )
                 cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
             cm_hybrid_no_reinflate_tt_extract_time = 0.0
@@ -1658,6 +1696,7 @@ def time_backends_on_expr(
                         diagnostics=profile_diag,
                         hybrid_threshold=config.cm_hybrid_threshold,
                         words_eval=config.cm_words_eval,
+                        output_budget=_cm_output_budget(config),
                     )
                 cm_hybrid_no_reinflate_cached_exec_only_time = (time.perf_counter() - t_rep0) / float(eval_repeat)
                 if profile_diag is not None:
@@ -1679,6 +1718,7 @@ def time_backends_on_expr(
                     diagnostics=cm_hybrid_diag,
                     materialize_mode="hybrid",
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    output_budget=_cm_output_budget(config),
                 )
                 cm_hybrid_exec_only_time = time.perf_counter() - t_exec0
                 cm_hybrid_time = ir_compile_time + cm_hybrid_exec_only_time
@@ -1707,6 +1747,7 @@ def time_backends_on_expr(
                     diagnostics=cm_partial_hybrid_diag,
                     materialize_mode="partial_hybrid",
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    output_budget=_cm_output_budget(config),
                 )
                 cm_partial_hybrid_exec_only_time = time.perf_counter() - t_exec0
                 cm_partial_hybrid_time = ir_compile_time + cm_partial_hybrid_exec_only_time
@@ -1816,6 +1857,10 @@ def time_backends_on_expr(
                     words_eval=config.cm_words_eval,
                     allow_reduced_output=large_n_safe,
                     max_full_output_vars=int(config.cm_max_full_output_vars),
+                    output_budget=_cm_output_budget(
+                        config,
+                        allow_reduced_output=large_n_safe,
+                    ),
                 )
                 cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
                 cm_hybrid_no_reinflate_exec_only_time = cm_hybrid_no_reinflate_time
@@ -1825,7 +1870,7 @@ def time_backends_on_expr(
                 elif tt_ref is not None and res_nr.tt is not None:
                     cm_hybrid_no_reinflate_ok = bool(np.array_equal(res_nr.tt, tt_ref))
                 else:
-                    cm_hybrid_no_reinflate_ok = True if large_n_safe else None
+                    cm_hybrid_no_reinflate_ok = None
             except Exception as fallback_exc:
                 cm_hybrid_no_reinflate_declined = isinstance(fallback_exc, ValueError) and str(
                     fallback_exc
@@ -1858,6 +1903,7 @@ def time_backends_on_expr(
                 words_eval=config.cm_words_eval,
                 allow_reduced_output=True,
                 max_full_output_vars=max_full_output_vars,
+                output_budget=_cm_output_budget(config, allow_reduced_output=True),
             )
             cm_hybrid_no_reinflate_time = time.perf_counter() - t0nr
             cm_hybrid_no_reinflate_tt_extract_time = 0.0
@@ -1887,7 +1933,7 @@ def time_backends_on_expr(
                     tt_bitset = bitset_to_bool_array(bitset_tt, len(output_vars))
                     cm_hybrid_no_reinflate_ok = bool(np.array_equal(res_nr.tt, tt_bitset))
                 else:
-                    cm_hybrid_no_reinflate_ok = True
+                    cm_hybrid_no_reinflate_ok = None
                 bitset_ok = True
 
                 if eval_repeat > 1:
@@ -1899,7 +1945,7 @@ def time_backends_on_expr(
                             _ = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
                     bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             else:
-                cm_hybrid_no_reinflate_ok = True
+                cm_hybrid_no_reinflate_ok = None
 
             sampled_k = int(config.sampled_correctness)
             if sampled_k > 0:
@@ -1913,6 +1959,12 @@ def time_backends_on_expr(
                 sampled_correctness_samples = check["sampled_correctness_samples"]
                 sampled_correctness_mismatches = check["sampled_correctness_mismatches"]
                 sampled_correctness_mismatch_rate = check["sampled_correctness_mismatch_rate"]
+                sampled_ok = int(sampled_correctness_mismatches) == 0
+                cm_hybrid_no_reinflate_ok = (
+                    sampled_ok
+                    if cm_hybrid_no_reinflate_ok is None
+                    else bool(cm_hybrid_no_reinflate_ok and sampled_ok)
+                )
 
             if eval_repeat > 1:
                 profile_diag: Optional[Dict[str, Any]]
@@ -1932,6 +1984,7 @@ def time_backends_on_expr(
                         words_eval=config.cm_words_eval,
                         allow_reduced_output=True,
                         max_full_output_vars=max_full_output_vars,
+                        output_budget=_cm_output_budget(config, allow_reduced_output=True),
                     )
                 cm_hybrid_no_reinflate_cached_exec_only_time = (time.perf_counter() - t_rep0) / float(eval_repeat)
                 if profile_diag is not None:
@@ -3857,6 +3910,7 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             diagnostics=diag_a,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
             words_eval=bool(bench_config.cm_words_eval),
+            output_budget=_cm_output_budget(bench_config),
         )
         eval_a = time.perf_counter() - t2
         t3 = time.perf_counter()
@@ -3867,6 +3921,7 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             diagnostics=diag_b,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
             words_eval=bool(bench_config.cm_words_eval),
+            output_budget=_cm_output_budget(bench_config),
         )
         eval_b = time.perf_counter() - t3
         t4 = time.perf_counter()
@@ -3897,8 +3952,17 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             "opdiff_cm_nr_delta_density": float(true_count / denom),
             "opdiff_cm_nr_equivalent": bool(true_count == 0),
             "opdiff_cm_nr_ok": True,
+            "opdiff_cm_nr_status": "ok",
         }
     except Exception as exc:
+        if isinstance(exc, OutputBudgetExceeded):
+            status = OutputStatus.REFUSED.value
+        elif isinstance(exc, TimeoutError):
+            status = OutputStatus.TIMEOUT.value
+        elif isinstance(exc, MemoryError):
+            status = OutputStatus.OOM.value
+        else:
+            status = "error"
         return {
             "opdiff_cm_nr_compile_a_time_s": None,
             "opdiff_cm_nr_compile_b_time_s": None,
@@ -3909,6 +3973,7 @@ def cm_no_reinflate_truth_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[s
             "opdiff_cm_nr_delta_density": None,
             "opdiff_cm_nr_equivalent": None,
             "opdiff_cm_nr_ok": False,
+            "opdiff_cm_nr_status": status,
             "opdiff_cm_nr_error": repr(exc),
         }
 
@@ -3954,6 +4019,7 @@ def dense_cm_quotient_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[str, 
             diagnostics=diag_a,
             materialize_mode="partial_hybrid",
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            output_budget=_cm_output_budget(bench_config),
         )
         dense_a = time.perf_counter() - t0
         t1 = time.perf_counter()
@@ -3970,6 +4036,7 @@ def dense_cm_quotient_delta(expr_a: Any, expr_b: Any, n_vars: int) -> Dict[str, 
             diagnostics=diag_b,
             materialize_mode="partial_hybrid",
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            output_budget=_cm_output_budget(bench_config),
         )
         dense_b = time.perf_counter() - t1
         bool_a = np.asarray(mat_a, dtype=bool)
@@ -4647,6 +4714,20 @@ def main():
     )
     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
     ap.add_argument("--cm-max-full-output-vars", dest="cm_max_full_output_vars", type=int, default=16)
+    ap.add_argument(
+        "--cm-max-output-bytes",
+        dest="cm_max_output_bytes",
+        type=int,
+        default=(1 << 16),
+        help="Maximum bytes in one explicit CM output (default: 65536).",
+    )
+    ap.add_argument(
+        "--cm-max-temporary-bytes",
+        dest="cm_max_temporary_bytes",
+        type=int,
+        default=None,
+        help="Optional conservative temporary-memory admission limit.",
+    )
     ap.add_argument(
         "--cm-flat-eval",
         dest="cm_flat_eval",

@@ -105,7 +105,11 @@ def _partial_reference_array(expr: Any, n_vars: int, context: Mapping[str, int],
     for idx in range(out.size):
         assignment = {f"x{i}": int(context.get(f"x{i}", 0)) for i in range(n_vars)}
         for j, name in enumerate(output_vars):
-            assignment[name] = (idx >> (len(output_vars) - 1 - j)) & 1
+            # In full-vars mode, fixed variables remain fixed while their output
+            # axes are broadcast. Overwriting them here would silently validate
+            # against the original unconditioned truth table.
+            if name not in context:
+                assignment[name] = (idx >> (len(output_vars) - 1 - j)) & 1
         out[idx] = eval_expr_assignment(expr, assignment)
     return out
 

@@ -24,6 +24,8 @@ class CMRemoteRequest:
     return_format: str = "packed_bitset_or_summary"
     allow_reduced_output: bool = False
     max_full_output_vars: int | None = None
+    max_output_bytes: int | None = 1 << 16
+    max_temporary_bytes: int | None = None
     words_eval: bool = False
 
     @classmethod
@@ -40,6 +42,8 @@ class CMRemoteRequest:
         return_format: str = "packed_bitset_or_summary",
         allow_reduced_output: bool = False,
         max_full_output_vars: int | None = None,
+        max_output_bytes: int | None = 1 << 16,
+        max_temporary_bytes: int | None = None,
         words_eval: bool = False,
     ) -> "CMRemoteRequest":
         return cls(
@@ -53,6 +57,8 @@ class CMRemoteRequest:
             return_format=return_format,
             allow_reduced_output=bool(allow_reduced_output),
             max_full_output_vars=max_full_output_vars,
+            max_output_bytes=max_output_bytes,
+            max_temporary_bytes=max_temporary_bytes,
             words_eval=bool(words_eval),
         )
 
@@ -71,6 +77,16 @@ class CMRemoteRequest:
             max_full_output_vars=(
                 None if data.get("max_full_output_vars") is None else int(data.get("max_full_output_vars"))
             ),
+            max_output_bytes=(
+                None
+                if data.get("max_output_bytes", 1 << 16) is None
+                else int(data.get("max_output_bytes", 1 << 16))
+            ),
+            max_temporary_bytes=(
+                None
+                if data.get("max_temporary_bytes") is None
+                else int(data.get("max_temporary_bytes"))
+            ),
             words_eval=bool(data.get("words_eval", False)),
         )
 
@@ -86,6 +102,8 @@ class CMRemoteRequest:
             "return_format": self.return_format,
             "allow_reduced_output": self.allow_reduced_output,
             "max_full_output_vars": self.max_full_output_vars,
+            "max_output_bytes": self.max_output_bytes,
+            "max_temporary_bytes": self.max_temporary_bytes,
             "words_eval": self.words_eval,
         }
 
@@ -98,6 +116,7 @@ class CMRemoteResponse:
     request_id: str
     ok: bool
     result_repr: str
+    status: str = "ok"
     result: dict[str, Any] | None = None
     diagnostics: dict[str, Any] = field(default_factory=dict)
     timing: dict[str, float] = field(default_factory=dict)
@@ -110,6 +129,7 @@ class CMRemoteResponse:
             request_id=str(data.get("request_id", "")),
             ok=bool(data.get("ok", False)),
             result_repr=str(data.get("result_repr", "")),
+            status=str(data.get("status", "ok" if data.get("ok", False) else "error")),
             result=dict(result) if isinstance(result, Mapping) else None,
             diagnostics=dict(data.get("diagnostics", {})),
             timing={str(k): float(v) for k, v in dict(data.get("timing", {})).items()},
@@ -121,6 +141,7 @@ class CMRemoteResponse:
             "request_id": self.request_id,
             "ok": self.ok,
             "result_repr": self.result_repr,
+            "status": self.status,
             "result": self.result,
             "diagnostics": self.diagnostics,
             "timing": self.timing,

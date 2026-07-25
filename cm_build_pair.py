@@ -24,6 +24,13 @@ from cm_build import compile_expr_to_cm
 from cm_exprlib import And, Eqv, Expr, Imp, Not, Or, Var, Xor
 from cm_normalize import lift_cm
 from cm_token import cm_compose, cm_not
+from cmbench.output_budget import (
+    DEFAULT_OUTPUT_BUDGET,
+    OutputBudget,
+    decide_output_budget,
+    estimate_explicit_output,
+    require_output_budget,
+)
 
 
 def _vname(v: Var) -> str:
@@ -132,6 +139,7 @@ def _fallback_compile(
         diagnostics=diagnostics,
         materialize_mode=materialize_mode,
         hybrid_threshold=hybrid_threshold,
+        output_budget=None,
     )
 
 
@@ -189,7 +197,15 @@ def compile_expr_to_cm_pair(
     diagnostics: Optional[Dict[str, int]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
+    output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
 ) -> Tuple[np.ndarray, Dict[str, float]]:
+    require_output_budget(
+        decide_output_budget(
+            output_budget,
+            estimate_explicit_output(len(R) + len(C), "dense_bool"),
+            artifact_name="full dense CM output",
+        )
+    )
     metrics: Dict[str, int] = {}
     res = _compile_pair(
         e,

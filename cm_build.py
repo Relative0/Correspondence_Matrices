@@ -2,12 +2,13 @@
 cm_build.py
 Compile cm_exprlib expressions into correspondence matrices through the shared CM IR.
 """
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 
 from cm_exprlib import Var
 from cm_ir import compile_expr_to_cm_ir, expr_vars, materialize_cm
+from cmbench.output_budget import DEFAULT_OUTPUT_BUDGET, OutputBudget
 
 
 def _var_name(v: Var) -> str:
@@ -33,6 +34,7 @@ def compile_expr_to_cm(
     hybrid_threshold: int = 7,
     reuse_compiled_ir: bool = False,
     use_persistent_cache: bool = False,
+    output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
 ) -> np.ndarray:
     node = compile_expr_to_cm_ir(
         e,
@@ -48,6 +50,7 @@ def compile_expr_to_cm(
         diagnostics=diagnostics,
         materialize_mode=materialize_mode,
         hybrid_threshold=hybrid_threshold,
+        output_budget=output_budget,
     )
 
 

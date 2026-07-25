@@ -6,7 +6,8 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
-from cm_ir import compile_expr, evaluate_compiled, materialize_hybrid_no_reinflate
+from cm_ir import compile_expr, evaluate_compiled
+from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, OutputStatus
 from cm_runpod_protocol import CMRemoteRequest, CMRemoteResponse, result_payload
 
 
@@ -24,35 +25,31 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
 
         t_exec = time.perf_counter()
         result = None
+        output_budget = OutputBudget(
+            max_output_bytes=request.max_output_bytes,
+            max_temporary_bytes=request.max_temporary_bytes,
+            max_output_vars=request.max_full_output_vars,
+            allow_reduced_output=request.allow_reduced_output,
+        )
         for _ in range(max(1, request.eval_repeat)):
-            if request.allow_reduced_output or request.max_full_output_vars is not None:
-                if request.mode != "hybrid_no_reinflate":
-                    raise ValueError(f"unsupported mode: {request.mode!r}")
-                result = materialize_hybrid_no_reinflate(
-                    compiled.node,
-                    request.vars_all,
-                    fixed={},
-                    diagnostics=diagnostics,
-                    hybrid_threshold=request.hybrid_threshold,
-                    allow_reduced_output=request.allow_reduced_output,
-                    max_full_output_vars=request.max_full_output_vars,
-                    words_eval=bool(request.words_eval),
-                )
-            else:
-                result = evaluate_compiled(
-                    compiled,
-                    mode=request.mode,
-                    vars_all=request.vars_all,
-                    diagnostics=diagnostics,
-                    hybrid_threshold=request.hybrid_threshold,
-                    words_eval=bool(request.words_eval),
-                )
+            result = evaluate_compiled(
+                compiled,
+                mode=request.mode,
+                vars_all=request.vars_all,
+                diagnostics=diagnostics,
+                hybrid_threshold=request.hybrid_threshold,
+                words_eval=bool(request.words_eval),
+                output_budget=output_budget,
+                allow_reduced_output=request.allow_reduced_output,
+                max_full_output_vars=request.max_full_output_vars,
+            )
         exec_s = time.perf_counter() - t_exec
         repr_name, payload = result_payload(result, return_format=request.return_format)
         return CMRemoteResponse(
             request_id=request.request_id,
             ok=True,
             result_repr=repr_name,
+            status=result.status.value,
             result=payload,
             diagnostics=_jsonable_dict(diagnostics),
             timing={
@@ -62,10 +59,19 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
             },
         )
     except Exception as exc:
+        if isinstance(exc, OutputBudgetExceeded):
+            status = OutputStatus.REFUSED.value
+        elif isinstance(exc, TimeoutError):
+            status = OutputStatus.TIMEOUT.value
+        elif isinstance(exc, MemoryError):
+            status = OutputStatus.OOM.value
+        else:
+            status = "error"
         return CMRemoteResponse(
             request_id=request.request_id,
             ok=False,
             result_repr="error",
+            status=status,
             diagnostics=_jsonable_dict(diagnostics),
             timing={"remote_total_time_s": time.perf_counter() - started},
             error=str(exc),

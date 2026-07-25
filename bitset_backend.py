@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+import threading
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Dict, Mapping, Optional, Sequence, Tuple
 
@@ -204,7 +205,7 @@ class FlatProgram:
     """
 
     __slots__ = ("n_slots", "root_slot", "loads", "ops", "release_after", "bound_cache",
-                 "word_plan", "word_scratch")
+                 "word_plan", "word_scratch_local")
 
     def __init__(self, n_slots: int, root_slot: int, loads, ops) -> None:
         self.n_slots = n_slots
@@ -214,7 +215,10 @@ class FlatProgram:
         self.release_after = _last_use_releases(n_slots, root_slot, ops)
         self.bound_cache: Dict[tuple, tuple] = {}
         self.word_plan = None
-        self.word_scratch: Dict[int, list] = {}
+        # NumPy releases the GIL in the word kernels, so one shared scratch pool
+        # can be overwritten by concurrent remote-worker requests. Retain reuse
+        # without serializing independent evaluations by caching per thread.
+        self.word_scratch_local = threading.local()
 
 
 def _last_use_releases(n_slots: int, root_slot: int, ops) -> tuple:
@@ -527,12 +531,16 @@ def _eval_words(prog: FlatProgram, vars_key: Tuple[str, ...],
     steps, n_buffers, root_loc, load_info = prog.word_plan
     n_words = (1 << len(vars_key)) // 64
     env = _build_words_env_cached(vars_key)
-    scratch = prog.word_scratch.get(n_words)
+    scratch_by_width = getattr(prog.word_scratch_local, "by_width", None)
+    if scratch_by_width is None:
+        scratch_by_width = {}
+        prog.word_scratch_local.by_width = scratch_by_width
+    scratch = scratch_by_width.get(n_words)
     if scratch is None:
-        if len(prog.word_scratch) >= _WORDS_SCRATCH_WIDTHS_MAX:
-            prog.word_scratch.pop(next(iter(prog.word_scratch)))
+        if len(scratch_by_width) >= _WORDS_SCRATCH_WIDTHS_MAX:
+            scratch_by_width.pop(next(iter(scratch_by_width)))
         scratch = [np.empty(n_words, dtype="<u8") for _ in range(n_buffers)]
-        prog.word_scratch[n_words] = scratch
+        scratch_by_width[n_words] = scratch
 
     def resolve(loc):
         tag, x = loc

@@ -31,7 +31,7 @@ class LocalMockCMRemoteExecutor:
             response=response,
             request_time_s=response.timing.get("remote_total_time_s", 0.0),
             total_wall_time_s=time.perf_counter() - started,
-            status="ok" if response.ok else "error",
+            status=response.status,
         )
 
 
@@ -55,7 +55,7 @@ class RunPodCMRemoteExecutor:
                 ready_wait_time_s=ready_wait,
                 request_time_s=request_time,
                 total_wall_time_s=time.perf_counter() - started,
-                status="ok" if response.ok else "error",
+                status=response.status,
             )
         finally:
             should_stop = self.config.stop_after_run if stop_after_run is None else stop_after_run
@@ -72,6 +72,8 @@ def build_remote_request(
     eval_repeat: int = 1,
     large_n_safe: bool = False,
     max_full_output_vars: int | None = None,
+    max_output_bytes: int | None = 1 << 16,
+    max_temporary_bytes: int | None = None,
     words_eval: bool = False,
 ) -> CMRemoteRequest:
     return CMRemoteRequest.from_expr(
@@ -82,5 +84,7 @@ def build_remote_request(
         eval_repeat=eval_repeat,
         allow_reduced_output=large_n_safe,
         max_full_output_vars=max_full_output_vars,
+        max_output_bytes=max_output_bytes,
+        max_temporary_bytes=max_temporary_bytes,
         words_eval=words_eval,
     )

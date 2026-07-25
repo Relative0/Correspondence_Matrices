@@ -16,6 +16,15 @@ from bitset_backend import (
     eval_cm_node_words,
 )
 from cm_exprlib import And, Eqv, Expr, Imp, Not, Or, Var, Xor
+from cmbench.output_budget import (
+    DEFAULT_OUTPUT_BUDGET,
+    OutputBudget,
+    OutputBudgetDecision,
+    OutputStatus,
+    decide_output_budget,
+    estimate_explicit_output,
+    require_output_budget,
+)
 
 
 AXIS = np.array([False, True], dtype=bool)
@@ -501,6 +510,7 @@ class CMIRBuilder:
         t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
         out: List[CMNode] = []
         seen = set()
+        negated_bases = set()
         for node in ordered:
             if node.const_value == 0:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -515,7 +525,12 @@ class CMIRBuilder:
             if node in seen:
                 _bump(self.diagnostics, "canonical_rewrites")
                 continue
-            if any(self._is_negation_of(node, prev) for prev in out):
+            is_complement = (
+                node.args[0] in seen
+                if node.kind == "not"
+                else node in negated_bases
+            )
+            if is_complement:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
                 if t0 is not None:
@@ -523,6 +538,8 @@ class CMIRBuilder:
                 return self.const(0)
             out.append(node)
             seen.add(node)
+            if node.kind == "not":
+                negated_bases.add(node.args[0])
 
         if t0 is not None:
             _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
@@ -551,6 +568,7 @@ class CMIRBuilder:
         t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
         out: List[CMNode] = []
         seen = set()
+        negated_bases = set()
         for node in ordered:
             if node.const_value == 1:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -565,7 +583,12 @@ class CMIRBuilder:
             if node in seen:
                 _bump(self.diagnostics, "canonical_rewrites")
                 continue
-            if any(self._is_negation_of(node, prev) for prev in out):
+            is_complement = (
+                node.args[0] in seen
+                if node.kind == "not"
+                else node in negated_bases
+            )
+            if is_complement:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
                 if t0 is not None:
@@ -573,6 +596,8 @@ class CMIRBuilder:
                 return self.const(1)
             out.append(node)
             seen.add(node)
+            if node.kind == "not":
+                negated_bases.add(node.args[0])
 
         if t0 is not None:
             _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
@@ -861,6 +886,9 @@ def evaluate_compiled(
     diagnostics: Optional[Dict[str, Any]] = None,
     hybrid_threshold: int = 7,
     words_eval: Optional[bool] = None,
+    output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+    allow_reduced_output: bool = False,
+    max_full_output_vars: Optional[int] = None,
 ):
     """Public reusable API: evaluate a compiled expression in a chosen mode.
 
@@ -877,6 +905,9 @@ def evaluate_compiled(
         diagnostics=diagnostics,
         hybrid_threshold=hybrid_threshold,
         words_eval=words_eval,
+        output_budget=output_budget,
+        allow_reduced_output=allow_reduced_output,
+        max_full_output_vars=max_full_output_vars,
     )
 
 
@@ -1368,6 +1399,53 @@ def _materialize_ir_tagged(
     return rec(node, depth=0, allow_bitset_collapse=(materialize_mode == "hybrid"))
 
 
+def _cm_node_count(node: CMNode) -> int:
+    seen: set[int] = set()
+    pending = [node]
+    while pending:
+        current = pending.pop()
+        marker = id(current)
+        if marker in seen:
+            continue
+        seen.add(marker)
+        pending.extend(current.args)
+    return len(seen)
+
+
+def _effective_output_budget(
+    output_budget: Optional[OutputBudget],
+    *,
+    max_full_output_vars: Optional[int],
+    allow_reduced_output: bool,
+) -> Optional[OutputBudget]:
+    if output_budget is None and max_full_output_vars is None:
+        return None
+    budget = output_budget or OutputBudget()
+    return budget.with_overrides(
+        max_output_vars=max_full_output_vars,
+        allow_reduced_output=bool(
+            budget.allow_reduced_output or allow_reduced_output
+        ),
+    )
+
+
+def _record_output_budget_diagnostics(
+    diagnostics: Optional[Dict[str, Any]],
+    decision: OutputBudgetDecision,
+) -> None:
+    if diagnostics is None:
+        return
+    diagnostics["output_budget_status"] = decision.status.value
+    diagnostics["output_budget_estimated_output_bytes"] = int(
+        decision.estimate.output_bytes
+    )
+    diagnostics["output_budget_estimated_temporary_bytes"] = int(
+        decision.estimate.temporary_bytes
+    )
+    diagnostics["output_budget_output_vars"] = int(decision.estimate.variable_count)
+    diagnostics["output_budget_reason"] = decision.reason
+
+
 def materialize_cm(
     node: CMNode,
     R: Sequence[str],
@@ -1378,10 +1456,28 @@ def materialize_cm(
     combine_fn: Optional[Callable[[np.ndarray, np.ndarray, str, Optional[Dict[str, Any]]], np.ndarray]] = None,
     materialize_mode: str = "partial_hybrid",
     hybrid_threshold: int = 7,
+    output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+    max_full_output_vars: Optional[int] = None,
 ) -> np.ndarray:
     # Stable, benchmark-friendly final-output diagnostics (representation_code=0 for dense CM matrix).
     _init_final_output_diagnostics(diagnostics)
     target_vars = tuple(list(R) + list(C))
+    budget = _effective_output_budget(
+        output_budget,
+        max_full_output_vars=max_full_output_vars,
+        allow_reduced_output=False,
+    )
+    decision = decide_output_budget(
+        budget,
+        estimate_explicit_output(
+            len(target_vars),
+            "dense_bool",
+            operation_slots=_cm_node_count(node),
+        ),
+        artifact_name="full dense CM output",
+    )
+    _record_output_budget_diagnostics(diagnostics, decision)
+    require_output_budget(decision)
     res = _materialize_ir_tagged(
         node,
         fixed=fixed,
@@ -1453,6 +1549,8 @@ class FinalNoReinflateResult:
     bits: Optional[int] = None
     tt: Optional[np.ndarray] = None
     output_vars: Tuple[str, ...] = tuple()
+    status: OutputStatus = OutputStatus.OK
+    budget_decision: Optional[OutputBudgetDecision] = None
 
 
 def materialize_hybrid_no_reinflate(
@@ -1464,6 +1562,7 @@ def materialize_hybrid_no_reinflate(
     hybrid_threshold: int = 7,
     allow_reduced_output: bool = False,
     max_full_output_vars: Optional[int] = None,
+    output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
     flat_eval: Optional[bool] = None,
     words_eval: Optional[bool] = None,
     flat_fast_path: bool = True,
@@ -1491,24 +1590,36 @@ def materialize_hybrid_no_reinflate(
             else tuple(v for v in node.vars if v not in fast_fixed_map)
         )
         fast_n = len(fast_vars_key)
-        fast_guard_full = max_full_output_vars is not None and fast_n > int(max_full_output_vars)
-        fast_reduced = bool(allow_reduced_output and fast_guard_full)
+        fast_budget = _effective_output_budget(
+            output_budget,
+            max_full_output_vars=max_full_output_vars,
+            allow_reduced_output=allow_reduced_output,
+        )
+        fast_representation = (
+            "packed_bitset"
+            if len(fast_live_vars) <= hybrid_threshold
+            else "truth_table_uint8"
+        )
+        fast_decision = require_output_budget(
+            decide_output_budget(
+                fast_budget,
+                estimate_explicit_output(
+                    fast_n,
+                    fast_representation,
+                    operation_slots=_cm_node_count(node),
+                ),
+                reduced_estimate=estimate_explicit_output(
+                    len(fast_live_vars),
+                    fast_representation,
+                    operation_slots=_cm_node_count(node),
+                ),
+                artifact_name="full no-reinflate output",
+                reduced_artifact_name="reduced no-reinflate output",
+            )
+        )
+        fast_reduced = fast_decision.status is OutputStatus.REDUCED
         fast_output_vars = fast_live_vars if fast_reduced else fast_vars_key
         fast_output_k = len(fast_output_vars)
-        if fast_guard_full and not allow_reduced_output:
-            raise ValueError(
-                f"refusing to materialize full no-reinflate output for {fast_n} variables; "
-                "pass allow_reduced_output=True for structural large-n validation"
-            )
-        if (
-            fast_reduced
-            and max_full_output_vars is not None
-            and fast_output_k > int(max_full_output_vars)
-        ):
-            raise ValueError(
-                f"refusing to materialize reduced no-reinflate output for {fast_output_k} live variables; "
-                f"max_full_output_vars={int(max_full_output_vars)}"
-            )
         if len(fast_live_vars) <= hybrid_threshold:
             return FinalNoReinflateResult(
                 final_output_representation_code=3 if fast_reduced else 2,
@@ -1519,6 +1630,8 @@ def materialize_hybrid_no_reinflate(
                 ),
                 tt=None,
                 output_vars=fast_output_vars,
+                status=fast_decision.status,
+                budget_decision=fast_decision,
             )
 
     profile = diagnostics is not None and bool(diagnostics.get("cached_exec_profile_enabled", 0))
@@ -1548,8 +1661,33 @@ def materialize_hybrid_no_reinflate(
     live_k = len(live_vars)
     n = len(vars_key)
     nominal_out_elems = 1 << n
-    guard_full_output = max_full_output_vars is not None and n > int(max_full_output_vars)
-    use_reduced_output = bool(allow_reduced_output and guard_full_output)
+    budget = _effective_output_budget(
+        output_budget,
+        max_full_output_vars=max_full_output_vars,
+        allow_reduced_output=allow_reduced_output,
+    )
+    representation = (
+        "packed_bitset" if live_k <= hybrid_threshold else "truth_table_uint8"
+    )
+    decision = require_output_budget(
+        decide_output_budget(
+            budget,
+            estimate_explicit_output(
+                n,
+                representation,
+                operation_slots=_cm_node_count(node),
+            ),
+            reduced_estimate=estimate_explicit_output(
+                live_k,
+                representation,
+                operation_slots=_cm_node_count(node),
+            ),
+            artifact_name="full no-reinflate output",
+            reduced_artifact_name="reduced no-reinflate output",
+        )
+    )
+    _record_output_budget_diagnostics(diagnostics, decision)
+    use_reduced_output = decision.status is OutputStatus.REDUCED
     output_vars = live_vars if use_reduced_output else vars_key
     output_k = len(output_vars)
     out_elems = 1 << output_k
@@ -1558,16 +1696,7 @@ def materialize_hybrid_no_reinflate(
 
     if hybrid_threshold < 0:
         raise ValueError("hybrid_threshold must be >= 0")
-    if guard_full_output and not allow_reduced_output:
-        raise ValueError(
-            f"refusing to materialize full no-reinflate output for {n} variables; "
-            "pass allow_reduced_output=True for structural large-n validation"
-        )
-    if use_reduced_output and max_full_output_vars is not None and output_k > int(max_full_output_vars):
-        raise ValueError(
-            f"refusing to materialize reduced no-reinflate output for {output_k} live variables; "
-            f"max_full_output_vars={int(max_full_output_vars)}"
-        )
+    guard_full_output = decision.status is not OutputStatus.OK
 
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
@@ -1603,6 +1732,8 @@ def materialize_hybrid_no_reinflate(
             bits=bits,
             tt=None,
             output_vars=output_vars,
+            status=decision.status,
+            budget_decision=decision,
         )
         if profile:
             _bump(diagnostics, "cached_exec_result_wrap_count")
@@ -1672,6 +1803,8 @@ def materialize_hybrid_no_reinflate(
         bits=None,
         tt=tt,
         output_vars=target_vars,
+        status=decision.status,
+        budget_decision=decision,
     )
     if profile:
         _bump(diagnostics, "cached_exec_result_wrap_count")

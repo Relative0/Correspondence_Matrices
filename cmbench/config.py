@@ -44,6 +44,8 @@ class BenchmarkConfig:
     cm_compile_once_per_expression: bool = False
     cm_eval_repeat: int = 1
     cm_max_full_output_vars: int = 16
+    cm_max_output_bytes: int | None = 1 << 16
+    cm_max_temporary_bytes: int | None = None
     cm_flat_eval: bool = False
     cm_words_eval: bool = False
     cm_exec_target: Literal["local", "runpod"] = "local"
@@ -130,6 +132,12 @@ class BenchmarkConfig:
             raise ValueError("full_tt_max_n must be >= 0")
         if self.cm_eval_repeat < 1:
             raise ValueError("cm_eval_repeat must be >= 1")
+        if self.cm_max_full_output_vars < 0:
+            raise ValueError("cm_max_full_output_vars must be >= 0")
+        if self.cm_max_output_bytes is not None and self.cm_max_output_bytes < 0:
+            raise ValueError("cm_max_output_bytes must be >= 0")
+        if self.cm_max_temporary_bytes is not None and self.cm_max_temporary_bytes < 0:
+            raise ValueError("cm_max_temporary_bytes must be >= 0")
         if any(size < 0 for size in self.sizes):
             raise ValueError("sizes must be >= 0")
         if self.robdd_order_sweeps < 1:
@@ -185,6 +193,16 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         cm_compile_once_per_expression=bool(getattr(args, "cm_compile_once_per_expression", False)),
         cm_eval_repeat=int(getattr(args, "cm_eval_repeat", 1)),
         cm_max_full_output_vars=int(getattr(args, "cm_max_full_output_vars", 16)),
+        cm_max_output_bytes=(
+            None
+            if getattr(args, "cm_max_output_bytes", 1 << 16) is None
+            else int(getattr(args, "cm_max_output_bytes", 1 << 16))
+        ),
+        cm_max_temporary_bytes=(
+            None
+            if getattr(args, "cm_max_temporary_bytes", None) is None
+            else int(getattr(args, "cm_max_temporary_bytes", 0))
+        ),
         cm_flat_eval=bool(getattr(args, "cm_flat_eval", False)),
         cm_words_eval=bool(getattr(args, "cm_words_eval", False)),
         cm_exec_target=getattr(args, "cm_exec_target", "local"),
