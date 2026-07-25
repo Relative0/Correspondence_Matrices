@@ -1,4 +1,5 @@
 import importlib
+import json
 
 import numpy as np
 import pytest
@@ -97,3 +98,39 @@ def test_empty_robdd_result_preserves_legacy_keys() -> None:
         "robdd_correctness_mode",
     }
     assert expected <= set(row)
+
+
+@pytest.mark.parametrize("objective", ["composite", "min_nodes", "min_build_time"])
+def test_best_of_k_persists_trials_and_selection_objective(objective: str) -> None:
+    if importlib.util.find_spec("dd.autoref") is None:
+        pytest.skip("dd.autoref unavailable")
+    expr = And(Or(Var(0), Var(2)), Var(1))
+    row = run_robdd_dd_backend(
+        expr,
+        3,
+        backend_preference="autoref",
+        order_policy="best-of-k",
+        order_sweeps=4,
+        order_seed=17,
+        selection_objective=objective,
+        correctness_rng=np.random.default_rng(18),
+        correctness_samples=8,
+    )
+    trials = json.loads(row["robdd_order_trials_json"])
+    assert len(trials) == 4
+    assert [trial["effective_seed"] for trial in trials] == [17, 18, 19, 20]
+    assert row["robdd_selection_objective"] == objective
+    assert row["robdd_selected_build_time_s"] == row["robdd_build_time_s"]
+    assert row["robdd_fastest_build_time_s"] == min(t["build_time_s"] for t in trials)
+    assert row["robdd_order_generation_time_s"] >= 0.0
+    assert row["robdd_order_search_time_s"] >= sum(t["build_time_s"] for t in trials)
+
+
+def test_unknown_selection_objective_is_rejected() -> None:
+    with pytest.raises(ValueError, match="selection objective"):
+        run_robdd_dd_backend(
+            And(Var(0), Var(1)),
+            2,
+            backend_preference="autoref",
+            selection_objective="mystery",
+        )

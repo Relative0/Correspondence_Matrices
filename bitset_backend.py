@@ -204,13 +204,16 @@ class FlatProgram:
     small FIFO-evicted cache of resolved input masks.
     """
 
-    __slots__ = ("n_slots", "root_slot", "loads", "ops", "release_after", "bound_cache",
+    __slots__ = ("n_slots", "root_slot", "loads", "load_vars", "ops", "release_after", "bound_cache",
                  "word_plan", "word_scratch_local")
 
     def __init__(self, n_slots: int, root_slot: int, loads, ops) -> None:
         self.n_slots = n_slots
         self.root_slot = root_slot
         self.loads = loads
+        self.load_vars = tuple(dict.fromkeys(
+            payload for _slot, kind, payload in loads if kind == "var"
+        ))
         self.ops = ops
         self.release_after = _last_use_releases(n_slots, root_slot, ops)
         self.bound_cache: Dict[tuple, tuple] = {}
@@ -290,7 +293,14 @@ def get_flat_program(node: "CMNode") -> FlatProgram:
 
 def _bind_flat_program(prog: FlatProgram, vars_key: Tuple[str, ...],
                        fixed_map: Mapping[str, int]) -> tuple:
-    key = (vars_key, tuple(sorted(fixed_map.items())))
+    fixed_present = 0
+    fixed_values = 0
+    for index, name in enumerate(prog.load_vars):
+        if name in fixed_map:
+            fixed_present |= 1 << index
+            if bool(fixed_map[name]):
+                fixed_values |= 1 << index
+    key = (vars_key, fixed_present, fixed_values)
     bound = prog.bound_cache.get(key)
     if bound is None:
         env = build_bitset_env(vars_key)
@@ -313,6 +323,91 @@ def _bind_flat_program(prog: FlatProgram, vars_key: Tuple[str, ...],
         bound = (template, full_mask)
         prog.bound_cache[key] = bound
     return bound
+
+
+class PreparedFlatEvaluation:
+    """Bind variable masks once, then execute the same FlatProgram repeatedly."""
+
+    __slots__ = ("program", "template", "full_mask", "release_dead")
+
+    def __init__(self, program: FlatProgram, template, full_mask: int, release_dead: bool):
+        self.program = program
+        self.template = template
+        self.full_mask = full_mask
+        self.release_dead = release_dead
+
+    def evaluate(self) -> int:
+        return _eval_prepared_flat(self)
+
+
+def _eval_prepared_flat(prepared: PreparedFlatEvaluation) -> int:
+    prog = prepared.program
+    values = prepared.template.copy()
+    full_mask = prepared.full_mask
+    for op_index, (slot, opcode, arg_slots) in enumerate(prog.ops):
+        if opcode == _FLAT_OP_AND:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc &= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_OR:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc |= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_XOR:
+            acc = values[arg_slots[0]]
+            for i in arg_slots[1:]:
+                acc ^= values[i]
+            values[slot] = acc
+        elif opcode == _FLAT_OP_NOT:
+            values[slot] = (~values[arg_slots[0]]) & full_mask
+        elif opcode == _FLAT_OP_IMP:
+            values[slot] = ((~values[arg_slots[0]]) | values[arg_slots[1]]) & full_mask
+        elif opcode == _FLAT_OP_EQV:
+            values[slot] = (~(values[arg_slots[0]] ^ values[arg_slots[1]])) & full_mask
+        else:
+            raise ValueError(f"unknown flat opcode: {opcode!r}")
+        if prepared.release_dead:
+            for dead_slot in prog.release_after[op_index]:
+                values[dead_slot] = None
+    return int(values[prog.root_slot])
+
+
+def prepare_expr_flat_evaluation(
+    expr: Expr,
+    vars_all: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+    free_dead_slots: bool = True,
+) -> PreparedFlatEvaluation:
+    prog = get_expr_flat_program(expr)
+    vars_key = tuple(vars_all)
+    template, full_mask = _bind_flat_program(prog, vars_key, fixed or {})
+    release_dead = bool(
+        free_dead_slots
+        and len(vars_key) >= _FLAT_FREE_MIN_VARS
+        and prog.n_slots >= _FLAT_FREE_MIN_SLOTS
+    )
+    return PreparedFlatEvaluation(prog, template, full_mask, release_dead)
+
+
+def prepare_cm_node_flat_evaluation(
+    node: "CMNode",
+    live_vars: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+    free_dead_slots: bool = True,
+) -> PreparedFlatEvaluation:
+    prog = get_flat_program(node)
+    vars_key = tuple(live_vars)
+    template, full_mask = _bind_flat_program(prog, vars_key, fixed or {})
+    release_dead = bool(
+        free_dead_slots
+        and len(vars_key) >= _FLAT_FREE_MIN_VARS
+        and prog.n_slots >= _FLAT_FREE_MIN_SLOTS
+    )
+    return PreparedFlatEvaluation(prog, template, full_mask, release_dead)
 
 
 def eval_cm_node_flat(

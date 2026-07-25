@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from collections import OrderedDict
+from contextlib import contextmanager
+from functools import wraps
 from dataclasses import dataclass
 from functools import lru_cache
 import hashlib
@@ -109,6 +111,37 @@ def set_words_eval_default(enabled: bool) -> None:
     """Set the process-wide CLI/harness default for the opt-in words evaluator."""
     global _WORDS_EVAL_DEFAULT
     _WORDS_EVAL_DEFAULT = bool(enabled)
+
+
+def get_evaluation_defaults() -> tuple[bool, bool]:
+    """Return ``(flat_eval, words_eval)`` for compatibility diagnostics."""
+    return bool(_FLAT_EVAL_DEFAULT), bool(_WORDS_EVAL_DEFAULT)
+
+
+@contextmanager
+def evaluation_defaults_scope(*, flat_eval: bool, words_eval: bool):
+    """Temporarily set compatibility defaults and always restore prior state."""
+    previous = get_evaluation_defaults()
+    set_flat_eval_default(flat_eval)
+    set_words_eval_default(words_eval)
+    try:
+        yield
+    finally:
+        set_flat_eval_default(previous[0])
+        set_words_eval_default(previous[1])
+
+
+def preserve_evaluation_defaults(fn):
+    """Decorator for reentrant CLI entry points that still use legacy setters."""
+    @wraps(fn)
+    def wrapped(*args, **kwargs):
+        previous = get_evaluation_defaults()
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            set_flat_eval_default(previous[0])
+            set_words_eval_default(previous[1])
+    return wrapped
 
 
 def _expr_var_name(expr: Any) -> str:
@@ -1579,6 +1612,7 @@ def materialize_hybrid_no_reinflate(
     # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
     use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
     use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+    from cmbench.backends.bitset_engine import select_cm_node_engine
     if diagnostics is None and (use_flat or use_words) and flat_fast_path:
         if hybrid_threshold < 0:
             raise ValueError("hybrid_threshold must be >= 0")
@@ -1621,12 +1655,15 @@ def materialize_hybrid_no_reinflate(
         fast_output_vars = fast_live_vars if fast_reduced else fast_vars_key
         fast_output_k = len(fast_output_vars)
         if len(fast_live_vars) <= hybrid_threshold:
+            fast_selection = select_cm_node_engine(
+                live_k=fast_output_k,
+                words_requested=use_words,
+                flat_requested=use_flat,
+            )
             return FinalNoReinflateResult(
                 final_output_representation_code=3 if fast_reduced else 2,
-                bits=(
-                    eval_cm_node_words(node, fast_output_vars, fixed=fast_fixed_map)
-                    if use_words
-                    else eval_cm_node_flat(node, fast_output_vars, fixed=fast_fixed_map)
+                bits=fast_selection.evaluate_node(
+                    node, fast_output_vars, fixed=fast_fixed_map
                 ),
                 tt=None,
                 output_vars=fast_output_vars,
@@ -1701,12 +1738,15 @@ def materialize_hybrid_no_reinflate(
     if live_k <= hybrid_threshold:
         t_eval0 = time.perf_counter() if _ir_timing_enabled(diagnostics) else None
         t_profile_eval0 = time.perf_counter() if profile else None
-        if use_words:
-            bits = eval_cm_node_words(node, output_vars, fixed=fixed_map)
-        elif use_flat:
-            bits = eval_cm_node_flat(node, output_vars, fixed=fixed_map)
-        else:
-            bits = eval_cm_node_bitset(node, output_vars, fixed=fixed_map)
+        selected_engine = select_cm_node_engine(
+            live_k=output_k,
+            words_requested=use_words,
+            flat_requested=use_flat,
+        )
+        bits = selected_engine.evaluate_node(node, output_vars, fixed=fixed_map)
+        if diagnostics is not None:
+            diagnostics["cached_exec_engine_kind"] = selected_engine.kind
+            diagnostics["cached_exec_engine_live_k"] = selected_engine.live_k
         if t_profile_eval0 is not None:
             _bump(diagnostics, "cached_exec_bitset_eval_calls")
             _add_float(diagnostics, "cached_exec_bitset_eval_time_s", time.perf_counter() - t_profile_eval0)

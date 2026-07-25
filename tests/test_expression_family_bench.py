@@ -98,8 +98,8 @@ class ExpressionFamilyBenchTests(unittest.TestCase):
         self.assertIn("family_cm_cache_persistent_misses_total", row)
         self.assertEqual(row["family_bitset_baseline_kind"], "raw_ast_recursive")
 
-        # Under --cm-words-eval the Bitset control must use the same engine as
-        # the CM side (latent-fix 1) and stay bit-exact against the references.
+        # A words request below the six-variable crossover truthfully records
+        # the flat compatibility engine used on both sides.
         cm_bench.args = _family_args(cm_words_eval=True, cm_hybrid_threshold=16)
         words_row = cm_bench.time_expression_family_workload(
             4,
@@ -113,7 +113,7 @@ class ExpressionFamilyBenchTests(unittest.TestCase):
             sample_rng=np.random.default_rng(4),
             robdd_order_seed=5,
         )
-        self.assertEqual(words_row["family_bitset_baseline_kind"], "raw_ast_words")
+        self.assertEqual(words_row["family_bitset_baseline_kind"], "raw_ast_flat")
         self.assertEqual(words_row["family_bitset_ok_rate"], 1.0)
         self.assertEqual(words_row["family_cm_no_cache_ok_rate"], 1.0)
         self.assertEqual(words_row["family_cm_cache_ok_rate"], 1.0)

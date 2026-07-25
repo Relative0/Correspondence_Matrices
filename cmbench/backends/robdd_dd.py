@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import json
 import random
 import statistics
 import time
@@ -299,6 +300,7 @@ def _empty_robdd_dd_result(
     reorder_method: str,
     status: str,
     error: Optional[str],
+    selection_objective: str = "composite",
 ) -> Dict[str, Any]:
     return {
         "robdd_build_time_s": None,
@@ -317,6 +319,16 @@ def _empty_robdd_dd_result(
         "robdd_order_sweeps": order_sweeps,
         "robdd_order_used": None,
         "robdd_best_time_s": None,
+        "robdd_fastest_build_time_s": None,
+        "robdd_smallest_node_build_time_s": None,
+        "robdd_selected_build_time_s": None,
+        "robdd_selected_trial_index": None,
+        "robdd_selection_objective": selection_objective,
+        "robdd_selection_tiebreak": "nodes,build_time,trial_index",
+        "robdd_order_trials_json": "[]",
+        "robdd_order_generation_time_s": None,
+        "robdd_order_search_time_s": None,
+        "robdd_all_in_search_time_s": None,
         "robdd_median_time_s": None,
         "robdd_worst_time_s": None,
         "robdd_best_nodes": None,
@@ -351,6 +363,7 @@ def run_robdd_dd_backend(
     reorder_method: str = "sift",
     order_seed: Optional[int] = None,
     order_sweeps: int = 1,
+    selection_objective: str = "composite",
     tt_ref: Optional[np.ndarray] = None,
     correctness_rng: Optional[np.random.Generator] = None,
     correctness_samples: int = 0,
@@ -361,6 +374,8 @@ def run_robdd_dd_backend(
     if order_policy not in ("fixed", "expr", "random", "best-of-k"):
         raise ValueError(f"unknown ROBDD order policy: {order_policy!r}")
     sweeps = max(1, int(order_sweeps)) if order_policy == "best-of-k" else 1
+    if selection_objective not in ("composite", "min_nodes", "min_build_time"):
+        raise ValueError(f"unknown ROBDD selection objective: {selection_objective!r}")
     dd_module, error = select_dd_module(backend_preference)
     if dd_module is None:
         return _empty_robdd_dd_result(
@@ -372,16 +387,23 @@ def run_robdd_dd_backend(
             reorder_method=reorder_method,
             status="unavailable",
             error=error,
+            selection_objective=selection_objective,
         )
 
     names = [f"x{i}" for i in range(n)]
     var_name_map = {name: name for name in names}
     trials: List[Dict[str, Any]] = []
     base_seed = 0 if order_seed is None else int(order_seed)
+    search_started = time.perf_counter()
+    order_generation_total = 0.0
     for sweep in range(sweeps):
+        trial_started = time.perf_counter()
         effective_policy = "random" if order_policy == "best-of-k" else order_policy
         effective_seed = base_seed + sweep if effective_policy == "random" else order_seed
+        order_started = time.perf_counter()
         order = robdd_variable_order(expr, n, effective_policy, effective_seed)
+        order_generation_time = time.perf_counter() - order_started
+        order_generation_total += order_generation_time
         try:
             manager = dd_module.BDD()
             _declare_dd_vars(manager, order)
@@ -419,6 +441,10 @@ def run_robdd_dd_backend(
                     "check": check,
                     "status": "ok",
                     "error": None,
+                    "trial_index": sweep,
+                    "effective_seed": effective_seed,
+                    "order_generation_time": order_generation_time,
+                    "trial_total_time": time.perf_counter() - trial_started,
                 }
             )
         except Exception as e:
@@ -436,8 +462,13 @@ def run_robdd_dd_backend(
                     "check": {"robdd_ok": False, "robdd_correctness_mode": "build_failed"},
                     "status": "error",
                     "error": repr(e),
+                    "trial_index": sweep,
+                    "effective_seed": effective_seed,
+                    "order_generation_time": order_generation_time,
+                    "trial_total_time": time.perf_counter() - trial_started,
                 }
             )
+    search_time = time.perf_counter() - search_started
 
     ok_trials = [t for t in trials if t["status"] == "ok" and t["build_time"] is not None]
     if not ok_trials:
@@ -451,8 +482,27 @@ def run_robdd_dd_backend(
             reorder_method=reorder_method,
             status="error",
             error=first_error,
+            selection_objective=selection_objective,
         )
-    best = min(ok_trials, key=lambda t: (float(t["node_count"] or 10**30), float(t["build_time"])))
+    if selection_objective == "min_build_time":
+        selection_key = lambda t: (float(t["build_time"]), int(t["trial_index"]))
+        tiebreak = "build_time,trial_index"
+    elif selection_objective == "min_nodes":
+        selection_key = lambda t: (float(t["node_count"] or 10**30), int(t["trial_index"]))
+        tiebreak = "nodes,trial_index"
+    else:
+        selection_key = lambda t: (
+            float(t["node_count"] or 10**30),
+            float(t["build_time"]),
+            int(t["trial_index"]),
+        )
+        tiebreak = "nodes,build_time,trial_index"
+    best = min(ok_trials, key=selection_key)
+    fastest = min(ok_trials, key=lambda t: (float(t["build_time"]), int(t["trial_index"])))
+    smallest_nodes = min(
+        ok_trials,
+        key=lambda t: (float(t["node_count"] or 10**30), float(t["build_time"]), int(t["trial_index"])),
+    )
     times = sorted(float(t["build_time"]) for t in ok_trials)
     nodes = sorted(int(t["node_count"]) for t in ok_trials if t["node_count"] is not None)
     ident = best["identity"] or {}
@@ -490,6 +540,38 @@ def run_robdd_dd_backend(
         "robdd_order_sweeps": sweeps,
         "robdd_order_used": compact_order_repr(best["order"]),
         "robdd_best_time_s": min(times) if times else None,
+        # Compatibility: robdd_best_time_s retains its historical meaning
+        # (minimum isolated build interval). New names below are authoritative.
+        "robdd_fastest_build_time_s": fastest["build_time"],
+        "robdd_smallest_node_build_time_s": smallest_nodes["build_time"],
+        "robdd_selected_build_time_s": best["build_time"],
+        "robdd_selected_trial_index": best["trial_index"],
+        "robdd_selection_objective": selection_objective,
+        "robdd_selection_tiebreak": tiebreak,
+        "robdd_order_generation_time_s": order_generation_total,
+        "robdd_order_search_time_s": search_time,
+        "robdd_all_in_search_time_s": search_time,
+        "robdd_order_trials_json": json.dumps(
+            [
+                {
+                    "trial_index": t["trial_index"],
+                    "effective_seed": t["effective_seed"],
+                    "order": compact_order_repr(t["order"]),
+                    "order_generation_time_s": t["order_generation_time"],
+                    "build_time_s": t["build_time"],
+                    "reorder_time_s": t.get("reorder", {}).get("robdd_reorder_time_s"),
+                    "trial_total_time_s": t["trial_total_time"],
+                    "node_count": t["node_count"],
+                    "status": t["status"],
+                    "error": t["error"],
+                    "correctness_ok": t.get("check", {}).get("robdd_ok"),
+                    "correctness_mode": t.get("check", {}).get("robdd_correctness_mode"),
+                }
+                for t in trials
+            ],
+            sort_keys=True,
+            separators=(",", ":"),
+        ),
         "robdd_median_time_s": statistics.median(times) if times else None,
         "robdd_worst_time_s": max(times) if times else None,
         "robdd_best_nodes": min(nodes) if nodes else None,

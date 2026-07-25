@@ -79,8 +79,8 @@ class PartialContextBenchTests(unittest.TestCase):
         self.assertIn("partial_cm_cache_live_vars_median", row)
         self.assertEqual(row["partial_bitset_baseline_kind"], "raw_ast_recursive")
 
-        # Under --cm-words-eval the Bitset controls must use the same engine as
-        # the CM side (latent-fix 1) and stay bit-exact against the references.
+        # A words request below the six-variable crossover truthfully records
+        # the flat compatibility engine used on both sides.
         cm_bench.args = _partial_args(cm_words_eval=True, cm_hybrid_threshold=16)
         words_row = cm_bench.time_partial_context_workload(
             3,
@@ -92,7 +92,8 @@ class PartialContextBenchTests(unittest.TestCase):
             sample_rng=np.random.default_rng(2),
             robdd_order_seed=3,
         )
-        self.assertEqual(words_row["partial_bitset_baseline_kind"], "raw_ast_words")
+        self.assertEqual(words_row["partial_bitset_baseline_kind"], "raw_ast_flat")
+        self.assertEqual(words_row["partial_bitset_restricted_baseline_kinds"], "raw_ast_flat")
         self.assertEqual(words_row["partial_bitset_restricted_ok_rate"], 1.0)
         self.assertEqual(words_row["partial_cm_no_cache_ok_rate"], 1.0)
         self.assertEqual(words_row["partial_cm_cache_ok_rate"], 1.0)

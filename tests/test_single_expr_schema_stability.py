@@ -92,7 +92,7 @@ def test_no_reinflate_row_preserves_representative_schema_keys() -> None:
         cm_hybrid_threshold=16,
     )
     assert words_row["cm_words_eval"] is True
-    assert words_row["bitset_baseline_kind"] == "raw_ast_words"
+    assert words_row["bitset_baseline_kind"] == "raw_ast_flat"
     assert words_row["cm_hybrid_no_reinflate_ok"] is True
     assert words_row["bitset_ok"] is True
 

@@ -17,6 +17,7 @@ class BenchmarkConfig:
     seed: int
     max_depth: int
     full_tt_max_n: int = 16
+    corpus_jsonl: str = ""
 
     out_prefix: str = "bench_random_ops"
     depth_sweep: str = ""
@@ -85,6 +86,7 @@ class BenchmarkConfig:
     robdd_order_policy: Literal["fixed", "expr", "random", "best-of-k"] = "fixed"
     robdd_order_seed: int | None = None
     robdd_order_sweeps: int = 1
+    robdd_selection_objective: Literal["composite", "min_nodes", "min_build_time"] = "composite"
     robdd_dynamic_reordering: bool = False
     robdd_reorder_method: str = "sift"
     robdd_measure_tt_extract: bool = False
@@ -144,6 +146,8 @@ class BenchmarkConfig:
             raise ValueError("robdd_order_sweeps must be >= 1")
         if self.robdd_order_policy not in {"fixed", "expr", "random", "best-of-k"}:
             raise ValueError("invalid robdd_order_policy")
+        if self.robdd_selection_objective not in {"composite", "min_nodes", "min_build_time"}:
+            raise ValueError("invalid robdd_selection_objective")
         if self.cm_exec_target not in {"local", "runpod"}:
             raise ValueError("invalid cm_exec_target")
         if self.partial_output_mode not in {"remaining-vars", "full-vars"}:
@@ -169,6 +173,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         seed=int(getattr(args, "seed", 0)),
         max_depth=int(getattr(args, "max_depth", 3)),
         full_tt_max_n=int(getattr(args, "full_tt_max_n", 16)),
+        corpus_jsonl=str(getattr(args, "corpus_jsonl", "")),
         out_prefix=str(getattr(args, "out_prefix", "bench_random_ops")),
         depth_sweep=str(getattr(args, "depth_sweep", "")),
         html=str(getattr(args, "html", "")),
@@ -239,6 +244,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         robdd_order_policy=getattr(args, "robdd_order_policy", "fixed"),
         robdd_order_seed=getattr(args, "robdd_order_seed", None),
         robdd_order_sweeps=int(getattr(args, "robdd_order_sweeps", 1)),
+        robdd_selection_objective=str(getattr(args, "robdd_selection_objective", "composite")),
         robdd_dynamic_reordering=bool(getattr(args, "robdd_dynamic_reordering", False)),
         robdd_reorder_method=str(getattr(args, "robdd_reorder_method", "sift")),
         robdd_measure_tt_extract=bool(getattr(args, "robdd_measure_tt_extract", False)),

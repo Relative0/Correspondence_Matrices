@@ -34,7 +34,9 @@ from bitset_backend import (
 from cm_build import compile_expr_to_cm
 from cmbench.availability import detect_backends
 from cmbench.backends.bitset_utils import bitset_equivalence_check
+from cmbench.backends.bitset_engine import select_raw_ast_engine
 from cmbench.config import BenchmarkConfig, config_from_args
+from cmbench.corpus import load_expression_corpus, require_single_corpus_hash
 from cmbench.context import BenchmarkRunContext, make_context
 from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, OutputStatus
 from cmbench.backends.robdd_dd import (
@@ -105,6 +107,7 @@ from cmbench.expr.visitors import collect_subtree_hashes_fast
 from cmbench.results.equivalence import skipped_equiv_result
 from cmbench.results.expression_family import skipped_family_backend
 from cmbench.results.partial_context import skipped_partial_backend
+from cmbench.results.paired import PairedComparisonSpec, aggregate_paired_comparison
 from cm_exprlib import And, Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import (
     clear_cm_ir_persistent_cache,
@@ -115,6 +118,7 @@ from cm_ir import (
     expr_structural_hash,
     materialize_cm,
     materialize_hybrid_no_reinflate,
+    preserve_evaluation_defaults,
 )
 from cm_normalize import canonical_layout, cm_normalize_cache_stats
 from cm_operator_difference import (
@@ -653,25 +657,21 @@ def time_partial_context_workload(
         # recursive.  The engine changes with the CM-side flags; the scope of each
         # control (full recompute vs restricted) does not.
         names_full = tuple(f"x{i}" for i in range(n_vars))
-        use_words_bitset = bool(config.cm_words_eval)
-        use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
-        partial_bitset_baseline_kind = (
-            "raw_ast_words" if use_words_bitset else "raw_ast_flat" if use_flat_bitset else "raw_ast_recursive"
+        full_selection = select_raw_ast_engine(
+            live_k=len(names_full),
+            words_requested=bool(config.cm_words_eval),
+            flat_requested=bool(config.cm_flat_eval),
         )
+        partial_bitset_baseline_kind = full_selection.kind
         env_full = None
-        if not use_flat_bitset:
+        if full_selection.requires_bigint_env:
             env_full = bit_env if bit_env is not None else build_bitset_env(list(names_full))
         times_full: List[float] = []
         oks_full: List[Any] = []
         total0 = time.perf_counter()
         for i, context in enumerate(contexts):
             t0 = time.perf_counter()
-            if use_words_bitset:
-                _ = eval_expr_words_bitset(expr, names_full)
-            elif use_flat_bitset:
-                _ = eval_expr_flat_bitset(expr, names_full)
-            else:
-                _ = eval_expr_bitset(expr, env_full)
+            _ = full_selection.evaluate_expr(expr, names_full, bigint_env=env_full)
             times_full.append(time.perf_counter() - t0)
             if reference_arrays[i] is not None:
                 oks_full.append(True)
@@ -680,16 +680,21 @@ def time_partial_context_workload(
         full_total = time.perf_counter() - total0
         restricted_times: List[float] = []
         restricted_oks: List[Any] = []
+        restricted_kinds: set[str] = set()
         restricted_total0 = time.perf_counter()
         for i, context in enumerate(contexts):
             out_vars = _partial_output_vars(n_vars, context, output_mode)
-            if use_flat_bitset:
+            restricted_selection = select_raw_ast_engine(
+                live_k=len(out_vars),
+                words_requested=bool(config.cm_words_eval),
+                flat_requested=bool(config.cm_flat_eval),
+            )
+            restricted_kinds.add(restricted_selection.kind)
+            if not restricted_selection.requires_bigint_env:
                 fixed_map = {str(k): int(v) for k, v in context.items()}
                 t0 = time.perf_counter()
-                bits = (
-                    eval_expr_words_bitset(expr, tuple(out_vars), fixed=fixed_map)
-                    if use_words_bitset
-                    else eval_expr_flat_bitset(expr, tuple(out_vars), fixed=fixed_map)
+                bits = restricted_selection.evaluate_expr(
+                    expr, tuple(out_vars), fixed=fixed_map
                 )
             else:
                 env = build_bitset_env(out_vars)
@@ -704,6 +709,7 @@ def time_partial_context_workload(
         row.update(
             {
                 "partial_bitset_baseline_kind": partial_bitset_baseline_kind,
+                "partial_bitset_restricted_baseline_kinds": ";".join(sorted(restricted_kinds)),
                 "partial_bitset_full_recompute_total_s": float(full_total),
                 "partial_bitset_full_recompute_per_context_median_s": _median_or_none(times_full),
                 "partial_bitset_ok_rate": _ok_rate(oks_full),
@@ -716,6 +722,7 @@ def time_partial_context_workload(
         row.update(
             {
                 "partial_bitset_baseline_kind": None,
+                "partial_bitset_restricted_baseline_kinds": None,
                 "partial_bitset_full_recompute_total_s": None,
                 "partial_bitset_full_recompute_per_context_median_s": None,
                 "partial_bitset_ok_rate": None,
@@ -1070,25 +1077,21 @@ def time_expression_family_workload(
         # Same engine precedence as the single-expression control: words > flat >
         # recursive, so the family control matches the engine the CM side gets.
         names = tuple(f"x{i}" for i in range(n_vars))
-        use_words_bitset = bool(config.cm_words_eval)
-        use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
-        family_bitset_baseline_kind = (
-            "raw_ast_words" if use_words_bitset else "raw_ast_flat" if use_flat_bitset else "raw_ast_recursive"
+        family_selection = select_raw_ast_engine(
+            live_k=len(names),
+            words_requested=bool(config.cm_words_eval),
+            flat_requested=bool(config.cm_flat_eval),
         )
+        family_bitset_baseline_kind = family_selection.kind
         env = None
-        if not use_flat_bitset:
+        if family_selection.requires_bigint_env:
             env = bit_env if bit_env is not None else build_bitset_env(list(names))
         times: List[float] = []
         oks: List[Any] = []
         total0 = time.perf_counter()
         for expr, tt_ref in zip(variants, tt_refs):
             t0 = time.perf_counter()
-            if use_words_bitset:
-                bits = eval_expr_words_bitset(expr, names)
-            elif use_flat_bitset:
-                bits = eval_expr_flat_bitset(expr, names)
-            else:
-                bits = eval_expr_bitset(expr, env)
+            bits = family_selection.evaluate_expr(expr, names, bigint_env=env)
             times.append(time.perf_counter() - t0)
             if tt_ref is not None:
                 oks.append(bool(np.array_equal(bitset_to_bool_array(int(bits), n_vars), tt_ref)))
@@ -1158,6 +1161,7 @@ def time_expression_family_workload(
                 reorder_method=str(config.robdd_reorder_method),
                 order_seed=(None if robdd_order_seed is None else int(robdd_order_seed + i)),
                 order_sweeps=int(config.robdd_order_sweeps),
+                selection_objective=str(config.robdd_selection_objective),
                 tt_ref=tt_ref,
                 correctness_rng=sample_rng,
                 correctness_samples=int(config.sampled_correctness or (0 if build_tt else 256)),
@@ -1914,17 +1918,15 @@ def time_backends_on_expr(
                 # canonicalized CM DAG. Variables proven irrelevant by CM are fixed to an
                 # arbitrary value; invariance is checked against the CM result below.
                 raw_fixed = {name: 0 for name in vars_all if name not in output_vars}
-                use_words_bitset = bool(config.cm_words_eval)
-                bitset_baseline_kind = (
-                    "raw_ast_words_matched_scope"
-                    if use_words_bitset
-                    else "raw_ast_flat_matched_scope"
+                matched_selection = select_raw_ast_engine(
+                    live_k=len(output_vars),
+                    words_requested=bool(config.cm_words_eval),
+                    flat_requested=True,
                 )
+                bitset_baseline_kind = f"{matched_selection.kind}_matched_scope"
                 t7 = time.perf_counter()
-                bitset_tt = (
-                    eval_expr_words_bitset(expr, output_vars, fixed=raw_fixed)
-                    if use_words_bitset
-                    else eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
+                bitset_tt = matched_selection.evaluate_expr(
+                    expr, output_vars, fixed=raw_fixed
                 )
                 bitset_time = time.perf_counter() - t7
                 if res_nr.bits is not None:
@@ -1939,10 +1941,9 @@ def time_backends_on_expr(
                 if eval_repeat > 1:
                     t7r = time.perf_counter()
                     for _ in range(eval_repeat):
-                        if use_words_bitset:
-                            _ = eval_expr_words_bitset(expr, output_vars, fixed=raw_fixed)
-                        else:
-                            _ = eval_expr_flat_bitset(expr, output_vars, fixed=raw_fixed)
+                        _ = matched_selection.evaluate_expr(
+                            expr, output_vars, fixed=raw_fixed
+                        )
                     bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             else:
                 cm_hybrid_no_reinflate_ok = None
@@ -2104,6 +2105,7 @@ def time_backends_on_expr(
             reorder_method=config.robdd_reorder_method,
             order_seed=robdd_order_seed,
             order_sweeps=config.robdd_order_sweeps,
+            selection_objective=config.robdd_selection_objective,
             tt_ref=tt_ref,
             correctness_rng=sample_rng,
             correctness_samples=correctness_samples,
@@ -2121,6 +2123,7 @@ def time_backends_on_expr(
             reorder_method=config.robdd_reorder_method,
             status="disabled",
             error=None,
+            selection_objective=config.robdd_selection_objective,
         )
 
     def _derived_ratio(a: Any, b: Any) -> Optional[float]:
@@ -2155,35 +2158,28 @@ def time_backends_on_expr(
             if verbose:
                 print(f"[n={n}] Bitset eval ...")
             bitset_vars = tuple(f"x{i}" for i in range(n))
-            use_words_bitset = bool(config.cm_words_eval)
-            use_flat_bitset = bool(config.cm_flat_eval or use_words_bitset)
+            bitset_selection = select_raw_ast_engine(
+                live_k=len(bitset_vars),
+                words_requested=bool(config.cm_words_eval),
+                flat_requested=bool(config.cm_flat_eval),
+            )
             # The full bigint environment feeds only the recursive engine; skip
             # building it when the flat/words branch below will never use it.
             local_bit_env = None
-            if not use_flat_bitset:
+            if bitset_selection.requires_bigint_env:
                 local_bit_env = bit_env if bit_env is not None else build_bitset_env([f"x{i}" for i in range(n)])
-            if use_words_bitset:
-                bitset_baseline_kind = "raw_ast_words"
-            elif use_flat_bitset:
-                bitset_baseline_kind = "raw_ast_flat"
+            bitset_baseline_kind = bitset_selection.kind
             t7 = time.perf_counter()
-            bitset_tt = (
-                eval_expr_words_bitset(expr, bitset_vars)
-                if use_words_bitset
-                else eval_expr_flat_bitset(expr, bitset_vars)
-                if use_flat_bitset
-                else eval_expr_bitset(expr, local_bit_env)
+            bitset_tt = bitset_selection.evaluate_expr(
+                expr, bitset_vars, bigint_env=local_bit_env
             )
             bitset_time = time.perf_counter() - t7
             if eval_repeat > 1:
                 t7r = time.perf_counter()
                 for _ in range(eval_repeat):
-                    if use_words_bitset:
-                        _ = eval_expr_words_bitset(expr, bitset_vars)
-                    elif use_flat_bitset:
-                        _ = eval_expr_flat_bitset(expr, bitset_vars)
-                    else:
-                        _ = eval_expr_bitset(expr, local_bit_env)
+                    _ = bitset_selection.evaluate_expr(
+                        expr, bitset_vars, bigint_env=local_bit_env
+                    )
                 bitset_cached_exec_only_time = (time.perf_counter() - t7r) / float(eval_repeat)
             if tt_ref is not None:
                 t7x = time.perf_counter()
@@ -2619,6 +2615,20 @@ def time_backends_on_expr(
         "bitset_extract_time_s": bitset_extract_time,
         "bitset_ok": bitset_ok,
         "bitset_baseline_kind": bitset_baseline_kind,
+        "bitset_artifact_kind": "packed_truth_function",
+        "bitset_timing_kind": "packed_execution",
+        "cm_hybrid_no_reinflate_artifact_kind": (
+            "packed_truth_function"
+            if config.cm_compare_no_reinflate and cm_hybrid_no_reinflate_tt_extract_time == 0.0
+            else "truth_table_vector"
+            if config.cm_compare_no_reinflate
+            else None
+        ),
+        "cm_hybrid_no_reinflate_timing_kind": (
+            "packed_execution" if config.cm_compare_no_reinflate else None
+        ),
+        "robdd_artifact_kind": "symbolic_bdd",
+        "robdd_timing_kind": "compilation",
         "cm_words_eval": bool(config.cm_words_eval),
         "cm_time_excludes_tt_extract": True,
         "cm_hybrid_time_excludes_tt_extract": True,
@@ -2787,6 +2797,15 @@ def run_bench(
     use_dd = select_dd_module("autoref")[0] is not None
     use_espresso = pyeda is not None
     rows = []
+    corpus = load_expression_corpus(config.corpus_jsonl) if config.corpus_jsonl else None
+    corpus_by_n = (
+        {
+            n: [formula for formula in corpus.formulas if formula.nominal_n == n]
+            for n in sizes
+        }
+        if corpus is not None
+        else {}
+    )
 
     bit_env_by_n = _prepare_single_expr_bitset_envs(sizes, config)
     full_tt_max_n = config.full_tt_max_n
@@ -2797,10 +2816,27 @@ def run_bench(
             if n > full_tt_max_n:
                 print("[info] n>16: skipping Sympy/Espresso/TT")
         for t in range(trials):
-            expr, expr_diag, tt_ref = _generate_single_expr_trial(n, rng, max_depth, expr_style, config)
+            corpus_formula = None
+            if corpus is not None:
+                available = corpus_by_n.get(n, [])
+                if t >= len(available):
+                    raise ValueError(
+                        f"corpus has {len(available)} formulas for n={n}, fewer than trials={trials}"
+                    )
+                corpus_formula = available[t]
+                expr = corpus_formula.to_expr()
+                tt_ref = eval_expr_tt(expr, n).astype(np.uint8).reshape(-1) if n <= full_tt_max_n else None
+                expr_diag = {
+                    **expr_complexity_diagnostics(expr, n),
+                    **truth_table_diagnostics(tt_ref),
+                    "expr_regeneration_attempts": 0,
+                    "expr_filter_reason": "serialized_corpus",
+                }
+            else:
+                expr, expr_diag, tt_ref = _generate_single_expr_trial(n, rng, max_depth, expr_style, config)
             if verbose:
                 print(f"  Trial {t + 1}/{trials}")
-            rows.append(_run_single_expr_trial(
+            trial_row = _run_single_expr_trial(
                 n,
                 t,
                 expr,
@@ -2815,9 +2851,19 @@ def run_bench(
                 sample_rng=sample_rng,
                 config=config,
                 ctx=ctx,
-            ))
+            )
+            if corpus is not None and corpus_formula is not None:
+                trial_row.update(
+                    {
+                        "corpus_sha256": corpus.sha256,
+                        "corpus_formula_id": corpus_formula.formula_id,
+                        "corpus_formula_sha256": corpus_formula.formula_sha256,
+                    }
+                )
+            rows.append(trial_row)
 
     df = pd.DataFrame(rows)
+    corpus_hash = require_single_corpus_hash(rows) if corpus is not None else None
 
     def safe_median(s):
         try:
@@ -2889,6 +2935,13 @@ def run_bench(
             custom_tt_robdd_nodes_median=("custom_tt_robdd_nodes", safe_median),
             robdd_node_count_median=("robdd_node_count", safe_median),
             robdd_best_time_s_median=("robdd_best_time_s", safe_median),
+            robdd_fastest_build_time_s_median=("robdd_fastest_build_time_s", safe_median),
+            robdd_smallest_node_build_time_s_median=("robdd_smallest_node_build_time_s", safe_median),
+            robdd_selected_build_time_s_median=("robdd_selected_build_time_s", safe_median),
+            robdd_selected_trial_index_median=("robdd_selected_trial_index", safe_median),
+            robdd_order_generation_time_s_median=("robdd_order_generation_time_s", safe_median),
+            robdd_order_search_time_s_median=("robdd_order_search_time_s", safe_median),
+            robdd_all_in_search_time_s_median=("robdd_all_in_search_time_s", safe_median),
             robdd_median_time_s_median=("robdd_median_time_s", safe_median),
             robdd_worst_time_s_median=("robdd_worst_time_s", safe_median),
             robdd_best_nodes_median=("robdd_best_nodes", safe_median),
@@ -3135,6 +3188,8 @@ def run_bench(
             robdd_order_seed_median=("robdd_order_seed", safe_median),
             robdd_order_sweeps_median=("robdd_order_sweeps", safe_median),
             robdd_order_used=("robdd_order_used", safe_first),
+            robdd_selection_objective=("robdd_selection_objective", safe_first),
+            robdd_selection_tiebreak=("robdd_selection_tiebreak", safe_first),
             robdd_dynamic_reordering_requested_all=("robdd_dynamic_reordering_requested", safe_all),
             robdd_dynamic_reordering_available_all=("robdd_dynamic_reordering_available", safe_all),
             robdd_dynamic_reordering_used_all=("robdd_dynamic_reordering_used", safe_all),
@@ -3452,6 +3507,39 @@ def run_bench(
         axis=1,
     )
 
+    # Authoritative comparative fields use the same raw rows on both sides.
+    # Historical ratio columns above remain for compatibility and retain their
+    # original ratio-of-independent-medians meaning.
+    if config.cm_compare_no_reinflate and "cm_hybrid_no_reinflate_time_s" in df.columns:
+        paired_rows = []
+        for raw in df.to_dict(orient="records"):
+            left_status = (
+                "declined"
+                if bool(raw.get("cm_hybrid_no_reinflate_declined"))
+                else "success"
+                if raw.get("cm_hybrid_no_reinflate_time_s") is not None
+                else "error"
+            )
+            right_status = "success" if raw.get("bitset_time_s") is not None else "error"
+            paired_rows.append({**raw, "_cm_nr_status": left_status, "_bitset_status": right_status})
+        paired_by_n = []
+        for n_value in sorted(df["n_vars"].unique().tolist()):
+            selected = [r for r in paired_rows if r["n_vars"] == n_value]
+            paired = aggregate_paired_comparison(
+                selected,
+                PairedComparisonSpec(
+                    "cm_hybrid_no_reinflate_time_s",
+                    "bitset_time_s",
+                    "_cm_nr_status",
+                    "_bitset_status",
+                ),
+            )
+            paired_by_n.append({
+                "n_vars": n_value,
+                **{f"paired_cm_nr_over_bitset_{key}": value for key, value in paired.items()},
+            })
+        agg = agg.merge(pd.DataFrame(paired_by_n), on="n_vars", how="left")
+
     agg["backend_robdd"] = not config.no_robdd
     agg["backend_dd"] = use_dd and (not config.no_dd)
     agg["backend_robdd_dd"] = use_dd and (not config.no_dd) and (not config.no_robdd_dd)
@@ -3466,6 +3554,9 @@ def run_bench(
     agg["cm_default_materialize_mode"] = "numpy" if config.cm_compare_hybrid else "partial_hybrid"
     agg["cm_layout"] = config.cm_layout
     agg["expr_style"] = expr_style
+    if corpus_hash is not None:
+        agg["corpus_sha256"] = corpus_hash
+        agg["corpus_formula_count"] = len(rows)
     return df, agg
 
 
@@ -4530,6 +4621,7 @@ def write_html_report(html_path: str, agg_all: "pd.DataFrame", depths: List[int]
     print("Wrote HTML:", html_path)
 
 
+@preserve_evaluation_defaults
 def main():
     import pandas as pd
 
@@ -4633,6 +4725,11 @@ def main():
     ap.add_argument("--robdd-order-policy", choices=["fixed", "expr", "random", "best-of-k"], default="fixed")
     ap.add_argument("--robdd-order-seed", type=int, default=None)
     ap.add_argument("--robdd-order-sweeps", type=int, default=1)
+    ap.add_argument(
+        "--robdd-selection-objective",
+        choices=["composite", "min_nodes", "min_build_time"],
+        default="composite",
+    )
     ap.add_argument("--robdd-dynamic-reordering", action="store_true")
     ap.add_argument("--robdd-reorder-method", type=str, default="sift")
     ap.add_argument("--robdd-measure-tt-extract", dest="robdd_measure_tt_extract", action="store_true")
@@ -4713,6 +4810,11 @@ def main():
         help="Sample K full assignments and compare original AST evaluation with no-reinflate output projection.",
     )
     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
+    ap.add_argument(
+        "--corpus-jsonl",
+        default="",
+        help="Consume immutable serialized expressions instead of regenerating formulas.",
+    )
     ap.add_argument("--cm-max-full-output-vars", dest="cm_max_full_output_vars", type=int, default=16)
     ap.add_argument(
         "--cm-max-output-bytes",
