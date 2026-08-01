@@ -76,7 +76,9 @@ def _init_ir_persistent_cache_diagnostics(diag: Optional[Dict[str, Any]]) -> Non
 
 
 _COMPILED_IR_CACHE_MAXSIZE = 4096
-_COMPILED_IR_CACHE: "OrderedDict[Expr, CMNode]" = OrderedDict()
+# Keyed by (expr, share_aware_flatten) so ablation compiles cannot alias the
+# default-canonicalization entries.
+_COMPILED_IR_CACHE: "OrderedDict[Tuple[Expr, bool], CMNode]" = OrderedDict()
 
 
 def clear_cm_ir_compile_cache() -> None:
@@ -230,13 +232,85 @@ def expr_structural_hash(expr: Expr) -> str:
     return _structural_digest(expr, {}).hex()
 
 
+def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
+    """Commutative-canonical, association-PRESERVING digest (blake2b-128).
+
+    Sorts the two operand digests for AND/OR/XOR/EQV and preserves IMP order,
+    but — unlike ``expr_structural_hash`` — does NOT flatten associative
+    chains. Digest equality therefore implies an identical commutative-sorted
+    structural uid graph (see ``CMIRBuilder._shared_assoc_uids``), and hence
+    an identical sharing-aware compile. ``expr_structural_hash`` is too
+    coarse for a compile cache under sharing-aware flattening: it identifies
+    re-associations that canonicalize differently around shared subchains.
+
+    ``memo`` is id-keyed and must only live while the hashed expressions are
+    referenced by the caller (same invariant as ``_structural_digest``).
+    """
+    cached = memo.get(id(e))
+    if cached is not None:
+        return cached
+    h = hashlib.blake2b(digest_size=16)
+    if isinstance(e, Var):
+        h.update(b"VAR:")
+        h.update(_expr_var_name(e).encode("utf-8"))
+    elif isinstance(e, Not):
+        h.update(b"NOT:")
+        h.update(_persistent_digest(e.a, memo))
+    elif isinstance(e, Imp):
+        h.update(b"IMP:")
+        h.update(_persistent_digest(e.a, memo))
+        h.update(_persistent_digest(e.b, memo))
+    elif isinstance(e, (And, Or, Xor, Eqv)):
+        tag = {And: b"AND2:", Or: b"OR2:", Xor: b"XOR2:", Eqv: b"EQV2:"}[type(e)]
+        a = _persistent_digest(e.a, memo)
+        b = _persistent_digest(e.b, memo)
+        if b < a:
+            a, b = b, a
+        h.update(tag)
+        h.update(a)
+        h.update(b)
+    else:
+        raise TypeError(e)
+    d = h.digest()
+    memo[id(e)] = d
+    return d
+
+
 def compile_expr_to_cm_ir_persistent(
     expr: Expr,
     diagnostics: Optional[Dict[str, Any]] = None,
     *,
     reuse_cache: bool = False,
+    share_aware_flatten: bool = True,
+    build_memo: bool = True,
 ) -> CMNode:
-    """Compile Expr -> CM IR with persistent structural-hash caching for subtrees."""
+    """Compile Expr -> CM IR with a persistent digest-keyed cache.
+
+    2026-08-02 Phase A1: this path now uses the same sharing-aware
+    canonicalization as the default builder, so normal and persistent
+    compilation produce identical canonical keys and graph shapes.
+
+    Caching strategy (soundness argument in
+    CM_GAP_FINAL_REPAIR_AND_E3_2026-08-02.md §A1):
+
+    - Cache keys are commutative-canonical, association-preserving digests
+      (:func:`_persistent_digest`) prefixed with the flattening option, so a
+      hit can never return a node compiled under incompatible options.
+      ``build_memo`` is deliberately absent from the key: it cannot change
+      canonical output (guarded by tests).
+    - If the expression contains NO shared associative classes, guarded
+      canonicalization is context-free (identical to legacy always-splice),
+      and subtrees are cached/reused individually — preserving the historical
+      related-expression reuse behavior. Every entry stored this way is fully
+      spliced.
+    - If shared associative classes exist, canonical shape is
+      context-dependent, so only the ROOT expression is cached; compilation
+      delegates to :meth:`CMIRBuilder.build` (guard + per-call memo), which
+      guarantees normal-path equivalence by construction. The two regimes
+      cannot cross-contaminate: a digest match between them would require
+      the same class graph on both sides, contradicting one side having and
+      the other lacking shared classes.
+    """
     _init_ir_compile_diagnostics(diagnostics)
     _init_ir_persistent_cache_diagnostics(diagnostics)
 
@@ -256,42 +330,56 @@ def compile_expr_to_cm_ir_persistent(
             _PERSISTENT_IR_CACHE.popitem(last=False)
         return node
 
-    builder = CMIRBuilder(diagnostics)
-    # One digest memo shared across the whole compile: each subtree is hashed once
-    # (bottom-up) instead of re-walked by every enclosing expr_structural_hash call.
-    # Digest values are unchanged, so persistent-cache keys are unaffected.
+    prefix = "s1:" if share_aware_flatten else "s0:"
+    builder = CMIRBuilder(diagnostics, share_aware_flatten=share_aware_flatten,
+                          build_memo=build_memo)
     digest_memo: Dict[int, bytes] = {}
 
-    def build(e: Expr) -> CMNode:
-        key = _structural_digest(e, digest_memo).hex()
+    shared_uids: set = set()
+    if share_aware_flatten:
+        _uids, shared_uids = CMIRBuilder._shared_assoc_uids(expr)
+
+    def compile_root_level() -> CMNode:
+        key = prefix + _persistent_digest(expr, digest_memo).hex()
         cached = cache_get(key)
         if cached is not None:
             return cached
-        if isinstance(e, Var):
-            name = getattr(e, "name", None)
-            node = builder.var(name if isinstance(name, str) else f"x{int(e.i)}")
-        elif isinstance(e, Not):
-            node = builder.negate(build(e.a))
-        elif isinstance(e, And):
-            node = builder.make_and((build(e.a), build(e.b)))
-        elif isinstance(e, Or):
-            node = builder.make_or((build(e.a), build(e.b)))
-        elif isinstance(e, Xor):
-            node = builder.make_xor((build(e.a), build(e.b)))
-        elif isinstance(e, Imp):
-            node = builder.make_imp(build(e.a), build(e.b))
-        elif isinstance(e, Eqv):
-            node = builder.make_eqv(build(e.a), build(e.b))
-        else:
-            raise TypeError(e)
-        return cache_put(key, node)
+        return cache_put(key, builder.build(expr))
 
+    def compile_subtree_level() -> CMNode:
+        def build(e: Expr) -> CMNode:
+            key = prefix + _persistent_digest(e, digest_memo).hex()
+            cached = cache_get(key)
+            if cached is not None:
+                return cached
+            if isinstance(e, Var):
+                name = getattr(e, "name", None)
+                node = builder.var(name if isinstance(name, str) else f"x{int(e.i)}")
+            elif isinstance(e, Not):
+                node = builder.negate(build(e.a))
+            elif isinstance(e, And):
+                node = builder.make_and((build(e.a), build(e.b)))
+            elif isinstance(e, Or):
+                node = builder.make_or((build(e.a), build(e.b)))
+            elif isinstance(e, Xor):
+                node = builder.make_xor((build(e.a), build(e.b)))
+            elif isinstance(e, Imp):
+                node = builder.make_imp(build(e.a), build(e.b))
+            elif isinstance(e, Eqv):
+                node = builder.make_eqv(build(e.a), build(e.b))
+            else:
+                raise TypeError(e)
+            return cache_put(key, node)
+
+        return build(expr)
+
+    compile_fn = compile_root_level if shared_uids else compile_subtree_level
     if _ir_timing_enabled(diagnostics):
         t0 = time.perf_counter()
-        node = build(expr)
+        node = compile_fn()
         _add_float(diagnostics, "ir_compile_time_s", time.perf_counter() - t0)
     else:
-        node = build(expr)
+        node = compile_fn()
     if diagnostics is not None:
         diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
     return node
@@ -401,10 +489,62 @@ class CMNode:
         return h
 
 
+class _BuildState:
+    """Per-compilation state for one outermost CMIRBuilder.build call.
+
+    ``memo`` maps ``id(expr) -> (expr, node)``; holding the expression object
+    itself keeps every memo key's id valid for exactly the memo's lifetime
+    (the same invariant _structural_digest documents). The state is discarded
+    when the outermost build returns, so no object id outlives its referent.
+    """
+
+    __slots__ = ("memo", "no_splice", "uid_by_id", "shared_uids", "memo_by_uid")
+
+    def __init__(self, memo: Optional[Dict[int, Tuple[Expr, "CMNode"]]],
+                 no_splice: Optional[set],
+                 uid_by_id: Optional[Dict[int, int]] = None,
+                 shared_uids: Optional[set] = None):
+        self.memo = memo
+        self.no_splice = no_splice
+        self.uid_by_id = uid_by_id
+        self.shared_uids = shared_uids
+        # Structural memo: uid -> node. Guarantees make_* runs exactly once
+        # per structural equivalence class, at its first DFS encounter, so
+        # canonical output is a pure function of the deduplicated structure —
+        # identical for identity-shared and tree-expanded representations of
+        # the same expression. (Without this, no_splice marks that accrue
+        # mid-build could make a later *rebuild* of a duplicated subtree
+        # canonicalize differently than its first build — found by the
+        # 2026-08-02 merge-review fuzz.)
+        self.memo_by_uid: Optional[Dict[int, "CMNode"]] = (
+            {} if uid_by_id is not None else None)
+
+
 class CMIRBuilder:
-    def __init__(self, diagnostics: Optional[Dict[str, int]] = None):
+    def __init__(
+        self,
+        diagnostics: Optional[Dict[str, int]] = None,
+        *,
+        share_aware_flatten: bool = True,
+        build_memo: bool = True,
+    ):
         self.diagnostics = diagnostics
+        # Interning map keyed by COMPACT lookup keys (op tag + child intern
+        # uids), not by the deep structural CMNode.key — hashing a deep key
+        # is O(subtree) per lookup and was the dominant compile cost
+        # (2026-08-02 Phase B). The public CMNode.key is unchanged.
         self._interned: Dict[Tuple[object, ...], CMNode] = {}
+        # id(node) -> small int, builder-local; nodes are kept alive by
+        # _interned, so ids are stable for the builder's lifetime. Foreign
+        # nodes (built by another builder) are registered by identity on
+        # first use: semantically safe, they just don't dedupe structurally.
+        self._uid_of_node: Dict[int, int] = {}
+        self.share_aware_flatten = bool(share_aware_flatten)
+        self.build_memo = bool(build_memo)
+        # Non-None only while an outermost build() is executing. Builders are
+        # not thread-safe (this was already true of _interned); concurrent
+        # build() calls on one builder instance are unsupported.
+        self._build_state: Optional[_BuildState] = None
 
     def _maybe_time(self, *, calls_key: str, time_key: str) -> Optional[float]:
         if not _ir_timing_enabled(self.diagnostics):
@@ -416,6 +556,12 @@ class CMIRBuilder:
         if t0 is None or self.diagnostics is None:
             return
         _add_float(self.diagnostics, time_key, time.perf_counter() - t0)
+
+    def _node_uid(self, node: CMNode) -> int:
+        uid = self._uid_of_node.get(id(node))
+        if uid is None:
+            uid = self._uid_of_node[id(node)] = len(self._uid_of_node)
+        return uid
 
     def _intern(
         self,
@@ -432,7 +578,15 @@ class CMIRBuilder:
         if _ir_timing_enabled(self.diagnostics):
             _bump(self.diagnostics, "ir_intern_calls")
             t0 = time.perf_counter()
-        cached = self._interned.get(key)
+        # Compact O(arity) lookup key; ``key`` (the deep structural tuple)
+        # is stored on the node unchanged but never hashed here.
+        if kind == "var":
+            lookup: Tuple[object, ...] = ("VAR", var_name)
+        elif kind == "const":
+            lookup = ("CONST", const_value)
+        else:
+            lookup = (op,) + tuple(self._node_uid(a) for a in args)
+        cached = self._interned.get(lookup)
         if cached is not None:
             _bump(self.diagnostics, "subtree_cache_hits")
             if t0 is not None:
@@ -448,7 +602,8 @@ class CMIRBuilder:
             args=args,
             var_name=var_name,
         )
-        self._interned[key] = node
+        self._interned[lookup] = node
+        self._uid_of_node[id(node)] = len(self._uid_of_node)
         if t0 is not None:
             _add_float(self.diagnostics, "ir_intern_time_s", time.perf_counter() - t0)
         return node
@@ -515,11 +670,24 @@ class CMIRBuilder:
 
     def _canonicalize_commutative_args(self, op: str, args: Sequence[CMNode]) -> Tuple[CMNode, ...]:
         t0 = self._maybe_time(calls_key="ir_canonicalize_calls", time_key="ir_canonicalize_time_s")
+        # Sharing-aware flattening (2026-08-02 gap repair): splicing a child's
+        # args into every consumer re-executes the child's whole subchain per
+        # consumer, destroying the reuse interning created. During build(),
+        # associative subexpressions with more than one consumer edge are
+        # recorded in the per-compilation no_splice set and kept as nodes.
+        # Outside build() (direct make_* calls) the set is None and behavior
+        # is unchanged.
+        state = self._build_state
+        no_splice = state.no_splice if state is not None else None
         try:
             out: List[CMNode] = []
             changed = False
             for node in args:
                 if node.kind == "binary" and node.op == op and op in ASSOCIATIVE_OPS:
+                    if no_splice is not None and id(node) in no_splice:
+                        _bump(self.diagnostics, "canonical_splice_suppressed")
+                        out.append(node)
+                        continue
                     out.extend(node.args)
                     changed = True
                 else:
@@ -541,6 +709,8 @@ class CMIRBuilder:
         ordered = self._canonicalize_commutative_args("AND", args)
 
         t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
+        # seen/negated_bases hold intern uids, not nodes: hashing a CMNode is
+        # O(subtree) on first use, uids are O(1) (2026-08-02 Phase B).
         out: List[CMNode] = []
         seen = set()
         negated_bases = set()
@@ -555,13 +725,14 @@ class CMIRBuilder:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
                 continue
-            if node in seen:
+            uid = self._node_uid(node)
+            if uid in seen:
                 _bump(self.diagnostics, "canonical_rewrites")
                 continue
             is_complement = (
-                node.args[0] in seen
+                self._node_uid(node.args[0]) in seen
                 if node.kind == "not"
-                else node in negated_bases
+                else uid in negated_bases
             )
             if is_complement:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -570,9 +741,9 @@ class CMIRBuilder:
                     _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(0)
             out.append(node)
-            seen.add(node)
+            seen.add(uid)
             if node.kind == "not":
-                negated_bases.add(node.args[0])
+                negated_bases.add(self._node_uid(node.args[0]))
 
         if t0 is not None:
             _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
@@ -613,13 +784,14 @@ class CMIRBuilder:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
                 continue
-            if node in seen:
+            uid = self._node_uid(node)
+            if uid in seen:
                 _bump(self.diagnostics, "canonical_rewrites")
                 continue
             is_complement = (
-                node.args[0] in seen
+                self._node_uid(node.args[0]) in seen
                 if node.kind == "not"
-                else node in negated_bases
+                else uid in negated_bases
             )
             if is_complement:
                 _bump(self.diagnostics, "canonical_rewrites")
@@ -628,9 +800,9 @@ class CMIRBuilder:
                     _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
                 return self.const(1)
             out.append(node)
-            seen.add(node)
+            seen.add(uid)
             if node.kind == "not":
-                negated_bases.add(node.args[0])
+                negated_bases.add(self._node_uid(node.args[0]))
 
         if t0 is not None:
             _add_float(self.diagnostics, "ir_rewrite_time_s", time.perf_counter() - t0)
@@ -657,7 +829,8 @@ class CMIRBuilder:
         ordered = self._canonicalize_commutative_args("XOR", args)
 
         t0 = time.perf_counter() if _ir_timing_enabled(self.diagnostics) else None
-        counts: Dict[CMNode, int] = {}
+        counts: Dict[int, int] = {}
+        node_by_uid: Dict[int, CMNode] = {}
         parity = 0
         for node in ordered:
             if node.const_value is not None:
@@ -665,9 +838,12 @@ class CMIRBuilder:
                 _bump(self.diagnostics, "canonical_rewrites")
                 _bump(self.diagnostics, "pruned_branches")
                 continue
-            counts[node] = counts.get(node, 0) + 1
+            uid = self._node_uid(node)
+            counts[uid] = counts.get(uid, 0) + 1
+            node_by_uid[uid] = node
 
-        out = [node for node in sorted(counts, key=lambda n: n.key) if (counts[node] % 2) == 1]
+        out = [node_by_uid[uid] for uid in
+               sorted(counts, key=lambda u: node_by_uid[u].key) if (counts[uid] % 2) == 1]
         if len(out) != len(counts) or any(v > 1 for v in counts.values()):
             _bump(self.diagnostics, "canonical_rewrites")
 
@@ -803,25 +979,150 @@ class CMIRBuilder:
             args=(left, right),
         )
 
+    @staticmethod
+    def _shared_assoc_uids(expr: Expr) -> Tuple[Dict[int, int], set]:
+        """Syntactic fanout prepass for sharing-aware flattening.
+
+        Assigns every subexpression a structural intern uid (merging
+        structurally equal, separately allocated subtrees — so sharing that
+        only interning would recover, e.g. after a tree-JSON round trip, is
+        counted too) and counts consumer edges per uid. Returns
+        ``(uid_by_id, shared_assoc_uids)`` where the set contains uids of
+        associative-op subexpressions with more than one consumer edge.
+
+        Operand order of commutative operators (AND/OR/XOR/EQV) is sorted
+        into the uid key, so ``Xor(a, b)`` and ``Xor(b, a)`` share one class
+        — the builder canonicalizes them to one node, so counting them apart
+        would under-count fanout and let the splice guard duplicate their
+        subchains (2026-08-02 Phase A4). This also makes uid classes match
+        the persistent cache's commutative-canonical digest classes, which
+        the persistent path's soundness argument relies on.
+
+        Iterative (no recursion-depth limit). Holds only ids of objects kept
+        alive by ``expr`` for the duration of this call's caller.
+        """
+        uid_by_id: Dict[int, int] = {}
+        intern: Dict[Tuple[object, ...], int] = {}
+        fanout: Dict[int, int] = {}
+        assoc_uids: set = set()
+        scheduled: set = set()
+        stack: List[Tuple[Expr, bool]] = [(expr, False)]
+        while stack:
+            e, processed = stack.pop()
+            if processed:
+                if isinstance(e, Var):
+                    children: Tuple[int, ...] = ()
+                    key: Tuple[object, ...] = ("v", _expr_var_name(e))
+                elif isinstance(e, Not):
+                    children = (uid_by_id[id(e.a)],)
+                    key = ("n",) + children
+                else:
+                    children = (uid_by_id[id(e.a)], uid_by_id[id(e.b)])
+                    if isinstance(e, Imp):
+                        key = ("Imp",) + children
+                    elif children[0] <= children[1]:
+                        key = (type(e).__name__,) + children
+                    else:
+                        key = (type(e).__name__, children[1], children[0])
+                uid = intern.get(key)
+                if uid is None:
+                    uid = intern[key] = len(intern)
+                    if isinstance(e, (And, Or, Xor)):
+                        assoc_uids.add(uid)
+                    # Count consumer edges once per deduplicated structural
+                    # parent: two separately allocated copies of the same
+                    # parent are one consumer, not two.
+                    for child_uid in children:
+                        fanout[child_uid] = fanout.get(child_uid, 0) + 1
+                uid_by_id[id(e)] = uid
+                continue
+            if id(e) in scheduled:
+                continue
+            scheduled.add(id(e))
+            stack.append((e, True))
+            if isinstance(e, Var):
+                pass
+            elif isinstance(e, Not):
+                stack.append((e.a, False))
+            elif isinstance(e, (And, Or, Xor, Imp, Eqv)):
+                stack.append((e.b, False))
+                stack.append((e.a, False))
+            else:
+                raise TypeError(e)
+        shared = {u for u in assoc_uids if fanout.get(u, 0) > 1}
+        return uid_by_id, shared
+
     def build(self, expr: Expr) -> CMNode:
+        state = self._build_state
+        if state is not None:
+            # Reentrant call inside an active compilation (e.g. a subclass
+            # recursing through build): reuse the outermost call's state.
+            return self._build_rec(expr, state)
+
+        memo: Optional[Dict[int, Tuple[Expr, CMNode]]] = {} if self.build_memo else None
+        uid_by_id: Optional[Dict[int, int]] = None
+        shared_uids: Optional[set] = None
+        no_splice: Optional[set] = None
+        if self.share_aware_flatten:
+            uid_by_id, shared_uids = self._shared_assoc_uids(expr)
+            no_splice = set()
+            if self.diagnostics is not None:
+                _bump(self.diagnostics, "build_shared_assoc_subexprs", len(shared_uids))
+        state = _BuildState(memo, no_splice, uid_by_id, shared_uids)
+        self._build_state = state
+        try:
+            return self._build_rec(expr, state)
+        finally:
+            self._build_state = None
+
+    def _build_rec(self, expr: Expr, state: _BuildState) -> CMNode:
+        memo = state.memo
+        if memo is not None:
+            hit = memo.get(id(expr))
+            if hit is not None:
+                if self.diagnostics is not None:
+                    _bump(self.diagnostics, "build_memo_hits")
+                return hit[1]
+        uid = state.uid_by_id.get(id(expr)) if state.uid_by_id is not None else None
+        if uid is not None and state.memo_by_uid is not None:
+            cached = state.memo_by_uid.get(uid)
+            if cached is not None:
+                if self.diagnostics is not None:
+                    _bump(self.diagnostics, "build_memo_hits")
+                if memo is not None:
+                    memo[id(expr)] = (expr, cached)
+                return cached
         if isinstance(expr, Var):
             name = getattr(expr, "name", None)
-            if isinstance(name, str):
-                return self.var(name)
-            return self.var(f"x{int(expr.i)}")
-        if isinstance(expr, Not):
-            return self.negate(self.build(expr.a))
-        if isinstance(expr, And):
-            return self.make_and((self.build(expr.a), self.build(expr.b)))
-        if isinstance(expr, Or):
-            return self.make_or((self.build(expr.a), self.build(expr.b)))
-        if isinstance(expr, Xor):
-            return self.make_xor((self.build(expr.a), self.build(expr.b)))
-        if isinstance(expr, Imp):
-            return self.make_imp(self.build(expr.a), self.build(expr.b))
-        if isinstance(expr, Eqv):
-            return self.make_eqv(self.build(expr.a), self.build(expr.b))
-        raise TypeError(expr)
+            node = self.var(name if isinstance(name, str) else f"x{int(expr.i)}")
+        elif isinstance(expr, Not):
+            node = self.negate(self._build_rec(expr.a, state))
+        elif isinstance(expr, And):
+            node = self.make_and((self._build_rec(expr.a, state),
+                                  self._build_rec(expr.b, state)))
+        elif isinstance(expr, Or):
+            node = self.make_or((self._build_rec(expr.a, state),
+                                 self._build_rec(expr.b, state)))
+        elif isinstance(expr, Xor):
+            node = self.make_xor((self._build_rec(expr.a, state),
+                                  self._build_rec(expr.b, state)))
+        elif isinstance(expr, Imp):
+            node = self.make_imp(self._build_rec(expr.a, state),
+                                 self._build_rec(expr.b, state))
+        elif isinstance(expr, Eqv):
+            node = self.make_eqv(self._build_rec(expr.a, state),
+                                 self._build_rec(expr.b, state))
+        else:
+            raise TypeError(expr)
+        if uid is not None:
+            if state.no_splice is not None and state.shared_uids is not None \
+                    and uid in state.shared_uids:
+                state.no_splice.add(id(node))
+            if state.memo_by_uid is not None:
+                state.memo_by_uid[uid] = node
+        if memo is not None:
+            memo[id(expr)] = (expr, node)
+        return node
 
 
 def compile_expr_to_cm_ir(
@@ -830,17 +1131,31 @@ def compile_expr_to_cm_ir(
     *,
     reuse_cache: bool = False,
     persistent_cache: bool = False,
+    share_aware_flatten: bool = True,
+    build_memo: bool = True,
 ) -> CMNode:
     """Compile a boolean expression AST into a canonicalized, interned CM IR DAG.
 
     If ``reuse_cache=True``, the compiled IR may be reused across calls for identical immutable
     Expr objects. This is an explicit opt-in behavior to preserve benchmark semantics.
 
-    If ``persistent_cache=True``, a process-level persistent cache keyed by structural hash is used.
+    If ``persistent_cache=True``, a process-level persistent cache keyed by commutative-canonical
+    digest is used; it applies the same flags and produces canonical keys and graph shapes
+    identical to the default path (2026-08-02 Phase A1).
+
+    ``share_aware_flatten``/``build_memo`` (2026-08-02 gap repair): sharing-aware associative
+    flattening and per-compilation memoization. Defaults on; pass False to reproduce the legacy
+    behavior for ablation.
     """
     if persistent_cache:
-        return compile_expr_to_cm_ir_persistent(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
-    return compile_expr_to_cm_ir_cached(expr, diagnostics=diagnostics, reuse_cache=reuse_cache)
+        return compile_expr_to_cm_ir_persistent(
+            expr, diagnostics=diagnostics, reuse_cache=reuse_cache,
+            share_aware_flatten=share_aware_flatten, build_memo=build_memo,
+        )
+    return compile_expr_to_cm_ir_cached(
+        expr, diagnostics=diagnostics, reuse_cache=reuse_cache,
+        share_aware_flatten=share_aware_flatten, build_memo=build_memo,
+    )
 
 
 def compile_expr_to_cm_ir_cached(
@@ -848,17 +1163,20 @@ def compile_expr_to_cm_ir_cached(
     diagnostics: Optional[Dict[str, Any]] = None,
     *,
     reuse_cache: bool = False,
+    share_aware_flatten: bool = True,
+    build_memo: bool = True,
 ) -> CMNode:
     _init_ir_compile_diagnostics(diagnostics)
+    cache_key = (expr, bool(share_aware_flatten))
     if reuse_cache:
         if diagnostics is not None:
             diagnostics["ir_compile_cache_hit"] = 0
-        cached = _COMPILED_IR_CACHE.get(expr)
+        cached = _COMPILED_IR_CACHE.get(cache_key)
         if cached is not None:
             if diagnostics is not None:
                 _bump(diagnostics, "ir_compile_cache_hits")
                 diagnostics["ir_compile_cache_hit"] = 1
-            _COMPILED_IR_CACHE.move_to_end(expr)
+            _COMPILED_IR_CACHE.move_to_end(cache_key)
             return cached
         if diagnostics is not None:
             _bump(diagnostics, "ir_compile_cache_misses")
@@ -866,16 +1184,18 @@ def compile_expr_to_cm_ir_cached(
 
     if _ir_timing_enabled(diagnostics):
         t0 = time.perf_counter()
-        builder = CMIRBuilder(diagnostics)
+        builder = CMIRBuilder(diagnostics, share_aware_flatten=share_aware_flatten,
+                              build_memo=build_memo)
         node = builder.build(expr)
         _add_float(diagnostics, "ir_compile_time_s", time.perf_counter() - t0)
     else:
-        builder = CMIRBuilder(diagnostics)
+        builder = CMIRBuilder(diagnostics, share_aware_flatten=share_aware_flatten,
+                              build_memo=build_memo)
         node = builder.build(expr)
 
     if reuse_cache:
-        _COMPILED_IR_CACHE[expr] = node
-        _COMPILED_IR_CACHE.move_to_end(expr)
+        _COMPILED_IR_CACHE[cache_key] = node
+        _COMPILED_IR_CACHE.move_to_end(cache_key)
         if len(_COMPILED_IR_CACHE) > _COMPILED_IR_CACHE_MAXSIZE:
             _COMPILED_IR_CACHE.popitem(last=False)
     return node

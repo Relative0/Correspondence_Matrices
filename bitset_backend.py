@@ -202,6 +202,11 @@ class FlatProgram:
     ``release_after``: dead input slots to clear after each operation.
     ``bound_cache``: {(vars_key, fixed_items): (slot_template, full_mask)} —
     small FIFO-evicted cache of resolved input masks.
+
+    ``len(prog.ops)`` is a *flat instruction count*, not an executed-operation
+    count: an n-ary AND/OR/XOR instruction executes ``arity - 1`` primitive
+    combines and IMP/EQV/NOT expand to multiple primitives in both executors.
+    Use :func:`program_metrics` for executed-operation accounting.
     """
 
     __slots__ = ("n_slots", "root_slot", "loads", "load_vars", "ops", "release_after", "bound_cache",
@@ -244,6 +249,61 @@ def _last_use_releases(n_slots: int, root_slot: int, ops) -> tuple:
                 dead.append(arg_slot)
         releases.append(tuple(dead))
     return tuple(releases)
+
+
+def program_metrics(prog: FlatProgram) -> Dict[str, int]:
+    """Deterministic execution-cost accounting for a :class:`FlatProgram`.
+
+    Returns a dict with:
+
+    - ``flat_instructions``: ``len(prog.ops)`` — instruction count only.
+    - ``loads``: number of load slots (variables and constants).
+    - ``argument_edges``: total operand references across all instructions.
+    - ``executed_word_ops``: primitive numpy kernel invocations performed by
+      the words executor (``_eval_words``): NOT = 1 (``bitwise_not``),
+      IMP = 2 (``not`` + ``or``), EQV = 2 (``xor`` + ``not``), and n-ary
+      AND/OR/XOR = ``max(1, arity - 1)`` (a 1-ary op is a ``copyto``).
+    - ``executed_bigint_ops``: primitive Python-int operations performed by
+      the bigint flat executors (``eval_cm_node_flat`` and twins): NOT = 2
+      (``~`` + mask), IMP = 3, EQV = 3, n-ary AND/OR/XOR = ``arity - 1``.
+    - ``peak_live_word_buffers``: scratch buffers in the words execution plan
+      (peak simultaneously-live op outputs under the last-use schedule).
+
+    These are the authoritative operation counts for benchmark reporting;
+    never present ``flat_instructions`` as an executed-operation count.
+    """
+    argument_edges = 0
+    executed_word = 0
+    executed_bigint = 0
+    for _slot, opcode, arg_slots in prog.ops:
+        arity = len(arg_slots)
+        argument_edges += arity
+        if opcode == _FLAT_OP_NOT:
+            executed_word += 1
+            executed_bigint += 2
+        elif opcode == _FLAT_OP_IMP:
+            executed_word += 2
+            executed_bigint += 3
+        elif opcode == _FLAT_OP_EQV:
+            executed_word += 2
+            executed_bigint += 3
+        else:  # n-ary AND/OR/XOR
+            executed_word += max(1, arity - 1)
+            executed_bigint += arity - 1
+    # Observationally pure (2026-08-02 Phase A3): reuse an existing word plan
+    # but never cache one — metric collection must not warm evaluation state.
+    plan = prog.word_plan
+    if plan is None:
+        plan = _compute_word_plan(prog)
+    n_buffers = plan[1]
+    return {
+        "flat_instructions": len(prog.ops),
+        "loads": len(prog.loads),
+        "argument_edges": argument_edges,
+        "executed_word_ops": executed_word,
+        "executed_bigint_ops": executed_bigint,
+        "peak_live_word_buffers": int(n_buffers),
+    }
 
 
 def compile_flat(node: "CMNode") -> FlatProgram:
@@ -464,7 +524,14 @@ def eval_cm_node_flat(
 
 
 def compile_expr_flat(expr: Expr) -> FlatProgram:
-    """Lower a raw Expr tree to a flat program without CM canonicalization/sharing."""
+    """Lower a raw Expr tree to a flat program without CM canonicalization/sharing.
+
+    ABLATION BASELINE ONLY (2026-08-02 gap repair): this compiler re-emits
+    every occurrence of every subtree — on shared/reconvergent inputs its
+    programs are orders of magnitude larger than necessary. The production
+    baseline is :func:`compile_expr_cse`; keep this one only for explicitly
+    labeled no-CSE ablation arms.
+    """
     loads = []
     ops = []
 
@@ -502,6 +569,141 @@ def get_expr_flat_program(expr: Expr) -> FlatProgram:
         prog = compile_expr_flat(expr)
         object.__setattr__(expr, "_bitset_flat_program", prog)
     return prog
+
+
+_EXPR_OPCODE = {And: _FLAT_OP_AND, Or: _FLAT_OP_OR, Xor: _FLAT_OP_XOR,
+                Imp: _FLAT_OP_IMP, Eqv: _FLAT_OP_EQV}
+_ASSOC_OPCODES = frozenset((_FLAT_OP_AND, _FLAT_OP_OR, _FLAT_OP_XOR))
+
+
+def compile_expr_cse(expr: Expr, *, flatten: bool = False) -> FlatProgram:
+    """Structural-CSE production baseline compiler (2026-08-02 gap repair).
+
+    Pure syntactic hash-consing over the raw AST: every structurally distinct
+    subexpression is compiled exactly once, whether or not the input shares
+    objects. No CM canonicalization, commutative sorting, or algebraic
+    rewriting is performed — this is an independent baseline, not a CM reuse.
+    Interning keys are small ints, so compilation is linear in the identity
+    DAG with O(1) hashing, and the walk is iterative (no recursion limit).
+
+    ``flatten=True`` additionally merges associative same-opcode chains into
+    n-ary instructions, but only through children with exactly one consumer
+    — sharing-aware, so it never duplicates shared subchain work (the defect
+    the 2026-08-02 audit found in always-splice flattening).
+    """
+    # Pass 1: iterative structural interning of the expression graph.
+    uid_by_id: Dict[int, int] = {}
+    intern: Dict[tuple, int] = {}
+    spec: list = []          # uid -> ("var", name) | ("const-free op", opcode, child uids)
+    fanout: Dict[int, int] = {}
+    scheduled: set = set()
+    stack: list = [(expr, False)]
+    while stack:
+        e, processed = stack.pop()
+        if processed:
+            if isinstance(e, Var):
+                key: tuple = ("v", int(e.i))
+                entry: tuple = ("var", f"x{e.i}", ())
+            elif isinstance(e, Not):
+                children = (uid_by_id[id(e.a)],)
+                key = (_FLAT_OP_NOT, ) + children
+                entry = ("op", _FLAT_OP_NOT, children)
+            else:
+                opcode = _EXPR_OPCODE.get(type(e))
+                if opcode is None:
+                    raise TypeError(e)
+                children = (uid_by_id[id(e.a)], uid_by_id[id(e.b)])
+                key = (opcode,) + children
+                entry = ("op", opcode, children)
+            uid = intern.get(key)
+            if uid is None:
+                uid = intern[key] = len(spec)
+                spec.append(entry)
+                for child_uid in entry[2]:
+                    fanout[child_uid] = fanout.get(child_uid, 0) + 1
+            uid_by_id[id(e)] = uid
+            continue
+        if id(e) in scheduled:
+            continue
+        scheduled.add(id(e))
+        stack.append((e, True))
+        if isinstance(e, Var):
+            pass
+        elif isinstance(e, Not):
+            stack.append((e.a, False))
+        elif isinstance(e, (And, Or, Xor, Imp, Eqv)):
+            stack.append((e.b, False))
+            stack.append((e.a, False))
+        else:
+            raise TypeError(e)
+    root_uid = uid_by_id[id(expr)]
+
+    # Pass 2 (flatten only): decide which single-consumer associative children
+    # are spliced into their parent's n-ary argument list.
+    spliced: set = set()
+    flat_args: Dict[int, tuple] = {}
+    if flatten:
+        for uid, (kind, payload, children) in enumerate(spec):
+            if kind != "op" or payload not in _ASSOC_OPCODES:
+                continue
+            args: list = []
+            for child_uid in children:
+                ckind, cpayload, _ = spec[child_uid]
+                if (ckind == "op" and cpayload == payload
+                        and fanout.get(child_uid, 0) == 1 and child_uid != root_uid):
+                    args.extend(flat_args[child_uid])
+                    spliced.add(child_uid)
+                else:
+                    args.append(child_uid)
+            flat_args[uid] = tuple(args)
+
+    # Pass 3: emit slots in uid (topological) order.
+    loads: list = []
+    ops: list = []
+    slot_of: Dict[int, int] = {}
+    for uid, (kind, payload, children) in enumerate(spec):
+        if uid in spliced:
+            continue
+        slot = len(loads) + len(ops)
+        if kind == "var":
+            loads.append((slot, "var", payload))
+        else:
+            arg_uids = flat_args.get(uid, children) if flatten else children
+            ops.append((slot, payload, tuple(slot_of[a] for a in arg_uids)))
+        slot_of[uid] = slot
+    return FlatProgram(len(loads) + len(ops), slot_of[root_uid], tuple(loads), tuple(ops))
+
+
+def get_expr_cse_program(expr: Expr, *, flatten: bool = False) -> FlatProgram:
+    """Return the (cached) structural-CSE program for a root expression."""
+    attr = "_bitset_cse_flat_program" if flatten else "_bitset_cse_program"
+    prog = expr.__dict__.get(attr)
+    if prog is None:
+        prog = compile_expr_cse(expr, flatten=flatten)
+        object.__setattr__(expr, attr, prog)
+    return prog
+
+
+def eval_expr_words_cse(
+    expr: Expr,
+    vars_all: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+    flatten: bool = False,
+) -> int:
+    """Packed evaluation through the structural-CSE production baseline.
+
+    Same output contract as :func:`eval_expr_words_bitset` (bit-identical),
+    using the words kernel at >= 6 variables and the bigint flat executor
+    below that.
+    """
+    vars_key = tuple(vars_all)
+    prog = get_expr_cse_program(expr, flatten=flatten)
+    if len(vars_key) < _WORDS_MIN_VARS:
+        template, full_mask = _bind_flat_program(prog, vars_key, fixed or {})
+        prepared = PreparedFlatEvaluation(prog, template, full_mask, False)
+        return _eval_prepared_flat(prepared)
+    return _eval_words(prog, vars_key, fixed or {})
 
 
 def eval_expr_flat_bitset(

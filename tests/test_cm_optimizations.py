@@ -112,7 +112,12 @@ class CMOptimizationTests(unittest.TestCase):
 
         eager_diag = {}
         M_eager = compile_expr_to_cm(expr, R, C, fixed={}, diagnostics=eager_diag)
-        self.assertGreater(eager_diag.get("subtree_cache_hits", 0), 0)
+        # Identity-shared subtrees are now short-circuited by the per-call
+        # build memo (2026-08-02 repair) before reaching the interner; reuse
+        # is evidenced by either counter.
+        self.assertGreater(
+            eager_diag.get("subtree_cache_hits", 0) + eager_diag.get("build_memo_hits", 0), 0
+        )
 
         tt_ref = eval_expr_tt(expr, n).astype(np.uint8).reshape(-1)
         tt_eager = _cm_matrix_to_tt(M_eager, R, C, n)
@@ -121,7 +126,9 @@ class CMOptimizationTests(unittest.TestCase):
         if HAS_LAZY:
             lazy_diag = {}
             M_lazy = compile_expr_to_cm_lazy(expr, R, C, fixed={}, diagnostics=lazy_diag)
-            self.assertGreater(lazy_diag.get("subtree_cache_hits", 0), 0)
+            self.assertGreater(
+                lazy_diag.get("subtree_cache_hits", 0) + lazy_diag.get("build_memo_hits", 0), 0
+            )
             tt_lazy = _cm_matrix_to_tt(M_lazy, R, C, n)
             self.assertTrue(np.array_equal(tt_ref, tt_lazy))
 
@@ -138,7 +145,12 @@ class CMOptimizationTests(unittest.TestCase):
         tt = _cm_matrix_to_tt(M, R, C, n)
         self.assertTrue(np.array_equal(tt_ref, tt))
         self.assertGreater(diag.get("canonical_rewrites", 0), 0)
-        self.assertGreater(diag.get("subtree_cache_hits", 0), 0)
+        # Commutative-equivalent subtrees are one structural-memo class since
+        # the 2026-08-02 Phase A4 repair, so reuse may surface as a build-memo
+        # hit rather than an interner hit.
+        self.assertGreater(
+            diag.get("subtree_cache_hits", 0) + diag.get("build_memo_hits", 0), 0
+        )
 
     def test_pruning_short_circuit_is_correct(self) -> None:
         n = 8
