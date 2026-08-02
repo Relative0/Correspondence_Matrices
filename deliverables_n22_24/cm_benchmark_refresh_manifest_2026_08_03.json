@@ -1,0 +1,62 @@
+{
+  "campaign": "CM comprehensive benchmark refresh 2026-08-03",
+  "git_head": "eab8879edcb7fb13582ad9bdff7ea7c00238774d",
+  "git_head_equals_origin_main": true,
+  "interpreters": {
+    "benchmarks": "C:\\Users\\brian\\Documents\\CM_Computation\\.venv\\Scripts\\python.exe (3.13.5, numpy 2.3.2)",
+    "tests": "system Python 3.10.11"
+  },
+  "authorization_flags": {
+    "EPFL_DOWNLOAD_APPROVED": "YES",
+    "POD_REPLICATION_APPROVED": "YES (hard cap $5)",
+    "DEPENDENCY_INSTALL_APPROVED": "NO locally / YES pod-side only",
+    "COMMIT_PUSH_APPROVED": "NO"
+  },
+  "downloads": [
+    {
+      "what": "EPFL benchmarks shallow clone",
+      "url": "https://github.com/lsils/benchmarks.git",
+      "commit": "0060e156826e733d69bf5b3322d1bdd0d03a1f9a",
+      "destination": "external/epfl-benchmarks",
+      "on_disk_bytes": 111550671,
+      "staged_or_committed": false,
+      "manifest": "deliverables_n22_24/cm_gap_epfl_provenance_2026_08_03.json"
+    }
+  ],
+  "pod_side_installs": [
+    "numpy 2.2.6 (bootstrap, every pod)",
+    "cython + dd 0.5.7 built from source with CUDD (setup.py install --fetch --cudd) on the B5 pod only"
+  ],
+  "local_installs": [],
+  "pods": {
+    "b6_run1": {"pods_created": 5, "evidence_pods": 3, "failed_proxy_404": 2, "cost_usd": 0.0050, "audit": "deliverables_n22_24/b6_pod_replication_2026_08_03/b6_pod_audit_2026_08_03.json"},
+    "b6_run2": {"pods_created": 2, "evidence_pods": 2, "cost_usd": 0.0022, "audit": "deliverables_n22_24/b6_pod_replication_2026_08_03_run2/b6_pod_audit_2026_08_03.json"},
+    "b5_run1": {"status": "failed proxy 404 pre-measurement", "cost_usd": 0.0007},
+    "b5_run2": {"status": "failed: dd env-var route installed pure-python dd", "cost_usd": 0.0012},
+    "b5_run3": {"status": "failed: dd.cudd.Function lacks ^ operator (dd 0.5.7)", "cost_usd": 0.0016},
+    "b5_run4": {"status": "failed: CUDD tarball fetch timeout", "cost_usd": 0.0030},
+    "b5_run5": {"status": "complete", "cost_usd": 0.0021, "audit": "deliverables_n22_24/b5_cudd_2026_08_03_run5/b5_pod_audit_2026_08_03.json"},
+    "all_pods_terminated": true,
+    "total_cost_usd": 0.0158,
+    "budget_cap_usd": 5.0
+  },
+  "benchmarks": {
+    "B1": {"verdict": "REPLAY CONFIRMED", "dir": "deliverables_n22_24/b1_e3_replay_2026_08_03"},
+    "B2": {"verdict": "COMPLETE — wrapper-boundary claim REVISED", "dir": "deliverables_n22_24/b2_wrapper_2026_08_03", "pilot_dir": "deliverables_n22_24/b2_wrapper_pilot_2026_08_03"},
+    "B3": {"verdict": "COMPLETE — compile-scaling claim CONFIRMED", "dir": "deliverables_n22_24/b3_scaling_2026_08_03"},
+    "B4": {"verdict": "COMPLETE — guard CONFIRMED / headline REVISED", "dir": "deliverables_n22_24/b4_sweep_2026_08_03"},
+    "B5": {"verdict": "COMPLETE — CUDD boundary CONFIRMED same-box", "dir": "deliverables_n22_24/b5_cudd_2026_08_03_run5"},
+    "B6": {"verdict": "CROSS-PLATFORM REPLICATION PASSED", "dir": "deliverables_n22_24/b6_pod_replication_2026_08_03 (+_run2)"},
+    "B7": {"verdict": "EXTERNAL VALIDATION SUPPORTS GENERALIZATION", "report": "deliverables_n22_24/CM_GAP_EPFL_VALIDATION_2026-08-03.md"}
+  },
+  "tests": {
+    "suite": "python -m pytest tests -q --basetemp tmp/pytest_cm_bench_2026-08-03",
+    "result": "334 passed, 0 failed, 4 subtests, 196.4 s (baseline 326 + 8 new EPFL parser tests)"
+  },
+  "corpora_sha256": {
+    "b1_frozen_corpus": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+    "b2_corpus": "in results _meta (full run: b2_wrapper_2026_08_03)",
+    "b4_headline_corpus": "31b98462eb2d3d9a07dc75cb862ae90868b941a8d46aa9443aef8f9c7cba043c",
+    "epfl_corpus": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac"
+  }
+}
