@@ -1,0 +1,96 @@
+{
+  "archive_sha256": "27eff1210083e6dfd1ed34b707559bdd33679b38b943fe3630915b5afc42b0bf",
+  "n_pods_requested": 2,
+  "setup_timeout_s": 900,
+  "driver_timeout_s": 88.8,
+  "budget_cap_usd": 5.0,
+  "total_cost_usd": 0.0022,
+  "acceptance_criteria": {
+    "worker_echo": "every pod verifies current-worker words echo before driver",
+    "identity": "per-formula identity fields exact vs local archive",
+    "replication_passed": "all completed pods: stratified CI excludes parity AND |geomean - 0.8876| <= 0.05",
+    "inconclusive_if": "fewer than 3 pods complete"
+  },
+  "pods": [
+    {
+      "pod_index": 1,
+      "terminated": true,
+      "status": "complete",
+      "pod_id": "io26rodwqtaetq",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hr": 0.06,
+      "created_unix": 1785704931.1908357,
+      "state": {
+        "env": {
+          "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.41",
+          "python": "3.10.20",
+          "machine": "x86_64",
+          "cgroup_cpu_max": "max 100000",
+          "cgroup_memory_max": "3999997952",
+          "runpod_pod_id": "io26rodwqtaetq",
+          "runpod_cpu_count": 192,
+          "cpu_model": "AMD EPYC 9655 96-Core Processor",
+          "numpy": "2.2.6"
+        },
+        "worker_echo_verified": {
+          "ok": true,
+          "remote_words_eval_echo": true,
+          "verified": true
+        },
+        "driver": {
+          "returncode": 0,
+          "wall_s": 13.084178993944079,
+          "stdout_tail": "loaded corpus: deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl (192 formulas)\ncorpus sha256: 8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a\n  192 formulas, 24 cells, per-cell [8]\n  semantic support exact and hashes/truths distinct in every stratum\n  [21:09:19] measured 24/192\n  [21:09:20] measured 48/192\n  [21:09:20] measured 72/192\n  [21:09:21] measured 96/192\n  [21:09:23] measured 120/192\n  [21:09:24] measured 144/192\n  [21:09:26] measured 168/192\n  [21:09:28] measured 192/192\nround-robin schedules ...\nwrote deliverables_n22_24/pod_out/cm_gap_e3_corrected_results_2026_08_02.json\nwrote deliverables_n22_24/pod_out/CM_gap_e3_corrected_summary_2026_08_02.csv\ntotal wall time: 13.0s\n",
+          "stderr_tail": ""
+        }
+      },
+      "files": [
+        "CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "cm_gap_e3_corrected_results_2026_08_02.json"
+      ],
+      "lifetime_s": 45.79507112503052,
+      "cost_usd_actual": 0.0008
+    },
+    {
+      "pod_index": 2,
+      "terminated": true,
+      "status": "complete",
+      "pod_id": "qzxv5v9enfuf1x",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hr": 0.06,
+      "created_unix": 1785704976.9868598,
+      "state": {
+        "env": {
+          "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.41",
+          "python": "3.10.20",
+          "machine": "x86_64",
+          "cgroup_cpu_max": "max 100000",
+          "cgroup_memory_max": "3999997952",
+          "runpod_pod_id": "qzxv5v9enfuf1x",
+          "runpod_cpu_count": 256,
+          "cpu_model": "AMD EPYC 7713 64-Core Processor",
+          "numpy": "2.2.6"
+        },
+        "worker_echo_verified": {
+          "ok": true,
+          "remote_words_eval_echo": true,
+          "verified": true
+        },
+        "driver": {
+          "returncode": 0,
+          "wall_s": 26.51878428598866,
+          "stdout_tail": "loaded corpus: deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl (192 formulas)\ncorpus sha256: 8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a\n  192 formulas, 24 cells, per-cell [8]\n  semantic support exact and hashes/truths distinct in every stratum\n  [21:10:25] measured 24/192\n  [21:10:27] measured 48/192\n  [21:10:29] measured 72/192\n  [21:10:31] measured 96/192\n  [21:10:33] measured 120/192\n  [21:10:36] measured 144/192\n  [21:10:40] measured 168/192\n  [21:10:44] measured 192/192\nround-robin schedules ...\nwrote deliverables_n22_24/pod_out/cm_gap_e3_corrected_results_2026_08_02.json\nwrote deliverables_n22_24/pod_out/CM_gap_e3_corrected_summary_2026_08_02.csv\ntotal wall time: 26.3s\n",
+          "stderr_tail": ""
+        }
+      },
+      "files": [
+        "CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "cm_gap_e3_corrected_results_2026_08_02.json"
+      ],
+      "lifetime_s": 82.08578658103943,
+      "cost_usd_actual": 0.0014
+    }
+  ]
+}

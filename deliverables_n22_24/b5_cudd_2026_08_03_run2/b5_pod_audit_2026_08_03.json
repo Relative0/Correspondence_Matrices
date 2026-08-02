@@ -1,0 +1,31 @@
+{
+  "terminated": true,
+  "archive_sha256": "1d6e4163215cfc011548f00d8ab406bafb70414fbd927649645c22adc724a0e3",
+  "cpu_flavor": "cpu3c",
+  "vcpu_count": 2,
+  "pod_id": "ye9yodzo8hlysp",
+  "cost_per_hr": 0.06,
+  "image": "python:3.10",
+  "state": {
+    "env": {
+      "platform": "Linux-6.8.0-100-generic-x86_64-with-glibc2.41",
+      "python": "3.10.20",
+      "cgroup_cpu_max": "max 100000",
+      "cgroup_memory_max": "3999997952",
+      "runpod_pod_id": "ye9yodzo8hlysp",
+      "cpu_count": 128,
+      "cpu_model": "AMD EPYC 7702P 64-Core Processor"
+    },
+    "install": {
+      "apt_rc": 0,
+      "pip_rc": 0,
+      "pip_tail": "cessfully built astutils ply\nInstalling collected packages: ply, pyparsing, psutil, networkx, astutils, pydot, dd\n  Running setup.py install for dd: started\n  Running setup.py install for dd: finished with status 'done'\nSuccessfully installed astutils-0.0.6 dd-0.5.7 networkx-3.4.2 ply-3.10 psutil-7.2.2 pydot-4.0.1 pyparsing-3.3.2\nDEPRECATION: --no-binary currently disables reading from the cache of locally built wheels. In the future --no-binary will not influence the wheel cache. pip 23.1 will enforce this behaviour change. A possible replacement is to use the --no-cache-dir option. You can use the flag --use-feature=no-binary-enable-wheel-cache to test the upcoming behaviour. Discussion can be found at https://github.com/pypa/pip/issues/11453\n  DEPRECATION: dd is being installed using the legacy 'setup.py install' method, because the '--no-binary' option was enabled for it and this currently disables local wheel building for projects that don't have a 'pyproject.toml' file. pip 23.1 will enforce this behaviour change. A possible replacement is to enable the '--use-pep517' option. Discussion can be found at https://github.com/pypa/pip/issues/11451\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 23.0.1 -> 26.2\n[notice] To update, run: pip install --upgrade pip\n",
+      "cudd_import": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nModuleNotFoundError: No module named 'dd.cudd'\n"
+    },
+    "driver": {}
+  },
+  "status": "pod_error",
+  "error_tail": "Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 75, in campaign\n    raise RuntimeError(\"dd.cudd unavailable after install \u2014 fail closed, \"\nRuntimeError: dd.cudd unavailable after install \u2014 fail closed, no autoref fallback: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nModuleNotFoundError: No module named 'dd.cudd'\n\n",
+  "lifetime_s": 73.87920355796814,
+  "cost_usd_actual": 0.0012
+}

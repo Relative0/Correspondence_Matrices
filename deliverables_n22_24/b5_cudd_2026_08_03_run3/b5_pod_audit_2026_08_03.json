@@ -1,0 +1,37 @@
+{
+  "terminated": true,
+  "archive_sha256": "1d6e4163215cfc011548f00d8ab406bafb70414fbd927649645c22adc724a0e3",
+  "cpu_flavor": "cpu3c",
+  "vcpu_count": 2,
+  "pod_id": "iuwt9w4lxgv6he",
+  "cost_per_hr": 0.06,
+  "image": "python:3.10",
+  "state": {
+    "env": {
+      "platform": "Linux-6.8.0-100-generic-x86_64-with-glibc2.41",
+      "python": "3.10.20",
+      "cgroup_cpu_max": "max 100000",
+      "cgroup_memory_max": "3999997952",
+      "runpod_pod_id": "iuwt9w4lxgv6he",
+      "cpu_count": 128,
+      "cpu_model": "AMD EPYC 7702P 64-Core Processor"
+    },
+    "install": {
+      "apt_rc": 0,
+      "pip_rc": 0,
+      "pip_tail": "cpython-310: module MAY be using inspect.stack\nply.__pycache__.ygen.cpython-310: module references __file__\n/usr/local/lib/python3.10/site-packages/setuptools/_distutils/dist.py:289: UserWarning: Unknown distribution option: 'tests_require'\n  warnings.warn(msg)\n/usr/local/lib/python3.10/site-packages/setuptools/dist.py:759: SetuptoolsDeprecationWarning: License classifiers are deprecated.\n!!\n\n        ********************************************************************************\n        Please consider removing the following classifiers in favor of a SPDX license expression:\n\n        License :: OSI Approved :: BSD License\n\n        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.\n        ********************************************************************************\n\n!!\n  self._finalize_license_expression()\n/usr/local/lib/python3.10/site-packages/setuptools/_distutils/cmd.py:90: SetuptoolsDeprecationWarning: setup.py install is deprecated.\n!!\n\n        ********************************************************************************\n        Please avoid running ``setup.py`` directly.\n        Instead, use pypa/build, pypa/installer or other\n        standards-based tools.\n\n        See https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html for details.\n        ********************************************************************************\n\n!!\n  self.initialize_options()\nzip_safe flag not set; analyzing archive contents...\n",
+      "cudd_import": "cudd-ok",
+      "dd_version_info": "Name: dd\nVersion: 0.5.7\nSummary: Binary decision diagrams implemented in pure Python, as well as Cython wrappers of CUDD, Sylvan, and BuDDy.\nHome-page: https://github.com/tulip-control/dd\nAuthor: Caltech Control and Dynamical Systems\nAuthor-email: tulip@tulip-control.org\nLicense: BSD\nLocation: /usr/local/lib/python3.10/site-packages/dd-0.5.7-py3.10-linux-x86_64.egg\nRequires: astutils, networkx, pl"
+    },
+    "driver": {
+      "returncode": 1,
+      "wall_s": 0.2413417063653469,
+      "stdout_tail": "",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 231, in <module>\n    main()\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 118, in main\n    u = expr_to_bdd(expr, bdd, var_of)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 88, in expr_to_bdd\n    return rec(expr)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 70, in rec\n    r = ~rec(e.a)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 72, in rec\n    a, b = rec(e.a), rec(e.b)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 72, in rec\n    a, b = rec(e.a), rec(e.b)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 78, in rec\n    r = a ^ b\nTypeError: unsupported operand type(s) for ^: 'dd.cudd.Function' and 'dd.cudd.Function'\n"
+    }
+  },
+  "status": "pod_error",
+  "error_tail": "Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 98, in campaign\n    raise RuntimeError(f\"driver failed: {result.stderr[-2000:]}\")\nRuntimeError: driver failed: Traceback (most recent call last):\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 231, in <module>\n    main()\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 118, in main\n    u = expr_to_bdd(expr, bdd, var_of)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 88, in expr_to_bdd\n    return rec(expr)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 70, in rec\n    r = ~rec(e.a)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 72, in rec\n    a, b = rec(e.a), rec(e.b)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 72, in rec\n    a, b = rec(e.a), rec(e.b)\n  File \"/workspace/cm/repo/deliverables_n22_24/cm_b5_cudd_matched_2026_08_03.py\", line 78, in rec\n    r = a ^ b\nTypeError: unsupported operand type(s) for ^: 'dd.cudd.Function' and 'dd.cudd.Function'\n\n",
+  "lifetime_s": 98.9698600769043,
+  "cost_usd_actual": 0.0016
+}
