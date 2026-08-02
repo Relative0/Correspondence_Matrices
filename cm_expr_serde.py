@@ -14,6 +14,16 @@ Two schemas are supported:
   documents. Use :func:`expr_to_json_dag` to write and :func:`expr_from_json`
   (auto-detecting) to read.
 
+  Accepted v2 input is *valid but possibly noncanonical* (2026-08-02
+  consolidated audit, F7): the reader requires backward references, no
+  duplicate definitions, and — since that audit — every definition reachable
+  from ``root`` (which forces ``root`` to be the last node; unreachable or
+  smuggled definitions are rejected). It does NOT require the serializer's
+  exact postorder: any topological ordering of the same DAG is accepted and
+  deserializes to the same expression value. Reading does not normalize the
+  document; re-serializing the result (``expr_to_json_dag(expr_from_json(d))``)
+  yields the canonical form.
+
 Deserialization constructs only ``cm_exprlib`` dataclasses from validated
 fields — no code execution, no attribute-driven construction.
 """
@@ -194,6 +204,7 @@ def _expr_from_json_dag(data: Mapping[str, Any]) -> Expr:
     if not isinstance(nodes_json, list) or not nodes_json:
         raise ValueError("v2 document must contain a non-empty 'nodes' list")
     built: List[Expr] = []
+    children_of: List[Tuple[int, ...]] = []
     seen_structure: set = set()
     for idx, entry in enumerate(nodes_json):
         if not isinstance(entry, Mapping):
@@ -216,12 +227,15 @@ def _expr_from_json_dag(data: Mapping[str, Any]) -> Expr:
             if not isinstance(i, int) or isinstance(i, bool) or i < 0:
                 raise ValueError(f"node {idx}: var index i={i!r} must be a non-negative integer")
             built.append(Var(i))
+            children_of.append(())
             skey: Tuple[object, ...] = ("var", i)
         elif op == "not":
             built.append(Not(ref("a")))
+            children_of.append((entry["a"],))
             skey = ("not", entry.get("a"))
         elif op in _BIN_OPS:
             built.append(_BIN_OPS[op](ref("a"), ref("b")))
+            children_of.append((entry["a"], entry["b"]))
             skey = (op, entry.get("a"), entry.get("b"))
         else:
             raise ValueError(f"node {idx}: unsupported expression op: {op!r}")
@@ -231,6 +245,25 @@ def _expr_from_json_dag(data: Mapping[str, Any]) -> Expr:
     root = data.get("root")
     if not isinstance(root, int) or isinstance(root, bool) or not (0 <= root < len(built)):
         raise ValueError(f"root={root!r} out of range [0, {len(built)})")
+    # Every definition must be reachable from root (2026-08-02 consolidated
+    # audit, F7). Since references point strictly backwards, this also forces
+    # root to be the last definition. O(n): sweep indices root..0 once.
+    reachable = [False] * len(built)
+    reachable[root] = True
+    n_reachable = 1
+    for idx in range(root, -1, -1):
+        if not reachable[idx]:
+            continue
+        for child in children_of[idx]:
+            if not reachable[child]:
+                reachable[child] = True
+                n_reachable += 1
+    if n_reachable != len(built):
+        unreachable = [i for i, r in enumerate(reachable) if not r]
+        raise ValueError(
+            f"unreachable definitions {unreachable} (every node must be reachable "
+            "from root; the canonical serializer never emits unreachable nodes)"
+        )
     return built[root]
 
 

@@ -117,6 +117,45 @@ def test_non_mapping_input_rejected():
         expr_from_json([1, 2, 3])  # type: ignore[arg-type]
 
 
+def test_unreachable_definitions_are_rejected():
+    """2026-08-02 consolidated audit (F7): accepted documents may not smuggle
+    definitions the root never references."""
+    doc = {"version": 2, "root": 2,
+           "nodes": [{"op": "var", "i": 0},
+                     {"op": "var", "i": 1},
+                     {"op": "not", "a": 0}]}  # node 1 unreachable
+    with pytest.raises(ValueError, match="unreachable"):
+        expr_from_json(doc)
+
+
+def test_non_last_root_is_rejected_as_unreachable():
+    """Backward refs + full reachability force root to be the last node."""
+    doc = {"version": 2, "root": 1,
+           "nodes": [{"op": "var", "i": 0},
+                     {"op": "not", "a": 0},
+                     {"op": "var", "i": 1}]}  # node 2 after root
+    with pytest.raises(ValueError, match="unreachable"):
+        expr_from_json(doc)
+
+
+def test_alternate_topological_ordering_is_accepted_and_normalizes():
+    """The reader requires a valid topological order, not the serializer's
+    exact postorder; re-serialization yields the canonical document."""
+    expr = And(Xor(Var(0), Var(1)), Not(Var(2)))
+    canonical = expr_to_json_dag(expr)
+    # Same DAG, legal but non-canonical order: vars first in reverse.
+    alt = {"version": 2, "root": 5,
+           "nodes": [{"op": "var", "i": 2},
+                     {"op": "var", "i": 1},
+                     {"op": "var", "i": 0},
+                     {"op": "xor", "a": 2, "b": 1},
+                     {"op": "not", "a": 0},
+                     {"op": "and", "a": 3, "b": 4}]}
+    rt = expr_from_json(alt)
+    assert np.array_equal(eval_expr_tt(rt, 3), eval_expr_tt(expr, 3))
+    assert expr_to_json_dag(rt) == canonical
+
+
 def _deep_v1_doc(depth):
     doc = {"op": "var", "i": 0}
     for _ in range(depth):
