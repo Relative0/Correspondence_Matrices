@@ -1,0 +1,147 @@
+{
+  "_meta": {
+    "created_utc": "2026-08-02T16:36:00Z",
+    "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "root": "C:\\Users\\brian\\Documents\\CM_Computation"
+  },
+  "F1_seed_randomization": {
+    "old_driver_seed_expression_by_hashseed": {
+      "0": "[3448, 8543, 967, 688]",
+      "1": "[5230, 2639, 3919, 3178]",
+      "12345": "[5943, 82, 8863, 3767]"
+    },
+    "old_driver_confirmed_process_randomized": true,
+    "corrected_driver_corpus_sha_by_hashseed": {
+      "0": "6eee5040d3e4e83cc2a38df4088ddf0626060cd39bae7b177422ef5cc649633f",
+      "1": "6eee5040d3e4e83cc2a38df4088ddf0626060cd39bae7b177422ef5cc649633f"
+    },
+    "corrected_driver_deterministic": true,
+    "verdict": "CONFIRMED; fixed in corrected driver"
+  },
+  "F2_archived_semantic_support": {
+    "archived_formulas": 96,
+    "exact_support_by_stratum": {
+      "8": 17,
+      "12": 16,
+      "16": 20
+    },
+    "totals_by_stratum": {
+      "8": 32,
+      "12": 32,
+      "16": 32
+    },
+    "reduced_support_count": 43,
+    "constants": [
+      "e3-k8-mixed-shared-1-56e872d00cd9",
+      "e3-k8-mixed-shared-2-8c9d6c04551c",
+      "e3-k8-mixed-shared-4-7b840c1d72a4",
+      "e3-k12-andor_dom-shared-1-b4bf9c663df7",
+      "e3-k12-andor_dom-shared-2-6d76f9b80f9b"
+    ],
+    "verdict": "CONFIRMED: only 53/96 archived formulas have exact semantic support; corrected corpus enforces exactness"
+  },
+  "F3_tree_occurrences": {
+    "ladder_depth": 10,
+    "identity_dag_nodes": 11,
+    "true_unfolded_count": 2047,
+    "archived_function_returns": 2047,
+    "returns_unfolded_not_dag": true,
+    "verdict": "REFUTED: the archived function computes exact unfolded occurrences (multiplicity-propagating memoization), not identity-DAG nodes; the corrected driver still records identity/structural/unfolded metrics separately"
+  },
+  "F4_foreign_interning": {
+    "and_xx_is_var": true,
+    "or_xx_is_var": true,
+    "xor_xx_is_const0": true,
+    "equal_keys_intern_to_one_node": true,
+    "foreign_ids_registered_and_pinned": true,
+    "verdict": "CONFIRMED (pre-fix: AND(x,x) stayed binary, equal keys gave distinct nodes, ids registered without retention); FIXED by structural adoption + keepalive in cm_ir.py; regression suite tests/test_foreign_node_interning.py"
+  },
+  "F5_output_safety": {
+    "old_drivers_wrote_fixed_archived_paths": true,
+    "corrected_default_refuses_overwrite": true,
+    "existing_file_preserved": true,
+    "verdict": "CONFIRMED for archived drivers (fixed output names); corrected driver + probe rerun write only new paths; tests/test_e3_output_safety.py"
+  },
+  "F6_repo_state": {
+    "head": "4c51429b1f1001219625e1047045264c01c224b6",
+    "origin_main": "4c51429b1f1001219625e1047045264c01c224b6",
+    "branch": "main",
+    "production_repair_commit": "12defc43169a19c8d0d777e39cb3e8da06f321b9",
+    "stale_claim": "reports dated 2026-08-02 describe the repair as an uncommitted working-tree diff on b6ce6b2",
+    "verdict": "CONFIRMED: erratum records the correction; no history rewritten"
+  },
+  "F7_proof_overreach": {
+    "v2_reader_rejects_unreachable_definitions": true,
+    "persistent_digest_doc_states_probabilistic_assumption": true,
+    "verdict": "CONFIRMED; digest language corrected to a documented probabilistic assumption (no equality fallback added), v2 reader now rejects unreachable definitions and documents normalization (accepted input = valid but possibly noncanonical topological orders)"
+  },
+  "e3_corrected_gate_and_headline": {
+    "pilot_wall_s": 13.626044900040142,
+    "pilot_per_cell": 4,
+    "runtime_gate_minutes": 60,
+    "estimated_full_wall_s": 27.252089800080284,
+    "gate_passed_widened_to_per_cell_8": true,
+    "full_wall_s": 26.552193400042597,
+    "full_formulas": 192,
+    "corpus_sha256": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+    "corpus_sha256_matches_results": true,
+    "blocked_headline": {
+      "live_k=8": {
+        "n_formulas": 64,
+        "geomean": 0.8707,
+        "median": 0.9199,
+        "ci95_lo": 0.8445,
+        "ci95_hi": 0.8953,
+        "sigma_log": 0.177,
+        "n_distinct_truth": 64
+      },
+      "live_k=12": {
+        "n_formulas": 64,
+        "geomean": 0.8688,
+        "median": 0.9035,
+        "ci95_lo": 0.8506,
+        "ci95_hi": 0.8864,
+        "sigma_log": 0.1396,
+        "n_distinct_truth": 64
+      },
+      "live_k=16": {
+        "n_formulas": 64,
+        "geomean": 0.9254,
+        "median": 0.9324,
+        "ci95_lo": 0.9133,
+        "ci95_hi": 0.9387,
+        "sigma_log": 0.0807,
+        "n_distinct_truth": 64
+      },
+      "all": {
+        "n_formulas": 192,
+        "geomean": 0.8879,
+        "median": 0.9232,
+        "ci95_lo": 0.8764,
+        "ci95_hi": 0.8991,
+        "sigma_log": 0.1406,
+        "n_distinct_truth": 192
+      }
+    },
+    "breakeven": {
+      "n_formulas": 192,
+      "n_never_breaks_even_vs_cse": 30,
+      "breakeven_evals_median": 78.5
+    }
+  },
+  "adversarial_probe_rerun": {
+    "corpus_key_regression_identical": 49,
+    "semantic_fuzz_failures": [],
+    "memo_lifetime_stress_failures": 0,
+    "reentrancy_ok": true,
+    "persistent_keys_differ": false,
+    "cse_independent": true,
+    "metrics_instrumented_all_exact": true,
+    "serde_fuzz": {
+      "roundtrip_failures": 0,
+      "non_valueerror_escapes": 0,
+      "mutations_accepted_as_wellformed": 28
+    }
+  },
+  "full_test_suite": "326 passed, 0 failed (+4 subtests) in 413.64s; python -m pytest tests -q --basetemp tmp/pytest_cm_consolidated (system Python 3.10.11)"
+}
