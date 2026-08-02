@@ -237,11 +237,17 @@ def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
 
     Sorts the two operand digests for AND/OR/XOR/EQV and preserves IMP order,
     but — unlike ``expr_structural_hash`` — does NOT flatten associative
-    chains. Digest equality therefore implies an identical commutative-sorted
-    structural uid graph (see ``CMIRBuilder._shared_assoc_uids``), and hence
-    an identical sharing-aware compile. ``expr_structural_hash`` is too
-    coarse for a compile cache under sharing-aware flattening: it identifies
-    re-associations that canonicalize differently around shared subchains.
+    chains. Two expressions produce equal digests iff they have an identical
+    commutative-sorted structural uid graph (see
+    ``CMIRBuilder._shared_assoc_uids``) — and hence an identical
+    sharing-aware compile — *up to blake2b-128 collision*. The persistent
+    cache treats digest equality as structural identity without an equality
+    fallback: this is a probabilistic assumption (≈2⁻⁶⁴ birthday bound at
+    2³² distinct entries, far above the cache's 10⁴ capacity), not a logical
+    proof; a collision would serve a wrong compile. ``expr_structural_hash``
+    is too coarse for a compile cache under sharing-aware flattening: it
+    identifies re-associations that canonicalize differently around shared
+    subchains.
 
     ``memo`` is id-keyed and must only live while the hashed expressions are
     referenced by the caller (same invariant as ``_structural_digest``).
@@ -536,9 +542,14 @@ class CMIRBuilder:
         self._interned: Dict[Tuple[object, ...], CMNode] = {}
         # id(node) -> small int, builder-local; nodes are kept alive by
         # _interned, so ids are stable for the builder's lifetime. Foreign
-        # nodes (built by another builder) are registered by identity on
-        # first use: semantically safe, they just don't dedupe structurally.
+        # nodes (built by another builder, e.g. persistent-cache hits) are
+        # structurally adopted on first use (:meth:`_adopt_foreign`): they
+        # share the uid of this builder's structurally identical twin, so
+        # dedup/idempotence rewrites and interning treat them exactly like
+        # internal nodes, and they are pinned in _foreign_keepalive so a
+        # registered id can never be recycled by the allocator.
         self._uid_of_node: Dict[int, int] = {}
+        self._foreign_keepalive: List[CMNode] = []
         self.share_aware_flatten = bool(share_aware_flatten)
         self.build_memo = bool(build_memo)
         # Non-None only while an outermost build() is executing. Builders are
@@ -560,8 +571,62 @@ class CMIRBuilder:
     def _node_uid(self, node: CMNode) -> int:
         uid = self._uid_of_node.get(id(node))
         if uid is None:
-            uid = self._uid_of_node[id(node)] = len(self._uid_of_node)
+            # Unregistered means foreign (every internal node is registered at
+            # intern time). Slow structural fallback — O(subtree) once per
+            # foreign object, preserving the pre-compact-key guarantee that
+            # structurally equal nodes are one equivalence class.
+            self._adopt_foreign(node)
+            uid = self._uid_of_node[id(node)]
         return uid
+
+    def _adopt_foreign(self, node: CMNode) -> CMNode:
+        """Find or create this builder's structurally identical twin of a
+        CMNode produced by another builder, registering every visited foreign
+        object under its twin's uid.
+
+        Adoption preserves the node's exact shape (its public ``key``): it
+        re-interns the structure as-is and applies no re-canonicalization, so
+        a foreign node kept un-spliced by its origin builder's sharing guard
+        keeps that shape here. Iterative post-order — deep foreign chains
+        cannot hit the interpreter recursion limit. Adopted foreign objects
+        are pinned in ``_foreign_keepalive`` for the builder's lifetime so
+        their registered ids cannot be recycled.
+        """
+        twin_by_id: Dict[int, CMNode] = {}
+        stack: List[Tuple[CMNode, bool]] = [(node, False)]
+        while stack:
+            cur, processed = stack.pop()
+            if id(cur) in twin_by_id:
+                continue
+            if id(cur) in self._uid_of_node:
+                # Known to this builder already (internal, or previously
+                # adopted): usable directly wherever a twin is needed.
+                twin_by_id[id(cur)] = cur
+                continue
+            if not processed:
+                stack.append((cur, True))
+                for arg in cur.args:
+                    stack.append((arg, False))
+                continue
+            if cur.kind == "const":
+                twin = self.const(cur.const_value)
+            elif cur.kind == "var":
+                twin = self.var(cur.var_name)
+            else:
+                twin = self._intern(
+                    kind=cur.kind,
+                    key=cur.key,
+                    vars=cur.vars,
+                    const_value=cur.const_value,
+                    op=cur.op,
+                    args=tuple(twin_by_id[id(a)] for a in cur.args),
+                    var_name=cur.var_name,
+                )
+            twin_by_id[id(cur)] = twin
+            if twin is not cur:
+                self._uid_of_node[id(cur)] = self._uid_of_node[id(twin)]
+                self._foreign_keepalive.append(cur)
+        return twin_by_id[id(node)]
 
     def _intern(
         self,
