@@ -1,0 +1,1199 @@
+{
+  "_meta": {
+    "title": "CM gap corrected-E3 independent spot replication",
+    "date": "2026-08-03",
+    "agent": "new independent agent session (Claude Code); no prior aggregation code imported or consulted for computation",
+    "script": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm_gap_post_acceptance_2026-08-03\\independent_reaggregation_2026_08_03.py",
+    "script_sha256": "13d6a83688d4d40c5f07e979393f3235be1546a0794260bcb54abc8ef566fd16",
+    "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "imports": "stdlib only: json, math, hashlib, random, csv, os, sys, collections",
+    "inputs": {
+      "corpus": {
+        "path": "C:\\Users\\brian\\Documents\\CM_Computation\\deliverables_n22_24\\CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+        "sha256": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+      },
+      "results": {
+        "path": "C:\\Users\\brian\\Documents\\CM_Computation\\deliverables_n22_24\\cm_gap_e3_corrected_results_2026_08_02.json",
+        "sha256": "66cde08a4722ec4bff4693c0e8ce426acb6dc2756ee821d2c89942819977ec9b"
+      },
+      "summary_csv": {
+        "path": "C:\\Users\\brian\\Documents\\CM_Computation\\deliverables_n22_24\\CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "sha256": "39ea2df45c25a415580ea3533e52845d9990cfc1bc4c1bf037f127d29c17b53f"
+      },
+      "review_results": {
+        "path": "C:\\Users\\brian\\Documents\\CM_Computation\\deliverables_n22_24\\cm_gap_consolidated_review_results_2026_08_03.json",
+        "sha256": "a5f5a52e1ea4ceb39952ac150013d7b25a712b664a8b6aa35a8b5ab519ee462a"
+      }
+    },
+    "comparison_policy": {
+      "floats": "relative tolerance 1e-09",
+      "integers_ids_labels": "bit-exact",
+      "independent_bootstrap": "+/-0.005 on stratified_by_cell rows, 20000 draws, seed 'cm-post-acceptance-independent-bootstrap-2026-08-03'"
+    },
+    "discovered_definitions": {
+      "summary_median": "exp(median(log ratios)): summary medians are computed in log space; for even n this is the geometric mean of the two middle ratios. First implementation used the plain arithmetic median and mismatched all 60 rows in the 5th decimal; the log-space definition reproduces all 60 bit-exactly. Display-rounded report values (3 decimals) are unaffected.",
+      "breakeven_rule": "never iff cse_kernel_us - cm_kernel_us <= 0; else max(0, ceil((cm_prep_us - cse_prep_us) / (cse_kernel_us - cm_kernel_us))); breakeven median is a plain arithmetic median over breaking formulas"
+    }
+  },
+  "checks": {
+    "corpus_file_sha256_matches_expected": {
+      "ok": true,
+      "detail": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+    },
+    "results_file_sha256_matches_expected": {
+      "ok": true,
+      "detail": "66cde08a4722ec4bff4693c0e8ce426acb6dc2756ee821d2c89942819977ec9b"
+    },
+    "results_meta_corpus_sha_matches_file": {
+      "ok": true,
+      "detail": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+    },
+    "corpus_meta_line_present": {
+      "ok": true,
+      "detail": ""
+    },
+    "corpus_has_192_records": {
+      "ok": true,
+      "detail": "192"
+    },
+    "results_have_192_rows": {
+      "ok": true,
+      "detail": "192"
+    },
+    "results_row_ids_unique": {
+      "ok": true,
+      "detail": ""
+    },
+    "results_ids_equal_corpus_ids": {
+      "ok": true,
+      "detail": ""
+    },
+    "results_rows_field_linkage_to_corpus": {
+      "ok": true,
+      "detail": "[]"
+    },
+    "per_stratum_64_unique_structural_and_truth": {
+      "ok": true,
+      "detail": "{'k8': {'n': 64, 'structural': 64, 'truth': 64}, 'k12': {'n': 64, 'structural': 64, 'truth': 64}, 'k16': {'n': 64, 'structural': 64, 'truth': 64}}"
+    },
+    "raw_row_internal_consistency": {
+      "ok": true,
+      "detail": "[]"
+    },
+    "breakeven_recomputes_exactly_with_single_rule": {
+      "ok": true,
+      "detail": "ceil_clamp0"
+    },
+    "summary_group_label_sets_match_expected_grid": {
+      "ok": true,
+      "detail": ""
+    },
+    "point_estimates_reproduce": {
+      "ok": true,
+      "detail": "max relative deviation 2.042e-16"
+    },
+    "breakeven_block_matches": {
+      "ok": true,
+      "detail": "{'archived_n_never': 30, 'mine_n_never': 30, 'archived_median': 78.5, 'mine_median': 78.5}"
+    },
+    "derived_stats_match_recorded": {
+      "ok": true,
+      "detail": "{'instr_ratio_geomean': 0.0, 'op_ratio_median': 0.0, 'prep_multiple_geomean': 0.0, 'cm_vs_cse_flat_geomean': 0.0}"
+    },
+    "report_secondary_statements_reproduce": {
+      "ok": true,
+      "detail": "{'instr_ratio_geomean_rounds_to_0693': True, 'xor_dom_instr_ratio_rounds_to_0455': True, 'op_ratio_family_geomeans_in_0914_0973': True, 'op_ratio_share_below_1_rounds_to_34pct': True, 'op_ratio_min_rounds_to_0474': True, 'prep_multiple_rounds_to_430': True, 'prep_range_rounds_to_20_61': True, 'wrapper_overhead_median_rounds_to_23us': True, 'never_family_split_17_9_4_0': True, 'never_shape_split_24_6': True}"
+    },
+    "summary_csv_consistent_with_results_json": {
+      "ok": true,
+      "detail": "60 rows"
+    },
+    "independent_stratified_bootstrap_within_0005": {
+      "ok": true,
+      "detail": "8 stratified rows checked, draws=20000"
+    }
+  },
+  "max_float_relative_deviation": 2.0421547794943791e-16,
+  "breakeven_rule_used": "ceil_clamp0",
+  "recomputed_breakeven": {
+    "n_formulas": 192,
+    "n_never": 30,
+    "never_ids": [
+      "e3c-k12-impeqv_dom-shared-4-775c19bc5c3f",
+      "e3c-k12-impeqv_dom-shared-5-e5be2855a4e6",
+      "e3c-k12-impeqv_dom-tree-2-0c0e561a18d2",
+      "e3c-k12-impeqv_dom-tree-3-aced031e9200",
+      "e3c-k12-impeqv_dom-tree-4-2ebdbf5d8183",
+      "e3c-k12-impeqv_dom-tree-6-7e0d68bf1d90",
+      "e3c-k12-mixed-tree-2-7fbb1e9f3a60",
+      "e3c-k12-mixed-tree-4-e0c8035f1431",
+      "e3c-k16-andor_dom-shared-5-7b9d82a9702e",
+      "e3c-k16-andor_dom-tree-3-59c1d0e45abd",
+      "e3c-k16-impeqv_dom-shared-5-32222f34f422",
+      "e3c-k16-impeqv_dom-tree-2-17dccb5ccf14",
+      "e3c-k16-impeqv_dom-tree-4-9f526c6fed83",
+      "e3c-k16-impeqv_dom-tree-7-3e51fb43fa12",
+      "e3c-k16-mixed-tree-3-603ce9083d01",
+      "e3c-k16-mixed-tree-4-669c6b2b98e4",
+      "e3c-k16-mixed-tree-6-200a8246c37d",
+      "e3c-k8-andor_dom-tree-1-b28dbfbd470c",
+      "e3c-k8-andor_dom-tree-7-97a5fbe050a4",
+      "e3c-k8-impeqv_dom-shared-4-50f7a6cfec19",
+      "e3c-k8-impeqv_dom-shared-5-68aeaefbcccd",
+      "e3c-k8-impeqv_dom-tree-1-3d5166db5e97",
+      "e3c-k8-impeqv_dom-tree-2-bbefc51d5fa9",
+      "e3c-k8-impeqv_dom-tree-3-318fa14cfe63",
+      "e3c-k8-impeqv_dom-tree-5-540ef76942d0",
+      "e3c-k8-impeqv_dom-tree-7-bb524dcf8384",
+      "e3c-k8-mixed-tree-1-4275e83ef9d6",
+      "e3c-k8-mixed-tree-3-9bc075e52280",
+      "e3c-k8-mixed-tree-6-648aea3ed822",
+      "e3c-k8-mixed-tree-7-e3032fbfca3b"
+    ],
+    "median_over_breakers": 78.5,
+    "never_by_family": {
+      "andor_dom": 4,
+      "impeqv_dom": 17,
+      "mixed": 9
+    },
+    "never_by_shape": {
+      "tree": 24,
+      "shared": 6
+    }
+  },
+  "derived": {
+    "instr_ratio_geomean": 0.6927770203319423,
+    "instr_ratio_geomean_by_family": {
+      "xor_dom": 0.45473878575195736,
+      "andor_dom": 0.6800509607971578,
+      "impeqv_dom": 0.9657635819309568,
+      "mixed": 0.7712578782756974
+    },
+    "op_ratio_median": 1.0,
+    "op_ratio_geomean_by_family": {
+      "xor_dom": 0.9136207014765514,
+      "andor_dom": 0.9713950585036161,
+      "impeqv_dom": 0.9733173361110128,
+      "mixed": 0.9468288690229186
+    },
+    "op_ratio_share_below_1": 0.34375,
+    "op_ratio_min": 0.47368421052631576,
+    "prep_multiple_geomean": 4.299390540763132,
+    "prep_multiple_min": 2.041477576660201,
+    "prep_multiple_max": 6.065455053448751,
+    "cm_vs_cse_flat_geomean": 0.9849806190342593,
+    "n_cse_flat_rows": 192,
+    "corr_log_instr_log_kernel_blockedmedian": 0.8240074015967473,
+    "corr_log_instr_log_kernel_scalarkernel": 0.8124996482066201,
+    "wrapper_overhead_median_us": 22.728834689284366
+  },
+  "derived_comparison": {
+    "instr_ratio_geomean": {
+      "mine": 0.6927770203319423,
+      "review": 0.6927770203319423,
+      "rel_dev": 0.0
+    },
+    "op_ratio_median": {
+      "mine": 1.0,
+      "review": 1.0,
+      "rel_dev": 0.0
+    },
+    "prep_multiple_geomean": {
+      "mine": 4.299390540763132,
+      "review": 4.299390540763132,
+      "rel_dev": 0.0
+    },
+    "cm_vs_cse_flat_geomean": {
+      "mine": 0.9849806190342593,
+      "review": 0.9849806190342593,
+      "rel_dev": 0.0
+    },
+    "corr_log_instr_log_kernel": {
+      "mine_blockedmedian": 0.8240074015967473,
+      "mine_scalarkernel": 0.8124996482066201,
+      "review": 0.8240074015967473,
+      "basis_matching_recorded": "corr_log_instr_log_kernel_blockedmedian"
+    }
+  },
+  "report_secondary": {
+    "instr_ratio_geomean_rounds_to_0693": true,
+    "xor_dom_instr_ratio_rounds_to_0455": true,
+    "op_ratio_family_geomeans_in_0914_0973": true,
+    "op_ratio_share_below_1_rounds_to_34pct": true,
+    "op_ratio_min_rounds_to_0474": true,
+    "prep_multiple_rounds_to_430": true,
+    "prep_range_rounds_to_20_61": true,
+    "wrapper_overhead_median_rounds_to_23us": true,
+    "never_family_split_17_9_4_0": true,
+    "never_shape_split_24_6": true
+  },
+  "bootstrap": {
+    "blocked": {
+      "live_k=8": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8446034939279952,
+          0.8952779172016891
+        ],
+        "archived": [
+          0.844465024811101,
+          0.8952651055474544
+        ],
+        "delta": [
+          0.00013846911689419095,
+          1.2811654234723413e-05
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.6665812272607611,
+          0.8223715421868911
+        ],
+        "archived": [
+          0.661657089276682,
+          0.8232707955925374
+        ],
+        "delta": [
+          0.004924137984079091,
+          -0.0008992534056462276
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8579955046588883,
+          0.9443371569976243
+        ],
+        "archived": [
+          0.8568030661130962,
+          0.9434021634459508
+        ],
+        "delta": [
+          0.001192438545792096,
+          0.0009349935516734798
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9160912714484893,
+          1.0053021300699603
+        ],
+        "archived": [
+          0.9179757853666826,
+          1.005373472254588
+        ],
+        "delta": [
+          -0.0018845139181932202,
+          -7.134218462767627e-05
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8130770697625658,
+          0.9448000274517124
+        ],
+        "archived": [
+          0.8107205559572656,
+          0.9453713948161637
+        ],
+        "delta": [
+          0.00235651380530022,
+          -0.0005713673644512918
+        ],
+        "within_0005": true
+      },
+      "live_k=8/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9141299688205948,
+          0.9718317989345464
+        ],
+        "archived": [
+          0.9127015489133758,
+          0.9718880921253714
+        ],
+        "delta": [
+          0.0014284199072189807,
+          -5.62931908250075e-05
+        ],
+        "within_0005": true
+      },
+      "live_k=8/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.746021122234133,
+          0.8571817608380456
+        ],
+        "archived": [
+          0.7466322858909016,
+          0.8591049115630571
+        ],
+        "delta": [
+          -0.0006111636567686096,
+          -0.0019231507250114799
+        ],
+        "within_0005": true
+      },
+      "live_k=12": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8498664097479519,
+          0.8870767320696837
+        ],
+        "archived": [
+          0.8505728293286978,
+          0.8864421597814556
+        ],
+        "delta": [
+          -0.0007064195807459095,
+          0.0006345722882281635
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7243143971021679,
+          0.7998815408520801
+        ],
+        "archived": [
+          0.7253137289173195,
+          0.8003301509469988
+        ],
+        "delta": [
+          -0.0009993318151515496,
+          -0.00044861009491869996
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.828801434067739,
+          0.9035650890606505
+        ],
+        "archived": [
+          0.8313559177544132,
+          0.9046754425579271
+        ],
+        "delta": [
+          -0.0025544836866742138,
+          -0.0011103534972766171
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9411259138129736,
+          0.9920276029247155
+        ],
+        "archived": [
+          0.940652242180036,
+          0.9920208314808159
+        ],
+        "delta": [
+          0.0004736716329376556,
+          6.771443899600271e-06
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8143359619780653,
+          0.9546829207746456
+        ],
+        "archived": [
+          0.8122271544172183,
+          0.9545624506571587
+        ],
+        "delta": [
+          0.0021088075608470813,
+          0.00012047011748683722
+        ],
+        "within_0005": true
+      },
+      "live_k=12/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.884412110285126,
+          0.9501557750565313
+        ],
+        "archived": [
+          0.8854608915047357,
+          0.9494160332963171
+        ],
+        "delta": [
+          -0.001048781219609718,
+          0.0007397417602141854
+        ],
+        "within_0005": true
+      },
+      "live_k=12/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.780646469498613,
+          0.8642334364933053
+        ],
+        "archived": [
+          0.7819520015534323,
+          0.86397310526832
+        ],
+        "delta": [
+          -0.0013055320548192029,
+          0.0002603312249852552
+        ],
+        "within_0005": true
+      },
+      "live_k=16": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.9131987387698369,
+          0.9381477126998793
+        ],
+        "archived": [
+          0.9133057125849142,
+          0.9387396266347247
+        ],
+        "delta": [
+          -0.00010697381507729364,
+          -0.0005919139348453673
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8231565080080167,
+          0.8811413723485729
+        ],
+        "archived": [
+          0.8222102046227963,
+          0.8795476050327632
+        ],
+        "delta": [
+          0.0009463033852203928,
+          0.0015937673158097354
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8956576662633301,
+          0.9630419491213187
+        ],
+        "archived": [
+          0.8958151228945955,
+          0.9652510978631182
+        ],
+        "delta": [
+          -0.00015745663126542908,
+          -0.0022091487417995603
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9532475063755723,
+          0.9998535941648197
+        ],
+        "archived": [
+          0.9538791752925504,
+          1.000471552690223
+        ],
+        "delta": [
+          -0.0006316689169780787,
+          -0.0006179585254033615
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9241401470589984,
+          0.9701782733842875
+        ],
+        "archived": [
+          0.92393677309617,
+          0.9701476580177439
+        ],
+        "delta": [
+          0.00020337396282843478,
+          3.0615366543584877e-05
+        ],
+        "within_0005": true
+      },
+      "live_k=16/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9311290429001589,
+          0.9688276346323129
+        ],
+        "archived": [
+          0.9311289468532495,
+          0.9689791497924275
+        ],
+        "delta": [
+          9.60469093147509e-08,
+          -0.00015151516011457922
+        ],
+        "within_0005": true
+      },
+      "live_k=16/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8738309289071516,
+          0.9298147521397244
+        ],
+        "archived": [
+          0.8742178509139461,
+          0.9281226134611188
+        ],
+        "delta": [
+          -0.00038692200679446564,
+          0.0016921386786056258
+        ],
+        "within_0005": true
+      },
+      "family=xor_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8147978997569337,
+          0.8672934708914868
+        ],
+        "archived": [
+          0.8152597249475073,
+          0.8675990164182411
+        ],
+        "delta": [
+          -0.00046182519057358373,
+          -0.000305545526754325
+        ],
+        "within_0005": true
+      },
+      "family=xor_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.6818513941849049,
+          0.7863351033661158
+        ],
+        "archived": [
+          0.682196275334819,
+          0.7839645080044796
+        ],
+        "delta": [
+          -0.0003448811499140447,
+          0.0023705953616361963
+        ],
+        "within_0005": true
+      },
+      "family=andor_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9205757793353437,
+          0.9619096092896157
+        ],
+        "archived": [
+          0.9219904653794038,
+          0.9617589531000211
+        ],
+        "delta": [
+          -0.0014146860440600317,
+          0.00015065618959453353
+        ],
+        "within_0005": true
+      },
+      "family=andor_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8246550858962015,
+          0.8921416791951449
+        ],
+        "archived": [
+          0.824417036049244,
+          0.8905028035863306
+        ],
+        "delta": [
+          0.00023804984695752207,
+          0.0016388756088142609
+        ],
+        "within_0005": true
+      },
+      "family=impeqv_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9802178644214966,
+          1.0089406649388764
+        ],
+        "archived": [
+          0.9801676625696775,
+          1.0086289230816077
+        ],
+        "delta": [
+          5.020185181914272e-05,
+          0.000311741857268677
+        ],
+        "within_0005": true
+      },
+      "family=impeqv_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9143782709731124,
+          0.9776347399008206
+        ],
+        "archived": [
+          0.9135277710461276,
+          0.9788960301685513
+        ],
+        "delta": [
+          0.0008504999269848268,
+          -0.001261290267730697
+        ],
+        "within_0005": true
+      },
+      "family=mixed/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9584945172271963,
+          0.9971712115796671
+        ],
+        "archived": [
+          0.9585125135460952,
+          0.9966543525726587
+        ],
+        "delta": [
+          -1.79963188989829e-05,
+          0.0005168590070084855
+        ],
+        "within_0005": true
+      },
+      "family=mixed/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7848798688110736,
+          0.8860418899642726
+        ],
+        "archived": [
+          0.7867794405972837,
+          0.8859606644387962
+        ],
+        "delta": [
+          -0.0018995717862100303,
+          8.122552547640272e-05
+        ],
+        "within_0005": true
+      },
+      "all": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8762580525245603,
+          0.8990596985595557
+        ],
+        "archived": [
+          0.8764410087721892,
+          0.8990716122365229
+        ],
+        "delta": [
+          -0.00018295624762887375,
+          -1.1913676967179043e-05
+        ],
+        "within_0005": true
+      }
+    },
+    "round_robin": {
+      "live_k=8": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8627431963654746,
+          0.9089628773848538
+        ],
+        "archived": [
+          0.863469447678917,
+          0.9094360357385001
+        ],
+        "delta": [
+          -0.0007262513134423942,
+          -0.00047315835364625247
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7026791686721762,
+          0.8569859234046864
+        ],
+        "archived": [
+          0.699677478057012,
+          0.8573646532795334
+        ],
+        "delta": [
+          0.0030016906151641987,
+          -0.0003787298748469947
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8728943658158084,
+          0.9416751551814122
+        ],
+        "archived": [
+          0.8729826179292451,
+          0.941470657838679
+        ],
+        "delta": [
+          -8.825211343677086e-05,
+          0.00020449734273320086
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9236429057771174,
+          0.9974253468397728
+        ],
+        "archived": [
+          0.9249177771522641,
+          0.9978439778899704
+        ],
+        "delta": [
+          -0.0012748713751467022,
+          -0.00041863105019757096
+        ],
+        "within_0005": true
+      },
+      "live_k=8/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8393410449266678,
+          0.9544334204875309
+        ],
+        "archived": [
+          0.8374039910369931,
+          0.9555673827571869
+        ],
+        "delta": [
+          0.0019370538896746892,
+          -0.001133962269656008
+        ],
+        "within_0005": true
+      },
+      "live_k=8/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9318570938540439,
+          0.9747724121303357
+        ],
+        "archived": [
+          0.9310396818468419,
+          0.9745710828156924
+        ],
+        "delta": [
+          0.0008174120072019786,
+          0.00020132931464333925
+        ],
+        "within_0005": true
+      },
+      "live_k=8/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7719716190630793,
+          0.8732210570762682
+        ],
+        "archived": [
+          0.7704782302597228,
+          0.8733331922796981
+        ],
+        "delta": [
+          0.0014933888033564768,
+          -0.00011213520342989725
+        ],
+        "within_0005": true
+      },
+      "live_k=12": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8741661676304492,
+          0.9105442238644621
+        ],
+        "archived": [
+          0.875298019013181,
+          0.9102835702679978
+        ],
+        "delta": [
+          -0.0011318513827318633,
+          0.00026065359646432196
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7427321110741194,
+          0.828802045107256
+        ],
+        "archived": [
+          0.7439872284395723,
+          0.830610457608106
+        ],
+        "delta": [
+          -0.001255117365452918,
+          -0.001808412500850065
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8666137016716489,
+          0.9289114537105726
+        ],
+        "archived": [
+          0.8680562825493844,
+          0.9296687078271908
+        ],
+        "delta": [
+          -0.001442580877735522,
+          -0.0007572541166182001
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9450892992065819,
+          1.0146635419428407
+        ],
+        "archived": [
+          0.9435374189349478,
+          1.0159294137643817
+        ],
+        "delta": [
+          0.0015518802716341096,
+          -0.0012658718215410314
+        ],
+        "within_0005": true
+      },
+      "live_k=12/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8529905581368955,
+          0.9751457155567975
+        ],
+        "archived": [
+          0.8510328278895026,
+          0.9776559948492406
+        ],
+        "delta": [
+          0.001957730247392875,
+          -0.002510279292443074
+        ],
+        "within_0005": true
+      },
+      "live_k=12/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9065092524870599,
+          0.9741566750379095
+        ],
+        "archived": [
+          0.9077156871897888,
+          0.9724971195618584
+        ],
+        "delta": [
+          -0.0012064347027288536,
+          0.0016595554760511222
+        ],
+        "within_0005": true
+      },
+      "live_k=12/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8067684573209801,
+          0.8852497161507256
+        ],
+        "archived": [
+          0.808649390922241,
+          0.8863584864675066
+        ],
+        "delta": [
+          -0.001880933601260848,
+          -0.001108770316781027
+        ],
+        "within_0005": true
+      },
+      "live_k=16": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.9251998486671846,
+          0.9464354146077474
+        ],
+        "archived": [
+          0.9255745155060044,
+          0.9464891992784535
+        ],
+        "delta": [
+          -0.0003746668388198149,
+          -5.3784670706158444e-05
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=xor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8254264080640276,
+          0.8808003177819584
+        ],
+        "archived": [
+          0.8251046826476286,
+          0.8802823365438686
+        ],
+        "delta": [
+          0.0003217254163989658,
+          0.0005179812380898818
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=andor_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9043518900175016,
+          0.9661407231738783
+        ],
+        "archived": [
+          0.9052930885053527,
+          0.9658890867592085
+        ],
+        "delta": [
+          -0.0009411984878511248,
+          0.00025163641466985354
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=impeqv_dom": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9794977690385516,
+          1.0277590065755524
+        ],
+        "archived": [
+          0.9823094896867538,
+          1.027641963605972
+        ],
+        "delta": [
+          -0.0028117206482022317,
+          0.0001170429695804831
+        ],
+        "within_0005": true
+      },
+      "live_k=16/family=mixed": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9300885344369733,
+          0.9805895285487378
+        ],
+        "archived": [
+          0.9298330471576093,
+          0.9803242140409121
+        ],
+        "delta": [
+          0.0002554872793639751,
+          0.0002653145078257424
+        ],
+        "within_0005": true
+      },
+      "live_k=16/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9452765233271302,
+          0.9892432841166753
+        ],
+        "archived": [
+          0.9441604133934678,
+          0.9888150627308775
+        ],
+        "delta": [
+          0.0011161099336624014,
+          0.000428221385797789
+        ],
+        "within_0005": true
+      },
+      "live_k=16/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8781496386168939,
+          0.9331039468600685
+        ],
+        "archived": [
+          0.8788670516818841,
+          0.9320018269378408
+        ],
+        "delta": [
+          -0.00071741306499018,
+          0.00110211992222764
+        ],
+        "within_0005": true
+      },
+      "family=xor_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8353554437984245,
+          0.8894362584694246
+        ],
+        "archived": [
+          0.8354278916868398,
+          0.8897071394781968
+        ],
+        "delta": [
+          -7.24478884153168e-05,
+          -0.00027088100877215027
+        ],
+        "within_0005": true
+      },
+      "family=xor_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.7040007753403158,
+          0.8027486146113785
+        ],
+        "archived": [
+          0.7021563368095609,
+          0.8032276827337684
+        ],
+        "delta": [
+          0.0018444385307548883,
+          -0.00047906812238995844
+        ],
+        "within_0005": true
+      },
+      "family=andor_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.944556546308631,
+          0.9814682098510775
+        ],
+        "archived": [
+          0.945367327937574,
+          0.98121576407407
+        ],
+        "delta": [
+          -0.0008107816289431025,
+          0.00025244577700755944
+        ],
+        "within_0005": true
+      },
+      "family=andor_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.8467071426221003,
+          0.8848854324581098
+        ],
+        "archived": [
+          0.8461059784489269,
+          0.8846204479546713
+        ],
+        "delta": [
+          0.0006011641731734629,
+          0.00026498450343848123
+        ],
+        "within_0005": true
+      },
+      "family=impeqv_dom/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9787443106009635,
+          1.0157592875224914
+        ],
+        "archived": [
+          0.9781479555558573,
+          1.0158469832488028
+        ],
+        "delta": [
+          0.0005963550451061339,
+          -8.769572631139866e-05
+        ],
+        "within_0005": true
+      },
+      "family=impeqv_dom/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9347758039918982,
+          1.0005087683710596
+        ],
+        "archived": [
+          0.9350958129271718,
+          1.0005239181750323
+        ],
+        "delta": [
+          -0.00032000893527361907,
+          -1.5149803972658304e-05
+        ],
+        "within_0005": true
+      },
+      "family=mixed/shape=tree": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.9867986747668922,
+          1.0127126957111061
+        ],
+        "archived": [
+          0.9869127970959649,
+          1.0120254384250527
+        ],
+        "delta": [
+          -0.0001141223290727078,
+          0.0006872572860534554
+        ],
+        "within_0005": true
+      },
+      "family=mixed/shape=shared": {
+        "bootstrap_kind": "formula",
+        "mine": [
+          0.812190646997727,
+          0.893039065514672
+        ],
+        "archived": [
+          0.8121930855562344,
+          0.8939405943090852
+        ],
+        "delta": [
+          -2.438558507344979e-06,
+          -0.0009015287944131867
+        ],
+        "within_0005": true
+      },
+      "all": {
+        "bootstrap_kind": "stratified_by_cell",
+        "mine": [
+          0.8944428625836199,
+          0.9153691312023688
+        ],
+        "archived": [
+          0.8941677725037773,
+          0.914710846248717
+        ],
+        "delta": [
+          0.00027509007984261036,
+          0.0006582849536518331
+        ],
+        "within_0005": true
+      }
+    }
+  },
+  "bootstrap_formula_rows_within_0005": "52/52 (informational; archived 2000-draw MC error dominates at n=16)",
+  "failures": [],
+  "verdict": "INDEPENDENT REAGGREGATION PASSED"
+}
