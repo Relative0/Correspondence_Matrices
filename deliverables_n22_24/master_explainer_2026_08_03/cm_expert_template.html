@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Correspondence Matrices — expert technical summary</title>
 <meta name="description" content="Dense technical cut: every chart, every interval with its clustering basis, protocol notes, corrections ledger, and file-level provenance.">
+<meta property="og:title" content="Correspondence Matrices — expert technical summary">
+<meta property="og:description" content="Every benchmark result, confidence interval, protocol note, correction, and source file in one technical summary.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="og.png">
 <style>/*__CM_CSS__*/</style>
 </head>
 <body>
@@ -40,7 +45,7 @@ app.append(h("header", { class: "page" }, [
     "Every measurement from the 2026-08-03 campaign, with its scope, its clustering basis, and the file it " +
     "was read from. Interpretation is kept to where it changes what a number means." }),
   h("p", { class: "meta", html:
-    `Repository <code>${M.build_head.slice(0, 7)}</code> · evidence campaign <code>${M.campaign_head.slice(0, 7)}</code> · ` +
+    `Evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> · campaign revision <code>${M.campaign_revision.slice(0, 7)}</code> · ` +
     `local box ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy} · ` +
     `pods Linux/AMD EPYC cpu3c, all terminated · campaign spend ${FMT.usd(M.cost_usd)} of $${M.cost_cap_usd.toFixed(2)} cap · ` +
     `tests ${M.tests}` }),

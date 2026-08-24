@@ -5,6 +5,13 @@ https://www.b-theory.com/CorrespondenceMatrices.pdf
 
 This repository benchmarks and validates several Boolean-expression backends, centered on the Correspondence Matrix (CM) representation. The code in this repo is the source of truth for the benchmark flow, compiler options, and correctness checks.
 
+## Publication materials
+
+- [Master explainer](deliverables_n22_24/master_explainer_2026_08_03/index.html) — the current, fully sourced publication website.
+- [Plain-language version](deliverables_n22_24/master_explainer_2026_08_03/layperson.html), [investor brief](deliverables_n22_24/master_explainer_2026_08_03/investor.html), and [expert summary](deliverables_n22_24/master_explainer_2026_08_03/expert.html).
+- [Benchmark refresh claim map](deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md) — the authoritative map of confirmed, revised, and superseded claims.
+- [Website build report](deliverables_n22_24/master_explainer_2026_08_03/CM_MASTER_EXPLAINER_BUILD_REPORT_2026-08-03.md) and [publication-stabilization report](deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_PUBLICATION_STABILIZATION_2026-08-24.md).
+
 ## What the project does
 
 - Builds CM representations for Boolean expressions with eager, lazy, pair-aware, and parallelized compilation paths.

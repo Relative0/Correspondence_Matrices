@@ -29,13 +29,17 @@ import json
 import math
 import re
 import statistics
-import subprocess
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DELIV = HERE.parent
 REPO = DELIV.parent
+
+# The evidence inputs used by this site are frozen at this revision.  Do not
+# derive this value from the checkout's current HEAD: doing so makes a rebuild
+# change its own output after the generated site is committed.
+EVIDENCE_REVISION = "6e8a283d22fb7cf643753fb6ad2d7fc3f3f2c96f"
 
 # ---------------------------------------------------------------- helpers
 
@@ -63,16 +67,6 @@ def fnum(x):
 
 def geomean(xs: list[float]) -> float:
     return math.exp(statistics.fmean(math.log(x) for x in xs))
-
-
-def git_head() -> str:
-    try:
-        return subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=REPO, capture_output=True,
-            text=True, check=True,
-        ).stdout.strip()
-    except Exception:  # pragma: no cover - diagnostics only
-        return "unknown"
 
 
 # ---------------------------------------------------------------- paths
@@ -963,8 +957,8 @@ num("bx2.n_orders", bx2_res["_meta"]["n_orders"], "int", "%s :: _meta.n_orders" 
 # ================================================================= campaign
 
 D["_campaign"] = {
-    "build_head": git_head(),
-    "campaign_head": manifest["git_head"],
+    "evidence_revision": EVIDENCE_REVISION,
+    "campaign_revision": manifest["git_head"],
     "campaign": manifest["campaign"],
     "cost_usd": manifest["pods"]["total_cost_usd"] + bx2_pod["cost_usd_actual"],
     "cost_cap_usd": manifest["pods"]["budget_cap_usd"],
@@ -993,8 +987,10 @@ num("meta.tests", manifest["tests"]["result"].split(",")[0], "text",
     "%s :: tests.result" % rel(P_MANIFEST))
 num("meta.cost", D["_campaign"]["cost_usd"], "usd",
     "%s :: pods.total_cost_usd + %s :: cost_usd_actual" % (rel(P_MANIFEST), rel(P_BX2_POD)))
-num("meta.head", D["_campaign"]["build_head"][:7], "text", "git rev-parse HEAD at build time")
-num("meta.campaign_head", manifest["git_head"][:7], "text", "%s :: git_head" % rel(P_MANIFEST))
+num("meta.evidence_revision", EVIDENCE_REVISION[:7], "text",
+    "evidence revision pinned by the site builder")
+num("meta.campaign_revision", manifest["git_head"][:7], "text",
+    "%s :: git_head" % rel(P_MANIFEST))
 
 # ---------------------------------------------------------------- superseded
 # Numbers that must NEVER appear on a chart. They are rendered only in the
@@ -1140,8 +1136,8 @@ print("wrote %s (%d bytes)" % (out_json.name, out_json.stat().st_size))
 for name, size in written:
     print("wrote %-16s (%d bytes)" % (name, size))
 print()
-print("build HEAD:    ", D["_campaign"]["build_head"])
-print("campaign HEAD: ", D["_campaign"]["campaign_head"])
+print("evidence revision:", D["_campaign"]["evidence_revision"])
+print("campaign revision:", D["_campaign"]["campaign_revision"])
 print("number tokens: %d defined, %d referenced by prose, %d unused"
       % (len(NUM), len(used), len(unused)))
 if unused:

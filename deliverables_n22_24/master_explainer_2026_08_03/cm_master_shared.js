@@ -547,8 +547,35 @@ function topbar(cfg) {
   const inner = h("div", { class: "inner" });
   inner.append(h("div", { class: "brand", html: cfg.brand }));
   if (cfg.links && cfg.links.length) {
-    const nav = h("nav");
-    cfg.links.forEach(([href, lab]) => nav.append(h("a", { href, text: lab })));
+    const nav = h("nav", { id: "site-nav", "aria-label": "Page navigation" });
+    const menu = h("button", {
+      class: "menutog", type: "button", "aria-controls": "site-nav",
+      "aria-expanded": "false", text: "☰ menu",
+    });
+    const closeMenu = () => {
+      nav.removeAttribute("data-open");
+      menu.setAttribute("aria-expanded", "false");
+    };
+    menu.addEventListener("click", () => {
+      const open = nav.getAttribute("data-open") === "true";
+      if (open) closeMenu();
+      else {
+        nav.setAttribute("data-open", "true");
+        menu.setAttribute("aria-expanded", "true");
+      }
+    });
+    cfg.links.forEach(([href, lab]) => {
+      const link = h("a", { href, text: lab });
+      link.addEventListener("click", closeMenu);
+      nav.append(link);
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && nav.getAttribute("data-open") === "true") {
+        closeMenu();
+        menu.focus();
+      }
+    });
+    inner.append(menu);
     inner.append(nav);
   }
   const tog = h("button", { class: "themetog", type: "button", "aria-label": "Toggle light or dark theme", text: "◑ theme" });
@@ -1303,7 +1330,7 @@ function pageFooter(extra, minimal) {
   }
   foot.append(h("p", {
     html:
-      `Built from repository <code>${M.build_head.slice(0, 7)}</code> (evidence campaign <code>${M.campaign_head.slice(0, 7)}</code>) ` +
+      `Built from evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> (campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>) ` +
       `by <code>cm_master_build_2026_08_03.py</code>, which reads every number from the evidence files listed under each figure. ` +
       `No benchmark was re-run and no committed evidence file was modified to produce this site.`,
   }));

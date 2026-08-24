@@ -1,5 +1,10 @@
 # CM master knowledge base — build report (2026-08-03)
 
+> **Publication update (2026-08-24):** this report records the original build.
+> The current publication-preparation state, responsive-navigation QA, pinned
+> evidence revision, and share-card work are documented in
+> `CM_WEBSITE_PUBLICATION_STABILIZATION_2026-08-24.md`.
+
 ## Repository state
 
 - `git rev-parse HEAD` at start **and** end of session:
