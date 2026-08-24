@@ -159,6 +159,7 @@ function card(o) {
   }
   if (o.svg) c.append(h("div", { class: "figwrap" }, [o.svg]));
   if (o.svg2) c.append(h("div", { class: "figwrap" }, [o.svg2]));
+  if (o.visual) c.append(o.visual);
   if (o.note) c.append(h("p", { class: "claim", html: P(o.note) }));
   if (o.table) {
     const d = h("details");
@@ -411,6 +412,12 @@ function hBars(rows, cfg) {
     g.append(el("text", { x: x(t), y: padT + rows.length * rowH + 18, class: "tick", "text-anchor": "middle" },
                         [document.createTextNode(cfg.fmtTick ? cfg.fmtTick(t) : f(t, 0))]));
   });
+  if (cfg.ref != null && cfg.ref >= 0 && cfg.ref <= maxV) {
+    g.append(el("line", { x1: x(cfg.ref), x2: x(cfg.ref), y1: padT - 9, y2: padT + rows.length * rowH,
+                          stroke: "var(--ref)", "stroke-width": 1.5 }));
+    g.append(el("text", { x: x(cfg.ref), y: padT - 13, class: "axtitle", "text-anchor": "middle" },
+                        [document.createTextNode(cfg.refLabel || String(cfg.ref))]));
+  }
   g.append(el("text", { x: (padL + W - padR) / 2, y: H - 6, class: "axtitle", "text-anchor": "middle" },
                       [document.createTextNode(cfg.xTitle)]));
   rows.forEach((r, i) => {
@@ -424,6 +431,42 @@ function hBars(rows, cfg) {
     g.append(bar);
     g.append(el("text", { x: x(r.value) + 8, y: cy + 4, class: "val", "font-size": 11.5 },
                         [document.createTextNode(cfg.fmtVal ? cfg.fmtVal(r.value) : f(r.value, 2))]));
+  });
+  return g;
+}
+
+/* ----------------------------------- 100% stacked horizontal outcome bars */
+function stackedPercentBars(rows, cfg) {
+  const W = cfg.width || 900, padL = cfg.padL || 245, padR = 128, padT = 30, rowH = cfg.rowH || 46;
+  const H = padT + rows.length * rowH + 46;
+  const x = linScale(0, 100, padL, W - padR);
+  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  [0, 25, 50, 75, 100].forEach(t => {
+    g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 8, y2: padT + rows.length * rowH,
+                          stroke: "var(--grid)", "stroke-width": 1 }));
+    g.append(el("text", { x: x(t), y: padT + rows.length * rowH + 18, class: "tick", "text-anchor": "middle" },
+                        [document.createTextNode(t + "%")]));
+  });
+  g.append(el("text", { x: (padL + W - padR) / 2, y: H - 7, class: "axtitle", "text-anchor": "middle" },
+                      [document.createTextNode("share of expressions in the arm")]));
+  rows.forEach((r, i) => {
+    const cy = padT + i * rowH + rowH / 2;
+    const finitePct = 100 * r.finite / r.total, neverPct = 100 - finitePct;
+    g.append(el("text", { x: padL - 12, y: cy - 3, class: "lab", "text-anchor": "end" },
+                        [document.createTextNode(r.label)]));
+    g.append(el("text", { x: padL - 12, y: cy + 13, class: "tick", "text-anchor": "end", "font-size": 10.5 },
+                        [document.createTextNode("vs " + r.baseline)]));
+    const finite = el("rect", { x: x(0), y: cy - 9, width: x(finitePct) - x(0), height: 18, rx: 4, fill: S1 });
+    const never = el("rect", { x: x(finitePct), y: cy - 9, width: x(100) - x(finitePct), height: 18,
+                               rx: 4, fill: "var(--critical)" });
+    bindTip(finite, `<b>${r.label}</b><span class="r">${r.finite}/${r.total} finite break-even (${f(finitePct, 1)}%)<br>` +
+      `finite median ${FMT.num1s(r.median)} evaluations</span>`);
+    bindTip(never, `<b>${r.label}</b><span class="r">${r.never}/${r.total} never break even (${f(neverPct, 1)}%)</span>`);
+    g.append(finite, never);
+    g.append(el("text", { x: W - padR + 10, y: cy - 2, class: "val", "font-size": 11.5 },
+                        [document.createTextNode("median " + FMT.num1s(r.median) + " eval")]));
+    g.append(el("text", { x: W - padR + 10, y: cy + 13, class: "tick", "font-size": 10.5 },
+                        [document.createTextNode(r.never + " never")]));
   });
   return g;
 }
@@ -679,6 +722,71 @@ function decisionFlow(nodes) {
   return wrap;
 }
 
+function decisionAtlasVisual(items) {
+  const wrap = h("div", { class: "decision-atlas" });
+  items.forEach(it => {
+    const c = h("div", { class: "decision-mini" });
+    c.append(h("div", { class: "decision-num", text: it.n }));
+    c.append(h("h4", { text: it.question }));
+    c.append(h("div", { class: "decision-answer", text: it.answer }));
+    c.append(h("p", { html: it.evidence }));
+    wrap.append(c);
+  });
+  return wrap;
+}
+
+function metricComparisons(rows) {
+  const wrap = h("div", { class: "metric-comparisons" });
+  rows.forEach(r => {
+    const fmtMetric = v => r.format === "multiple" ? f(v, 2) + "×"
+      : r.format === "evaluations" ? FMT.num1s(v) + " evaluations"
+      : Math.round(v) + " of " + r.total;
+    const d = h("div", { class: "metric-diff" });
+    d.append(h("h4", { text: r.metric }));
+    d.append(h("div", { class: "metric-pair" }, [
+      h("div", {}, [h("span", { text: "archive" }), h("b", { text: fmtMetric(r.archived) })]),
+      h("div", { class: "metric-arrow", text: "→" }),
+      h("div", {}, [h("span", { text: "fresh replay" }), h("b", { text: fmtMetric(r.replay) })]),
+    ]));
+    wrap.append(d);
+  });
+  return wrap;
+}
+
+function frontierLanes(items) {
+  const defs = [
+    ["ranked-next-test", "Next measurements", "Cheap questions that change the decision"],
+    ["partially-answered", "Partial or negative evidence", "Some evidence exists; the success criterion is unmet"],
+    ["formal-not-demonstrated", "Formal or capability gaps", "Implemented ideas without demonstrated practical value"],
+    ["open", "Boundary not mapped", "The current evidence stops here"],
+  ];
+  const wrap = h("div", { class: "frontier-lanes" });
+  defs.forEach(([status, title, sub]) => {
+    const lane = h("div", { class: "frontier-lane" });
+    lane.append(h("div", { class: "lane-head" }, [h("b", { text: title }), h("span", { text: sub })]));
+    const chips = h("div", { class: "lane-chips" });
+    items.filter(it => it.status === status).forEach(it =>
+      chips.append(h("span", { text: it.visual_label || it.title })));
+    lane.append(chips);
+    wrap.append(lane);
+  });
+  return wrap;
+}
+
+function auditLadder(chain) {
+  const wrap = h("div", { class: "audit-ladder" });
+  chain.forEach((step, i) => {
+    const row = h("div", { class: "audit-step" });
+    row.append(h("div", { class: "audit-mark", text: String(i + 1).padStart(2, "0") }));
+    row.append(h("div", { class: "audit-copy" }, [
+      h("span", { class: "audit-date", text: step.date }),
+      h("b", { text: step.stage.split(" — ")[0] }),
+    ]));
+    wrap.append(row);
+  });
+  return wrap;
+}
+
 function glossary(terms, mountId) {
   const wrap = h("div");
   const controls = h("div", { class: "glosscontrols" });
@@ -727,6 +835,73 @@ function glossary(terms, mountId) {
    numbers — a derived page can never drift from the master. */
 
 const FIG = {};
+
+FIG.decisionAtlas = () => {
+  const wrapRows = DATA.e6_wrapper_ratio.rows;
+  const be = DATA.e11_breakeven;
+  const engines = DATA.e15_engines.rows;
+  const extract = DATA.e12_cudd.extract_vs_kernel.map(r => r.factor);
+  const flatExternal = DATA.e2_kernel_vs_cse_flat.rows.find(r => r.group === "external");
+  const flatWins = engines.filter(r => r.fastest === "flat_bigint").length;
+  const wordsWins = engines.filter(r => r.fastest === "words").length;
+  const items = [
+    { n: "01", question: "One answer", answer: "Use BitSet",
+      evidence: `BitSet led at all ${wrapRows.length} measured supports; even cached CM took ` +
+        `${f(Math.min(...wrapRows.map(r => r.cached_median)), 2)}–${f(Math.max(...wrapRows.map(r => r.cached_median)), 2)}× as long.` },
+    { n: "02", question: "The same answer repeatedly", answer: "Measure reuse first",
+      evidence: `Against the matched plain-CSE baseline, the finite median moves from ` +
+        `${FMT.num1s(be.synthetic.median_finite)} synthetic to ${FMT.num1s(be.epfl_vs_plain_cse.median_finite)} real-circuit evaluations.` },
+    { n: "03", question: "Choosing an internal engine", answer: "Use workload evidence",
+      evidence: `Flat big-integer won ${flatWins} of ${engines.length} measured supports; word-packed won ` +
+        `${wordsWins}, at live_k=${engines.find(r => r.fastest === "words").live_k}.` },
+    { n: "04", question: "Canonical symbolic questions", answer: "Use CUDD",
+      evidence: `It builds a compact graph; producing the complete explicit answer vector cost ` +
+        `${FMT.x0(Math.min(...extract))}–${FMT.xcomma(Math.max(...extract))} the CM kernel.` },
+    { n: "05", question: "Real AND/INV circuits", answer: "Expect parity with a strong compiler",
+      evidence: `External CM ÷ CSE-flat was ${f(flatExternal.value, 4)}, with its circuit-clustered interval spanning parity.` },
+  ];
+  return card({
+    id: "fig-decision-atlas",
+    scope: "five common decisions · each signal comes from the matched result named in the card",
+    title: "The decision atlas: five questions, five evidence-backed answers",
+    caption: "The answer changes with the artifact you need and where you draw the timing boundary. This is the " +
+      "shortest honest version of section 4; the full charts immediately below show the underlying measurements.",
+    visual: decisionAtlasVisual(items),
+    table: table(["situation", "answer", "evidence signal"],
+      items.map(it => [it.question, it.answer, it.evidence])),
+    prov: [
+      ...DATA.e6_wrapper_ratio.provenance,
+      ...DATA.e11_breakeven.provenance,
+      ...DATA.e15_engines.provenance,
+      ...DATA.e12_cudd.provenance,
+      ...DATA.e2_kernel_vs_cse_flat.provenance,
+    ],
+  });
+};
+
+FIG.assignmentGrowth = () => {
+  const d = DATA.e18_assignment_growth;
+  return card({
+    id: "fig-assignment-growth",
+    scope: "definition of an explicit truth vector · assignments = 2^live_k",
+    title: "Four more live inputs means sixteen times as many answers",
+    caption: "The work grows with inputs that actually change the result, not with names sitting unused in the " +
+      "namespace. The log axis makes the repeated sixteen-fold jumps visible without letting the largest bar " +
+      "erase the smaller ones.",
+    svg: dotLog(d.rows.map(r => ({
+      label: "live_k = " + r.live_k,
+      points: [{ label: commas(r.assignments) + " assignments", v: r.assignments, color: S1 }],
+      right: commas(r.assignments),
+    })), {
+      min: 10, max: 100000, title: "Explicit answer-vector growth",
+      xTitle: "explicit assignments (log scale)", fmtTick: commas, fmtVal: commas,
+    }),
+    table: table(["live_k", "explicit assignments"], d.rows.map(r => [r.live_k, commas(r.assignments)])),
+    prov: d.provenance,
+    note: `The current guard stops at live_k=${d.guard_limit}. The graph explains why that is a capability ` +
+      "boundary rather than an arbitrary benchmark cutoff.",
+  });
+};
 
 FIG.kernelForest = () => {
   const d = DATA.e1_kernel_vs_cse;
@@ -856,7 +1031,7 @@ FIG.wrapperCost = () => {
   });
 };
 
-FIG.breakeven = () => {
+FIG.breakevenSummary = () => {
   const d = DATA.e11_breakeven;
   const arms = [
     ["Synthetic corpus (B1 replay)", d.synthetic, S1],
@@ -866,13 +1041,37 @@ FIG.breakeven = () => {
   return card({
     id: "fig-breakeven",
     scope: "192 synthetic formulas and 129 EPFL cones · three arms, each against its named baseline",
-    title: "How many times you must re-evaluate before CM's preparation pays for itself",
-    caption: "Each bar counts formulas whose break-even lands in that band. Formulas that never break even are " +
-      "absent from the histogram entirely — they are counted separately below, because no reuse count rescues " +
-      "them. <b>Compare like with like:</b> the first two series share a baseline and may be compared to each " +
-      "other; the third uses a different baseline and may not.",
+    title: "Matched baselines make the economics legible",
+    caption: `Against plain CSE, the finite median moves from ${FMT.num1s(d.synthetic.median_finite)} ` +
+      `evaluations on synthetic formulas to ${FMT.num1s(d.epfl_vs_plain_cse.median_finite)} on real circuits, ` +
+      `while the never-break-even share moves from ${f(100*d.synthetic.n_never/d.synthetic.n_total, 1)}% to ` +
+      `${f(100*d.epfl_vs_plain_cse.n_never/d.epfl_vs_plain_cse.n_total, 1)}%. Against CSE-flat, parity makes ` +
+      `${f(100*d.epfl.n_never/d.epfl.n_total, 1)}% of cones never break even at any reuse count.`,
+    legend: [[S1, "finite break-even"], ["var(--critical)", "never breaks even"]],
+    svg: stackedPercentBars(arms.map(([name, a]) => ({
+      label: name, baseline: a.baseline, finite: a.n_finite, never: a.n_never,
+      total: a.n_total, median: a.median_finite,
+    })), { title: "Finite versus never-break-even shares" }),
+    table: table(["corpus", "baseline", "median of finite", "breaks even", "never breaks even", "prep multiple"],
+      arms.map(([name, a]) => [name, a.baseline, f(a.median_finite, 1),
+        `${a.n_finite}/${a.n_total}`, `${a.n_never}/${a.n_total}`, FMT.x2(a.prep_multiple_geomean)])),
+    prov: d.provenance,
+    note: "Only the first two rows are a cross-corpus comparison: both use plain CSE. The third row answers a " +
+      "different and stricter question against CSE-flat.",
+  });
+};
+
+FIG.breakeven = () => {
+  const d = DATA.e11_breakeven;
+  const distribution = card({
+    id: "fig-breakeven-distribution",
+    scope: "finite break-even cases only · the never-break-even population is shown in the summary above",
+    title: "Among formulas that do break even, the distribution is broad and right-skewed",
+    caption: "Each bar counts formulas whose finite break-even lands in that band. The median alone hides a long " +
+      "tail, so the complete distribution is shown; never-break-even cases are not smuggled into an artificial " +
+      "final bin.",
     legend: [[S1, "synthetic, vs plain CSE"], [S2, "EPFL circuits, vs plain CSE (matched)"],
-             [S3, "EPFL circuits, vs CSE-flat (the Outcome A arm)"]],
+             [S3, "EPFL circuits, vs CSE-flat"]],
     svg: histogram({
       labels: d.bin_labels, xTitle: "evaluations of the same expression needed to break even",
       yTitle: "formulas", title: "Break-even distributions",
@@ -882,9 +1081,8 @@ FIG.breakeven = () => {
         { label: "EPFL vs CSE-flat", color: S3, counts: d.epfl.hist },
       ],
     }),
-    table: table(["corpus", "baseline", "median of finite", "breaks even", "never breaks even", "prep multiple"],
-      arms.map(([name, a]) => [name, a.baseline, f(a.median_finite, 1),
-        `${a.n_finite}/${a.n_total}`, `${a.n_never}/${a.n_total}`, FMT.x2(a.prep_multiple_geomean)])),
+    table: table(["break-even band", "synthetic vs plain CSE", "EPFL vs plain CSE", "EPFL vs CSE-flat"],
+      d.bin_labels.map((label, i) => [label, d.synthetic.hist[i], d.epfl_vs_plain_cse.hist[i], d.epfl.hist[i]])),
     prov: d.provenance,
     note: "<b>Baseline warning.</b> " + d.baseline_warning + " Read that way, real circuits are moderately worse " +
       `than synthetic ones on the matched arm (median ${f(d.epfl_vs_plain_cse.median_finite, 1)} against ` +
@@ -894,6 +1092,7 @@ FIG.breakeven = () => {
       "A formula is classified never-break-even exactly when its per-evaluation gain is not positive; preparation " +
       "cost sets how large the finite counts are, but plays no part in that classification.",
   });
+  return frag([FIG.breakevenSummary(), distribution]);
 };
 
 FIG.engines = () => {
@@ -1292,6 +1491,89 @@ FIG.schedule = () => {
     note: "The rows use two different arms — the local and pod rows compare CM against plain CSE, the EPFL row " +
       "against CSE-flat — because each source's primary comparison is the one that source was designed to make. " +
       "They share an axis only because both are ratios near parity; they are not a single series.",
+  });
+};
+
+FIG.discrepancies = () => {
+  const d = DATA.e17_discrepancies;
+  return card({
+    id: "fig-discrepancies",
+    scope: "the two open claim-map discrepancies · visualised from the raw files that exposed them",
+    title: "The discrepancies change wording, not the campaign verdict",
+    caption: "The old “within about 1–2%” schedule sentence holds for the archive, EPFL and pods, but not for " +
+      "the fresh B1 replay. The replay-versus-archive economics moved only slightly, which is why the site uses " +
+      "fresh values and keeps the workload-dependent conclusion.",
+    svg: hBars(d.schedule_rows.map(r => ({
+      label: r.label, value: r.delta_pct, color: r.delta_pct > 2 ? "var(--critical)" : S2, tip: r.scope,
+    })), {
+      max: 15, ref: 2, refLabel: "old ≈2% wording", title: "Absolute schedule shift",
+      xTitle: "absolute blocked-to-round-robin shift", fmtTick: v => f(v, 0) + "%",
+      fmtVal: v => f(v, 2) + "%",
+    }),
+    visual: metricComparisons(d.replay_vs_archive),
+    table: table(["scope", "absolute schedule shift", "what it represents"],
+      d.schedule_rows.map(r => [r.label, f(r.delta_pct, 2) + "%", r.scope])),
+    prov: d.provenance,
+    note: "Red means the scope exceeds the sentence's old ~2% shorthand; it does not mean the benchmark failed. " +
+      "Blocked and round-robin remain separate everywhere, so the protocol rule itself is intact.",
+  });
+};
+
+FIG.frontierMap = () => {
+  const items = DATA._content.frontier.items;
+  return card({
+    id: "fig-frontier-map",
+    scope: "10 open questions · grouped by evidence state, not ranked by optimism",
+    title: "The frontier is mostly measurement work, with two formal gaps and one unmapped boundary",
+    caption: "Four questions already have partial or negative evidence; three cheap measurements are explicitly " +
+      "next; two capabilities exist without demonstrated practical value; one boundary has not been explored. " +
+      "That is a sharper research programme than a generic list of future work.",
+    visual: frontierLanes(items),
+    table: table(["question", "evidence state", "downside case"],
+      items.map(it => [it.visual_label || it.title, it.status.replace(/-/g, " "), P(it.downside)]), "wrap"),
+    prov: ["deliverables_n22_24/cm_master_content_2026_08_03.json :: frontier.items[]"],
+  });
+};
+
+FIG.roadmap = () => {
+  const rows = DATA._content.frontier.roadmap;
+  const costName = v => ({1: "low", 2: "medium", 3: "high"})[Math.round(v)] || "";
+  return card({
+    id: "fig-roadmap",
+    scope: "publication roadmap · priority order and qualitative effort category",
+    title: "The first four decisions are low-cost measurements; formal proof comes last",
+    caption: "The order is deliberate: measure whether reuse exists, find where setup time goes, validate routing, " +
+      "and study cache behaviour before funding heavier workload implementations or formal equivalence work. " +
+      "The graph encodes authored effort categories, not benchmark timings.",
+    svg: hBars(rows.map(r => ({
+      label: r.priority + " · " + r.experiment, value: r.cost_level, color: r.cost_level === 1 ? S1 : r.cost_level === 2 ? S2 : S3,
+      tip: `${r.decision} · ${r.what_it_settles}`,
+    })), {
+      max: 3.25, padL: 285, rowH: 34, title: "Roadmap effort by priority",
+      xTitle: "qualitative effort category", fmtTick: costName, fmtVal: costName,
+    }),
+    table: table(["priority", "experiment", "decision unlocked", "effort", "what it settles"],
+      rows.map(r => [r.priority, r.experiment, r.decision, r.cost_label, r.what_it_settles]), "wrap"),
+    prov: [
+      "deliverables_n22_24/cm_master_content_2026_08_03.json :: frontier.roadmap[]",
+      "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md :: ranked next tests and optimisations",
+    ],
+  });
+};
+
+FIG.auditLadder = () => {
+  const chain = DATA._content.chain;
+  return card({
+    id: "fig-audit-ladder",
+    scope: "14 audit, repair, replication and external-validation passes · July–August 2026",
+    title: "The evidence chain repeatedly narrowed claims before it strengthened them",
+    caption: "The sequence did not merely accumulate confirmations. It exposed unfair comparisons, retracted the " +
+      "largest headline, repaired the baseline, fixed the pass mark in advance, and only then added independent, " +
+      "cross-machine and external evidence.",
+    visual: auditLadder(chain),
+    table: table(["pass", "date", "stage", "outcome"],
+      chain.map((step, i) => [i + 1, step.date, step.stage, P(step.outcome)]), "wrap"),
+    prov: ["deliverables_n22_24/cm_master_content_2026_08_03.json :: chain[] and each chain entry's cited audit artifact"],
   });
 };
 

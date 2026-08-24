@@ -147,6 +147,7 @@ app.append(banner("note", "How to read this page", [
     s.append(c);
   }
   s.append(techBlock(C.whatIsCM.liveK.technical));
+  s.append(FIG.assignmentGrowth());
   s.append(FIG.ambientN());
 
   s.append(h("h3", { text: "CM as an operator calculus — and exactly how far that goes" }));
@@ -212,6 +213,7 @@ app.append(banner("note", "How to read this page", [
     ["A smart non-programmer should be able to read only the plain-language layer of the five scenarios " +
      "below and then answer “when would I want each tool?” without using any jargon. If a paragraph in " +
      "that layer needs a technical term to make sense, it is a defect in the paragraph."]));
+  s.append(FIG.decisionAtlas());
 
   C.scenarios.items.forEach(sc => {
     const blk = h("div", { class: "scenario", id: sc.id });
@@ -241,6 +243,8 @@ app.append(banner("note", "How to read this page", [
   const s = section("s5", "Section 5", "The open frontier — what is still genuinely unsolved", F.lede);
   if (F.lay) s.append(layBlock(F.lay));
   if (F.technical) s.append(techBlock(F.technical));
+  s.append(FIG.frontierMap());
+  s.append(FIG.roadmap());
 
   const KIND = {
     "ranked-next-test": ["open", "ranked next test"],
@@ -296,14 +300,7 @@ app.append(banner("note", "How to read this page", [
   ]));
 
   /* --- the chain ---------------------------------------------------- */
-  s.append(h("h3", { text: "The audit chain" }));
-  s.append(h("p", { html:
-    "Each pass below re-examined the one before it. Nothing here was a single run reported once." }));
-  if ((C.chain || []).length) {
-    s.append(h("div", { class: "tablewrap" }, [
-      table(["pass", "date", "what was checked", "outcome"],
-        C.chain.map(x => [x.stage, x.date, P(x.what_was_checked), P(x.outcome)]), "wrap")]));
-  }
+  s.append(FIG.auditLadder());
 
   /* --- discipline --------------------------------------------------- */
   s.append(h("h3", { text: "The measurement rules, and what each one prevents" }));
@@ -348,6 +345,7 @@ app.append(banner("note", "How to read this page", [
   s.append(h("p", { html:
     "Found while re-reading every number from its source file for this page. Neither changes a campaign " +
     "verdict; both change how a sentence should be worded. They are surfaced here rather than smoothed over." }));
+  s.append(FIG.discrepancies());
   s.append(FIG.flagsBlock());
 
   /* --- scope limits -------------------------------------------------- */

@@ -6,6 +6,11 @@ The first publication-preparation pass is complete. The website is preserved in
 baseline commit `17ad2c7`, rebuilt from the latest local evidence, and ready for
 editorial sign-off. It has not been publicly hosted or pushed by this pass.
 
+The targeted graph and editorial recommendations from that sign-off list were
+subsequently implemented and verified. See
+`CM_WEBSITE_VISUAL_EDITORIAL_EXPANSION_2026-08-24.md` for the current visual
+inventory, deterministic hashes, and remaining gates.
+
 The scientific source is unchanged:
 
 - evidence revision: `6e8a283d22fb7cf643753fb6ad2d7fc3f3f2c96f`;
@@ -65,9 +70,9 @@ browser checks are the tests for the touched surface.
 
 ## Remaining publication gates
 
-1. Brian's editorial sign-off on master §4, the §6 corrections and flags, the
-   break-even baseline wording, §5's frontier ordering, and the three audience
-   cuts.
+1. Brian's final visual/editorial sign-off on the expanded master and audience
+   cuts. The previously listed §4, §5, §6, break-even and audience-cut work is
+   implemented in the follow-on visual/editorial pass.
 2. Choose the exact public origin and hosting route. Then add absolute canonical
    and `og:image` URLs, run one final link/share-preview check, and publish.
 3. Add the final public URL to the README and archive or clearly label the older

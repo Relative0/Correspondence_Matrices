@@ -1728,6 +1728,89 @@
       "deliverables_n22_24/b6_pod_replication_2026_08_03/b6_analysis_2026_08_03.json :: pods[].blocked_geomean, pods[].rr_geomean"
     ]
   },
+  "e17_discrepancies": {
+    "schedule_rows": [
+      {
+        "label": "B1 largest cell",
+        "delta_pct": 12.934498420599905,
+        "scope": "largest absolute per-cell schedule shift in the fresh synthetic replay"
+      },
+      {
+        "label": "B1 all formulas",
+        "delta_pct": 5.175929973525983,
+        "scope": "all-corpus schedule shift in the fresh synthetic replay"
+      },
+      {
+        "label": "Archived synthetic",
+        "delta_pct": 1.914018847176835,
+        "scope": "all-corpus schedule shift in the archived synthetic run"
+      },
+      {
+        "label": "External EPFL",
+        "delta_pct": 0.7788113663731,
+        "scope": "external circuit-clustered campaign"
+      },
+      {
+        "label": "Largest pod",
+        "delta_pct": 0.9247360029360108,
+        "scope": "largest all-corpus shift across the five Linux pods"
+      }
+    ],
+    "replay_vs_archive": [
+      {
+        "metric": "Preparation multiple",
+        "archived": 4.299390540763132,
+        "replay": 4.395430294833716,
+        "format": "multiple"
+      },
+      {
+        "metric": "Finite break-even median",
+        "archived": 78.5,
+        "replay": 78,
+        "format": "evaluations"
+      },
+      {
+        "metric": "Never break even",
+        "archived": 30,
+        "replay": 35,
+        "format": "count",
+        "total": 192
+      }
+    ],
+    "provenance": [
+      "deliverables_n22_24/b1_e3_replay_2026_08_03/CM_gap_e3_corrected_summary_2026_08_02.csv :: blocked|round_robin all-corpus and per-cell geomeans",
+      "deliverables_n22_24/CM_gap_e3_corrected_summary_2026_08_02.csv :: blocked|round_robin all-corpus geomeans",
+      "deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: primary blocked and round-robin geomeans",
+      "deliverables_n22_24/b6_pod_replication_2026_08_03/b6_analysis_2026_08_03.json :: pods[].blocked_geomean, pods[].rr_geomean",
+      "deliverables_n22_24/b1_e3_replay_2026_08_03/cm_gap_e3_corrected_results_2026_08_02.json :: formulas[].prep_ratio_cm_vs_cse, .breakeven_evals_vs_cse, .never_breaks_even_vs_cse",
+      "deliverables_n22_24/cm_gap_e3_corrected_results_2026_08_02.json :: same fields (archived comparison)"
+    ]
+  },
+  "e18_assignment_growth": {
+    "rows": [
+      {
+        "live_k": 4,
+        "assignments": 16
+      },
+      {
+        "live_k": 8,
+        "assignments": 256
+      },
+      {
+        "live_k": 12,
+        "assignments": 4096
+      },
+      {
+        "live_k": 16,
+        "assignments": 65536
+      }
+    ],
+    "guard_limit": 16,
+    "provenance": [
+      "deliverables_n22_24/cm_b4_guard_family_sweep_2026_08_03.py :: max_full_output_vars",
+      "Boolean truth-vector definition :: explicit assignments = 2^live_k"
+    ]
+  },
   "e15_engines": {
     "rows": [
       {
@@ -2775,6 +2858,7 @@
           "id": "fr-realworkload",
           "title": "No real deployed workload has ever been measured",
           "status": "ranked-next-test",
+          "visual_label": "Measure real reuse",
           "lay_statement": "Everything here answers “how many times would you have to re-run this before compiling pays off?” Nobody has yet gone and measured how many times real systems actually do re-run the same expression. Without that number, the economics stay hypothetical in both directions.",
           "technical_statement": "This is distinct from what the external validation delivered. The EPFL campaign supplied real circuit cones and validated kernel ratios and the structure of the preparation and break-even economics on real expressions — but it measured per-formula kernel and preparation costs, not an application's actual reuse distribution or end-to-end task cost. The ranked next test is a reuse-distribution measurement on a real consumer workload, to calibrate expected reuse against predicted break-even. The candidate validation domains named by the project remain untested as workloads: configuration and policy systems, hardware verification and EDA, compiler and program analysis, and constraint satisfaction in AI systems.",
           "why_it_matters": "Reuse count is the decision variable for the entire cost argument. Every recommendation in section 4 that says “it depends how many times” is waiting on this measurement.",
@@ -2789,6 +2873,7 @@
           "id": "fr-prep",
           "title": "Preparation cost is unprofiled — and it is the top optimisation surface",
           "status": "ranked-next-test",
+          "visual_label": "Profile preparation",
           "lay_statement": "Before CM can answer anything it does a one-time setup step costing roughly {{prep.min}}–{{prep.max}} what the simple alternative's setup costs. Nobody has yet measured which part of that setup is expensive, so nobody knows what to fix. Until someone does, any attempt to speed it up is guesswork.",
           "technical_statement": "Preparation costs {{be.syn.prep}} plain-CSE prep on the synthetic corpus, {{be.epflcse.prep}} on the external corpus against the same baseline, and {{be.epfl.prep}} against CSE-flat, with a per-case range of {{b3.prep_ratio.min}}–{{b3.prep_ratio.max}} across the compile-scaling cases. Preparation is linear in structural DAG nodes rather than in unfolded tree size, so this is a constant factor inside the compiler, not a scaling problem. It is ranked the top <em>optimisation</em> surface, and the third-ranked <em>test</em>, behind the reuse-distribution measurement above. The test itself is a decomposition of where that constant goes — canonicalisation, interning, lowering — explicitly <em>before</em> any optimisation is attempted. Prep-cost reduction is the top-ranked optimisation and is gated on that profile existing.",
           "why_it_matters": "Break-even is the preparation premium divided by the per-evaluation kernel gain, so preparation sets how large every finite break-even count is. Halving it roughly halves those counts and widens the band of workloads where compiling pays. It does not, however, rescue the never-break-even population — a formula is classified “never” exactly when the per-evaluation gain is not positive, which is a property of the comparison, not of the setup cost.",
@@ -2804,6 +2889,7 @@
           "id": "fr-cache",
           "title": "The persistent cache has never been studied",
           "status": "ranked-next-test",
+          "visual_label": "Study the cache",
           "lay_statement": "One of the three things CM is left standing on is that it remembers what it has already compiled. Nobody has measured how often that memory actually helps under a realistic mix of work, or how sensitive it is to how much you let it remember.",
           "technical_statement": "The persistent cache is named as the second optimisation surface, with cache-policy tuning as a ranked optimisation gated on the study existing. The only recorded production characteristic to date is incidental: the cache returns one object per digest, which is what keeps a known duplicated-slot behaviour narrow in practice — it requires mid-compile eviction or deliberate cross-builder mixing. Everything else is unmeasured: steady-state hit rate, working-set size, eviction policy, invalidation correctness when an expression changes, memory retention, and cold-versus-warm cost.",
           "why_it_matters": "With kernel speed declared equivalent, the cache is one of three remaining differentiators. An unmeasured differentiator is an architectural assertion.",
@@ -2818,6 +2904,7 @@
           "id": "fr-selector",
           "title": "Backend selection is unvalidated, and the rule in use is measurably wrong",
           "status": "partially-answered",
+          "visual_label": "Validate selection",
           "lay_statement": "CM has several internal engines and picks one using a simple size threshold. New measurements show that threshold is wrong for small problems and can cost several times the runtime. A better rule has been proposed but never fitted, and never tested on data it was not fitted to.",
           "technical_statement": "The long-standing rule — big-integer evaluation below six live variables, word-packed at six and above — is revised to workload-dependent. Flat big-integer beat the recursive kernel at every support ({{bx1.fvr.min}}–{{bx1.fvr.max}}), but the word-packed engine's fixed dispatch cost kept flat fastest through live_k={{bx1.last_flat_k}}; words only won at live_k={{bx1.first_words_k}}. At the support where a threshold rule would have switched, words was {{bx1.k6.wvf}} slower. A support-only selector therefore leaves multiples on the table in the mid range. Separately, an analysis-stage selector is proposed for choosing CM against CSE-flat per workload, from expected reuse count and measured expression properties (structural nodes, sharing factor, operator mix), predicting break-even and choosing CM only when expected reuse greatly exceeds it. It carries an explicit pre-commitment: the rule must be fitted on one slice and validated out of sample — at minimum fit on two strata and validate on the third — before any production integration is proposed. It is deliberately kept out of production until then.",
           "why_it_matters": "Selection is where “different tools answer different questions” becomes an engineering deliverable rather than a slogan. Getting it wrong costs multiples silently. And a selector that cannot be shown to generalise out of sample is indistinguishable from a rule overfitted to the two corpora this project happens to own.",
@@ -2833,6 +2920,7 @@
           "id": "fr-canonical",
           "title": "Canonical CM equivalence exists in the formalism and nowhere else",
           "status": "formal-not-demonstrated",
+          "visual_label": "Prove equivalence",
           "lay_statement": "CM's most distinctive claim is that two differently written expressions can be recognised as the same object by their structure. In practice the project has only ever checked that two things produce the same answers. Matching answers is required for sameness — it does not prove it.",
           "technical_statement": "The current path establishes output equality, including full 2<sup>live_k</sup> packed equality against CUDD on all {{cudd.rows}} matched rows. None of that is a canonical CM-equivalence proof. Matrix equality requires the same normalised ordered basis; a truth table, a normalised CM and a reduced ordered BDD each identify a Boolean function under their own conventions, and none of those conventions is interchangeable with the others. What CM does have is compact interned canonical <em>keys</em>, resting on a documented hash-collision assumption, with one interned twin per builder — which is an engineering property, not a promise of global object identity, and the project's own clarifications say so.",
           "why_it_matters": "This is the capability that would distinguish CM from “a structural IR with a good cache”. Without it, the differentiator list reduces to keys, caching and serialisation — all real, all reproducible by other means.",
@@ -2848,6 +2936,7 @@
           "id": "fr-family",
           "title": "Cross-expression and related-family reuse — preliminary, and it has not beaten the real baseline",
           "status": "partially-answered",
+          "visual_label": "Retest family reuse",
           "lay_statement": "If you evaluate a whole family of closely related expressions — successive versions of a policy, revisions of a circuit — CM ought to be able to reuse work between them. A first experiment showed it reusing work compared with a version of itself that had no cache. It has never been shown to beat the actual competitor.",
           "technical_statement": "The project's own success criterion is that CM's preparation cost amortises across the family and that total family cost falls below repeated BitSet evaluation. Current state: a cross-expression subtree-cache implementation improved cached CM against <em>uncached CM</em> on shared-block cases, with mixed results on composition mixes, while BitSet remained faster by more than an order of magnitude in the strongest exact-output cases cited. A CM-versus-uncached-CM improvement is not the comparison the criterion names. The retest guidance is explicit: do not re-run the existing synthetic family sweep; use real edit, version and query families, and compare against hash-consed DAGs, e-graphs, incremental BDD managers and compiler memoisation as well as uncached CM.",
           "why_it_matters": "This is the workload shape a structural layer is supposed to be for. If it does not pay here, the persistent cache's story collapses back to “re-run the same compiled formula many times”, and the family and versioning domains — policy versions, circuit revisions, compiler passes — drop out of scope.",
@@ -2862,6 +2951,7 @@
           "id": "fr-partial",
           "title": "Repeated partial contexts — tested, and CM lost",
           "status": "partially-answered",
+          "visual_label": "Retest partial contexts",
           "lay_statement": "Many real systems evaluate the same rule over and over with most of the inputs held fixed and a few varying. CM should be able to keep the fixed part's work. When this was tested, CM did beat a version of itself with no cache — and still lost to both BitSet and to the decision-diagram approach at every size tried.",
           "technical_statement": "Success criterion: CM partial evaluation faster than full re-evaluation for repeated partial contexts. Current state: partially tested with a negative comparative result. Cached CM improved substantially over uncached CM, and in one fixed-fraction sweep by a larger factor still — but BitSet and ROBDD restriction remained faster throughout the tested range. The retest guidance calls for real context traces (sliding, random, locality-heavy, adversarially low-overlap, phase-changing) compared against CUDD restrict/cofactor and incremental SAT with assumptions, and asks for a break-even <em>surface</em> over original support, remaining live support, number of contexts, context overlap, output type, cache budget, and cold versus steady state — not a single ratio.",
           "why_it_matters": "Combined with the already-measured BitSet lead at every semantic support up to the guard, a second negative result here would mean the structural layer offers no execution-time advantage on incremental workloads either — and the value proposition would have to rest entirely on the artifacts rather than on time.",
@@ -2876,6 +2966,7 @@
           "id": "fr-operator",
           "title": "Operator difference and quotient — implemented and correct, practical value unproven",
           "status": "formal-not-demonstrated",
+          "visual_label": "Show operator value",
           "lay_statement": "The formalism lets you ask structural questions about operators themselves: what is the difference between these two rules, can this one be factored. Those operations have been implemented and shown to be correct. Nobody has yet shown a real task where using them is cheaper or better than the obvious alternative.",
           "technical_statement": "Directional quotienting, transpose, complement, rotations, operand swap, expression negation and operand-negation transforms are implemented and validated. The measured comparison is where care is needed: BitSet was faster for the semantic-delta task, and CM's quotient computes a <em>different artifact</em> — it is not a faster semantic XOR. The project records this as a standing anti-pattern: never benchmark the quotient as though it were a semantic-difference speed contest, because that compares two different outputs. This sits squarely in the formalism column: the artifact is a structural operator representation, and its practical performance advantage has not been benchmarked.",
           "why_it_matters": "This is the only capability on the list that could not be reproduced by bolting CSE plus flattening onto an existing evaluator. If it never demonstrates value, the operator calculus remains a correct but unused feature and CM's public claim reduces to a well-engineered structural IR with a well-tested explicit-output path.",
@@ -2890,6 +2981,7 @@
           "id": "fr-bddhard",
           "title": "The decision-diagram comparison has only been run where ordering barely matters",
           "status": "partially-answered",
+          "visual_label": "Test BDD-hard families",
           "lay_statement": "The order in which a decision diagram tests its variables can change its size dramatically — for some functions, catastrophically. The expressions measured here are all easy in that respect, so the comparison against decision diagrams has been made only in the region where their hardest failure mode never appears.",
           "technical_statement": "The order-search question is closed with data: best-of-ten order search yielded {{bx2.node_saving.min_pct}}–{{bx2.node_saving.max_pct}} smaller graphs at {{bx2.search_x.min}}–{{bx2.search_x.max}} the single-build cost, and dynamic reordering never triggered — node ratio exactly {{bx2.reorder_ratio}} — because at {{bx2.max_nodes}} nodes and below the trigger threshold is never reached. That last fact <em>is</em> the limitation. What remains open is a controlled study over standard parameterised families with known behaviour — easy and reducible, parity-like, multiplexer, arithmetic and circuit-derived, and deliberately order-sensitive — reporting for each: fixed order, explicitly stated alternative orders, best-of-k with the full search cost, the dynamic-reordering method and its total cost, and node count, peak memory, build time and each downstream query kept separate.",
           "why_it_matters": "Comparing a packed evaluator against decision diagrams only on diagram-friendly inputs risks reading a favourable extraction ratio as a general property. On genuinely hard families the packed path may become infeasible before the diagram does.",
@@ -2905,6 +2997,7 @@
           "id": "fr-aboveguard",
           "title": "Above the guard limit, the boundary is enforced rather than explored",
           "status": "open",
+          "visual_label": "Map the guard boundary",
           "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. The refusal is correct and has never once been wrong. But it means the region beyond that line has never been measured — and that happens to be the only region where CM's whole-call path might have led.",
           "technical_statement": "The guard is confirmed correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} fresh trials, with depth-8 decline rates of {{guard.depth8.min_pct}}–{{guard.depth8.max_pct}}. What is not established is behaviour beyond it. The wrapper-boundary result states that any CM-versus-BitSet crossover sits <em>above</em> the live_k={{guard.k}} guard — that is, the one region where CM's end-to-end path might lead is the region the guard prevents measuring. Separately, the engine crossover only turns at live_k={{bx1.first_words_k}}, so the guard edge is where two different open questions converge. Required work: controlled live-support sweeps independent of ambient namespace size, with memory telemetry and fail-closed limits.",
           "why_it_matters": "The difference between “we have not measured there” and “nothing can work there” is the difference between a tunable threshold and a hard capability boundary, and the site should be able to say which it is.",
@@ -2915,6 +3008,56 @@
             "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md rows 4 and 7"
           ],
           "downside": "If explicit output becomes infeasible immediately past the limit, the crossover question is permanently moot, no claim that CM's whole-call path leads can ever be made, and the limit is a hard capability boundary rather than a tunable setting."
+        }
+      ],
+      "roadmap": [
+        {
+          "priority": 1,
+          "experiment": "Measure real reuse",
+          "decision": "Commercial applicability",
+          "cost_level": 1,
+          "cost_label": "Low",
+          "what_it_settles": "Whether deployed systems repeat logic often enough for preparation to amortise."
+        },
+        {
+          "priority": 2,
+          "experiment": "Profile preparation",
+          "decision": "Optimisation target",
+          "cost_level": 1,
+          "cost_label": "Low",
+          "what_it_settles": "Where the setup multiple comes from before anyone attempts to reduce it."
+        },
+        {
+          "priority": 3,
+          "experiment": "Validate backend selection",
+          "decision": "Automatic routing",
+          "cost_level": 1,
+          "cost_label": "Low",
+          "what_it_settles": "Whether a fitted rule transfers to data it was not fitted on."
+        },
+        {
+          "priority": 4,
+          "experiment": "Study persistent-cache behaviour",
+          "decision": "Cache value",
+          "cost_level": 1,
+          "cost_label": "Low",
+          "what_it_settles": "Whether realistic hit rates make the stored structural artifact useful."
+        },
+        {
+          "priority": 5,
+          "experiment": "Retest structural reuse on real traces",
+          "decision": "Execution niche",
+          "cost_level": 2,
+          "cost_label": "Medium",
+          "what_it_settles": "Whether family reuse or partial contexts beat real competitors, not merely uncached CM."
+        },
+        {
+          "priority": 6,
+          "experiment": "Define and prove canonical equivalence",
+          "decision": "Formal differentiator",
+          "cost_level": 3,
+          "cost_label": "High",
+          "what_it_settles": "Whether “same structural object” can become a demonstrated claim."
         }
       ],
       "closed": [

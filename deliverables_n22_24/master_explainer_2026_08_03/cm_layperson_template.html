@@ -76,6 +76,7 @@ app.append(h("header", { class: "page" }, [
 {
   const s = section("lp2", "Second", "The one idea that makes the rest make sense", null);
   s.append(layBlock(C.whatIsCM.liveK.lay.slice(0, 2)));
+  s.append(FIG.assignmentGrowth());
   s.append(banner("note", "The whole idea in one line", [
     "How big a job is depends on how many things <em>actually matter</em> — not on how many things exist. " +
     "Everything that follows is about that number.",
@@ -117,6 +118,7 @@ app.append(h("header", { class: "page" }, [
   const s = section("choose", "Fourth", "Which one do you actually want?", null);
   s.append(h("p", { class: "sectionlede", text:
     "Five situations. Read the ones that sound like yours." }));
+  s.append(FIG.decisionAtlas());
   C.scenarios.items.forEach(sc => {
     const blk = h("div", { class: "scenario" });
     blk.append(h("p", { class: "q" }, [
@@ -147,6 +149,7 @@ app.append(h("header", { class: "page" }, [
     ["Times you must repeat", "about " + T("be.syn.median") + "–" + T("be.epfl.median.matched"),
       "before the setup is repaid, on the two sets of expressions measured — and for a large minority of cases, never"],
   ]));
+  s.append(FIG.breakevenSummary());
   s.append(banner("ok", "The honest summary", [
     "Correspondence Matrices are not a faster calculator. Against a carelessly built competitor they are " +
     "modestly quicker; against a carefully built one they are the same speed. What they add is different in " +
@@ -165,6 +168,7 @@ app.append(h("header", { class: "page" }, [
   s.append(h("p", { class: "sectionlede", text:
     "Short, honest list. These are open in the sense that nobody knows the answer — not in the sense that " +
     "someone is confident and hasn't written it up." }));
+  s.append(FIG.frontierMap());
   const g = h("div", { class: "grid2" });
   C.frontier.items.forEach(it => g.append(h("div", { class: "dom" }, [
     h("h4", { text: it.title.split(" — ")[0] }),
@@ -181,6 +185,7 @@ app.append(h("header", { class: "page" }, [
 /* ---------------------------------------------------------------- 7 */
 {
   const s = section("trust", "Last", "Why you might believe any of this", null);
+  s.append(FIG.auditLadder());
   s.append(layBlock([
     "Research that only ever confirms itself is not research. The most useful thing to know about this " +
     "project is not any single number — it is that several of its own earlier headline figures were " +

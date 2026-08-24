@@ -142,16 +142,13 @@ app.append(banner("note", "Reading conventions enforced throughout", [
   const s = section("x5", "5", "Protocol and measurement discipline",
     C.discipline.lede);
   s.append(FIG.schedule());
+  s.append(FIG.auditLadder());
   {
     const t = h("div", { class: "tablewrap" });
     t.append(table(["rule", "technical statement", "failure mode it prevents"],
       C.discipline.rules.map(r => [r.rule, P(r.technical_explanation), P(r.what_goes_wrong_without_it)]), "wrap"));
     s.append(t);
   }
-  s.append(h("h3", { text: "Audit chain" }));
-  s.append(h("div", { class: "tablewrap" }, [
-    table(["pass", "date", "checked", "outcome"],
-      C.chain.map(x => [x.stage, x.date, P(x.what_was_checked), P(x.outcome)]), "wrap")]));
   app.append(s);
 }
 
@@ -164,6 +161,7 @@ app.append(banner("note", "Reading conventions enforced throughout", [
   s.append(h("p", { text:
     "Found while re-reading every number from its source file for this page. Neither changes a campaign " +
     "verdict; both change how a sentence should be worded." }));
+  s.append(FIG.discrepancies());
   s.append(FIG.flagsBlock());
   app.append(s);
 }
@@ -171,6 +169,8 @@ app.append(banner("note", "Reading conventions enforced throughout", [
 /* ------------------------------------------------------------ open */
 {
   const s = section("x7", "7", "Open frontier", C.frontier.lede);
+  s.append(FIG.frontierMap());
+  s.append(FIG.roadmap());
   C.frontier.items.forEach(it => {
     const c = h("div", { class: "card" });
     c.append(h("h2", { style: "font-size:16.5px" }, [

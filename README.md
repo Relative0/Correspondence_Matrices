@@ -10,7 +10,7 @@ This repository benchmarks and validates several Boolean-expression backends, ce
 - [Master explainer](deliverables_n22_24/master_explainer_2026_08_03/index.html) — the current, fully sourced publication website.
 - [Plain-language version](deliverables_n22_24/master_explainer_2026_08_03/layperson.html), [investor brief](deliverables_n22_24/master_explainer_2026_08_03/investor.html), and [expert summary](deliverables_n22_24/master_explainer_2026_08_03/expert.html).
 - [Benchmark refresh claim map](deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md) — the authoritative map of confirmed, revised, and superseded claims.
-- [Website build report](deliverables_n22_24/master_explainer_2026_08_03/CM_MASTER_EXPLAINER_BUILD_REPORT_2026-08-03.md) and [publication-stabilization report](deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_PUBLICATION_STABILIZATION_2026-08-24.md).
+- [Website build report](deliverables_n22_24/master_explainer_2026_08_03/CM_MASTER_EXPLAINER_BUILD_REPORT_2026-08-03.md), [publication-stabilization report](deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_PUBLICATION_STABILIZATION_2026-08-24.md), and [visual/editorial expansion report](deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_VISUAL_EDITORIAL_EXPANSION_2026-08-24.md).
 
 ## What the project does
 

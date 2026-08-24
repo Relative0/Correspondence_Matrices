@@ -839,6 +839,63 @@ num("sched.epfl.delta_pct", [s for s in sched if "EPFL" in s["source"]][0]["delt
 num("sched.pod.min_pct", min(_pod_deltas), "pctsign2", "%s :: min over pods" % rel(P_B6_ANA))
 num("sched.pod.max_pct", max(_pod_deltas), "pctsign2", "%s :: max over pods" % rel(P_B6_ANA))
 
+# ================================================================= E17/E18 publication summaries
+# Two visual summaries requested for the publication pages.  E17 makes the two
+# claim-map discrepancies graphical; E18 derives the explicit-output growth
+# curve from the guard's own live-k limit.  Neither introduces a new benchmark
+# result.
+
+_arch_be_finite = [
+    f["breakeven_evals_vs_cse"] for f in b1_arch_res["formulas"]
+    if not f["never_breaks_even_vs_cse"] and f["breakeven_evals_vs_cse"] is not None
+]
+_arch_be_never = sum(bool(f["never_breaks_even_vs_cse"]) for f in b1_arch_res["formulas"])
+_sched_replay = next(s for s in sched if "B1 replay" in s["source"])
+_sched_archive = next(s for s in sched if "archive" in s["source"])
+_sched_epfl = next(s for s in sched if "EPFL" in s["source"])
+
+D["e17_discrepancies"] = {
+    "schedule_rows": [
+        {"label": "B1 largest cell", "delta_pct": max(abs(c["delta_pct"]) for c in per_cell),
+         "scope": "largest absolute per-cell schedule shift in the fresh synthetic replay"},
+        {"label": "B1 all formulas", "delta_pct": abs(_sched_replay["delta_pct"]),
+         "scope": "all-corpus schedule shift in the fresh synthetic replay"},
+        {"label": "Archived synthetic", "delta_pct": abs(_sched_archive["delta_pct"]),
+         "scope": "all-corpus schedule shift in the archived synthetic run"},
+        {"label": "External EPFL", "delta_pct": abs(_sched_epfl["delta_pct"]),
+         "scope": "external circuit-clustered campaign"},
+        {"label": "Largest pod", "delta_pct": max(abs(x) for x in _pod_deltas),
+         "scope": "largest all-corpus shift across the five Linux pods"},
+    ],
+    "replay_vs_archive": [
+        {"metric": "Preparation multiple", "archived": _arch_prep,
+         "replay": _bs["prep_multiple_geomean"], "format": "multiple"},
+        {"metric": "Finite break-even median", "archived": statistics.median(_arch_be_finite),
+         "replay": _bs["median_finite"], "format": "evaluations"},
+        {"metric": "Never break even", "archived": _arch_be_never,
+         "replay": _bs["n_never"], "format": "count", "total": _bs["n_total"]},
+    ],
+    "provenance": [
+        "%s :: blocked|round_robin all-corpus and per-cell geomeans" % rel(P_B1_SUM),
+        "%s :: blocked|round_robin all-corpus geomeans" % rel(P_B1_ARCH),
+        "%s :: primary blocked and round-robin geomeans" % rel(P_EPFL_ANA),
+        "%s :: pods[].blocked_geomean, pods[].rr_geomean" % rel(P_B6_ANA),
+        "%s :: formulas[].prep_ratio_cm_vs_cse, .breakeven_evals_vs_cse, .never_breaks_even_vs_cse" % rel(P_B1_RES),
+        "%s :: same fields (archived comparison)" % rel(P_B1_ARCH_RES),
+    ],
+}
+
+_guard_limit = int(_guard_k.group(1))
+_growth_k = sorted(set([4, 8, 12, _guard_limit]))
+D["e18_assignment_growth"] = {
+    "rows": [{"live_k": k, "assignments": 2 ** k} for k in _growth_k],
+    "guard_limit": _guard_limit,
+    "provenance": [
+        "%s :: max_full_output_vars" % rel(P_B4_DRIVER),
+        "Boolean truth-vector definition :: explicit assignments = 2^live_k",
+    ],
+}
+
 # ================================================================= E15 (BX1)
 # Engine crossover: recursive bigint / flat bigint / words, by live_k.
 
