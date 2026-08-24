@@ -1,0 +1,22 @@
+{
+  "campaign_attempt": "initial selector Runpod launch 2026-08-24",
+  "status": "failed_before_evidence_acceptance",
+  "cause": "The source-only python:3.13.5-slim image did not contain a git executable. The selector measurements completed, but provenance finalization raised FileNotFoundError before evidence files were written.",
+  "pod1": {
+    "pod_id": "n5zlc00abgime1",
+    "status": "worker_error",
+    "input_digests_verified": true,
+    "cost_usd_recorded": 0.001232,
+    "terminated": true
+  },
+  "pod2": {
+    "pod_id": "d5pvym4izhincg",
+    "status": "interrupted_during_setup_or_execution",
+    "delete_http_status": 204,
+    "terminated": true,
+    "cost_usd_recorded": null
+  },
+  "post_recovery_live_campaign_pods": 0,
+  "cost_reserve_carried_into_run2_usd": 0.01,
+  "corrective_action": "The audit harness now returns blank git metadata when git is unavailable; source and corpus SHA-256 values remain controlling. The accepted run used a new refuse-overwrite directory."
+}

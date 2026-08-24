@@ -1,0 +1,476 @@
+{
+  "campaign": "CM selector Runpod replication 2026-08-24",
+  "guards": {
+    "n_pods": 3,
+    "total_budget_usd": 1.0,
+    "max_price_per_hour_usd": 0.25,
+    "setup_timeout_s": 600,
+    "driver_timeout_s": 1320,
+    "hard_lifetime_s": 2100,
+    "image": "python:3.13.5-slim",
+    "numpy": "2.3.2"
+  },
+  "pods": [
+    {
+      "pod_index": 1,
+      "status": "orchestrator_error",
+      "terminated": true,
+      "pod_id": "n5zlc00abgime1",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.06,
+      "projected_hard_lifetime_cost_usd": 0.035,
+      "state": {
+        "done": false,
+        "stage": "failed",
+        "error": "Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 154, in _campaign\n    _run_driver(\n    ~~~~~~~~~~~^\n        \"selector\",\n        ^^^^^^^^^^^\n    ...<16 lines>...\n        timeout=12 * 60,\n        ^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 123, in _run_driver\n    raise RuntimeError(f\"{name} failed: {result.stderr[-4000:]}\")\nRuntimeError: selector failed: Traceback (most recent call last):\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 739, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 726, in main\n    environment = _environment(sys.argv, args.suite, corpora)\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 629, in _environment\n    \"git_branch\": _git(\"branch\", \"--show-current\"),\n                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 579, in _git\n    return subprocess.run(\n           ~~~~~~~~~~~~~~^\n        [\"git\", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=False\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ).stdout.strip()\n    ^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 554, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1039, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        pass_fds, cwd, env,\n                        ^^^^^^^^^^^^^^^^^^^\n    ...<5 lines>...\n                        gid, gids, uid, umask,\n                        ^^^^^^^^^^^^^^^^^^^^^^\n                        start_new_session, process_group)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1972, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'git'\n\n",
+        "environment": {
+          "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+          "python": "3.13.5",
+          "machine": "x86_64",
+          "logical_cpu_count": 256,
+          "cgroup_cpu_max": "max 100000",
+          "cgroup_memory_max": "3999997952",
+          "runpod_pod_id": "n5zlc00abgime1",
+          "cpu_model": "AMD EPYC 7713 64-Core Processor",
+          "numpy": "2.3.2"
+        },
+        "input_verification": {
+          "ok": true,
+          "archive_source_file_count": 64,
+          "mismatches": [],
+          "verified": [
+            {
+              "path": "bitset_backend.py",
+              "expected": "2fd4657fa1fd296d38764646f16e6dc881284642cafef15bcb5a19e8bbd4f11a",
+              "actual": "2fd4657fa1fd296d38764646f16e6dc881284642cafef15bcb5a19e8bbd4f11a"
+            },
+            {
+              "path": "cm_bench.py",
+              "expected": "6991924e7167660d8da7d0911832d7691f7c77866b685058ce468be694fd4a45",
+              "actual": "6991924e7167660d8da7d0911832d7691f7c77866b685058ce468be694fd4a45"
+            },
+            {
+              "path": "cm_build.py",
+              "expected": "325987a6778feb09f2ff2e3a6a1f21e672ea1696c294f063261b2f5fbfabb33e",
+              "actual": "325987a6778feb09f2ff2e3a6a1f21e672ea1696c294f063261b2f5fbfabb33e"
+            },
+            {
+              "path": "cm_build_lazy.py",
+              "expected": "3aa17385275179a8d42c76cce7e9033358946ddc191a2d2802235912cb81f19e",
+              "actual": "3aa17385275179a8d42c76cce7e9033358946ddc191a2d2802235912cb81f19e"
+            },
+            {
+              "path": "cm_build_pair.py",
+              "expected": "2eca538f8eabd8d9df6cc0f54813750efed3e815f8d86e3045a78be6243c93bf",
+              "actual": "2eca538f8eabd8d9df6cc0f54813750efed3e815f8d86e3045a78be6243c93bf"
+            },
+            {
+              "path": "cm_expr_serde.py",
+              "expected": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99",
+              "actual": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99"
+            },
+            {
+              "path": "cm_exprlib.py",
+              "expected": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040",
+              "actual": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040"
+            },
+            {
+              "path": "cm_ir.py",
+              "expected": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09",
+              "actual": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09"
+            },
+            {
+              "path": "cm_lm.py",
+              "expected": "c53ef95bcc576866cdff9de20ff85bf77abba14ba29bbd9d893032117a52e5d5",
+              "actual": "c53ef95bcc576866cdff9de20ff85bf77abba14ba29bbd9d893032117a52e5d5"
+            },
+            {
+              "path": "cm_normalize.py",
+              "expected": "7de16b5dc28c5381bf80931403a6803d2ff6b9c249065e45464305d3f25ec6d8",
+              "actual": "7de16b5dc28c5381bf80931403a6803d2ff6b9c249065e45464305d3f25ec6d8"
+            },
+            {
+              "path": "cm_operator_difference.py",
+              "expected": "9b90399f8462e2b3d75dbdb7e5a0c0a1eadb59c27d3bdc1efc5124e38db6633a",
+              "actual": "9b90399f8462e2b3d75dbdb7e5a0c0a1eadb59c27d3bdc1efc5124e38db6633a"
+            },
+            {
+              "path": "cm_pair.py",
+              "expected": "aae72270f8218a075fa12902826a740b8d314f4b33a024a52443e8cc086ac226",
+              "actual": "aae72270f8218a075fa12902826a740b8d314f4b33a024a52443e8cc086ac226"
+            },
+            {
+              "path": "cm_parallel.py",
+              "expected": "d1cd27981718bcfe38621844309b8fbf122a6140b98114b4efd66dbb2e928dc7",
+              "actual": "d1cd27981718bcfe38621844309b8fbf122a6140b98114b4efd66dbb2e928dc7"
+            },
+            {
+              "path": "cm_remote_executor.py",
+              "expected": "d1ea9cf03c513320c9ea0cc1643dd858168530d3e233c675b2f23e2be5e941da",
+              "actual": "d1ea9cf03c513320c9ea0cc1643dd858168530d3e233c675b2f23e2be5e941da"
+            },
+            {
+              "path": "cm_remote_worker.py",
+              "expected": "412dcb9961876a62b065068d51da33cad372c89698be7f2bea0e6b45cc8857a1",
+              "actual": "412dcb9961876a62b065068d51da33cad372c89698be7f2bea0e6b45cc8857a1"
+            },
+            {
+              "path": "cm_render.py",
+              "expected": "4d75fe0c122d41f181f0699df9799f49a7e99075a8caaf7aed9ce0c6896810a4",
+              "actual": "4d75fe0c122d41f181f0699df9799f49a7e99075a8caaf7aed9ce0c6896810a4"
+            },
+            {
+              "path": "cm_runpod_client.py",
+              "expected": "55f7fb0aac005b5fbe43526349d12422c71987be6732c0245dc59822f933c2ba",
+              "actual": "55f7fb0aac005b5fbe43526349d12422c71987be6732c0245dc59822f933c2ba"
+            },
+            {
+              "path": "cm_runpod_config.py",
+              "expected": "ed55485a9adffad023504eaf78e5138ead7de044d71fe028077eed7031f07291",
+              "actual": "ed55485a9adffad023504eaf78e5138ead7de044d71fe028077eed7031f07291"
+            },
+            {
+              "path": "cm_runpod_deploy.py",
+              "expected": "56e1eb24ca81bb7f0143ef22292b0ade2c9b47ec54c197f07b103de36b189dea",
+              "actual": "56e1eb24ca81bb7f0143ef22292b0ade2c9b47ec54c197f07b103de36b189dea"
+            },
+            {
+              "path": "cm_runpod_protocol.py",
+              "expected": "53ce83d80b7834cc765565200bf0f7c436b362963b15d5caab9e0f574e8d9c6a",
+              "actual": "53ce83d80b7834cc765565200bf0f7c436b362963b15d5caab9e0f574e8d9c6a"
+            },
+            {
+              "path": "cm_runpod_smoke_test.py",
+              "expected": "6dc033900f9ee20364f354b530a5d52cb783a34edb36bd80f52f908544a7e2f2",
+              "actual": "6dc033900f9ee20364f354b530a5d52cb783a34edb36bd80f52f908544a7e2f2"
+            },
+            {
+              "path": "cm_token.py",
+              "expected": "a54cfa95af3b42fd1bc61b3fa753960b660481d87a48211d24578f84e457ef95",
+              "actual": "a54cfa95af3b42fd1bc61b3fa753960b660481d87a48211d24578f84e457ef95"
+            },
+            {
+              "path": "cmbench/__init__.py",
+              "expected": "238d23590d91c767d07751bd70cdac6cb58bb017b47af7dbc189a92031fab1c9",
+              "actual": "238d23590d91c767d07751bd70cdac6cb58bb017b47af7dbc189a92031fab1c9"
+            },
+            {
+              "path": "cmbench/availability.py",
+              "expected": "bf7f52425924447e4d092d63743fec8c983eecbd129762edb23df9f31cbe2560",
+              "actual": "bf7f52425924447e4d092d63743fec8c983eecbd129762edb23df9f31cbe2560"
+            },
+            {
+              "path": "cmbench/backends/__init__.py",
+              "expected": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            {
+              "path": "cmbench/backends/bitset_engine.py",
+              "expected": "206a69d7cbb9f8fc7cbc03831ceb2b3d41fd33a81559dafdb995e8443d340254",
+              "actual": "206a69d7cbb9f8fc7cbc03831ceb2b3d41fd33a81559dafdb995e8443d340254"
+            },
+            {
+              "path": "cmbench/backends/bitset_utils.py",
+              "expected": "e3ec1d52594c98abce3abf383a409f3fe8434ae026b5723eaf294567db679429",
+              "actual": "e3ec1d52594c98abce3abf383a409f3fe8434ae026b5723eaf294567db679429"
+            },
+            {
+              "path": "cmbench/backends/robdd_dd.py",
+              "expected": "4389e88b41dd5509e7bc8ab40efafdf451490f345dde0e82d5d4457dcd899e28",
+              "actual": "4389e88b41dd5509e7bc8ab40efafdf451490f345dde0e82d5d4457dcd899e28"
+            },
+            {
+              "path": "cmbench/cli.py",
+              "expected": "31088a64c609fdd89cd0147924746d3531922ae10ce71b40adc1cc2fa6a2a24e",
+              "actual": "31088a64c609fdd89cd0147924746d3531922ae10ce71b40adc1cc2fa6a2a24e"
+            },
+            {
+              "path": "cmbench/config.py",
+              "expected": "6c01814a84c22954953611adcbe9f1eaa71a7e1ea47bac1977b116327daeda99",
+              "actual": "6c01814a84c22954953611adcbe9f1eaa71a7e1ea47bac1977b116327daeda99"
+            },
+            {
+              "path": "cmbench/context.py",
+              "expected": "807c082a92f650457fe385547eb09ec838d1a7c1b7732f27c7e9fc88f921d1c8",
+              "actual": "807c082a92f650457fe385547eb09ec838d1a7c1b7732f27c7e9fc88f921d1c8"
+            },
+            {
+              "path": "cmbench/corpus.py",
+              "expected": "1fa8f4c232587bba248aef8ce8c971feaf7702a8e1db944420c4f30b34c1ef5d",
+              "actual": "1fa8f4c232587bba248aef8ce8c971feaf7702a8e1db944420c4f30b34c1ef5d"
+            },
+            {
+              "path": "cmbench/enums.py",
+              "expected": "e0c90c636dec93f2f0a28b7eec22808283ef6e7894c70c10b1706cd100918ea4",
+              "actual": "e0c90c636dec93f2f0a28b7eec22808283ef6e7894c70c10b1706cd100918ea4"
+            },
+            {
+              "path": "cmbench/expr/__init__.py",
+              "expected": "2b5208b0e4b96f3e1e8b6bc86dd07dcaff9214a87ceb5eb44aee9d264f9592a5",
+              "actual": "2b5208b0e4b96f3e1e8b6bc86dd07dcaff9214a87ceb5eb44aee9d264f9592a5"
+            },
+            {
+              "path": "cmbench/expr/diagnostics.py",
+              "expected": "47207bfe5320d0c6b62f7f543cd785935815c49f252d18e2406f55d79197e9a3",
+              "actual": "47207bfe5320d0c6b62f7f543cd785935815c49f252d18e2406f55d79197e9a3"
+            },
+            {
+              "path": "cmbench/expr/equivalence.py",
+              "expected": "37fb69f2dd8345533408af49d4db473081b943cd69b4159b4f7e5e403aac927c",
+              "actual": "37fb69f2dd8345533408af49d4db473081b943cd69b4159b4f7e5e403aac927c"
+            },
+            {
+              "path": "cmbench/expr/eval.py",
+              "expected": "ad2eca23a584b827f92410a06405be28f0ecd1ad7b37898d8091b5aba0888f59",
+              "actual": "ad2eca23a584b827f92410a06405be28f0ecd1ad7b37898d8091b5aba0888f59"
+            },
+            {
+              "path": "cmbench/expr/families.py",
+              "expected": "f9664b4e5c5c06ba36c3be834928cac3afffcf6041693bde9648ff5c107683e5",
+              "actual": "f9664b4e5c5c06ba36c3be834928cac3afffcf6041693bde9648ff5c107683e5"
+            },
+            {
+              "path": "cmbench/expr/generators.py",
+              "expected": "65eac1c58a07bda9060f759dd51efa771673d44cfdde977f0e796f4025bd7b5b",
+              "actual": "65eac1c58a07bda9060f759dd51efa771673d44cfdde977f0e796f4025bd7b5b"
+            },
+            {
+              "path": "cmbench/expr/partial_contexts.py",
+              "expected": "0cf1f12fa95bc9f03f26c487e12be4759aa407de42be0df2cf487c5c986e753e",
+              "actual": "0cf1f12fa95bc9f03f26c487e12be4759aa407de42be0df2cf487c5c986e753e"
+            },
+            {
+              "path": "cmbench/expr/visitors.py",
+              "expected": "9cc081cba5ee5b8fa0cfdc7624b47d2af5213e7d92ebb75e0ad7dc12cb270f74",
+              "actual": "9cc081cba5ee5b8fa0cfdc7624b47d2af5213e7d92ebb75e0ad7dc12cb270f74"
+            },
+            {
+              "path": "cmbench/output_budget.py",
+              "expected": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498",
+              "actual": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498"
+            },
+            {
+              "path": "cmbench/reporting/__init__.py",
+              "expected": "a9a8dc0c0af9ec7002390be1de773f7c09ac5b3adafa86190028d5bdcec5604a",
+              "actual": "a9a8dc0c0af9ec7002390be1de773f7c09ac5b3adafa86190028d5bdcec5604a"
+            },
+            {
+              "path": "cmbench/reporting/csv_io.py",
+              "expected": "8b83f577b107af130b49c390e125e40b025b32e583c0e12f681daa0cd12b0264",
+              "actual": "8b83f577b107af130b49c390e125e40b025b32e583c0e12f681daa0cd12b0264"
+            },
+            {
+              "path": "cmbench/reporting/summary_tables.py",
+              "expected": "586e6ff2a4656d9e5d6fcf56b93187fd6bf6ff71f7b8942ae717fd4d8c99ec97",
+              "actual": "586e6ff2a4656d9e5d6fcf56b93187fd6bf6ff71f7b8942ae717fd4d8c99ec97"
+            },
+            {
+              "path": "cmbench/results/__init__.py",
+              "expected": "f0334a6b2ee521f906d3d11a3c20c094f92fed951a80e986efd5ae7a01f18a15",
+              "actual": "f0334a6b2ee521f906d3d11a3c20c094f92fed951a80e986efd5ae7a01f18a15"
+            },
+            {
+              "path": "cmbench/results/aggregation.py",
+              "expected": "7b8246f1bca61b3d2ae62d6f8fd77a31aca84fa4d12440f7dedc9b8afb15ecf6",
+              "actual": "7b8246f1bca61b3d2ae62d6f8fd77a31aca84fa4d12440f7dedc9b8afb15ecf6"
+            },
+            {
+              "path": "cmbench/results/equivalence.py",
+              "expected": "6ea540207fe7edfb095a6e7c2f1faca3f49866330d22c42f11e15ff882909f87",
+              "actual": "6ea540207fe7edfb095a6e7c2f1faca3f49866330d22c42f11e15ff882909f87"
+            },
+            {
+              "path": "cmbench/results/expression_family.py",
+              "expected": "bfc3b7e9d18df1231c07233358e1d6ae726c35b21df077282e3912863299a95a",
+              "actual": "bfc3b7e9d18df1231c07233358e1d6ae726c35b21df077282e3912863299a95a"
+            },
+            {
+              "path": "cmbench/results/flatten.py",
+              "expected": "c38e718f521d06025f9c9b2433e06f8c5cd85ccb9445a72fcacd3054f3c34b61",
+              "actual": "c38e718f521d06025f9c9b2433e06f8c5cd85ccb9445a72fcacd3054f3c34b61"
+            },
+            {
+              "path": "cmbench/results/paired.py",
+              "expected": "192db23f7ef79cbd2ac94894dda0b2dc2d63f95e57930382631bfaaa6e0a860d",
+              "actual": "192db23f7ef79cbd2ac94894dda0b2dc2d63f95e57930382631bfaaa6e0a860d"
+            },
+            {
+              "path": "cmbench/results/partial_context.py",
+              "expected": "1215912ed471ca7b9fda4d3bfd2f22da90381fb93260b7c5a9e45ada95ed4d5e",
+              "actual": "1215912ed471ca7b9fda4d3bfd2f22da90381fb93260b7c5a9e45ada95ed4d5e"
+            },
+            {
+              "path": "cmbench/results/schema.py",
+              "expected": "607ab813ecdab4d6eb72cd482547ce880973a26d29f78839ec3450c4bee43d66",
+              "actual": "607ab813ecdab4d6eb72cd482547ce880973a26d29f78839ec3450c4bee43d66"
+            },
+            {
+              "path": "cmbench/results/single_expr.py",
+              "expected": "fe94c7cc1f1387b63dd913d87a5ba32372fa9afa54af97b2597dd02ce0a7d9a0",
+              "actual": "fe94c7cc1f1387b63dd913d87a5ba32372fa9afa54af97b2597dd02ce0a7d9a0"
+            },
+            {
+              "path": "cmbench/results/timing.py",
+              "expected": "8b0ac19b1c7d0b89f6138407933aaa3cd6bf7d7db05091c97b26913163139861",
+              "actual": "8b0ac19b1c7d0b89f6138407933aaa3cd6bf7d7db05091c97b26913163139861"
+            },
+            {
+              "path": "cmbench/timing.py",
+              "expected": "1899a1248ff2d4ffeb11ed89488e95b060f4274c319684266fe67331c0233c62",
+              "actual": "1899a1248ff2d4ffeb11ed89488e95b060f4274c319684266fe67331c0233c62"
+            },
+            {
+              "path": "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+              "expected": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+              "actual": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+            },
+            {
+              "path": "deliverables_n22_24/CM_gap_epfl_corpus_2026_08_03.jsonl",
+              "expected": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac",
+              "actual": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac"
+            },
+            {
+              "path": "deliverables_n22_24/b2_wrapper_2026_08_03/CM_b2_wrapper_corpus_2026_08_03.jsonl",
+              "expected": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+              "actual": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf"
+            },
+            {
+              "path": "deliverables_n22_24/bx1_crossover_2026_08_03/CM_bx1_crossover_corpus_2026_08_03.jsonl",
+              "expected": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963",
+              "actual": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963"
+            },
+            {
+              "path": "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py",
+              "expected": "421c32af52a78cff08a045c721f1842f12962939a77dcf0e7cab2775b88773a8",
+              "actual": "421c32af52a78cff08a045c721f1842f12962939a77dcf0e7cab2775b88773a8"
+            },
+            {
+              "path": "expr_simplify.py",
+              "expected": "dab25716ae5d983db8f53d869c524d3b3517feb2296058a09037452a19c3ef38",
+              "actual": "dab25716ae5d983db8f53d869c524d3b3517feb2296058a09037452a19c3ef38"
+            },
+            {
+              "path": "numba_backend.py",
+              "expected": "ca97813b4a0cdf97595247cb92fd6257816291294c36b9106533073362966b03",
+              "actual": "ca97813b4a0cdf97595247cb92fd6257816291294c36b9106533073362966b03"
+            },
+            {
+              "path": "scripts/cm_deep_performance_audit.py",
+              "expected": "144f00d768a54af31dd7825ef5cb92fc7142aefbaccfddf85d839cabdf512daf",
+              "actual": "144f00d768a54af31dd7825ef5cb92fc7142aefbaccfddf85d839cabdf512daf"
+            }
+          ]
+        },
+        "drivers": {
+          "selector": {
+            "command": [
+              "python",
+              "scripts/cm_deep_performance_audit.py",
+              "--suite",
+              "representative",
+              "--corpora",
+              "bx1,b2,epfl",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "8388608",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/current"
+            ],
+            "returncode": 1,
+            "wall_s": 35.04065357148647,
+            "stdout_tail": "ds/flat=3.2355117667601845 cm words/flat=2.78\nepfl 100/129 epfl-random_control-int2float-po1-5d8e7b322c: compile=2092.5us raw words/flat=3.2882104139933532 cm words/flat=2.81\nepfl 101/129 epfl-random_control-int2float-po2-6d30452990: compile=1997.9us raw words/flat=3.396356109479516 cm words/flat=2.83\nepfl 102/129 epfl-random_control-int2float-po3-15980bb2bc: compile=498.5us raw words/flat=3.7857852925419913 cm words/flat=3.27\nepfl 103/129 epfl-random_control-int2float-po4-f28975a467: compile=1188.1us raw words/flat=3.4595420808528794 cm words/flat=2.83\nepfl 104/129 epfl-random_control-int2float-po5-b67636a98e: compile=877.9us raw words/flat=3.579755622117624 cm words/flat=2.95\nepfl 105/129 epfl-random_control-int2float-po6-f3b25f4977: compile=319.1us raw words/flat=3.66423613029148 cm words/flat=3.13\nepfl 106/129 epfl-random_control-int2float-internal25-be3b3fac1d: compile=877.5us raw words/flat=4.002769402732634 cm words/flat=3.09\nepfl 107/129 epfl-random_control-mem_ctrl-po614-b0a54afe66: compile=830.5us raw words/flat=1.6185516438887495 cm words/flat=1.39\nepfl 108/129 epfl-random_control-mem_ctrl-po622-b73ccd172a: compile=1660.7us raw words/flat=0.48747845177317795 cm words/flat=0.53\nepfl 109/129 epfl-random_control-mem_ctrl-po623-7f80ce9c66: compile=1815.3us raw words/flat=0.4962359482135979 cm words/flat=0.56\nepfl 110/129 epfl-random_control-mem_ctrl-po627-7b4af14eba: compile=1660.6us raw words/flat=0.4919816183089692 cm words/flat=0.53\nepfl 111/129 epfl-random_control-priority-internal17-ead80e25a7: compile=657.4us raw words/flat=4.265337523552047 cm words/flat=3.02\nepfl 112/129 epfl-random_control-priority-internal33-6197962bc5: compile=1256.1us raw words/flat=1.4834305110526484 cm words/flat=1.23\nepfl 113/129 epfl-random_control-priority-internal390-5c1b8c3dc3: compile=627.3us raw words/flat=3.458629727989885 cm words/flat=2.70\nepfl 114/129 epfl-random_control-priority-internal636-78eeeb8379: compile=698.1us raw words/flat=0.5332917954774393 cm words/flat=0.51\nepfl 115/129 epfl-random_control-priority-internal919-8f1126a8c9: compile=392.9us raw words/flat=3.280202517912438 cm words/flat=3.02\nepfl 116/129 epfl-random_control-router-internal19-4200fe3838: compile=330.5us raw words/flat=3.3431601727182714 cm words/flat=2.77\nepfl 117/129 epfl-random_control-router-internal29-ebfa4eab0e: compile=438.7us raw words/flat=2.804922347010638 cm words/flat=2.42\nepfl 118/129 epfl-random_control-router-internal39-7af9c35a7e: compile=544.8us raw words/flat=1.122704489708862 cm words/flat=0.98\nepfl 119/129 epfl-random_control-router-internal104-77af71e925: compile=613.4us raw words/flat=3.0249560661553367 cm words/flat=2.62\nepfl 120/129 epfl-random_control-router-internal135-565d2a3a16: compile=467.9us raw words/flat=2.2492711965071837 cm words/flat=1.91\nepfl 121/129 epfl-random_control-router-internal177-832d43e9af: compile=667.1us raw words/flat=0.7750794812905555 cm words/flat=0.75\nepfl 122/129 epfl-random_control-router-internal233-5ddc8d5e1b: compile=1440.9us raw words/flat=0.4630489395256677 cm words/flat=0.50\nepfl 123/129 epfl-random_control-voter-internal72-661c8b218d: compile=1216.5us raw words/flat=2.1030287026817263 cm words/flat=1.80\nepfl 124/129 epfl-random_control-voter-internal3075-f8954d4f09: compile=2765.2us raw words/flat=2.1896376431068516 cm words/flat=1.89\nepfl 125/129 epfl-random_control-voter-internal4823-4087895a60: compile=2393.3us raw words/flat=2.1505270402989485 cm words/flat=1.82\nepfl 126/129 epfl-random_control-voter-internal7179-1f4236d03b: compile=2501.7us raw words/flat=2.128541119670664 cm words/flat=1.82\nepfl 127/129 epfl-random_control-voter-internal9182-24dfeed155: compile=2698.4us raw words/flat=2.143939799609538 cm words/flat=1.83\nepfl 128/129 epfl-random_control-voter-internal10038-a5538c254b: compile=2534.2us raw words/flat=2.1180900078522185 cm words/flat=1.81\nepfl 129/129 epfl-random_control-voter-internal10957-7dc361262b: compile=3000.7us raw words/flat=2.101269026108369 cm words/flat=1.83\n",
+            "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 739, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 726, in main\n    environment = _environment(sys.argv, args.suite, corpora)\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 629, in _environment\n    \"git_branch\": _git(\"branch\", \"--show-current\"),\n                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 579, in _git\n    return subprocess.run(\n           ~~~~~~~~~~~~~~^\n        [\"git\", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=False\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ).stdout.strip()\n    ^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 554, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1039, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        pass_fds, cwd, env,\n                        ^^^^^^^^^^^^^^^^^^^\n    ...<5 lines>...\n                        gid, gids, uid, umask,\n                        ^^^^^^^^^^^^^^^^^^^^^^\n                        start_new_session, process_group)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1972, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'git'\n"
+          }
+        }
+      },
+      "error": "pod worker failed: Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 154, in _campaign\n    _run_driver(\n    ~~~~~~~~~~~^\n        \"selector\",\n        ^^^^^^^^^^^\n    ...<16 lines>...\n        timeout=12 * 60,\n        ^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 123, in _run_driver\n    raise RuntimeError(f\"{name} failed: {result.stderr[-4000:]}\")\nRuntimeError: selector failed: Traceback (most recent call last):\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 739, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 726, in main\n    environment = _environment(sys.argv, args.suite, corpora)\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 629, in _environment\n    \"git_branch\": _git(\"branch\", \"--show-current\"),\n                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm/repo/scripts/cm_deep_performance_audit.py\", line 579, in _git\n    return subprocess.run(\n           ~~~~~~~~~~~~~~^\n        [\"git\", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=False\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ).stdout.strip()\n    ^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 554, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1039, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        pass_fds, cwd, env,\n                        ^^^^^^^^^^^^^^^^^^^\n    ...<5 lines>...\n                        gid, gids, uid, umask,\n                        ^^^^^^^^^^^^^^^^^^^^^^\n                        start_new_session, process_group)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.13/subprocess.py\", line 1972, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'git'\n\n",
+      "lifetime_s": 73.89911913871765,
+      "cost_usd_actual": 0.001232
+    }
+  ],
+  "total_cost_usd": 0.001232,
+  "all_pods_terminated": false,
+  "verdict": "running",
+  "snapshot": {
+    "campaign": "CM selector Runpod replication 2026-08-24",
+    "created_utc": "2026-08-24T12:52:28Z",
+    "files_sha256": {
+      "bitset_backend.py": "2fd4657fa1fd296d38764646f16e6dc881284642cafef15bcb5a19e8bbd4f11a",
+      "cm_bench.py": "6991924e7167660d8da7d0911832d7691f7c77866b685058ce468be694fd4a45",
+      "cm_build.py": "325987a6778feb09f2ff2e3a6a1f21e672ea1696c294f063261b2f5fbfabb33e",
+      "cm_build_lazy.py": "3aa17385275179a8d42c76cce7e9033358946ddc191a2d2802235912cb81f19e",
+      "cm_build_pair.py": "2eca538f8eabd8d9df6cc0f54813750efed3e815f8d86e3045a78be6243c93bf",
+      "cm_expr_serde.py": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99",
+      "cm_exprlib.py": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040",
+      "cm_ir.py": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09",
+      "cm_lm.py": "c53ef95bcc576866cdff9de20ff85bf77abba14ba29bbd9d893032117a52e5d5",
+      "cm_normalize.py": "7de16b5dc28c5381bf80931403a6803d2ff6b9c249065e45464305d3f25ec6d8",
+      "cm_operator_difference.py": "9b90399f8462e2b3d75dbdb7e5a0c0a1eadb59c27d3bdc1efc5124e38db6633a",
+      "cm_pair.py": "aae72270f8218a075fa12902826a740b8d314f4b33a024a52443e8cc086ac226",
+      "cm_parallel.py": "d1cd27981718bcfe38621844309b8fbf122a6140b98114b4efd66dbb2e928dc7",
+      "cm_remote_executor.py": "d1ea9cf03c513320c9ea0cc1643dd858168530d3e233c675b2f23e2be5e941da",
+      "cm_remote_worker.py": "412dcb9961876a62b065068d51da33cad372c89698be7f2bea0e6b45cc8857a1",
+      "cm_render.py": "4d75fe0c122d41f181f0699df9799f49a7e99075a8caaf7aed9ce0c6896810a4",
+      "cm_runpod_client.py": "55f7fb0aac005b5fbe43526349d12422c71987be6732c0245dc59822f933c2ba",
+      "cm_runpod_config.py": "ed55485a9adffad023504eaf78e5138ead7de044d71fe028077eed7031f07291",
+      "cm_runpod_deploy.py": "56e1eb24ca81bb7f0143ef22292b0ade2c9b47ec54c197f07b103de36b189dea",
+      "cm_runpod_protocol.py": "53ce83d80b7834cc765565200bf0f7c436b362963b15d5caab9e0f574e8d9c6a",
+      "cm_runpod_smoke_test.py": "6dc033900f9ee20364f354b530a5d52cb783a34edb36bd80f52f908544a7e2f2",
+      "cm_token.py": "a54cfa95af3b42fd1bc61b3fa753960b660481d87a48211d24578f84e457ef95",
+      "cmbench/__init__.py": "238d23590d91c767d07751bd70cdac6cb58bb017b47af7dbc189a92031fab1c9",
+      "cmbench/availability.py": "bf7f52425924447e4d092d63743fec8c983eecbd129762edb23df9f31cbe2560",
+      "cmbench/backends/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cmbench/backends/bitset_engine.py": "206a69d7cbb9f8fc7cbc03831ceb2b3d41fd33a81559dafdb995e8443d340254",
+      "cmbench/backends/bitset_utils.py": "e3ec1d52594c98abce3abf383a409f3fe8434ae026b5723eaf294567db679429",
+      "cmbench/backends/robdd_dd.py": "4389e88b41dd5509e7bc8ab40efafdf451490f345dde0e82d5d4457dcd899e28",
+      "cmbench/cli.py": "31088a64c609fdd89cd0147924746d3531922ae10ce71b40adc1cc2fa6a2a24e",
+      "cmbench/config.py": "6c01814a84c22954953611adcbe9f1eaa71a7e1ea47bac1977b116327daeda99",
+      "cmbench/context.py": "807c082a92f650457fe385547eb09ec838d1a7c1b7732f27c7e9fc88f921d1c8",
+      "cmbench/corpus.py": "1fa8f4c232587bba248aef8ce8c971feaf7702a8e1db944420c4f30b34c1ef5d",
+      "cmbench/enums.py": "e0c90c636dec93f2f0a28b7eec22808283ef6e7894c70c10b1706cd100918ea4",
+      "cmbench/expr/__init__.py": "2b5208b0e4b96f3e1e8b6bc86dd07dcaff9214a87ceb5eb44aee9d264f9592a5",
+      "cmbench/expr/diagnostics.py": "47207bfe5320d0c6b62f7f543cd785935815c49f252d18e2406f55d79197e9a3",
+      "cmbench/expr/equivalence.py": "37fb69f2dd8345533408af49d4db473081b943cd69b4159b4f7e5e403aac927c",
+      "cmbench/expr/eval.py": "ad2eca23a584b827f92410a06405be28f0ecd1ad7b37898d8091b5aba0888f59",
+      "cmbench/expr/families.py": "f9664b4e5c5c06ba36c3be834928cac3afffcf6041693bde9648ff5c107683e5",
+      "cmbench/expr/generators.py": "65eac1c58a07bda9060f759dd51efa771673d44cfdde977f0e796f4025bd7b5b",
+      "cmbench/expr/partial_contexts.py": "0cf1f12fa95bc9f03f26c487e12be4759aa407de42be0df2cf487c5c986e753e",
+      "cmbench/expr/visitors.py": "9cc081cba5ee5b8fa0cfdc7624b47d2af5213e7d92ebb75e0ad7dc12cb270f74",
+      "cmbench/output_budget.py": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498",
+      "cmbench/reporting/__init__.py": "a9a8dc0c0af9ec7002390be1de773f7c09ac5b3adafa86190028d5bdcec5604a",
+      "cmbench/reporting/csv_io.py": "8b83f577b107af130b49c390e125e40b025b32e583c0e12f681daa0cd12b0264",
+      "cmbench/reporting/summary_tables.py": "586e6ff2a4656d9e5d6fcf56b93187fd6bf6ff71f7b8942ae717fd4d8c99ec97",
+      "cmbench/results/__init__.py": "f0334a6b2ee521f906d3d11a3c20c094f92fed951a80e986efd5ae7a01f18a15",
+      "cmbench/results/aggregation.py": "7b8246f1bca61b3d2ae62d6f8fd77a31aca84fa4d12440f7dedc9b8afb15ecf6",
+      "cmbench/results/equivalence.py": "6ea540207fe7edfb095a6e7c2f1faca3f49866330d22c42f11e15ff882909f87",
+      "cmbench/results/expression_family.py": "bfc3b7e9d18df1231c07233358e1d6ae726c35b21df077282e3912863299a95a",
+      "cmbench/results/flatten.py": "c38e718f521d06025f9c9b2433e06f8c5cd85ccb9445a72fcacd3054f3c34b61",
+      "cmbench/results/paired.py": "192db23f7ef79cbd2ac94894dda0b2dc2d63f95e57930382631bfaaa6e0a860d",
+      "cmbench/results/partial_context.py": "1215912ed471ca7b9fda4d3bfd2f22da90381fb93260b7c5a9e45ada95ed4d5e",
+      "cmbench/results/schema.py": "607ab813ecdab4d6eb72cd482547ce880973a26d29f78839ec3450c4bee43d66",
+      "cmbench/results/single_expr.py": "fe94c7cc1f1387b63dd913d87a5ba32372fa9afa54af97b2597dd02ce0a7d9a0",
+      "cmbench/results/timing.py": "8b0ac19b1c7d0b89f6138407933aaa3cd6bf7d7db05091c97b26913163139861",
+      "cmbench/timing.py": "1899a1248ff2d4ffeb11ed89488e95b060f4274c319684266fe67331c0233c62",
+      "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+      "deliverables_n22_24/CM_gap_epfl_corpus_2026_08_03.jsonl": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac",
+      "deliverables_n22_24/b2_wrapper_2026_08_03/CM_b2_wrapper_corpus_2026_08_03.jsonl": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+      "deliverables_n22_24/bx1_crossover_2026_08_03/CM_bx1_crossover_corpus_2026_08_03.jsonl": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963",
+      "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py": "421c32af52a78cff08a045c721f1842f12962939a77dcf0e7cab2775b88773a8",
+      "expr_simplify.py": "dab25716ae5d983db8f53d869c524d3b3517feb2296058a09037452a19c3ef38",
+      "numba_backend.py": "ca97813b4a0cdf97595247cb92fd6257816291294c36b9106533073362966b03",
+      "scripts/cm_deep_performance_audit.py": "144f00d768a54af31dd7825ef5cb92fc7142aefbaccfddf85d839cabdf512daf"
+    },
+    "corpus_sha256": {
+      "b1": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+      "bx1": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963",
+      "b2": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+      "epfl": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac"
+    },
+    "archive_sha256": "6caec7b141a6202bfa9a11351af25791347a4d6d83110b31b36ba6c15e19bfc0",
+    "archive_bytes": 346654
+  }
+}

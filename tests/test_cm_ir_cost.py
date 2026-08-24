@@ -3,12 +3,19 @@ import unittest
 import numpy as np
 
 from cm_exprlib import And, Or, Var, Xor, eval_expr_tt, random_expr
-from cm_ir import clear_cm_ir_compile_cache, compile_expr_to_cm_ir
+from cm_ir import _cm_node_count, clear_cm_ir_compile_cache, compile_expr_to_cm_ir
 from cm_normalize import canonical_layout
 from cm_ir import materialize_hybrid_no_reinflate
 
 
 class CMIRCostDiagnosticsTests(unittest.TestCase):
+    def test_node_count_is_cached_on_immutable_ir_root(self) -> None:
+        node = compile_expr_to_cm_ir(And(Var(0), Or(Var(1), Var(2))))
+        self.assertNotIn("_node_count", node.__dict__)
+        self.assertEqual(_cm_node_count(node), 5)
+        self.assertEqual(node.__dict__.get("_node_count"), 5)
+        self.assertEqual(_cm_node_count(node), 5)
+
     def test_ir_compile_timing_fields_exist_when_enabled(self) -> None:
         diag = {"ir_timing_enabled": 1}
         expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))

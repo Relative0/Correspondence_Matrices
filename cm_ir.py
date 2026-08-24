@@ -1818,6 +1818,9 @@ def _materialize_ir_tagged(
 
 
 def _cm_node_count(node: CMNode) -> int:
+    cached = node.__dict__.get("_node_count")
+    if cached is not None:
+        return int(cached)
     seen: set[int] = set()
     pending = [node]
     while pending:
@@ -1827,7 +1830,9 @@ def _cm_node_count(node: CMNode) -> int:
             continue
         seen.add(marker)
         pending.extend(current.args)
-    return len(seen)
+    count = len(seen)
+    object.__setattr__(node, "_node_count", count)
+    return count
 
 
 def _effective_output_budget(
@@ -2019,18 +2024,19 @@ def materialize_hybrid_no_reinflate(
             if len(fast_live_vars) <= hybrid_threshold
             else "truth_table_uint8"
         )
+        fast_operation_slots = _cm_node_count(node)
         fast_decision = require_output_budget(
             decide_output_budget(
                 fast_budget,
                 estimate_explicit_output(
                     fast_n,
                     fast_representation,
-                    operation_slots=_cm_node_count(node),
+                    operation_slots=fast_operation_slots,
                 ),
                 reduced_estimate=estimate_explicit_output(
                     len(fast_live_vars),
                     fast_representation,
-                    operation_slots=_cm_node_count(node),
+                    operation_slots=fast_operation_slots,
                 ),
                 artifact_name="full no-reinflate output",
                 reduced_artifact_name="reduced no-reinflate output",
@@ -2091,18 +2097,19 @@ def materialize_hybrid_no_reinflate(
     representation = (
         "packed_bitset" if live_k <= hybrid_threshold else "truth_table_uint8"
     )
+    operation_slots = _cm_node_count(node)
     decision = require_output_budget(
         decide_output_budget(
             budget,
             estimate_explicit_output(
                 n,
                 representation,
-                operation_slots=_cm_node_count(node),
+                operation_slots=operation_slots,
             ),
             reduced_estimate=estimate_explicit_output(
                 live_k,
                 representation,
-                operation_slots=_cm_node_count(node),
+                operation_slots=operation_slots,
             ),
             artifact_name="full no-reinflate output",
             reduced_artifact_name="reduced no-reinflate output",

@@ -14,6 +14,14 @@ from bitset_backend import (
 )
 
 
+# Frozen BX1 tuning measured flat as faster through k=12 and words as faster at
+# k=16.  The later balanced/EPFL k=13..15 cross-machine study found workload
+# interactions: lower scalar thresholds reduced circuit regret but introduced
+# catastrophic synthetic misroutes. Keep k=16 as the conservative default,
+# not a universal optimum, until a feature-based selector clears held-out gates.
+WORDS_AUTO_MIN_VARS = 16
+
+
 @dataclass(frozen=True)
 class EngineSelection:
     kind: str
@@ -64,14 +72,15 @@ def select_raw_ast_engine(
 ) -> EngineSelection:
     """Select the raw-expression evaluator from actual output width.
 
-    Words is used only at six or more live/output variables. A words request at
-    a narrower width truthfully selects the flat bigint kernel used by the
-    existing words evaluator's compatibility fallback.
+    Words is used only at the conservative automatic crossover. A words request
+    below it truthfully selects the flat bigint kernel; direct calls to the
+    explicit words evaluator retain their six-variable representation minimum
+    and compatibility fallback.
     """
     k = int(live_k)
     if k < 0:
         raise ValueError("live_k must be non-negative")
-    if words_requested and k >= 6:
+    if words_requested and k >= WORDS_AUTO_MIN_VARS:
         return EngineSelection(
             "raw_ast_words", k, "packed_execute", False, True, eval_expr_words_bitset
         )

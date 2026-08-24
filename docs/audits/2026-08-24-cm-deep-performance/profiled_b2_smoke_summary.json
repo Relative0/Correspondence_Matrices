@@ -1,0 +1,251 @@
+{
+  "environment": {
+    "command": [
+      "scripts\\cm_deep_performance_audit.py",
+      "--suite",
+      "smoke",
+      "--corpora",
+      "b2",
+      "--prep-repetitions",
+      "3",
+      "--kernel-rounds",
+      "3",
+      "--output-prefix",
+      "docs\\audits\\2026-08-24-cm-deep-performance\\profiled_b2_smoke"
+    ],
+    "corpora": [
+      "b2"
+    ],
+    "corpus_sha256": {
+      "b2": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf"
+    },
+    "dependencies": {
+      "dd": "0.6.0",
+      "numba": null,
+      "numpy": "2.3.2",
+      "pandas": "2.3.2",
+      "sympy": "1.14.0"
+    },
+    "git_branch": "main",
+    "git_head": "6fe11d713cae39e56cd3251cca8e8ceb9cc5578f",
+    "git_status_short": [
+      "M README.md",
+      " M cm_ir.py",
+      " M cmbench/backends/bitset_engine.py",
+      " M deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_VISUAL_EDITORIAL_EXPANSION_2026-08-24.md",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_expert_template.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_investor_template.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_layperson_template.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_master_content_2026_08_03.json",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_master_data_2026_08_03.json",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_master_shared.css",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_master_shared.js",
+      " M deliverables_n22_24/master_explainer_2026_08_03/cm_master_template.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/expert.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/index.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/investor.html",
+      " M deliverables_n22_24/master_explainer_2026_08_03/layperson.html",
+      " M tests/test_bitset_engine_policy.py",
+      " M tests/test_cm_ir_cost.py",
+      "?? .claude/",
+      "?? deliverables_n22_24/master_explainer_2026_08_03/CM_WEBSITE_UX_PROGRESSIVE_DISCLOSURE_2026-08-24.md",
+      "?? docs/audits/2026-08-24-cm-deep-performance/",
+      "?? external/",
+      "?? scripts/cm_deep_performance_audit.py",
+      "?? tmp/"
+    ],
+    "logical_cpu_count": 12,
+    "platform": "Windows-10-10.0.19045-SP0",
+    "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "python_executable": "C:\\Users\\brian\\Documents\\CM_Computation\\.venv\\Scripts\\python.exe",
+    "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "source_sha256": {
+      "bitset_backend.py": "2fd4657fa1fd296d38764646f16e6dc881284642cafef15bcb5a19e8bbd4f11a",
+      "cm_ir.py": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09",
+      "cmbench/backends/bitset_engine.py": "0ff79468ab3a8dc00e6b9b680ba3de7e2b5d75e060e702a21b91b1f2e00bdde6",
+      "scripts/cm_deep_performance_audit.py": "9b49dcd7a8e0f4be1043ddb95ae130d0927742bc1f2a2dfd8b49201057dcc0d5"
+    },
+    "suite": "smoke",
+    "timestamp_utc": "2026-08-24T11:19:16.080360+00:00"
+  },
+  "phases": [
+    {
+      "corpus": "b2",
+      "field": "hash_ns_median",
+      "median_fraction_of_compile": 0.13037740266744546,
+      "median_ns": 107000.0,
+      "n": 6,
+      "p10_ns": 77700.0,
+      "p90_ns": 255650.0
+    },
+    {
+      "corpus": "b2",
+      "field": "ir_canonicalize_ns",
+      "median_fraction_of_compile": 0.05176501534266227,
+      "median_ns": 56700.00973623246,
+      "n": 6,
+      "p10_ns": 24449.99699946493,
+      "p90_ns": 90999.9362193048
+    },
+    {
+      "corpus": "b2",
+      "field": "ir_rewrite_ns",
+      "median_fraction_of_compile": 0.1037767460330935,
+      "median_ns": 127649.98245984316,
+      "n": 6,
+      "p10_ns": 49450.01273881644,
+      "p90_ns": 170200.02997014672
+    },
+    {
+      "corpus": "b2",
+      "field": "ir_intern_ns",
+      "median_fraction_of_compile": 0.16564542389245465,
+      "median_ns": 178099.94460549206,
+      "n": 6,
+      "p10_ns": 85650.0118970871,
+      "p90_ns": 277349.92909245193
+    },
+    {
+      "corpus": "b2",
+      "field": "ir_live_vars_ns",
+      "median_fraction_of_compile": 0.0989353978233817,
+      "median_ns": 114750.01520011574,
+      "n": 6,
+      "p10_ns": 42849.991586990654,
+      "p90_ns": 181200.0118661672
+    },
+    {
+      "corpus": "b2",
+      "field": "lower_cm_ns_median",
+      "median_fraction_of_compile": 0.10292861304563923,
+      "median_ns": 106100.0,
+      "n": 6,
+      "p10_ns": 65000.0,
+      "p90_ns": 212900.0
+    },
+    {
+      "corpus": "b2",
+      "field": "wrapper_current_ns_median",
+      "median_fraction_of_compile": null,
+      "median_ns": 39900.0,
+      "n": 6,
+      "p10_ns": 34450.0,
+      "p90_ns": 107750.0
+    },
+    {
+      "corpus": "b2",
+      "field": "end_to_end_current_ns_median",
+      "median_fraction_of_compile": null,
+      "median_ns": 946300.0,
+      "n": 6,
+      "p10_ns": 537700.0,
+      "p90_ns": 1848000.0
+    }
+  ],
+  "selector": [
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": null,
+      "n": 0,
+      "policy": "current_k6",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": NaN,
+      "regret_max": null,
+      "regret_median": null,
+      "regret_p90": NaN,
+      "role": "tuning"
+    },
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": null,
+      "n": 0,
+      "policy": "guard_k16",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": NaN,
+      "regret_max": null,
+      "regret_median": null,
+      "regret_p90": NaN,
+      "role": "tuning"
+    },
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 4,
+      "catastrophic_ge_2_rate": 0.6666666666666666,
+      "n": 6,
+      "policy": "current_k6",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 2.8285889333904066,
+      "regret_max": 4.5799017755950135,
+      "regret_median": 4.000731478013371,
+      "regret_p90": 4.483591533827116,
+      "role": "held_out"
+    },
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": 0.0,
+      "n": 6,
+      "policy": "guard_k16",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 1.080644443756145,
+      "regret_max": 1.592564200843235,
+      "regret_median": 1.0,
+      "regret_p90": 1.2962821004216174,
+      "role": "held_out"
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": null,
+      "n": 0,
+      "policy": "current_k6",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": NaN,
+      "regret_max": null,
+      "regret_median": null,
+      "regret_p90": NaN,
+      "role": "tuning"
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": null,
+      "n": 0,
+      "policy": "guard_k16",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": NaN,
+      "regret_max": null,
+      "regret_median": null,
+      "regret_p90": NaN,
+      "role": "tuning"
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 4,
+      "catastrophic_ge_2_rate": 0.6666666666666666,
+      "n": 6,
+      "policy": "current_k6",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 2.594897157511903,
+      "regret_max": 4.160883280757098,
+      "regret_median": 3.583984562258528,
+      "regret_p90": 4.062040764146348,
+      "role": "held_out"
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 0,
+      "catastrophic_ge_2_rate": 0.0,
+      "n": 6,
+      "policy": "guard_k16",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 1.0632272005124244,
+      "regret_max": 1.4446294754371358,
+      "regret_median": 1.0,
+      "regret_p90": 1.222314737718568,
+      "role": "held_out"
+    }
+  ]
+}

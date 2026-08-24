@@ -3,11 +3,15 @@ import pytest
 from bitset_backend import build_bitset_env, eval_expr_bitset
 from cm_exprlib import Imp, Var
 from cm_ir import compile_expr_to_cm_ir
-from cmbench.backends.bitset_engine import select_cm_node_engine, select_raw_ast_engine
+from cmbench.backends.bitset_engine import (
+    WORDS_AUTO_MIN_VARS,
+    select_cm_node_engine,
+    select_raw_ast_engine,
+)
 
 
-@pytest.mark.parametrize("live_k", range(0, 6))
-def test_words_request_truthfully_selects_flat_below_six(live_k):
+@pytest.mark.parametrize("live_k", range(0, WORDS_AUTO_MIN_VARS))
+def test_words_request_truthfully_selects_flat_below_auto_crossover(live_k):
     selected = select_raw_ast_engine(
         live_k=live_k, words_requested=True, flat_requested=False
     )
@@ -15,8 +19,8 @@ def test_words_request_truthfully_selects_flat_below_six(live_k):
     assert selected.requires_bigint_env is False
 
 
-@pytest.mark.parametrize("live_k", [6, 7, 16])
-def test_words_request_selects_words_at_six_and_above(live_k):
+@pytest.mark.parametrize("live_k", [WORDS_AUTO_MIN_VARS, 17, 20])
+def test_words_request_selects_words_at_auto_crossover_and_above(live_k):
     selected = select_raw_ast_engine(
         live_k=live_k, words_requested=True, flat_requested=False
     )
@@ -38,7 +42,7 @@ def test_default_and_explicit_flat_policy():
 
 def test_selected_evaluators_are_bit_identical():
     expr = Imp(Var(0), Var(1))
-    for k in (2, 6, 8):
+    for k in (2, 6, 12, 13, 16):
         names = tuple(f"x{i}" for i in range(k))
         reference = eval_expr_bitset(expr, build_bitset_env(names))
         selection = select_raw_ast_engine(
