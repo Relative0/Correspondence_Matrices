@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — investor brief</title>
+<meta name="description" content="The problem's breadth, the evidence chain as the credibility argument, what is proven versus open, and the roadmap. Derived from the CM master knowledge base.">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+
+<script>
+/* ============================================================ INVESTOR CUT
+   Derived from the master page. Structure: how large the problem is, what is
+   actually proven, what is honestly open, why the evidence should be believed,
+   and what the next spend buys. No claim, number or caveat appears here that
+   is not in the master. */
+
+const C = DATA._content;
+const M = DATA._campaign;
+const app = document.getElementById("app");
+
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· investor brief</span>",
+  links: [["index.html", "← full knowledge base"], ["#market", "The problem"],
+          ["#proven", "What's proven"], ["#open", "What's open"],
+          ["#credibility", "Why believe it"], ["#roadmap", "Roadmap"]],
+}));
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: "Correspondence Matrices — where the evidence actually stands" }),
+  h("p", { class: "lede", text:
+    "A structural representation layer for Boolean computation. This brief states what has been " +
+    "demonstrated, what has not, and what the next experiments would settle — in that order, because the " +
+    "second list is longer than the first and pretending otherwise would be the fastest way to lose your " +
+    "confidence later." }),
+  h("p", { class: "meta", html:
+    "Evidence: comprehensive benchmark campaign of 3 August 2026, including external validation on " +
+    "published third-party circuits and cross-machine replication. Total cloud spend for the entire " +
+    `campaign: ${FMT.usd(M.cost_usd)}. Full sourcing in the <a href="index.html">knowledge base</a>.` }),
+]));
+
+/* ------------------------------------------------------------ bottom line */
+app.append(banner("note", "The bottom line, stated first", [
+  "<b>Proven:</b> at the computational kernel, this system is measurably faster than a naively built " +
+  "competitor and <em>indistinguishable</em> from a well-built one. That result has been replicated on " +
+  "third-party real-world circuits and on " + T("kernel.pod.count") + " independent machines.",
+  "<b>Therefore:</b> the investable thesis is not speed. It is the structural layer — expression identity, " +
+  "persistent compiled caching, serialisation, and an operator formalism — none of which a conventional " +
+  "compiler pipeline provides, and none of which has yet been shown to pay for itself on a real workload.",
+  "<b>The single most important open question</b> is how often real systems re-evaluate the same logic. " +
+  "Every economic argument here turns on that number, and nobody has measured it.",
+]));
+
+app.append(tiles([
+  ["Kernel vs naive baseline", T("kernel.local.pct") + " faster",
+    "synthetic; {{kernel.epfl.pct}} on third-party real circuits; {{kernel.pod.min}}–{{kernel.pod.max}} across {{kernel.pod.count}} machines"],
+  ["Kernel vs strong baseline", "parity",
+    "{{flat.epfl}} externally, interval spanning parity — reported as equivalence, not as a win"],
+  ["Setup cost to amortise", T("prep.min") + "–" + T("prep.max"),
+    "the top optimisation surface, currently unprofiled"],
+  ["Campaign cloud spend", FMT.usd(M.cost_usd),
+    "against a $" + M.cost_cap_usd.toFixed(2) + " cap, all machines terminated — this is a capital-light research programme"],
+]));
+
+/* ------------------------------------------------------------ market */
+{
+  const s = section("market", "1", "How broad the underlying problem is",
+    "Boolean computation is infrastructure. It is not a market in itself — it is a layer inside a dozen " +
+    "markets, each of which has built its own tooling and lives with the gaps between them.");
+  s.append(layBlock(C.domains.lay));
+  s.append(h("p", { html:
+    "Ten domains where the central object is a Boolean function and the question of interest is a property " +
+    "of the whole function rather than a single evaluation. <b>These are candidate application areas, not " +
+    "validated deployments.</b> Of the evidence in this brief, only the verification and hardware-design " +
+    "row has been measured against." }));
+  {
+    const g = h("div", { class: "grid2" });
+    C.domains.items.forEach(d => g.append(h("div", { class: "dom" }, [
+      h("h4", { text: d.name }),
+      h("p", { class: "q", text: "“" + d.question + "”" }),
+      h("p", { class: "t", html: P(d.lay) }),
+    ])));
+    s.append(g);
+  }
+  s.append(banner("warn", "The honest framing of market size", [
+    "Nobody should treat that grid as a total addressable market. It is a list of places where the " +
+    "computation appears — every one of which already has incumbent tooling that works. The question this " +
+    "project is trying to answer is narrower and harder: is there a structural layer that those tools all " +
+    "lack, and does having it change anyone's costs? That question is still open.",
+  ]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ proven */
+{
+  const s = section("proven", "2", "What is actually proven",
+    "Three findings, each replicated, each with its scope stated.");
+
+  s.append(h("h3", { text: "Finding 1 — a real but modest kernel advantage over a naive baseline" }));
+  s.append(layBlock([
+    "Compared against a straightforwardly implemented competitor, the system's computational core is " +
+    "genuinely faster — {{kernel.local.pct}} on generated expressions and {{kernel.epfl.pct}} on real " +
+    "published hardware circuits. The mechanism is understood, not mysterious: it merges chains of the same " +
+    "operation into single wide instructions.",
+  ]));
+  s.append(FIG.kernelForest());
+
+  s.append(h("h3", { text: "Finding 2 — parity against a well-built baseline, confirmed externally" }));
+  s.append(layBlock([
+    "Compared against a competitor that has been given the same optimisation, the two are the same speed. " +
+    "This is the finding that most changed the project's own direction, and it is worth understanding why " +
+    "it counts as strong evidence rather than a disappointment: the pass mark was written down before the " +
+    "data existed, the experiment failed that mark, and the project reported it and rewrote its claim.",
+  ]));
+  s.append(FIG.flatForest());
+
+  s.append(h("h3", { text: "Finding 3 — the result is not an artifact of one machine" }));
+  s.append(layBlock([
+    "The same frozen test set was replayed on {{kernel.pod.count}} independent Linux machines with " +
+    "different hardware from the development box. All {{kernel.pod.count}} reproduced the result, within a " +
+    "spread of {{kernel.pod.spread}}. Before this, the project explicitly claimed no cross-machine result " +
+    "at all.",
+  ]));
+  s.append(FIG.pods());
+
+  s.append(banner("ok", "What these three findings license", [
+    "A defensible statement that the structural compilation approach is <em>competitive</em> with " +
+    "well-engineered conventional compilation at the kernel, on both generated and real-world expressions, " +
+    "across machines. That is a floor, not a moat.",
+    "They do <b>not</b> license any claim of a speed advantage over a competent competitor, any claim about " +
+    "real deployed workloads, or any claim about the operator formalism's practical value.",
+  ]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ economics */
+{
+  const s = section("economics", "3", "The economics, which are the actual risk",
+    "Compilation is a one-time cost. Everything turns on how many times you re-use the result.");
+  s.append(layBlock(C.scenarios.items[1].lay));
+  s.append(FIG.breakeven());
+  s.append(banner("warn", "The risk, stated plainly", [
+    "Against a strong baseline the per-evaluation gain is essentially zero, so no amount of reuse repays " +
+    "the setup — that is why {{be.epfl.never}} of {{be.epfl.total}} real circuits are marked “never”. " +
+    "Against a naive baseline the setup does repay, typically after {{be.syn.median}}–" +
+    "{{be.epfl.median.matched}} evaluations of the same expression.",
+    "So the commercial question is: <b>do real systems evaluate the same logic hundreds of times?</b> Some " +
+    "certainly do — policy engines, feature-flag systems, compiler analyses. Nobody has measured it. That " +
+    "measurement is the highest-value next experiment, and it is cheap.",
+  ]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ credibility */
+{
+  const s = section("credibility", "4", "Why this evidence should be believed",
+    "The credibility argument here is not the numbers. It is the process that produced them, and " +
+    "specifically the fact that it has repeatedly produced results the project did not want.");
+
+  s.append(layBlock([
+    "Any research programme can show you a favourable chart. The question is what happens when the data " +
+    "goes the other way. This one has a documented track record on exactly that: several of its own " +
+    "headline figures were checked by later passes, found wrong, and publicly withdrawn — including its " +
+    "single largest published claim.",
+    "That is the asset. A project that retracts its own biggest number is a project whose remaining " +
+    "numbers are worth reading.",
+  ]));
+
+  s.append(h("h3", { text: "The audit chain" }));
+  s.append(h("p", { text:
+    "Fourteen passes, each re-examining the one before. Nothing here is a single run reported once." }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["pass", "date", "what was checked", "outcome"],
+      C.chain.map(x => [x.stage, x.date, P(x.what_was_checked), P(x.outcome)]), "wrap")]));
+
+  s.append(h("h3", { text: "Corrections of record" }));
+  s.append(h("p", { html:
+    "Every figure below was published by an earlier version of this project and has since been withdrawn. " +
+    "They are listed here rather than deleted. <b>None of them appears anywhere else in this brief.</b>" }));
+  s.append(FIG.correctionsTable());
+
+  s.append(h("h3", { text: "The rules that make the numbers trustworthy" }));
+  s.append(h("p", { html:
+    C.discipline.rules.length + " measurement commitments, each of which exists because breaking it " +
+    "produced a wrong published " +
+    'number at some point. Summarised here; stated in full in the <a href="index.html#s6">knowledge base</a>.' }));
+  {
+    const g = h("div", { class: "grid2" });
+    C.discipline.rules.forEach(r => g.append(h("div", { class: "dom" }, [
+      h("h4", { text: r.rule }),
+      h("p", { class: "t", html: P(r.lay_explanation) }),
+    ])));
+    s.append(g);
+  }
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ open */
+{
+  const s = section("open", "5", "What is honestly open",
+    "Ten items. Three are cheap and would move the picture immediately; three would establish whether " +
+    "the structural idea pays at all; two are engineering and formal gaps; two are boundary questions.");
+  s.append(layBlock(C.frontier.lay));
+  {
+    const g = h("div", { class: "grid2" });
+    C.frontier.items.forEach(it => {
+      const c = h("div", { class: "dom" });
+      const kind = it.status === "partially-answered" ? "ok" : "open";
+      c.append(h("h4", {}, [document.createTextNode(it.title.split(" — ")[0] + " "),
+        h("span", { class: "pill " + kind, text: it.status.replace(/-/g, " ") })]));
+      c.append(h("p", { class: "t", html: P(it.lay_statement) }));
+      c.append(h("p", { class: "why", html: "<b>Downside case:</b> " + P(it.downside) }));
+      g.append(c);
+    });
+    s.append(g);
+  }
+  s.append(banner("", "Two of these have already been tested, and the result went against CM", [
+    "Cross-expression family reuse and repeated partial contexts are the two workload shapes a structural " +
+    "layer is supposed to be best at. Preliminary experiments on both improved against a version of the " +
+    "system with its cache disabled — and still lost to the plain competitor. Those are reported here as " +
+    "they stand, because they are the results that most constrain the thesis.",
+  ]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ roadmap */
+{
+  const s = section("roadmap", "6", "The roadmap, in the project's own priority order",
+    "Note what is absent: no production optimisation is currently justified by the evidence, and the " +
+    "project says so explicitly.");
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["priority", "experiment", "what it would settle", "cost profile"], [
+      ["1", "Reuse-distribution measurement on a real workload",
+       "Whether real systems re-evaluate often enough for the economics to work. Converts every " +
+       "“it depends on your workload” statement into a number.",
+       "Low — instrumentation of an existing system, no new infrastructure."],
+      ["2", "Preparation-cost profile",
+       "Where the setup cost actually goes. Required before any attempt to reduce it; a reduction lowers " +
+       "every break-even count roughly proportionally.",
+       "Low — profiling only, explicitly gated before optimisation."],
+      ["3", "Validated backend selection",
+       "Whether a fitted selection rule beats the current threshold on data it was not fitted to. The " +
+       "current rule is measurably wrong in the mid range.",
+       "Low — analysis on existing corpora, with an out-of-sample validation pre-commitment."],
+      ["4", "Persistent-cache behaviour study",
+       "Whether one of the three remaining differentiators has empirical content.",
+       "Low — instrumentation."],
+      ["5", "Family reuse and partial contexts, on real traces",
+       "Whether the structural layer pays on the workload shapes it was designed for — against real " +
+       "competitors this time, not against an uncached version of itself.",
+       "Medium — needs real trace data and several comparison implementations."],
+      ["6", "Canonical equivalence: define, prove, validate",
+       "Whether the most distinctive claim can be made formally rather than informally.",
+       "High — formal work, and it may return a negative result."],
+    ], "wrap")]));
+  s.append(banner("note", "What the last campaign cost", [
+    `The entire benchmark campaign — external validation on third-party circuits, replication across ` +
+    `${T("kernel.pod.count")} machines, matched decision-diagram comparison, and four local benchmark ` +
+    `families — cost ${FMT.usd(M.cost_usd)} in cloud time against a $${M.cost_cap_usd.toFixed(2)} cap, ` +
+    `with every machine terminated afterwards. Test suite: ${M.tests}. ` +
+    "The next four experiments on the list are local profiling, instrumentation and analysis, with no " +
+    "cloud cost at all.",
+  ]));
+
+  const nav = h("div", { class: "pagenav" });
+  [
+    ["index.html", "The full knowledge base", "Every figure with its source file, every caveat, every chart."],
+    ["expert.html", "Expert technical summary", "All intervals with their clustering basis, and protocol detail."],
+    ["layperson.html", "Plain-language version", "The same story with no numbers and no jargon."],
+  ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
+  s.append(nav);
+  app.append(s);
+}
+
+app.append(pageFooter("Investor cut of the master knowledge base. No claim, number or caveat appears here " +
+  'that is not in the <a href="index.html">full version</a>, and every figure is generated from the same ' +
+  "evidence files by the same build script."));
+</script>
+</body>
+</html>

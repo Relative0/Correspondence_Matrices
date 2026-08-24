@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — a structural layer for Boolean computation</title>
+<meta name="description" content="Master knowledge base: what Boolean computation is, which tool solves which problem, what a Correspondence Matrix is, the refreshed evidence, and what remains unsolved.">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+
+<script>
+/* ================================================================== PAGE
+   Master knowledge base. Every section is written in layers: a plain-language
+   paragraph first, then the technical layer, then the chart. The three derived
+   pages (layperson / investor / expert) are cuts of this content and never add
+   anything that is not here. */
+
+const C = DATA._content;
+const M = DATA._campaign;
+const app = document.getElementById("app");
+
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· master knowledge base</span>",
+  links: [
+    ["#s1", "1 · Why it matters"],
+    ["#s2", "2 · The toolbox"],
+    ["#s3", "3 · What a CM is"],
+    ["#s4", "4 · Which is better when"],
+    ["#s5", "5 · Open frontier"],
+    ["#s6", "6 · How we know"],
+    ["#s7", "7 · Glossary"],
+    ["#s8", "8 · Other versions"],
+  ],
+}));
+
+/* ---------------------------------------------------------------- header */
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: C.page.title }),
+  h("p", { class: "lede", html: P(C.page.lede) }),
+  h("p", { class: "lede", style: "font-size:15px", html: P(C.page.standfirst) }),
+  h("p", { class: "meta", html:
+    `Evidence: comprehensive benchmark refresh of 3 August 2026 (B1–B7, BX1–BX2) · ` +
+    `repository <code>${M.build_head.slice(0, 7)}</code>, evidence campaign <code>${M.campaign_head.slice(0, 7)}</code>. ` +
+    P(C.page.honesty) }),
+]));
+
+/* headline tiles ------------------------------------------------------- */
+app.append(tiles([
+  ["CM vs a plain CSE kernel", f(DATA.e1_kernel_vs_cse.rows[0].value, 3),
+    "faster, {{kernel.local.pct}} — replicated on real circuits and on {{kernel.pod.count}} independent Linux machines"],
+  ["CM vs a flattened CSE kernel", f(DATA.e2_kernel_vs_cse_flat.rows[1].value, 4),
+    "external corpus — kernel-equivalent, the residual is not a win in either direction"],
+  ["Whole-call boundary", "BitSet",
+    "leads at every semantic support measured, up to live_k = {{wrap.max_k}}"],
+  ["Preparation cost", T("prep.min") + "–" + T("prep.max"),
+    "the top remaining optimisation surface, and the reason reuse count decides everything"],
+]));
+
+app.append(banner("note", "How to read this page", [
+  "Every section opens with a plain-language paragraph, then a technical layer, then the measurement. " +
+  "Read only the first layer and you will still be able to answer “when would I want each tool?” — that is " +
+  "the stated quality bar for section 4.",
+  "Hover any bold figure in the prose to see the exact file and field it was read from. Every chart carries " +
+  "its scope, the clustering basis of any confidence interval, a table view of every plotted value, and a " +
+  "provenance list.",
+]));
+
+/* ============================================================ SECTION 1 */
+{
+  const s = section("s1", "Section 1", "Why Boolean computation matters", C.domains.lede);
+  s.append(layBlock(C.domains.lay));
+  s.append(techBlock(C.domains.technical));
+  s.append(h("h3", { text: "Where the problem actually shows up" }));
+  s.append(h("p", { html:
+    "Ten domains, each with the question it is really asking. These are candidate application areas — " +
+    "of the evidence on this site, only the formal-verification and hardware-synthesis row has been " +
+    "measured against, via the EPFL circuits in section 4." }));
+  s.append(domainGrid(C.domains.items));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 2 */
+{
+  const s = section("s2", "Section 2", "The toolbox, and what each tool solves", C.toolbox.lede);
+  s.append(layBlock(C.toolbox.lay));
+  s.append(techBlock(C.toolbox.technical));
+  s.append(banner("warn", "No single blended speed ranking is meaningful",
+    ["These methods do not produce the same primary artifact. BitSet and the CM packed path produce an " +
+     "explicit truth vector; CUDD produces a canonical graph; SAT produces a witness or a proof of " +
+     "unsatisfiability; Espresso produces a smaller expression. Ranking them on one time axis compares " +
+     "different jobs. Where this site does compare timings, both sides produced the same artifact and " +
+     "agreed on it bit for bit first."]));
+  s.append(toolCards(C.toolbox.tools));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 3 */
+{
+  const s = section("s3", "Section 3", "What a Correspondence Matrix is", C.whatIsCM.lede);
+
+  s.append(h("h3", { text: "The familiar view, and the CM view" }));
+  s.append(layBlock(C.whatIsCM.truthTable.lay));
+  {
+    const g = h("div", { class: "grid2" });
+    const left = h("div", { class: "card", style: "margin:0" });
+    left.append(h("p", { class: "scope", text: "the familiar view — a truth table" }));
+    left.append(h("p", { class: "caption", text: "Answers: what are the outputs?" }));
+    left.append(h("div", { class: "tablewrap" }, [
+      table(["x", "y", "output"], C.whatIsCM.truthTable.example.rows)]));
+    const right = h("div", { class: "card", style: "margin:0" });
+    right.append(h("p", { class: "scope", text: "the CM view — an ordered binary matrix" }));
+    right.append(h("p", { class: "caption", text: "Answers: what operator produced them, and how is it structured?" }));
+    right.append(h("pre", { style: "font-family:ui-monospace,Consolas,monospace;font-size:16px;margin:10px 0 0;line-height:1.5",
+      text: C.whatIsCM.truthTable.example.matrix.map(r => "[ " + r.join("  ") + " ]").join("\n") }));
+    right.append(h("p", { class: "claim", text: "Same Boolean function. Different representation, and a different set of supported operations." }));
+    g.append(left, right);
+    s.append(g);
+  }
+  s.append(techBlock(C.whatIsCM.truthTable.technical));
+
+  s.append(h("h3", { text: "Nominal n versus live_k — the idea every chart depends on" }));
+  s.append(layBlock(C.whatIsCM.liveK.lay));
+  {
+    const c = h("div", { class: "card" });
+    c.append(h("p", { class: "scope", text: "worked example" }));
+    c.append(h("h2", { style: "font-size:16px", html: "<code>f(x0…x31) = x2 AND x17</code>" }));
+    c.append(h("div", { class: "tablewrap" }, [
+      table(["quantity", "value", "meaning"], C.whatIsCM.liveK.table, "wrap")]));
+    c.append(h("p", { class: "claim", html:
+      "The ambient truth table has 2<sup>n</sup> entries, but almost all of them are repetitions. The " +
+      "semantically meaningful work scales with 2<sup>live_k</sup> — which is what CM exposes, and what " +
+      "every axis on this site uses." }));
+    s.append(c);
+  }
+  s.append(techBlock(C.whatIsCM.liveK.technical));
+  s.append(FIG.ambientN());
+
+  s.append(h("h3", { text: "CM as an operator calculus — and exactly how far that goes" }));
+  s.append(h("p", { class: "sectionlede", html: P(C.whatIsCM.operatorCalculus.lede) }));
+  s.append(layBlock(C.whatIsCM.operatorCalculus.lay));
+  {
+    const g = h("div", { class: "grid3" });
+    C.whatIsCM.operatorCalculus.columns.forEach(col => {
+      const c = h("div", { class: "toolcard" });
+      c.append(h("h4", {}, [document.createTextNode(col.heading + " "),
+        h("span", { class: "pill " + col.kind, text: col.kind === "ok" ? "measured" : "not demonstrated" })]));
+      const ul = h("ul", { style: "margin:8px 0 0;padding-left:18px;font-size:13.2px;color:var(--text-secondary)" });
+      col.items.forEach(i => ul.append(h("li", { html: P(i) })));
+      c.append(ul);
+      g.append(c);
+    });
+    s.append(g);
+  }
+  s.append(banner("warn", "The equivalence caveat, stated exactly",
+    [C.whatIsCM.operatorCalculus.caveat]));
+
+  s.append(h("h3", { text: "The structural compilation pipeline" }));
+  s.append(h("p", { html: P(C.whatIsCM.pipeline.lede) }));
+  {
+    const g = h("div", { class: "grid2" });
+    C.whatIsCM.pipeline.stages.forEach(st => {
+      const c = h("div", { class: "dom" });
+      c.append(h("p", { class: "why", style: "margin:0 0 2px", text: st.n }));
+      c.append(h("h4", { text: st.name }));
+      c.append(h("p", { class: "t", html: P(st.what) }));
+      c.append(h("p", { style: "margin:8px 0 0" }, [
+        h("span", { class: "pill " + (st.status === "implemented" ? "ok" : "open"), text: st.status })]));
+      g.append(c);
+    });
+    s.append(g);
+  }
+  s.append(layBlock([
+    "One consequence of compiling to a shared graph rather than walking the expression is worth seeing " +
+    "directly. If an expression re-uses the same sub-result many times, a naive compiler that expands it " +
+    "out has exponentially more to do than one that notices the sharing. The chart below is the controlled " +
+    "case: an expression whose expanded form has {{b3.ladder.unfolded}} occurrences but only " +
+    "{{b3.ladder.nodes}} distinct shared pieces compiles in {{b3.ladder.prep_us}}.",
+  ], "What this buys you"));
+  s.append(FIG.compileScaling());
+  s.append(techBlock([
+    "Preparation is linear in structural DAG nodes, not in unfolded occurrences — the ladder family isolates " +
+    "this by holding operator mix and depth structure fixed and varying only the sharing factor, which reaches " +
+    "{{b3.ladder.sharing}} at the extreme case. Across all {{b3.n_cases}} cases, CM preparation costs " +
+    "{{b3.prep_ratio.min}}–{{b3.prep_ratio.max}} the CSE-flat baseline's, and packed outputs agreed across " +
+    "every arm on every case.",
+    "This is the capability that makes preparation cost a tractable optimisation target rather than an " +
+    "intrinsic barrier: the work is proportional to something that stays small, so the {{prep.min}}–{{prep.max}} " +
+    "multiple is a constant factor in the compiler, not a scaling problem. Profiling where that constant goes " +
+    "is the top-ranked open item in section 5.",
+  ]));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 4 */
+{
+  const s = section("s4", "Section 4 · the heart of the page", "Which is better when", C.scenarios.lede);
+  s.append(banner("note", "The bar for this section",
+    ["A smart non-programmer should be able to read only the plain-language layer of the five scenarios " +
+     "below and then answer “when would I want each tool?” without using any jargon. If a paragraph in " +
+     "that layer needs a technical term to make sense, it is a defect in the paragraph."]));
+
+  C.scenarios.items.forEach(sc => {
+    const blk = h("div", { class: "scenario", id: sc.id });
+    blk.append(h("p", { class: "q" }, [
+      h("span", { class: "idx", text: sc.n }),
+      h("span", { html: P(sc.question) })]));
+    blk.append(h("div", { class: "verdict", html:
+      P(sc.verdict) + (sc.verdictWhy ? ' <span class="arrow">— ' + P(sc.verdictWhy) + "</span>" : "") }));
+    blk.append(layBlock(sc.lay));
+    blk.append(techBlock(sc.technical));
+    s.append(blk);
+    (sc.figs || []).forEach(name => {
+      if (!FIG[name]) { console.error("unknown figure:", name); return; }
+      s.append(FIG[name]());
+    });
+  });
+
+  s.append(h("h3", { id: "flowchart", text: "The whole section as a decision flow" }));
+  s.append(h("p", { html: P(C.scenarios.flowchart.lede) }));
+  s.append(decisionFlow(C.scenarios.flowchart.nodes));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 5 */
+{
+  const F = C.frontier;
+  const s = section("s5", "Section 5", "The open frontier — what is still genuinely unsolved", F.lede);
+  if (F.lay) s.append(layBlock(F.lay));
+  if (F.technical) s.append(techBlock(F.technical));
+
+  const KIND = {
+    "ranked-next-test": ["open", "ranked next test"],
+    open: ["open", "open"],
+    "formal-not-demonstrated": ["open", "formal, not demonstrated"],
+    "partially-answered": ["ok", "partially answered"],
+    closed: ["ok", "closed by this campaign"],
+  };
+  (F.items || []).forEach(it => {
+    const c = h("div", { class: "card", id: it.id });
+    const k = KIND[it.status] || ["open", it.status];
+    c.append(h("h2", { style: "font-size:17px" }, [
+      document.createTextNode(it.title + " "),
+      h("span", { class: "pill " + k[0], text: k[1] })]));
+    c.append(layBlock(it.lay_statement));
+    c.append(techBlock(it.technical_statement, null));
+    c.append(h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }));
+    c.append(h("p", { class: "claim", html: "<b>What would change the picture.</b> " + P(it.what_would_change_the_picture) }));
+    if (it.sources && it.sources.length) {
+      const d = h("details", { class: "prov" });
+      d.append(h("summary", { text: "Where this is written down" }));
+      const ul = h("ul");
+      it.sources.forEach(x => ul.append(h("li", { html: `<code>${x}</code>` })));
+      d.append(ul);
+      c.append(d);
+    }
+    s.append(c);
+  });
+
+  if (F.closed && F.closed.length) {
+    s.append(h("h3", { text: "Closed by this campaign — no longer open" }));
+    s.append(h("div", { class: "tablewrap" }, [
+      table(["question", "how it was closed", "result"],
+        F.closed.map(x => [x.title, P(x.how), P(x.result)]), "wrap")]));
+  }
+  app.append(s);
+}
+
+/* ============================================================ SECTION 6 */
+{
+  const s = section("s6", "Section 6", "How we know — the quality of the evidence",
+    "A result is only as good as the discipline that produced it. This section is the audit trail: what was " +
+    "checked, in what order, under what rules, and what had to be withdrawn along the way.");
+
+  s.append(layBlock([
+    "Research that only ever confirms itself is not research. The most useful thing to know about this " +
+    "project is not any single number — it is that several of its earlier headline numbers were checked, " +
+    "found wrong, and publicly retracted, and that the rules for judging the most important result were " +
+    "written down <em>before</em> the data existed.",
+    "That last part matters more than it sounds. The decisive experiment had a pass mark fixed in advance. " +
+    "It failed that mark. The project reported the failure and changed its own claim accordingly, rather " +
+    "than looking for a different way to slice the data.",
+  ]));
+
+  /* --- the chain ---------------------------------------------------- */
+  s.append(h("h3", { text: "The audit chain" }));
+  s.append(h("p", { html:
+    "Each pass below re-examined the one before it. Nothing here was a single run reported once." }));
+  if ((C.chain || []).length) {
+    s.append(h("div", { class: "tablewrap" }, [
+      table(["pass", "date", "what was checked", "outcome"],
+        C.chain.map(x => [x.stage, x.date, P(x.what_was_checked), P(x.outcome)]), "wrap")]));
+  }
+
+  /* --- discipline --------------------------------------------------- */
+  s.append(h("h3", { text: "The measurement rules, and what each one prevents" }));
+  if (C.discipline && C.discipline.lede) s.append(h("p", { html:
+    "<b>" + C.discipline.rules.length + " rules.</b> " + P(C.discipline.lede) }));
+  (C.discipline.rules || []).forEach(r => {
+    const c = h("div", { class: "card" });
+    c.append(h("h2", { style: "font-size:16px", text: r.rule }));
+    c.append(layBlock(r.lay_explanation));
+    c.append(techBlock(r.technical_explanation, null));
+    c.append(h("p", { class: "claim", html: "<b>Without it:</b> " + P(r.what_goes_wrong_without_it) }));
+    if (r.sources && r.sources.length) {
+      const d = h("details", { class: "prov" });
+      d.append(h("summary", { text: "Where this rule is written down" }));
+      const ul = h("ul");
+      r.sources.forEach(x => ul.append(h("li", { html: `<code>${x}</code>` })));
+      d.append(ul);
+      c.append(d);
+    }
+    s.append(c);
+  });
+
+  /* --- the two evidence pillars ------------------------------------- */
+  s.append(h("h3", { text: "The two figures the discipline was built to protect" }));
+  s.append(FIG.pods());
+  s.append(FIG.schedule());
+  s.append(FIG.strata());
+
+  /* --- corrections ledger ------------------------------------------- */
+  s.append(h("h3", { id: "corrections", text: "Corrections of record" }));
+  s.append(layBlock([
+    "Every figure in the table below was published by an earlier version of this project and has since been " +
+    "withdrawn. They are listed here, together, with the reason each was wrong — not deleted from the " +
+    "history. This is the only place on the site where any of them appears.",
+  ]));
+  s.append(banner("", "These numbers are superseded — do not cite them",
+    ["Each row names the figure, what it originally claimed, the actual mechanism of the error, and what " +
+     "replaced it. A struck-through figure is never plotted anywhere on this site."]));
+  s.append(FIG.correctionsTable());
+
+  s.append(h("h3", { text: "Open discrepancies between the summary prose and the raw evidence" }));
+  s.append(h("p", { html:
+    "Found while re-reading every number from its source file for this page. Neither changes a campaign " +
+    "verdict; both change how a sentence should be worded. They are surfaced here rather than smoothed over." }));
+  s.append(FIG.flagsBlock());
+
+  /* --- scope limits -------------------------------------------------- */
+  s.append(h("h3", { text: "What this evidence does not cover" }));
+  s.append(h("ul", { html:
+    "<li>One synthetic generator and one external circuit family. The external corpus is AND/INV form, " +
+    "which is exactly the case where CM's merging mechanism predicts parity — informative, but not a " +
+    "sample of all real workloads.</li>" +
+    "<li>No BDD-hard or deliberately order-sensitive formula families were measured. The corpora here are " +
+    "small for CUDD, which is why dynamic reordering never triggered.</li>" +
+    "<li>Explicit-output behaviour above live_k = " + T("guard.k") + " is not characterised; the guard " +
+    "declines rather than measuring it, so nothing above that boundary should be extrapolated.</li>" +
+    "<li>No real deployed workload has been measured. Reuse counts — the variable that decides whether " +
+    "compilation pays — have never been observed in production, only computed as break-even thresholds.</li>" +
+    "<li>Canonical CM structural equivalence has not been implemented or demonstrated. The current path " +
+    "establishes output equality only.</li>" }));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 7 */
+{
+  const s = section("s7", "Section 7", "Glossary",
+    "Every term with both a plain-language and a technical definition. Filter by text or by group.");
+  s.append(glossary(C.glossary || [], "glossary-list"));
+  app.append(s);
+}
+
+/* ============================================================ SECTION 8 */
+{
+  const s = section("s8", "Section 8", "Shorter versions of this page",
+    "Each is a cut of this master page. None of them contains a claim, a number, or a caveat that is not here.");
+  const nav = h("div", { class: "pagenav" });
+  [
+    ["layperson.html", "Layperson one-pager",
+      "What the problem is, which tool to reach for, and the decision flow — in plain language, with only a couple of vivid numbers."],
+    ["investor.html", "Investor brief",
+      "The breadth of the problem, the honest evidence chain as the credibility argument, what is proven versus open, and the roadmap."],
+    ["expert.html", "Expert technical summary",
+      "Dense: every chart, every interval with its clustering basis, protocol notes, and file-level provenance."],
+  ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
+  s.append(nav);
+  app.append(s);
+}
+
+app.append(pageFooter(
+  "This page is a knowledge base, not a marketing document. Where the evidence supports a modest claim it " +
+  "says so; where it supports none it says that instead."));
+</script>
+</body>
+</html>

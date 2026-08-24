@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CM Benchmark Refresh — Charts (2026-08-03)</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --plane: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --ref: #898781;
+    --good: #0ca30c;
+    --critical: #d03b3b;
+    --warning: #fab219;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface-1: #1a1a19;
+      --plane: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --plane: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--plane);
+    color: var(--text-primary);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 96px; }
+  header.page { padding: 8px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; font-weight: 650; }
+  .sub { color: var(--text-secondary); margin: 0 0 4px; }
+  .meta { color: var(--muted); font-size: 13px; margin: 12px 0 0; }
+  .meta code { font-size: 12px; }
+  h2 { font-size: 20px; margin: 0 0 6px; font-weight: 620; }
+  h3 { font-size: 15px; margin: 22px 0 8px; font-weight: 600; color: var(--text-secondary); }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 22px 18px;
+    margin: 0 0 26px;
+  }
+  .card > .scope {
+    color: var(--muted); font-size: 12.5px; margin: 0 0 2px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .card > .claim {
+    color: var(--text-secondary); font-size: 13px; margin: 8px 0 0;
+  }
+  .card > .caption { color: var(--text-secondary); font-size: 14px; margin: 4px 0 16px; }
+  .figwrap { overflow-x: auto; margin: 4px 0 0; }
+  svg { display: block; }
+  svg text { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .tick { fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .lab { fill: var(--text-secondary); }
+  .val { fill: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .axtitle { fill: var(--muted); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-secondary); }
+  .legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+  details { margin: 12px 0 0; }
+  details > summary {
+    cursor: pointer; color: var(--muted); font-size: 13px; list-style: none;
+    padding: 4px 0;
+  }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: "▸ "; }
+  details[open] > summary::before { content: "▾ "; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; font-size: 12.5px; margin-top: 6px; min-width: 100%; }
+  th, td { text-align: right; padding: 5px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; }
+  td { font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+
+  .prov { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+  .prov ul { margin: 4px 0 0; padding-left: 18px; }
+  .prov code { font-size: 11.5px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 0 0 26px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .tile .k { color: var(--muted); font-size: 12.5px; }
+  .tile .v { font-size: 30px; font-weight: 640; line-height: 1.15; margin: 4px 0 2px; }
+  .tile .n { color: var(--text-secondary); font-size: 12.5px; }
+
+  .banner {
+    border-left: 3px solid var(--critical); background: var(--surface-1);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 0 0 26px;
+    border-top: 1px solid var(--border); border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .banner h2 { color: var(--critical); font-size: 16px; }
+  .banner table td, .banner table th { white-space: normal; }
+
+  #tip {
+    position: fixed; pointer-events: none; opacity: 0; transition: opacity .08s;
+    background: var(--surface-1); border: 1px solid var(--border);
+    box-shadow: 0 4px 14px rgba(0,0,0,.14); border-radius: 8px;
+    padding: 8px 11px; font-size: 12.5px; color: var(--text-primary);
+    max-width: 320px; z-index: 50; line-height: 1.45;
+  }
+  #tip b { display: block; margin-bottom: 3px; }
+  #tip .r { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .hit { fill: transparent; cursor: crosshair; }
+  footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--border); padding-top: 18px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div id="tip" role="status" aria-live="polite"></div>
+<main id="app"></main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+
+/* ---------------------------------------------------------------- utils */
+const S1 = "var(--series-1)", S2 = "var(--series-2)", S3 = "var(--series-3)";
+const el = (t, a = {}, kids = []) => {
+  const n = document.createElementNS("http://www.w3.org/2000/svg", t);
+  for (const k in a) if (a[k] !== null && a[k] !== undefined) n.setAttribute(k, a[k]);
+  for (const c of [].concat(kids)) n.append(c);
+  return n;
+};
+const h = (t, a = {}, kids = []) => {
+  const n = document.createElement(t);
+  for (const k in a) {
+    if (k === "html") n.innerHTML = a[k];
+    else if (k === "text") n.textContent = a[k];
+    else n.setAttribute(k, a[k]);
+  }
+  for (const c of [].concat(kids)) if (c) n.append(c);
+  return n;
+};
+const f = (x, d = 3) => (x === null || x === undefined) ? "—" : Number(x).toFixed(d);
+const us = (x) => x === null || x === undefined ? "—"
+  : x >= 100000 ? (x / 1000).toFixed(0) + " ms"
+  : x >= 1000 ? (x / 1000).toFixed(x >= 10000 ? 1 : 2) + " ms"
+  : x.toFixed(x < 10 ? 2 : 1) + " µs";
+
+const tip = document.getElementById("tip");
+function bindTip(node, html) {
+  const show = (e) => {
+    tip.innerHTML = html;
+    tip.style.opacity = 1;
+    const r = tip.getBoundingClientRect();
+    let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+    if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  };
+  node.addEventListener("mousemove", show);
+  node.addEventListener("mouseenter", show);
+  node.addEventListener("mouseleave", () => tip.style.opacity = 0);
+  node.setAttribute("tabindex", "0");
+  node.addEventListener("focus", (e) => {
+    const b = node.getBoundingClientRect();
+    show({ clientX: b.left + b.width / 2, clientY: b.top });
+  });
+  node.addEventListener("blur", () => tip.style.opacity = 0);
+}
+
+/* ---------------------------------------------------------------- scales */
+const linScale = (d0, d1, r0, r1) => (v) => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+const logScale = (d0, d1, r0, r1) => {
+  const l0 = Math.log10(d0), l1 = Math.log10(d1);
+  return (v) => r0 + (Math.log10(v) - l0) / (l1 - l0) * (r1 - r0);
+};
+function niceTicks(lo, hi, n = 5) {
+  const raw = (hi - lo) / n;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw) || 10 * mag;
+  const out = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function logTicks(lo, hi) {
+  const out = [];
+  for (let e = Math.floor(Math.log10(lo)); e <= Math.ceil(Math.log10(hi)); e++) {
+    const v = Math.pow(10, e);
+    if (v >= lo * 0.999 && v <= hi * 1.001) out.push(v);
+  }
+  return out;
+}
+
+/* ---------------------------------------------------------------- card */
+function card(o) {
+  const c = h("section", { class: "card", id: o.id });
+  if (o.scope) c.append(h("p", { class: "scope", text: o.scope }));
+  c.append(h("h2", { text: o.title }));
+  if (o.caption) c.append(h("p", { class: "caption", html: o.caption }));
+  if (o.legend) {
+    const lg = h("div", { class: "legend" });
+    o.legend.forEach(([col, lab]) =>
+      lg.append(h("span", {}, [h("i", { style: `background:${col}` }), h("span", { text: lab })])));
+    c.append(lg);
+  }
+  if (o.svg) c.append(h("div", { class: "figwrap" }, [o.svg]));
+  if (o.note) c.append(h("p", { class: "claim", html: o.note }));
+  if (o.table) {
+    const d = h("details");
+    d.append(h("summary", { text: "Table view (every plotted value)" }));
+    d.append(h("div", { class: "tablewrap" }, [o.table]));
+    c.append(d);
+  }
+  if (o.prov) {
+    const d = h("details", { class: "prov" });
+    d.append(h("summary", { text: "Data provenance" }));
+    const ul = h("ul");
+    o.prov.forEach(p => ul.append(h("li", { html: `<code>${p.replace("::", "</code> :: <code>")}</code>` })));
+    d.append(ul);
+    c.append(d);
+  }
+  if (o.claim) c.append(h("p", { class: "claim", html: o.claim }));
+  return c;
+}
+function table(headers, rows) {
+  const t = h("table");
+  const th = h("tr");
+  headers.forEach(x => th.append(h("th", { text: x })));
+  t.append(h("thead", {}, [th]));
+  const tb = h("tbody");
+  rows.forEach(r => {
+    const tr = h("tr");
+    r.forEach(x => tr.append(h("td", { text: String(x) })));
+    tb.append(tr);
+  });
+  t.append(tb);
+  return t;
+}
+
+/* ------------------------------------------------- forest (dot + CI, horiz) */
+function forest(rows, opt) {
+  const W = opt.width || 900, padL = opt.padL || 250, padR = 92, padT = 30, rowH = 30;
+  const H = padT + rows.length * rowH + 46;
+  const lo = opt.domain[0], hi = opt.domain[1];
+  const x = linScale(lo, hi, padL, W - padR);
+  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
+                        "aria-label": opt.title || "forest plot" });
+
+  niceTicks(lo, hi, opt.ticks || 6).forEach(t => {
+    g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 8, y2: padT + rows.length * rowH,
+                          stroke: "var(--grid)", "stroke-width": 1 }));
+    g.append(el("text", { x: x(t), y: padT + rows.length * rowH + 18, class: "tick",
+                          "text-anchor": "middle" }, [document.createTextNode(f(t, 2))]));
+  });
+  // parity reference
+  if (opt.ref !== undefined && opt.ref >= lo && opt.ref <= hi) {
+    g.append(el("line", { x1: x(opt.ref), x2: x(opt.ref), y1: padT - 12, y2: padT + rows.length * rowH,
+                          stroke: "var(--ref)", "stroke-width": 1.5 }));
+    g.append(el("text", { x: x(opt.ref), y: padT - 17, class: "axtitle", "text-anchor": "middle" },
+                        [document.createTextNode(opt.refLabel || "parity 1.00")]));
+  }
+  g.append(el("text", { x: (padL + W - padR) / 2, y: H - 8, class: "axtitle", "text-anchor": "middle" },
+                      [document.createTextNode(opt.xTitle)]));
+
+  rows.forEach((r, i) => {
+    const cy = padT + i * rowH + rowH / 2;
+    const col = r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
+    g.append(el("text", { x: padL - 12, y: cy + 4, class: "lab", "text-anchor": "end" },
+                        [document.createTextNode(r.label)]));
+    if (r.lo !== null && r.lo !== undefined) {
+      g.append(el("line", { x1: x(r.lo), x2: x(r.hi), y1: cy, y2: cy, stroke: col, "stroke-width": 2,
+                            "stroke-linecap": "round" }));
+      [r.lo, r.hi].forEach(v => g.append(el("line", { x1: x(v), x2: x(v), y1: cy - 5, y2: cy + 5,
+                                                      stroke: col, "stroke-width": 2 })));
+    }
+    g.append(el("circle", { cx: x(r.value), cy, r: 5.5, fill: col,
+                            stroke: "var(--surface-1)", "stroke-width": 2 }));
+    g.append(el("text", { x: W - padR + 10, y: cy + 4, class: "val" },
+                        [document.createTextNode(f(r.value, 4))]));
+    const hit = el("rect", { x: padL - 4, y: cy - rowH / 2, width: W - padR - padL + 8, height: rowH, class: "hit" });
+    bindTip(hit, `<b>${r.label}</b><span class="r">${opt.arm}: ${f(r.value, 4)}` +
+      (r.lo != null ? ` &nbsp;95% CI [${f(r.lo, 4)}, ${f(r.hi, 4)}]` : "") +
+      `</span><br><span class="r">${r.scope}</span><br><span class="r">${r.basis}</span>`);
+    g.append(hit);
+  });
+  return g;
+}
+
+/* ------------------------------------------------- grouped columns */
+function groupedCols(cfg) {
+  const W = cfg.width || 900, padL = 74, padR = 22, padT = 22, padB = 62;
+  const H = cfg.height || 320;
+  const groups = cfg.groups, series = cfg.series;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const isLog = !!cfg.log;
+  const allV = groups.flatMap(g => series.map(s => g.values[s.key]).filter(v => v != null && (!isLog || v > 0)));
+  const maxV = cfg.max || Math.max(...allV) * 1.12;
+  const minV = isLog ? (cfg.min || Math.pow(10, Math.floor(Math.log10(Math.min(...allV))))) : 0;
+  const y = isLog ? logScale(minV, maxV, padT + plotH, padT) : linScale(minV, maxV, padT + plotH, padT);
+  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
+                        "aria-label": cfg.title || "grouped columns" });
+
+  (isLog ? logTicks(minV, maxV) : niceTicks(minV, maxV, 5)).forEach(t => {
+    g.append(el("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: "var(--grid)", "stroke-width": 1 }));
+    g.append(el("text", { x: padL - 10, y: y(t) + 4, class: "tick", "text-anchor": "end" },
+                        [document.createTextNode(cfg.fmtTick ? cfg.fmtTick(t) : f(t, cfg.tickDigits ?? 2))]));
+  });
+  g.append(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH,
+                        stroke: "var(--axis)", "stroke-width": 1 }));
+  if (cfg.ref != null) {
+    g.append(el("line", { x1: padL, x2: W - padR, y1: y(cfg.ref), y2: y(cfg.ref),
+                          stroke: "var(--ref)", "stroke-width": 1.5 }));
+    g.append(el("text", { x: W - padR - 2, y: y(cfg.ref) - 6, class: "axtitle", "text-anchor": "end" },
+                        [document.createTextNode(cfg.refLabel || "parity 1.00")]));
+  }
+  g.append(el("text", { x: 16, y: padT + plotH / 2, class: "axtitle", "text-anchor": "middle",
+                        transform: `rotate(-90 16 ${padT + plotH / 2})` },
+                      [document.createTextNode(cfg.yTitle)]));
+  g.append(el("text", { x: padL + plotW / 2, y: H - 8, class: "axtitle", "text-anchor": "middle" },
+                      [document.createTextNode(cfg.xTitle)]));
+
+  const bandW = plotW / groups.length;
+  const inner = Math.min(24, (bandW - 26) / series.length);
+  groups.forEach((grp, gi) => {
+    const cx = padL + bandW * (gi + 0.5);
+    const total = series.length * inner + (series.length - 1) * 2;   // 2px surface gap
+    series.forEach((s, si) => {
+      const v = grp.values[s.key];
+      if (v == null || (isLog && v <= 0)) return;
+      const bx = cx - total / 2 + si * (inner + 2);
+      const by = y(v), bh = Math.max(1, padT + plotH - by);
+      const r = Math.min(4, bh / 2);
+      const path = `M${bx},${by + bh} L${bx},${by + r} Q${bx},${by} ${bx + r},${by}` +
+                   ` L${bx + inner - r},${by} Q${bx + inner},${by} ${bx + inner},${by + r}` +
+                   ` L${bx + inner},${by + bh} Z`;
+      const bar = el("path", { d: path, fill: s.color });
+      bindTip(bar, `<b>${grp.label} · ${s.label}</b><span class="r">${cfg.fmtVal ? cfg.fmtVal(v) : f(v, 3)}</span>` +
+        (grp.tip ? `<br><span class="r">${grp.tip}</span>` : ""));
+      g.append(bar);
+      if (cfg.labelBars) {
+        g.append(el("text", { x: bx + inner / 2, y: by - 6, class: "val", "text-anchor": "middle",
+                              "font-size": 10.5 },
+                            [document.createTextNode(cfg.fmtVal ? cfg.fmtVal(v) : f(v, 2))]));
+      }
+    });
+    g.append(el("text", { x: cx, y: padT + plotH + 18, class: "lab", "text-anchor": "middle" },
+                        [document.createTextNode(grp.label)]));
+    if (grp.sub) g.append(el("text", { x: cx, y: padT + plotH + 33, class: "tick", "text-anchor": "middle",
+                                       "font-size": 11 }, [document.createTextNode(grp.sub)]));
+  });
+  return g;
+}
+
+/* ------------------------------------------------- dumbbell (2 series, horiz cats) */
+function dumbbell(cats, cfg) {
+  const W = cfg.width || 900, padL = cfg.padL || 175, padR = 30, padT = 26, rowH = 24;
+  const H = padT + cats.length * rowH + 48;
+  const x = linScale(cfg.domain[0], cfg.domain[1], padL, W - padR);
+  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
+                        "aria-label": cfg.title });
+  niceTicks(cfg.domain[0], cfg.domain[1], 6).forEach(t => {
+    g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 6, y2: padT + cats.length * rowH,
+                          stroke: "var(--grid)", "stroke-width": 1 }));
+    g.append(el("text", { x: x(t), y: padT + cats.length * rowH + 18, class: "tick", "text-anchor": "middle" },
+                        [document.createTextNode(f(t, 2))]));
+  });
+  if (cfg.ref != null) {
+    g.append(el("line", { x1: x(cfg.ref), x2: x(cfg.ref), y1: padT - 12, y2: padT + cats.length * rowH,
+                          stroke: "var(--ref)", "stroke-width": 1.5 }));
+    g.append(el("text", { x: x(cfg.ref), y: padT - 17, class: "axtitle", "text-anchor": "middle" },
+                        [document.createTextNode("parity 1.00")]));
+  }
+  g.append(el("text", { x: (padL + W - padR) / 2, y: H - 8, class: "axtitle", "text-anchor": "middle" },
+                      [document.createTextNode(cfg.xTitle)]));
+  cats.forEach((c, i) => {
+    const cy = padT + i * rowH + rowH / 2;
+    g.append(el("text", { x: padL - 12, y: cy + 4, class: "lab", "text-anchor": "end" },
+                        [document.createTextNode(c.label)]));
+    g.append(el("line", { x1: x(Math.min(c.a, c.b)), x2: x(Math.max(c.a, c.b)), y1: cy, y2: cy,
+                          stroke: "var(--axis)", "stroke-width": 2, "stroke-linecap": "round" }));
+    g.append(el("circle", { cx: x(c.b), cy, r: 4.5, fill: S2, stroke: "var(--surface-1)", "stroke-width": 2 }));
+    g.append(el("circle", { cx: x(c.a), cy, r: 4.5, fill: S1, stroke: "var(--surface-1)", "stroke-width": 2 }));
+    const hit = el("rect", { x: padL - 4, y: cy - rowH / 2, width: W - padR - padL + 8, height: rowH, class: "hit" });
+    bindTip(hit, `<b>${c.label}</b><span class="r">${cfg.aLabel}: ${f(c.a, 4)}<br>${cfg.bLabel}: ${f(c.b, 4)}</span>` +
+      (c.tip ? `<br><span class="r">${c.tip}</span>` : ""));
+    g.append(hit);
+  });
+  return g;
+}
+
+/* ------------------------------------------------- xy scatter / lines */
+function xyPlot(cfg) {
+  const W = cfg.width || 900, padL = 78, padR = 30, padT = 24, padB = 58;
+  const H = cfg.height || 320, plotW = W - padL - padR, plotH = H - padT - padB;
+  const x = cfg.logX ? logScale(cfg.xDomain[0], cfg.xDomain[1], padL, W - padR)
+                     : linScale(cfg.xDomain[0], cfg.xDomain[1], padL, W - padR);
+  const y = cfg.logY ? logScale(cfg.yDomain[0], cfg.yDomain[1], padT + plotH, padT)
+                     : linScale(cfg.yDomain[0], cfg.yDomain[1], padT + plotH, padT);
+  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+
+  (cfg.logY ? logTicks(cfg.yDomain[0], cfg.yDomain[1]) : niceTicks(cfg.yDomain[0], cfg.yDomain[1], 5)).forEach(t => {
+    g.append(el("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: "var(--grid)", "stroke-width": 1 }));
+    g.append(el("text", { x: padL - 10, y: y(t) + 4, class: "tick", "text-anchor": "end" },
+                        [document.createTextNode(cfg.fmtY ? cfg.fmtY(t) : f(t, 2))]));
+  });
+  (cfg.logX ? logTicks(cfg.xDomain[0], cfg.xDomain[1]) : niceTicks(cfg.xDomain[0], cfg.xDomain[1], 6)).forEach(t => {
+    g.append(el("text", { x: x(t), y: padT + plotH + 18, class: "tick", "text-anchor": "middle" },
+                        [document.createTextNode(cfg.fmtX ? cfg.fmtX(t) : f(t, 0))]));
+  });
+  g.append(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH,
+                        stroke: "var(--axis)", "stroke-width": 1 }));
+  g.append(el("text", { x: 16, y: padT + plotH / 2, class: "axtitle", "text-anchor": "middle",
+                        transform: `rotate(-90 16 ${padT + plotH / 2})` },
+                      [document.createTextNode(cfg.yTitle)]));
+  g.append(el("text", { x: padL + plotW / 2, y: H - 8, class: "axtitle", "text-anchor": "middle" },
+                      [document.createTextNode(cfg.xTitle)]));
+
+  cfg.series.forEach(s => {
+    if (s.line) {
+      const d = s.points.map((p, i) => `${i ? "L" : "M"}${x(p.x)},${y(p.y)}`).join(" ");
+      g.append(el("path", { d, fill: "none", stroke: s.color, "stroke-width": 2,
+                            "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    }
+    s.points.forEach(p => {
+      const c = el("circle", { cx: x(p.x), cy: y(p.y), r: 4.5, fill: s.color,
+                               stroke: "var(--surface-1)", "stroke-width": 2 });
+      g.append(c);
+      const hit = el("circle", { cx: x(p.x), cy: y(p.y), r: 13, class: "hit" });
+      bindTip(hit, `<b>${p.label || s.label}</b><span class="r">${p.tip}</span>`);
+      g.append(hit);
+      if (p.direct) {
+        g.append(el("text", { x: x(p.x), y: y(p.y) - 12, class: "val", "text-anchor": p.anchor || "middle",
+                              "font-size": 11 }, [document.createTextNode(p.direct)]));
+      }
+    });
+  });
+  return g;
+}
+</script>
+
+<script>
+/* ================================================================ PAGE */
+const app = document.getElementById("app");
+const M = DATA._campaign;
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: "CM benchmark refresh — display pack" }),
+  h("p", { class: "sub", text: "Every chart on this page is generated from the 2026-08-03 comprehensive benchmark refresh (B1–B7). No number is retyped from prose; each panel lists the file and field it was read from." }),
+  h("p", { class: "meta", html:
+    `Campaign git <code>${M.campaign_head.slice(0, 7)}</code> · display build <code>${M.display_build_head.slice(0, 7)}</code> · ` +
+    `local box ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy} · ` +
+    `pod spend $${M.cost_usd.toFixed(4)} of $${M.cost_cap_usd.toFixed(2)} cap (B1–B7 $${M.cost_usd_manifest.toFixed(4)} + BX2 $${M.cost_usd_bx2.toFixed(4)}), all pods terminated · tests: ${M.tests}` }),
+]));
+
+/* ---- headline tiles ------------------------------------------------- */
+const tiles = h("div", { class: "tiles" });
+[
+  ["CM vs plain CSE — local", f(DATA.c1_kernel_vs_cse.rows[0].value, 4),
+   `95% CI [${f(DATA.c1_kernel_vs_cse.rows[0].lo, 3)}, ${f(DATA.c1_kernel_vs_cse.rows[0].hi, 3)}] · 192 synthetic formulas`],
+  ["CM vs CSE-flat — EPFL", f(DATA.c2_kernel_vs_cse_flat.rows[1].value, 4),
+   `95% CI [${f(DATA.c2_kernel_vs_cse_flat.rows[1].lo, 3)}, ${f(DATA.c2_kernel_vs_cse_flat.rows[1].hi, 3)}] · kernel-equivalent`],
+  ["Cross-platform spread", f(DATA.c5_pods.spread.geomean_spread, 3),
+   `${DATA.c5_pods.pods.length} Linux/EPYC pods, ${f(DATA.c5_pods.spread.geomean_min, 3)}–${f(DATA.c5_pods.spread.geomean_max, 3)}`],
+  ["Guard violations", `${DATA.c9_guard.totals.wrong_guard} / ${DATA.c9_guard.totals.trials.toLocaleString()}`,
+   `wrong guards in fresh trials; ${DATA.c9_guard.totals.oversized} oversized outputs`],
+].forEach(([k, v, n]) => tiles.append(h("div", { class: "tile" }, [
+  h("div", { class: "k", text: k }), h("div", { class: "v", text: v }), h("div", { class: "n", text: n }),
+])));
+app.append(tiles);
+
+/* ---- C1 -------------------------------------------------------------- */
+{
+  const r = DATA.c1_kernel_vs_cse.rows;
+  app.append(card({
+    id: "c1", scope: "Kernel boundary · three independent scopes, never pooled",
+    title: "CM kernel vs plain structural CSE",
+    caption: "Paired kernel-time ratio, geometric mean. Below 1.00 favours CM. Each row keeps its own bootstrap clustering basis and is plotted separately — the local, external, and pod scopes are never combined into one number.",
+    legend: [[S1, "Local synthetic (Windows / Ryzen)"], [S2, "External EPFL cones (Windows / Ryzen)"], [S3, "Linux / AMD EPYC pods"]],
+    svg: forest(r, { domain: [0.84, 1.01], ref: 1.0, xTitle: "CM kernel time ÷ plain-CSE kernel time (geomean; lower favours CM)", arm: "cm/cse" }),
+    note: `Mechanism is <b>n-ary instruction merging</b>, not semantic op-compression: on the EPFL AND/INV cones CM emits exactly the CSE-flat instruction and executed-op counts (both ratios ${f(DATA.c4_epfl_per_circuit.mechanism.instr_ratio_cm_cse_flat, 3)}), so the advantage over <i>plain</i> CSE is the flattening effect itself.`,
+    table: table(["scope", "geomean", "CI lo", "CI hi", "clustering basis"],
+      r.map(x => [x.label, f(x.value, 4), f(x.lo, 4), f(x.hi, 4), x.basis])),
+    prov: DATA.c1_kernel_vs_cse.provenance,
+    claim: "Claim map rows 1, 11, 12.",
+  }));
+}
+
+/* ---- C2 -------------------------------------------------------------- */
+{
+  const d = DATA.c2_kernel_vs_cse_flat, r = d.rows;
+  app.append(card({
+    id: "c2", scope: "Kernel boundary · Outcome A (final)",
+    title: "CM vs CSE + sharing-aware flattening — kernel equivalence",
+    caption: "The same paired ratio against the <i>strong</i> CSE baseline. The residual straddles parity and <b>its sign is not stable</b> (1.004 local, 0.9998 external, 0.96–0.97 on EPYC): this is an equivalence result, never a CM win in either direction.",
+    legend: [[S1, "Local synthetic"], [S2, "External EPFL cones"], [S3, "Linux / AMD EPYC pods"]],
+    svg: forest(r, { domain: [0.94, 1.04], ref: 1.0, xTitle: "CM kernel time ÷ CSE-flat kernel time (geomean)", arm: "cm/cse_flat" }),
+    note: `Pre-registered materiality rule, applied as written: geomean ≤ 0.95 → <b>${d.materiality["cond1_geomean_le_0.95"] ? "yes" : "NO"}</b>; circuit-clustered CI excludes parity → <b>${d.materiality.cond2_clustered_ci_excludes_parity ? "yes" : "NO"}</b>; median break-even ≤ 1000 → <b>${d.materiality["cond3_median_breakeven_le_1000"] ? "yes" : "no"}</b>. Conditions fail ⇒ optimization not warranted; <b>Outcome A converts provisional → final</b>. Differentiators are canonical keys, persistent cache and serde — not kernel speed.`,
+    table: table(["scope / schedule", "geomean", "CI lo", "CI hi", "basis"],
+      r.map(x => [x.label, f(x.value, 4), f(x.lo, 4), f(x.hi, 4), x.basis])),
+    prov: d.provenance,
+    claim: "Claim map row 10.",
+  }));
+}
+
+/* ---- C3 -------------------------------------------------------------- */
+{
+  const d = DATA.c3_local_strata;
+  const groups = d.by_live_k.map(s => ({
+    label: "live_k = " + s.live_k, sub: `n=${s.n}`,
+    values: { g: s.geomean, lo: s.lo, hi: s.hi },
+    tip: `95% CI [${f(s.lo, 3)}, ${f(s.hi, 3)}] · ${s.basis} bootstrap`,
+  }));
+  const svgK = groupedCols({
+    groups, series: [{ key: "g", label: "cm/cse geomean", color: S1 }],
+    yTitle: "CM ÷ plain CSE (geomean)", xTitle: "controlled live support (live_k) — never nominal n",
+    min: 0.8, max: 1.02, ref: 1.0, labelBars: true, height: 280,
+    fmtVal: v => f(v, 3), tickDigits: 2,
+  });
+  const svgFS = groupedCols({
+    groups: d.families.map(fam => {
+      const cells = d.by_family_shape.filter(c => c.family === fam);
+      const v = {};
+      cells.forEach(c => v[c.shape] = c.geomean);
+      return { label: fam, sub: `n=${cells[0].n} per shape`, values: v,
+        tip: cells.map(c => `${c.shape}: ${f(c.geomean, 3)} [${f(c.lo, 3)}, ${f(c.hi, 3)}]`).join("<br>") };
+    }),
+    series: d.shapes.map((s, i) => ({ key: s, label: s, color: i ? S2 : S1 })),
+    yTitle: "CM ÷ plain CSE (geomean)", xTitle: "operator family × formula shape",
+    min: 0.7, max: 1.06, ref: 1.0, labelBars: true, height: 290,
+    fmtVal: v => f(v, 3), tickDigits: 2,
+  });
+  const best = d.by_family_shape.reduce((a, b) => a.geomean < b.geomean ? a : b);
+  const worst = d.by_family_shape.reduce((a, b) => a.geomean > b.geomean ? a : b);
+
+  const wrap = h("div");
+  wrap.append(h("h3", { text: "By controlled live support" }));
+  wrap.append(h("div", { class: "figwrap" }, [svgK]));
+  wrap.append(h("h3", { text: "By operator family × shape (the cells the summary actually reports)" }));
+  wrap.append(h("div", { class: "legend" }, d.shapes.map((s, i) =>
+    h("span", {}, [h("i", { style: `background:${i ? S2 : S1}` }), h("span", { text: s })]))));
+  wrap.append(h("div", { class: "figwrap" }, [svgFS]));
+
+  const c = card({
+    id: "c3", scope: "Local synthetic generator e3-corrected-2026-08-02.1 · Windows / Ryzen",
+    title: "Local headline by stratum and by operator family",
+    caption: `Fresh B1 replay of the frozen corpus: all-corpus geomean <b>${f(d.headline.geomean, 4)}</b> [${f(d.headline.lo, 3)}, ${f(d.headline.hi, 3)}], identity fields exact on ${192 - d.headline.n_identity_mismatches}/192 formulas, CI overlapping the archived result. Operator family, not support size, is what moves the number.`,
+    note: `Best cell: <b>${best.family} × ${best.shape} at ${f(best.geomean, 3)}</b> — the longest mergeable chains. Worst: <b>${worst.family} × ${worst.shape} at ${f(worst.geomean, 3)}</b>, at or above parity. The summary reports family and shape only as this interaction grid; there are no family-only or shape-only marginal rows, and none are invented here.`,
+    table: table(["group", "n", "geomean", "CI lo", "CI hi", "bootstrap basis"],
+      [...d.by_live_k.map(x => ["live_k = " + x.live_k, x.n, f(x.geomean, 4), f(x.lo, 4), f(x.hi, 4), x.basis]),
+       ...d.by_family_shape.map(x => [`${x.family} × ${x.shape}`, x.n, f(x.geomean, 4), f(x.lo, 4), f(x.hi, 4), x.basis])]),
+    prov: d.provenance,
+    claim: "Claim map row 1.",
+  });
+  c.insertBefore(wrap, c.querySelector("details"));
+  app.append(c);
+}
+
+/* ---- C4 -------------------------------------------------------------- */
+{
+  const d = DATA.c4_epfl_per_circuit;
+  const cats = d.circuits.map(c => ({
+    label: `${c.circuit.replace(".aig", "")} (${c.category === "arithmetic" ? "arith" : "ctrl"}, n=${c.n})`,
+    a: c.cm_cse_flat, b: c.cm_cse,
+    tip: `${c.category} · ${c.n} admitted cones`,
+  }));
+  app.append(card({
+    id: "c4", scope: "External · EPFL AND/INV combinational cones (lsils/benchmarks)",
+    title: "Per-circuit ratios on real circuits",
+    caption: `${d.n_ok} admitted cones from ${d.n_circuits} circuits, ${d.n_guard_skipped} runtime-guard skips. Against CSE-flat the circuits scatter symmetrically around parity; against plain CSE almost every circuit sits below 1.00.`,
+    legend: [[S1, "CM ÷ CSE-flat (primary)"], [S2, "CM ÷ plain CSE (secondary)"]],
+    svg: dumbbell(cats, { domain: [0.80, 1.12], ref: 1.0, aLabel: "cm/cse_flat", bLabel: "cm/cse",
+                          xTitle: "paired kernel-time ratio (geomean per circuit)", title: "EPFL per-circuit ratios" }),
+    note: `By semantic support: ${d.by_sem_bucket.map(b => `${b.bucket} vars → ${f(b.cm_cse_flat, 3)} (n=${b.n})`).join(" · ")}. Per-circuit values are descriptive; only the circuit-clustered all-corpus CI in the panel above is inferential.`,
+    table: table(["circuit", "category", "cones", "cm/cse_flat", "cm/cse"],
+      d.circuits.map(c => [c.circuit, c.category, c.n, f(c.cm_cse_flat, 4), f(c.cm_cse, 4)])),
+    prov: d.provenance,
+    claim: "Claim map rows 10, 11.",
+  }));
+}
+
+/* ---- C5 -------------------------------------------------------------- */
+{
+  const d = DATA.c5_pods;
+  const rows = d.pods.map(p => ({
+    label: p.label, value: p.blocked, lo: p.lo, hi: p.hi, group: "pod",
+    scope: `${p.platform.split("-x86_64")[0]} · numpy ${p.numpy} · ${p.n_formulas} formulas · corpus SHA ${p.corpus_sha_ok ? "verified" : "MISMATCH"}`,
+    basis: "per-pod stratified bootstrap — never pooled across pods",
+  }));
+  app.append(card({
+    id: "c5", scope: "Cross-platform · 5 RunPod cpu3c pods, AMD EPYC, Linux",
+    title: "Cross-platform replication of the local headline",
+    caption: `Each pod re-ran the frozen corpus (SHA-verified on-pod) through the frozen driver. Identity fields exact on 192/192 formulas per pod; every CI excludes parity; pod-to-pod spread <b>${f(d.spread.geomean_spread, 3)}</b> (σ ${f(d.spread.sigma_across_pods, 4)}) against a local reference of ${f(d.local_reference, 4)}.`,
+    legend: [[S3, "per-pod blocked geomean (cm/cse)"], ["var(--ref)", "local reference 0.8876"]],
+    svg: forest(rows, { domain: [0.855, 0.905], ref: d.local_reference, refLabel: "local " + f(d.local_reference, 4),
+                        xTitle: "CM ÷ plain CSE (geomean, per pod)", arm: "cm/cse", ticks: 5 }),
+    note: `<b>${d.verdict}</b>. The cm/cse_flat arm tilts platform-dependently (${d.pods.map(p => f(p.cm_cse_flat, 3)).join(" / ")} on EPYC vs ≈1.00 local) — reported, not pooled away; it is exactly the "residual sign is not stable" caveat, measured on a second CPU family.`,
+    table: table(["pod", "blocked", "CI lo", "CI hi", "round-robin", "cm/cse_flat", "identity", "CI excludes parity"],
+      d.pods.map(p => [p.label, f(p.blocked, 4), f(p.lo, 4), f(p.hi, 4), f(p.rr, 4), f(p.cm_cse_flat, 4),
+                       p.identity_exact ? "exact" : "MISMATCH", p.ci_excludes_parity ? "yes" : "no"])),
+    prov: d.provenance,
+    claim: "Claim map row 12 (UPGRADED from “no cross-platform claim”).",
+  }));
+}
+
+/* ---- C6 -------------------------------------------------------------- */
+{
+  const d = DATA.c6_wrapper_ratio, r = d.rows;
+  const cached = { label: "cached (prebuilt programs)", color: S1, line: true,
+    points: r.map(x => ({ x: x.live_k, y: x.cached_median,
+      tip: `median ${f(x.cached_median, 2)}× · geomean ${f(x.cached_geomean, 2)}× · p10–p90 ${f(x.cached_p10, 2)}–${f(x.cached_p90, 2)} · n=${x.n}`,
+      label: `cached · live_k ${x.live_k}`,
+      direct: x.live_k === 4 || x.live_k === 16 ? f(x.cached_median, 2) + "×" : null })) };
+  const unc = { label: "uncached warm-env (fresh compile both sides)", color: S2, line: true,
+    points: r.filter(x => x.uncached_median != null).map(x => ({ x: x.live_k, y: x.uncached_median,
+      tip: `median ${f(x.uncached_median, 2)}× · geomean ${f(x.uncached_geomean, 2)}×`,
+      label: `uncached · live_k ${x.live_k}`,
+      direct: x.live_k === 16 ? f(x.uncached_median, 2) + "×" : null })) };
+  app.append(card({
+    id: "c6", scope: "Wrapper boundary · REVISED CLAIM · synthetic corrected-admission corpus, Windows",
+    title: "CM wrapper vs bare BitSet — BitSet leads at every live_k ≤ 16",
+    caption: "Paired ratio CM wrapper ÷ bare BitSet. <b>Above 1.00 means BitSet is faster.</b> There is no crossover through the k=16 guard: the trend falls with live_k but stays above parity everywhere. The deck-era sentence “CM modestly ahead at controlled live_k 12/16” is <b>not</b> supported post-repair and must not reappear.",
+    legend: [[S1, "cached regime"], [S2, "uncached warm-env"]],
+    svg: xyPlot({ series: [cached, unc], xDomain: [3, 17], yDomain: [0.8, 8.4], logY: true,
+      xTitle: "controlled live support (live_k)", yTitle: "CM wrapper ÷ BitSet (log)", height: 330,
+      fmtY: v => f(v, v < 1 ? 1 : 0) + "×", fmtX: v => String(Math.round(v)), title: "wrapper ratio" }),
+    note: `${d.engine_note} At every stratum the p10 stays at or above ~0.96 — only a minority of formulas reach parity, none of the medians do.`,
+    table: table(["live_k", "n", "cached median", "cached geomean", "p10", "p90", "uncached median"],
+      r.map(x => [x.live_k, x.n, f(x.cached_median, 3), f(x.cached_geomean, 3), f(x.cached_p10, 3), f(x.cached_p90, 3), f(x.uncached_median, 3)])),
+    prov: d.provenance,
+    claim: "Claim map row 4 (REVISED). Supersedes the V4 C1 chart entirely.",
+  }));
+}
+
+/* ---- C7 -------------------------------------------------------------- */
+{
+  const d = DATA.c7_wrapper_cost;
+  const groups = d.rows.map(x => ({
+    label: "k = " + x.live_k,
+    values: { cm: x.cm_wrapper_us, bs: x.bitset_us, ov: x.overhead_us },
+    tip: x.overhead_us == null ? "overhead not separable at k=4 (bigint fallback)" : null,
+  }));
+  app.append(card({
+    id: "c7", scope: "Wrapper boundary · overhead decomposition",
+    title: "Where the wrapper time goes",
+    caption: "Median per-call cost, cached regime. Wrapper overhead grows 50 → 91 µs across the range while the kernels themselves are tens of µs — so overhead is a <b>co-equal cost through k = 16</b>, which is the mechanism behind the panel above.",
+    legend: [[S1, "CM wrapper total"], [S2, "bare BitSet"], [S3, "CM wrapper overhead (of the total)"]],
+    svg: groupedCols({
+      groups, series: [{ key: "cm", label: "CM wrapper total", color: S1 },
+                       { key: "bs", label: "bare BitSet", color: S2 },
+                       { key: "ov", label: "wrapper overhead", color: S3 }],
+      yTitle: "median µs per call", xTitle: "controlled live support (live_k)", height: 320,
+      labelBars: true, fmtVal: v => v.toFixed(0), fmtTick: v => v.toFixed(0), tickDigits: 0,
+    }),
+    note: `The archived “median 23 µs” overhead figure is <b>superseded</b> on this corpus and protocol. The qualitative claim it supported — overhead dominates the small-k harness boundary — comes out stronger, not weaker.`,
+    table: table(["live_k", "CM wrapper µs", "BitSet µs", "overhead µs"],
+      d.rows.map(x => [x.live_k, f(x.cm_wrapper_us, 1), f(x.bitset_us, 1), f(x.overhead_us, 1)])),
+    prov: d.provenance,
+    claim: "Claim map row 5 (REVISED).",
+  }));
+}
+
+/* ---- C8 -------------------------------------------------------------- */
+{
+  const d = DATA.c8_ambient_n;
+  const ks = [...new Set(d.rows.map(r => r.live_k))].sort((a, b) => a - b);
+  const groups = ks.map(k => {
+    const rs = d.rows.filter(r => r.live_k === k);
+    const v = {};
+    rs.forEach(r => v["n" + r.ambient_n] = r.geomean);
+    return { label: "live_k = " + k, sub: `n=${rs[0].n} formulas`, values: v,
+             tip: `spread across ambient n: ${f(Math.max(...rs.map(r => r.geomean)) - Math.min(...rs.map(r => r.geomean)), 3)}` };
+  });
+  app.append(card({
+    id: "c8", scope: "Wrapper boundary · V4 C1 protocol re-run · ambient n ∈ {16, 20, 24}",
+    title: "Nominal n is not workload size — live_k is",
+    caption: "The same formulas embedded at three ambient variable counts by fixing dead variables. Ratios are flat across ambient n at fixed live_k; the only thing that moves the number is live support. Values above 1.00 mean the BitSet control is faster.",
+    legend: [[S1, "ambient n = 16"], [S2, "ambient n = 20"], [S3, "ambient n = 24"]],
+    svg: groupedCols({
+      groups, series: [{ key: "n16", label: "n = 16", color: S1 },
+                       { key: "n20", label: "n = 20", color: S2 },
+                       { key: "n24", label: "n = 24", color: S3 }],
+      yTitle: "CM wrapper ÷ BitSet (geomean)", xTitle: "controlled live support (live_k)",
+      min: 0, max: 2.1, ref: 1.0, labelBars: true, height: 320, fmtVal: v => f(v, 2), tickDigits: 1,
+    }),
+    note: "This is the exact protocol behind the deck-era C1 slide. Re-run on corrected-admission corpora it confirms the nominal-n claim and reverses the sign claim — both facts come from the same chart.",
+    table: table(["live_k", "ambient n", "formulas", "geomean", "median", "p10", "p90", "CM µs", "BitSet µs"],
+      d.rows.map(r => [r.live_k, r.ambient_n, r.n, f(r.geomean, 3), f(r.median, 3), f(r.p10, 3), f(r.p90, 3),
+                       f(r.cm_us, 1), f(r.bitset_us, 1)])),
+    prov: d.provenance,
+    claim: "Claim map rows 6 (CONFIRMED) and 4 (REVISED).",
+  }));
+}
+
+/* ---- C9 -------------------------------------------------------------- */
+{
+  const d = DATA.c9_guard;
+  const ns = [...new Set(d.rows.map(r => r.n))].sort((a, b) => a - b);
+  const groups = ns.map(n => {
+    const rs = d.rows.filter(r => r.n === n);
+    const v = {};
+    rs.forEach(r => v["d" + r.depth] = r.declined_rate * 100);
+    return { label: "n = " + n, values: v,
+             sub: `median live_k ${rs.map(r => r.median_live_k).join(" / ")}`,
+             tip: rs.map(r => `depth ${r.depth}: live_k ${r.min_live_k}–${r.max_live_k} (median ${r.median_live_k})`).join("<br>") };
+  });
+  app.append(card({
+    id: "c9", scope: "Guard / decline · 200 trials per cell, 15 cells",
+    title: "Decline behaviour, and zero wrong guards",
+    caption: `Decline rate by nominal n and formula depth. Depth 4 never declines at any n; depth 8 declines 75–93%. Across all <b>${d.totals.trials.toLocaleString()} trials there were ${d.totals.wrong_guard} wrong guards and ${d.totals.oversized} oversized outputs</b> — the reduced-output guard and the C3 fairness fix hold post-repair.`,
+    legend: [[S1, "depth 4"], [S2, "depth 6"], [S3, "depth 8"]],
+    svg: groupedCols({
+      groups, series: [{ key: "d4", label: "depth 4", color: S1 },
+                       { key: "d6", label: "depth 6", color: S2 },
+                       { key: "d8", label: "depth 8", color: S3 }],
+      yTitle: "declined (%)", xTitle: "nominal variable count (n) — sub-label: median live_k at depth 4 / 6 / 8",
+      min: 0, max: 100, labelBars: true, height: 330,
+      fmtVal: v => v.toFixed(0) + "%", fmtTick: v => v.toFixed(0) + "%", tickDigits: 0,
+    }),
+    note: "The median-live_k sub-labels are the second half of the nominal-n story: at depth 4 the median live support is 5–6 regardless of whether n is 16 or 24.",
+    table: table(["n", "depth", "trials", "declined %", "median live_k", "min", "max", "wrong guards", "oversized"],
+      d.rows.map(r => [r.n, r.depth, r.trials, (r.declined_rate * 100).toFixed(1), r.median_live_k,
+                       r.min_live_k, r.max_live_k, r.wrong_guard, r.oversized])),
+    prov: d.provenance,
+    claim: "Claim map row 7 (CONFIRMED); replaces the superseded pre-repair n ≥ 18 sweeps.",
+  }));
+}
+
+/* ---- C10 ------------------------------------------------------------- */
+{
+  const d = DATA.c10_compile_scaling, cs = d.cases;
+  const pat = d.pathological;
+  const pt = (c, xkey, directFor) => ({
+    x: c[xkey], y: c.cm_prep_us, label: c.id,
+    tip: `${c.family} · ${c.structural_nodes} structural nodes · ${c.unfolded.toLocaleString()} unfolded occurrences<br>CM prep ${us(c.cm_prep_us)} · CSE-flat prep ${us(c.cse_flat_prep_us)} · prep ratio ${f(c.prep_ratio_cm_vs_cse, 2)}×`,
+    direct: c.id === directFor ? us(c.cm_prep_us) : null,
+    anchor: c.id === directFor ? "end" : "middle",
+  });
+  const ladderCases = cs.filter(c => c.family === "shared_ladder").sort((a, b) => a.unfolded - b.unfolded);
+  const otherCases = cs.filter(c => c.family !== "shared_ladder");
+
+  const svgA = xyPlot({
+    series: [
+      { label: "other 24 cases", color: S1, points: otherCases.map(c => pt(c, "unfolded", null)) },
+      { label: "shared-ladder family (one structure, deepened)", color: S2, line: true,
+        points: ladderCases.map(c => pt(c, "unfolded", pat.id)) },
+    ],
+    xDomain: [10, 2e7], logX: true, yDomain: [100, 20000], logY: true, height: 300,
+    xTitle: "tree-unfolded operator occurrences (log)", yTitle: "CM prep (µs, log)",
+    fmtY: v => us(v), fmtX: v => v >= 1e6 ? (v / 1e6) + "M" : v >= 1000 ? (v / 1000) + "k" : String(v),
+    title: "prep vs unfolding",
+  });
+  const svgB = xyPlot({
+    series: [
+      { label: "other 24 cases", color: S1, points: otherCases.map(c => pt(c, "structural_nodes", null)) },
+      { label: "shared-ladder family", color: S2, line: true,
+        points: ladderCases.map(c => pt(c, "structural_nodes", null)) },
+    ],
+    xDomain: [20, 700], yDomain: [100, 20000], logY: true, height: 300,
+    xTitle: "structural DAG nodes", yTitle: "CM prep (µs, log)",
+    fmtY: v => us(v), fmtX: v => String(Math.round(v)), title: "prep vs structural nodes",
+  });
+
+  const legend = () => h("div", { class: "legend" }, [
+    h("span", {}, [h("i", { style: `background:${S1}` }), h("span", { text: "other 24 cases" })]),
+    h("span", {}, [h("i", { style: `background:${S2}` }), h("span", { text: "shared-ladder family (one structure, deepened)" })]),
+  ]);
+  const wrap = h("div");
+  wrap.append(h("h3", { text: "Prep vs tree unfolding — the ladder line is the money plot: flat across six orders of magnitude" }));
+  wrap.append(legend());
+  wrap.append(h("div", { class: "figwrap" }, [svgA]));
+  wrap.append(h("h3", { text: "Prep vs structural DAG nodes — the same points, now linear" }));
+  wrap.append(legend());
+  wrap.append(h("div", { class: "figwrap" }, [svgB]));
+
+  const c = card({
+    id: "c10", scope: "Compile / DAG scaling · 31 constructed cases, 5 families, Windows",
+    title: "Compilation tracks structural nodes, not tree size",
+    caption: `The same ${d.n_cases} cases plotted against two x-axes. The orange line is the controlled comparison — one ladder structure deepened step by step, so <i>only</i> the unfolding grows: it spans ${ladderCases[0].unfolded.toLocaleString()} → <b>${pat.unfolded.toLocaleString()} unfolded operator occurrences (${Math.round(pat.unfolded / ladderCases[0].unfolded).toLocaleString()}×) while prep rises only ${us(ladderCases[0].cm_prep_us)} → ${us(pat.cm_prep_us)} (${f(pat.cm_prep_us / ladderCases[0].cm_prep_us, 1)}×)</b>. In the second panel the same ladder points climb with structural nodes like everything else. The blue cloud's apparent drift in panel 1 is confounded — those 24 cases vary in structure <i>and</i> unfolding at once — which is exactly why the controlled family carries the claim. All ${d.n_cases} cases passed complete packed equality before timing.`,
+    prov: d.provenance,
+    claim: "Claim map row 8 (CONFIRMED).",
+    note: `Prep multiple vs CSE across all cases: ${f(d.prep_ratio_range[0], 1)}–${f(d.prep_ratio_range[1], 1)}× — structure-dependent but bounded, and consistent with the corrected-E3 geomean.`,
+    table: table(["case", "family", "structural nodes", "unfolded", "sharing factor", "CM prep µs", "CSE-flat prep µs", "prep ratio"],
+      cs.map(x => [x.id, x.family, x.structural_nodes, x.unfolded.toLocaleString(), f(x.sharing_factor, 1),
+                   f(x.cm_prep_us, 1), f(x.cse_flat_prep_us, 1), f(x.prep_ratio_cm_vs_cse, 2)])),
+  });
+  c.insertBefore(wrap, c.querySelector("details"));
+  app.append(c);
+}
+
+/* ---- C11 ------------------------------------------------------------- */
+{
+  const d = DATA.c11_breakeven;
+  const mkHist = (side) => {
+    const groups = d.bin_labels.map((lab, i) => ({
+      label: lab, values: { c: side.hist[i] },
+      tip: `${side.hist[i]} of ${side.n_finite} finite-break-even formulas`,
+    }));
+    groups.push({ label: "never", values: { n: side.n_never },
+                  tip: `${side.n_never} formulas never repay the prep cost at any reuse count` });
+    return groupedCols({
+      groups,
+      series: [{ key: "c", label: "breaks even", color: S1 }, { key: "n", label: "never breaks even", color: S2 }],
+      yTitle: "formulas", xTitle: "evaluations needed to repay CM's prep cost",
+      min: 0, labelBars: true, height: 280, fmtVal: v => String(Math.round(v)),
+      fmtTick: v => String(Math.round(v)), tickDigits: 0,
+    });
+  };
+  const wrap = h("div");
+  wrap.append(h("h3", { html: `Synthetic corpus vs <b>plain CSE</b> — prep ${f(d.synthetic.prep_multiple_geomean, 2)}×, median ${f(d.synthetic.median_finite, 1)} evals, ${d.synthetic.n_never} never` }));
+  wrap.append(h("div", { class: "figwrap" }, [mkHist(d.synthetic)]));
+  wrap.append(h("h3", { html: `EPFL circuits vs <b>CSE-flat</b> — prep ${f(d.epfl.prep_multiple_geomean, 2)}×, median ${f(d.epfl.median_finite, 1)} evals, ${d.epfl.n_never} never` }));
+  wrap.append(h("div", { class: "figwrap" }, [mkHist(d.epfl)]));
+
+  const c = card({
+    id: "c11", scope: "Prep / break-even economics · two corpora, two baselines",
+    title: "Reuse count, not raw speed, decides whether CM pays",
+    caption: `CM's preparation costs ~4× the CSE baselines, so the kernel advantage has to be amortised. The orange bar is the part that matters: <b>${d.synthetic.n_never} of 192 synthetic formulas and ${d.epfl.n_never} of ${d.epfl.n_finite + d.epfl.n_never} real EPFL cones never break even at any reuse count.</b> On real circuits the median finite break-even is more than twice the synthetic one.`,
+    legend: [[S1, "finite break-even (binned)"], [S2, "never breaks even"]],
+    prov: d.provenance,
+    claim: "Claim map row 9 (CONFIRMED + extended).",
+    note: `Baselines differ by design and are <b>not comparable to each other</b>: the synthetic panel is vs plain CSE (the arm the synthetic headline uses), the EPFL panel is vs CSE-flat (the arm the external primary uses). Note the B1 fresh replay reports median ${f(d.synthetic.median_finite, 1)} with ${d.synthetic.n_never} never, where the archived 2026-08-02 run of the same corpus reported 78.5 with 30 never — break-even is a ratio of a prep delta to a per-eval gain, so it moves with ordinary timing noise. Cite the replay values with the replay headline.`,
+    table: table(["corpus", "baseline", "bin", "formulas"],
+      [...d.bin_labels.map((l, i) => ["synthetic (192)", d.synthetic.baseline, l, d.synthetic.hist[i]]),
+       ["synthetic (192)", d.synthetic.baseline, "never", d.synthetic.n_never],
+       ...d.bin_labels.map((l, i) => ["EPFL (129)", d.epfl.baseline, l, d.epfl.hist[i]]),
+       ["EPFL (129)", d.epfl.baseline, "never", d.epfl.n_never]]),
+  });
+  c.insertBefore(wrap, c.querySelector("details"));
+  app.append(c);
+}
+
+/* ---- C12 / C13 ------------------------------------------------------- */
+{
+  const d = DATA.c12_cudd, r = d.rows;
+  const cons = groupedCols({
+    groups: r.map(x => ({ label: "live_k = " + x.live_k, sub: `${x.cudd_dag_size} BDD nodes`,
+      values: { cm: x.cm_prep_us, cse: x.cse_flat_prep_us, cudd: x.cudd_build_us },
+      tip: `CUDD DAG: ${x.cudd_dag_size} nodes vs 2^${x.live_k} truth bits` })),
+    series: [{ key: "cm", label: "CM prep", color: S1 },
+             { key: "cse", label: "CSE-flat prep", color: S2 },
+             { key: "cudd", label: "CUDD build", color: S3 }],
+    yTitle: "median µs", xTitle: "controlled live support (live_k)", min: 0, height: 300,
+    labelBars: true, fmtVal: v => v.toFixed(0), fmtTick: v => v.toFixed(0), tickDigits: 0,
+  });
+  const evSeries = (key, label, color) => ({
+    label, color, line: true,
+    points: r.map(x => ({
+      x: x.live_k, y: x[key], label: `${label} · live_k ${x.live_k}`,
+      tip: `${us(x[key])} median · CSE-flat kernel here is ${us(x.cse_flat_kernel_us)} (within 4% of CM)`,
+      direct: x.live_k === 16 ? us(x[key]) : null, anchor: "end",
+    })),
+  });
+  const evalp = xyPlot({
+    series: [evSeries("cm_kernel_us", "CM words kernel (full 2^k)", S1),
+             evSeries("cudd_eval256_us", `CUDD ${d.pod.eval_samples}-assignment eval`, S2),
+             evSeries("cudd_extract_full_us", "CUDD full 2^k extraction", S3)],
+    xDomain: [7, 17], yDomain: [10, 2e6], logY: true, height: 340,
+    xTitle: "controlled live support (live_k)", yTitle: "median µs (log scale)",
+    fmtY: v => us(v), fmtX: v => String(Math.round(v)), title: "evaluation cost",
+  });
+
+  const wrap = h("div");
+  wrap.append(h("h3", { text: "Panel 1 — construction (build the representation once)" }));
+  wrap.append(h("div", { class: "legend" }, [
+    h("span", {}, [h("i", { style: `background:${S1}` }), h("span", { text: "CM prep" })]),
+    h("span", {}, [h("i", { style: `background:${S2}` }), h("span", { text: "CSE-flat prep" })]),
+    h("span", {}, [h("i", { style: `background:${S3}` }), h("span", { text: "CUDD build" })]),
+  ]));
+  wrap.append(h("div", { class: "figwrap" }, [cons]));
+  wrap.append(h("h3", { text: "Panel 2 — evaluation to packed output (log scale; dots not bars — a log axis has no zero baseline)" }));
+  wrap.append(h("div", { class: "legend" }, [
+    h("span", {}, [h("i", { style: `background:${S1}` }), h("span", { text: "CM words kernel, full 2^k" })]),
+    h("span", {}, [h("i", { style: `background:${S2}` }), h("span", { text: `CUDD ${d.pod.eval_samples}-assignment eval` })]),
+    h("span", {}, [h("i", { style: `background:${S3}` }), h("span", { text: "CUDD full 2^k extraction" })]),
+  ]));
+  wrap.append(h("div", { class: "figwrap" }, [evalp]));
+
+  const c = card({
+    id: "c12", scope: `Same-box matched · one Linux pod, ${d.pod.cpu_model}, CUDD ${d.pod.cudd_version}`,
+    title: "CUDD comparison — construction and evaluation kept separate",
+    caption: `Construction and evaluation are different quantities and are <b>never combined into a single three-way winner</b>. CUDD's strength is real and visible in panel 1's sub-labels: it represents these cones in ${r[0].cudd_dag_size}–${r[2].cudd_dag_size} BDD nodes rather than 2^k truth bits. Its cost is in panel 2: producing the same packed output takes ${d.extract_vs_kernel.map(e => Math.round(e.factor).toLocaleString() + "×").join(" / ")} the CM words kernel at k = 8 / 12 / 16.`,
+    prov: d.provenance,
+    claim: "Claim map row 13 (CONFIRMED, same-box matched — fills V4's blocked primary experiment).",
+    note: `Integrity on all ${d.integrity.n_rows} rows: <code>robdd_is_cudd</code> ${d.integrity.robdd_is_cudd_all ? "true everywhere (no autoref fallback)" : "FAILED"}, CM/CSE-flat packed equality ${d.integrity.packed_equal_cm_cse_flat_all ? "complete" : "FAILED"}, and <b>full 2^k CUDD extraction packed-equal to the CM bits on every formula</b> ${d.integrity.full_extraction_equal_all ? "(exhaustive, not sampled)" : "— FAILED"}. Conventions: ${d.pod.conventions}. Pod ${d.pod.flavor}, ${d.pod.vcpu} vCPU, terminated after collection: ${d.pod.terminated}.`,
+    table: table(["live_k", "CM prep", "CSE-flat prep", "CUDD build", "CM kernel", "CSE-flat kernel", "CUDD 256-eval", "CUDD full extract", "BDD nodes"],
+      r.map(x => [x.live_k, us(x.cm_prep_us), us(x.cse_flat_prep_us), us(x.cudd_build_us), us(x.cm_kernel_us),
+                  us(x.cse_flat_kernel_us), us(x.cudd_eval256_us), us(x.cudd_extract_full_us), x.cudd_dag_size])),
+  });
+  c.insertBefore(wrap, c.querySelector("details"));
+  app.append(c);
+}
+
+/* ---- C14 ------------------------------------------------------------- */
+{
+  const d = DATA.c14_schedule;
+  const cats = d.rows.map(r => ({ label: r.source, a: r.blocked, b: r.rr,
+    tip: `${r.arm} · round-robin differs from blocked by ${r.delta_pct >= 0 ? "+" : ""}${f(r.delta_pct, 2)}%` }));
+  app.append(card({
+    id: "c14", scope: "Schedule discipline · every source, both schedules",
+    title: "Blocked and round-robin, reported side by side and never pooled",
+    caption: `Every source reports both cache schedules. Agreement is tight externally (EPFL +0.78%) and on every pod (+0.5% to +0.75%) — but <b>not on the synthetic corpus</b>: the B1 fresh replay disagrees by ${f(d.rows[0].delta_pct, 2)}% all-corpus and up to ${f(d.max_abs_cell_delta_pct, 1)}% per cell, where the archived run of the same corpus disagreed by only ${f(d.rows[1].delta_pct, 2)}%. See the flagged-discrepancies panel below.`,
+    legend: [[S1, "blocked (warm within formula)"], [S2, "round-robin"]],
+    svg: dumbbell(cats, { domain: [0.86, 1.02], ref: 1.0, aLabel: "blocked", bLabel: "round-robin",
+                          xTitle: "geomean ratio (arm varies by row — see table)", padL: 215, title: "schedule agreement" }),
+    note: "The arm differs by source (the EPFL row is the CM/CSE-flat primary; the rest are CM/plain-CSE), so the readable quantity here is the <i>gap within each row</i>, never a comparison across rows. Pooling the two schedules is never done anywhere in this campaign.",
+    table: table(["source", "arm", "blocked", "round-robin", "Δ %"],
+      d.rows.map(r => [r.source, r.arm, f(r.blocked, 4), f(r.rr, 4), (r.delta_pct >= 0 ? "+" : "") + f(r.delta_pct, 2)])
+        .concat(d.per_cell_b1.map(c => ["B1 replay cell: " + c.group, "CM / plain CSE", f(c.blocked, 4), f(c.rr, 4),
+          (c.delta_pct >= 0 ? "+" : "") + f(c.delta_pct, 2)]))),
+    prov: d.provenance,
+    claim: "Claim map row 16 — “never pooled” CONFIRMED; “agree within ~1–2%” needs narrowing (see flags).",
+  }));
+}
+
+/* ---- C15 (BX1) -------------------------------------------------------- */
+{
+  const d = DATA.c15_engines, r = d.rows;
+  // Label selectively — the three curves converge at k=16, so stacking a label
+  // on each end would detach them from their lines. One label per claim instead.
+  const mkS = (key, label, color, directAt) => ({
+    label, color, line: true,
+    points: r.filter(x => x[key] != null).map(x => ({
+      x: x.live_k, y: x[key], label: `${label} · live_k ${x.live_k}`,
+      tip: `${us(x[key])} median · fastest engine at this k: ${x.fastest.replace(/_/g, " ")}`,
+      direct: x.live_k === directAt ? label + " " + us(x[key]) : null,
+      anchor: x.live_k >= 14 ? "end" : "middle",
+    })),
+  });
+  app.append(card({
+    id: "c15", scope: "Engine selection · 80 synthetic formulas, corrected-E3 scale, Windows",
+    title: "Words/flat/bigint crossover — not a universal k = 6",
+    caption: "Steady-state kernel time per engine. Flat bigint beats the recursive evaluator at every live_k (0.55–0.88×) — that half of the deck claim strengthens. But the words engine carries ~15–20 µs of fixed dispatch, so on formulas of this size <b>flat stays fastest through k = 12 and words only wins at k = 16</b> (0.82× vs flat).",
+    legend: [[S1, "recursive bigint"], [S2, "flat bigint"], [S3, "words"]],
+    svg: xyPlot({
+      series: [mkS("recursive_us", "recursive bigint", S1, null),
+               mkS("flat_us", "flat bigint", S2, 12),
+               mkS("words_us", "words", S3, 16)],
+      xDomain: [2, 17], yDomain: [0, 70], height: 330,
+      xTitle: "controlled live support (live_k)", yTitle: "median kernel µs",
+      fmtY: v => v.toFixed(0), fmtX: v => String(Math.round(v)), title: "engine crossover",
+    }),
+    note: `The historical “words at k ≥ 6” came from deck-era corpora with much larger per-formula op counts, where kernel work amortised that fixed overhead early. Both statements are corpus-scoped; restate the claim as <b>words wins once (2^k words) × ops amortises ~20 µs of dispatch</b>. No earlier campaign conclusion changes — B2 and B4 used words symmetrically on both sides at every k ≥ 6.`,
+    table: table(["live_k", "formulas", "recursive µs", "flat µs", "words µs", "flat/recursive", "words/flat", "fastest"],
+      r.map(x => [x.live_k, x.n, f(x.recursive_us, 1), f(x.flat_us, 1), f(x.words_us, 1),
+                  f(x.flat_vs_recursive, 3), f(x.words_vs_flat, 3), x.fastest.replace(/_/g, " ")])),
+    prov: d.provenance,
+    claim: "Claim-map addendum row 15 (REVISED — workload-dependent).",
+  }));
+}
+
+/* ---- C16 (BX2) -------------------------------------------------------- */
+{
+  const d = DATA.c16_cudd_orders, r = d.rows;
+  const nodes = groupedCols({
+    groups: r.map(x => ({ label: "live_k = " + x.live_k,
+      values: { fx: x.fixed_nodes, b10: x.best10_nodes, ro: x.reorder_nodes },
+      tip: `best-10 node ratio ${f(x.node_ratio_best10, 2)} · dynamic-reorder node ratio ${f(x.node_ratio_reorder, 2)}` })),
+    series: [{ key: "fx", label: "fixed natural order", color: S1 },
+             { key: "b10", label: "best-of-10 selected", color: S2 },
+             { key: "ro", label: "dynamic reordering", color: S3 }],
+    yTitle: "median BDD nodes", xTitle: "controlled live support (live_k)", min: 0, height: 290,
+    labelBars: true, fmtVal: v => v.toFixed(0), fmtTick: v => v.toFixed(0), tickDigits: 0,
+  });
+  const costSeries = (key, label, color) => ({
+    label, color, line: true,
+    points: r.map(x => ({
+      x: x.live_k, y: x[key], label: `${label} · live_k ${x.live_k}`,
+      tip: `${us(x[key])} median · pure search cost is ${f(x.pure_10build_sum_us / x.fixed_build_us, 1)}× a single build`,
+      direct: x.live_k === 16 ? us(x[key]) : null, anchor: "end",
+    })),
+  });
+  const cost = xyPlot({
+    series: [costSeries("fixed_build_us", "single fixed-order build", S1),
+             costSeries("pure_10build_sum_us", "10-build search sum (pure)", S2)],
+    xDomain: [7, 17], yDomain: [10, 1000], logY: true, height: 300,
+    xTitle: "controlled live support (live_k)", yTitle: "median µs (log scale)",
+    fmtY: v => us(v), fmtX: v => String(Math.round(v)), title: "order-search cost",
+  });
+  const wrap = h("div");
+  wrap.append(h("h3", { text: "What order search buys — BDD size" }));
+  wrap.append(h("div", { class: "legend" }, [
+    h("span", {}, [h("i", { style: `background:${S1}` }), h("span", { text: "fixed natural order" })]),
+    h("span", {}, [h("i", { style: `background:${S2}` }), h("span", { text: "best-of-10 selected" })]),
+    h("span", {}, [h("i", { style: `background:${S3}` }), h("span", { text: "dynamic reordering" })]),
+  ]));
+  wrap.append(h("div", { class: "figwrap" }, [nodes]));
+  wrap.append(h("h3", { text: "What it costs — the search total, not just the winner's build" }));
+  wrap.append(h("div", { class: "legend" }, [
+    h("span", {}, [h("i", { style: `background:${S1}` }), h("span", { text: "single fixed-order build" })]),
+    h("span", {}, [h("i", { style: `background:${S2}` }), h("span", { text: "sum of all 10 builds (pure search)" })]),
+  ]));
+  wrap.append(h("div", { class: "figwrap" }, [cost]));
+
+  const c = card({
+    id: "c16", scope: `CUDD order sensitivity · one Linux pod, ${d.integrity.n_orders} orders × ${d.integrity.n_rows} formulas`,
+    title: "CUDD variable-order search — the labelling caution, with data",
+    caption: `Best-of-10 does buy smaller BDDs — node ratios ${r.map(x => f(x.node_ratio_best10, 2)).join(" / ")} at k = 8 / 12 / 16, a 21–30% reduction — but it costs ${r.map(x => Math.round(x.pure_10build_sum_us / x.fixed_build_us) + "×").join(" / ")} a single build in pure search. <b>Dynamic reordering is a no-op here</b>: node ratio exactly 1.00 in every stratum, because these BDDs (≤ ${r[2].fixed_nodes} nodes) never reach CUDD's reordering trigger.`,
+    prov: d.provenance,
+    claim: "Claim-map addendum row 14 (CLOSED with data). B5's own comparison used fixed natural order, so it is unaffected.",
+    note: `<b>Axis warning:</b> ${d.build_window_note} Selection rule: ${d.integrity.selection_rule}. Correctness: ${d.integrity.correctness_mode}; <code>robdd_is_cudd</code> ${d.integrity.robdd_is_cudd_all ? "true on all rows" : "FAILED"}, sampled checks ${d.integrity.sampled_checks_all_ok ? "all pass" : "FAILED"}. The driver's recorded <code>order_search_total_us</code> (${r.map(x => (x.search_total_recorded_us / 1000).toFixed(0) + " ms").join(" / ")}) additionally includes per-order correctness verification and overstates pure search by ~50× — the chart plots the pure 10-build sum instead, computed from <code>per_order[].build_us</code>.`,
+    table: table(["live_k", "n", "fixed µs", "fixed nodes", "best-10 µs", "best-10 nodes", "reorder µs", "reorder nodes", "node ratio b10", "node ratio reorder", "pure 10-build sum µs"],
+      r.map(x => [x.live_k, x.n, f(x.fixed_build_us, 1), x.fixed_nodes, f(x.best10_build_us, 1), x.best10_nodes,
+                  f(x.reorder_build_us, 1), x.reorder_nodes, f(x.node_ratio_best10, 3), f(x.node_ratio_reorder, 3),
+                  f(x.pure_10build_sum_us, 1)])),
+  });
+  c.insertBefore(wrap, c.querySelector("details"));
+  app.append(c);
+}
+
+/* ---- flags ----------------------------------------------------------- */
+{
+  const b = h("section", { class: "banner", id: "flags", style: "border-left-color: var(--warning)" });
+  b.append(h("h2", { text: "Flagged — claim-map prose that the raw evidence does not fully support", style: "color: var(--text-primary)" }));
+  b.append(h("p", { class: "caption", html: "Found while re-reading every number from its source file. Neither changes a campaign verdict; both change how a sentence should be worded on a slide." }));
+  b.append(h("div", { class: "tablewrap" }, [table(["claim-map row", "what the raw files say", "what to do"],
+    DATA._flags.map(x => [x.claim_row, x.finding, x.consequence]))]));
+  app.append(b);
+}
+
+/* ---- corrections ----------------------------------------------------- */
+{
+  const b = h("section", { class: "banner", id: "corrections" });
+  b.append(h("h2", { text: "Corrections — numbers that appear nowhere else on this page" }));
+  b.append(h("p", { class: "caption", html: "These are listed once, here, explicitly labelled. They must not appear on any chart, caption, or slide." }));
+  b.append(h("div", { class: "tablewrap" }, [table(["superseded number", "what it claimed", "what replaces it"],
+    DATA._superseded.map(s => [s.number, s.what, s.replaced_by]))]));
+  app.append(b);
+}
+
+/* ---- footer ---------------------------------------------------------- */
+{
+  const v = M.verdicts;
+  app.append(h("footer", {}, [
+    h("p", { html: Object.entries(v).map(([k, x]) => `<b>${k}</b> ${x}`).join(" · ") }),
+    h("p", { html: `EPFL source: ${M.epfl_source.url} @ <code>${M.epfl_source.commit.slice(0, 10)}</code> (clone never staged: ${!M.epfl_source.staged_or_committed}). Frozen corpus SHA-256 <code>${M.corpora_sha256.b1_frozen_corpus.slice(0, 16)}…</code>; EPFL corpus <code>${M.corpora_sha256.epfl_corpus.slice(0, 16)}…</code>.` }),
+    h("p", { text: "Generated by cm_display_build_2026_08_03.py from committed evidence only. Regenerate by re-running that script." }),
+  ]));
+}
+</script>
+</body>
+</html>

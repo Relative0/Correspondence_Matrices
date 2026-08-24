@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — expert technical summary</title>
+<meta name="description" content="Dense technical cut: every chart, every interval with its clustering basis, protocol notes, corrections ledger, and file-level provenance.">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+
+<script>
+/* ============================================================== EXPERT CUT
+   Derived from the master page. Charts and provenance first, prose only where
+   it changes an interpretation. Every figure is the same object the master
+   renders, from the same data, so the two cannot drift. */
+
+const C = DATA._content;
+const M = DATA._campaign;
+const app = document.getElementById("app");
+
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· expert summary</span>",
+  links: [["index.html", "← full knowledge base"], ["#x1", "Kernel"], ["#x2", "Boundary"],
+          ["#x3", "Economics"], ["#x4", "Symbolic"], ["#x5", "Protocol"],
+          ["#x6", "Corrections"], ["#x7", "Open"], ["#x8", "Provenance"]],
+}));
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: "Correspondence Matrices — expert technical summary" }),
+  h("p", { class: "lede", text:
+    "Every measurement from the 2026-08-03 campaign, with its scope, its clustering basis, and the file it " +
+    "was read from. Interpretation is kept to where it changes what a number means." }),
+  h("p", { class: "meta", html:
+    `Repository <code>${M.build_head.slice(0, 7)}</code> · evidence campaign <code>${M.campaign_head.slice(0, 7)}</code> · ` +
+    `local box ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy} · ` +
+    `pods Linux/AMD EPYC cpu3c, all terminated · campaign spend ${FMT.usd(M.cost_usd)} of $${M.cost_cap_usd.toFixed(2)} cap · ` +
+    `tests ${M.tests}` }),
+]));
+
+app.append(banner("note", "Reading conventions enforced throughout", [
+  "<b>live_k on every workload axis</b>, never nominal namespace size — verified, not assumed. " +
+  "<b>Construction and evaluation never merged</b> into a single ranking. " +
+  "<b>Blocked and round-robin never pooled.</b> " +
+  "<b>CM vs CSE-flat is stated as kernel-equivalence</b>; the residual's sign is not stable across scopes and " +
+  "is never rendered as a win. " +
+  "<b>Superseded figures appear only in §6</b>, struck through.",
+  "Every timed comparison is gated on bit-for-bit output agreement across all arms before any measurement " +
+  "is recorded. Every summary statistic below was recomputed from raw per-formula rows by the build script " +
+  "that generated this page; none is copied from a report's prose.",
+]));
+
+/* ------------------------------------------------------------ verdicts */
+{
+  const s = section("verdicts", "0", "Campaign verdicts", null);
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["leg", "verdict"], Object.entries(M.verdicts).map(([k, v]) => [k, v]), "wrap")]));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["corpus", "SHA-256"], Object.entries(M.corpora_sha256).map(([k, v]) => [k, `<code>${v}</code>`]), "wrap")]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ kernel */
+{
+  const s = section("x1", "1", "Kernel-level results",
+    "Two arms, three scopes, never pooled. Each row carries its own resampling unit.");
+  s.append(FIG.kernelForest());
+  s.append(FIG.flatForest());
+  s.append(techBlock([
+    "Mechanism, stated as a falsifiable prediction rather than a post-hoc explanation: CM's advantage over " +
+    "a plain CSE comes from n-ary instruction merging over associative operator chains. On a corpus with no " +
+    "mergeable chains beyond what flattening already captures, the mechanism predicts parity. The external " +
+    "corpus is AND/INV form — every gate binary — and the instruction-count and executed-operation ratios " +
+    "against CSE-flat are both exactly {{mech.instr_ratio}}. Parity was predicted and parity was measured.",
+    "The residual against CSE-flat is {{flat.local}} locally, {{flat.epfl}} externally and " +
+    "{{flat.pod.min}}–{{flat.pod.max}} across pods — straddling parity in both directions. A quantity whose " +
+    "sign is not stable across scopes is reported as equivalence.",
+  ], null));
+  s.append(FIG.strata());
+  s.append(FIG.epflCircuits());
+  s.append(FIG.pods());
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ boundary */
+{
+  const s = section("x2", "2", "Wrapper boundary and workload axis",
+    "The end-to-end call, its overhead decomposition, the irrelevance of ambient namespace size, and the " +
+    "explicit-output guard.");
+  s.append(FIG.wrapperRatio());
+  s.append(FIG.wrapperCost());
+  s.append(FIG.ambientN());
+  s.append(FIG.guard());
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ economics */
+{
+  const s = section("x3", "3", "Preparation and break-even economics",
+    "Compilation scaling, then the break-even distributions with their baselines matched.");
+  s.append(FIG.compileScaling());
+  s.append(FIG.breakeven());
+  s.append(techBlock([
+    "Break-even is the preparation premium divided by the per-evaluation kernel gain. Never-break-even " +
+    "classification depends only on the sign of that gain; preparation cost scales the finite counts but " +
+    "plays no part in the classification. Matched-baseline pairs: synthetic vs plain CSE median " +
+    "{{be.syn.median}} ({{be.syn.never}}/{{be.syn.total}} never, prep {{be.syn.prep}}) against EPFL vs " +
+    "plain CSE median {{be.epfl.median.matched}} ({{be.epflcse.never}}/{{be.epfl.total}} never, prep " +
+    "{{be.epflcse.prep}}). The EPFL-vs-CSE-flat arm — median {{be.epfl.median}}, {{be.epfl.never}}/" +
+    "{{be.epfl.total}} never, prep {{be.epfl.prep}} — is a different baseline and is never paired with the " +
+    "synthetic figure.",
+  ], null));
+  s.append(FIG.engines());
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ symbolic */
+{
+  const s = section("x4", "4", "Symbolic construction and extraction",
+    "Construction and evaluation as separate panels, then order sensitivity. The two runs use different " +
+    "build-window conventions and are never plotted on a shared axis.");
+  s.append(FIG.cudd());
+  s.append(FIG.cuddOrders());
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ protocol */
+{
+  const s = section("x5", "5", "Protocol and measurement discipline",
+    C.discipline.lede);
+  s.append(FIG.schedule());
+  {
+    const t = h("div", { class: "tablewrap" });
+    t.append(table(["rule", "technical statement", "failure mode it prevents"],
+      C.discipline.rules.map(r => [r.rule, P(r.technical_explanation), P(r.what_goes_wrong_without_it)]), "wrap"));
+    s.append(t);
+  }
+  s.append(h("h3", { text: "Audit chain" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["pass", "date", "checked", "outcome"],
+      C.chain.map(x => [x.stage, x.date, P(x.what_was_checked), P(x.outcome)]), "wrap")]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ corrections */
+{
+  const s = section("x6", "6", "Corrections of record and open discrepancies",
+    "Every superseded figure, with the mechanism of the error. These appear nowhere else on this page.");
+  s.append(FIG.correctionsTable());
+  s.append(h("h3", { text: "Discrepancies between summary prose and raw evidence" }));
+  s.append(h("p", { text:
+    "Found while re-reading every number from its source file for this page. Neither changes a campaign " +
+    "verdict; both change how a sentence should be worded." }));
+  s.append(FIG.flagsBlock());
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ open */
+{
+  const s = section("x7", "7", "Open frontier", C.frontier.lede);
+  C.frontier.items.forEach(it => {
+    const c = h("div", { class: "card" });
+    c.append(h("h2", { style: "font-size:16.5px" }, [
+      document.createTextNode(it.title + " "),
+      h("span", { class: "pill " + (it.status === "partially-answered" ? "ok" : "open"),
+                  text: it.status.replace(/-/g, " ") })]));
+    c.append(techBlock(it.technical_statement, null));
+    c.append(h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }));
+    c.append(h("p", { class: "claim", html: "<b>Success / failure interpretation.</b> " + P(it.what_would_change_the_picture) }));
+    if (it.sources && it.sources.length) {
+      const d = h("details", { class: "prov" });
+      d.append(h("summary", { text: "Where this is written down" }));
+      const ul = h("ul");
+      it.sources.forEach(x => ul.append(h("li", { html: `<code>${x}</code>` })));
+      d.append(ul);
+      c.append(d);
+    }
+    s.append(c);
+  });
+  s.append(h("h3", { text: "Closed by this campaign" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["question", "how it was closed", "result"],
+      C.frontier.closed.map(x => [x.title, P(x.how), P(x.result)]), "wrap")]));
+  app.append(s);
+}
+
+/* ------------------------------------------------------------ provenance */
+{
+  const s = section("x8", "8", "Provenance and scope limits", null);
+
+  s.append(h("h3", { text: "Every named figure on this site, with the file and field it came from" }));
+  s.append(h("p", { text:
+    "The build script reads each of these from an evidence file and refuses to build if any prose token has " +
+    "no backing entry. Hovering a bold figure anywhere on this site shows the same string." }));
+  {
+    const rows = Object.entries(DATA._numbers)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([k, v]) => [`<code>${k}</code>`, (FMT[v.fmt] || FMT.text)(v.value), `<code>${v.prov}</code>`]);
+    const d = h("details");
+    d.append(h("summary", { text: `Named-number provenance table (${rows.length} entries)` }));
+    d.append(h("div", { class: "tablewrap" }, [table(["token", "value", "source"], rows, "wrap")]));
+    s.append(d);
+  }
+
+  s.append(h("h3", { text: "Environment" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["what", "value"], [
+      ["Local platform", M.local_env.platform],
+      ["Local CPU", M.local_env.cpu],
+      ["Local Python / numpy", M.local_env.python + " / " + M.local_env.numpy],
+      ["Pod CPU", DATA.e12_cudd.pod.cpu_model],
+      ["Pod platform", DATA.e12_cudd.pod.platform],
+      ["Pod flavour / vCPU", DATA.e12_cudd.pod.flavor + " / " + DATA.e12_cudd.pod.vcpu],
+      ["Decision-diagram library", "CUDD " + DATA.e12_cudd.pod.cudd_version + " via native dd.cudd (" + DATA.e12_cudd.pod.dd_cudd + ")"],
+      ["Matched-run conventions", DATA.e12_cudd.pod.conventions],
+      ["External corpus source", `<code>${M.epfl_source.url}</code> at <code>${M.epfl_source.commit}</code> — staged or committed: ${M.epfl_source.staged_or_committed}`],
+      ["Test suite", M.tests],
+      ["Campaign cloud spend", FMT.usd(M.cost_usd) + " of $" + M.cost_cap_usd.toFixed(2) + " cap; all pods terminated: " + M.all_pods_terminated],
+    ], "wrap")]));
+
+  s.append(h("h3", { text: "Scope limits" }));
+  s.append(h("ul", { html: P(
+    "<li>One synthetic generator and one external circuit family. The external corpus is AND/INV form — " +
+    "precisely the case where the merging mechanism predicts parity. Informative as a mechanism test; not a " +
+    "sample of all real workloads.</li>" +
+    "<li>No BDD-hard or deliberately order-sensitive families measured. At {{bx2.max_nodes}} nodes and " +
+    "below, dynamic reordering never triggers, so the order question is answered only where ordering barely " +
+    "matters.</li>" +
+    "<li>Explicit-output behaviour above live_k = {{guard.k}} is uncharacterised. The wrapper crossover, if " +
+    "one exists, sits above that guard — so the one region where the end-to-end path might lead is the " +
+    "region the guard prevents measuring.</li>" +
+    "<li>No real deployed workload measured. Reuse counts — the decision variable for the entire cost " +
+    "argument — have never been observed in production, only computed as break-even thresholds.</li>" +
+    "<li>Canonical CM structural equivalence is not implemented or demonstrated. Current evidence is output " +
+    "equality, which is necessary but not sufficient.</li>" +
+    "<li>Wrapper-boundary, guard, engine-crossover and order-sensitivity runs are blocked-schedule only and " +
+    "say so; only the kernel experiment, its replay, the pod replication and the external validation measure " +
+    "both schedules.</li>") }));
+
+  s.append(h("h3", { text: "Regenerating this page" }));
+  s.append(h("p", { html:
+    "<code>.venv\\Scripts\\python.exe deliverables_n22_24\\master_explainer_2026_08_03\\cm_master_build_2026_08_03.py</code>" +
+    " — reads the evidence files, re-derives every figure, validates every prose token against a backing " +
+    "measurement, and regenerates all four pages. No benchmark is re-run; no evidence file is opened for " +
+    "writing." }));
+
+  const nav = h("div", { class: "pagenav" });
+  [
+    ["index.html", "The full knowledge base", "The same evidence with the explanatory layers restored."],
+    ["investor.html", "Investor brief", "Problem breadth, evidence chain, roadmap."],
+    ["layperson.html", "Plain-language version", "No numbers, no jargon."],
+  ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
+  s.append(nav);
+  app.append(s);
+}
+
+app.append(pageFooter("Expert cut of the master knowledge base. Identical figures from identical data — " +
+  "both pages render the same chart objects from the same generated payload, so they cannot drift apart."));
+</script>
+</body>
+</html>

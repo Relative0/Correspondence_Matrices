@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boolean computation, and where Correspondence Matrices fit — the short version</title>
+<meta name="description" content="A plain-language one-pager: what the problem is, which tool to reach for, and what is still unknown. Derived from the CM master knowledge base.">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+
+<script>
+/* ============================================================ LAYPERSON CUT
+   Derived from the master page. Every paragraph here is the `lay` layer of a
+   master section — nothing is added, and nothing that is not in the master
+   appears. Deliberately almost number-free: four vivid figures, no charts
+   except the decision flow. */
+
+const C = DATA._content;
+const app = document.getElementById("app");
+
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· the short version</span>",
+  links: [["index.html", "← full knowledge base"], ["#tools", "The tools"],
+          ["#choose", "Which to use"], ["#unknown", "What we don't know"]],
+}));
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: "Yes-or-no logic, at scale — and how to pick the right tool" }),
+  h("p", { class: "lede", text:
+    "A plain-language tour of a corner of computing you probably rely on daily without noticing. " +
+    "Plain language, four numbers worth remembering, and a decision guide at the end. Roughly ten minutes." }),
+  h("p", { class: "meta", html:
+    'This is the short cut of a longer, fully sourced <a href="index.html">knowledge base</a>. ' +
+    "Everything here is in that page; nothing here is only here." }),
+]));
+
+/* ---------------------------------------------------------------- 1 */
+{
+  const s = section("lp1", "First", "The problem", null);
+  s.append(layBlock(C.domains.lay));
+  s.append(h("p", { html:
+    "It turns up in more places than you would guess. A chip designer proving an optimised circuit still " +
+    "does the same job. A bank checking that its lending rules do not contradict each other. A security " +
+    "team asking whether any user could reach a file they should not. A biologist working out which stable " +
+    "states a network of genes can settle into. Same underlying question, wildly different fields." }));
+  {
+    const g = h("div", { class: "grid2" });
+    C.domains.items.slice(0, 6).forEach(d => g.append(h("div", { class: "dom" }, [
+      h("h4", { text: d.lay_name || d.name }),
+      h("p", { class: "q", text: "“" + d.question + "”" }),
+      h("p", { class: "t", html: P(d.lay) }),
+    ])));
+    s.append(g);
+  }
+  s.append(h("p", { html:
+    'Four more — configuration systems, computational biology, knowledge graphs and compilers — are in the ' +
+    '<a href="index.html#s1">full version</a>.' }));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 2 */
+{
+  const s = section("lp2", "Second", "The one idea that makes the rest make sense", null);
+  s.append(layBlock(C.whatIsCM.liveK.lay.slice(0, 2)));
+  s.append(banner("note", "The whole idea in one line", [
+    "How big a job is depends on how many things <em>actually matter</em> — not on how many things exist. " +
+    "Everything that follows is about that number.",
+  ]));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 3 */
+{
+  const s = section("tools", "Third", "The toolbox", null);
+  s.append(layBlock(C.toolbox.lay));
+  {
+    const g = h("div", { class: "grid2" });
+    C.toolbox.tools.forEach(t => {
+      const c = h("div", { class: "toolcard" });
+      c.append(h("h4", { text: t.lay_name }));
+      c.append(h("p", { class: "role", text: t.lay_role }));
+      const dl = h("dl");
+      dl.append(h("dt", { text: "It answers" }));
+      dl.append(h("dd", { text: t.lay_question || t.question }));
+      dl.append(h("dt", { text: "Think of it as" }));
+      dl.append(h("dd", { class: "analogy", text: t.analogy }));
+      c.append(dl);
+      g.append(c);
+    });
+    s.append(g);
+  }
+  s.append(banner("warn", "Why “which is fastest?” is the wrong question", [
+    "These tools do not produce the same thing. One hands you a complete answer table, one hands you a " +
+    "compressed diagram you can query cheaply forever, one hands you a single example, one hands you a " +
+    "shorter version of your own rule. Ranking them on speed is like asking whether a calculator is faster " +
+    "than a proof.",
+  ]));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 4 */
+{
+  const s = section("choose", "Fourth", "Which one do you actually want?", null);
+  s.append(h("p", { class: "sectionlede", text:
+    "Five situations. Read the ones that sound like yours." }));
+  C.scenarios.items.forEach(sc => {
+    const blk = h("div", { class: "scenario" });
+    blk.append(h("p", { class: "q" }, [
+      h("span", { class: "idx", text: sc.n }),
+      h("span", { text: sc.lay_question || sc.question })]));
+    blk.append(h("div", { class: "verdict", html:
+      sc.lay_verdict + ' <span class="arrow">— ' + sc.lay_verdictWhy + "</span>" }));
+    blk.append(layBlock(sc.lay));
+    s.append(blk);
+  });
+
+  s.append(h("h3", { text: "All of that, as one decision guide" }));
+  s.append(h("p", { text: C.scenarios.flowchartLay.lede }));
+  s.append(decisionFlow(C.scenarios.flowchartLay.nodes));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 5 */
+{
+  const s = section("numbers", "Fifth", "The four numbers worth remembering", null);
+  s.append(tiles([
+    ["Against a naive competitor", T("kernel.local.pct") + " faster",
+      "on generated expressions, and " + T("kernel.epfl.pct") + " on real hardware designs — the honest size of the win, and it held on several different machines"],
+    ["Against a well-built competitor", "no measurable difference",
+      "which is the finding that mattered most, and the one the project had committed in advance to reporting either way"],
+    ["Setup cost", T("prep.min") + "–" + T("prep.max"),
+      "what you pay before the first answer — the reason this only pays off with heavy repetition"],
+    ["Times you must repeat", "about " + T("be.syn.median") + "–" + T("be.epfl.median.matched"),
+      "before the setup is repaid, on the two sets of expressions measured — and for a large minority of cases, never"],
+  ]));
+  s.append(banner("ok", "The honest summary", [
+    "Correspondence Matrices are not a faster calculator. Against a carelessly built competitor they are " +
+    "modestly quicker; against a carefully built one they are the same speed. What they add is different in " +
+    "kind — a system that recognises expressions it has seen before, can store and reload compiled work, and " +
+    "treats the logic itself as an object you can inspect and transform.",
+    "Whether that is worth the setup cost depends almost entirely on one thing: how many times you ask the " +
+    "same question. Nobody has yet measured that for a real deployed system, which is the biggest open " +
+    "question on the list.",
+  ]));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 6 */
+{
+  const s = section("unknown", "Sixth", "What is still genuinely unknown", null);
+  s.append(h("p", { class: "sectionlede", text:
+    "Short, honest list. These are open in the sense that nobody knows the answer — not in the sense that " +
+    "someone is confident and hasn't written it up." }));
+  const g = h("div", { class: "grid2" });
+  C.frontier.items.forEach(it => g.append(h("div", { class: "dom" }, [
+    h("h4", { text: it.title.split(" — ")[0] }),
+    h("p", { class: "t", html: P(it.lay_statement) }),
+  ])));
+  s.append(g);
+  s.append(h("p", { html:
+    'Each of these has a stated success and failure criterion in the ' +
+    '<a href="index.html#s5">full version</a> — including what a negative result would mean, which is ' +
+    "written down as carefully as what a positive one would." }));
+  app.append(s);
+}
+
+/* ---------------------------------------------------------------- 7 */
+{
+  const s = section("trust", "Last", "Why you might believe any of this", null);
+  s.append(layBlock([
+    "Research that only ever confirms itself is not research. The most useful thing to know about this " +
+    "project is not any single number — it is that several of its own earlier headline figures were " +
+    "checked, found wrong, and publicly withdrawn.",
+    "And the decisive experiment had its pass mark written down before the data existed. It failed that " +
+    "mark. The project reported the failure and changed its claim, instead of looking for a different way " +
+    "to slice the numbers. That is the part worth trusting.",
+  ]));
+  s.append(h("p", { html:
+    'The full correction list — every withdrawn figure, why it was wrong, and what replaced it — is in the ' +
+    '<a href="index.html#corrections">knowledge base</a>.' }));
+  const nav = h("div", { class: "pagenav" });
+  [
+    ["index.html", "The full knowledge base", "Everything above, plus the evidence, the charts, and the sources."],
+    ["investor.html", "Investor brief", "The size of the problem, the evidence chain, and the roadmap."],
+    ["expert.html", "Expert summary", "Dense technical version with all intervals and provenance."],
+  ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
+  s.append(nav);
+  app.append(s);
+}
+
+app.append(pageFooter("Plain-language cut of the master knowledge base. Every claim here is stated more " +
+  'precisely, with its evidence, in the <a href="index.html">full version</a>.', true));
+</script>
+</body>
+</html>
