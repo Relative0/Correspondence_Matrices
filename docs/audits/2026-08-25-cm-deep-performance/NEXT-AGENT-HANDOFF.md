@@ -2,6 +2,14 @@
 
 Use this only if Brian chooses to continue a deferred workstream. The 2026-08-25 audit itself is complete.
 
+## Post-consolidation status (2026-08-25)
+
+The state below records the audit's historical starting point. It was subsequently consolidated in `main` commit `1fd3907dbc1986cb2d8a9f0f8cab2b5920a415ce` (`Audit and consolidate CM benchmark corrections`), which was also present at `origin/main` when checked. That commit includes the audit-owned implementation, tests, tooling, corrected benchmark evidence, Runpod evidence, and regenerated public materials.
+
+Reconciliation found no semantic code conflict. The current `cm_ir.py` differs from the V3 symmetric-study snapshot only by explanatory comments about legacy-memo scope; the symmetric driver differs only by added uncertainty-provenance metadata. Post-consolidation validation passed `73 passed, 4 subtests` focused and `363 passed, 4 subtests` full. The authoritative local symmetric-comparator headline is now V3, not V2: formula-balanced bare CM/CSE-flat `0.890570` overall, interval `[0.874065, 0.907272]`; `0.961234` at `k=16`, interval `[0.928974, 0.994177]`; public wrapper/CSE-flat `3.094136` overall, interval `[2.883083, 3.310818]`.
+
+For reruns after consolidation, use [CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md](CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md). It separates mandatory local acceptance checks from optional cache/family/context, boundary, profiling, BDD, native, and cloud experiments and preserves every approval boundary.
+
 ## Exact audited state
 
 - Repository: `C:\Users\brian\Documents\CM_Computation`
@@ -72,7 +80,9 @@ Do not resurrect these claims:
 - no formal global semantic canonicality from current hashes/keys;
 - no family/context/cache dominance over strongest incumbents from existing synthetic experiments.
 
-## Copy-paste continuation prompt
+## Historical copy-paste continuation prompt
+
+This prompt records the pre-consolidation handoff and should not be used for a new rerun campaign. Use `CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md` instead.
 
 ```text
 Continue the Correspondence Matrix performance work in

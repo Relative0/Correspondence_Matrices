@@ -7,6 +7,7 @@ Primary deliverables:
 - `CM-BENCHMARK-RESULTS.md` — commands, timing windows, environment, paired results, tests, and evidence index.
 - `CM-OPTIMIZATION-BACKLOG.md` — gated next work and rejected/theoretically blocked ideas.
 - `NEXT-AGENT-HANDOFF.md` — exact continuation state and copy-paste prompt.
+- `CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md` — post-consolidation, phased local/external rerun playbook pinned to the accepted consolidation commit.
 
 ## Reproducible runs
 

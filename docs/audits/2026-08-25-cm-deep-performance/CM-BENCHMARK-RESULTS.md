@@ -170,7 +170,7 @@ No selector code changed in this audit. The corrected 401-row replay remains aut
 
 The focused `k=13..15` replay still has one CM reused-validation row at 2.174x regret. Cross-machine results show that thresholds 14 and 15 trade circuit improvements for synthetic catastrophic misses. Therefore `WORDS_AUTO_MIN_VARS = 16` remains a conservative default, not a universal crossover theorem. A production feature selector needs a newly frozen untouched corpus; B2 and EPFL cannot supply that gate.
 
-The corrected strongest-comparator study also remains in force: bare CM/CSE-flat is 0.909 overall and 0.979 at `k=16`, while the public CM wrapper/CSE-flat is 2.797 overall and 1.343 at `k=16`. These are workload-specific and do not supersede B1’s CM/CSE-flat parity result.
+The exactly counterbalanced V3 strongest-comparator study supersedes the V2 local headline quoted in the original audit. Formula-balanced bare CM/CSE-flat is `0.890570` overall with formula-cluster 95% bootstrap interval `[0.874065, 0.907272]`, and `0.961234` at `k=16` with interval `[0.928974, 0.994177]`. Formula-balanced public CM wrapper/CSE-flat is `3.094136` overall with interval `[2.883083, 3.310818]`; bare CM/raw-AST is `0.822450` overall with interval `[0.789444, 0.855425]`. V3 used 24 rounds, exact schedule counterbalancing, 264 timing rows, 216 unique formulas, and 10,000 deterministic paired formula-cluster bootstrap resamples. These are local, workload-specific results and do not supersede B1’s CM/CSE-flat parity result. Immutable evidence: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_{raw,summary,inference,audit}.*`.
 
 ## Negative and reliability results
 
