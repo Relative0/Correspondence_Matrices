@@ -1,0 +1,972 @@
+{
+  "campaign": "CM corrected benchmark Runpod replication 2026-08-25",
+  "guards": {
+    "n_pods": 3,
+    "total_budget_usd": 1.0,
+    "max_price_per_hour_usd": 0.25,
+    "setup_timeout_s": 600,
+    "driver_timeout_s": 1320,
+    "hard_lifetime_s": 2100,
+    "image": "python:3.13.5-slim",
+    "numpy": "2.3.2"
+  },
+  "pods": [
+    {
+      "pod_index": 1,
+      "status": "complete",
+      "terminated": true,
+      "pod_id": "juhyi9fpkolh1g",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.06,
+      "projected_hard_lifetime_cost_usd": 0.035,
+      "state": {
+        "done": true,
+        "stage": "complete",
+        "error": null,
+        "environment": {
+          "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.36",
+          "python": "3.13.5",
+          "machine": "x86_64",
+          "logical_cpu_count": 192,
+          "cgroup_cpu_max": "max 100000",
+          "cgroup_memory_max": "3999997952",
+          "runpod_pod_id": "juhyi9fpkolh1g",
+          "cpu_model": "AMD EPYC 9655P 96-Core Processor",
+          "numpy": "2.3.2"
+        },
+        "input_verification": {
+          "ok": true,
+          "mismatches": [],
+          "archive_source_file_count": 69
+        },
+        "drivers": {
+          "selector_full": {
+            "command": [
+              "python",
+              "scripts/cm_deep_performance_audit.py",
+              "--suite",
+              "representative",
+              "--corpora",
+              "bx1,b2,epfl",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "8388608",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/current"
+            ],
+            "returncode": 0,
+            "wall_s": 20.410838679992594,
+            "stdout_tail": ".430603098100428 cm words/flat=2.99\nepfl 102/129 epfl-random_control-int2float-po3-15980bb2bc: compile=264.2us raw words/flat=3.969658372619073 cm words/flat=3.49\nepfl 103/129 epfl-random_control-int2float-po4-f28975a467: compile=645.5us raw words/flat=3.5155663574888814 cm words/flat=2.98\nepfl 104/129 epfl-random_control-int2float-po5-b67636a98e: compile=434.9us raw words/flat=3.621442766165369 cm words/flat=3.14\nepfl 105/129 epfl-random_control-int2float-po6-f3b25f4977: compile=171.7us raw words/flat=3.910381914532592 cm words/flat=3.29\nepfl 106/129 epfl-random_control-int2float-internal25-be3b3fac1d: compile=479.2us raw words/flat=4.035893958615863 cm words/flat=3.47\nepfl 107/129 epfl-random_control-mem_ctrl-po614-b0a54afe66: compile=421.4us raw words/flat=1.3140833064362623 cm words/flat=1.25\nepfl 108/129 epfl-random_control-mem_ctrl-po622-b73ccd172a: compile=890.9us raw words/flat=0.4051644231740801 cm words/flat=0.43\nepfl 109/129 epfl-random_control-mem_ctrl-po623-7f80ce9c66: compile=937.2us raw words/flat=0.37342218015818096 cm words/flat=0.42\nepfl 110/129 epfl-random_control-mem_ctrl-po627-7b4af14eba: compile=871.1us raw words/flat=0.39116026569959467 cm words/flat=0.42\nepfl 111/129 epfl-random_control-priority-internal17-ead80e25a7: compile=328.0us raw words/flat=4.4469967537843695 cm words/flat=3.26\nepfl 112/129 epfl-random_control-priority-internal33-6197962bc5: compile=672.6us raw words/flat=1.2141832576624618 cm words/flat=1.18\nepfl 113/129 epfl-random_control-priority-internal390-5c1b8c3dc3: compile=319.4us raw words/flat=3.493257237538547 cm words/flat=2.75\nepfl 114/129 epfl-random_control-priority-internal636-78eeeb8379: compile=339.5us raw words/flat=0.43661330605989684 cm words/flat=0.41\nepfl 115/129 epfl-random_control-priority-internal919-8f1126a8c9: compile=193.8us raw words/flat=3.342452065515121 cm words/flat=3.00\nepfl 116/129 epfl-random_control-router-internal19-4200fe3838: compile=162.2us raw words/flat=3.521724643475943 cm words/flat=3.00\nepfl 117/129 epfl-random_control-router-internal29-ebfa4eab0e: compile=219.0us raw words/flat=2.831249793481733 cm words/flat=2.49\nepfl 118/129 epfl-random_control-router-internal39-7af9c35a7e: compile=294.2us raw words/flat=0.8550556249455369 cm words/flat=0.81\nepfl 119/129 epfl-random_control-router-internal104-77af71e925: compile=328.9us raw words/flat=3.0716271305177334 cm words/flat=2.67\nepfl 120/129 epfl-random_control-router-internal135-565d2a3a16: compile=235.8us raw words/flat=2.032055479492827 cm words/flat=1.83\nepfl 121/129 epfl-random_control-router-internal177-832d43e9af: compile=350.4us raw words/flat=0.6096997021360439 cm words/flat=0.60\nepfl 122/129 epfl-random_control-router-internal233-5ddc8d5e1b: compile=735.6us raw words/flat=0.373306398203162 cm words/flat=0.41\nepfl 123/129 epfl-random_control-voter-internal72-661c8b218d: compile=608.7us raw words/flat=1.928303378842317 cm words/flat=1.76\nepfl 124/129 epfl-random_control-voter-internal3075-f8954d4f09: compile=1389.1us raw words/flat=1.974925954434967 cm words/flat=1.75\nepfl 125/129 epfl-random_control-voter-internal4823-4087895a60: compile=1252.3us raw words/flat=1.9847972054994858 cm words/flat=1.70\nepfl 126/129 epfl-random_control-voter-internal7179-1f4236d03b: compile=1301.5us raw words/flat=1.9469005259788819 cm words/flat=1.76\nepfl 127/129 epfl-random_control-voter-internal9182-24dfeed155: compile=1388.8us raw words/flat=2.0573425729398336 cm words/flat=1.77\nepfl 128/129 epfl-random_control-voter-internal10038-a5538c254b: compile=1317.7us raw words/flat=1.9638492715330376 cm words/flat=1.72\nepfl 129/129 epfl-random_control-voter-internal10957-7dc361262b: compile=1538.5us raw words/flat=1.9167975643843875 cm words/flat=1.76\nWrote deliverables_n22_24/pod_out/current_raw.csv\nWrote deliverables_n22_24/pod_out/current_summary.json\nWrote deliverables_n22_24/pod_out/current_selector.csv\nWrote deliverables_n22_24/pod_out/current_phases.csv\nWrote deliverables_n22_24/pod_out/current_environment.json\n",
+            "stderr_tail": ""
+          },
+          "selector_gap": {
+            "command": [
+              "python",
+              "scripts/cm_selector_gap_study.py",
+              "--corpus",
+              "deliverables_n22_24/followups_2026_08_24/selector_gap/selector_gap_corpus.jsonl",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/gap/current",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "16777216"
+            ],
+            "returncode": 0,
+            "wall_s": 2.167829746962525,
+            "stdout_tail": "or-gap-k14-mixed-shared-2-1cf5bb233646\ntuning 33/48 selector-gap-k15-xor_dom-tree-1-2e0891e31407\ntuning 34/48 selector-gap-k15-xor_dom-tree-2-28f6f3f3f8d5\ntuning 35/48 selector-gap-k15-xor_dom-shared-1-474676d10915\ntuning 36/48 selector-gap-k15-xor_dom-shared-2-28f94d5d642c\ntuning 37/48 selector-gap-k15-andor_dom-tree-1-4d50b0642787\ntuning 38/48 selector-gap-k15-andor_dom-tree-2-372028c2497e\ntuning 39/48 selector-gap-k15-andor_dom-shared-1-9aa243490576\ntuning 40/48 selector-gap-k15-andor_dom-shared-2-abf82a07cbf5\ntuning 41/48 selector-gap-k15-impeqv_dom-tree-1-e2a491eea144\ntuning 42/48 selector-gap-k15-impeqv_dom-tree-2-accd4da50448\ntuning 43/48 selector-gap-k15-impeqv_dom-shared-1-4493d2b06f92\ntuning 44/48 selector-gap-k15-impeqv_dom-shared-2-618b7d4d57a5\ntuning 45/48 selector-gap-k15-mixed-tree-1-1cca3b230dee\ntuning 46/48 selector-gap-k15-mixed-tree-2-2479fdf72c85\ntuning 47/48 selector-gap-k15-mixed-shared-1-5d08450d50ab\ntuning 48/48 selector-gap-k15-mixed-shared-2-47c2f2399dad\nvalidation_reused 1/23 epfl-arithmetic-adder-po6-5e5f8d2bf9\nvalidation_reused 2/23 epfl-arithmetic-div-internal10810-b1ae747db1\nvalidation_reused 3/23 epfl-arithmetic-log2-internal10182-8de9088c0d\nvalidation_reused 4/23 epfl-arithmetic-multiplier-po6-1ed43b9012\nvalidation_reused 5/23 epfl-arithmetic-multiplier-internal2314-b18e1af7fc\nvalidation_reused 6/23 epfl-arithmetic-sin-internal473-3d94727928\nvalidation_reused 7/23 epfl-arithmetic-sin-internal618-7a9d438d5b\nvalidation_reused 8/23 epfl-arithmetic-sin-internal2610-34083b18d5\nvalidation_reused 9/23 epfl-arithmetic-sin-internal2639-ac10ac7863\nvalidation_reused 10/23 epfl-arithmetic-sqrt-po57-bf55ec5ca5\nvalidation_reused 11/23 epfl-arithmetic-square-po13-eca0925c59\nvalidation_reused 12/23 epfl-arithmetic-square-po14-e64d8827d4\nvalidation_reused 13/23 epfl-arithmetic-square-po15-ffd477ae96\nvalidation_reused 14/23 epfl-random_control-arbiter-internal4039-8a2c198584\nvalidation_reused 15/23 epfl-random_control-i2c-po41-b4580bd004\nvalidation_reused 16/23 epfl-random_control-i2c-po42-455375796e\nvalidation_reused 17/23 epfl-random_control-i2c-po44-bebebe05c9\nvalidation_reused 18/23 epfl-random_control-i2c-po68-6659cda0b7\nvalidation_reused 19/23 epfl-random_control-i2c-po74-3bf1791a1e\nvalidation_reused 20/23 epfl-random_control-mem_ctrl-po614-b0a54afe66\nvalidation_reused 21/23 epfl-random_control-priority-internal33-6197962bc5\nvalidation_reused 22/23 epfl-random_control-router-internal39-7af9c35a7e\nvalidation_reused 23/23 epfl-random_control-router-internal177-832d43e9af\n{\n  \"paths\": {\n    \"raw\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_raw.csv\",\n    \"selector\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_selector.csv\",\n    \"audit\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_audit.json\",\n    \"environment\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_environment.json\"\n  },\n  \"acceptance\": {\n    \"gate\": {\n      \"regret_geomean_max\": 1.1,\n      \"catastrophic_ge_2_count\": 0\n    },\n    \"checks\": [\n      {\n        \"arm\": \"raw\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.1205841063673767,\n        \"regret_max\": 2.473187114226275,\n        \"catastrophic_ge_2_count\": 3,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"raw\",\n        \"role\": \"validation_reused\",\n        \"n\": 17,\n        \"regret_geomean\": 1.217134272025235,\n        \"regret_max\": 1.7102661386652542,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.1403265450615283,\n        \"regret_max\": 2.4484912323346903,\n        \"catastrophic_ge_2_count\": 3,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"validation_reused\",\n        \"n\": 23,\n        \"regret_geomean\": 1.2210858432403662,\n        \"regret_max\": 1.666592365142734,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      }\n    ],\n    \"pass\": false\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "symmetric": {
+            "command": [
+              "python",
+              "scripts/cm_symmetric_wrapper_followup.py",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/symmetric/current",
+              "--rounds",
+              "7"
+            ],
+            "returncode": 0,
+            "wall_s": 7.159830844029784,
+            "stdout_tail": "{\n  \"paths\": {\n    \"raw\": \"deliverables_n22_24/pod_out/symmetric/current_raw.csv\",\n    \"summary\": \"deliverables_n22_24/pod_out/symmetric/current_summary.csv\",\n    \"audit\": \"deliverables_n22_24/pod_out/symmetric/current_audit.json\"\n  },\n  \"acceptance\": {\n    \"pass\": true\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "b1": {
+            "command": [
+              "python",
+              "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py",
+              "--corpus",
+              "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+              "--out-dir",
+              "deliverables_n22_24/pod_out/b1"
+            ],
+            "returncode": 0,
+            "wall_s": 14.719610530068167,
+            "stdout_tail": "loaded corpus: deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl (192 formulas)\ncorpus sha256: 8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a\n  192 formulas, 24 cells, per-cell [8]\n  semantic support exact and hashes/truths distinct in every stratum\n  [07:33:17] measured 24/192\n  [07:33:18] measured 48/192\n  [07:33:19] measured 72/192\n  [07:33:20] measured 96/192\n  [07:33:21] measured 120/192\n  [07:33:23] measured 144/192\n  [07:33:25] measured 168/192\n  [07:33:27] measured 192/192\nround-robin schedules ...\nwrote deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json\nwrote deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv\ntotal wall time: 14.6s\n",
+            "stderr_tail": ""
+          }
+        }
+      },
+      "files": [
+        "deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json",
+        "deliverables_n22_24/pod_out/current_environment.json",
+        "deliverables_n22_24/pod_out/current_phases.csv",
+        "deliverables_n22_24/pod_out/current_raw.csv",
+        "deliverables_n22_24/pod_out/current_selector.csv",
+        "deliverables_n22_24/pod_out/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/current_summary.json",
+        "deliverables_n22_24/pod_out/gap/current_audit.json",
+        "deliverables_n22_24/pod_out/gap/current_environment.json",
+        "deliverables_n22_24/pod_out/gap/current_raw.csv",
+        "deliverables_n22_24/pod_out/gap/current_selector.csv",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_selector_gap_study.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_audit.json",
+        "deliverables_n22_24/pod_out/symmetric/current_raw.csv",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_symmetric_wrapper_followup.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_summary.csv"
+      ],
+      "acceptance": {
+        "b1_control": {
+          "geomean": 0.8878715028477248,
+          "ci95": [
+            0.8767745268451435,
+            0.8982894468210627
+          ],
+          "reference": 0.8876,
+          "pass": true
+        },
+        "pass": true,
+        "selector_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0016043970640396,
+              "regret_ci95": [
+                1.0,
+                1.0030852731819673
+              ],
+              "regret_max": 1.1195787831513262,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "raw",
+              "role": "validation_reused",
+              "n": 307,
+              "refused_or_ineligible_count": 14,
+              "regret_geomean": 1.0176074910336286,
+              "regret_ci95": [
+                1.0077696832350211,
+                1.0325634416440406
+              ],
+              "regret_max": 1.667255775369245,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0005737946356243,
+              "regret_ci95": [
+                1.0,
+                1.0012486608345703
+              ],
+              "regret_max": 1.0468186103976331,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "validation_reused",
+              "n": 321,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0207688103837798,
+              "regret_ci95": [
+                1.010069860607357,
+                1.038789923728505
+              ],
+              "regret_max": 1.7105985555251668,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            }
+          ],
+          "pass": true,
+          "gate": {
+            "regret_geomean_max": 1.1,
+            "catastrophic_ge_2_count": 0
+          }
+        },
+        "selector_gap_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 3,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.1205841063673767,
+              "regret_max": 2.473187114226275,
+              "role": "tuning"
+            },
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 0,
+              "n": 17,
+              "pass": false,
+              "regret_geomean": 1.217134272025235,
+              "regret_max": 1.7102661386652542,
+              "role": "validation_reused"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 3,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.1403265450615283,
+              "regret_max": 2.4484912323346903,
+              "role": "tuning"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 0,
+              "n": 23,
+              "pass": false,
+              "regret_geomean": 1.2210858432403662,
+              "regret_max": 1.666592365142734,
+              "role": "validation_reused"
+            }
+          ],
+          "gate": {
+            "catastrophic_ge_2_count": 0,
+            "regret_geomean_max": 1.1
+          },
+          "pass": false
+        },
+        "correction_integrity": {
+          "selector": {
+            "rows": 401,
+            "failures": [],
+            "roles": {
+              "tuning": 80,
+              "validation_reused": 321
+            },
+            "pass": true
+          },
+          "selector_gap": {
+            "rows": 71,
+            "failures": [],
+            "pass": true
+          },
+          "symmetric": {
+            "rows": 264,
+            "failures": [],
+            "pass": true
+          },
+          "source_snapshots": {
+            "manifest_count": 3,
+            "file_count": 16,
+            "failures": [],
+            "pass": true
+          },
+          "pass": true
+        }
+      },
+      "lifetime_s": 97.7251489162445,
+      "cost_usd_actual": 0.001629
+    },
+    {
+      "pod_index": 2,
+      "status": "complete",
+      "terminated": true,
+      "pod_id": "bzpf7a9j6hmt6v",
+      "cpu_flavor": "cpu3m",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.11,
+      "projected_hard_lifetime_cost_usd": 0.06416666666666666,
+      "state": {
+        "done": true,
+        "stage": "complete",
+        "error": null,
+        "environment": {
+          "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.36",
+          "python": "3.13.5",
+          "machine": "x86_64",
+          "logical_cpu_count": 192,
+          "cgroup_cpu_max": null,
+          "cgroup_memory_max": null,
+          "runpod_pod_id": "bzpf7a9j6hmt6v",
+          "cpu_model": "AMD EPYC 9654 96-Core Processor",
+          "numpy": "2.3.2"
+        },
+        "input_verification": {
+          "ok": true,
+          "mismatches": [],
+          "archive_source_file_count": 69
+        },
+        "drivers": {
+          "selector_full": {
+            "command": [
+              "python",
+              "scripts/cm_deep_performance_audit.py",
+              "--suite",
+              "representative",
+              "--corpora",
+              "bx1,b2,epfl",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "8388608",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/current"
+            ],
+            "returncode": 0,
+            "wall_s": 22.996099196374416,
+            "stdout_tail": ".27466273873577 cm words/flat=2.82\nepfl 102/129 epfl-random_control-int2float-po3-15980bb2bc: compile=296.5us raw words/flat=3.6789050257810927 cm words/flat=3.16\nepfl 103/129 epfl-random_control-int2float-po4-f28975a467: compile=717.3us raw words/flat=3.387330250002634 cm words/flat=2.76\nepfl 104/129 epfl-random_control-int2float-po5-b67636a98e: compile=500.8us raw words/flat=3.511412260402567 cm words/flat=2.96\nepfl 105/129 epfl-random_control-int2float-po6-f3b25f4977: compile=186.5us raw words/flat=3.6710228898426323 cm words/flat=3.07\nepfl 106/129 epfl-random_control-int2float-internal25-be3b3fac1d: compile=534.8us raw words/flat=3.932636758591694 cm words/flat=3.20\nepfl 107/129 epfl-random_control-mem_ctrl-po614-b0a54afe66: compile=497.0us raw words/flat=1.478694585205724 cm words/flat=1.32\nepfl 108/129 epfl-random_control-mem_ctrl-po622-b73ccd172a: compile=1021.8us raw words/flat=0.39109283701744685 cm words/flat=0.42\nepfl 109/129 epfl-random_control-mem_ctrl-po623-7f80ce9c66: compile=1114.2us raw words/flat=0.3769682107943308 cm words/flat=0.41\nepfl 110/129 epfl-random_control-mem_ctrl-po627-7b4af14eba: compile=1012.1us raw words/flat=0.3986429095711094 cm words/flat=0.43\nepfl 111/129 epfl-random_control-priority-internal17-ead80e25a7: compile=389.5us raw words/flat=3.9661373074861928 cm words/flat=2.87\nepfl 112/129 epfl-random_control-priority-internal33-6197962bc5: compile=764.2us raw words/flat=1.3569644182038407 cm words/flat=1.20\nepfl 113/129 epfl-random_control-priority-internal390-5c1b8c3dc3: compile=369.9us raw words/flat=3.520710360917401 cm words/flat=2.77\nepfl 114/129 epfl-random_control-priority-internal636-78eeeb8379: compile=394.4us raw words/flat=0.4556818369629291 cm words/flat=0.41\nepfl 115/129 epfl-random_control-priority-internal919-8f1126a8c9: compile=235.3us raw words/flat=3.382047556610794 cm words/flat=2.88\nepfl 116/129 epfl-random_control-router-internal19-4200fe3838: compile=183.6us raw words/flat=3.2686923301870947 cm words/flat=2.74\nepfl 117/129 epfl-random_control-router-internal29-ebfa4eab0e: compile=252.0us raw words/flat=2.709894779072524 cm words/flat=2.34\nepfl 118/129 epfl-random_control-router-internal39-7af9c35a7e: compile=330.1us raw words/flat=0.9393332220181444 cm words/flat=0.89\nepfl 119/129 epfl-random_control-router-internal104-77af71e925: compile=378.0us raw words/flat=2.7162648006169756 cm words/flat=2.55\nepfl 120/129 epfl-random_control-router-internal135-565d2a3a16: compile=272.5us raw words/flat=1.9836741632457753 cm words/flat=1.81\nepfl 121/129 epfl-random_control-router-internal177-832d43e9af: compile=400.5us raw words/flat=0.6431436722883765 cm words/flat=0.65\nepfl 122/129 epfl-random_control-router-internal233-5ddc8d5e1b: compile=870.0us raw words/flat=0.3875636319220163 cm words/flat=0.44\nepfl 123/129 epfl-random_control-voter-internal72-661c8b218d: compile=714.8us raw words/flat=1.979097253242141 cm words/flat=1.76\nepfl 124/129 epfl-random_control-voter-internal3075-f8954d4f09: compile=1629.0us raw words/flat=1.954788980164441 cm words/flat=1.79\nepfl 125/129 epfl-random_control-voter-internal4823-4087895a60: compile=1462.1us raw words/flat=1.9541102130620902 cm words/flat=1.78\nepfl 126/129 epfl-random_control-voter-internal7179-1f4236d03b: compile=1504.8us raw words/flat=1.9738592002222588 cm words/flat=1.78\nepfl 127/129 epfl-random_control-voter-internal9182-24dfeed155: compile=1607.3us raw words/flat=1.974467149209955 cm words/flat=1.81\nepfl 128/129 epfl-random_control-voter-internal10038-a5538c254b: compile=1531.0us raw words/flat=1.963986524568325 cm words/flat=1.79\nepfl 129/129 epfl-random_control-voter-internal10957-7dc361262b: compile=1784.4us raw words/flat=1.950372120879184 cm words/flat=1.76\nWrote deliverables_n22_24/pod_out/current_raw.csv\nWrote deliverables_n22_24/pod_out/current_summary.json\nWrote deliverables_n22_24/pod_out/current_selector.csv\nWrote deliverables_n22_24/pod_out/current_phases.csv\nWrote deliverables_n22_24/pod_out/current_environment.json\n",
+            "stderr_tail": ""
+          },
+          "selector_gap": {
+            "command": [
+              "python",
+              "scripts/cm_selector_gap_study.py",
+              "--corpus",
+              "deliverables_n22_24/followups_2026_08_24/selector_gap/selector_gap_corpus.jsonl",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/gap/current",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "16777216"
+            ],
+            "returncode": 0,
+            "wall_s": 2.2704393696039915,
+            "stdout_tail": "gap-k14-mixed-shared-2-1cf5bb233646\ntuning 33/48 selector-gap-k15-xor_dom-tree-1-2e0891e31407\ntuning 34/48 selector-gap-k15-xor_dom-tree-2-28f6f3f3f8d5\ntuning 35/48 selector-gap-k15-xor_dom-shared-1-474676d10915\ntuning 36/48 selector-gap-k15-xor_dom-shared-2-28f94d5d642c\ntuning 37/48 selector-gap-k15-andor_dom-tree-1-4d50b0642787\ntuning 38/48 selector-gap-k15-andor_dom-tree-2-372028c2497e\ntuning 39/48 selector-gap-k15-andor_dom-shared-1-9aa243490576\ntuning 40/48 selector-gap-k15-andor_dom-shared-2-abf82a07cbf5\ntuning 41/48 selector-gap-k15-impeqv_dom-tree-1-e2a491eea144\ntuning 42/48 selector-gap-k15-impeqv_dom-tree-2-accd4da50448\ntuning 43/48 selector-gap-k15-impeqv_dom-shared-1-4493d2b06f92\ntuning 44/48 selector-gap-k15-impeqv_dom-shared-2-618b7d4d57a5\ntuning 45/48 selector-gap-k15-mixed-tree-1-1cca3b230dee\ntuning 46/48 selector-gap-k15-mixed-tree-2-2479fdf72c85\ntuning 47/48 selector-gap-k15-mixed-shared-1-5d08450d50ab\ntuning 48/48 selector-gap-k15-mixed-shared-2-47c2f2399dad\nvalidation_reused 1/23 epfl-arithmetic-adder-po6-5e5f8d2bf9\nvalidation_reused 2/23 epfl-arithmetic-div-internal10810-b1ae747db1\nvalidation_reused 3/23 epfl-arithmetic-log2-internal10182-8de9088c0d\nvalidation_reused 4/23 epfl-arithmetic-multiplier-po6-1ed43b9012\nvalidation_reused 5/23 epfl-arithmetic-multiplier-internal2314-b18e1af7fc\nvalidation_reused 6/23 epfl-arithmetic-sin-internal473-3d94727928\nvalidation_reused 7/23 epfl-arithmetic-sin-internal618-7a9d438d5b\nvalidation_reused 8/23 epfl-arithmetic-sin-internal2610-34083b18d5\nvalidation_reused 9/23 epfl-arithmetic-sin-internal2639-ac10ac7863\nvalidation_reused 10/23 epfl-arithmetic-sqrt-po57-bf55ec5ca5\nvalidation_reused 11/23 epfl-arithmetic-square-po13-eca0925c59\nvalidation_reused 12/23 epfl-arithmetic-square-po14-e64d8827d4\nvalidation_reused 13/23 epfl-arithmetic-square-po15-ffd477ae96\nvalidation_reused 14/23 epfl-random_control-arbiter-internal4039-8a2c198584\nvalidation_reused 15/23 epfl-random_control-i2c-po41-b4580bd004\nvalidation_reused 16/23 epfl-random_control-i2c-po42-455375796e\nvalidation_reused 17/23 epfl-random_control-i2c-po44-bebebe05c9\nvalidation_reused 18/23 epfl-random_control-i2c-po68-6659cda0b7\nvalidation_reused 19/23 epfl-random_control-i2c-po74-3bf1791a1e\nvalidation_reused 20/23 epfl-random_control-mem_ctrl-po614-b0a54afe66\nvalidation_reused 21/23 epfl-random_control-priority-internal33-6197962bc5\nvalidation_reused 22/23 epfl-random_control-router-internal39-7af9c35a7e\nvalidation_reused 23/23 epfl-random_control-router-internal177-832d43e9af\n{\n  \"paths\": {\n    \"raw\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_raw.csv\",\n    \"selector\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_selector.csv\",\n    \"audit\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_audit.json\",\n    \"environment\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_environment.json\"\n  },\n  \"acceptance\": {\n    \"gate\": {\n      \"regret_geomean_max\": 1.1,\n      \"catastrophic_ge_2_count\": 0\n    },\n    \"checks\": [\n      {\n        \"arm\": \"raw\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.0860913429952157,\n        \"regret_max\": 2.2078944932242375,\n        \"catastrophic_ge_2_count\": 1,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"raw\",\n        \"role\": \"validation_reused\",\n        \"n\": 17,\n        \"regret_geomean\": 1.1340897082299706,\n        \"regret_max\": 1.6163870261976472,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.0993294365581945,\n        \"regret_max\": 2.1659976244418537,\n        \"catastrophic_ge_2_count\": 2,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"validation_reused\",\n        \"n\": 23,\n        \"regret_geomean\": 1.1684424196008174,\n        \"regret_max\": 1.6155883309368149,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      }\n    ],\n    \"pass\": false\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "symmetric": {
+            "command": [
+              "python",
+              "scripts/cm_symmetric_wrapper_followup.py",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/symmetric/current",
+              "--rounds",
+              "7"
+            ],
+            "returncode": 0,
+            "wall_s": 8.613479744642973,
+            "stdout_tail": "{\n  \"paths\": {\n    \"raw\": \"deliverables_n22_24/pod_out/symmetric/current_raw.csv\",\n    \"summary\": \"deliverables_n22_24/pod_out/symmetric/current_summary.csv\",\n    \"audit\": \"deliverables_n22_24/pod_out/symmetric/current_audit.json\"\n  },\n  \"acceptance\": {\n    \"pass\": true\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "b1": {
+            "command": [
+              "python",
+              "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py",
+              "--corpus",
+              "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+              "--out-dir",
+              "deliverables_n22_24/pod_out/b1"
+            ],
+            "returncode": 0,
+            "wall_s": 17.28260629810393,
+            "stdout_tail": "loaded corpus: deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl (192 formulas)\ncorpus sha256: 8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a\n  192 formulas, 24 cells, per-cell [8]\n  semantic support exact and hashes/truths distinct in every stratum\n  [07:34:51] measured 24/192\n  [07:34:52] measured 48/192\n  [07:34:53] measured 72/192\n  [07:34:54] measured 96/192\n  [07:34:56] measured 120/192\n  [07:34:58] measured 144/192\n  [07:35:00] measured 168/192\n  [07:35:03] measured 192/192\nround-robin schedules ...\nwrote deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json\nwrote deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv\ntotal wall time: 17.1s\n",
+            "stderr_tail": ""
+          }
+        }
+      },
+      "files": [
+        "deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json",
+        "deliverables_n22_24/pod_out/current_environment.json",
+        "deliverables_n22_24/pod_out/current_phases.csv",
+        "deliverables_n22_24/pod_out/current_raw.csv",
+        "deliverables_n22_24/pod_out/current_selector.csv",
+        "deliverables_n22_24/pod_out/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/current_summary.json",
+        "deliverables_n22_24/pod_out/gap/current_audit.json",
+        "deliverables_n22_24/pod_out/gap/current_environment.json",
+        "deliverables_n22_24/pod_out/gap/current_raw.csv",
+        "deliverables_n22_24/pod_out/gap/current_selector.csv",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_selector_gap_study.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_audit.json",
+        "deliverables_n22_24/pod_out/symmetric/current_raw.csv",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_symmetric_wrapper_followup.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_summary.csv"
+      ],
+      "acceptance": {
+        "b1_control": {
+          "geomean": 0.8814449194597949,
+          "ci95": [
+            0.8705508533518822,
+            0.8917653311291581
+          ],
+          "reference": 0.8876,
+          "pass": true
+        },
+        "pass": true,
+        "selector_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0038833063856212,
+              "regret_ci95": [
+                1.0,
+                1.009875515425456
+              ],
+              "regret_max": 1.1856393461351713,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "raw",
+              "role": "validation_reused",
+              "n": 307,
+              "refused_or_ineligible_count": 14,
+              "regret_geomean": 1.0158834225427191,
+              "regret_ci95": [
+                1.0065058983631148,
+                1.0277334515331804
+              ],
+              "regret_max": 1.6415402140436244,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.001007687888688,
+              "regret_ci95": [
+                1.0,
+                1.0021850041368408
+              ],
+              "regret_max": 1.0833189361218458,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "validation_reused",
+              "n": 321,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.016348473713196,
+              "regret_ci95": [
+                1.0079607535094997,
+                1.029960175001547
+              ],
+              "regret_max": 1.640950385282782,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            }
+          ],
+          "pass": true,
+          "gate": {
+            "regret_geomean_max": 1.1,
+            "catastrophic_ge_2_count": 0
+          }
+        },
+        "selector_gap_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 1,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.0860913429952157,
+              "regret_max": 2.2078944932242375,
+              "role": "tuning"
+            },
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 0,
+              "n": 17,
+              "pass": false,
+              "regret_geomean": 1.1340897082299706,
+              "regret_max": 1.6163870261976472,
+              "role": "validation_reused"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 2,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.0993294365581945,
+              "regret_max": 2.1659976244418537,
+              "role": "tuning"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 0,
+              "n": 23,
+              "pass": false,
+              "regret_geomean": 1.1684424196008174,
+              "regret_max": 1.6155883309368149,
+              "role": "validation_reused"
+            }
+          ],
+          "gate": {
+            "catastrophic_ge_2_count": 0,
+            "regret_geomean_max": 1.1
+          },
+          "pass": false
+        },
+        "correction_integrity": {
+          "selector": {
+            "rows": 401,
+            "failures": [],
+            "roles": {
+              "tuning": 80,
+              "validation_reused": 321
+            },
+            "pass": true
+          },
+          "selector_gap": {
+            "rows": 71,
+            "failures": [],
+            "pass": true
+          },
+          "symmetric": {
+            "rows": 264,
+            "failures": [],
+            "pass": true
+          },
+          "source_snapshots": {
+            "manifest_count": 3,
+            "file_count": 16,
+            "failures": [],
+            "pass": true
+          },
+          "pass": true
+        }
+      },
+      "lifetime_s": 89.35794401168823,
+      "cost_usd_actual": 0.00273
+    },
+    {
+      "pod_index": 3,
+      "status": "complete",
+      "terminated": true,
+      "pod_id": "0yki225dikil17",
+      "cpu_flavor": "cpu5c",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.07,
+      "projected_hard_lifetime_cost_usd": 0.04083333333333333,
+      "state": {
+        "done": true,
+        "stage": "complete",
+        "error": null,
+        "environment": {
+          "platform": "Linux-6.8.0-51-generic-x86_64-with-glibc2.36",
+          "python": "3.13.5",
+          "machine": "x86_64",
+          "logical_cpu_count": 32,
+          "cgroup_cpu_max": null,
+          "cgroup_memory_max": null,
+          "runpod_pod_id": "0yki225dikil17",
+          "cpu_model": "AMD EPYC 4564P 16-Core Processor",
+          "numpy": "2.3.2"
+        },
+        "input_verification": {
+          "ok": true,
+          "mismatches": [],
+          "archive_source_file_count": 69
+        },
+        "drivers": {
+          "selector_full": {
+            "command": [
+              "python",
+              "scripts/cm_deep_performance_audit.py",
+              "--suite",
+              "representative",
+              "--corpora",
+              "bx1,b2,epfl",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "8388608",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/current"
+            ],
+            "returncode": 0,
+            "wall_s": 15.641891971230507,
+            "stdout_tail": "3.0177392239221286 cm words/flat=2.70\nepfl 102/129 epfl-random_control-int2float-po3-15980bb2bc: compile=215.2us raw words/flat=3.501712961821901 cm words/flat=3.09\nepfl 103/129 epfl-random_control-int2float-po4-f28975a467: compile=486.0us raw words/flat=3.17686804256343 cm words/flat=2.70\nepfl 104/129 epfl-random_control-int2float-po5-b67636a98e: compile=338.6us raw words/flat=3.3683145485776134 cm words/flat=2.76\nepfl 105/129 epfl-random_control-int2float-po6-f3b25f4977: compile=131.0us raw words/flat=3.51738679929541 cm words/flat=3.04\nepfl 106/129 epfl-random_control-int2float-internal25-be3b3fac1d: compile=355.2us raw words/flat=3.589442095379536 cm words/flat=2.99\nepfl 107/129 epfl-random_control-mem_ctrl-po614-b0a54afe66: compile=335.3us raw words/flat=1.3687582253836699 cm words/flat=1.24\nepfl 108/129 epfl-random_control-mem_ctrl-po622-b73ccd172a: compile=688.7us raw words/flat=0.38999557392780465 cm words/flat=0.42\nepfl 109/129 epfl-random_control-mem_ctrl-po623-7f80ce9c66: compile=751.9us raw words/flat=0.37707692102703494 cm words/flat=0.41\nepfl 110/129 epfl-random_control-mem_ctrl-po627-7b4af14eba: compile=678.6us raw words/flat=0.40462751505230393 cm words/flat=0.43\nepfl 111/129 epfl-random_control-priority-internal17-ead80e25a7: compile=262.9us raw words/flat=3.805127732928947 cm words/flat=2.74\nepfl 112/129 epfl-random_control-priority-internal33-6197962bc5: compile=529.3us raw words/flat=1.3255177433715963 cm words/flat=1.16\nepfl 113/129 epfl-random_control-priority-internal390-5c1b8c3dc3: compile=256.8us raw words/flat=3.2709206641113835 cm words/flat=2.60\nepfl 114/129 epfl-random_control-priority-internal636-78eeeb8379: compile=266.1us raw words/flat=0.4493243521100117 cm words/flat=0.41\nepfl 115/129 epfl-random_control-priority-internal919-8f1126a8c9: compile=154.7us raw words/flat=3.1641912362373454 cm words/flat=2.78\nepfl 116/129 epfl-random_control-router-internal19-4200fe3838: compile=121.8us raw words/flat=3.2564149186216684 cm words/flat=2.67\nepfl 117/129 epfl-random_control-router-internal29-ebfa4eab0e: compile=174.6us raw words/flat=2.657024519987826 cm words/flat=2.36\nepfl 118/129 epfl-random_control-router-internal39-7af9c35a7e: compile=226.5us raw words/flat=0.901220342533913 cm words/flat=0.85\nepfl 119/129 epfl-random_control-router-internal104-77af71e925: compile=251.6us raw words/flat=2.808797944025929 cm words/flat=2.52\nepfl 120/129 epfl-random_control-router-internal135-565d2a3a16: compile=183.6us raw words/flat=2.014940314294349 cm words/flat=1.77\nepfl 121/129 epfl-random_control-router-internal177-832d43e9af: compile=274.6us raw words/flat=0.6215592110450686 cm words/flat=0.67\nepfl 122/129 epfl-random_control-router-internal233-5ddc8d5e1b: compile=594.9us raw words/flat=0.3745023166133843 cm words/flat=0.43\nepfl 123/129 epfl-random_control-voter-internal72-661c8b218d: compile=493.2us raw words/flat=1.8997799251465148 cm words/flat=1.71\nepfl 124/129 epfl-random_control-voter-internal3075-f8954d4f09: compile=1108.9us raw words/flat=1.9196373573643069 cm words/flat=1.70\nepfl 125/129 epfl-random_control-voter-internal4823-4087895a60: compile=971.0us raw words/flat=1.9123238271686627 cm words/flat=1.66\nepfl 126/129 epfl-random_control-voter-internal7179-1f4236d03b: compile=1020.2us raw words/flat=1.920356763745878 cm words/flat=1.71\nepfl 127/129 epfl-random_control-voter-internal9182-24dfeed155: compile=1081.2us raw words/flat=1.9220994620318446 cm words/flat=1.72\nepfl 128/129 epfl-random_control-voter-internal10038-a5538c254b: compile=1027.1us raw words/flat=1.899587844262208 cm words/flat=1.72\nepfl 129/129 epfl-random_control-voter-internal10957-7dc361262b: compile=1205.5us raw words/flat=1.9379073232589448 cm words/flat=1.71\nWrote deliverables_n22_24/pod_out/current_raw.csv\nWrote deliverables_n22_24/pod_out/current_summary.json\nWrote deliverables_n22_24/pod_out/current_selector.csv\nWrote deliverables_n22_24/pod_out/current_phases.csv\nWrote deliverables_n22_24/pod_out/current_environment.json\n",
+            "stderr_tail": ""
+          },
+          "selector_gap": {
+            "command": [
+              "python",
+              "scripts/cm_selector_gap_study.py",
+              "--corpus",
+              "deliverables_n22_24/followups_2026_08_24/selector_gap/selector_gap_corpus.jsonl",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/gap/current",
+              "--prep-repetitions",
+              "3",
+              "--kernel-rounds",
+              "5",
+              "--max-kernel-temporary-bytes",
+              "16777216"
+            ],
+            "returncode": 0,
+            "wall_s": 1.5407081544399261,
+            "stdout_tail": "r-gap-k14-mixed-shared-2-1cf5bb233646\ntuning 33/48 selector-gap-k15-xor_dom-tree-1-2e0891e31407\ntuning 34/48 selector-gap-k15-xor_dom-tree-2-28f6f3f3f8d5\ntuning 35/48 selector-gap-k15-xor_dom-shared-1-474676d10915\ntuning 36/48 selector-gap-k15-xor_dom-shared-2-28f94d5d642c\ntuning 37/48 selector-gap-k15-andor_dom-tree-1-4d50b0642787\ntuning 38/48 selector-gap-k15-andor_dom-tree-2-372028c2497e\ntuning 39/48 selector-gap-k15-andor_dom-shared-1-9aa243490576\ntuning 40/48 selector-gap-k15-andor_dom-shared-2-abf82a07cbf5\ntuning 41/48 selector-gap-k15-impeqv_dom-tree-1-e2a491eea144\ntuning 42/48 selector-gap-k15-impeqv_dom-tree-2-accd4da50448\ntuning 43/48 selector-gap-k15-impeqv_dom-shared-1-4493d2b06f92\ntuning 44/48 selector-gap-k15-impeqv_dom-shared-2-618b7d4d57a5\ntuning 45/48 selector-gap-k15-mixed-tree-1-1cca3b230dee\ntuning 46/48 selector-gap-k15-mixed-tree-2-2479fdf72c85\ntuning 47/48 selector-gap-k15-mixed-shared-1-5d08450d50ab\ntuning 48/48 selector-gap-k15-mixed-shared-2-47c2f2399dad\nvalidation_reused 1/23 epfl-arithmetic-adder-po6-5e5f8d2bf9\nvalidation_reused 2/23 epfl-arithmetic-div-internal10810-b1ae747db1\nvalidation_reused 3/23 epfl-arithmetic-log2-internal10182-8de9088c0d\nvalidation_reused 4/23 epfl-arithmetic-multiplier-po6-1ed43b9012\nvalidation_reused 5/23 epfl-arithmetic-multiplier-internal2314-b18e1af7fc\nvalidation_reused 6/23 epfl-arithmetic-sin-internal473-3d94727928\nvalidation_reused 7/23 epfl-arithmetic-sin-internal618-7a9d438d5b\nvalidation_reused 8/23 epfl-arithmetic-sin-internal2610-34083b18d5\nvalidation_reused 9/23 epfl-arithmetic-sin-internal2639-ac10ac7863\nvalidation_reused 10/23 epfl-arithmetic-sqrt-po57-bf55ec5ca5\nvalidation_reused 11/23 epfl-arithmetic-square-po13-eca0925c59\nvalidation_reused 12/23 epfl-arithmetic-square-po14-e64d8827d4\nvalidation_reused 13/23 epfl-arithmetic-square-po15-ffd477ae96\nvalidation_reused 14/23 epfl-random_control-arbiter-internal4039-8a2c198584\nvalidation_reused 15/23 epfl-random_control-i2c-po41-b4580bd004\nvalidation_reused 16/23 epfl-random_control-i2c-po42-455375796e\nvalidation_reused 17/23 epfl-random_control-i2c-po44-bebebe05c9\nvalidation_reused 18/23 epfl-random_control-i2c-po68-6659cda0b7\nvalidation_reused 19/23 epfl-random_control-i2c-po74-3bf1791a1e\nvalidation_reused 20/23 epfl-random_control-mem_ctrl-po614-b0a54afe66\nvalidation_reused 21/23 epfl-random_control-priority-internal33-6197962bc5\nvalidation_reused 22/23 epfl-random_control-router-internal39-7af9c35a7e\nvalidation_reused 23/23 epfl-random_control-router-internal177-832d43e9af\n{\n  \"paths\": {\n    \"raw\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_raw.csv\",\n    \"selector\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_selector.csv\",\n    \"audit\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_audit.json\",\n    \"environment\": \"/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_environment.json\"\n  },\n  \"acceptance\": {\n    \"gate\": {\n      \"regret_geomean_max\": 1.1,\n      \"catastrophic_ge_2_count\": 0\n    },\n    \"checks\": [\n      {\n        \"arm\": \"raw\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.0899895368274657,\n        \"regret_max\": 2.2178512361571996,\n        \"catastrophic_ge_2_count\": 1,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"raw\",\n        \"role\": \"validation_reused\",\n        \"n\": 17,\n        \"regret_geomean\": 1.152446008612166,\n        \"regret_max\": 1.6317126987348982,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"tuning\",\n        \"n\": 48,\n        \"regret_geomean\": 1.0977712696644288,\n        \"regret_max\": 2.097113133524566,\n        \"catastrophic_ge_2_count\": 2,\n        \"pass\": false\n      },\n      {\n        \"arm\": \"cm\",\n        \"role\": \"validation_reused\",\n        \"n\": 23,\n        \"regret_geomean\": 1.1834831449582146,\n        \"regret_max\": 1.6588155280528325,\n        \"catastrophic_ge_2_count\": 0,\n        \"pass\": false\n      }\n    ],\n    \"pass\": false\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "symmetric": {
+            "command": [
+              "python",
+              "scripts/cm_symmetric_wrapper_followup.py",
+              "--output-prefix",
+              "deliverables_n22_24/pod_out/symmetric/current",
+              "--rounds",
+              "7"
+            ],
+            "returncode": 0,
+            "wall_s": 5.793228201568127,
+            "stdout_tail": "{\n  \"paths\": {\n    \"raw\": \"deliverables_n22_24/pod_out/symmetric/current_raw.csv\",\n    \"summary\": \"deliverables_n22_24/pod_out/symmetric/current_summary.csv\",\n    \"audit\": \"deliverables_n22_24/pod_out/symmetric/current_audit.json\"\n  },\n  \"acceptance\": {\n    \"pass\": true\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          "b1": {
+            "command": [
+              "python",
+              "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py",
+              "--corpus",
+              "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+              "--out-dir",
+              "deliverables_n22_24/pod_out/b1"
+            ],
+            "returncode": 0,
+            "wall_s": 11.71240795403719,
+            "stdout_tail": "loaded corpus: deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl (192 formulas)\ncorpus sha256: 8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a\n  192 formulas, 24 cells, per-cell [8]\n  semantic support exact and hashes/truths distinct in every stratum\n  [07:36:10] measured 24/192\n  [07:36:11] measured 48/192\n  [07:36:12] measured 72/192\n  [07:36:13] measured 96/192\n  [07:36:14] measured 120/192\n  [07:36:15] measured 144/192\n  [07:36:17] measured 168/192\n  [07:36:19] measured 192/192\nround-robin schedules ...\nwrote deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json\nwrote deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv\ntotal wall time: 11.6s\n",
+            "stderr_tail": ""
+          }
+        }
+      },
+      "files": [
+        "deliverables_n22_24/pod_out/b1/CM_gap_e3_corrected_summary_2026_08_02.csv",
+        "deliverables_n22_24/pod_out/b1/cm_gap_e3_corrected_results_2026_08_02.json",
+        "deliverables_n22_24/pod_out/current_environment.json",
+        "deliverables_n22_24/pod_out/current_phases.csv",
+        "deliverables_n22_24/pod_out/current_raw.csv",
+        "deliverables_n22_24/pod_out/current_selector.csv",
+        "deliverables_n22_24/pod_out/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/current_summary.json",
+        "deliverables_n22_24/pod_out/gap/current_audit.json",
+        "deliverables_n22_24/pod_out/gap/current_environment.json",
+        "deliverables_n22_24/pod_out/gap/current_raw.csv",
+        "deliverables_n22_24/pod_out/gap/current_selector.csv",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_deep_performance_audit.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/scripts/cm_selector_gap_study.py",
+        "deliverables_n22_24/pod_out/gap/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_audit.json",
+        "deliverables_n22_24/pod_out/symmetric/current_raw.csv",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/bitset_backend.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cm_ir.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/cmbench/backends/bitset_engine.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_benchmark_provenance.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/scripts/cm_symmetric_wrapper_followup.py",
+        "deliverables_n22_24/pod_out/symmetric/current_source_snapshot/source_manifest.json",
+        "deliverables_n22_24/pod_out/symmetric/current_summary.csv"
+      ],
+      "acceptance": {
+        "b1_control": {
+          "geomean": 0.8831426000690299,
+          "ci95": [
+            0.8722731250708331,
+            0.8933932349723018
+          ],
+          "reference": 0.8876,
+          "pass": true
+        },
+        "pass": true,
+        "selector_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0043571788229575,
+              "regret_ci95": [
+                1.0020767100462422,
+                1.0077417971980591
+              ],
+              "regret_max": 1.1878161209420928,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "raw",
+              "role": "validation_reused",
+              "n": 307,
+              "refused_or_ineligible_count": 14,
+              "regret_geomean": 1.0165789571330812,
+              "regret_ci95": [
+                1.0069705268027043,
+                1.0294179834162087
+              ],
+              "regret_max": 1.6596151329057625,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "tuning",
+              "n": 80,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0011646876060647,
+              "regret_ci95": [
+                1.0,
+                1.002542885590917
+              ],
+              "regret_max": 1.0975943064350273,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            },
+            {
+              "arm": "cm",
+              "role": "validation_reused",
+              "n": 321,
+              "refused_or_ineligible_count": 0,
+              "regret_geomean": 1.0172212116526003,
+              "regret_ci95": [
+                1.0083206848864494,
+                1.0316751133410602
+              ],
+              "regret_max": 1.689395924443926,
+              "catastrophic_ge_2_count": 0,
+              "pass": true
+            }
+          ],
+          "pass": true,
+          "gate": {
+            "regret_geomean_max": 1.1,
+            "catastrophic_ge_2_count": 0
+          }
+        },
+        "selector_gap_performance_gate": {
+          "checks": [
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 1,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.0899895368274657,
+              "regret_max": 2.2178512361571996,
+              "role": "tuning"
+            },
+            {
+              "arm": "raw",
+              "catastrophic_ge_2_count": 0,
+              "n": 17,
+              "pass": false,
+              "regret_geomean": 1.152446008612166,
+              "regret_max": 1.6317126987348982,
+              "role": "validation_reused"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 2,
+              "n": 48,
+              "pass": false,
+              "regret_geomean": 1.0977712696644288,
+              "regret_max": 2.097113133524566,
+              "role": "tuning"
+            },
+            {
+              "arm": "cm",
+              "catastrophic_ge_2_count": 0,
+              "n": 23,
+              "pass": false,
+              "regret_geomean": 1.1834831449582146,
+              "regret_max": 1.6588155280528325,
+              "role": "validation_reused"
+            }
+          ],
+          "gate": {
+            "catastrophic_ge_2_count": 0,
+            "regret_geomean_max": 1.1
+          },
+          "pass": false
+        },
+        "correction_integrity": {
+          "selector": {
+            "rows": 401,
+            "failures": [],
+            "roles": {
+              "tuning": 80,
+              "validation_reused": 321
+            },
+            "pass": true
+          },
+          "selector_gap": {
+            "rows": 71,
+            "failures": [],
+            "pass": true
+          },
+          "symmetric": {
+            "rows": 264,
+            "failures": [],
+            "pass": true
+          },
+          "source_snapshots": {
+            "manifest_count": 3,
+            "file_count": 16,
+            "failures": [],
+            "pass": true
+          },
+          "pass": true
+        }
+      },
+      "lifetime_s": 74.73071098327637,
+      "cost_usd_actual": 0.001453
+    }
+  ],
+  "prior_attempt_cost_reserve_usd": 0.021215,
+  "total_cost_usd": 0.027027,
+  "all_pods_terminated": true,
+  "verdict": "passed",
+  "snapshot": {
+    "campaign": "CM corrected benchmark Runpod replication 2026-08-25",
+    "created_utc": "2026-08-25T07:32:06Z",
+    "files_sha256": {
+      "bitset_backend.py": "06a9a24a0bc1e579840d0349803353c08b86f7dd15bc7f9bad7d557d9f0c9cdf",
+      "cm_bench.py": "6991924e7167660d8da7d0911832d7691f7c77866b685058ce468be694fd4a45",
+      "cm_build.py": "325987a6778feb09f2ff2e3a6a1f21e672ea1696c294f063261b2f5fbfabb33e",
+      "cm_build_lazy.py": "3aa17385275179a8d42c76cce7e9033358946ddc191a2d2802235912cb81f19e",
+      "cm_build_pair.py": "2eca538f8eabd8d9df6cc0f54813750efed3e815f8d86e3045a78be6243c93bf",
+      "cm_expr_serde.py": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99",
+      "cm_exprlib.py": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040",
+      "cm_ir.py": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09",
+      "cm_lm.py": "c53ef95bcc576866cdff9de20ff85bf77abba14ba29bbd9d893032117a52e5d5",
+      "cm_normalize.py": "7de16b5dc28c5381bf80931403a6803d2ff6b9c249065e45464305d3f25ec6d8",
+      "cm_operator_difference.py": "9b90399f8462e2b3d75dbdb7e5a0c0a1eadb59c27d3bdc1efc5124e38db6633a",
+      "cm_pair.py": "aae72270f8218a075fa12902826a740b8d314f4b33a024a52443e8cc086ac226",
+      "cm_parallel.py": "d1cd27981718bcfe38621844309b8fbf122a6140b98114b4efd66dbb2e928dc7",
+      "cm_remote_executor.py": "d1ea9cf03c513320c9ea0cc1643dd858168530d3e233c675b2f23e2be5e941da",
+      "cm_remote_worker.py": "412dcb9961876a62b065068d51da33cad372c89698be7f2bea0e6b45cc8857a1",
+      "cm_render.py": "4d75fe0c122d41f181f0699df9799f49a7e99075a8caaf7aed9ce0c6896810a4",
+      "cm_runpod_client.py": "55f7fb0aac005b5fbe43526349d12422c71987be6732c0245dc59822f933c2ba",
+      "cm_runpod_config.py": "ed55485a9adffad023504eaf78e5138ead7de044d71fe028077eed7031f07291",
+      "cm_runpod_deploy.py": "56e1eb24ca81bb7f0143ef22292b0ade2c9b47ec54c197f07b103de36b189dea",
+      "cm_runpod_protocol.py": "53ce83d80b7834cc765565200bf0f7c436b362963b15d5caab9e0f574e8d9c6a",
+      "cm_runpod_smoke_test.py": "6dc033900f9ee20364f354b530a5d52cb783a34edb36bd80f52f908544a7e2f2",
+      "cm_token.py": "a54cfa95af3b42fd1bc61b3fa753960b660481d87a48211d24578f84e457ef95",
+      "cmbench/__init__.py": "238d23590d91c767d07751bd70cdac6cb58bb017b47af7dbc189a92031fab1c9",
+      "cmbench/availability.py": "bf7f52425924447e4d092d63743fec8c983eecbd129762edb23df9f31cbe2560",
+      "cmbench/backends/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cmbench/backends/bitset_engine.py": "91cfa4ec491d5153b1332a6738ef34c1e17335ee48df168bdc06ad92faa2db62",
+      "cmbench/backends/bitset_utils.py": "e3ec1d52594c98abce3abf383a409f3fe8434ae026b5723eaf294567db679429",
+      "cmbench/backends/robdd_dd.py": "4389e88b41dd5509e7bc8ab40efafdf451490f345dde0e82d5d4457dcd899e28",
+      "cmbench/cli.py": "31088a64c609fdd89cd0147924746d3531922ae10ce71b40adc1cc2fa6a2a24e",
+      "cmbench/config.py": "6c01814a84c22954953611adcbe9f1eaa71a7e1ea47bac1977b116327daeda99",
+      "cmbench/context.py": "807c082a92f650457fe385547eb09ec838d1a7c1b7732f27c7e9fc88f921d1c8",
+      "cmbench/corpus.py": "1fa8f4c232587bba248aef8ce8c971feaf7702a8e1db944420c4f30b34c1ef5d",
+      "cmbench/enums.py": "e0c90c636dec93f2f0a28b7eec22808283ef6e7894c70c10b1706cd100918ea4",
+      "cmbench/expr/__init__.py": "2b5208b0e4b96f3e1e8b6bc86dd07dcaff9214a87ceb5eb44aee9d264f9592a5",
+      "cmbench/expr/diagnostics.py": "47207bfe5320d0c6b62f7f543cd785935815c49f252d18e2406f55d79197e9a3",
+      "cmbench/expr/equivalence.py": "37fb69f2dd8345533408af49d4db473081b943cd69b4159b4f7e5e403aac927c",
+      "cmbench/expr/eval.py": "ad2eca23a584b827f92410a06405be28f0ecd1ad7b37898d8091b5aba0888f59",
+      "cmbench/expr/families.py": "f9664b4e5c5c06ba36c3be834928cac3afffcf6041693bde9648ff5c107683e5",
+      "cmbench/expr/generators.py": "65eac1c58a07bda9060f759dd51efa771673d44cfdde977f0e796f4025bd7b5b",
+      "cmbench/expr/partial_contexts.py": "0cf1f12fa95bc9f03f26c487e12be4759aa407de42be0df2cf487c5c986e753e",
+      "cmbench/expr/visitors.py": "9cc081cba5ee5b8fa0cfdc7624b47d2af5213e7d92ebb75e0ad7dc12cb270f74",
+      "cmbench/output_budget.py": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498",
+      "cmbench/reporting/__init__.py": "a9a8dc0c0af9ec7002390be1de773f7c09ac5b3adafa86190028d5bdcec5604a",
+      "cmbench/reporting/csv_io.py": "8b83f577b107af130b49c390e125e40b025b32e583c0e12f681daa0cd12b0264",
+      "cmbench/reporting/summary_tables.py": "586e6ff2a4656d9e5d6fcf56b93187fd6bf6ff71f7b8942ae717fd4d8c99ec97",
+      "cmbench/results/__init__.py": "f0334a6b2ee521f906d3d11a3c20c094f92fed951a80e986efd5ae7a01f18a15",
+      "cmbench/results/aggregation.py": "7b8246f1bca61b3d2ae62d6f8fd77a31aca84fa4d12440f7dedc9b8afb15ecf6",
+      "cmbench/results/equivalence.py": "6ea540207fe7edfb095a6e7c2f1faca3f49866330d22c42f11e15ff882909f87",
+      "cmbench/results/expression_family.py": "bfc3b7e9d18df1231c07233358e1d6ae726c35b21df077282e3912863299a95a",
+      "cmbench/results/flatten.py": "c38e718f521d06025f9c9b2433e06f8c5cd85ccb9445a72fcacd3054f3c34b61",
+      "cmbench/results/paired.py": "192db23f7ef79cbd2ac94894dda0b2dc2d63f95e57930382631bfaaa6e0a860d",
+      "cmbench/results/partial_context.py": "1215912ed471ca7b9fda4d3bfd2f22da90381fb93260b7c5a9e45ada95ed4d5e",
+      "cmbench/results/schema.py": "607ab813ecdab4d6eb72cd482547ce880973a26d29f78839ec3450c4bee43d66",
+      "cmbench/results/single_expr.py": "fe94c7cc1f1387b63dd913d87a5ba32372fa9afa54af97b2597dd02ce0a7d9a0",
+      "cmbench/results/timing.py": "8b0ac19b1c7d0b89f6138407933aaa3cd6bf7d7db05091c97b26913163139861",
+      "cmbench/timing.py": "1899a1248ff2d4ffeb11ed89488e95b060f4274c319684266fe67331c0233c62",
+      "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+      "deliverables_n22_24/CM_gap_epfl_corpus_2026_08_03.jsonl": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac",
+      "deliverables_n22_24/b2_wrapper_2026_08_03/CM_b2_wrapper_corpus_2026_08_03.jsonl": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+      "deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_headline_corpus_2026_08_03.jsonl": "31b98462eb2d3d9a07dc75cb862ae90868b941a8d46aa9443aef8f9c7cba043c",
+      "deliverables_n22_24/bx1_crossover_2026_08_03/CM_bx1_crossover_corpus_2026_08_03.jsonl": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963",
+      "deliverables_n22_24/cm_gap_e3_corrected_2026_08_02.py": "421c32af52a78cff08a045c721f1842f12962939a77dcf0e7cab2775b88773a8",
+      "deliverables_n22_24/followups_2026_08_24/selector_gap/selector_gap_corpus.jsonl": "ba394c3342af638ab70b62c3c232dee3d8f0770d858aca2fcdb6e693a29f4516",
+      "expr_simplify.py": "dab25716ae5d983db8f53d869c524d3b3517feb2296058a09037452a19c3ef38",
+      "numba_backend.py": "ca97813b4a0cdf97595247cb92fd6257816291294c36b9106533073362966b03",
+      "scripts/cm_benchmark_provenance.py": "e955b203848c14f196a75ff086f682acc974abe89cf4b3c9569fb0ab2a65c7ed",
+      "scripts/cm_deep_performance_audit.py": "3296ea243d47eb4cbb7ab7c88f9e60307769fdad85fadae7934c767413cff7bf",
+      "scripts/cm_selector_gap_study.py": "21eef29b79dee4b61e6557172435fde06064c31b981c2409422ce9d652661c47",
+      "scripts/cm_symmetric_wrapper_followup.py": "75d4c706140a11f2fd0ce5fc6e1b0fd3a0bf5198be009e2427bf8adb42370a90"
+    },
+    "corpus_sha256": {
+      "b1": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a",
+      "bx1": "1709ff137de74d56d02ff115652461b49dde170bee8904303f16189743d69963",
+      "b2": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+      "epfl": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac"
+    },
+    "archive_sha256": "81d454e7381475e464c4286f9f4ed04d1e43f740e21bd8269b565213388d30dc",
+    "archive_bytes": 376504
+  }
+}

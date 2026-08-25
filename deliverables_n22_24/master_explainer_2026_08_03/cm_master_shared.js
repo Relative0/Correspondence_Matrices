@@ -150,17 +150,27 @@ function card(o) {
   const c = h("section", { class: "card", id: o.id });
   if (o.scope) c.append(h("p", { class: "scope", text: o.scope }));
   c.append(h(o.h || "h2", { text: o.title }));
-  if (o.caption) c.append(h("p", { class: "caption", html: P(o.caption) }));
+  if (o.caption) c.append(h("p", { class: "caption caption-preview", html: P(o.caption) }));
   if (o.legend) {
     const lg = h("div", { class: "legend" });
     o.legend.forEach(([col, lab]) =>
       lg.append(h("span", {}, [h("i", { style: `background:${col}` }), h("span", { text: lab })])));
     c.append(lg);
   }
-  if (o.svg) c.append(h("div", { class: "figwrap" }, [o.svg]));
-  if (o.svg2) c.append(h("div", { class: "figwrap" }, [o.svg2]));
-  if (o.visual) c.append(o.visual);
-  if (o.note) c.append(h("p", { class: "claim", html: P(o.note) }));
+  const graphTargets = [];
+  if (o.svg) {
+    const w = h("div", { class: "figwrap graph-click", title: "Click for explanation and analysis" }, [o.svg]);
+    graphTargets.push(w); c.append(w);
+  }
+  if (o.svg2) {
+    const w = h("div", { class: "figwrap graph-click", title: "Click for explanation and analysis" }, [o.svg2]);
+    graphTargets.push(w); c.append(w);
+  }
+  if (o.visual) {
+    o.visual.classList.add("graph-click");
+    o.visual.setAttribute("title", "Click for explanation and analysis");
+    graphTargets.push(o.visual); c.append(o.visual);
+  }
   if (o.table) {
     const d = h("details");
     d.append(h("summary", { text: "Table view (every plotted value)" }));
@@ -175,7 +185,64 @@ function card(o) {
     d.append(ul);
     c.append(d);
   }
-  if (o.claim) c.append(h("p", { class: "claim", html: P(o.claim) }));
+  if (graphTargets.length) {
+    const titleId = `${o.id}-analysis-title`;
+    const dialog = h("dialog", { class: "analysis-dialog", "aria-labelledby": titleId });
+    const shell = h("div", { class: "analysis-shell" });
+    const head = h("div", { class: "analysis-head" }, [
+      h("div", {}, [
+        h("p", { class: "scope", text: o.scope || "Graph analysis" }),
+        h("h2", { id: titleId, text: o.title }),
+      ]),
+    ]);
+    const close = h("button", { class: "analysis-close", type: "button", "aria-label": "Close analysis", text: "Close" });
+    head.append(close);
+    shell.append(head);
+    if (o.caption) shell.append(h("p", { class: "analysis-caption", html: P(o.caption) }));
+    if (o.note) shell.append(h("div", { class: "analysis-note" }, [
+      h("h3", { text: "What this means" }), h("p", { html: P(o.note) }),
+    ]));
+    if (o.claim) shell.append(h("div", { class: "analysis-note" }, [
+      h("h3", { text: "Decision boundary" }), h("p", { html: P(o.claim) }),
+    ]));
+    if (o.table) {
+      const data = h("details", { class: "analysis-data" });
+      data.append(h("summary", { text: "Every plotted value" }));
+      data.append(h("div", { class: "tablewrap" }, [o.table.cloneNode(true)]));
+      shell.append(data);
+    }
+    if (o.prov) {
+      const provenance = h("details", { class: "analysis-data" });
+      provenance.append(h("summary", { text: "Data provenance" }));
+      const ul = h("ul");
+      o.prov.forEach(p => ul.append(h("li", { html: `<code>${p.replace("::", "</code> :: <code>")}</code>` })));
+      provenance.append(ul); shell.append(provenance);
+    }
+    dialog.append(shell);
+    document.body.append(dialog);
+    let opener = null;
+    const openAnalysis = (node) => {
+      opener = node;
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+    };
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener("close", () => { if (opener) opener.focus(); });
+    graphTargets.forEach(node => node.addEventListener("click", e => {
+      if (!e.target.closest("a, button, summary, details")) openAnalysis(node);
+    }));
+    const explain = h("button", {
+      class: "explain-graph", type: "button", "aria-haspopup": "dialog",
+      "aria-controls": `${o.id}-analysis`, text: "Explain this graph",
+    });
+    dialog.id = `${o.id}-analysis`;
+    explain.addEventListener("click", () => openAnalysis(explain));
+    c.append(explain);
+  } else {
+    if (o.note) c.append(h("p", { class: "claim", html: P(o.note) }));
+    if (o.claim) c.append(h("p", { class: "claim", html: P(o.claim) }));
+  }
   return c;
 }
 function table(headers, rows, cls) {
@@ -644,14 +711,15 @@ function section(id, eyebrow, title, lede) {
 function layBlock(paras, tag) {
   const d = h("div", { class: "lay" });
   d.append(h("span", { class: "tag", text: tag || "In plain language" }));
-  [].concat(paras).forEach(p => d.append(h("p", { html: P(p) })));
+  const rows = [].concat(paras);
+  if (rows.length) d.append(h("p", { html: P(rows[0]) }));
+  if (rows.length > 1) d.append(moreBlock(rows.slice(1).map(p => h("p", { html: P(p) }))));
   return d;
 }
 function techBlock(paras, tag) {
   const d = h("div", { class: "tech" });
-  if (tag !== null) d.append(h("span", { class: "tag", text: tag || "The technical layer" }));
   [].concat(paras).forEach(p => d.append(h("p", { html: P(p) })));
-  return d;
+  return moreBlock([d], tag === null ? "Technical details" : (tag || "Technical layer"));
 }
 function banner(kind, title, bodyHtml) {
   const b = h("div", { class: "banner " + (kind || "") });
@@ -669,38 +737,140 @@ function tiles(items) {
   return g;
 }
 
-/* ------------------------------------------------------ content blocks */
-function domainGrid(domains) {
-  const g = h("div", { class: "grid2" });
-  domains.forEach(d => g.append(h("div", { class: "dom" }, [
-    h("h4", { text: d.name }),
-    h("p", { class: "q", html: "“" + P(d.question) + "”" }),
-    h("p", { class: "t", html: P(d.lay) }),
-    h("p", { class: "why", html: P(d.technical) }),
+function moreBlock(children, label = "More") {
+  const d = h("details", { class: "card-more" });
+  const summary = h("summary", { text: label });
+  const body = h("div", { class: "more-body" });
+  [].concat(children).forEach(child => child && body.append(child));
+  d.append(summary, body);
+  d.addEventListener("toggle", () => { summary.textContent = d.open ? "Less" : label; });
+  return d;
+}
+
+function projectStatePanel() {
+  const g = h("section", { class: "project-state", "aria-label": "State of the project" });
+  DATA._content.project_state.items.forEach(item => g.append(h("article", { class: "state-item " + item.kind }, [
+    h("p", { class: "state-label", text: item.label }),
+    h("h2", { text: item.title }),
+    h("p", { text: item.summary }),
   ])));
+  return g;
+}
+
+function evidenceBoundary() {
+  const b = h("aside", { class: "boundary-strip", "aria-label": "Evidence boundaries" });
+  b.append(h("h2", { text: "Keep these boundaries visible" }));
+  const ul = h("ul");
+  DATA._content.project_state.boundaries.forEach(x => ul.append(h("li", { html: P(x) })));
+  b.append(ul);
+  return b;
+}
+
+function opportunityMap(items) {
+  const g = h("div", { class: "opportunity-map" });
+  items.forEach(item => {
+    const c = h("article", { class: "opportunity " + item.kind });
+    c.append(h("div", { class: "opportunity-head" }, [
+      h("h4", { text: item.name }),
+      h("span", { class: "pill " + (item.kind === "measured" ? "ok" : "open"), text: item.status }),
+    ]));
+    c.append(h("p", { class: "opportunity-problem", html: P(item.problem) }));
+    c.append(h("div", { class: "opportunity-arrow", "aria-hidden": "true", text: "Problem → CM capability → proof" }));
+    c.append(moreBlock([
+      h("dl", { class: "opportunity-detail" }, [
+        h("dt", { text: "CM capability" }), h("dd", { html: P(item.wedge) }),
+        h("dt", { text: "Evidence today" }), h("dd", { html: P(item.evidence) }),
+        h("dt", { text: "Proof still needed" }), h("dd", { html: P(item.proof) }),
+      ]),
+    ]));
+    g.append(c);
+  });
+  return g;
+}
+
+function thesisRisks() {
+  const g = h("div", { class: "risk-grid" });
+  DATA._content.project_state.risks.forEach((risk, i) => {
+    const c = h("article", { class: "risk-item" }, [
+      h("span", { class: "risk-num", text: String(i + 1).padStart(2, "0") }),
+      h("h4", { text: risk.title }),
+      h("p", { html: P(risk.visible) }),
+    ]);
+    c.append(moreBlock([h("p", { html: "<b>Test that resolves it:</b> " + P(risk.test) })]));
+    g.append(c);
+  });
+  return g;
+}
+
+/* ------------------------------------------------------ content blocks */
+function domainGrid(domains, cfg = {}) {
+  const g = h("div", { class: "grid2" });
+  domains.forEach(d => {
+    const c = h("article", { class: "dom" }, [
+      h("h4", { text: cfg.layNames ? (d.lay_name || d.name) : d.name }),
+      h("p", { class: "q", html: "“" + P(d.question) + "”" }),
+      h("p", { class: "t", html: P(d.lay) }),
+    ]);
+    if (d.technical) c.append(moreBlock([
+      h("p", { class: "why", html: P(d.technical) }),
+    ]));
+    g.append(c);
+  });
   return g;
 }
 
 function toolCards(tools) {
   const g = h("div", { class: "grid2" });
-  tools.forEach(t => {
+  const ordered = [...tools].sort((a, b) => {
+    const acm = a.name.startsWith("CM (") ? 0 : 1;
+    const bcm = b.name.startsWith("CM (") ? 0 : 1;
+    return acm - bcm;
+  });
+  ordered.forEach(t => {
     const c = h("div", { class: "toolcard" });
+    if (t.name.startsWith("CM (")) c.classList.add("subject-tool");
     c.append(h("h4", { text: t.name }));
     c.append(h("p", { class: "role", text: t.role }));
     const dl = h("dl");
     dl.append(h("dt", { text: "Question it answers" }));
     dl.append(h("dd", { html: P(t.question) }));
-    dl.append(h("dt", { text: "Superpower" }));
-    dl.append(h("dd", { html: P(t.superpower) }));
-    dl.append(h("dt", { text: "What it costs you" }));
-    dl.append(h("dd", { html: P(t.cost) }));
-    dl.append(h("dt", { text: "Analogy" }));
-    dl.append(h("dd", { class: "analogy", html: P(t.analogy) }));
-    if (t.measured) {
-      dl.append(h("dt", { text: "Measured here" }));
-      dl.append(h("dd", { html: P(t.measured) }));
-    }
     c.append(dl);
+    const extra = h("dl");
+    extra.append(h("dt", { text: "Superpower" }));
+    extra.append(h("dd", { html: P(t.superpower) }));
+    extra.append(h("dt", { text: "What it costs you" }));
+    extra.append(h("dd", { html: P(t.cost) }));
+    extra.append(h("dt", { text: "Analogy" }));
+    extra.append(h("dd", { class: "analogy", html: P(t.analogy) }));
+    if (t.measured) {
+      extra.append(h("dt", { text: "Measured here" }));
+      extra.append(h("dd", { html: P(t.measured) }));
+    }
+    c.append(moreBlock([extra]));
+    g.append(c);
+  });
+  return g;
+}
+
+function layToolCards(tools) {
+  const g = h("div", { class: "grid2" });
+  const ordered = [...tools].sort((a, b) => (a.name.startsWith("CM (") ? 0 : 1) - (b.name.startsWith("CM (") ? 0 : 1));
+  ordered.forEach(t => {
+    const c = h("article", { class: "toolcard" });
+    if (t.name.startsWith("CM (")) c.classList.add("subject-tool");
+    c.append(h("h4", { text: t.lay_name }));
+    c.append(h("p", { class: "role", text: t.lay_role }));
+    const dl = h("dl", {}, [
+      h("dt", { text: "It answers" }),
+      h("dd", { text: t.lay_question || t.question }),
+    ]);
+    c.append(dl);
+    c.append(moreBlock([h("dl", {}, [
+      h("dt", { text: "Think of it as" }),
+      h("dd", { class: "analogy", text: t.analogy }),
+      h("dt", { text: "Measured status" }),
+      h("dd", { html: P(t.measured || "Not benchmarked here; it answers a different question.") }),
+    ])]));
     g.append(c);
   });
   return g;

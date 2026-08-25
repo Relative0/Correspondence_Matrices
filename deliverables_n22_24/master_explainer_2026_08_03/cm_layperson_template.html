@@ -57,15 +57,7 @@ app.append(h("header", { class: "page" }, [
     "does the same job. A bank checking that its lending rules do not contradict each other. A security " +
     "team asking whether any user could reach a file they should not. A biologist working out which stable " +
     "states a network of genes can settle into. Same underlying question, wildly different fields." }));
-  {
-    const g = h("div", { class: "grid2" });
-    C.domains.items.slice(0, 6).forEach(d => g.append(h("div", { class: "dom" }, [
-      h("h4", { text: d.lay_name || d.name }),
-      h("p", { class: "q", text: "“" + d.question + "”" }),
-      h("p", { class: "t", html: P(d.lay) }),
-    ])));
-    s.append(g);
-  }
+  s.append(domainGrid(C.domains.items.slice(0, 6), { layNames: true }));
   s.append(h("p", { html:
     'Four more — configuration systems, computational biology, knowledge graphs and compilers — are in the ' +
     '<a href="index.html#s1">full version</a>.' }));
@@ -88,22 +80,7 @@ app.append(h("header", { class: "page" }, [
 {
   const s = section("tools", "Third", "The toolbox", null);
   s.append(layBlock(C.toolbox.lay));
-  {
-    const g = h("div", { class: "grid2" });
-    C.toolbox.tools.forEach(t => {
-      const c = h("div", { class: "toolcard" });
-      c.append(h("h4", { text: t.lay_name }));
-      c.append(h("p", { class: "role", text: t.lay_role }));
-      const dl = h("dl");
-      dl.append(h("dt", { text: "It answers" }));
-      dl.append(h("dd", { text: t.lay_question || t.question }));
-      dl.append(h("dt", { text: "Think of it as" }));
-      dl.append(h("dd", { class: "analogy", text: t.analogy }));
-      c.append(dl);
-      g.append(c);
-    });
-    s.append(g);
-  }
+  s.append(layToolCards(C.toolbox.tools));
   s.append(banner("warn", "Why “which is fastest?” is the wrong question", [
     "These tools do not produce the same thing. One hands you a complete answer table, one hands you a " +
     "compressed diagram you can query cheaply forever, one hands you a single example, one hands you a " +

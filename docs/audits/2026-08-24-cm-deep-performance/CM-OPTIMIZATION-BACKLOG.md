@@ -2,14 +2,18 @@
 
 This backlog begins after the 2026-08-24 audit. Priorities assume the current complete exact-output contract and accepted `live_k<=16` evidence.
 
+Correction (2026-08-25): B2 and EPFL are reused selection-validation data,
+not untouched held-out data. Any future selector acceptance requires a newly
+frozen untouched validation corpus.
+
 ## Ready to implement or validate locally
 
 ### DP-R1 — Cross-machine selector confirmation
 
 - Current state: automatic words crossover changed from `k>=6` to `k>=16`.
-- Evidence: zero `>=2x` routing regrets in final BX1 tuning and B2+EPFL held-out replay; old rule had 38-39 catastrophic tuning rows and 200 held-out rows per arm.
+- Evidence: zero `>=2x` routing regrets in final BX1 tuning and B2+EPFL reused-validation replay; old rule had 38-39 catastrophic tuning rows and 200 reused-validation rows per arm.
 - Next: run the unchanged final harness on one materially different CPU/OS with the same corpus hashes.
-- Gate: exact equality, no new catastrophic tail, and cluster-bootstrap geomean regret close to 1. Do not silently tune on held-out data.
+- Gate: exact equality, no new catastrophic tail, and cluster-bootstrap geomean regret close to 1. Confirm on a newly frozen untouched validation corpus; do not tune on that corpus.
 - Dependency/approval: access to another machine only; no new software required.
 
 ### DP-R2 — Explicit temporary-memory contract
@@ -115,9 +119,9 @@ Current normalization and structural digests provide engineering identity under 
 
 | ID | Candidate | Evidence | Reopen condition |
 |---|---|---|---|
-| DP-N1 | Automatic words at `k=6` | 2.06/2.74 raw geomean regret on tuning/held out; 39/200 catastrophic rows | Never without new paired evidence |
-| DP-N2 | Interpolate crossover at `k=13` | BX1 has no gap samples; one replay showed a 2.18x held-out raw misroute | Dedicated frozen `k=13..15` tuning corpus |
-| DP-N3 | Optimize CM/CSE-flat residual | Accepted ratio 0.9998 with parity interval | New replicated evidence with equivalent artifact/timing |
+| DP-N1 | Automatic words at `k=6` | 2.06/2.74 raw geomean regret on tuning/reused validation; 39/200 catastrophic rows | Never without new paired evidence |
+| DP-N2 | Interpolate crossover at `k=13` | BX1 has no gap samples; one replay showed a 2.18x reused-validation raw misroute | Dedicated frozen `k=13..15` tuning corpus |
+| DP-N3 | Optimize CM/CSE-flat residual | B1/E3 parity; corrected B2/B4 bare CM/CSE-flat 0.909 overall and 0.979 at `k=16`, but wrapper/preparation still dominate | Replicated task-matched end-to-end evidence where the structural reduction repays preparation |
 | DP-N4 | Broad pass fusion | Preparation time distributed; no dominant duplicate traversal | Allocation/profile shows one fused boundary is material |
 | DP-N5 | E-graph replacement | Rewrite/canonicalize not dominant; no downstream kernel benefit established | Real heavy rewrite/edit stream and bounded extraction |
 | DP-N6 | New cache admission policy | No realistic size/access trace; synthetic cache gains do not beat BitSet | DP-W1 trace exists |

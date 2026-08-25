@@ -1,0 +1,62 @@
+{
+  "audit_date": "2026-08-25",
+  "branch": "main",
+  "evidence_roles": {
+    "b2": "validation_reused",
+    "bx1": "tuning",
+    "epfl": "validation_reused"
+  },
+  "head_at_start": "1ba3a7312fa99439b57ddb3b4433ead7e86b2c74",
+  "implemented_change": {
+    "files": [
+      "cm_ir.py",
+      "tests/test_build_memo.py"
+    ],
+    "mechanism": "Use only memo_by_uid on sharing-aware CMIRBuilder builds; retain the id-keyed memo on the legacy non-sharing-aware path.",
+    "temporary_memory_effect": "memo_ablation_smoke peak-bytes candidate/baseline geomean 0.882005; explicit-arm reproduction 0.882397"
+  },
+  "paired_results": {
+    "bx1_b2": {
+      "candidate_over_baseline_geomean": 0.9601134360208174,
+      "cluster_interval_95": [
+        0.9509865955133348,
+        0.9721319642166536
+      ],
+      "repetitions": 11,
+      "rows": 272
+    },
+    "epfl": {
+      "candidate_over_baseline_geomean": 0.9768398185813388,
+      "cluster_interval_95": [
+        0.9547479256441237,
+        0.9995344940953658
+      ],
+      "repetitions": 5,
+      "rows": 129
+    },
+    "exact_canonical_mismatches": 0,
+    "exact_packed_mismatches": 0
+  },
+  "primary_documents": [
+    "CM-DEEP-PERFORMANCE-AUDIT.md",
+    "CM-RESEARCH-LEDGER.md",
+    "CM-BENCHMARK-RESULTS.md",
+    "CM-OPTIMIZATION-BACKLOG.md",
+    "NEXT-AGENT-HANDOFF.md"
+  ],
+  "preservation": {
+    "commit_created": false,
+    "dependencies_installed": false,
+    "external_compute_started": false,
+    "git_push_performed": false,
+    "starting_environment_and_status": "baseline_smoke_environment.json"
+  },
+  "tests": {
+    "focused": "33 passed, 4 subtests passed in 4.34s",
+    "full": "359 passed, 4 subtests passed in 204.62s"
+  },
+  "tooling": [
+    "scripts/cm_deep_performance_audit.py",
+    "scripts/cm_prepare_memo_ablation.py"
+  ]
+}

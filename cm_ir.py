@@ -498,10 +498,12 @@ class CMNode:
 class _BuildState:
     """Per-compilation state for one outermost CMIRBuilder.build call.
 
-    ``memo`` maps ``id(expr) -> (expr, node)``; holding the expression object
-    itself keeps every memo key's id valid for exactly the memo's lifetime
-    (the same invariant _structural_digest documents). The state is discarded
-    when the outermost build returns, so no object id outlives its referent.
+    On the legacy path, ``memo`` maps ``id(expr) -> (expr, node)``; holding the
+    expression object keeps every memo key's id valid for exactly the memo's
+    lifetime.  Sharing-aware builds already have ``uid_by_id`` plus
+    ``memo_by_uid`` and therefore leave ``memo`` unset: the root argument keeps
+    the complete Expr DAG alive while those id keys are used.  The state is
+    discarded when the outermost build returns.
     """
 
     __slots__ = ("memo", "no_splice", "uid_by_id", "shared_uids", "memo_by_uid")
@@ -551,6 +553,8 @@ class CMIRBuilder:
         self._uid_of_node: Dict[int, int] = {}
         self._foreign_keepalive: List[CMNode] = []
         self.share_aware_flatten = bool(share_aware_flatten)
+        # Controls only the legacy id-keyed memo. Sharing-aware builds always
+        # use their structural UID memo; maintaining both was redundant.
         self.build_memo = bool(build_memo)
         # Non-None only while an outermost build() is executing. Builders are
         # not thread-safe (this was already true of _interned); concurrent
@@ -1124,7 +1128,12 @@ class CMIRBuilder:
             # recursing through build): reuse the outermost call's state.
             return self._build_rec(expr, state)
 
-        memo: Optional[Dict[int, Tuple[Expr, CMNode]]] = {} if self.build_memo else None
+        # The structural UID memo below subsumes object-identity memoization on
+        # the default sharing-aware path.  Keeping both maps repeated every
+        # lookup/store and retained an extra (expr, node) tuple per visited
+        # object.  The legacy path has no UID plan and still uses the identity
+        # memo when requested.
+        memo: Optional[Dict[int, Tuple[Expr, CMNode]]] = None
         uid_by_id: Optional[Dict[int, int]] = None
         shared_uids: Optional[set] = None
         no_splice: Optional[set] = None
@@ -1133,6 +1142,8 @@ class CMIRBuilder:
             no_splice = set()
             if self.diagnostics is not None:
                 _bump(self.diagnostics, "build_shared_assoc_subexprs", len(shared_uids))
+        elif self.build_memo:
+            memo = {}
         state = _BuildState(memo, no_splice, uid_by_id, shared_uids)
         self._build_state = state
         try:
@@ -1208,9 +1219,10 @@ def compile_expr_to_cm_ir(
     digest is used; it applies the same flags and produces canonical keys and graph shapes
     identical to the default path (2026-08-02 Phase A1).
 
-    ``share_aware_flatten``/``build_memo`` (2026-08-02 gap repair): sharing-aware associative
-    flattening and per-compilation memoization. Defaults on; pass False to reproduce the legacy
-    behavior for ablation.
+    ``share_aware_flatten`` enables sharing-aware associative flattening and
+    its required structural UID memo. ``build_memo`` controls the id-keyed
+    memo only on the non-sharing-aware path. Pass both False to reproduce the
+    fully legacy behavior for ablation.
     """
     if persistent_cache:
         return compile_expr_to_cm_ir_persistent(

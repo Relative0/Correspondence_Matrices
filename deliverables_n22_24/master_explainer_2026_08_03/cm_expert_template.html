@@ -156,7 +156,7 @@ app.append(banner("note", "Reading conventions enforced throughout", [
 {
   const s = section("x6", "6", "Corrections of record and open discrepancies",
     "Every superseded figure, with the mechanism of the error. These appear nowhere else on this page.");
-  s.append(FIG.correctionsTable());
+  s.append(moreBlock([FIG.correctionsTable()], "View corrections ledger"));
   s.append(h("h3", { text: "Discrepancies between summary prose and raw evidence" }));
   s.append(h("p", { text:
     "Found while re-reading every number from its source file for this page. Neither changes a campaign " +
@@ -178,8 +178,10 @@ app.append(banner("note", "Reading conventions enforced throughout", [
       h("span", { class: "pill " + (it.status === "partially-answered" ? "ok" : "open"),
                   text: it.status.replace(/-/g, " ") })]));
     c.append(techBlock(it.technical_statement, null));
-    c.append(h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }));
-    c.append(h("p", { class: "claim", html: "<b>Success / failure interpretation.</b> " + P(it.what_would_change_the_picture) }));
+    c.append(moreBlock([
+      h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }),
+      h("p", { class: "claim", html: "<b>Success / failure interpretation.</b> " + P(it.what_would_change_the_picture) }),
+    ], "Why it matters"));
     if (it.sources && it.sources.length) {
       const d = h("details", { class: "prov" });
       d.append(h("summary", { text: "Where this is written down" }));

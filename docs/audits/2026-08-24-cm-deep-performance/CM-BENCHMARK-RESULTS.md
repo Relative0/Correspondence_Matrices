@@ -1,5 +1,10 @@
 # CM Deep Performance Benchmark Results
 
+> **Correction, 2026-08-25:** Historical `held out` labels below mean reused
+> selection-validation data, not untouched held-out data. Corrected fail-closed
+> truth verification and the matched CSE-flat successor are documented in
+> `deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md`.
+
 Audit date: 2026-08-24. Performance commands used the project virtual environment. Correctness tests used the existing global pytest installation because the virtual environment contains no pytest.
 
 ## Environment
@@ -127,14 +132,14 @@ End-to-end medians were 385 microseconds on BX1, 472 microseconds on B2, and 926
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | raw / BX1 tuning | old `k>=6` | 80 | 2.060 | [1.870, 2.158] | 1.669 | 4.945 | 7.607 | 39 |
 | raw / BX1 tuning | current `k>=16` | 80 | 1.012 | [1.000, 1.041] | 1.000 | 1.000 | 1.737 | 0 |
-| raw / B2+EPFL held out | old `k>=6` | 307 | 2.743 | [2.532, 3.012] | 3.601 | 5.801 | 11.001 | 200 |
-| raw / B2+EPFL held out | current `k>=16` | 307 | 1.011 | [1.003, 1.019] | 1.000 | 1.000 | 1.609 | 0 |
+| raw / B2+EPFL reused validation | old `k>=6` | 307 | 2.743 | [2.532, 3.012] | 3.601 | 5.801 | 11.001 | 200 |
+| raw / B2+EPFL reused validation | current `k>=16` | 307 | 1.011 | [1.003, 1.019] | 1.000 | 1.000 | 1.609 | 0 |
 | CM / BX1 tuning | old `k>=6` | 80 | 1.912 | [1.694, 2.027] | 1.532 | 4.545 | 6.391 | 38 |
 | CM / BX1 tuning | current `k>=16` | 80 | 1.011 | [1.000, 1.029] | 1.000 | 1.000 | 1.273 | 0 |
-| CM / B2+EPFL held out | old `k>=6` | 321 | 2.416 | [2.246, 2.617] | 3.108 | 4.827 | 7.055 | 200 |
-| CM / B2+EPFL held out | current `k>=16` | 321 | 1.013 | [1.005, 1.022] | 1.000 | 1.000 | 1.961 | 0 |
+| CM / B2+EPFL reused validation | old `k>=6` | 321 | 2.416 | [2.246, 2.617] | 3.108 | 4.827 | 7.055 | 200 |
+| CM / B2+EPFL reused validation | current `k>=16` | 321 | 1.013 | [1.005, 1.022] | 1.000 | 1.000 | 1.961 | 0 |
 
-Raw held-out eligibility excludes 10 source-protocol skips and 4 explicit 8 MiB temporary-budget refusals. These outcomes remain in the raw file. CM evaluation completed for all 401 rows.
+Raw reused-validation eligibility excludes 10 source-protocol skips and 4 explicit 8 MiB temporary-budget refusals. These outcomes remain in the raw file. CM evaluation completed for all 401 rows.
 
 The table is a same-run policy replay over paired raw times, so it avoids between-process drift. The selector itself is a single integer comparison and contributes no measurable model overhead.
 
@@ -173,7 +178,7 @@ These cache times are allocation-instrumented and therefore not comparable to th
 
 - The final raw CSV preserves formula IDs, roles, clusters, structural hashes, expected truth hashes, seeds when present, result hashes, operation counts, phase timings, kernel timings, memory estimates, refusals, batch sizes, and rounds.
 - Whole-file corpus and implementation hashes are in the sidecar.
-- No affinity pinning was applied. Very short kernels vary between complete replays; policy conclusions rely on large paired differences and held-out transfer, not marginal individual rows.
+- No affinity pinning was applied. Very short kernels vary between complete replays; policy conclusions rely on large paired differences and reused-validation transfer, not marginal individual rows.
 - BX1 has no direct `k=13..15` rows. `k=16` is a conservative measured endpoint, not proof of a universal hardware crossover.
 - Cluster intervals quantify corpus clustering, not machine-to-machine uncertainty.
 - No result is extrapolated beyond `k=16`.

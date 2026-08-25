@@ -37,16 +37,15 @@ document.body.prepend(topbar({
   brand: "Correspondence Matrices <span>· investor brief</span>",
   links: [["index.html", "← full knowledge base"], ["#market", "The problem"],
           ["#proven", "What's proven"], ["#open", "What's open"],
-          ["#credibility", "Why believe it"], ["#roadmap", "Roadmap"]],
+          ["#roadmap", "Roadmap"], ["#credibility", "Why believe it"]],
 }));
 
 app.append(h("header", { class: "page" }, [
   h("h1", { text: "Correspondence Matrices — where the evidence actually stands" }),
   h("p", { class: "lede", text:
-    "A structural representation layer for Boolean computation. This brief states what has been " +
-    "demonstrated, what has not, and what the next experiments would settle — in that order, because the " +
-    "second list is longer than the first and pretending otherwise would be the fastest way to lose your " +
-    "confidence later." }),
+    "A rigorously tested structural layer for Boolean logic. Kernel competitiveness is established; the " +
+    "next phase tests whether expression identity, persistent reuse and operator-level transformations " +
+    "create workflow value." }),
   h("p", { class: "meta", html:
     "Evidence: comprehensive benchmark campaign of 3 August 2026, including external validation on " +
     "published third-party circuits and cross-machine replication. Total cloud spend for the entire " +
@@ -54,16 +53,8 @@ app.append(h("header", { class: "page" }, [
 ]));
 
 /* ------------------------------------------------------------ bottom line */
-app.append(banner("note", "The bottom line, stated first", [
-  "<b>Proven:</b> at the computational kernel, this system is measurably faster than a naively built " +
-  "competitor and <em>indistinguishable</em> from a well-built one. That result has been replicated on " +
-  "third-party real-world circuits and on " + T("kernel.pod.count") + " independent machines.",
-  "<b>Therefore:</b> the investable thesis is not speed. It is the structural layer — expression identity, " +
-  "persistent compiled caching, serialisation, and an operator formalism — none of which a conventional " +
-  "compiler pipeline provides, and none of which has yet been shown to pay for itself on a real workload.",
-  "<b>The single most important open question</b> is how often real systems re-evaluate the same logic. " +
-  "Every economic argument here turns on that number, and nobody has measured it.",
-]));
+app.append(projectStatePanel());
+app.append(evidenceBoundary());
 
 app.append(tiles([
   ["Kernel vs naive baseline", T("kernel.local.pct") + " faster",
@@ -78,24 +69,17 @@ app.append(tiles([
 
 /* ------------------------------------------------------------ market */
 {
-  const s = section("market", "1", "How broad the underlying problem is",
-    "Boolean computation is infrastructure. It is not a market in itself — it is a layer inside a dozen " +
-    "markets, each of which has built its own tooling and lives with the gaps between them.");
+  const s = section("market", "1", "Where CM could create serious value",
+    "The opportunity is structural reuse inside existing workflows—not a new market called Boolean logic. " +
+    "Three wedges are credible enough to test next; only one has externally measured expressions.");
   s.append(layBlock(C.domains.lay));
+  s.append(opportunityMap(C.domains.opportunities));
   s.append(h("p", { html:
     "Ten domains where the central object is a Boolean function and the question of interest is a property " +
     "of the whole function rather than a single evaluation. <b>These are candidate application areas, not " +
     "validated deployments.</b> Of the evidence in this brief, only the verification and hardware-design " +
     "row has been measured against." }));
-  {
-    const g = h("div", { class: "grid2" });
-    C.domains.items.forEach(d => g.append(h("div", { class: "dom" }, [
-      h("h4", { text: d.name }),
-      h("p", { class: "q", text: "“" + d.question + "”" }),
-      h("p", { class: "t", html: P(d.lay) }),
-    ])));
-    s.append(g);
-  }
+  s.append(moreBlock([domainGrid(C.domains.items)], "Browse all 10 candidate domains"));
   s.append(banner("warn", "The honest framing of market size", [
     "Nobody should treat that grid as a total addressable market. It is a list of places where the " +
     "computation appears — every one of which already has incumbent tooling that works. The question this " +
@@ -166,8 +150,8 @@ app.append(tiles([
 }
 
 /* ------------------------------------------------------------ credibility */
-{
-  const s = section("credibility", "4", "Why this evidence should be believed",
+function buildCredibilitySection() {
+  const s = section("credibility", "6", "Why this evidence should be believed",
     "The credibility argument here is not the numbers. It is the process that produced them, and " +
     "specifically the fact that it has repeatedly produced results the project did not want.");
 
@@ -189,7 +173,7 @@ app.append(tiles([
   s.append(h("p", { html:
     "Every figure below was published by an earlier version of this project and has since been withdrawn. " +
     "They are listed here rather than deleted. <b>None of them appears anywhere else in this brief.</b>" }));
-  s.append(FIG.correctionsTable());
+  s.append(moreBlock([FIG.correctionsTable()], "View corrections ledger"));
   s.append(FIG.discrepancies());
 
   s.append(h("h3", { text: "The rules that make the numbers trustworthy" }));
@@ -205,15 +189,17 @@ app.append(tiles([
     ])));
     s.append(g);
   }
-  app.append(s);
+  return s;
 }
 
 /* ------------------------------------------------------------ open */
 {
-  const s = section("open", "5", "What is honestly open",
+  const s = section("open", "4", "What could disprove or narrow the thesis",
     "Ten items. Three are cheap and would move the picture immediately; three would establish whether " +
     "the structural idea pays at all; two are engineering and formal gaps; two are boundary questions.");
   s.append(layBlock(C.frontier.lay));
+  s.append(h("h3", { text: "Five thesis risks, each paired with a resolving test" }));
+  s.append(thesisRisks());
   s.append(FIG.frontierMap());
   {
     const g = h("div", { class: "grid2" });
@@ -223,7 +209,7 @@ app.append(tiles([
       c.append(h("h4", {}, [document.createTextNode(it.title.split(" — ")[0] + " "),
         h("span", { class: "pill " + kind, text: it.status.replace(/-/g, " ") })]));
       c.append(h("p", { class: "t", html: P(it.lay_statement) }));
-      c.append(h("p", { class: "why", html: "<b>Downside case:</b> " + P(it.downside) }));
+      c.append(moreBlock([h("p", { class: "why", html: "<b>Downside case:</b> " + P(it.downside) })], "Downside case"));
       g.append(c);
     });
     s.append(g);
@@ -239,7 +225,7 @@ app.append(tiles([
 
 /* ------------------------------------------------------------ roadmap */
 {
-  const s = section("roadmap", "6", "The roadmap, in the project's own priority order",
+  const s = section("roadmap", "5", "The roadmap, in the project's own priority order",
     "Note what is absent: no production optimisation is currently justified by the evidence, and the " +
     "project says so explicitly.");
   s.append(FIG.roadmap());
@@ -261,6 +247,8 @@ app.append(tiles([
   s.append(nav);
   app.append(s);
 }
+
+app.append(buildCredibilitySection());
 
 app.append(pageFooter("Investor cut of the master knowledge base. No claim, number or caveat appears here " +
   'that is not in the <a href="index.html">full version</a>, and every figure is generated from the same ' +

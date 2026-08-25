@@ -1,11 +1,16 @@
 # CM selector and boundary follow-up — 2026-08-24
 
+> **Correction, 2026-08-25:** EPFL influenced the earlier selector decision and
+> is therefore reused external validation, not untouched held-out data. The
+> corrected local replay also verifies each frozen truth digest in the original
+> corpus order. See `../corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md`.
+
 ## Verdict
 
 The three frozen follow-ups are complete.
 
 1. The symmetric B2/B4 comparison passed exact packed equality on all 264 rows. Once both sides use the current selector, the CM wrapper is near parity with the raw-AST arm at `k=16`, not clearly faster: B2 CM/raw geomean `1.062`; B4 geomeans `1.086`, `1.075`, and `1.090` at ambient `n=16,20,24`. At smaller support the raw-AST arm is substantially faster because CM wrapper cost dominates.
-2. The dedicated `k=13..15` study rejects a universal width-only threshold change. The current `k=16` policy passes the balanced synthetic tuning gate on Windows but fails held-out EPFL there; it fails at least one predeclared gate on all three Linux pods. Lower thresholds improve held-out circuits but create large, sometimes catastrophic, misses on balanced synthetic formulas.
+2. The dedicated `k=13..15` study rejects a universal width-only threshold change. The current `k=16` policy passes the balanced synthetic tuning gate on Windows but fails reused EPFL validation there; it fails at least one predeclared gate on all three Linux pods. Lower thresholds improve those circuit rows but create large, sometimes catastrophic, misses on balanced synthetic formulas.
 3. The isolated `k=17..20` boundary sweep passed all 16 cases. The production wrapper refused every case before explicit allocation; explicitly authorized direct kernels agreed bit-for-bit, had no timeout/OOM, and stayed below the predeclared estimate and RSS caps.
 
 The production recommendation is therefore to keep `WORDS_AUTO_MIN_VARS = 16` as the conservative default for now. Do not replace it with another single support threshold based on this study. The next selector experiment should be feature-based and independently validated (for example, support width plus program liveness/operator-work features).
@@ -14,7 +19,7 @@ The production recommendation is therefore to keep `WORDS_AUTO_MIN_VARS = 16` as
 
 - Python `3.13.5`; Runpod NumPy `2.3.2`.
 - Synthetic gap corpus: 48 formulas, balanced across `k=13,14,15`, four operator families, and tree/shared shapes; two formulas per cell.
-- Held-out gap corpus: 23 exact-support roots from the frozen EPFL corpus. The raw-AST timing arm admitted 17 of these under the 16 MiB temporary-memory protocol; the CM arm admitted all 23.
+- Reused-validation gap corpus: 23 exact-support roots from the frozen EPFL corpus. The raw-AST timing arm admitted 17 of these under the 16 MiB temporary-memory protocol; the CM arm admitted all 23.
 - Synthetic corpus SHA-256: `ba394c3342af638ab70b62c3c232dee3d8f0770d858aca2fcdb6e693a29f4516`.
 - EPFL corpus SHA-256: `bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac`.
 - Selector gate, declared before timing: regret geomean at most `1.10` and zero rows with regret at least `2.0`.
@@ -66,11 +71,11 @@ All packed comparisons were exact. All three frozen B1 controls passed, so the L
 
 ### Why no threshold change is justified
 
-- Threshold `k=14` is best on the held-out EPFL slice: Windows regret geomeans are `1.043` raw and `1.038` CM; Linux is essentially `1.000` on both arms.
+- Threshold `k=14` is best on the reused EPFL validation slice: Windows regret geomeans are `1.043` raw and `1.038` CM; Linux is essentially `1.000` on both arms.
 - The same `k=14` policy is poor on synthetic tuning: Windows geomeans `1.224` raw / `1.195` CM, with catastrophic rows; Linux raw ranges `1.172–1.194` and CM `1.133–1.144`, also with catastrophic rows.
-- Threshold `k=15` is a compromise but still has a catastrophic raw tuning row on every host and slightly exceeds the `1.10` CM held-out gate on Linux pod 2.
+- Threshold `k=15` is a compromise but still has a catastrophic raw tuning row on every host and slightly exceeds the `1.10` CM reused-validation gate on Linux pod 2.
 
-This is evidence of a workload interaction, not a stable scalar crossover. A feature-based model must be trained only on the tuning partition and accepted only if it clears the frozen held-out and cross-machine gates.
+This is evidence of a workload interaction, not a stable scalar crossover. A feature-based model must be trained only on the tuning partition and accepted only if it clears a newly frozen untouched validation corpus and cross-machine gates.
 
 ## Above-guard boundary sweep
 

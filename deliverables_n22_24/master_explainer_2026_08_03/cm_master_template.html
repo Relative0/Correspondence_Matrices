@@ -69,14 +69,15 @@ app.append(tiles([
   ["Preparation cost", T("prep.min") + "–" + T("prep.max"),
     "the top remaining optimisation surface, and the reason reuse count decides everything"],
 ]));
+app.append(projectStatePanel());
+app.append(evidenceBoundary());
 
 app.append(banner("note", "How to read this page", [
-  "Every section opens with a plain-language paragraph, then a technical layer, then the measurement. " +
-  "Read only the first layer and you will still be able to answer “when would I want each tool?” — that is " +
-  "the stated quality bar for section 4.",
-  "Hover any bold figure in the prose to see the exact file and field it was read from. Every chart carries " +
-  "its scope, the clustering basis of any confidence interval, a table view of every plotted value, and a " +
-  "provenance list.",
+  "Every section opens with the conclusion and its plain-language explanation. Use <b>More</b> only when " +
+  "you want the technical layer; the page remains complete without forcing that layer into the first read.",
+  "Each chart keeps its scope, baseline and one-sentence takeaway visible. Click the graph or choose " +
+  "<b>Explain this graph</b> for the full interpretation, decision boundary, table and provenance. Hover or " +
+  "focus a plotted mark for its exact value.",
 ]));
 
 /* ============================================================ SECTION 1 */
@@ -84,12 +85,17 @@ app.append(banner("note", "How to read this page", [
   const s = section("s1", "Section 1", "Why Boolean computation matters", C.domains.lede);
   s.append(layBlock(C.domains.lay));
   s.append(techBlock(C.domains.technical));
-  s.append(h("h3", { text: "Where the problem actually shows up" }));
+  s.append(h("h3", { text: "Where CM could matter most — and what would prove it" }));
+  s.append(h("p", { html:
+    "These are capability wedges, not market-size claims. Each one pairs the problem with the CM mechanism, " +
+    "the evidence that exists today, and the missing proof." }));
+  s.append(opportunityMap(C.domains.opportunities));
+  s.append(h("h3", { text: "Where the underlying problem shows up" }));
   s.append(h("p", { html:
     "Ten domains, each with the question it is really asking. These are candidate application areas — " +
     "of the evidence on this site, only the formal-verification and hardware-synthesis row has been " +
     "measured against, via the EPFL circuits in section 4." }));
-  s.append(domainGrid(C.domains.items));
+  s.append(moreBlock([domainGrid(C.domains.items)], "Browse all 10 candidate domains"));
   app.append(s);
 }
 
@@ -160,8 +166,13 @@ app.append(banner("note", "How to read this page", [
       c.append(h("h4", {}, [document.createTextNode(col.heading + " "),
         h("span", { class: "pill " + col.kind, text: col.kind === "ok" ? "measured" : "not demonstrated" })]));
       const ul = h("ul", { style: "margin:8px 0 0;padding-left:18px;font-size:13.2px;color:var(--text-secondary)" });
-      col.items.forEach(i => ul.append(h("li", { html: P(i) })));
+      col.items.slice(0, 1).forEach(i => ul.append(h("li", { html: P(i) })));
       c.append(ul);
+      if (col.items.length > 1) {
+        const rest = h("ul", { style: "margin:0;padding-left:18px;font-size:13.2px;color:var(--text-secondary)" });
+        col.items.slice(1).forEach(i => rest.append(h("li", { html: P(i) })));
+        c.append(moreBlock([rest]));
+      }
       g.append(c);
     });
     s.append(g);
@@ -261,8 +272,10 @@ app.append(banner("note", "How to read this page", [
       h("span", { class: "pill " + k[0], text: k[1] })]));
     c.append(layBlock(it.lay_statement));
     c.append(techBlock(it.technical_statement, null));
-    c.append(h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }));
-    c.append(h("p", { class: "claim", html: "<b>What would change the picture.</b> " + P(it.what_would_change_the_picture) }));
+    c.append(moreBlock([
+      h("p", { class: "claim", html: "<b>Why it matters.</b> " + P(it.why_it_matters) }),
+      h("p", { class: "claim", html: "<b>What would change the picture.</b> " + P(it.what_would_change_the_picture) }),
+    ], "Why it matters"));
     if (it.sources && it.sources.length) {
       const d = h("details", { class: "prov" });
       d.append(h("summary", { text: "Where this is written down" }));
@@ -311,7 +324,9 @@ app.append(banner("note", "How to read this page", [
     c.append(h("h2", { style: "font-size:16px", text: r.rule }));
     c.append(layBlock(r.lay_explanation));
     c.append(techBlock(r.technical_explanation, null));
-    c.append(h("p", { class: "claim", html: "<b>Without it:</b> " + P(r.what_goes_wrong_without_it) }));
+    c.append(moreBlock([
+      h("p", { class: "claim", html: "<b>Without it:</b> " + P(r.what_goes_wrong_without_it) }),
+    ], "Failure mode"));
     if (r.sources && r.sources.length) {
       const d = h("details", { class: "prov" });
       d.append(h("summary", { text: "Where this rule is written down" }));
@@ -339,7 +354,7 @@ app.append(banner("note", "How to read this page", [
   s.append(banner("", "These numbers are superseded — do not cite them",
     ["Each row names the figure, what it originally claimed, the actual mechanism of the error, and what " +
      "replaced it. A struck-through figure is never plotted anywhere on this site."]));
-  s.append(FIG.correctionsTable());
+  s.append(moreBlock([FIG.correctionsTable()], "View corrections ledger"));
 
   s.append(h("h3", { text: "Open discrepancies between the summary prose and the raw evidence" }));
   s.append(h("p", { html:

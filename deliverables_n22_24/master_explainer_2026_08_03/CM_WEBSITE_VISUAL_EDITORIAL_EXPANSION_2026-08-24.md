@@ -8,6 +8,11 @@ rerun the campaign: every numeric visual is generated from the same evidence
 payload as the existing charts, and qualitative roadmap categories are labelled
 as authored categories rather than measured timings.
 
+A later UX pass added progressive disclosure, graph-analysis dialogs and a
+restructured investor narrative without changing those visuals or their
+evidence. See `CM_WEBSITE_UX_PROGRESSIVE_DISCLOSURE_2026-08-24.md` for the
+current generated hashes and browser checks.
+
 Scientific source:
 
 - evidence revision: `6e8a283d22fb7cf643753fb6ad2d7fc3f3f2c96f`;

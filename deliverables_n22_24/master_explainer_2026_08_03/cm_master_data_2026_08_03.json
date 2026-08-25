@@ -2110,6 +2110,62 @@
       "standfirst": "This is the complete version. Three shorter cuts are derived from it and never add anything it does not contain.",
       "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign and carries the file it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
     },
+    "project_state": {
+      "items": [
+        {
+          "label": "Validated now",
+          "title": "Correct output and a competitive kernel",
+          "summary": "CM matched a sharing-aware flattened CSE kernel on the external corpus, after correctness gating, and the direction replicated across independent machines.",
+          "kind": "measured"
+        },
+        {
+          "label": "Structural wedge",
+          "title": "Identity, persistence and transforms",
+          "summary": "Expression-identity keys, persistent compiled caching, serialisation and operator transformations are implemented; their workflow value is not yet demonstrated.",
+          "kind": "implemented"
+        },
+        {
+          "label": "Decisive next proof",
+          "title": "Measure reuse in a real workflow",
+          "summary": "The commercial question is whether deployed systems reuse logic enough—or need structural operations enough—to repay preparation and wrapper cost.",
+          "kind": "open"
+        }
+      ],
+      "boundaries": [
+        "Strong baseline: CM and CSE-flat are kernel-equivalent, not a demonstrated speed moat.",
+        "Whole call: BitSet led at every measured semantic support through live_k={{wrap.max_k}}.",
+        "Economics: real production reuse counts have not been measured.",
+        "External scope: EPFL hardware/formal-verification expressions, not a deployed workflow.",
+        "Output boundary: explicit answer vectors grow as 2^live_k and are guarded at live_k={{guard.k}}."
+      ],
+      "risks": [
+        {
+          "title": "Real reuse may be too rare",
+          "visible": "If deployed systems do not repeat logic enough, preparation never amortises.",
+          "test": "Instrument one real consumer workload and compare its reuse distribution with the matched-baseline break-even distribution."
+        },
+        {
+          "title": "The setup premium may remain",
+          "visible": "Preparation currently costs {{prep.min}}–{{prep.max}} the comparison compiler's setup.",
+          "test": "Profile canonicalisation, interning and lowering before funding optimisation work."
+        },
+        {
+          "title": "Structural reuse may not beat incumbents",
+          "visible": "Preliminary family and partial-context tests improved over uncached CM but still lost to real alternatives.",
+          "test": "Retest on real version and context traces against incremental BDD, compiler and solver baselines."
+        },
+        {
+          "title": "The formal differentiator may not hold",
+          "visible": "Canonical CM equivalence is not yet defined, proved and validated end to end.",
+          "test": "Specify the normalisation and equivalence claim precisely, then prove it or narrow the claim."
+        },
+        {
+          "title": "The explicit-output boundary may be hard",
+          "visible": "The current path stops at live_k={{guard.k}}, where output size is already exponential.",
+          "test": "Map memory and runtime immediately above the guard with fail-closed limits."
+        }
+      ]
+    },
     "domains": {
       "lede": "Boolean logic is the arithmetic of yes and no. It looks trivial in isolation — an AND, an OR, a NOT — and becomes hard the moment you have thousands of them wired together and need a guaranteed answer about all of their combinations at once. That situation is far more common than it sounds.",
       "lay": [
@@ -2190,6 +2246,35 @@
           "lay": "Compilers reason about which conditions can hold at each point in a program, so they can delete impossible branches and prove that a rewrite is safe.",
           "technical": "Path-condition reasoning, dataflow analysis, and reachability over predicates — with repeated partial evaluation of the same condition under evolving context, which is exactly the reuse pattern a compiled structural representation would target.",
           "lay_name": "Compilers analysing your code"
+        }
+      ],
+      "opportunities": [
+        {
+          "name": "Hardware verification and EDA",
+          "status": "Measured expressions",
+          "kind": "measured",
+          "problem": "Teams repeatedly compare, revise and verify logically equivalent circuit descriptions.",
+          "wedge": "Persistent expression identity, stored compiled structure and operator-aware change analysis.",
+          "evidence": "Kernel behavior was measured on {{epfl.n_cones}} cones from {{epfl.n_circuits}} published circuits; no deployed workflow was measured.",
+          "proof": "A real design trace shows repeated structural queries or version reuse lowering total workflow cost."
+        },
+        {
+          "name": "Rules, policies and configuration",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "Long-lived rule sets are revised, audited and evaluated under many related contexts.",
+          "wedge": "Expression keys, persistent caching, serialisation and structural difference across versions.",
+          "evidence": "The mechanisms are implemented, but no policy, access-control or configuration workload has been measured.",
+          "proof": "A real version history demonstrates reuse, audit or change-analysis value against incumbent tooling."
+        },
+        {
+          "name": "Compilers and symbolic reasoning",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "The same predicates are transformed and partially re-evaluated as context changes.",
+          "wedge": "Semantic-support reduction, cached partial evaluation and operator transformations.",
+          "evidence": "Preliminary partial-context work improved over uncached CM but did not beat the real comparison engines.",
+          "proof": "Real traces show a structural artifact benefit or a repeatable win against incremental alternatives."
         }
       ]
     },

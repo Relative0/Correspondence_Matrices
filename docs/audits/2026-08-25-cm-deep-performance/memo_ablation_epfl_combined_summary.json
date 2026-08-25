@@ -1,0 +1,34 @@
+{
+  "aggregation": {
+    "bootstrap_draws": 2000,
+    "chunk_files": [
+      "memo_ablation_epfl_000_019_raw.csv",
+      "memo_ablation_epfl_020_039_raw.csv",
+      "memo_ablation_epfl_040_059_raw.csv",
+      "memo_ablation_epfl_060_079_raw.csv",
+      "memo_ablation_epfl_080_099_raw.csv",
+      "memo_ablation_epfl_100_119_raw.csv",
+      "memo_ablation_epfl_120_128_raw.csv"
+    ],
+    "cluster_count": 19,
+    "cluster_key": "EPFL circuit",
+    "method": "geometric mean of per-root candidate/baseline median ratios; percentile interval from circuit-cluster bootstrap",
+    "repetitions_per_root": 5,
+    "timing_schedule": "per-root paired alternating order; one warmup per arm"
+  },
+  "interpretation": "Reused external validation, not untouched held-out evidence. The point estimate favors the one-memo candidate, but the upper clustered endpoint is near parity and per-root tails are wide.",
+  "summary": {
+    "allocation_rows": 0,
+    "candidate_faster_rows": 91,
+    "candidate_over_baseline_geomean": 0.9768398185813388,
+    "candidate_slower_rows": 38,
+    "canonical_mismatches": 0,
+    "cluster_interval_95_high": 0.9995344940953658,
+    "cluster_interval_95_low": 0.9547479256441237,
+    "packed_mismatches": 0,
+    "ratio_median": 0.971065864314566,
+    "ratio_p10": 0.8487232263087456,
+    "ratio_p90": 1.1490359348171013,
+    "rows": 129
+  }
+}

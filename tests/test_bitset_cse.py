@@ -8,6 +8,7 @@ import pytest
 from bitset_backend import (
     compile_expr_cse,
     compile_expr_flat,
+    eval_expr_flat_cse,
     eval_expr_words_bitset,
     eval_expr_words_cse,
     get_expr_cse_program,
@@ -43,6 +44,17 @@ def test_cse_matches_raw_on_random_shared_expressions(seed, flatten):
     expr = _random_expr(rng, 8, 20)
     got = eval_expr_words_cse(expr, _support(8), flatten=flatten)
     assert got == eval_expr_words_bitset(expr, _support(8))
+
+
+@pytest.mark.parametrize("flatten", [False, True])
+@pytest.mark.parametrize("n_vars", [3, 8, 12, 16])
+def test_cse_bigint_and_words_arms_are_identical(n_vars, flatten):
+    rng = random.Random(1000 + n_vars)
+    expr = _random_expr(rng, n_vars, 24)
+    support = _support(n_vars)
+    expected = eval_expr_words_bitset(expr, support)
+    assert eval_expr_flat_cse(expr, support, flatten=flatten) == expected
+    assert eval_expr_words_cse(expr, support, flatten=flatten) == expected
 
 
 def test_cse_compiles_each_distinct_subtree_once():

@@ -1,8 +1,9 @@
-"""Tests for the lifetime-safe per-compilation build memo (2026-08-02 repair).
+"""Tests for lifetime-safe per-compilation build memos.
 
-The memo lives only for one outermost CMIRBuilder.build call and holds strong
-references to every memoized Expr, so recycled object ids can never alias a
-stale entry — the hazard the 2026-08-02 audit found in the id-keyed prototype.
+Sharing-aware builds use the structural UID memo created by their fanout
+prepass.  Legacy builds retain the id-keyed memo, which lives only for one
+outermost call and holds strong references to every memoized Expr so recycled
+object ids cannot alias a stale entry.
 """
 from __future__ import annotations
 
@@ -40,6 +41,26 @@ def test_memo_scope_is_one_build_no_state_left_behind():
     assert builder._build_state is None
     builder.build(_ladder(4))
     assert builder._build_state is None
+
+
+def test_sharing_aware_build_uses_only_structural_memo():
+    observed = []
+
+    class InspectingBuilder(CMIRBuilder):
+        def _build_rec(self, expr, state):
+            observed.append((state.memo is None, state.memo_by_uid is not None))
+            return super()._build_rec(expr, state)
+
+    InspectingBuilder().build(_ladder(4))
+    assert observed
+    assert all(identity_absent and structural_present
+               for identity_absent, structural_present in observed)
+
+    observed.clear()
+    InspectingBuilder(share_aware_flatten=False).build(_ladder(4))
+    assert observed
+    assert all(not identity_absent and not structural_present
+               for identity_absent, structural_present in observed)
 
 
 def test_id_reuse_across_many_discarded_expressions_stays_correct():
@@ -92,7 +113,7 @@ def test_structurally_equal_separately_allocated_objects_intern_to_one_node():
     assert node.key == builder.build(make()).key
 
 
-def test_memo_off_flag_reproduces_legacy_visit_pattern():
+def test_build_memo_flag_does_not_change_share_aware_output():
     expr = _ladder(6)
     a = compile_expr_to_cm_ir(expr, build_memo=False)
     b = compile_expr_to_cm_ir(expr)

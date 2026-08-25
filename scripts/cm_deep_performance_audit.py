@@ -48,6 +48,10 @@ from cm_ir import (  # noqa: E402
     materialize_hybrid_no_reinflate,
 )
 from cmbench.backends.bitset_engine import WORDS_AUTO_MIN_VARS  # noqa: E402
+from scripts.cm_benchmark_provenance import (  # noqa: E402
+    capture_source_snapshot,
+    source_hashes,
+)
 
 
 CORPORA = {
@@ -63,6 +67,17 @@ CORPORA = {
     / "deliverables_n22_24"
     / "CM_gap_epfl_corpus_2026_08_03.jsonl",
 }
+
+SOURCE_PATHS = (
+    "bitset_backend.py",
+    "cm_expr_serde.py",
+    "cm_exprlib.py",
+    "cm_ir.py",
+    "cmbench/backends/bitset_engine.py",
+    "cmbench/output_budget.py",
+    "scripts/cm_benchmark_provenance.py",
+    "scripts/cm_deep_performance_audit.py",
+)
 
 
 def _natural_key(name: str) -> tuple[int, object]:
@@ -214,6 +229,116 @@ def _compile_profile(expr: Any, repetitions: int) -> tuple[dict[str, float], Any
     return result, node
 
 
+def _evaluation_context(
+    corpus: str,
+    record: Mapping[str, Any],
+    expr: Any,
+    live_k: int,
+) -> tuple[tuple[str, ...], dict[str, int]]:
+    all_variables = tuple(
+        sorted((f"x{i}" for i in {n.i for n in _walk_vars(expr)}), key=_natural_key)
+    )
+    if corpus != "epfl":
+        if len(all_variables) != live_k:
+            raise AssertionError(
+                f"{record.get('id')}: live_k={live_k}, variables={all_variables!r}"
+            )
+        return all_variables, {}
+
+    syntactic_inputs = list(record.get("synt_support_inputs") or ())
+    semantic_inputs = set(record.get("sem_support_inputs") or ())
+    if len(syntactic_inputs) != len(all_variables):
+        raise AssertionError(
+            f"{record.get('id')}: cannot map syntactic to semantic support"
+        )
+    live_positions = {
+        index
+        for index, original_input in enumerate(syntactic_inputs)
+        if original_input in semantic_inputs
+    }
+    # The frozen EPFL corpus hashes cone_truth_bigint's LSB-first axes. Packed
+    # evaluators use the first key as the MSB axis, so reverse the live key.
+    variables = tuple(
+        reversed(
+            tuple(
+                name
+                for name in all_variables
+                if int(name[1:]) in live_positions
+            )
+        )
+    )
+    fixed = {
+        name: 0 for name in all_variables if int(name[1:]) not in live_positions
+    }
+    if len(variables) != live_k:
+        raise AssertionError(
+            f"{record.get('id')}: live_k={live_k}, variables={variables!r}"
+        )
+    return variables, fixed
+
+
+def _require_truth_digest(record: Mapping[str, Any], packed: int, live_k: int) -> str:
+    output_bytes = max(1, (1 << live_k) // 8)
+    actual = hashlib.sha256(int(packed).to_bytes(output_bytes, "little")).hexdigest()
+    expected = record.get("truth_sha256")
+    if not isinstance(expected, str) or not expected:
+        raise AssertionError(f"{record.get('id')}: missing frozen truth digest")
+    if actual != expected:
+        raise AssertionError(
+            f"{record.get('id')}: truth drift: expected {expected}, got {actual}"
+        )
+    return actual
+
+
+def _verify_frozen_truth(
+    corpus: str,
+    record: Mapping[str, Any],
+    expr: Any,
+    packed_live_result: int,
+    live_k: int,
+) -> str:
+    """Verify the corpus digest at the width/order in which it was frozen."""
+    if corpus != "epfl":
+        return _require_truth_digest(record, packed_live_result, live_k)
+
+    # EPFL truth_sha256 covers the original syntactic-support truth table, even
+    # when semantic-support analysis later identifies a dead input. Expand the
+    # reduced result across those proven-dead axes before checking the immutable
+    # artifact. This validates the variable map/order without reevaluating a
+    # potentially huge expression tree a second time.
+    syntactic_k = int(record.get("synt_support_size") or 0)
+    if syntactic_k <= 0:
+        raise AssertionError(f"{record.get('id')}: missing syntactic support size")
+    syntactic_inputs = list(record.get("synt_support_inputs") or ())
+    semantic_inputs = set(record.get("sem_support_inputs") or ())
+    if len(syntactic_inputs) != syntactic_k:
+        raise AssertionError(f"{record.get('id')}: malformed syntactic support")
+    live_positions = tuple(
+        position
+        for position, original_input in enumerate(syntactic_inputs)
+        if original_input in semantic_inputs
+    )
+    if len(live_positions) != live_k:
+        raise AssertionError(f"{record.get('id')}: malformed semantic support")
+    if syntactic_k == live_k:
+        frozen_packed = packed_live_result
+    else:
+        live_bytes = int(packed_live_result).to_bytes(
+            max(1, (1 << live_k) // 8), "little"
+        )
+        frozen_bytes = bytearray(max(1, (1 << syntactic_k) // 8))
+        for syntactic_row in range(1 << syntactic_k):
+            semantic_row = 0
+            for semantic_position, syntactic_position in enumerate(live_positions):
+                semantic_row |= (
+                    (syntactic_row >> syntactic_position) & 1
+                ) << semantic_position
+            if live_bytes[semantic_row >> 3] & (1 << (semantic_row & 7)):
+                frozen_bytes[syntactic_row >> 3] |= 1 << (syntactic_row & 7)
+        frozen_packed = int.from_bytes(frozen_bytes, "little")
+    return _require_truth_digest(record, frozen_packed, syntactic_k)
+
+
 def _node_count_profile(node: Any, repetitions: int) -> tuple[float, float]:
     cold_samples: list[int] = []
     warm_samples: list[int] = []
@@ -246,30 +371,7 @@ def _measure_record(
         or record.get("stratum_live_k")
         or record.get("sem_support_size")
     )
-    all_variables = tuple(
-        sorted((f"x{i}" for i in {n.i for n in _walk_vars(expr)}), key=_natural_key)
-    )
-    fixed: dict[str, int] = {}
-    variables = all_variables
-    if corpus == "epfl" and len(all_variables) != k:
-        syntactic_inputs = list(record.get("synt_support_inputs") or ())
-        semantic_inputs = set(record.get("sem_support_inputs") or ())
-        if len(syntactic_inputs) != len(all_variables):
-            raise AssertionError(
-                f"{record.get('id')}: cannot map syntactic to semantic support"
-            )
-        live_positions = {
-            index for index, original_input in enumerate(syntactic_inputs)
-            if original_input in semantic_inputs
-        }
-        variables = tuple(
-            name for name in all_variables if int(name[1:]) in live_positions
-        )
-        fixed = {
-            name: 0 for name in all_variables if int(name[1:]) not in live_positions
-        }
-    if len(variables) != k:
-        raise AssertionError(f"{record.get('id')}: live_k={k}, variables={variables!r}")
+    variables, fixed = _evaluation_context(corpus, record, expr, k)
 
     hash_ns, structural_hash = _median_ns(lambda: expr_structural_hash(expr), repetitions)
     serde_ns, serde_doc = _median_ns(lambda: expr_to_json_dag(expr), repetitions)
@@ -325,6 +427,12 @@ def _measure_record(
         raw_kernel_eligible and not (raw_flat == raw_words == cm_flat)
     ):
         raise AssertionError(f"{record.get('id')}: packed engine mismatch")
+    frozen_truth_sha256_verified = _verify_frozen_truth(
+        corpus, record, expr, cm_flat, k
+    )
+    packed_sha256 = hashlib.sha256(
+        int(cm_flat).to_bytes(output_bytes, "little")
+    ).hexdigest()
 
     wrapper_ns, wrapper_result = _median_ns(
         lambda: materialize_hybrid_no_reinflate(
@@ -349,10 +457,11 @@ def _measure_record(
 
     return {
         "corpus": corpus,
-        "role": "tuning" if corpus == "bx1" else "held_out",
+        "role": "tuning" if corpus == "bx1" else "validation_reused",
         "id": str(record.get("id")),
         "seed": record.get("seed"),
         "truth_sha256_expected": record.get("truth_sha256"),
+        "frozen_truth_sha256_verified": frozen_truth_sha256_verified,
         "source_circuit_sha256": record.get("circuit_sha256"),
         "cluster": str(record.get("circuit") or record.get("op_family") or "unknown"),
         "live_k": k,
@@ -395,7 +504,8 @@ def _measure_record(
         "wrapper_over_selected_bare": wrapper_ns / (
             cm_words_ns if k >= WORDS_AUTO_MIN_VARS else cm_flat_ns
         ),
-        "packed_sha256": hashlib.sha256(int(cm_flat).to_bytes(output_bytes, "little")).hexdigest(),
+        "packed_sha256": packed_sha256,
+        "packed_digest_scope": "semantic_live_support",
         "packed_equal": True,
         "output_bytes_exact": output_bytes,
         "words_environment_bytes_estimate": k * n_words * 8,
@@ -495,7 +605,11 @@ def _selector_summary(rows: Sequence[Mapping[str, Any]], arm: str) -> list[dict[
         return words if k >= threshold else flat
 
     summaries: list[dict[str, Any]] = []
-    for role in ("tuning", "held_out"):
+    roles = sorted(
+        {str(row["role"]) for row in rows},
+        key=lambda role: (role != "tuning", role),
+    )
+    for role in roles:
         role_subset = [row for row in rows if row["role"] == role]
         subset = [
             row
@@ -652,16 +766,12 @@ def _environment(command: Sequence[str], suite: str, corpora: Sequence[str]) -> 
             )
         },
         "seed_policy": "per-record seeds when present; otherwise immutable circuit/root IDs",
+        "role_policy": (
+            "BX1 is tuning; B2 and EPFL are reused selection-validation data, "
+            "not untouched held-out data"
+        ),
         "dependencies": {name: _version(name) for name in ("numpy", "pandas", "sympy", "dd", "numba")},
-        "source_sha256": {
-            path: hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()
-            for path in (
-                "cm_ir.py",
-                "bitset_backend.py",
-                "cmbench/backends/bitset_engine.py",
-                "scripts/cm_deep_performance_audit.py",
-            )
-        },
+        "source_sha256": source_hashes(REPO_ROOT, SOURCE_PATHS),
         "corpus_sha256": {
             name: hashlib.sha256(CORPORA[name].read_bytes()).hexdigest() for name in corpora
         },
@@ -701,7 +811,8 @@ def main() -> int:
         "phases": prefix.with_name(prefix.name + "_phases.csv"),
         "environment": prefix.with_name(prefix.name + "_environment.json"),
     }
-    existing = [str(path) for path in paths.values() if path.exists()]
+    snapshot_dir = prefix.with_name(prefix.name + "_source_snapshot")
+    existing = [str(path) for path in (*paths.values(), snapshot_dir) if path.exists()]
     if existing:
         parser.error("refusing to overwrite existing outputs: " + ", ".join(existing))
     prefix.parent.mkdir(parents=True, exist_ok=True)
@@ -730,6 +841,9 @@ def main() -> int:
     selector = _selector_summary(rows, "raw") + _selector_summary(rows, "cm")
     phases = _phase_summary(rows)
     environment = _environment(sys.argv, args.suite, corpora)
+    environment["source_snapshot"] = capture_source_snapshot(
+        REPO_ROOT, snapshot_dir, SOURCE_PATHS
+    )
     summary = {"environment": environment, "selector": selector, "phases": phases}
     _write_csv(paths["raw"], rows)
     _write_csv(paths["selector"], selector)

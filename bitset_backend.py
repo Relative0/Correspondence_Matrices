@@ -706,6 +706,35 @@ def eval_expr_words_cse(
     return _eval_words(prog, vars_key, fixed or {})
 
 
+def eval_expr_flat_cse(
+    expr: Expr,
+    vars_all: Sequence[str],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+    flatten: bool = False,
+    free_dead_slots: bool = True,
+) -> int:
+    """Bigint-flat twin of :func:`eval_expr_words_cse`.
+
+    This entry point lets benchmark selectors apply the same backend policy to
+    the sharing-aware CSE program and the CM program. It changes only the
+    execution representation; ``flatten=True`` retains structural CSE and the
+    sharing-aware associative flattening used by the strongest generic
+    comparator.
+    """
+    vars_key = tuple(vars_all)
+    prog = get_expr_cse_program(expr, flatten=flatten)
+    template, full_mask = _bind_flat_program(prog, vars_key, fixed or {})
+    release_dead = bool(
+        free_dead_slots
+        and len(vars_key) >= _FLAT_FREE_MIN_VARS
+        and prog.n_slots >= _FLAT_FREE_MIN_SLOTS
+    )
+    return _eval_prepared_flat(
+        PreparedFlatEvaluation(prog, template, full_mask, release_dead)
+    )
+
+
 def eval_expr_flat_bitset(
     expr: Expr,
     vars_all: Sequence[str],

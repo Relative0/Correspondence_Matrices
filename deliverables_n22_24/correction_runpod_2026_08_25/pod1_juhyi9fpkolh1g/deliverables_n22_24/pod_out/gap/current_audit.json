@@ -1,0 +1,99 @@
+{
+  "acceptance": {
+    "checks": [
+      {
+        "arm": "raw",
+        "catastrophic_ge_2_count": 3,
+        "n": 48,
+        "pass": false,
+        "regret_geomean": 1.1205841063673767,
+        "regret_max": 2.473187114226275,
+        "role": "tuning"
+      },
+      {
+        "arm": "raw",
+        "catastrophic_ge_2_count": 0,
+        "n": 17,
+        "pass": false,
+        "regret_geomean": 1.217134272025235,
+        "regret_max": 1.7102661386652542,
+        "role": "validation_reused"
+      },
+      {
+        "arm": "cm",
+        "catastrophic_ge_2_count": 3,
+        "n": 48,
+        "pass": false,
+        "regret_geomean": 1.1403265450615283,
+        "regret_max": 2.4484912323346903,
+        "role": "tuning"
+      },
+      {
+        "arm": "cm",
+        "catastrophic_ge_2_count": 0,
+        "n": 23,
+        "pass": false,
+        "regret_geomean": 1.2210858432403662,
+        "regret_max": 1.666592365142734,
+        "role": "validation_reused"
+      }
+    ],
+    "gate": {
+      "catastrophic_ge_2_count": 0,
+      "regret_geomean_max": 1.1
+    },
+    "pass": false
+  },
+  "environment": {
+    "corpus_sha256": {
+      "epfl": "bb98f14a5525a2d869a7ad80e25e879fd176e78ad6d01c51385edc947f2806ac",
+      "synthetic_gap": "ba394c3342af638ab70b62c3c232dee3d8f0770d858aca2fcdb6e693a29f4516"
+    },
+    "counts": {
+      "tuning": 48,
+      "validation_reused": 23
+    },
+    "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.36",
+    "protocol": "paired alternating medians; synthetic tuning and reused EPFL selection validation; thresholds frozen before this timing run",
+    "python": "3.13.5 (main, Jul 22 2025, 01:46:07) [GCC 12.2.0]",
+    "source_snapshot": {
+      "directory": "/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_source_snapshot",
+      "files": [
+        {
+          "path": "cm_ir.py",
+          "sha256": "b6787eca513c5776f0676f77c9e219d028bc280e51067f79f854609b3357ac09",
+          "size_bytes": 95289
+        },
+        {
+          "path": "bitset_backend.py",
+          "sha256": "06a9a24a0bc1e579840d0349803353c08b86f7dd15bc7f9bad7d557d9f0c9cdf",
+          "size_bytes": 37979
+        },
+        {
+          "path": "cmbench/backends/bitset_engine.py",
+          "sha256": "91cfa4ec491d5153b1332a6738ef34c1e17335ee48df168bdc06ad92faa2db62",
+          "size_bytes": 3627
+        },
+        {
+          "path": "scripts/cm_benchmark_provenance.py",
+          "sha256": "e955b203848c14f196a75ff086f682acc974abe89cf4b3c9569fb0ab2a65c7ed",
+          "size_bytes": 2078
+        },
+        {
+          "path": "scripts/cm_deep_performance_audit.py",
+          "sha256": "3296ea243d47eb4cbb7ab7c88f9e60307769fdad85fadae7934c767413cff7bf",
+          "size_bytes": 31530
+        },
+        {
+          "path": "scripts/cm_selector_gap_study.py",
+          "sha256": "21eef29b79dee4b61e6557172435fde06064c31b981c2409422ce9d652661c47",
+          "size_bytes": 7863
+        }
+      ],
+      "manifest": "/workspace/cm/repo/deliverables_n22_24/pod_out/gap/current_source_snapshot/source_manifest.json",
+      "manifest_sha256": "1b5e3d2f688be758d6577a5f4d5a97ee280a49ece844550557796e5f307afec7"
+    },
+    "validation_status": "EPFL influenced earlier selector selection and is not untouched held-out data",
+    "words_auto_min_vars": 16
+  }
+}

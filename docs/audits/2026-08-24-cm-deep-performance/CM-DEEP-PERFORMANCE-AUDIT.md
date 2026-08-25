@@ -4,13 +4,20 @@ Audit date: 2026-08-24
 Repository: `C:\Users\brian\Documents\CM_Computation`
 Frozen starting revision: `main` at `6fe11d713cae39e56cd3251cca8e8ceb9cc5578f`
 
+> **Correction, 2026-08-25:** B2 and EPFL are reused selection-validation data,
+> not untouched held-out data. The original EPFL benchmark driver also failed to
+> assert the frozen truth digest in the corpus's original variable order. The
+> corrected 401-row replay verifies every frozen digest and all timed-arm outputs.
+> A matched 264-row successor now uses sharing-aware CSE-flat as the primary
+> comparator. See `deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md`.
+
 ## Executive conclusion
 
 The audit found one material routing defect and one small repeated-traversal cost worth changing. It did not find evidence for a new CM-specific kernel advantage, an algebraic shortcut for complete exact output, or a current reason to add JIT, native SIMD, e-graphs, GPU, multiprocessing, or a new cache policy.
 
 Implemented:
 
-1. Automatic packed-engine routing now keeps the flat Python-bigint kernel through `live_k=15` and selects NumPy `uint64` words at `live_k>=16`. The former `k>=6` rule incurred geometric-mean regret of 2.06 on frozen BX1 tuning and 2.72 on held-out raw-AST rows, with catastrophic regret (`>=2x`) on 39/80 and 197/307 rows. The `k>=16` policy reduced these to 1.011 and 1.014, with zero catastrophic rows. CM-node results tell the same story.
+1. Automatic packed-engine routing now keeps the flat Python-bigint kernel through `live_k=15` and selects NumPy `uint64` words at `live_k>=16`. The former `k>=6` rule incurred geometric-mean regret of 2.06 on frozen BX1 tuning and 2.72 on reused-validation raw-AST rows, with catastrophic regret (`>=2x`) on 39/80 and 197/307 rows. The `k>=16` policy reduced these to 1.011 and 1.014, with zero catastrophic rows. CM-node results tell the same story.
 2. Immutable CM-IR roots cache their DAG node count. A call falls from a corpus-median 5.7/7.8/15.5 microseconds cold to 0.3-0.4 microseconds warm on BX1/B2/EPFL. The no-reinflate budget path also computes the count once instead of twice. This is an algorithmic removal of repeated full-DAG traversals; no noisy wrapper-level speedup is claimed.
 
 The dominant unresolved cost remains CM preparation. Fresh phase instrumentation places interning at roughly 21-25% of compile time, live-variable analysis at 11-13%, hashing at 9-12%, lowering at 10-13%, rewriting at 7-9%, and canonicalization at 6-7%. No single duplicate pass dominates enough to justify a broad fusion rewrite. Accepted B3 evidence remains controlling: preparation tracks structural DAG size `s`, not unfolded tree size `t`, and is about 4.3x the fair comparison compiler in aggregate.
@@ -27,8 +34,8 @@ The available project runtime was `.venv\Scripts\python.exe`, CPython 3.13.5, wi
 
 The requested documents were read in the prescribed order. This audit preserves their accepted dispositions:
 
-- CM and sharing-aware CSE-flat are kernel-equivalent: accepted external ratio 0.9998 with interval [0.9747, 1.0249]. The residual is not an optimization target.
-- CM's earlier advantage over plain CSE was principally flattening/merging; the fair CSE-flat comparator closes it.
+- On the accepted B1/E3 workload, CM and sharing-aware CSE-flat were at parity: external ratio 0.9998 with interval [0.9747, 1.0249]. This is workload-specific, not a universal equivalence claim.
+- CM's earlier advantage over plain CSE was principally flattening/merging. The corrected B2/B4 successor finds a smaller additional CM reduction: bare CM/CSE-flat geomean 0.909 overall, accompanied by about 5% fewer instructions and 7% fewer primitive operations; at `k=16` the timing ratio is 0.979. The public CM wrapper remains much slower, so this is not an end-to-end dominance result.
 - BitSet wins the measured whole-call exact-output workload through `live_k=16`.
 - CM preparation is the leading CM cost and is about 4.3x the comparison compiler in accepted aggregate evidence.
 - B3 shows structural-DAG scaling: an 8.39-million-occurrence shared ladder with 77 structural nodes compiled in 985 microseconds, while unshared trees grew approximately with structural nodes.
@@ -150,7 +157,7 @@ The web review was performed on 2026-08-24. Full source-by-source decisions are 
 
 Rust's incremental compiler uses stable fingerprints and a dependency graph, while explicitly noting that stable hashing can itself make incremental compilation slower. Salsa's red-green query model similarly helps when tracked inputs change locally and repeated queries reuse dependency results. These mechanisms match a versioned family service, not isolated expressions, and need representative edit traces before implementation. See the [Rust incremental compilation guide](https://rustc-dev-guide.rust-lang.org/queries/incremental-compilation-in-detail.html) and [Salsa algorithm reference](https://github.com/salsa-rs/salsa/blob/master/book/src/reference/algorithm.md).
 
-`egglog` combines equality saturation and Datalog-style incremental execution and is credible for workloads with many interacting rewrites. Current profiling does not show canonicalization/rewrite as a dominant isolated cost, and the accepted fair baseline says additional CM-vs-CSE-flat rewriting has no established kernel payoff. Integration is therefore rejected for the current output workload, not as a general compiler technique. See the [PLDI 2023 egglog paper](https://www.mwillsey.com/papers/egglog) and the newer speculative [persistent e-graph compiler preprint](https://arxiv.org/abs/2602.16707).
+`egglog` combines equality saturation and Datalog-style incremental execution and is credible for workloads with many interacting rewrites. Current profiling does not show canonicalization/rewrite as a dominant isolated cost, and the corrected matched comparison shows only a workload-specific bare-kernel benefit that does not overcome the measured preparation/wrapper boundary. Integration is therefore rejected for the current output workload, not as a general compiler technique. See the [PLDI 2023 egglog paper](https://www.mwillsey.com/papers/egglog) and the newer speculative [persistent e-graph compiler preprint](https://arxiv.org/abs/2602.16707).
 
 Content-addressed compiler caches such as LLVM ThinLTO combine compact summaries with bounded cache pruning. CM's structural cache has the content key but only entry-count limits and no disk artifact, byte telemetry, or pruning policy. The missing piece is a real multi-process/version working-set trace, not another cache algorithm in isolation. See [LLVM ThinLTO cache documentation](https://clang.llvm.org/docs/ThinLTO.html) and the foundational [TinyLFU admission paper](https://arxiv.org/abs/1512.00727).
 
@@ -181,7 +188,7 @@ IPASIR assumptions support repeated SAT solves under changing assumptions while 
 
 ## Fresh profiling
 
-The final replay contains 401 immutable-corpus expressions: BX1 80 tuning rows, B2 192 held-out rows, and EPFL 129 held-out rows. Each preparation phase used three repetitions. Kernel comparisons used five alternating paired rounds and size-dependent batches. Every eligible packed raw/CM flat/words result and wrapper result was exactly equal.
+The final replay contains 401 immutable-corpus expressions: BX1 80 tuning rows and B2+EPFL 321 reused selection-validation rows. Each preparation phase used three repetitions. Kernel comparisons used five alternating paired rounds and size-dependent batches. The corrected replay verifies every frozen digest and every eligible packed raw/CM flat/words and wrapper result.
 
 Median phase fractions of cold external CM compilation:
 
@@ -221,18 +228,18 @@ No phase contributes enough alone to support a risky compiler-pass fusion. Inter
 
 `WORDS_AUTO_MIN_VARS` is now 16. Explicit direct requests for the words evaluator retain the existing minimum representation behavior; only automatic routing changed. The selector remains a constant-time, zero-allocation width test.
 
-The choice is intentionally conservative. BX1 directly measured `k=12` and `k=16` but not the gap. An initial `k=13` interpolation was tested and rejected after one held-out replay produced a raw-AST 2.18x misroute. The final implementation uses the directly observed endpoint rather than treating missing `k=13..15` tuning cells as evidence.
+The choice is intentionally conservative. BX1 directly measured `k=12` and `k=16` but not the gap. An initial `k=13` interpolation was tested and rejected after one reused-validation replay produced a raw-AST 2.18x misroute. The final implementation uses the directly observed endpoint rather than treating missing `k=13..15` tuning cells as evidence.
 
 Final authoritative policy regret:
 
 | Arm/role | Old `k>=6` geomean regret (cluster 95% CI) | Old catastrophic | New `k>=16` geomean regret (cluster 95% CI) | New catastrophic | New max |
 |---|---:|---:|---:|---:|---:|
 | raw / BX1 tuning | 2.06 [1.80, 2.16] | 39/80 | about 1.01 [about 1.00, 1.02] | 0/80 | below 1.5x in repeated final runs |
-| raw / B2+EPFL held out | 2.72 [2.49, 2.99] | 197/307 | about 1.01 [about 1.00, 1.03] | 0/307 | below 2x in the authoritative run |
+| raw / B2+EPFL reused validation | 2.72 [2.49, 2.99] | 197/307 | about 1.01 [about 1.00, 1.03] | 0/307 | below 2x in the authoritative run |
 | CM / BX1 tuning | 1.89 [1.66, 2.00] | 38/80 | about 1.01 [about 1.00, 1.02] | 0/80 | about 1.3x |
-| CM / B2+EPFL held out | 2.37 [2.19, 2.55] | 197/321 | about 1.01 [about 1.01, 1.02] | 0/321 | about 1.6x |
+| CM / B2+EPFL reused validation | 2.37 [2.19, 2.55] | 197/321 | about 1.01 [about 1.01, 1.02] | 0/321 | about 1.6x |
 
-Ratios vary modestly between whole replays because kernels are short, but the old rule's failure and the conservative rule's direction are stable. All raw threshold results exclude 14 EPFL rows in accordance with explicit protocol/memory outcomes; CM has all 321 held-out rows.
+Ratios vary modestly between whole replays because kernels are short, but the old rule's failure and the conservative rule's direction are stable. All raw threshold results exclude 14 EPFL rows in accordance with explicit protocol/memory outcomes; CM has all 321 reused-validation rows.
 
 ### Immutable node-count memoization
 
@@ -260,9 +267,9 @@ Focused tests pass. The first full-suite attempt produced 325 passes and 20 setu
 
 ## Negative and rejected experiments
 
-- **`k=13` interpolation:** rejected. It was not a measured BX1 cell and showed unstable held-out tail behavior. `k=16` is the directly supported conservative endpoint.
+- **`k=13` interpolation:** rejected. It was not a measured BX1 cell and showed unstable reused-validation tail behavior. `k=16` is the directly supported conservative endpoint.
 - **Broad compiler-pass fusion:** rejected for now. Timing is distributed across interning, live-variable analysis, lowering, hashing, rewriting, and canonicalization; no duplicated traversal accounts for a dominant fraction.
-- **CM-vs-CSE-flat residual optimization:** rejected as settled parity.
+- **CM-vs-CSE-flat residual optimization:** not justified end-to-end. The corrected successor finds a modest bare-kernel reduction on B2/B4, especially at small `k`, but near parity at `k=16`; preparation and wrapper costs still control the complete workflow.
 - **JIT of Python bigints:** semantics mismatch because Numba uses fixed-width integers. A word-array JIT needs a separate batch crossover study and dependency approval.
 - **Handwritten SIMD/ternary fusion:** not justified. NumPy already dispatches SIMD, and present workload sizes are dominated by fixed overhead until `k=16`.
 - **Kronecker/tensor shortcut:** rejected for arbitrary complete outputs. Factorization requires decomposable inputs or a structured-output contract and does not remove the output lower bound.
