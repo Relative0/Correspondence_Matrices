@@ -1,0 +1,136 @@
+{
+  "content_modes": [
+    "metrics"
+  ],
+  "gates": {
+    "cache": {
+      "collection_adequate": false,
+      "exact_logical_replay_ready": false,
+      "requires_complete_cache_fields": true,
+      "requires_complete_unsampled_capture": true,
+      "requires_real_provenance": true
+    },
+    "feature_selector": {
+      "missing_capability": "current trace lacks per-call current-vs-best eligible counterfactual timings",
+      "opportunity_fraction_computable": false,
+      "traffic_ready": false,
+      "volume_adequate": false
+    },
+    "incremental_family": {
+      "collection_adequate": false,
+      "followup_capture_ready": false,
+      "incremental_replay_ready": false,
+      "missing_capability": "metrics V1 lacks parent-version/change-set and replayable expression data"
+    },
+    "numba_or_native": {
+      "break_even_computable": false,
+      "missing_capability": "requires prototype import/JIT/copy timings and measured q-star",
+      "repeated_q_observed": false
+    },
+    "partial_context": {
+      "collection_adequate": false,
+      "exact_context_replay_ready": false,
+      "followup_capture_ready": false,
+      "missing_capability": "metrics V1 stores context digests/overlap, not assignments"
+    },
+    "simd": {
+      "eligible": false,
+      "reason": "requires an accepted workload-backed Numba result first"
+    }
+  },
+  "inputs": [
+    {
+      "bytes": 7446,
+      "path": "docs\\audits\\2026-08-25-cm-deep-performance\\remaining-work\\orchestration-20260826-213058\\trace_single_events.jsonl",
+      "sha256": "01be9ddc9825bbcebac47b9ae25c6ea6ed52368d8db781e779aac5a802359b96"
+    },
+    {
+      "bytes": 20752,
+      "path": "docs\\audits\\2026-08-25-cm-deep-performance\\remaining-work\\orchestration-20260826-213058\\trace_family_events.jsonl",
+      "sha256": "0a4d50e73425ddfb3f981a45a6264807a5e2ab8184e8a06cd5cf74dd83f1fc40"
+    },
+    {
+      "bytes": 23404,
+      "path": "docs\\audits\\2026-08-25-cm-deep-performance\\remaining-work\\orchestration-20260826-213058\\trace_context_events.jsonl",
+      "sha256": "0a23fe22338eee9d00e64eb7102490420c19e7988c12b4d76537067fb0c55694"
+    }
+  ],
+  "limitations": [
+    "declared evidence provenance is not cryptographically or operationally verified",
+    "sampled metrics are an opportunity screen, not an exact request replay",
+    "no performance benefit is inferred from collection volume alone"
+  ],
+  "observations": {
+    "cache_access_count": 0,
+    "cache_access_field_coverage": {
+      "complete": false,
+      "event_count": 0,
+      "populated": {
+        "artifact_bytes": 0,
+        "cache_key_digest": 0,
+        "prepare_s": 0
+      }
+    },
+    "context_stream_count": 3,
+    "context_transition_count": 21,
+    "context_transition_event_count": 24,
+    "eligible_call_count_k13_15": 0,
+    "eligible_call_count_k13_16": 1,
+    "eligible_formula_count_k13_15": 0,
+    "eligible_formula_count_k13_16": 1,
+    "family_id_count": 3,
+    "family_transition_count": 21,
+    "family_version_event_count": 24,
+    "kernel_fraction_median": 1.0,
+    "kernel_fraction_observation_count": 7,
+    "prepare_request_count": 0,
+    "q_max": null,
+    "q_observation_count": 0
+  },
+  "recommended_next_step": "collect_named_real_metrics_trace",
+  "screen_status": "pass",
+  "screen_version": "cm-workload-opportunity/v1",
+  "thresholds": {
+    "cache_prepare_requests": 10000,
+    "cache_process_lifetimes": 2,
+    "context_streams": 5,
+    "context_transitions": 500,
+    "family_ids": 20,
+    "family_transitions": 200,
+    "selector_eligible_calls": 500,
+    "selector_independent_formulas": 50
+  },
+  "trace_quality": {
+    "complete_capture": false,
+    "event_count": 71,
+    "event_counts": {
+      "context_transition": 24,
+      "evaluation_result": 11,
+      "family_version": 24,
+      "prepare_result": 3,
+      "process_restart": 3,
+      "session_end": 3,
+      "session_start": 3
+    },
+    "phase_change_observed": true,
+    "phase_values": [
+      "observed",
+      "trace"
+    ],
+    "process_lifetimes_observed": 3,
+    "sample_every_values": [
+      16
+    ],
+    "session_count": 3,
+    "trace_drop_count": 0
+  },
+  "trace_schema_version": "cm-workload-trace/v1",
+  "workload": {
+    "complete_family_population_declared": false,
+    "complete_workload_declared": false,
+    "context_stream_kind": "synthetic",
+    "declared_evidence_class": "synthetic",
+    "label": "synthetic-three-boundary-smoke",
+    "provenance_verified_by_tool": false
+  }
+}

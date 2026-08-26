@@ -74,6 +74,15 @@
   "e2_kernel_vs_cse_flat": {
     "rows": [
       {
+        "label": "Current B2/B4 V3 · formula-balanced",
+        "scope": "B2/B4 frozen formulas · Windows · current selectors · exactly counterbalanced",
+        "value": 0.8905696773306687,
+        "lo": 0.8740654100098479,
+        "hi": 0.9072717741775921,
+        "basis": "paired formula-cluster bootstrap (10000 draws; one equal-weight contribution per formula)",
+        "group": "current"
+      },
+      {
         "label": "Local synthetic · blocked",
         "scope": "synthetic generator · Windows",
         "value": 1.003787081474839,
@@ -153,6 +162,8 @@
       "optimization_worthy": false
     },
     "provenance": [
+      "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current",
+      "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json :: acceptance, protocol, formula_count, row_count, statistical_inference",
       "deliverables_n22_24/b1_e3_replay_2026_08_03/b1_acceptance_check_results_2026_08_03.json :: new_cm_vs_cse_flat_geomean, n_flat_rows",
       "deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: primary_blocked_cm_cse_flat, round_robin_cm_cse_flat, materiality",
       "deliverables_n22_24/b6_pod_replication_2026_08_03/b6_analysis_2026_08_03.json :: pods[].cm_cse_flat_geomean"
@@ -1992,7 +2003,7 @@
     ]
   },
   "_campaign": {
-    "evidence_revision": "6e8a283d22fb7cf643753fb6ad2d7fc3f3f2c96f",
+    "evidence_revision": "1fd3907dbc1986cb2d8a9f0f8cab2b5920a415ce",
     "campaign_revision": "eab8879edcb7fb13582ad9bdff7ea7c00238774d",
     "campaign": "CM comprehensive benchmark refresh 2026-08-03",
     "cost_usd": 0.017400000000000002,
@@ -2108,14 +2119,14 @@
       "title": "Correspondence Matrices: a structural layer for Boolean computation",
       "lede": "What Boolean computation is, which tool solves which problem, what a Correspondence Matrix actually is, what the refreshed evidence shows, and what is still genuinely unsolved — written in layers, so you can stop at whatever depth you need.",
       "standfirst": "This is the complete version. Three shorter cuts are derived from it and never add anything it does not contain.",
-      "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign and carries the file it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
+      "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or the dated 2026-08-26 follow-up, and carries the file it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
     },
     "project_state": {
       "items": [
         {
           "label": "Validated now",
           "title": "Correct output and a competitive kernel",
-          "summary": "CM matched a sharing-aware flattened CSE kernel on the external corpus, after correctness gating, and the direction replicated across independent machines.",
+          "summary": "CM matched sharing-aware CSE-flat across the accepted B1/E3 and EPFL parity scopes. The later exactly counterbalanced B2/B4 V3 study measured bare CM at {{symv3.bare.overall}} [{{symv3.bare.overall.lo}}, {{symv3.bare.overall.hi}}] overall, while the public wrapper remained {{symv3.wrapper.overall}} against CSE-flat.",
           "kind": "measured"
         },
         {
@@ -2132,7 +2143,7 @@
         }
       ],
       "boundaries": [
-        "Strong baseline: CM and CSE-flat are kernel-equivalent, not a demonstrated speed moat.",
+        "Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3 and EPFL, but {{symv3.bare.overall}} [{{symv3.bare.overall.lo}}, {{symv3.bare.overall.hi}}] for bare CM on current B2/B4 V3.",
         "Whole call: BitSet led at every measured semantic support through live_k={{wrap.max_k}}.",
         "Economics: real production reuse counts have not been measured.",
         "External scope: EPFL hardware/formal-verification expressions, not a deployed workflow.",
@@ -2161,8 +2172,8 @@
         },
         {
           "title": "The explicit-output boundary may be hard",
-          "visible": "The current path stops at live_k={{guard.k}}, where output size is already exponential.",
-          "test": "Map memory and runtime immediately above the guard with fail-closed limits."
+          "visible": "Bounded direct kernels completed at live_k={{guard.followup.min_k}}–{{guard.followup.max_k}}, but the supported public path still stops at live_k={{guard.k}} and complete output remains exponential.",
+          "test": "Use a caller-backed, memory-safe protocol to compare equivalent whole-call artifacts before reconsidering the guard."
         }
       ]
     },
@@ -2356,7 +2367,7 @@
           "superpower": "Identifies repeated subexpressions, computes each once, and — with sharing-aware flattening — collapses chains of the same operator into single wide operations without duplicating shared work.",
           "cost": "Preparation is not free, and the compiled program only pays off if you evaluate it more than once.",
           "analogy": "Doing your working out on paper once and then reading off the answers, instead of redoing the arithmetic each time.",
-          "measured": "This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about {{kernel.local.pct}} faster; against a properly flattened CSE, the two are indistinguishable.",
+          "measured": "This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about {{kernel.local.pct}} faster. Against sharing-aware CSE-flat, B1/E3 and EPFL measured parity, while current B2/B4 V3 measured bare CM at {{symv3.bare.overall}} overall and {{symv3.bare.k16}} at k=16.",
           "lay_name": "A compiled evaluator",
           "lay_role": "the working-out-once approach",
           "lay_question": "If I do the working-out once and keep it, how fast is it after that?"
@@ -2368,7 +2379,7 @@
           "superpower": "Treats the operator itself as the object. It gives every expression a canonical key, keeps a persistent compiled cache, serialises, and knows which variables actually matter before it evaluates anything.",
           "cost": "Compilation costs roughly {{prep.min}}–{{prep.max}} what the CSE baseline's does, and the end-to-end call carries {{wrap.ovh.min}}–{{wrap.ovh.max}} of fixed overhead. Both must be amortised by reuse.",
           "analogy": "A build system rather than a compiler. The value is in knowing what you already built and being able to reuse it — not in the raw speed of any single build.",
-          "measured": "Kernel-equivalent to a flattened CSE on every corpus tested. Its differentiators are structural, not speed: canonical keys, persistent caching, and serialisation.",
+          "measured": "Workload-dependent against CSE-flat: parity on B1/E3 and EPFL, but a modest bare-program advantage on current B2/B4 V3. The public wrapper was still {{symv3.wrapper.overall}} [{{symv3.wrapper.overall.lo}}, {{symv3.wrapper.overall.hi}}] overall, so no end-to-end speed moat is established. Structural keys, caching, and serialisation remain separate differentiators.",
           "lay_name": "CM",
           "lay_role": "the build system",
           "lay_question": "Have I seen this rule before, what is it made of, and can I store it and reuse it?"
@@ -2582,7 +2593,7 @@
           "lay": [
             "Now the calculus changes. Compilation is a one-time cost, and each evaluation afterwards is slightly cheaper. So there is some number of evaluations at which compiling pays for itself. Below it you lose; above it you win.",
             "That break-even number is the single most useful thing to know about your workload. Against a plain, unflattened baseline the typical synthetic expression needs about {{be.syn.median}} evaluations, and the typical real circuit about {{be.epfl.median.matched}} — worse, but not by a lot.",
-            "Against a properly flattened baseline the picture changes completely, and it is worth understanding why. There, each evaluation is not actually cheaper — the two are equally fast. So there is nothing to accumulate, and the setup cost is never repaid however many times you run it. That is why {{be.epfl.never}} of {{be.epfl.total}} real circuits are marked “never”: not because they are hard, but because the race is already tied.",
+            "Against a properly flattened baseline, break-even depends on the workload. On the EPFL AND/INV workload each evaluation was effectively tied, so there was nothing to accumulate and {{be.epfl.never}} of {{be.epfl.total}} real circuits were marked “never.” Current B2/B4 V3 instead measured a bare CM/CSE-flat ratio of {{symv3.bare.overall}}, but its public wrapper ratio was {{symv3.wrapper.overall}}; any new break-even claim must therefore include preparation and the exact wrapper boundary rather than extrapolate from the bare kernel.",
             "So the honest advice is not “use CM for repeated evaluation.” It is: work out what you are really comparing against, then work out how many times you will actually re-evaluate."
           ],
           "technical": [
@@ -2748,8 +2759,8 @@
               },
               {
                 "cond": "a sharing-aware flattened CSE",
-                "then": "treat them as equivalent",
-                "why": "{{flat.epfl}} externally; pick on features, not speed"
+                "then": "measure the actual workload and timing boundary",
+                "why": "EPFL measured {{flat.epfl}}; current B2/B4 V3 bare CM measured {{symv3.bare.overall}}, while its wrapper measured {{symv3.wrapper.overall}}"
               }
             ]
           },
@@ -2853,8 +2864,8 @@
               },
               {
                 "cond": "something built carefully",
-                "then": "treat them as equally fast",
-                "why": "so choose on what else they give you, not on speed"
+                "then": "do not assume either parity or a speed win",
+                "why": "the accepted CSE-flat result changes with workload structure and wrapper cost"
               }
             ]
           },
@@ -2928,14 +2939,14 @@
       }
     ],
     "frontier": {
-      "lede": "The 2026-08-03 campaign settled the question it set out to settle: at the kernel, CM and a well-implemented flattened CSE are equivalent. That answer closes one door and makes the remaining questions sharper, not vaguer. They are ordered below as the project's own ranked list orders them — with the two legs that list ranked first and last, external validation and cross-machine replication, now complete.",
+      "lede": "The 2026-08-03 campaign established parity against CSE-flat on B1/E3 and EPFL. The accepted 2026-08-25 V3 correction narrowed that conclusion: current B2/B4 measured a workload-specific bare CM advantage, while the public wrapper remained slower. Three fresh same-host repetitions ranged from {{symv3.repeat.min}} to {{symv3.repeat.max}}, confirming the direction while exposing run-level variation that a within-run formula interval cannot measure. A later three-pod preparation confirmation passed, while a genuinely held-out i10 feature selector failed and the simple k=16 rule transferred well. The remaining questions are therefore about preparation, boundary cost, reuse, and choosing by workload rather than declaring one universal kernel ratio.",
       "lay": [
-        "It is worth being clear about what kind of problem is left. It is not “is CM faster?” — that has been answered, and the answer is “not against a well-built competitor, at the kernel.” The remaining questions are about cost, about choosing, and about capabilities that exist on paper but have never been shown to pay.",
+        "It is worth being clear about what kind of problem is left. “Is CM faster?” has no workload-free answer: B1/E3 and EPFL measured parity at the kernel, current B2/B4 V3 measured a modest bare CM lead, and the public wrapper remained slower. The remaining questions are about total cost, choosing, and capabilities that exist on paper but have never been shown to pay.",
         "Three of them are cheap to answer and would move the picture immediately. Three more are the experiments that would actually test whether the structural idea is worth anything beyond re-running the same expression. Two are engineering and formal gaps. And two are honest boundary questions — regions the measurements simply do not cover.",
-        "On cost: the next four items on that list are local profiling, instrumentation and analysis. None of them needs cloud time."
+        "The preparation replication and first untouched selector transfer test are now complete. The next useful work is narrower: real reuse traces, another independently frozen selector family, and dependency-gated native comparators where the workload justifies them."
       ],
       "technical": [
-        "With Outcome A final, kernel work aimed at the CM-versus-CSE-flat residual is explicitly rejected: the residual is below the pre-registered materiality bar, its sign is not stable across scopes, and both schedules agree it is parity. Optimisation priority moves to preparation cost, cache behaviour, and workload-aware backend selection.",
+        "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Optimisation priority remains preparation cost, cache behaviour, wrapper economics, and workload-aware backend selection.",
         "Several items below are marked <em>partially answered</em>. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism."
       ],
       "items": [
@@ -2956,17 +2967,20 @@
         },
         {
           "id": "fr-prep",
-          "title": "Preparation cost is unprofiled — and it is the top optimisation surface",
-          "status": "ranked-next-test",
-          "visual_label": "Profile preparation",
-          "lay_statement": "Before CM can answer anything it does a one-time setup step costing roughly {{prep.min}}–{{prep.max}} what the simple alternative's setup costs. Nobody has yet measured which part of that setup is expensive, so nobody knows what to fix. Until someone does, any attempt to speed it up is guesswork.",
-          "technical_statement": "Preparation costs {{be.syn.prep}} plain-CSE prep on the synthetic corpus, {{be.epflcse.prep}} on the external corpus against the same baseline, and {{be.epfl.prep}} against CSE-flat, with a per-case range of {{b3.prep_ratio.min}}–{{b3.prep_ratio.max}} across the compile-scaling cases. Preparation is linear in structural DAG nodes rather than in unfolded tree size, so this is a constant factor inside the compiler, not a scaling problem. It is ranked the top <em>optimisation</em> surface, and the third-ranked <em>test</em>, behind the reuse-distribution measurement above. The test itself is a decomposition of where that constant goes — canonicalisation, interning, lowering — explicitly <em>before</em> any optimisation is attempted. Prep-cost reduction is the top-ranked optimisation and is gated on that profile existing.",
+          "title": "Preparation is profiled — and remains the top optimisation surface",
+          "status": "partially-answered",
+          "visual_label": "Reduce preparation",
+          "lay_statement": "Before CM can answer anything it does a one-time setup step costing roughly {{prep.min}}–{{prep.max}} what the simple alternative's setup costs. The deep audit traced that work and removed one redundant compilation memo safely. That improvement then reproduced on {{memo.pods}} Linux machines; a more ambitious compact-ordering idea was exact but much slower and was removed.",
+          "technical_statement": "Preparation costs {{be.syn.prep}} plain-CSE prep on the synthetic corpus, {{be.epflcse.prep}} on the external corpus against the same baseline, and {{be.epfl.prep}} against CSE-flat, with a per-case range of {{b3.prep_ratio.min}}–{{b3.prep_ratio.max}} across the compile-scaling cases. The 2026-08-25 deep audit measured a distributed profile led by interning, lowering, live-support work, structural hashing, rewrite, and canonicalisation. It removed the redundant identity memo only from the sharing-aware builder path, with exact ordered-DAG and packed-output gates. Three independent Runpod CPU flavors then measured candidate/baseline preparation at {{memo.bx1b2.min}}–{{memo.bx1b2.max}} on BX1+B2 and {{memo.epfl.min}}–{{memo.epfl.max}} on EPFL, with {{memo.mismatches}} exact mismatches, cost {{memo.cost}}, and {{memo.postflight_pods}} postflight pods. The subsequent exact rational compact-order prototype preserved all {{dpr1.rows}} smoke outputs but cost {{dpr1.time}} time and {{dpr1.peak}} traced peak memory; it was rejected and reverted.",
           "why_it_matters": "Break-even is the preparation premium divided by the per-evaluation kernel gain, so preparation sets how large every finite break-even count is. Halving it roughly halves those counts and widens the band of workloads where compiling pays. It does not, however, rescue the never-break-even population — a formula is classified “never” exactly when the per-evaluation gain is not positive, which is a property of the comparison, not of the setup cost.",
-          "what_would_change_the_picture": "<b>If it succeeds</b> — a profile attributing the multiple to a dominant contributor that can be reduced — the finite break-even counts fall roughly proportionally and CM's applicability band widens materially. <b>If it fails</b> — the cost is diffuse across canonicalisation, interning and lowering with no dominant term — then the multiple is intrinsic to building a canonical, cacheable, serialisable structure, and CM's honest positioning is a high-reuse-only layer whose value rests entirely on canonical keys, the persistent cache and serialisation rather than on any cost argument.",
+          "what_would_change_the_picture": "The small one-memo improvement is now cross-host confirmed. Any further preparation change needs a different measured mechanism from the rejected compact-order prototype, paired exact evidence on representative and high-sharing cases, and benefit large enough to repay compatibility and maintenance risk.",
           "sources": [
             "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §7 ranked next tests, item 3; §8 ranked optimizations, item 1",
             "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md rows 8 and 9",
-            "deliverables_n22_24/b3_scaling_2026_08_03/"
+            "deliverables_n22_24/b3_scaling_2026_08_03/",
+            "docs/audits/2026-08-25-cm-deep-performance/CM-DEEP-PERFORMANCE-AUDIT.md",
+            "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json"
           ],
           "downside": "If the cost is spread thinly across several stages with no dominant one, the setup premium is intrinsic to building a reusable, storable structure — and CM is a high-reuse-only layer whose case rests entirely on what it stores, not on cost."
         },
@@ -2977,7 +2991,7 @@
           "visual_label": "Study the cache",
           "lay_statement": "One of the three things CM is left standing on is that it remembers what it has already compiled. Nobody has measured how often that memory actually helps under a realistic mix of work, or how sensitive it is to how much you let it remember.",
           "technical_statement": "The persistent cache is named as the second optimisation surface, with cache-policy tuning as a ranked optimisation gated on the study existing. The only recorded production characteristic to date is incidental: the cache returns one object per digest, which is what keeps a known duplicated-slot behaviour narrow in practice — it requires mid-compile eviction or deliberate cross-builder mixing. Everything else is unmeasured: steady-state hit rate, working-set size, eviction policy, invalidation correctness when an expression changes, memory retention, and cold-versus-warm cost.",
-          "why_it_matters": "With kernel speed declared equivalent, the cache is one of three remaining differentiators. An unmeasured differentiator is an architectural assertion.",
+          "why_it_matters": "Without a universal kernel advantage, the cache is one of the remaining potential differentiators. An unmeasured differentiator is an architectural assertion.",
           "what_would_change_the_picture": "<b>If it succeeds</b> — measured hit rates and a sensitivity curve for the cache size limit under realistic mixes — cache-policy tuning gains a quantified payoff and the differentiator gains empirical content. <b>If it fails</b> — low hit rates or high sensitivity to the size limit — the cache is a fragile differentiator, the duplicated-slot behaviour stops being exotic, and the amortisation argument weakens further on top of an already-substantial preparation cost.",
           "sources": [
             "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §7 ranked next tests, item 4; §8 item 3",
@@ -2987,17 +3001,19 @@
         },
         {
           "id": "fr-selector",
-          "title": "Backend selection is unvalidated, and the rule in use is measurably wrong",
+          "title": "The simple k=16 rule transferred; a richer feature selector did not",
           "status": "partially-answered",
           "visual_label": "Validate selection",
-          "lay_statement": "CM has several internal engines and picks one using a simple size threshold. New measurements show that threshold is wrong for small problems and can cost several times the runtime. A better rule has been proposed but never fitted, and never tested on data it was not fitted to.",
-          "technical_statement": "The long-standing rule — big-integer evaluation below six live variables, word-packed at six and above — is revised to workload-dependent. Flat big-integer beat the recursive kernel at every support ({{bx1.fvr.min}}–{{bx1.fvr.max}}), but the word-packed engine's fixed dispatch cost kept flat fastest through live_k={{bx1.last_flat_k}}; words only won at live_k={{bx1.first_words_k}}. At the support where a threshold rule would have switched, words was {{bx1.k6.wvf}} slower. A support-only selector therefore leaves multiples on the table in the mid range. Separately, an analysis-stage selector is proposed for choosing CM against CSE-flat per workload, from expected reuse count and measured expression properties (structural nodes, sharing factor, operator mix), predicting break-even and choosing CM only when expected reuse greatly exceeds it. It carries an explicit pre-commitment: the rule must be fitted on one slice and validated out of sample — at minimum fit on two strata and validate on the third — before any production integration is proposed. It is deliberately kept out of production until then.",
+          "lay_statement": "CM has several internal engines. The old switch at six variables was badly wrong, so the implementation moved to a conservative switch at sixteen. On a new circuit that simple rule stayed close to the best engine. A more complicated rule trained on the old data looked plausible there but made many disastrous choices on the new circuit, so it was rejected.",
+          "technical_statement": "The older rule — big-integer evaluation below six live variables, word-packed at six and above — remains rejected: flat big-integer beat the recursive kernel at every support ({{bx1.fvr.min}}–{{bx1.fvr.max}}), stayed fastest through live_k={{bx1.last_flat_k}}, and words won only at live_k={{bx1.first_words_k}}; at k=6 words was {{bx1.k6.wvf}} slower. The current k=16 control then transferred to {{i10.rows}} untouched Berkeley ABC i10 cones spanning k={{i10.min_k}}–{{i10.max_k}}, with raw and CM regret {{i10.current.raw}} and {{i10.current.cm}} and zero catastrophic routes. A preregistered ridge selector trained only on BX1 features failed the same held-out gate: regret {{i10.feature.raw}} raw and {{i10.feature.cm}} CM, with {{i10.feature.raw.cat}} and {{i10.feature.cm.cat}} catastrophic routes. It was rejected without retuning on i10. No production feature selector is integrated.",
           "why_it_matters": "Selection is where “different tools answer different questions” becomes an engineering deliverable rather than a slogan. Getting it wrong costs multiples silently. And a selector that cannot be shown to generalise out of sample is indistinguishable from a rule overfitted to the two corpora this project happens to own.",
-          "what_would_change_the_picture": "<b>If it succeeds</b> — a rule fitted on one slice that beats the current threshold policy on a held-out slice, judged on regret against the best feasible backend, catastrophic-choice rate, and routing overhead — the multiples currently lost are recovered and production integration is unlocked. <b>If it fails</b> to transfer out of sample, the selector is corpus-overfitting; the honest response is to keep the simple documented threshold, label engine choice as corpus-scoped tuning, and narrow any “automatic routing” language to the implemented policy only.",
+          "what_would_change_the_picture": "A replacement must first clear its tuning-corpus cross-validation catastrophe gate, then beat k=16 on another independently frozen circuit family without using i10 for tuning. Until then the honest response is to keep the simple documented threshold and treat richer automatic routing as rejected research, not a shipped advantage.",
           "sources": [
             "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_ADDENDUM_2026-08-03.md row 15 revisited",
             "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §4 selector proposal; §8 item 2",
-            "deliverables_n22_24/bx1_crossover_2026_08_03/"
+            "deliverables_n22_24/bx1_crossover_2026_08_03/",
+            "deliverables_n22_24/heldout_abc_i10_2026_08_26/CM_ABC_I10_HELDOUT_SELECTOR_PREREGISTRATION_2026-08-26.md",
+            "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json"
           ],
           "downside": "If a fitted rule does not transfer to data it was not fitted on, it is overfitted to the two test sets this project owns, and any “automatic routing” language has to narrow to the simple policy already shipped."
         },
@@ -3080,19 +3096,21 @@
         },
         {
           "id": "fr-aboveguard",
-          "title": "Above the guard limit, the boundary is enforced rather than explored",
-          "status": "open",
+          "title": "Above the guard limit, bounded kernels work but the public boundary still refuses",
+          "status": "partially answered",
           "visual_label": "Map the guard boundary",
-          "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. The refusal is correct and has never once been wrong. But it means the region beyond that line has never been measured — and that happens to be the only region where CM's whole-call path might have led.",
-          "technical_statement": "The guard is confirmed correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} fresh trials, with depth-8 decline rates of {{guard.depth8.min_pct}}–{{guard.depth8.max_pct}}. What is not established is behaviour beyond it. The wrapper-boundary result states that any CM-versus-BitSet crossover sits <em>above</em> the live_k={{guard.k}} guard — that is, the one region where CM's end-to-end path might lead is the region the guard prevents measuring. Separately, the engine crossover only turns at live_k={{bx1.first_words_k}}, so the guard edge is where two different open questions converge. Required work: controlled live-support sweeps independent of ambient namespace size, with memory telemetry and fail-closed limits.",
-          "why_it_matters": "The difference between “we have not measured there” and “nothing can work there” is the difference between a tunable threshold and a hard capability boundary, and the site should be able to say which it is.",
-          "what_would_change_the_picture": "<b>If a controlled sweep finds a feasibility surface</b> — and, if a crossover exists there, measures it — the guard can either be raised on evidence or confirmed on evidence rather than convention. <b>If explicit output becomes time- or memory-infeasible immediately past the guard</b>, the crossover question is permanently moot, no claim that CM's end-to-end path leads BitSet on any admissible workload can ever be made, and the guard should be presented as a hard capability boundary.",
+          "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. A bounded follow-up did run the underlying exact kernels from {{guard.followup.min_k}} through {{guard.followup.max_k}}: all {{guard.followup.cases}} cases completed with {{guard.followup.mismatches}} wrong answers and {{guard.followup.timeouts}} timeouts. The public wrapper still refused every case, so this proves a small feasibility band, not permission to raise the limit or a CM speed win.",
+          "technical_statement": "The original guard remains correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} earlier trials. The bounded subprocess follow-up then exercised exact direct kernels for live_k={{guard.followup.min_k}}–{{guard.followup.max_k}} under a 64 MiB estimate cap, 512 MiB RSS cap, 45-second timeout and three repetitions: {{guard.followup.cases}}/{{guard.followup.cases}} completed, with {{guard.followup.mismatches}} mismatches, {{guard.followup.timeouts}} timeouts and {{guard.followup.wrapper_non_refusals}} wrapper non-refusals. This closes the claim that nothing above the guard has been measured, but it did not compare equivalent whole-call CM and BitSet artifacts or justify a production policy change.",
+          "why_it_matters": "The evidence now separates three facts: bounded direct kernels are feasible just above the line, complete output still grows exponentially, and the supported public API intentionally refuses that region.",
+          "what_would_change_the_picture": "A caller-backed, memory-safe study would need equivalent whole-call artifacts, paired CM/BitSet timings, retained and temporary memory, and a pre-allocated refusal policy. Only then could the public guard be reconsidered; a direct-kernel feasibility result alone is insufficient.",
           "sources": [
             "deliverables_n22_24/b4_sweep_2026_08_03/",
             "deliverables_n22_24/b2_wrapper_2026_08_03/",
-            "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md rows 4 and 7"
+            "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md rows 4 and 7",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_raw.csv"
           ],
-          "downside": "If explicit output becomes infeasible immediately past the limit, the crossover question is permanently moot, no claim that CM's whole-call path leads can ever be made, and the limit is a hard capability boundary rather than a tunable setting."
+          "downside": "Every additional live variable doubles complete-output size. Extending the sweep without a caller, equivalent artifact boundary, and hard memory protocol would spend resources without supporting a production decision."
         }
       ],
       "roadmap": [
@@ -3149,7 +3167,7 @@
         {
           "title": "Does the kernel result generalise beyond the synthetic generator?",
           "how": "External validation on real AND/INV circuit cones from a published benchmark suite, under a protocol and a materiality rule pre-registered before any external number existed.",
-          "result": "SUPPORTS GENERALIZATION. CM ÷ CSE-flat {{flat.epfl}} [{{flat.epfl.lo}}, {{flat.epfl.hi}}]; CM ÷ plain CSE {{kernel.epfl}}. The materiality rule failed, which converted the kernel-equivalence posture from provisional to final."
+          "result": "SUPPORTS GENERALIZATION TO THIS AND/INV WORKLOAD. CM ÷ CSE-flat {{flat.epfl}} [{{flat.epfl.lo}}, {{flat.epfl.hi}}]; CM ÷ plain CSE {{kernel.epfl}}. The materiality rule failed for EPFL. Later B2/B4 V3 evidence prevents upgrading that workload-scoped result into universal kernel equivalence."
         },
         {
           "title": "Is the result an artifact of one machine?",
@@ -3180,7 +3198,7 @@
         {
           "rule": "The pass mark for the decisive experiment was written down before the data existed",
           "lay_explanation": "The most important measurement in the project had its success threshold fixed in advance, in a document, before anyone had a single external number. Then the experiment ran — and failed to meet the threshold. The project reported that and changed its claim, rather than looking for another way to slice the data.",
-          "technical_explanation": "The external protocol pre-registered the corpus source, cone-selection rules, arms, schedules, clustering basis and a three-condition materiality rule: the external CM ÷ CSE-flat geometric mean had to be at or below 0.95, <em>and</em> its circuit-clustered interval had to exclude parity, <em>and</em> the median break-even had to be at or below 1000. The measured result was {{flat.epfl}} [{{flat.epfl.lo}}, {{flat.epfl.hi}}] — the first two conditions failed. That failure is precisely what converts “treat CM and CSE-flat as kernel-equivalent” from a provisional posture into a final one.",
+          "technical_explanation": "The external protocol pre-registered the corpus source, cone-selection rules, arms, schedules, clustering basis and a three-condition materiality rule: the external CM ÷ CSE-flat geometric mean had to be at or below 0.95, <em>and</em> its circuit-clustered interval had to exclude parity, <em>and</em> the median break-even had to be at or below 1000. The measured result was {{flat.epfl}} [{{flat.epfl.lo}}, {{flat.epfl.hi}}] — the first two conditions failed. That failure makes parity the final posture for the EPFL AND/INV workload. The later B2/B4 V3 result is reported separately and rules out silently generalising that posture to every workload.",
           "what_goes_wrong_without_it": "Without a threshold fixed in advance, any result can be narrated as a success. Pre-registration is what makes a negative result informative instead of merely disappointing.",
           "sources": [
             "deliverables_n22_24/CM_GAP_EPFL_PROTOCOL_2026-08-03.md",
@@ -3607,7 +3625,7 @@
         "term": "kernel",
         "group": "workload-and-timing",
         "lay": "The computation proper, with the setup and teardown stripped away. Two systems can have identical kernels and very different end-to-end costs.",
-        "technical": "The steady-state execution of the compiled program with environment and program prebuilt. The level at which CM and CSE-flat are equivalent."
+        "technical": "The steady-state execution of the compiled program with environment and program prebuilt. At this boundary CM/CSE-flat measured parity on B1/E3 and EPFL, but a workload-specific CM advantage on current B2/B4 V3."
       },
       {
         "term": "wrapper overhead",
@@ -3619,7 +3637,7 @@
         "term": "preparation (prep) cost",
         "group": "workload-and-timing",
         "lay": "The one-time cost of compiling an expression before you can evaluate it. The prep <em>multiple</em> is that cost expressed as a ratio against a named baseline — and the baseline must always be named, because it changes the number.",
-        "technical": "Compilation cost, linear in structural DAG nodes. Geometric-mean multiple against plain CSE and against CSE-flat differ and are never interchanged. Currently unprofiled, and the top-ranked optimisation surface."
+        "technical": "Compilation cost, linear in structural DAG nodes. Geometric-mean multiple against plain CSE and against CSE-flat differ and are never interchanged. It is now profiled, has one accepted memo-reduction improvement, and remains the top-ranked optimisation surface."
       },
       {
         "term": "prepared evaluation",
@@ -3894,6 +3912,216 @@
       "prov": "deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: execop_ratio_cm_cse_flat_geomean",
       "note": ""
     },
+    "symv3.bare.overall": {
+      "value": 0.8905696773306687,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_geomean",
+      "note": ""
+    },
+    "symv3.bare.overall.lo": {
+      "value": 0.8740654100098479,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low",
+      "note": ""
+    },
+    "symv3.bare.overall.hi": {
+      "value": 0.9072717741775921,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high",
+      "note": ""
+    },
+    "symv3.bare.k16": {
+      "value": 0.9612336536584536,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_geomean",
+      "note": ""
+    },
+    "symv3.bare.k16.lo": {
+      "value": 0.9289740604127864,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low",
+      "note": ""
+    },
+    "symv3.bare.k16.hi": {
+      "value": 0.9941768792355472,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high",
+      "note": ""
+    },
+    "symv3.wrapper.overall": {
+      "value": 3.094136185032722,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_geomean",
+      "note": ""
+    },
+    "symv3.wrapper.overall.lo": {
+      "value": 2.883082692131623,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low",
+      "note": ""
+    },
+    "symv3.wrapper.overall.hi": {
+      "value": 3.310818221547949,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high",
+      "note": ""
+    },
+    "symv3.formulas": {
+      "value": 216,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json :: formula_count",
+      "note": ""
+    },
+    "symv3.rows": {
+      "value": 264,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json :: row_count",
+      "note": ""
+    },
+    "symv3.repeat.runs": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: statistical_inference.headline across three fresh audits",
+      "note": ""
+    },
+    "symv3.repeat.min": {
+      "value": 0.9049046621598351,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: min statistical_inference.headline.paired_formula_cluster_geomean",
+      "note": ""
+    },
+    "symv3.repeat.max": {
+      "value": 0.9089909230682988,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: max statistical_inference.headline.paired_formula_cluster_geomean",
+      "note": ""
+    },
+    "symv3.repeat.geomean": {
+      "value": 0.9075896895877928,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: geomean of three fresh headline paired_formula_cluster_geomean values",
+      "note": ""
+    },
+    "memo.pods": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: len(pods)",
+      "note": ""
+    },
+    "memo.bx1b2.min": {
+      "value": 0.9721473304630113,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: min pods[].acceptance.bx1_b2.candidate_over_baseline_geomean",
+      "note": ""
+    },
+    "memo.bx1b2.max": {
+      "value": 0.9787809773859333,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: max pods[].acceptance.bx1_b2.candidate_over_baseline_geomean",
+      "note": ""
+    },
+    "memo.epfl.min": {
+      "value": 0.9694113999271565,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: min pods[].acceptance.epfl.candidate_over_baseline_geomean",
+      "note": ""
+    },
+    "memo.epfl.max": {
+      "value": 0.9769022960374893,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: max pods[].acceptance.epfl.candidate_over_baseline_geomean",
+      "note": ""
+    },
+    "memo.mismatches": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: total canonical_failures and packed_failures across both scopes and every pod",
+      "note": ""
+    },
+    "memo.cost": {
+      "value": 0.002815,
+      "fmt": "usd",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: total_cost_usd",
+      "note": ""
+    },
+    "memo.postflight_pods": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/memo_runpod_2026_08_26/postflight_runpod_inventory.json :: pod_count",
+      "note": ""
+    },
+    "dpr1.rows": {
+      "value": 25,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].rows",
+      "note": ""
+    },
+    "dpr1.time": {
+      "value": 1.8317193428962577,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].candidate_over_baseline_geomean",
+      "note": ""
+    },
+    "dpr1.peak": {
+      "value": 1.244028561563647,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].peak_bytes_ratio_geomean",
+      "note": ""
+    },
+    "i10.rows": {
+      "value": 144,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_screening.json :: selected_rows",
+      "note": ""
+    },
+    "i10.min_k": {
+      "value": 8,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_screening.json :: min(represented_k)",
+      "note": ""
+    },
+    "i10.max_k": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_screening.json :: max(represented_k)",
+      "note": ""
+    },
+    "i10.current.raw": {
+      "value": 1.0122846058253983,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[raw/current_k16].regret_geomean",
+      "note": ""
+    },
+    "i10.current.cm": {
+      "value": 1.0124600210108508,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[cm/current_k16].regret_geomean",
+      "note": ""
+    },
+    "i10.feature.raw": {
+      "value": 1.1211910317880938,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[raw/feature_ridge].regret_geomean",
+      "note": ""
+    },
+    "i10.feature.cm": {
+      "value": 1.1364816324136957,
+      "fmt": "ratio4",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[cm/feature_ridge].regret_geomean",
+      "note": ""
+    },
+    "i10.feature.raw.cat": {
+      "value": 7,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[raw/feature_ridge].catastrophic_ge_2_count",
+      "note": ""
+    },
+    "i10.feature.cm.cat": {
+      "value": 11,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/heldout_abc_i10_2026_08_26/abc_i10_selector_audit.json :: summaries[cm/feature_ridge].catastrophic_ge_2_count",
+      "note": ""
+    },
     "b1.n_formulas": {
       "value": 192,
       "fmt": "int",
@@ -4072,6 +4300,42 @@
       "value": 16,
       "fmt": "int",
       "prov": "deliverables_n22_24/cm_b4_guard_family_sweep_2026_08_03.py :: max_full_output_vars (the explicit-output guard; the same driver's wrong-guard predicate is `live_k <= 16`)",
+      "note": ""
+    },
+    "guard.followup.cases": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.completed_cases",
+      "note": ""
+    },
+    "guard.followup.min_k": {
+      "value": 17,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_raw.csv :: min(live_k)",
+      "note": ""
+    },
+    "guard.followup.max_k": {
+      "value": 20,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_raw.csv :: max(live_k)",
+      "note": ""
+    },
+    "guard.followup.mismatches": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.mismatch_count",
+      "note": ""
+    },
+    "guard.followup.timeouts": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.timeout_count",
+      "note": ""
+    },
+    "guard.followup.wrapper_non_refusals": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.wrapper_non_refusal_count",
       "note": ""
     },
     "b3.ladder.unfolded": {
@@ -4411,7 +4675,7 @@
       "note": ""
     },
     "meta.evidence_revision": {
-      "value": "6e8a283",
+      "value": "1fd3907",
       "fmt": "text",
       "prov": "evidence revision pinned by the site builder",
       "note": ""

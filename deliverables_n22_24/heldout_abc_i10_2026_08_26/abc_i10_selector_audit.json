@@ -1,0 +1,117 @@
+{
+  "acceptance": {
+    "arm_checks": [
+      {
+        "arm": "raw",
+        "candidate_over_control_regret": 1.1075847892341455,
+        "candidate_regret_geomean": 1.1211910317880938,
+        "control_regret_geomean": 1.0122846058253983,
+        "max_regret_below_2": false,
+        "no_catastrophic_routes": false,
+        "not_more_than_1pct_worse_than_control": false,
+        "pass": false,
+        "regret_geomean_at_most_1_05": false
+      },
+      {
+        "arm": "cm",
+        "candidate_over_control_regret": 1.1224953171770877,
+        "candidate_regret_geomean": 1.1364816324136957,
+        "control_regret_geomean": 1.0124600210108508,
+        "max_regret_below_2": false,
+        "no_catastrophic_routes": false,
+        "not_more_than_1pct_worse_than_control": false,
+        "pass": false,
+        "regret_geomean_at_most_1_05": false
+      }
+    ],
+    "exact_failure_ids": [],
+    "feature_selector_validation_pass": false,
+    "production_integration_authorized": false,
+    "production_reason": "Preregistration requires replication on another independently frozen circuit family even if this single-circuit validation passes.",
+    "screening": {
+      "minimum_k_strata": 3,
+      "minimum_rows": 32,
+      "pass": true
+    }
+  },
+  "corpus_sha256": "dbefb5dd790eb394a74a99f9dd710fdd344c5a2d90a7379d12038dde9e5da16b",
+  "model_sha256": "d577d5d795f0297e9931d2cd4116df6dc24495ae4e3ce093d5c65ec0112f1bdc",
+  "protocol": "CM_ABC_I10_HELDOUT_SELECTOR_PREREGISTRATION_2026-08-26.md",
+  "raw_sha256": "45d7b42ba30f2871cbf4c25b4ba17bc2ce218d44a6c6ca9f743bf61b274a745b",
+  "source": {
+    "notice_bytes": 1129,
+    "notice_sha256": "819151b8f059a48f806c75732ef62b1f873b49b6a04fb128aed28bf87d3dcd6c",
+    "preregistration_sha256": "e5be34d58622bb0677c96b587a6cba892d3ffb3d3f7791ead3658aef8bc1e72a",
+    "source_bytes": 14696,
+    "source_manifest_sha256": "aa6979f34ff6e5e6d567cd4087296775f6489189d0339ef706834a57a55e4bea",
+    "source_sha256": "b551b0932703d7d3c5e3b3cd0fc742b484d0f5d8332b1bf3dd7567679d1559d7",
+    "upstream_commit": "c6e8823c0b9f0c7c469a7538dc2a75b39da17cc4"
+  },
+  "summaries": [
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 0,
+      "n": 140,
+      "policy": "current_k16",
+      "refused_or_ineligible_count": 4,
+      "regret_geomean": 1.0122846058253983,
+      "regret_max": 1.289917654147419,
+      "regret_median": 1.0,
+      "regret_p90": 1.0219457668169996,
+      "regret_row_bootstrap_ci95_high": 1.0201028156132044,
+      "regret_row_bootstrap_ci95_low": 1.0058465223194084,
+      "selector_decision_ns_median": 0.0,
+      "uncertainty_scope": "row bootstrap conditional on the single i10 circuit",
+      "word_routes": 15
+    },
+    {
+      "arm": "raw",
+      "catastrophic_ge_2_count": 7,
+      "n": 140,
+      "policy": "feature_ridge",
+      "refused_or_ineligible_count": 4,
+      "regret_geomean": 1.1211910317880938,
+      "regret_max": 5.02496042646038,
+      "regret_median": 1.0,
+      "regret_p90": 1.3019187825094432,
+      "regret_row_bootstrap_ci95_high": 1.1898406411392561,
+      "regret_row_bootstrap_ci95_low": 1.0637313235586612,
+      "selector_decision_ns_median": 7557.5,
+      "uncertainty_scope": "row bootstrap conditional on the single i10 circuit",
+      "word_routes": 8
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 0,
+      "n": 144,
+      "policy": "current_k16",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 1.0124600210108508,
+      "regret_max": 1.4054834054834056,
+      "regret_median": 1.0,
+      "regret_p90": 1.0,
+      "regret_row_bootstrap_ci95_high": 1.0213914117224145,
+      "regret_row_bootstrap_ci95_low": 1.0051325277051575,
+      "selector_decision_ns_median": 0.0,
+      "uncertainty_scope": "row bootstrap conditional on the single i10 circuit",
+      "word_routes": 16
+    },
+    {
+      "arm": "cm",
+      "catastrophic_ge_2_count": 11,
+      "n": 144,
+      "policy": "feature_ridge",
+      "refused_or_ineligible_count": 0,
+      "regret_geomean": 1.1364816324136957,
+      "regret_max": 3.8162089329740265,
+      "regret_median": 1.0,
+      "regret_p90": 1.4200288600288604,
+      "regret_row_bootstrap_ci95_high": 1.2053560141360204,
+      "regret_row_bootstrap_ci95_low": 1.0780974343296057,
+      "selector_decision_ns_median": 9148.5,
+      "uncertainty_scope": "row bootstrap conditional on the single i10 circuit",
+      "word_routes": 30
+    }
+  ],
+  "timestamp_utc": "2026-08-26T07:51:10.992224+00:00"
+}

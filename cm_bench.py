@@ -108,6 +108,11 @@ from cmbench.results.equivalence import skipped_equiv_result
 from cmbench.results.expression_family import skipped_family_backend
 from cmbench.results.partial_context import skipped_partial_backend
 from cmbench.results.paired import PairedComparisonSpec, aggregate_paired_comparison
+from cmbench.tracing.integration import (
+    trace_expression_family_result,
+    trace_partial_context_result,
+    trace_single_expression_result,
+)
 from cm_exprlib import And, Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
 from cm_ir import (
     clear_cm_ir_persistent_cache,
@@ -848,6 +853,7 @@ def run_partial_context_bench(
                 config=config,
             )
             row.update(expr_diag)
+            trace_partial_context_result(ctx, expr, contexts, row, trial=t)
             rows.append(row)
     df = pd.DataFrame(rows)
 
@@ -1271,6 +1277,13 @@ def run_expression_family_bench(
                     else int(seed + n * 1009 + t * 9176)
                 ),
                 config=config,
+            )
+            trace_expression_family_result(
+                ctx,
+                family["variants"],
+                row,
+                family_id=family_id,
+                trial=t,
             )
             rows.append(row)
 
@@ -2860,6 +2873,7 @@ def run_bench(
                         "corpus_formula_sha256": corpus_formula.formula_sha256,
                     }
                 )
+            trace_single_expression_result(ctx, expr, trial_row, workload_id=f"single:{n}:{t}")
             rows.append(trial_row)
 
     df = pd.DataFrame(rows)
@@ -4860,6 +4874,20 @@ def main():
     ap.add_argument("--cm-parallel-no-shared-memory", action="store_true")
     ap.add_argument("--cm-parallel-shared-min-cells", type=int, default=(1 << 20))
     ap.add_argument("--cm-debug-stats", action="store_true")
+    ap.add_argument(
+        "--cm-trace-jsonl",
+        default="",
+        help="Opt-in metrics-only workload trace JSONL path; existing files are refused.",
+    )
+    ap.add_argument("--cm-trace-max-bytes", type=int, default=(1 << 20))
+    ap.add_argument("--cm-trace-max-files", type=int, default=1)
+    ap.add_argument("--cm-trace-flush-every", type=int, default=64)
+    ap.add_argument(
+        "--cm-trace-sample-every",
+        type=int,
+        default=16,
+        help="Emit one workload trace observation per N calls; sampled traces are not cache-replay evidence.",
+    )
     ap.add_argument("--experiment", type=str, default="none", choices=["none", "cm_vs_bitset"])
     ap.add_argument("--html", type=str, default="")
 
@@ -4879,6 +4907,7 @@ def main():
     if config.cm_runpod_smoke_test:
         from cm_runpod_smoke_test import run_smoke_test
 
+        _ctx.close_trace()
         raise SystemExit(run_smoke_test(local_mock=bool(config.cm_runpod_local_mock)))
 
     if config.cm_runpod_start or config.cm_runpod_stop:
@@ -4896,6 +4925,7 @@ def main():
                 "RunPod pod stop requested: "
                 f"desired={status.desired_status or 'unknown'} runtime={status.runtime_status or 'unknown'}"
         )
+        _ctx.close_trace()
         return
 
     sizes = list(config.sizes)
@@ -4949,6 +4979,7 @@ def main():
     if config.html:
         agg_cat = pd.concat(agg_all, ignore_index=True) if len(agg_all) > 1 else agg_all[0]
         write_html_report(config.html, agg_cat, depths, sizes, config.trials)
+    _ctx.close_trace()
 
 
 if __name__ == "__main__":

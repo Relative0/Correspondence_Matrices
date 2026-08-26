@@ -1,0 +1,107 @@
+{
+  "acceptance": {
+    "pass": true
+  },
+  "corpus_sha256": {
+    "b2": "feadff2ffb70d871847ffa5fa5e734971a5477478178664b9fde4d98cd52a1cf",
+    "b4": "31b98462eb2d3d9a07dc75cb862ae90868b941a8d46aa9443aef8f9c7cba043c"
+  },
+  "environment": {
+    "platform": "Windows-10-10.0.19045-SP0",
+    "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "source_sha256": {
+      "bitset_backend.py": "06a9a24a0bc1e579840d0349803353c08b86f7dd15bc7f9bad7d557d9f0c9cdf",
+      "cm_expr_serde.py": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99",
+      "cm_exprlib.py": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040",
+      "cm_ir.py": "ff1633ccabd5392512ec0fdf4531773b7a92e0aa52109c6c681bd99357dcb7d7",
+      "cmbench/backends/bitset_engine.py": "91cfa4ec491d5153b1332a6738ef34c1e17335ee48df168bdc06ad92faa2db62",
+      "cmbench/output_budget.py": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498",
+      "scripts/cm_benchmark_provenance.py": "1a3bc9499f475a033c4998954abd436c42c7032550bbd5b82d197757d0ee8404",
+      "scripts/cm_symmetric_wrapper_followup.py": "f7c0f8d71e315c67d07bbcea374c96135540c6304af486e1ee2edc0009a3535f"
+    },
+    "source_snapshot": {
+      "directory": "docs\\audits\\2026-08-25-cm-deep-performance\\reruns\\campaign-20260826-132038\\symmetric_v3_source_snapshot",
+      "files": [
+        {
+          "path": "bitset_backend.py",
+          "sha256": "06a9a24a0bc1e579840d0349803353c08b86f7dd15bc7f9bad7d557d9f0c9cdf",
+          "size_bytes": 37979
+        },
+        {
+          "path": "cm_expr_serde.py",
+          "sha256": "59d72bba37c00b8606c57123ee838db476929c35fe0b941279b0f3a7d5d59e99",
+          "size_bytes": 11281
+        },
+        {
+          "path": "cm_exprlib.py",
+          "sha256": "a11937d372b13b5e06e07422edabe0b16c76d17f29c7c27f3109b5f44a97c040",
+          "size_bytes": 5626
+        },
+        {
+          "path": "cm_ir.py",
+          "sha256": "ff1633ccabd5392512ec0fdf4531773b7a92e0aa52109c6c681bd99357dcb7d7",
+          "size_bytes": 95960
+        },
+        {
+          "path": "cmbench/backends/bitset_engine.py",
+          "sha256": "91cfa4ec491d5153b1332a6738ef34c1e17335ee48df168bdc06ad92faa2db62",
+          "size_bytes": 3627
+        },
+        {
+          "path": "cmbench/output_budget.py",
+          "sha256": "a3b87ad3845cba4b71be54b5bbd31cfbee88dd2bffd6bc4faa772b43665e0498",
+          "size_bytes": 6730
+        },
+        {
+          "path": "scripts/cm_benchmark_provenance.py",
+          "sha256": "1a3bc9499f475a033c4998954abd436c42c7032550bbd5b82d197757d0ee8404",
+          "size_bytes": 2370
+        },
+        {
+          "path": "scripts/cm_symmetric_wrapper_followup.py",
+          "sha256": "f7c0f8d71e315c67d07bbcea374c96135540c6304af486e1ee2edc0009a3535f",
+          "size_bytes": 20077
+        }
+      ],
+      "manifest": "docs\\audits\\2026-08-25-cm-deep-performance\\reruns\\campaign-20260826-132038\\symmetric_v3_source_snapshot\\source_manifest.json",
+      "manifest_sha256": "fe7af6e4d39b39303aefd107ef4be932b8653101d52707de6eeb0f809c48c370"
+    }
+  },
+  "formula_count": 216,
+  "packed_mismatch_count": 0,
+  "primary_comparator": "sharing-aware structural CSE with flatten=True",
+  "protocol": "exactly counterbalanced current-policy bare CM vs sharing-aware CSE-flat primary; raw-AST ablation and CM wrapper reported separately",
+  "raw_ast_status": "ablation only; not the strongest generic comparator",
+  "row_count": 264,
+  "statistical_inference": {
+    "bootstrap_repetitions": 10000,
+    "cluster_key": [
+      "corpus",
+      "id"
+    ],
+    "confidence_level": 0.95,
+    "deterministic_seed": "SHA-256 of scope and metric label",
+    "does_not_model": [
+      "between-run timing variation",
+      "between-machine timing variation"
+    ],
+    "formula_weighting": "one equal-weight contribution per formula",
+    "headline": {
+      "bootstrap_repetitions": 10000,
+      "corpus": "all",
+      "formula_cluster_count": 216,
+      "live_k": "all",
+      "metric": "cm_current_over_cse_flat_current",
+      "paired_formula_cluster_bootstrap_ci95_high": 0.9204661324202082,
+      "paired_formula_cluster_bootstrap_ci95_low": 0.8966602369999914,
+      "paired_formula_cluster_geomean": 0.9089909230682988,
+      "row_count": 264,
+      "row_weighted_geomean": 0.9142017371760712,
+      "scope": "overall"
+    },
+    "method": "paired nonparametric percentile bootstrap of formula-level mean log timing ratios",
+    "uncertainty_target": "formula-to-formula variation conditional on this machine and run",
+    "within_formula_aggregation": "arithmetic mean of row log ratios"
+  },
+  "words_auto_min_vars": 16
+}

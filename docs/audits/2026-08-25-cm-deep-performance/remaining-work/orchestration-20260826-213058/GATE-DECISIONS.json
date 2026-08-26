@@ -1,0 +1,88 @@
+{
+  "campaign": "orchestration-20260826-213058",
+  "completed_utc": "2026-08-26T14:37:26.4610428Z",
+  "repository": {
+    "branch": "main",
+    "head": "0f833bc389778f7f915deb7acd4499d207e0ec21",
+    "cm_ir_sha256": "ff1633ccabd5392512ec0fdf4531773b7a92e0aa52109c6c681bd99357dcb7d7"
+  },
+  "regression": {
+    "venv_pytest_attempt": "not_run: pytest is not installed in the project virtual environment",
+    "venv_unittest": "12 passed in 1.394s",
+    "system_focused_pytest": "59 passed in 42.69s",
+    "system_full_pytest": "380 passed, 4 subtests passed in 114.69s"
+  },
+  "trace_smoke": {
+    "schema": "cm-workload-trace/v1",
+    "sample_every": 16,
+    "content_mode": "metrics",
+    "single": {
+      "raw_rows": 51,
+      "events": 11,
+      "expression_observations": 8,
+      "drops": 0,
+      "validation": "pass",
+      "scrub": "metrics_allowlist_pass",
+      "replay": "pass",
+      "enabled_correctness": "all pass"
+    },
+    "family": {
+      "raw_rows": 34,
+      "events": 30,
+      "expression_observations": 24,
+      "drops": 0,
+      "validation": "pass",
+      "scrub": "metrics_allowlist_pass",
+      "replay": "pass",
+      "enabled_correctness": "all rates 1.0"
+    },
+    "context": {
+      "raw_rows": 34,
+      "events": 30,
+      "expression_observations": 27,
+      "drops": 0,
+      "validation": "pass",
+      "scrub": "metrics_allowlist_pass",
+      "replay": "pass",
+      "enabled_correctness": "all rates 1.0"
+    },
+    "evidence_class": "synthetic mechanics only"
+  },
+  "gates": {
+    "real_workload_trace": {
+      "decision": "not_run_missing_input",
+      "reason": "no named real request stream or workload owner exists locally"
+    },
+    "cache_policy": {
+      "decision": "defer",
+      "reason": "sampled anonymous metrics do not preserve exact request order or byte-pressure behavior"
+    },
+    "incremental_family": {
+      "decision": "defer",
+      "reason": "no real edit/version history"
+    },
+    "partial_context": {
+      "decision": "defer",
+      "reason": "no natural ordered context stream"
+    },
+    "feature_selector": {
+      "decision": "defer",
+      "reason": "no new frozen family or demonstrated real k=13..15 opportunity; prior held-out selector failed"
+    },
+    "numba_cudd": {
+      "decision": "blocked_and_defer",
+      "reason": "RP-D0 stopped at source-only PLY 3.10 and no workload or new authorization exists"
+    },
+    "simd": {
+      "decision": "defer",
+      "reason": "requires a workload-backed accepted Numba result first"
+    }
+  },
+  "external_actions": {
+    "dependencies_installed": false,
+    "runpod_pods_created": 0,
+    "committed": false,
+    "pushed": false
+  }
+}
+

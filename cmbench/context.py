@@ -7,6 +7,7 @@ import numpy as np
 
 from .availability import BackendAvailability
 from .config import BenchmarkConfig
+from .tracing.sink import JsonlTraceSink, NullTraceSink, TraceSink
 from bitset_backend import build_bitset_env
 from cm_exprlib import eval_expr_tt
 from cm_ir import expr_structural_hash
@@ -19,6 +20,7 @@ class BenchmarkRunContext:
     rng: np.random.Generator
     sample_rng: np.random.Generator
     availability: BackendAvailability
+    trace_sink: TraceSink = field(default_factory=NullTraceSink)
 
     var_names_by_n: dict[int, tuple[str, ...]] = field(default_factory=dict)
     var_maps_by_n: dict[int, dict[str, str]] = field(default_factory=dict)
@@ -26,6 +28,7 @@ class BenchmarkRunContext:
     eval_grid_by_n: dict[int, np.ndarray] = field(default_factory=dict)
     layout_by_key: dict[tuple[int, str], tuple[list[str], list[str]]] = field(default_factory=dict)
     truth_table_by_key: dict[tuple[str, int], np.ndarray] = field(default_factory=dict)
+    trace_counter_by_stream: dict[str, int] = field(default_factory=dict)
 
     def var_names(self, n: int) -> tuple[str, ...]:
         if n not in self.var_names_by_n:
@@ -69,11 +72,39 @@ class BenchmarkRunContext:
             self.truth_table_by_key[cache_key] = eval_expr_tt(expr, n).astype(np.uint8).reshape(-1)
         return self.truth_table_by_key[cache_key]
 
+    def close_trace(self) -> None:
+        self.trace_sink.close()
+
+    def should_trace(self, stream: str) -> bool:
+        if not self.trace_sink.enabled:
+            return False
+        count = self.trace_counter_by_stream.get(stream, 0)
+        self.trace_counter_by_stream[stream] = count + 1
+        return count % int(self.config.cm_trace_sample_every) == 0
+
 
 def make_context(config: BenchmarkConfig, availability: BackendAvailability) -> BenchmarkRunContext:
+    trace_sink: TraceSink
+    if config.cm_trace_jsonl:
+        trace_sink = JsonlTraceSink(
+            config.cm_trace_jsonl,
+            max_bytes=config.cm_trace_max_bytes,
+            max_files=config.cm_trace_max_files,
+            flush_every=config.cm_trace_flush_every,
+        )
+        trace_sink.emit(
+            "process_restart",
+            phase="trace",
+            policy=("complete" if config.cm_trace_sample_every == 1 else "sampled"),
+            sample_every=config.cm_trace_sample_every,
+            status="ok",
+        )
+    else:
+        trace_sink = NullTraceSink()
     return BenchmarkRunContext(
         config=config,
         rng=np.random.default_rng(config.seed),
         sample_rng=np.random.default_rng(config.seed + 1_000_003),
         availability=availability,
+        trace_sink=trace_sink,
     )

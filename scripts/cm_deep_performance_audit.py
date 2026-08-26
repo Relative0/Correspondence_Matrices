@@ -75,6 +75,9 @@ SOURCE_PATHS = (
     "cm_ir.py",
     "cmbench/backends/bitset_engine.py",
     "cmbench/output_budget.py",
+    "cmbench/reporting/__init__.py",
+    "cmbench/reporting/provenance.py",
+    "cmbench/reporting/summary_tables.py",
     "scripts/cm_benchmark_provenance.py",
     "scripts/cm_deep_performance_audit.py",
 )

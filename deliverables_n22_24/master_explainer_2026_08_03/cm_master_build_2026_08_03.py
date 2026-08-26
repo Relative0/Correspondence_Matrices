@@ -1,8 +1,11 @@
-"""CM master knowledge-base builder (2026-08-03).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-26).
 
-Reads ONLY the refreshed evidence of the 2026-08-03 comprehensive benchmark
-campaign (B1-B7 + BX1/BX2) plus the authored prose content file, and emits a
-self-contained master page and three derived audience pages.
+Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
+campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
+the 2026-08-26 same-host repeatability, guard-boundary, three-pod preparation,
+and untouched Berkeley ABC i10 selector follow-ups, and the authored prose
+content file, then emits a self-contained master page and three derived
+audience pages.
 
     cm_master_data_2026_08_03.json   data arrays, named numbers, provenance
     index.html                       master knowledge base (all depth layers)
@@ -39,7 +42,7 @@ REPO = DELIV.parent
 # The evidence inputs used by this site are frozen at this revision.  Do not
 # derive this value from the checkout's current HEAD: doing so makes a rebuild
 # change its own output after the generated site is committed.
-EVIDENCE_REVISION = "6e8a283d22fb7cf643753fb6ad2d7fc3f3f2c96f"
+EVIDENCE_REVISION = "1fd3907dbc1986cb2d8a9f0f8cab2b5920a415ce"
 
 # ---------------------------------------------------------------- helpers
 
@@ -97,6 +100,21 @@ P_BX1_SUM = DELIV / "bx1_crossover_2026_08_03" / "CM_bx1_crossover_summary_2026_
 P_BX2_RES = DELIV / "bx2_cudd_orders_2026_08_03" / "cm_bx2_cudd_orders_results_2026_08_03.json"
 P_BX2_SUM = DELIV / "bx2_cudd_orders_2026_08_03" / "CM_bx2_cudd_orders_summary_2026_08_03.csv"
 P_BX2_POD = DELIV / "bx2_cudd_orders_2026_08_03" / "bx2_pod_audit_2026_08_03.json"
+P_SYM_V3_INF = DELIV / "corrections_2026_08_25" / "symmetric" / "audited_v3_inference.csv"
+P_SYM_V3_AUDIT = DELIV / "corrections_2026_08_25" / "symmetric" / "audited_v3_audit.json"
+P_RERUN = REPO / "docs" / "audits" / "2026-08-25-cm-deep-performance" / "reruns" / "campaign-20260826-132038"
+P_SYM_REPEAT_AUDITS = [
+    P_RERUN / "symmetric_v3_audit.json",
+    P_RERUN / "symmetric_v3_r2_audit.json",
+    P_RERUN / "symmetric_v3_r3_audit.json",
+]
+P_ABOVE_GUARD_AUDIT = P_RERUN / "above_guard_audit.json"
+P_ABOVE_GUARD_RAW = P_RERUN / "above_guard_raw.csv"
+P_DPR1_SUMMARY = P_RERUN / "dpr1_smoke_summary.json"
+P_MEMO_RUNPOD_AUDIT = DELIV / "memo_runpod_2026_08_26" / "memo_runpod_audit_2026_08_26.json"
+P_MEMO_RUNPOD_INVENTORY = DELIV / "memo_runpod_2026_08_26" / "postflight_runpod_inventory.json"
+P_I10_SCREEN = DELIV / "heldout_abc_i10_2026_08_26" / "abc_i10_screening.json"
+P_I10_SELECTOR_AUDIT = DELIV / "heldout_abc_i10_2026_08_26" / "abc_i10_selector_audit.json"
 
 P_CONTENT = HERE / "cm_master_content_2026_08_03.json"
 
@@ -127,6 +145,16 @@ bx1_sum = load_csv(P_BX1_SUM)
 bx2_res = load_json(P_BX2_RES)
 bx2_sum = load_csv(P_BX2_SUM)
 bx2_pod = load_json(P_BX2_POD)
+sym_v3_inf = load_csv(P_SYM_V3_INF)
+sym_v3_audit = load_json(P_SYM_V3_AUDIT)
+sym_repeat_audits = [load_json(path) for path in P_SYM_REPEAT_AUDITS]
+above_guard_audit = load_json(P_ABOVE_GUARD_AUDIT)
+above_guard_raw = load_csv(P_ABOVE_GUARD_RAW)
+dpr1_summary = load_json(P_DPR1_SUMMARY)
+memo_runpod_audit = load_json(P_MEMO_RUNPOD_AUDIT)
+memo_runpod_inventory = load_json(P_MEMO_RUNPOD_INVENTORY)
+i10_screen = load_json(P_I10_SCREEN)
+i10_selector_audit = load_json(P_I10_SELECTOR_AUDIT)
 content = load_json(P_CONTENT)
 
 D: dict = {}
@@ -213,10 +241,42 @@ num("kernel.pod.count", len(b6_ana["pods"]), "int",
     "%s :: len(pods)" % rel(P_B6_ANA))
 
 # ================================================================= E2
-# Kernel equivalence vs CSE + sharing-aware flattening (Outcome A).
-# The residual's SIGN IS NOT STABLE -> never rendered as a CM win.
+# Kernel comparison vs CSE + sharing-aware flattening.  B1/E3 and EPFL remain
+# the accepted parity workload.  The later symmetric V3 B2/B4 result is kept
+# separate because it measures a distinct workload and shows a structural win.
+
+
+def inference_row(scope: str, metric: str, *, corpus: str = "all", live_k: str = "all") -> dict:
+    matches = [
+        r for r in sym_v3_inf
+        if r["scope"] == scope
+        and r["metric"] == metric
+        and r["corpus"] == corpus
+        and r["live_k"] == live_k
+    ]
+    if len(matches) != 1:
+        raise SystemExit(
+            "expected one V3 inference row for %s/%s/%s/%s, found %d"
+            % (scope, corpus, live_k, metric, len(matches))
+        )
+    return matches[0]
+
+
+_sym_bare_all = inference_row("overall", "cm_current_over_cse_flat_current")
+_sym_bare_k16 = inference_row("live_k", "cm_current_over_cse_flat_current", live_k="16")
+_sym_wrap_all = inference_row("overall", "cm_wrapper_over_cse_flat_current")
 
 e2_rows = [
+    {
+        "label": "Current B2/B4 V3 · formula-balanced",
+        "scope": "B2/B4 frozen formulas · Windows · current selectors · exactly counterbalanced",
+        "value": fnum(_sym_bare_all["paired_formula_cluster_geomean"]),
+        "lo": fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_low"]),
+        "hi": fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_high"]),
+        "basis": "paired formula-cluster bootstrap (%s draws; one equal-weight contribution per formula)"
+                 % _sym_bare_all["bootstrap_repetitions"],
+        "group": "current",
+    },
     {
         "label": "Local synthetic · blocked",
         "scope": "synthetic generator · Windows",
@@ -259,6 +319,8 @@ D["e2_kernel_vs_cse_flat"] = {
     "rows": e2_rows,
     "materiality": epfl_ana["materiality"],
     "provenance": [
+        "%s :: overall/all/all/cm_current_over_cse_flat_current" % rel(P_SYM_V3_INF),
+        "%s :: acceptance, protocol, formula_count, row_count, statistical_inference" % rel(P_SYM_V3_AUDIT),
         "%s :: new_cm_vs_cse_flat_geomean, n_flat_rows" % rel(P_B1_ACC),
         "%s :: primary_blocked_cm_cse_flat, round_robin_cm_cse_flat, materiality" % rel(P_EPFL_ANA),
         "%s :: pods[].cm_cse_flat_geomean" % rel(P_B6_ANA),
@@ -282,6 +344,105 @@ num("mech.instr_ratio", epfl_ana["instr_ratio_cm_cse_flat_geomean"], "ratio3",
     "%s :: instr_ratio_cm_cse_flat_geomean" % rel(P_EPFL_ANA))
 num("mech.execop_ratio", epfl_ana["execop_ratio_cm_cse_flat_geomean"], "ratio3",
     "%s :: execop_ratio_cm_cse_flat_geomean" % rel(P_EPFL_ANA))
+num("symv3.bare.overall", fnum(_sym_bare_all["paired_formula_cluster_geomean"]), "ratio4",
+    "%s :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_geomean" % rel(P_SYM_V3_INF))
+num("symv3.bare.overall.lo", fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_low"]), "ratio4",
+    "%s :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low" % rel(P_SYM_V3_INF))
+num("symv3.bare.overall.hi", fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_high"]), "ratio4",
+    "%s :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high" % rel(P_SYM_V3_INF))
+num("symv3.bare.k16", fnum(_sym_bare_k16["paired_formula_cluster_geomean"]), "ratio4",
+    "%s :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_geomean" % rel(P_SYM_V3_INF))
+num("symv3.bare.k16.lo", fnum(_sym_bare_k16["paired_formula_cluster_bootstrap_ci95_low"]), "ratio4",
+    "%s :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low" % rel(P_SYM_V3_INF))
+num("symv3.bare.k16.hi", fnum(_sym_bare_k16["paired_formula_cluster_bootstrap_ci95_high"]), "ratio4",
+    "%s :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high" % rel(P_SYM_V3_INF))
+num("symv3.wrapper.overall", fnum(_sym_wrap_all["paired_formula_cluster_geomean"]), "ratio4",
+    "%s :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_geomean" % rel(P_SYM_V3_INF))
+num("symv3.wrapper.overall.lo", fnum(_sym_wrap_all["paired_formula_cluster_bootstrap_ci95_low"]), "ratio4",
+    "%s :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low" % rel(P_SYM_V3_INF))
+num("symv3.wrapper.overall.hi", fnum(_sym_wrap_all["paired_formula_cluster_bootstrap_ci95_high"]), "ratio4",
+    "%s :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high" % rel(P_SYM_V3_INF))
+num("symv3.formulas", sym_v3_audit["formula_count"], "int",
+    "%s :: formula_count" % rel(P_SYM_V3_AUDIT))
+num("symv3.rows", sym_v3_audit["row_count"], "int",
+    "%s :: row_count" % rel(P_SYM_V3_AUDIT))
+_sym_repeat_values = [
+    audit["statistical_inference"]["headline"]["paired_formula_cluster_geomean"]
+    for audit in sym_repeat_audits
+]
+num("symv3.repeat.runs", len(_sym_repeat_values), "int",
+    "%s :: statistical_inference.headline across three fresh audits" % rel(P_RERUN))
+num("symv3.repeat.min", min(_sym_repeat_values), "ratio4",
+    "%s :: min statistical_inference.headline.paired_formula_cluster_geomean" % rel(P_RERUN))
+num("symv3.repeat.max", max(_sym_repeat_values), "ratio4",
+    "%s :: max statistical_inference.headline.paired_formula_cluster_geomean" % rel(P_RERUN))
+num("symv3.repeat.geomean", geomean(_sym_repeat_values), "ratio4",
+    "%s :: geomean of three fresh headline paired_formula_cluster_geomean values" % rel(P_RERUN))
+
+_memo_bx1b2 = [pod["acceptance"]["bx1_b2"]["candidate_over_baseline_geomean"]
+                for pod in memo_runpod_audit["pods"]]
+_memo_epfl = [pod["acceptance"]["epfl"]["candidate_over_baseline_geomean"]
+              for pod in memo_runpod_audit["pods"]]
+_memo_mismatches = sum(
+    len(pod["acceptance"][scope][field])
+    for pod in memo_runpod_audit["pods"]
+    for scope in ("bx1_b2", "epfl")
+    for field in ("canonical_failures", "packed_failures")
+)
+num("memo.pods", len(memo_runpod_audit["pods"]), "int",
+    "%s :: len(pods)" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.bx1b2.min", min(_memo_bx1b2), "ratio4",
+    "%s :: min pods[].acceptance.bx1_b2.candidate_over_baseline_geomean" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.bx1b2.max", max(_memo_bx1b2), "ratio4",
+    "%s :: max pods[].acceptance.bx1_b2.candidate_over_baseline_geomean" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.epfl.min", min(_memo_epfl), "ratio4",
+    "%s :: min pods[].acceptance.epfl.candidate_over_baseline_geomean" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.epfl.max", max(_memo_epfl), "ratio4",
+    "%s :: max pods[].acceptance.epfl.candidate_over_baseline_geomean" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.mismatches", _memo_mismatches, "int",
+    "%s :: total canonical_failures and packed_failures across both scopes and every pod" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.cost", memo_runpod_audit["total_cost_usd"], "usd",
+    "%s :: total_cost_usd" % rel(P_MEMO_RUNPOD_AUDIT))
+num("memo.postflight_pods", memo_runpod_inventory["pod_count"], "int",
+    "%s :: pod_count" % rel(P_MEMO_RUNPOD_INVENTORY))
+
+_dpr1_all = next(row for row in dpr1_summary["summaries"] if row["group"] == "all")
+num("dpr1.rows", _dpr1_all["rows"], "int",
+    "%s :: summaries[group=all].rows" % rel(P_DPR1_SUMMARY))
+num("dpr1.time", _dpr1_all["candidate_over_baseline_geomean"], "ratio4",
+    "%s :: summaries[group=all].candidate_over_baseline_geomean" % rel(P_DPR1_SUMMARY))
+num("dpr1.peak", _dpr1_all["peak_bytes_ratio_geomean"], "ratio4",
+    "%s :: summaries[group=all].peak_bytes_ratio_geomean" % rel(P_DPR1_SUMMARY))
+
+def _i10_summary(arm: str, policy: str) -> dict:
+    rows = [row for row in i10_selector_audit["summaries"]
+            if row["arm"] == arm and row["policy"] == policy]
+    if len(rows) != 1:
+        raise SystemExit("expected one i10 selector summary for %s/%s" % (arm, policy))
+    return rows[0]
+
+_i10_current_raw = _i10_summary("raw", "current_k16")
+_i10_feature_raw = _i10_summary("raw", "feature_ridge")
+_i10_current_cm = _i10_summary("cm", "current_k16")
+_i10_feature_cm = _i10_summary("cm", "feature_ridge")
+num("i10.rows", i10_screen["selected_rows"], "int",
+    "%s :: selected_rows" % rel(P_I10_SCREEN))
+num("i10.min_k", min(i10_screen["represented_k"]), "int",
+    "%s :: min(represented_k)" % rel(P_I10_SCREEN))
+num("i10.max_k", max(i10_screen["represented_k"]), "int",
+    "%s :: max(represented_k)" % rel(P_I10_SCREEN))
+num("i10.current.raw", _i10_current_raw["regret_geomean"], "ratio4",
+    "%s :: summaries[raw/current_k16].regret_geomean" % rel(P_I10_SELECTOR_AUDIT))
+num("i10.current.cm", _i10_current_cm["regret_geomean"], "ratio4",
+    "%s :: summaries[cm/current_k16].regret_geomean" % rel(P_I10_SELECTOR_AUDIT))
+num("i10.feature.raw", _i10_feature_raw["regret_geomean"], "ratio4",
+    "%s :: summaries[raw/feature_ridge].regret_geomean" % rel(P_I10_SELECTOR_AUDIT))
+num("i10.feature.cm", _i10_feature_cm["regret_geomean"], "ratio4",
+    "%s :: summaries[cm/feature_ridge].regret_geomean" % rel(P_I10_SELECTOR_AUDIT))
+num("i10.feature.raw.cat", _i10_feature_raw["catastrophic_ge_2_count"], "int",
+    "%s :: summaries[raw/feature_ridge].catastrophic_ge_2_count" % rel(P_I10_SELECTOR_AUDIT))
+num("i10.feature.cm.cat", _i10_feature_cm["catastrophic_ge_2_count"], "int",
+    "%s :: summaries[cm/feature_ridge].catastrophic_ge_2_count" % rel(P_I10_SELECTOR_AUDIT))
 
 # ================================================================= E3
 # Local synthetic strata: live_k, then the family x shape interaction grid.
@@ -541,6 +702,20 @@ if not _guard_k:
 num("guard.k", int(_guard_k.group(1)), "int",
     "%s :: max_full_output_vars (the explicit-output guard; the same driver's "
     "wrong-guard predicate is `live_k <= 16`)" % rel(P_B4_DRIVER))
+_above_ks = sorted({int(row["live_k"]) for row in above_guard_raw})
+num("guard.followup.cases", above_guard_audit["acceptance"]["completed_cases"], "int",
+    "%s :: acceptance.completed_cases" % rel(P_ABOVE_GUARD_AUDIT))
+num("guard.followup.min_k", min(_above_ks), "int",
+    "%s :: min(live_k)" % rel(P_ABOVE_GUARD_RAW))
+num("guard.followup.max_k", max(_above_ks), "int",
+    "%s :: max(live_k)" % rel(P_ABOVE_GUARD_RAW))
+num("guard.followup.mismatches", above_guard_audit["acceptance"]["mismatch_count"], "int",
+    "%s :: acceptance.mismatch_count" % rel(P_ABOVE_GUARD_AUDIT))
+num("guard.followup.timeouts", above_guard_audit["acceptance"]["timeout_count"], "int",
+    "%s :: acceptance.timeout_count" % rel(P_ABOVE_GUARD_AUDIT))
+num("guard.followup.wrapper_non_refusals",
+    above_guard_audit["acceptance"]["wrapper_non_refusal_count"], "int",
+    "%s :: acceptance.wrapper_non_refusal_count" % rel(P_ABOVE_GUARD_AUDIT))
 
 # ================================================================= E10
 # Compile / DAG scaling: prep vs unfolded occurrences and vs structural nodes.
@@ -1210,6 +1385,17 @@ print("sanity — kernel vs CSE-flat        local %.4f · EPFL %.4f [%.4f, %.4f]
     epfl_ana["primary_blocked_cm_cse_flat"]["ci95_lo"],
     epfl_ana["primary_blocked_cm_cse_flat"]["ci95_hi"],
     min(_flat_pod), max(_flat_pod)))
+print("sanity — current B2/B4 V3 bare     overall %.4f [%.4f, %.4f] · k16 %.4f [%.4f, %.4f]" % (
+    fnum(_sym_bare_all["paired_formula_cluster_geomean"]),
+    fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_low"]),
+    fnum(_sym_bare_all["paired_formula_cluster_bootstrap_ci95_high"]),
+    fnum(_sym_bare_k16["paired_formula_cluster_geomean"]),
+    fnum(_sym_bare_k16["paired_formula_cluster_bootstrap_ci95_low"]),
+    fnum(_sym_bare_k16["paired_formula_cluster_bootstrap_ci95_high"])))
+print("sanity — current B2/B4 V3 wrapper  overall %.4f [%.4f, %.4f]" % (
+    fnum(_sym_wrap_all["paired_formula_cluster_geomean"]),
+    fnum(_sym_wrap_all["paired_formula_cluster_bootstrap_ci95_low"]),
+    fnum(_sym_wrap_all["paired_formula_cluster_bootstrap_ci95_high"])))
 print("sanity — materiality conditions    %s  => optimization_worthy=%s" % (
     {k: v for k, v in epfl_ana["materiality"].items() if k != "optimization_worthy"},
     epfl_ana["materiality"]["optimization_worthy"]))

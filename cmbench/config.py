@@ -72,6 +72,11 @@ class BenchmarkConfig:
     cm_debug_stats: bool = False
     cm_report_ir_breakdown: bool = False
     cm_profile_cached_exec: bool = False
+    cm_trace_jsonl: str = ""
+    cm_trace_max_bytes: int = 1 << 20
+    cm_trace_max_files: int = 1
+    cm_trace_flush_every: int = 64
+    cm_trace_sample_every: int = 16
 
     no_bitset: bool = False
     no_numba: bool = False
@@ -140,6 +145,14 @@ class BenchmarkConfig:
             raise ValueError("cm_max_output_bytes must be >= 0")
         if self.cm_max_temporary_bytes is not None and self.cm_max_temporary_bytes < 0:
             raise ValueError("cm_max_temporary_bytes must be >= 0")
+        if self.cm_trace_max_bytes < 1024:
+            raise ValueError("cm_trace_max_bytes must be >= 1024")
+        if self.cm_trace_max_files < 1:
+            raise ValueError("cm_trace_max_files must be >= 1")
+        if self.cm_trace_flush_every < 1:
+            raise ValueError("cm_trace_flush_every must be >= 1")
+        if self.cm_trace_sample_every < 1:
+            raise ValueError("cm_trace_sample_every must be >= 1")
         if any(size < 0 for size in self.sizes):
             raise ValueError("sizes must be >= 0")
         if self.robdd_order_sweeps < 1:
@@ -232,6 +245,11 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         cm_debug_stats=bool(getattr(args, "cm_debug_stats", False)),
         cm_report_ir_breakdown=bool(getattr(args, "cm_report_ir_breakdown", False)),
         cm_profile_cached_exec=bool(getattr(args, "cm_profile_cached_exec", False)),
+        cm_trace_jsonl=str(getattr(args, "cm_trace_jsonl", "")),
+        cm_trace_max_bytes=int(getattr(args, "cm_trace_max_bytes", 1 << 20)),
+        cm_trace_max_files=int(getattr(args, "cm_trace_max_files", 1)),
+        cm_trace_flush_every=int(getattr(args, "cm_trace_flush_every", 64)),
+        cm_trace_sample_every=int(getattr(args, "cm_trace_sample_every", 16)),
         no_bitset=bool(getattr(args, "no_bitset", False)),
         no_numba=bool(getattr(args, "no_numba", False)),
         no_sympy=bool(getattr(args, "no_sympy", False)),

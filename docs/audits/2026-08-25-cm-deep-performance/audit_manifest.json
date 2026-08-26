@@ -56,24 +56,125 @@
     "exact_canonical_mismatches": 0,
     "exact_packed_mismatches": 0
   },
+  "remaining_work_campaign": {
+    "path": "remaining-work/campaign-20260826-154541",
+    "trace_schema": "cm-workload-trace/v1",
+    "trace_default": "off; when enabled, deterministic one-in-16 workload sampling",
+    "continuous_trace_decision": "rejected: optimized full-rate median trace/null ratio 1.1172622629713618",
+    "sampled_trace_result": {
+      "sample_every": 16,
+      "paired_rows": 303,
+      "median_trace_over_null_ratio": 1.0052119138806217,
+      "exact_mismatches": 0,
+      "dropped_events": 0,
+      "io_errors": 0,
+      "decision": "retain as bounded diagnostic only; not exact cache-replay evidence"
+    },
+    "tests": {
+      "focused_trace": "12 passed in 1.13s",
+      "focused_integration": "59 passed in 34.95s",
+      "full": "380 passed, 4 subtests passed in 93.46s"
+    },
+    "runpod_rpd0": {
+      "status": "failed closed: dd requires source-only astutils>=0.0.5 under binary-only protocol",
+      "preflight_pod_count": 0,
+      "postflight_pod_count": 0,
+      "postflight_after_rpd0_pod_count": 0,
+      "pod_created": true,
+      "pod_terminated": true,
+      "run2_status": "failed closed before astutils download/build: wheel 0.48.0 requires omitted packaging>=24.0",
+      "run2_preflight_pod_count": 0,
+      "run2_postflight_pod_count": 0,
+      "run3_status": "final feasibility negative: corrected build tools installed and astutils built, then dd==0.6.0 resolution stopped on source-only PLY 3.10",
+      "run3_preflight_pod_count": 0,
+      "run3_postflight_pod_count": 0,
+      "run1_cost_usd": 0.000765,
+      "run2_cost_usd": 0.000537,
+      "run3_cost_usd": 0.000646,
+      "cost_usd": 0.001948,
+      "hard_cap_usd": 0.25
+    }
+  },
+  "test_orchestration_campaign": {
+    "path": "remaining-work/orchestration-20260826-213058",
+    "regression": {
+      "venv_unittest": "12 passed in 1.394s",
+      "focused": "59 passed in 42.69s",
+      "full": "380 passed, 4 subtests passed in 114.69s"
+    },
+    "sampled_trace": {
+      "sample_every": 16,
+      "boundaries": ["single", "family", "context"],
+      "validation": "all pass",
+      "scrub": "metrics_allowlist_pass",
+      "replay": "all pass",
+      "trace_drops": 0,
+      "evidence_class": "synthetic mechanics only"
+    },
+    "downstream_decision": "real-workload, cache, family, context, selector, Numba/CUDD, and SIMD lanes deferred at preregistered entry gates",
+    "runpod_pods_created": 0
+  },
+  "workload_intake_campaign": {
+    "path": "remaining-work/workload-intake-20260827-002305",
+    "real_ordered_workload_found": false,
+    "implemented": [
+      "cmbench/tracing/opportunity.py",
+      "scripts/cm_screen_workload_trace.py",
+      "tests/test_cm_workload_opportunity.py"
+    ],
+    "tests": {
+      "venv_unit": "5 passed in 0.024s",
+      "venv_trace_and_opportunity": "17 passed in 1.241s",
+      "focused": "64 passed in 42.23s",
+      "full": "385 passed, 4 subtests passed in 93.66s"
+    },
+    "available_trace_decision": "all available traces are declared synthetic and route to collect_named_real_metrics_trace",
+    "production_semantics_changed": false,
+    "dependencies_installed": false,
+    "runpod_pods_created": 0
+  },
   "primary_documents": [
     "CM-DEEP-PERFORMANCE-AUDIT.md",
     "CM-RESEARCH-LEDGER.md",
     "CM-BENCHMARK-RESULTS.md",
     "CM-OPTIMIZATION-BACKLOG.md",
     "NEXT-AGENT-HANDOFF.md",
-    "CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md"
+    "CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md",
+    "CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md",
+    "CM-POST-CONSOLIDATION-LOCAL-RUNPOD-PLAN-2026-08-26.md",
+    "CM-REMAINING-WORK-DEPENDENCIES-TESTING-INTEGRATION-PLAN-2026-08-26.md",
+    "reruns/campaign-20260826-132038/RUN-RESULTS.md",
+    "reruns/campaign-20260826-132038/RUN-DECISIONS.md",
+    "reruns/campaign-20260826-132038/EXTERNAL-RUNS-RESULTS.md",
+    "reruns/campaign-20260826-132038/NEXT-AGENT-HANDOFF.md",
+    "remaining-work/campaign-20260826-154541/PREREGISTRATION.md",
+    "remaining-work/campaign-20260826-154541/RESULTS.md",
+    "remaining-work/campaign-20260826-154541/DECISIONS.md",
+    "remaining-work/campaign-20260826-154541/NEXT-AGENT-HANDOFF.md",
+    "remaining-work/orchestration-20260826-213058/PREREGISTRATION.md",
+    "remaining-work/orchestration-20260826-213058/RESULTS.md",
+    "remaining-work/orchestration-20260826-213058/RUN-COMMANDS.md",
+    "remaining-work/workload-intake-20260827-002305/PREREGISTRATION.md",
+    "remaining-work/workload-intake-20260827-002305/RESULTS.md",
+    "remaining-work/workload-intake-20260827-002305/CM-REAL-WORKLOAD-INTAKE.md",
+    "remaining-work/workload-intake-20260827-002305/NEXT-AGENT-COMPREHENSIVE-PROMPT.md"
   ],
   "preservation": {
     "commit_created": false,
     "dependencies_installed": false,
-    "external_compute_started": false,
+    "external_compute_started": true,
+    "external_compute_result": "three Runpod CPU pods passed; total cost $0.002815; all terminated; postflight pod count 0",
+    "independent_heldout_result": "Berkeley ABC i10: current k16 passed with zero catastrophes; preregistered ridge feature selector failed with 7 raw and 11 CM catastrophes",
     "git_push_performed": false,
     "starting_environment_and_status": "baseline_smoke_environment.json"
   },
   "tests": {
     "focused": "33 passed, 4 subtests passed in 4.34s",
     "full": "359 passed, 4 subtests passed in 204.62s"
+  },
+  "external_followup_tests": {
+    "focused": "86 passed, 4 subtests passed in 3.27s",
+    "full": "368 passed, 4 subtests passed in 95.82s"
   },
   "tooling": [
     "scripts/cm_deep_performance_audit.py",

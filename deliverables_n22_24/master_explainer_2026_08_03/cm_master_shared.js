@@ -286,7 +286,7 @@ function forest(rows, opt) {
 
   rows.forEach((r, i) => {
     const cy = padT + i * rowH + rowH / 2;
-    const col = r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
+    const col = r.group === "current" ? S4 : r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
     g.append(el("text", { x: padL - 12, y: cy + 4, class: "lab", "text-anchor": "end" },
                         [document.createTextNode(r.label)]));
     if (r.lo !== null && r.lo !== undefined) {
@@ -1100,16 +1100,21 @@ FIG.flatForest = () => {
   const m = d.materiality;
   return card({
     id: "fig-flat",
-    scope: "3 independent scopes · CM kernel ÷ (CSE + sharing-aware flattening) kernel",
-    title: "Against a properly flattened CSE baseline, CM is kernel-equivalent",
-    caption: "This is the comparison that decided the project's direction. The residual straddles parity: " +
-      "it is above 1.00 locally, at 1.00 externally, and below 1.00 on pods. A quantity whose sign is not " +
-      "stable across scopes is not a win in either direction.",
-    legend: [[S1, "local synthetic corpus"], [S2, "external EPFL circuits"], [S3, "Linux pods (EPYC)"]],
+    scope: "Accepted B1/E3, EPFL and pod evidence plus current B2/B4 V3 · bare CM kernel ÷ sharing-aware CSE-flat kernel",
+    title: "The CSE-flat result is workload-specific, not one universal ratio",
+    caption: `B1/E3 and EPFL remain parity evidence for their workloads. The later, exactly counterbalanced ` +
+      `B2/B4 V3 study (${T("symv3.formulas")} formulas, ${T("symv3.rows")} timing rows) measured ${T("symv3.bare.overall")} ` +
+      `[${T("symv3.bare.overall.lo")}, ${T("symv3.bare.overall.hi")}] overall and ` +
+      `${T("symv3.bare.k16")} [${T("symv3.bare.k16.lo")}, ${T("symv3.bare.k16.hi")}] at k=16. ` +
+      `${T("symv3.repeat.runs")} fresh same-host repetitions ranged from ${T("symv3.repeat.min")} to ` +
+      `${T("symv3.repeat.max")} (run geomean ${T("symv3.repeat.geomean")}), showing that the formula-only ` +
+      `interval does not measure run-level variation. This remains a modest bare-program structural win on ` +
+      `B2/B4, not a universal CM advantage.`,
+    legend: [[S4, "current B2/B4 V3"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
     svg: forest(d.rows, {
       domain: pad(d.rows.flatMap(r => [r.value, r.lo, r.hi]).concat([1.0]), 0.01), ref: 1.0,
-      xTitle: "CM kernel ÷ CSE-flat kernel (geometric mean)",
-      arm: "CM / CSE-flat", title: "CM versus CSE-flat across three scopes",
+      xTitle: "bare CM kernel ÷ CSE-flat kernel (geometric mean)",
+      arm: "CM / CSE-flat", title: "CM versus CSE-flat across accepted workload scopes",
     }),
     table: table(["scope", "geomean", "95% CI", "clustering basis"],
       d.rows.map(r => [r.label, f(r.value, 4), r.lo == null ? "—" : `[${f(r.lo, 4)}, ${f(r.hi, 4)}]`, r.basis])),
@@ -1118,9 +1123,11 @@ FIG.flatForest = () => {
       `geomean ≤ 0.95 → <span class="pill ${m["cond1_geomean_le_0.95"] ? "ok" : "bad"}">${m["cond1_geomean_le_0.95"]}</span> · ` +
       `clustered CI excludes parity → <span class="pill ${m.cond2_clustered_ci_excludes_parity ? "ok" : "bad"}">${m.cond2_clustered_ci_excludes_parity}</span> · ` +
       `median break-even ≤ 1000 → <span class="pill ${m.cond3_median_breakeven_le_1000 ? "ok" : "bad"}">${m.cond3_median_breakeven_le_1000}</span>. ` +
-      `Overall <code>optimization_worthy = ${m.optimization_worthy}</code>. The rule was written down before any ` +
-      "external number existed, and it failed — which is what converts “treat CM and CSE-flat as kernel-equivalent” " +
-      "from a provisional posture into a final one.",
+      `Overall <code>optimization_worthy = ${m.optimization_worthy}</code>. That preregistered rule failed for the ` +
+      "EPFL AND/INV workload and remains authoritative for that workload. The later B2/B4 V3 result narrows the " +
+      "old universal-equivalence wording; it does not retroactively change the EPFL gate. The public wrapper is a " +
+      `different timing boundary and remained ${T("symv3.wrapper.overall")} ` +
+      `[${T("symv3.wrapper.overall.lo")}, ${T("symv3.wrapper.overall.hi")}] versus CSE-flat overall.`,
   });
 };
 

@@ -1,0 +1,91 @@
+{
+  "campaign": "CM optional dependency feasibility RP-D0 Run 2 2026-08-26",
+  "guards": {
+    "n_pods": 1,
+    "total_budget_usd": 0.25,
+    "max_price_per_hour_usd": 0.2,
+    "setup_timeout_s": 480,
+    "driver_timeout_s": 720,
+    "hard_lifetime_s": 1200,
+    "image": "python:3.13.5-slim",
+    "numpy": "2.3.2"
+  },
+  "pods": [
+    {
+      "pod_index": 1,
+      "status": "orchestrator_error",
+      "terminated": true,
+      "pod_id": "fukwsneipvjk9y",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.06,
+      "projected_hard_lifetime_cost_usd": 0.02,
+      "state": {
+        "done": false,
+        "stage": "failed",
+        "error": "Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 315, in _campaign\n    _run(\n    ~~~~^\n        \"install_build_tools\",\n        ^^^^^^^^^^^^^^^^^^^^^^\n    ...<11 lines>...\n        4 * 60,\n        ^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 75, in _run\n    raise RuntimeError(f\"{name} failed with return code {result.returncode}: {result.stderr[-4000:]}\")\nRuntimeError: install_build_tools failed with return code 1: ERROR: Could not find a version that satisfies the requirement packaging>=24.0 (from wheel) (from versions: none)\nERROR: No matching distribution found for packaging>=24.0\n\n",
+        "commands": {
+          "download_build_tools": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "download",
+              "--disable-pip-version-check",
+              "--only-binary=:all:",
+              "--no-deps",
+              "--dest",
+              "/workspace/cm/out/wheels",
+              "setuptools==84.0.0",
+              "wheel==0.48.0"
+            ],
+            "returncode": 0,
+            "wall_s": 0.7459878369700164,
+            "stdout_tail": "Collecting setuptools==84.0.0\n  Downloading setuptools-84.0.0-py3-none-any.whl.metadata (6.6 kB)\nCollecting wheel==0.48.0\n  Downloading wheel-0.48.0-py3-none-any.whl.metadata (2.3 kB)\nDownloading setuptools-84.0.0-py3-none-any.whl (818 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 818.2/818.2 kB 17.2 MB/s eta 0:00:00\nDownloading wheel-0.48.0-py3-none-any.whl (33 kB)\nSaved ./out/wheels/setuptools-84.0.0-py3-none-any.whl\nSaved ./out/wheels/wheel-0.48.0-py3-none-any.whl\nSuccessfully downloaded setuptools wheel\n",
+            "stderr_tail": ""
+          },
+          "install_build_tools": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "install",
+              "--disable-pip-version-check",
+              "--no-index",
+              "--find-links",
+              "/workspace/cm/out/wheels",
+              "setuptools==84.0.0",
+              "wheel==0.48.0"
+            ],
+            "returncode": 1,
+            "wall_s": 0.2454969750251621,
+            "stdout_tail": "Looking in links: /workspace/cm/out/wheels\nProcessing ./out/wheels/setuptools-84.0.0-py3-none-any.whl\nProcessing ./out/wheels/wheel-0.48.0-py3-none-any.whl\nINFO: pip is looking at multiple versions of wheel to determine which version is compatible with other requirements. This could take a while.\n",
+            "stderr_tail": "ERROR: Could not find a version that satisfies the requirement packaging>=24.0 (from wheel) (from versions: none)\nERROR: No matching distribution found for packaging>=24.0\n"
+          }
+        }
+      },
+      "files": [],
+      "error": "pod worker failed: Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 315, in _campaign\n    _run(\n    ~~~~^\n        \"install_build_tools\",\n        ^^^^^^^^^^^^^^^^^^^^^^\n    ...<11 lines>...\n        4 * 60,\n        ^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 75, in _run\n    raise RuntimeError(f\"{name} failed with return code {result.returncode}: {result.stderr[-4000:]}\")\nRuntimeError: install_build_tools failed with return code 1: ERROR: Could not find a version that satisfies the requirement packaging>=24.0 (from wheel) (from versions: none)\nERROR: No matching distribution found for packaging>=24.0\n\n",
+      "lifetime_s": 32.19670534133911,
+      "cost_usd_actual": 0.000537
+    }
+  ],
+  "prior_attempt_cost_reserve_usd": 0.000765,
+  "total_cost_usd": 0.001302,
+  "all_pods_terminated": true,
+  "verdict": "failed",
+  "snapshot": {
+    "campaign": "CM optional dependency feasibility RP-D0 Run 2 2026-08-26",
+    "created_utc": "2026-08-26T10:04:28.009208+00:00",
+    "files_sha256": {
+      "deliverables_n22_24/cm_dependency_runpod_campaign_run2_2026_08_26.py": "def45b6c2da80b3fdfa641414e7339db4dabc49480ee48ff5dfe0cdca63f23ab",
+      "deliverables_n22_24/cm_dependency_runpod_worker_run2_2026_08_26.py": "22f4984b9f7fb925e265280be492fe4a2101dad5a6ee26a51e9fdbcc272148e6",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/PREREGISTRATION-RPD0-RUN2.md": "00c943d7cc7d75ba04570609aa0dcef56c0f5cc7928460a3a4248568b42c8710",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility/dependency_runpod_audit_2026_08_26.json": "a2ce8b43be604d7156a5fdc7572f628f71143e794402802378df126d9fb42d2a"
+    },
+    "corpus_sha256": {},
+    "prior_attempt_cost_reserve_usd": 0.000765,
+    "archive_sha256": "f61f1ca164321224afb71bfd4c9b706ff6f01bb9c5795821c88b179fec218d24",
+    "archive_bytes": 11889
+  }
+}

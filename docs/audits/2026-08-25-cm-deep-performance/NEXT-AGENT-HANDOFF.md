@@ -8,7 +8,7 @@ The state below records the audit's historical starting point. It was subsequent
 
 Reconciliation found no semantic code conflict. The current `cm_ir.py` differs from the V3 symmetric-study snapshot only by explanatory comments about legacy-memo scope; the symmetric driver differs only by added uncertainty-provenance metadata. Post-consolidation validation passed `73 passed, 4 subtests` focused and `363 passed, 4 subtests` full. The authoritative local symmetric-comparator headline is now V3, not V2: formula-balanced bare CM/CSE-flat `0.890570` overall, interval `[0.874065, 0.907272]`; `0.961234` at `k=16`, interval `[0.928974, 0.994177]`; public wrapper/CSE-flat `3.094136` overall, interval `[2.883083, 3.310818]`.
 
-For reruns after consolidation, use [CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md](CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md). It separates mandatory local acceptance checks from optional cache/family/context, boundary, profiling, BDD, native, and cloud experiments and preserves every approval boundary.
+For the complete continuation—including durable audit memory, mandatory reruns, and the evidence-gated DP-R1 implementation—use [CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md](CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md). The shorter [CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md](CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md) remains available for a run-only campaign.
 
 ## Exact audited state
 
@@ -82,7 +82,10 @@ Do not resurrect these claims:
 
 ## Historical copy-paste continuation prompt
 
-This prompt records the pre-consolidation handoff and should not be used for a new rerun campaign. Use `CM-CONSOLIDATED-RERUN-PROMPT-2026-08-25.md` instead.
+This prompt records the pre-consolidation handoff and should not be used for a new rerun campaign. Use `CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md` instead.
+
+The current workload-backed continuation supersedes both older prompts. Use
+`remaining-work/workload-intake-20260827-002305/NEXT-AGENT-COMPREHENSIVE-PROMPT.md`.
 
 ```text
 Continue the Correspondence Matrix performance work in

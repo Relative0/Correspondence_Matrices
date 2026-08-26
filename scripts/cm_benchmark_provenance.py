@@ -8,9 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
-
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+from cmbench.reporting.provenance import sha256_file
 
 
 def source_hashes(repo_root: Path, relative_paths: Iterable[str]) -> dict[str, str]:

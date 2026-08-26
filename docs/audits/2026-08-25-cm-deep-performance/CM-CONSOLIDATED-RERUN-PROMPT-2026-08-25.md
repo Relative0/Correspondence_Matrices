@@ -2,6 +2,8 @@
 
 Copy the text below into a new task when a fresh benchmark campaign is wanted. It is phased: complete and interpret each gate before starting expensive optional work.
 
+For the full future-agent handoff—including the accepted audit history and the evidence-gated DP-R1 implementation phase—prefer [CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md](CM-NEXT-AGENT-FULL-RERUN-AND-IMPLEMENTATION-PROMPT-2026-08-25.md). This document remains the shorter run-only playbook.
+
 ```text
 Work in C:\Users\brian\Documents\CM_Computation.
 

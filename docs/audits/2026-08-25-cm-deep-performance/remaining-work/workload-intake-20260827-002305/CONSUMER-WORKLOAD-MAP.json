@@ -1,0 +1,57 @@
+{
+  "campaign": "workload-intake-20260827-002305",
+  "repository_role": "Boolean backend benchmark and validation repository",
+  "real_ordered_workload_found": false,
+  "scoped_scan": {
+    "language": "Python",
+    "excluded": [
+      "docs source snapshots",
+      "deliverables source snapshots",
+      "external repositories",
+      "temporary outputs",
+      "tests"
+    ]
+  },
+  "consumers": [
+    {
+      "path": "cm_bench.py",
+      "role": "benchmark CLI and synthetic/frozen-corpus driver",
+      "real_workload": false,
+      "trace_integration": "single, family, and partial-context benchmark boundaries"
+    },
+    {
+      "path": "cm_remote_worker.py",
+      "role": "isolated remote benchmark compiler/evaluator",
+      "real_workload": false,
+      "trace_integration": "no independent workload ownership"
+    },
+    {
+      "path": "scripts/",
+      "role": "audit, selector, ablation, and boundary diagnostics",
+      "real_workload": false,
+      "trace_integration": "evidence tooling only"
+    },
+    {
+      "path": "cm_ir.py and cm_build*.py",
+      "role": "compiler/library implementation",
+      "real_workload": false,
+      "trace_integration": "ambient global telemetry prohibited"
+    },
+    {
+      "path": "cm_render.py and cm_lm.py",
+      "role": "small algebra/rendering utility",
+      "real_workload": false,
+      "trace_integration": "none"
+    }
+  ],
+  "benchmark_inputs_are_not_real_traces": [
+    "BX1",
+    "B2",
+    "EPFL",
+    "Berkeley ABC i10",
+    "generated expression families",
+    "generated partial-context grids"
+  ],
+  "required_external_input": "a named application/caller or an owner-declared ordered real metrics trace"
+}
+

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 
@@ -11,7 +12,20 @@ from bitset_backend import eval_expr_words_bitset
 from cm_expr_serde import expr_from_json
 from scripts import cm_deep_performance_audit as audit
 from scripts import cm_symmetric_wrapper_followup as symmetric
+from cmbench.reporting.provenance import sha256_file as shared_sha256_file
+from scripts import cm_benchmark_provenance
 from scripts.cm_benchmark_provenance import capture_source_snapshot, sha256_file
+
+
+def test_sha256_file_is_streaming_shared_provenance_helper(tmp_path) -> None:
+    payload = (b"cm-provenance\x00" * 100_000) + b"tail"
+    path = tmp_path / "multi-chunk.bin"
+    path.write_bytes(payload)
+
+    assert shared_sha256_file(path) == hashlib.sha256(payload).hexdigest()
+    assert cm_benchmark_provenance.sha256_file is shared_sha256_file
+    with pytest.raises(ValueError, match="positive integer"):
+        shared_sha256_file(path, chunk_size=0)
 
 
 def test_epfl_context_matches_frozen_truth_digest() -> None:

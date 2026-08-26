@@ -2,6 +2,14 @@
 
 This backlog starts from the 2026-08-25 audited tree. It assumes exact complete-output semantics, the existing fail-closed budget/guard, and the evidence-role correction that BX1 is tuning while B2/EPFL are reused validation.
 
+## Completed after the original audit
+
+### DP-R3 — Bounded provenance consolidation
+
+- Completed 2026-08-27: the three repeated exact-file SHA-256 helpers were consolidated into `cmbench/reporting/provenance.py` with a compatibility re-export, transitive source-snapshot coverage, focused tests, and an exact quick smoke.
+- The three-round smoke passed exactness/integration but was too small and noisy for an overhead claim; its timing gates failed and are retained as inconclusive.
+- Broader audit-driver consolidation is deferred because distinct timing, corpus, and artifact contracts should not be coupled without a measured reliability benefit.
+
 ## Ready to implement or prototype locally
 
 ### DP-R1 — Compact canonical ordering/key prototype
@@ -12,19 +20,13 @@ This backlog starts from the 2026-08-25 audited tree. It assumes exact complete-
 - Gate: exact ordered IR and packed hashes on BX1/B2/EPFL plus high-sharing B3; paired cold compile; `tracemalloc`; no key/digest/persistent-path regression.
 - Stop rule: reject an effect within ordinary noise, any worse high-sharing tail, or any semantic/canonical ordering ambiguity.
 
-### DP-R2 — Explicit production temporary-memory policy
+### DP-R2 — Harden estimates before a production temporary-memory policy
 
 - Surface: `cmbench/output_budget.py`, local/remote wrappers and configuration.
-- Evidence: output estimates and typed refusals exist; some production callers still allow `None`; prior protocol violation could approach GiB-scale temporary memory.
-- Work: agree default `max_output_bytes`, `max_temporary_bytes`, override rules, representation scope, and local/remote parity.
+- Evidence: output estimates and typed refusals exist; some production callers still allow `None`. The 2026-08-27 dense diagnostic found the current `2 * output_bytes` temporary estimate below median `tracemalloc` peak by 3.51x to 38.73x on the bounded cases.
+- Work: first implement and validate representation-specific conservative estimates across dense, bigint, and word-packed paths without changing defaults. Then measure compatibility of the proposed versioned 16 MiB benchmark/remote and 64 MiB direct profiles.
 - Gate: refusal before allocation, no partial artifact, typed status propagation, compatibility plan for callers that currently opt out.
-- Note: this requires Brian’s API-policy approval before changing defaults.
-
-### DP-R3 — Consolidate audit tooling
-
-- Surface: reuse corrected timing/evidence helpers in the normal benchmark CLI.
-- Work: expose exact timing-window schema, corpus roles, frozen truth verification, source snapshots, cluster summaries, memory refusals, and refuse-overwrite behavior without duplicating logic.
-- Gate: smoke under about 30 seconds, deterministic schema, unit tests assert behavior rather than machine speed.
+- Note: estimator work is authorized by the backlog; the numeric defaults and newly possible refusals still require Brian’s explicit API-policy approval.
 
 ### DP-R4 — Second-machine confirmation of the one-memo preparation change
 
@@ -127,7 +129,7 @@ Current normalization/digests establish engineering identity under documented ru
 
 ## Priority
 
-1. Agree on temporary-memory defaults if these APIs are being productized.
+1. Harden temporary-memory estimates; agree on defaults only after compatibility evidence if these APIs are being productized.
 2. Prototype compact canonical ordering/key comparisons with exact compatibility gates.
 3. Obtain real cache/version/context traces.
 4. Build a feature selector only if the gap has production volume and a new untouched corpus is frozen.

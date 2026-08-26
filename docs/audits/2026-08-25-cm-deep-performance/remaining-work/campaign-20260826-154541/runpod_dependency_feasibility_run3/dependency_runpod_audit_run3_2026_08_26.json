@@ -1,0 +1,136 @@
+{
+  "campaign": "CM optional dependency feasibility RP-D0 Run 3 2026-08-26",
+  "guards": {
+    "n_pods": 1,
+    "total_budget_usd": 0.25,
+    "max_price_per_hour_usd": 0.2,
+    "setup_timeout_s": 480,
+    "driver_timeout_s": 720,
+    "hard_lifetime_s": 1200,
+    "image": "python:3.13.5-slim",
+    "numpy": "2.3.2"
+  },
+  "pods": [
+    {
+      "pod_index": 1,
+      "status": "orchestrator_error",
+      "terminated": true,
+      "pod_id": "7lv13g51ggzrib",
+      "cpu_flavor": "cpu3c",
+      "vcpu_count": 2,
+      "cost_per_hour_usd": 0.06,
+      "projected_hard_lifetime_cost_usd": 0.02,
+      "state": {
+        "done": false,
+        "stage": "failed",
+        "error": "Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 395, in _campaign\n    _run(\n    ~~~~^\n        \"download_binary_targets\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<15 lines>...\n        8 * 60,\n        ^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 85, in _run\n    raise RuntimeError(f\"{name} failed with return code {result.returncode}: {result.stderr[-4000:]}\")\nRuntimeError: download_binary_targets failed with return code 1: ERROR: Could not find a version that satisfies the requirement ply<=3.10,>=3.4 (from dd) (from versions: 3.11)\nERROR: No matching distribution found for ply<=3.10,>=3.4\n\n",
+        "commands": {
+          "download_build_tools": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "download",
+              "--disable-pip-version-check",
+              "--only-binary=:all:",
+              "--no-deps",
+              "--dest",
+              "/workspace/cm/out/build_wheels",
+              "setuptools==84.0.0",
+              "wheel==0.48.0",
+              "packaging==26.3"
+            ],
+            "returncode": 0,
+            "wall_s": 0.8434233227744699,
+            "stdout_tail": "Collecting setuptools==84.0.0\n  Downloading setuptools-84.0.0-py3-none-any.whl.metadata (6.6 kB)\nCollecting wheel==0.48.0\n  Downloading wheel-0.48.0-py3-none-any.whl.metadata (2.3 kB)\nCollecting packaging==26.3\n  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)\nDownloading setuptools-84.0.0-py3-none-any.whl (818 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 818.2/818.2 kB 15.5 MB/s eta 0:00:00\nDownloading wheel-0.48.0-py3-none-any.whl (33 kB)\nDownloading packaging-26.3-py3-none-any.whl (129 kB)\nSaved ./out/build_wheels/setuptools-84.0.0-py3-none-any.whl\nSaved ./out/build_wheels/wheel-0.48.0-py3-none-any.whl\nSaved ./out/build_wheels/packaging-26.3-py3-none-any.whl\nSuccessfully downloaded setuptools wheel packaging\n",
+            "stderr_tail": ""
+          },
+          "offline_install_build_tools": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "install",
+              "--disable-pip-version-check",
+              "--no-index",
+              "--find-links",
+              "/workspace/cm/out/build_wheels",
+              "setuptools==84.0.0",
+              "wheel==0.48.0",
+              "packaging==26.3"
+            ],
+            "returncode": 0,
+            "wall_s": 0.6235316591337323,
+            "stdout_tail": "Looking in links: /workspace/cm/out/build_wheels\nProcessing ./out/build_wheels/setuptools-84.0.0-py3-none-any.whl\nProcessing ./out/build_wheels/wheel-0.48.0-py3-none-any.whl\nProcessing ./out/build_wheels/packaging-26.3-py3-none-any.whl\nInstalling collected packages: setuptools, packaging, wheel\n\nSuccessfully installed packaging-26.3 setuptools-84.0.0 wheel-0.48.0\n",
+            "stderr_tail": "WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n"
+          },
+          "build_astutils_wheel": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "wheel",
+              "--disable-pip-version-check",
+              "--no-deps",
+              "--no-build-isolation",
+              "--wheel-dir",
+              "/workspace/cm/out/built_wheels",
+              "/workspace/cm/out/sources/astutils-0.0.6.tar.gz"
+            ],
+            "returncode": 0,
+            "wall_s": 0.5185264470055699,
+            "stdout_tail": "Processing ./out/sources/astutils-0.0.6.tar.gz\n  Preparing metadata (setup.py): started\n  Preparing metadata (setup.py): finished with status 'done'\nBuilding wheels for collected packages: astutils\n  Building wheel for astutils (setup.py): started\n  Building wheel for astutils (setup.py): finished with status 'done'\n  Created wheel for astutils: filename=astutils-0.0.6-py3-none-any.whl size=6620 sha256=67f0b270ff1da2bea46c104b935ac5e50fe3d31f0887aff27d6b929a3c0b9add\n  Stored in directory: /root/.cache/pip/wheels/ea/cb/77/721b9ad9874c20f26af328739c4fbfea211f8079ae26e0bbc8\nSuccessfully built astutils\n",
+            "stderr_tail": "  DEPRECATION: Building 'astutils' using the legacy setup.py bdist_wheel mechanism, which will be removed in a future version. pip 25.3 will enforce this behaviour change. A possible replacement is to use the standardized build interface by setting the `--use-pep517` option, (possibly combined with `--no-build-isolation`), or adding a `pyproject.toml` file to the source tree of 'astutils'. Discussion can be found at https://github.com/pypa/pip/issues/6334\n"
+          },
+          "download_binary_targets": {
+            "command": [
+              "/usr/local/bin/python",
+              "-m",
+              "pip",
+              "download",
+              "--disable-pip-version-check",
+              "--only-binary=:all:",
+              "--find-links",
+              "/workspace/cm/out/built_wheels",
+              "--find-links",
+              "/workspace/cm/out/build_wheels",
+              "--dest",
+              "/workspace/cm/out/target_wheels",
+              "numpy==2.3.2",
+              "llvmlite==0.49.0",
+              "numba==0.67.0",
+              "dd==0.6.0"
+            ],
+            "returncode": 1,
+            "wall_s": 1.248899769037962,
+            "stdout_tail": "Looking in links: /workspace/cm/out/built_wheels, /workspace/cm/out/build_wheels\nCollecting numpy==2.3.2\n  Downloading numpy-2.3.2-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)\nCollecting llvmlite==0.49.0\n  Downloading llvmlite-0.49.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.0 kB)\nCollecting numba==0.67.0\n  Downloading numba-0.67.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)\nCollecting dd==0.6.0\n  Downloading dd-0.6.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.7 kB)\nProcessing ./out/built_wheels/astutils-0.0.6-py3-none-any.whl (from dd==0.6.0)\nCollecting networkx>=2.4 (from dd==0.6.0)\n  Downloading networkx-3.6.1-py3-none-any.whl.metadata (6.8 kB)\nINFO: pip is looking at multiple versions of dd to determine which version is compatible with other requirements. This could take a while.\n",
+            "stderr_tail": "ERROR: Could not find a version that satisfies the requirement ply<=3.10,>=3.4 (from dd) (from versions: 3.11)\nERROR: No matching distribution found for ply<=3.10,>=3.4\n"
+          }
+        }
+      },
+      "files": [],
+      "error": "pod worker failed: Traceback (most recent call last):\n  File \"/workspace/cm/cm_remote_worker.py\", line 395, in _campaign\n    _run(\n    ~~~~^\n        \"download_binary_targets\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<15 lines>...\n        8 * 60,\n        ^^^^^^^\n    )\n    ^\n  File \"/workspace/cm/cm_remote_worker.py\", line 85, in _run\n    raise RuntimeError(f\"{name} failed with return code {result.returncode}: {result.stderr[-4000:]}\")\nRuntimeError: download_binary_targets failed with return code 1: ERROR: Could not find a version that satisfies the requirement ply<=3.10,>=3.4 (from dd) (from versions: 3.11)\nERROR: No matching distribution found for ply<=3.10,>=3.4\n\n",
+      "lifetime_s": 38.76719117164612,
+      "cost_usd_actual": 0.000646
+    }
+  ],
+  "prior_attempt_cost_reserve_usd": 0.001302,
+  "total_cost_usd": 0.001948,
+  "all_pods_terminated": true,
+  "verdict": "failed",
+  "snapshot": {
+    "campaign": "CM optional dependency feasibility RP-D0 Run 3 2026-08-26",
+    "created_utc": "2026-08-26T12:40:58.897429+00:00",
+    "files_sha256": {
+      "deliverables_n22_24/cm_dependency_runpod_campaign_run3_2026_08_26.py": "793078e6cf3f2025f303348099aa037f3773d3f62dff2800fb29defabcbc0fbd",
+      "deliverables_n22_24/cm_dependency_runpod_worker_run3_2026_08_26.py": "1243de196d5d70641a03b556d77ccf4904e7a4c61040fbb54405cfbc8d2c1d84",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/PREREGISTRATION-RPD0-RUN3.md": "84e1a9cb5ab299e31010357a8b85974588254ce7085d7a8237c4ffdff5e7045b",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility/dependency_runpod_audit_2026_08_26.json": "a2ce8b43be604d7156a5fdc7572f628f71143e794402802378df126d9fb42d2a",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility_run2/dependency_runpod_audit_run2_2026_08_26.json": "43ca31a45ac80246d78d8dd9860188e09613251019b4b9866e2c72d9b3dff461"
+    },
+    "corpus_sha256": {},
+    "prior_attempt_cost_reserve_usd": 0.001302,
+    "archive_sha256": "6e4b0a347986d77de5d79f7fd6dc7ff2ff10b59eb68cafa7b3f289854a341b24",
+    "archive_bytes": 14656
+  }
+}
