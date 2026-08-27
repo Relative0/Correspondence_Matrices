@@ -1,7 +1,9 @@
 # Correspondence Matrix use-case benchmark research
 
 **Audit date:** 2026-08-27  
-**Status:** benchmark design and source investigation; no third-party corpus has been downloaded or timed by this work.
+**Status:** benchmark design, source investigation, and first tracked-corpus pilot; no new third-party corpus was downloaded.
+
+**Executed follow-up:** the tracked EPFL corpus has now been tested in a real-cone/generated-context pilot. Two complete V2 runs produced exact output but CM/CSE-flat warm parity, not dominance. See [HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md](HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md). No new third-party corpus was downloaded.
 
 ## Bottom line
 
@@ -42,6 +44,7 @@ The machine-readable version of this audit is in [CM-USE-CASE-BENCHMARK-CATALOG.
 - Oracle: ABC combinational equivalence. Baselines: AIG/ABC, CUDD/ROBDD, SAT/SMT miter, and a packed compiled evaluator.
 - Run exact cone evaluation, equivalence after an equivalence-preserving rewrite, changed-output localization after a small edit, warm family reuse, and serialize/reload.
 - CM wins only if the whole revision workflow improves or change attribution becomes materially better at acceptable preparation and memory cost.
+- **First executed pilot:** all 129 tracked EPFL cones were evaluated under 13 deterministic partial contexts each, twice. Both runs had zero mismatches and circuit-weighted CM/CSE-flat ratios near parity; neither passed the preregistered advantage gate. All 129 CM and CSE-flat programs had identical flat-instruction and executed-word-operation counts. This closes repeated context evaluation as a demonstrated performance wedge on this artifact pair and redirects the next hardware test to natural revision/change-attribution work.
 
 ### 2. AI agents with hard rules
 
