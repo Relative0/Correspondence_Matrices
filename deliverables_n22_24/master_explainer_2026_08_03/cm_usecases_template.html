@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — audited use cases and benchmarks</title>
+<meta name="description" content="Eight audited Correspondence Matrix use-case hypotheses, with real datasets, synthetic demonstrations, incumbent baselines, semantic boundaries, and dominance gates.">
+<meta property="og:title" content="Correspondence Matrices — use cases">
+<meta property="og:description" content="How CMs might help in hardware, AI, biology, quantum-support logic, compilers, security, configuration, and regulated rule systems.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section id="template-fallback" style="max-width:760px;margin:12vh auto;padding:28px;font:16px/1.55 system-ui,sans-serif;color:#172033;border:1px solid #d8dee8;border-radius:12px;background:#f8fafc">
+    <h1 style="margin-top:0">This is the source template</h1>
+    <p>The template receives its data, styles, and rendering library during the site build. Open the generated page to view the audited CM use cases and benchmark plans.</p>
+    <p><a href="usecases.html">Open the generated CM Use Cases page</a></p>
+  </section>
+</main>
+
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+
+<script>
+/* =========================================================== USE-CASE GUIDE
+   A field-oriented reading of the master evidence. These are application
+   hypotheses with explicit incumbent comparisons and proof requirements, not
+   claims that CM has already outperformed a deployed domain tool. */
+
+const C = DATA._content;
+const U = C.use_cases;
+const B = C.use_case_benchmark_catalog;
+const app = document.getElementById("app");
+app.replaceChildren();
+
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· use cases</span>",
+  links: [["index.html", "Full knowledge base"], ["layperson.html", "Simple One-Pager"],
+          ["investor.html", "Investor Brief"], ["expert.html", "Technical Summary"],
+          ["#fields", "Fields"], ["#fit", "Where CM fits"]],
+}));
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: U.title }),
+  h("p", { class: "lede", html: P(U.lede) }),
+  h("p", { class: "meta", html: P(U.boundary) }),
+  h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "use_case_benchmarks_2026-08-27/CM_USE_CASE_BENCHMARK_RESEARCH_2026-08-27.md", text: "Read the benchmark dossier" }),
+    h("a", { href: "use_case_benchmarks_2026-08-27/CM-USE-CASE-BENCHMARK-CATALOG.json", text: "Download the machine-readable catalog" }),
+    h("a", { href: "use_case_benchmarks_2026-08-27/synthetic/MANIFEST.json", text: "Inspect the reusable synthetic suites" }),
+  ]),
+]));
+
+app.append(projectStatePanel());
+app.append(evidenceBoundary());
+
+{
+  const s = section("priority", "Audited priority", "Where to test first — and where to narrow the claim",
+    "The ranking reflects fit between the CM hypothesis and a field's natural workflow, not evidence that CM has already won there. Every favorable result must pass native-oracle correctness and an artifact-equivalent baseline.");
+  const g = h("div", { class: "benchmark-priority-grid" });
+  B.priority_summary.forEach(item => g.append(h("article", { class: "benchmark-priority" }, [
+    h("span", { class: "pill tier", text: item.tier }),
+    h("h3", { text: item.fields }),
+    h("p", { text: item.reason }),
+  ])));
+  s.append(g);
+  s.append(banner("warn", "Fairness rule", [
+    "Synthetic cases deliberately sweep reuse, edit locality, shared structure, and partial contexts. They demonstrate a mechanism only; a field-level claim also requires the complete eligible natural corpus, published failures, and the best baseline that produces the same artifact.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("why", "The CM-specific idea", "Four capabilities that could matter together",
+    "Other methods often provide one or more of these capabilities. The hypothesis is that keeping them attached to one reusable Boolean artifact could reduce information loss or repeated work in the right workflow.");
+  const g = h("div", { class: "grid2" });
+  U.advantages.forEach(item => g.append(h("article", { class: "dom" }, [
+    h("h3", { text: item.title }),
+    h("p", { html: P(item.text) }),
+  ])));
+  s.append(g);
+  app.append(s);
+}
+
+{
+  const s = section("fields", "Candidate applications", "Problems CM might help solve",
+    "Each audited card identifies the real pain point, a bounded CM role, the information at stake, the incumbent methods, and a complete benchmark hypothesis. Open a card's benchmark section for real sources, synthetic data, tasks, and the predeclared dominance gate.");
+  s.append(useCaseMap(U.items));
+  app.append(s);
+}
+
+{
+  const s = section("fit", "Decision boundary", "When CM is — and is not — a natural candidate",
+    "A structural representation is valuable only when the workflow needs its structure. These filters should be applied before benchmarking a domain.");
+  s.append(banner("note", "A stronger CM fit", [
+    "<ul>" + U.fit.good.map(x => `<li>${P(x)}</li>`).join("") + "</ul>",
+  ]));
+  s.append(banner("warn", "A weaker CM fit", [
+    "<ul>" + U.fit.poor.map(x => `<li>${P(x)}</li>`).join("") + "</ul>",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("next", "What would change the evidence", "The shortest honest path to a validated use case",
+    "Select one named application and caller, capture a scrubbed and approved workload trace, define the artifact and output contract, then compare total workflow cost and retained capabilities against the incumbent that already serves that field.");
+  s.append(thesisRisks());
+  app.append(s);
+}
+
+app.append(pageFooter(
+  "This audited guide is a reproducible research agenda, not a claim of domain dominance. The included synthetic data demonstrates workload mechanisms; natural-corpus and native-oracle results are still required."));
+</script>
+</body>
+</html>

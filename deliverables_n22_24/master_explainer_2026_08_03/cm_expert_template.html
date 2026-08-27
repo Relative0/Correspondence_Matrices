@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Correspondence Matrices — expert technical summary</title>
+<title>Correspondence Matrices — technical summary</title>
 <meta name="description" content="Dense technical cut: every chart, every interval with its clustering basis, protocol notes, corrections ledger, and file-level provenance.">
-<meta property="og:title" content="Correspondence Matrices — expert technical summary">
+<meta property="og:title" content="Correspondence Matrices — technical summary">
 <meta property="og:description" content="Every benchmark result, confidence interval, protocol note, correction, and source file in one technical summary.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,14 +33,15 @@ const M = DATA._campaign;
 const app = document.getElementById("app");
 
 document.body.prepend(topbar({
-  brand: "Correspondence Matrices <span>· expert summary</span>",
+  brand: "Correspondence Matrices <span>· technical summary</span>",
   links: [["index.html", "← full knowledge base"], ["#x1", "Kernel"], ["#x2", "Boundary"],
           ["#x3", "Economics"], ["#x4", "Symbolic"], ["#x5", "Protocol"],
-          ["#x6", "Corrections"], ["#x7", "Open"], ["#x8", "Provenance"]],
+          ["#x6", "Corrections"], ["#x7", "Open"], ["#x8", "Provenance"],
+          ["usecases.html", "CM use cases"]],
 }));
 
 app.append(h("header", { class: "page" }, [
-  h("h1", { text: "Correspondence Matrices — expert technical summary" }),
+  h("h1", { text: "Correspondence Matrices — technical summary" }),
   h("p", { class: "lede", text:
     "Every measurement from the 2026-08-03 campaign, with its scope, its clustering basis, and the file it " +
     "was read from. Interpretation is kept to where it changes what a number means." }),
@@ -55,13 +56,15 @@ app.append(banner("note", "Reading conventions enforced throughout", [
   "<b>live_k on every workload axis</b>, never nominal namespace size — verified, not assumed. " +
   "<b>Construction and evaluation never merged</b> into a single ranking. " +
   "<b>Blocked and round-robin never pooled.</b> " +
-  "<b>CM vs CSE-flat is stated as kernel-equivalence</b>; the residual's sign is not stable across scopes and " +
-  "is never rendered as a win. " +
+  "<b>CM vs CSE-flat is workload-scoped</b>: B1/E3 and EPFL are parity evidence; symmetric V3 is a separate " +
+  "bare-program win whose public wrapper remains slower. " +
   "<b>Superseded figures appear only in §6</b>, struck through.",
   "Every timed comparison is gated on bit-for-bit output agreement across all arms before any measurement " +
   "is recorded. Every summary statistic below was recomputed from raw per-formula rows by the build script " +
   "that generated this page; none is copied from a report's prose.",
 ]));
+
+app.append(currentEvidenceUpdate("expert"));
 
 /* ------------------------------------------------------------ verdicts */
 {
@@ -241,13 +244,12 @@ app.append(banner("note", "Reading conventions enforced throughout", [
     "<li>No BDD-hard or deliberately order-sensitive families measured. At {{bx2.max_nodes}} nodes and " +
     "below, dynamic reordering never triggers, so the order question is answered only where ordering barely " +
     "matters.</li>" +
-    "<li>Explicit-output behaviour above live_k = {{guard.k}} is uncharacterised. The wrapper crossover, if " +
-    "one exists, sits above that guard — so the one region where the end-to-end path might lead is the " +
-    "region the guard prevents measuring.</li>" +
+    "<li>Bounded direct kernels above live_k = {{guard.k}} completed exactly, but the supported public wrapper " +
+    "refused every case. This is feasibility evidence, not an above-guard public speed claim.</li>" +
     "<li>No real deployed workload measured. Reuse counts — the decision variable for the entire cost " +
     "argument — have never been observed in production, only computed as break-even thresholds.</li>" +
-    "<li>Canonical CM structural equivalence is not implemented or demonstrated. Current evidence is output " +
-    "equality, which is necessary but not sufficient.</li>" +
+    "<li>Current CM keys provide engineering identity under documented normalization and collision assumptions; " +
+    "they are not a theorem of global semantic canonicality.</li>" +
     "<li>Wrapper-boundary, guard, engine-crossover and order-sensitivity runs are blocked-schedule only and " +
     "say so; only the kernel experiment, its replay, the pod replication and the external validation measure " +
     "both schedules.</li>") }));
@@ -262,8 +264,9 @@ app.append(banner("note", "Reading conventions enforced throughout", [
   const nav = h("div", { class: "pagenav" });
   [
     ["index.html", "The full knowledge base", "The same evidence with the explanatory layers restored."],
-    ["investor.html", "Investor brief", "Problem breadth, evidence chain, roadmap."],
-    ["layperson.html", "Plain-language version", "No numbers, no jargon."],
+    ["usecases.html", "CM Use Cases", "Field-specific hypotheses, alternatives, and proof requirements."],
+    ["investor.html", "Investor Brief", "Problem breadth, evidence chain, roadmap."],
+    ["layperson.html", "Simple One-Pager", "The plain-language route through the same evidence."],
   ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
   s.append(nav);
   app.append(s);

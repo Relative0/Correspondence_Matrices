@@ -752,7 +752,7 @@ function projectStatePanel() {
   DATA._content.project_state.items.forEach(item => g.append(h("article", { class: "state-item " + item.kind }, [
     h("p", { class: "state-label", text: item.label }),
     h("h2", { text: item.title }),
-    h("p", { text: item.summary }),
+    h("p", { html: P(item.summary) }),
   ])));
   return g;
 }
@@ -764,6 +764,34 @@ function evidenceBoundary() {
   DATA._content.project_state.boundaries.forEach(x => ul.append(h("li", { html: P(x) })));
   b.append(ul);
   return b;
+}
+
+function currentEvidenceUpdate(audience = "master") {
+  const c = DATA._content.current_update;
+  const s = section("latest-evidence", "Evidence update · 2026-08-26/27", c.title,
+    audience === "layperson" ? c.lay_lede : c.lede);
+  const grid = h("div", { class: "evidence-update-grid" });
+  c.items.filter(item => item.audiences.includes(audience)).forEach(item => {
+    const card = h("article", { class: "evidence-update-card", id: item.id }, [
+      h("h3", { text: item.title }),
+      h("p", { html: P(item.summary) }),
+    ]);
+    if (audience !== "layperson") {
+      card.append(moreBlock([h("p", { html: P(item.detail) })], "Evidence boundary and limitation"));
+    }
+    grid.append(card);
+  });
+  s.append(grid);
+  if (audience === "master" || audience === "expert") {
+    const d = h("details", { class: "prov" });
+    d.append(h("summary", { text: "Field-level sources for this update" }));
+    const ul = h("ul");
+    DATA.e19_current_evidence.provenance.forEach(p =>
+      ul.append(h("li", { html: `<code>${p.replace("::", "</code> :: <code>")}</code>` })));
+    d.append(ul);
+    s.append(d);
+  }
+  return s;
 }
 
 function opportunityMap(items) {
@@ -783,6 +811,59 @@ function opportunityMap(items) {
         h("dt", { text: "Proof still needed" }), h("dd", { html: P(item.proof) }),
       ]),
     ]));
+    g.append(c);
+  });
+  return g;
+}
+
+function useCaseMap(items) {
+  const benchmarkEntries = DATA._content.use_case_benchmark_catalog?.entries || [];
+  const benchmarkById = new Map(benchmarkEntries.map(entry => [entry.id, entry]));
+  const g = h("div", { class: "usecase-grid" });
+  items.forEach(item => {
+    const audit = benchmarkById.get(item.id);
+    const c = h("article", { class: "usecase " + item.kind });
+    c.append(h("div", { class: "usecase-head" }, [
+      h("h3", { text: item.name }),
+      h("div", { class: "usecase-pills" }, [
+        audit && h("span", { class: "pill tier", text: audit.priority }),
+        h("span", {
+          class: "pill " + (item.kind === "measured" ? "ok" : "open"),
+          text: item.status,
+        }),
+      ]),
+    ]));
+    c.append(h("p", { class: "usecase-problem", html: P(audit?.pain_point || item.problem) }));
+    c.append(h("dl", { class: "usecase-detail" }, [
+      audit && h("dt", { text: "Audit conclusion" }), audit && h("dd", { html: P(audit.audit_verdict) }),
+      h("dt", { text: "Why CM could fit" }), h("dd", { html: P(audit?.cm_role || item.cm_fit) }),
+      h("dt", { text: "Information it may preserve" }), h("dd", { html: P(item.information) }),
+      h("dt", { text: "Where other methods lead" }), h("dd", { html: P(item.incumbents) }),
+      audit && h("dt", { text: "Scope boundary" }), audit && h("dd", { html: P(audit.scope_correction) }),
+    ]));
+    if (audit) {
+      const datasets = h("ul", { class: "benchmark-source-list" });
+      audit.real_datasets.forEach(dataset => datasets.append(h("li", {}, [
+        h("a", { href: dataset.url, target: "_blank", rel: "noopener noreferrer", text: dataset.name }),
+        h("span", { text: " — " + dataset.use }),
+      ])));
+      const baselines = h("ul");
+      audit.baselines.forEach(value => baselines.append(h("li", { text: value })));
+      const tasks = h("ul");
+      audit.tasks.forEach(value => tasks.append(h("li", { text: value })));
+      const details = h("details", { class: "usecase-benchmark" });
+      details.append(h("summary", { text: "Benchmark this hypothesis" }));
+      details.append(h("div", { class: "usecase-benchmark-body" }, [
+        h("h4", { text: "Natural datasets and fixtures" }), datasets,
+        h("h4", { text: "Synthetic demonstration" }),
+        h("p", { text: audit.synthetic_scenario }),
+        h("h4", { text: "Equivalent baselines" }), baselines,
+        h("h4", { text: "Tasks to measure separately" }), tasks,
+        h("h4", { text: "Dominance gate" }),
+        h("p", { class: "dominance-gate", text: audit.dominance_gate }),
+      ]));
+      c.append(details);
+    }
     g.append(c);
   });
   return g;

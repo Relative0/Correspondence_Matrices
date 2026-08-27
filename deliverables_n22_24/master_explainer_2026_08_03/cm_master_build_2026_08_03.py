@@ -1,17 +1,18 @@
-"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-26).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-27).
 
 Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
 campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
-the 2026-08-26 same-host repeatability, guard-boundary, three-pod preparation,
-and untouched Berkeley ABC i10 selector follow-ups, and the authored prose
-content file, then emits a self-contained master page and three derived
-audience pages.
+the 2026-08-26/27 repeatability, guard, preparation, held-out selector, cache,
+family, context, tracing, workload-intake, dependency, memory-policy, and audit
+reliability follow-ups, and the authored prose content file, then emits a
+self-contained master page, three derived audience pages, and a use-case guide.
 
     cm_master_data_2026_08_03.json   data arrays, named numbers, provenance
     index.html                       master knowledge base (all depth layers)
     layperson.html                   plain-language cut
     investor.html                    problem / evidence / roadmap cut
     expert.html                      dense technical cut
+    usecases.html                    field-oriented application hypotheses
 
 Every number rendered on any page is read from a raw or summary evidence file
 by this script and carried in `_numbers` with a file+field provenance string.
@@ -33,6 +34,7 @@ import math
 import re
 import statistics
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -42,7 +44,7 @@ REPO = DELIV.parent
 # The evidence inputs used by this site are frozen at this revision.  Do not
 # derive this value from the checkout's current HEAD: doing so makes a rebuild
 # change its own output after the generated site is committed.
-EVIDENCE_REVISION = "1fd3907dbc1986cb2d8a9f0f8cab2b5920a415ce"
+EVIDENCE_REVISION = "4dbfffc1db749e85401d533c5a07cb529a41eb37"
 
 # ---------------------------------------------------------------- helpers
 
@@ -70,6 +72,21 @@ def fnum(x):
 
 def geomean(xs: list[float]) -> float:
     return math.exp(statistics.fmean(math.log(x) for x in xs))
+
+
+def junit_counts(p: Path) -> dict:
+    root = ET.parse(p).getroot()
+    suites = root.findall("testsuite") if root.tag == "testsuites" else [root]
+    total = sum(int(s.attrib["tests"]) for s in suites)
+    cases = len(root.findall(".//testcase"))
+    return {
+        "total": total,
+        "testcases": cases,
+        "subtests": total - cases,
+        "failures": sum(int(s.attrib.get("failures", 0)) for s in suites),
+        "errors": sum(int(s.attrib.get("errors", 0)) for s in suites),
+        "skipped": sum(int(s.attrib.get("skipped", 0)) for s in suites),
+    }
 
 
 # ---------------------------------------------------------------- paths
@@ -115,8 +132,32 @@ P_MEMO_RUNPOD_AUDIT = DELIV / "memo_runpod_2026_08_26" / "memo_runpod_audit_2026
 P_MEMO_RUNPOD_INVENTORY = DELIV / "memo_runpod_2026_08_26" / "postflight_runpod_inventory.json"
 P_I10_SCREEN = DELIV / "heldout_abc_i10_2026_08_26" / "abc_i10_screening.json"
 P_I10_SELECTOR_AUDIT = DELIV / "heldout_abc_i10_2026_08_26" / "abc_i10_selector_audit.json"
+P_CACHE_PROCESS = P_RERUN / "cache_process_local_summary.csv"
+P_CACHE_REUSE50 = P_RERUN / "cache_reuse50_summary.csv"
+P_FAMILY_REUSE = P_RERUN / "family_high_reuse_summary.csv"
+P_PARTIAL_SUMMARIES = sorted(P_RERUN.glob("partial_f*_summary.csv")) + [P_RERUN / "partial_sliding_100_summary.csv"]
+P_REMAINING = REPO / "docs" / "audits" / "2026-08-25-cm-deep-performance" / "remaining-work"
+P_TRACE_CAMPAIGN = P_REMAINING / "campaign-20260826-154541"
+P_TRACE_V1 = P_TRACE_CAMPAIGN / "trace_overhead_summary.json"
+P_TRACE_V2 = P_TRACE_CAMPAIGN / "trace_overhead_v2_summary.json"
+P_TRACE_V3 = P_TRACE_CAMPAIGN / "trace_overhead_v3_sample16_summary.json"
+P_TRACE_V3_AUDIT = P_TRACE_CAMPAIGN / "trace_overhead_v3_sample16_trace_audit.json"
+P_DEP_AUDITS = [
+    P_TRACE_CAMPAIGN / "runpod_dependency_feasibility" / "dependency_runpod_audit_2026_08_26.json",
+    P_TRACE_CAMPAIGN / "runpod_dependency_feasibility_run2" / "dependency_runpod_audit_run2_2026_08_26.json",
+    P_TRACE_CAMPAIGN / "runpod_dependency_feasibility_run3" / "dependency_runpod_audit_run3_2026_08_26.json",
+]
+P_DEP_POSTFLIGHT = P_TRACE_CAMPAIGN / "runpod_run3_postflight_inventory.json"
+P_THREE_LANE = P_REMAINING / "three-lane-20260827-011536"
+P_WORKLOAD_VALIDATION = P_THREE_LANE / "WORKLOAD-MANIFEST-TEMPLATE-VALIDATION.json"
+P_MEMORY_PROBE = P_THREE_LANE / "DP-R2-OUTPUT-BUDGET-PROBE.json"
+P_DPR3_SUMMARY = P_THREE_LANE / "dpr3_trace_overhead_smoke_summary.json"
+P_FOCUSED_JUNIT = P_THREE_LANE / "focused_pytest.xml"
+P_FULL_JUNIT = P_THREE_LANE / "full_pytest.xml"
+P_LATE_EVIDENCE = HERE / "website_audit_2026-08-27" / "ACCEPTED-LATE-EVIDENCE.json"
 
 P_CONTENT = HERE / "cm_master_content_2026_08_03.json"
+P_USE_CASE_CATALOG = HERE / "use_case_benchmarks_2026-08-27" / "CM-USE-CASE-BENCHMARK-CATALOG.json"
 
 # ---------------------------------------------------------------- load
 
@@ -155,7 +196,22 @@ memo_runpod_audit = load_json(P_MEMO_RUNPOD_AUDIT)
 memo_runpod_inventory = load_json(P_MEMO_RUNPOD_INVENTORY)
 i10_screen = load_json(P_I10_SCREEN)
 i10_selector_audit = load_json(P_I10_SELECTOR_AUDIT)
+cache_process = load_csv(P_CACHE_PROCESS)
+cache_reuse50 = load_csv(P_CACHE_REUSE50)
+family_reuse = load_csv(P_FAMILY_REUSE)
+partial_summaries = {path: load_csv(path) for path in P_PARTIAL_SUMMARIES}
+trace_v1 = load_json(P_TRACE_V1)
+trace_v2 = load_json(P_TRACE_V2)
+trace_v3 = load_json(P_TRACE_V3)
+trace_v3_audit = load_json(P_TRACE_V3_AUDIT)
+dep_audits = [load_json(path) for path in P_DEP_AUDITS]
+dep_postflight = load_json(P_DEP_POSTFLIGHT)
+workload_validation = load_json(P_WORKLOAD_VALIDATION)
+memory_probe = load_json(P_MEMORY_PROBE)
+dpr3_summary = load_json(P_DPR3_SUMMARY)
+late_evidence = load_json(P_LATE_EVIDENCE)
 content = load_json(P_CONTENT)
+use_case_catalog = load_json(P_USE_CASE_CATALOG)
 
 D: dict = {}
 
@@ -1186,6 +1242,169 @@ num("bx2.max_nodes", max(r["fixed_nodes"] for r in _bx2), "int",
     "%s :: max(fixed_nodes_median)" % rel(P_BX2_SUM))
 num("bx2.n_orders", bx2_res["_meta"]["n_orders"], "int", "%s :: _meta.n_orders" % rel(P_BX2_RES))
 
+# ================================================================= E19
+# Accepted 2026-08-26/27 evidence that narrows formerly open website claims.
+# These are synthetic/reliability/safety/dependency results, not a new kernel
+# headline.  Keep their evidence roles explicit and do not blend their windows.
+
+_cache_process_rows = {int(r["n_vars"]): r for r in cache_process}
+_cache_reuse_rows = {int(r["n_vars"]): r for r in cache_reuse50}
+_cache_whole = {
+    k: fnum(r["cm_persistent_cache_no_reinflate_time_s_median"]) / fnum(r["bitset_time_s_median"])
+    for k, r in _cache_process_rows.items()
+}
+_cache_exec = {
+    k: fnum(r["ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached"])
+    for k, r in _cache_reuse_rows.items()
+}
+_family_ratios = [fnum(r["ratio_cm_cache_over_bitset_median"]) for r in family_reuse]
+_partial_rows = [(path, r) for path, rows in partial_summaries.items() for r in rows]
+_partial_speedups = [fnum(r["speedup_cm_cache_vs_cm_no_cache_median"]) for _, r in _partial_rows]
+
+def partial_k16(fraction: float) -> tuple[Path, dict]:
+    matches = [
+        (path, r) for path, r in _partial_rows
+        if int(r["n_vars"]) == 16
+        and int(float(r["partial_context_count"])) == 500
+        and abs(fnum(r["partial_fixed_var_fraction_median_median"]) - fraction) < 1e-12
+    ]
+    if len(matches) != 1:
+        raise SystemExit("expected one n=16,c=500 partial-context row for fraction %s; got %d" % (fraction, len(matches)))
+    return matches[0]
+
+
+_partial_near = {}
+for _fraction in (0.25, 0.50, 0.75):
+    _path, _row = partial_k16(_fraction)
+    _partial_near[_fraction] = {
+        "source": rel(_path),
+        "remaining_vars": int(float(_row["partial_remaining_var_count_median_median"])),
+        "bitset_total_s": fnum(_row["partial_bitset_full_recompute_total_s_median"]),
+        "cm_cache_total_s": fnum(_row["partial_cm_cache_total_s_median"]),
+        "ratio": fnum(_row["partial_cm_cache_total_s_median"]) / fnum(_row["partial_bitset_full_recompute_total_s_median"]),
+        "trials": int(float(_row["trials"])),
+    }
+
+_final_dep = dep_audits[-1]
+_final_dep_commands = _final_dep["pods"][0]["state"]["commands"]
+_memory_multiples = [case["peak_over_estimated_temporary_median"] for case in memory_probe["cases"]]
+_memory_refusals = sum(bool(case["refusal_before_materialization"]) for case in memory_probe["cases"])
+_focused = junit_counts(P_FOCUSED_JUNIT)
+_full = junit_counts(P_FULL_JUNIT)
+
+D["e19_current_evidence"] = {
+    "cache": {
+        "kind": "process-local synthetic all-hit cache; not durable persistence",
+        "whole_call_cm_over_bitset": _cache_whole,
+        "execution_only_cm_over_bitset_50": _cache_exec,
+        "evaluations": int(float(next(iter(_cache_reuse_rows.values()))["cm_eval_repeat_median"])),
+    },
+    "family": {
+        "kind": "synthetic related-expression families",
+        "cm_cache_over_bitset": [
+            {
+                "live_k": int(r["n_vars"]),
+                "family_size": int(r["family_size"]),
+                "ratio": fnum(r["ratio_cm_cache_over_bitset_median"]),
+            }
+            for r in family_reuse
+        ],
+    },
+    "partial_context": {
+        "kind": "three-trial synthetic sliding-window grid; no native CUDD restriction comparator",
+        "cache_vs_uncached_speedup_min": min(_partial_speedups),
+        "cache_vs_uncached_speedup_max": max(_partial_speedups),
+        "near_parity_n16_c500": _partial_near,
+    },
+    "tracing": {
+        "kind": "anonymous metrics-only diagnostic; not replayable workload capture",
+        "full_rate_ratios": [trace_v1["ratio_median"], trace_v2["ratio_median"]],
+        "sample_every": trace_v3["sample_every"],
+        "sampled_ratio": trace_v3["ratio_median"],
+        "sampled_ratio_gate_pass": trace_v3["ratio_gate_pass"],
+        "event_gate_pass": trace_v3["event_overhead_gate_pass"],
+        "exact_mismatches": trace_v3["exact_mismatches"],
+        "drops": trace_v3["trace_dropped_events"],
+        "io_errors": trace_v3["trace_io_errors"],
+        "content_modes": trace_v3_audit["content_modes"],
+        "logical_replay_only": trace_v3_audit["logical_replay_only"],
+    },
+    "workload_intake": workload_validation,
+    "dependency_feasibility": {
+        "attempts": sum(len(a["pods"]) for a in dep_audits),
+        "cumulative_cost_usd": _final_dep["total_cost_usd"],
+        "postflight_pods": dep_postflight["pod_count"],
+        "astutils_wheel_built": _final_dep_commands["build_astutils_wheel"]["returncode"] == 0,
+        "target_resolution_returncode": _final_dep_commands["download_binary_targets"]["returncode"],
+        "verdict": _final_dep["verdict"],
+    },
+    "temporary_memory": {
+        "measurement_scope": memory_probe["measurement_scope"],
+        "cases": memory_probe["cases"],
+        "refusal_before_materialization_count": _memory_refusals,
+        "policy": late_evidence["temporary_memory_policy"],
+    },
+    "provenance_consolidation": {
+        **late_evidence["provenance_consolidation"],
+        "smoke_ratio": dpr3_summary["ratio_median"],
+        "exact_mismatches": dpr3_summary["exact_mismatches"],
+        "ratio_gate_pass": dpr3_summary["ratio_gate_pass"],
+        "event_gate_pass": dpr3_summary["event_overhead_gate_pass"],
+    },
+    "validation": {"focused": _focused, "full": _full},
+    "canonicality_boundary": late_evidence["canonicality_boundary"],
+    "provenance": [
+        "%s :: cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median" % rel(P_CACHE_PROCESS),
+        "%s :: ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached" % rel(P_CACHE_REUSE50),
+        "%s :: ratio_cm_cache_over_bitset_median" % rel(P_FAMILY_REUSE),
+        "partial context summary CSVs :: speedup and total-time fields, selected by n/context count/fixed fraction",
+        "%s, %s, %s :: ratio_median and gate fields" % (rel(P_TRACE_V1), rel(P_TRACE_V2), rel(P_TRACE_V3)),
+        "%s :: validation and readiness fields" % rel(P_WORKLOAD_VALIDATION),
+        "%s :: pods, total_cost_usd, build_astutils_wheel, download_binary_targets" % rel(P_DEP_AUDITS[-1]),
+        "%s :: cases[] and measurement_scope" % rel(P_MEMORY_PROBE),
+        "%s :: ratio and exactness/gate fields" % rel(P_DPR3_SUMMARY),
+        "%s and %s :: testsuite attributes plus testcase count" % (rel(P_FOCUSED_JUNIT), rel(P_FULL_JUNIT)),
+        "%s :: section-level accepted non-benchmark evidence extraction" % rel(P_LATE_EVIDENCE),
+    ],
+}
+
+num("cache.whole.min", min(_cache_whole.values()), "x2", "%s :: min(cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median)" % rel(P_CACHE_PROCESS))
+num("cache.whole.max", max(_cache_whole.values()), "x2", "%s :: max(cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median)" % rel(P_CACHE_PROCESS))
+for _k in sorted(_cache_exec):
+    num("cache.exec.k%d" % _k, _cache_exec[_k], "x2", "%s :: n_vars=%d ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached" % (rel(P_CACHE_REUSE50), _k))
+num("cache.evals", D["e19_current_evidence"]["cache"]["evaluations"], "int", "%s :: cm_eval_repeat_median" % rel(P_CACHE_REUSE50))
+num("family.bitset.min", min(_family_ratios), "x2", "%s :: min(ratio_cm_cache_over_bitset_median)" % rel(P_FAMILY_REUSE))
+num("family.bitset.max", max(_family_ratios), "x2", "%s :: max(ratio_cm_cache_over_bitset_median)" % rel(P_FAMILY_REUSE))
+num("context.speedup.min", min(_partial_speedups), "x2", "partial context summary CSVs :: min(speedup_cm_cache_vs_cm_no_cache_median)")
+num("context.speedup.max", max(_partial_speedups), "x2", "partial context summary CSVs :: max(speedup_cm_cache_vs_cm_no_cache_median)")
+for _fraction, _item in _partial_near.items():
+    _name = str(_fraction).replace("0.", "f")
+    num("context.%s.ratio" % _name, _item["ratio"], "ratio3", "%s :: n_vars=16,c=500 cm_cache_total / bitset_full_recompute_total" % _item["source"])
+num("context.trials", min(item["trials"] for item in _partial_near.values()), "int", "selected n=16,c=500 partial context rows :: trials")
+num("trace.v1.ratio", trace_v1["ratio_median"], "ratio4", "%s :: ratio_median" % rel(P_TRACE_V1))
+num("trace.v2.ratio", trace_v2["ratio_median"], "ratio4", "%s :: ratio_median" % rel(P_TRACE_V2))
+num("trace.v3.ratio", trace_v3["ratio_median"], "ratio4", "%s :: ratio_median" % rel(P_TRACE_V3))
+num("trace.sample_every", trace_v3["sample_every"], "int", "%s :: sample_every" % rel(P_TRACE_V3))
+num("trace.mismatches", trace_v3["exact_mismatches"], "int", "%s :: exact_mismatches" % rel(P_TRACE_V3))
+num("trace.drops", trace_v3["trace_dropped_events"], "int", "%s :: trace_dropped_events" % rel(P_TRACE_V3))
+num("trace.io_errors", trace_v3["trace_io_errors"], "int", "%s :: trace_io_errors" % rel(P_TRACE_V3))
+num("workload.blockers", len(workload_validation["blockers"]), "int", "%s :: len(blockers)" % rel(P_WORKLOAD_VALIDATION))
+num("dependency.attempts", D["e19_current_evidence"]["dependency_feasibility"]["attempts"], "int", "three dependency audit JSON files :: sum(len(pods))")
+num("dependency.cost", _final_dep["total_cost_usd"], "usd", "%s :: total_cost_usd" % rel(P_DEP_AUDITS[-1]))
+num("dependency.postflight_pods", dep_postflight["pod_count"], "int", "%s :: pod_count" % rel(P_DEP_POSTFLIGHT))
+num("memory.cases", len(memory_probe["cases"]), "int", "%s :: len(cases)" % rel(P_MEMORY_PROBE))
+num("memory.multiple.min", min(_memory_multiples), "x2", "%s :: min(cases[].peak_over_estimated_temporary_median)" % rel(P_MEMORY_PROBE))
+num("memory.multiple.max", max(_memory_multiples), "x2", "%s :: max(cases[].peak_over_estimated_temporary_median)" % rel(P_MEMORY_PROBE))
+num("memory.refusals", _memory_refusals, "int", "%s :: count(cases[].refusal_before_materialization)" % rel(P_MEMORY_PROBE))
+num("memory.proposed.benchmark_mib", late_evidence["temporary_memory_policy"]["proposed_benchmark_remote_mib"], "int", "%s :: temporary_memory_policy.proposed_benchmark_remote_mib" % rel(P_LATE_EVIDENCE))
+num("memory.proposed.direct_mib", late_evidence["temporary_memory_policy"]["proposed_direct_mib"], "int", "%s :: temporary_memory_policy.proposed_direct_mib" % rel(P_LATE_EVIDENCE))
+num("dpr3.helpers.before", late_evidence["provenance_consolidation"]["duplicate_helpers_before"], "int", "%s :: provenance_consolidation.duplicate_helpers_before" % rel(P_LATE_EVIDENCE))
+num("dpr3.helpers.after", late_evidence["provenance_consolidation"]["streaming_helpers_after"], "int", "%s :: provenance_consolidation.streaming_helpers_after" % rel(P_LATE_EVIDENCE))
+num("dpr3.smoke.ratio", dpr3_summary["ratio_median"], "ratio4", "%s :: ratio_median" % rel(P_DPR3_SUMMARY))
+num("tests.focused", _focused["testcases"], "int", "%s :: count(testcase)" % rel(P_FOCUSED_JUNIT))
+num("tests.full", _full["testcases"], "int", "%s :: count(testcase)" % rel(P_FULL_JUNIT))
+num("tests.full.subtests", _full["subtests"], "int", "%s :: testsuite.tests - count(testcase)" % rel(P_FULL_JUNIT))
+
 # ================================================================= campaign
 
 D["_campaign"] = {
@@ -1195,7 +1414,8 @@ D["_campaign"] = {
     "cost_usd": manifest["pods"]["total_cost_usd"] + bx2_pod["cost_usd_actual"],
     "cost_cap_usd": manifest["pods"]["budget_cap_usd"],
     "all_pods_terminated": manifest["pods"]["all_pods_terminated"],
-    "tests": manifest["tests"]["result"],
+    "tests": "%d focused tests; %d tests plus %d subtests in the full suite" % (
+        _focused["testcases"], _full["testcases"], _full["subtests"]),
     "verdicts": dict(
         [(k, v["verdict"]) for k, v in manifest["benchmarks"].items()]
         + [("BX1", "COMPLETE — words crossover REVISED to workload-dependent"),
@@ -1213,10 +1433,15 @@ D["_campaign"] = {
         "commit": manifest["downloads"][0]["commit"],
         "staged_or_committed": manifest["downloads"][0]["staged_or_committed"],
     },
-    "provenance": ["%s :: whole file" % rel(P_MANIFEST), "%s :: _meta" % rel(P_B1_RES)],
+    "provenance": [
+        "%s :: whole file" % rel(P_MANIFEST),
+        "%s :: _meta" % rel(P_B1_RES),
+        "%s and %s :: current testsuite/testcase counts" % (rel(P_FOCUSED_JUNIT), rel(P_FULL_JUNIT)),
+    ],
 }
-num("meta.tests", manifest["tests"]["result"].split(",")[0], "text",
-    "%s :: tests.result" % rel(P_MANIFEST))
+num("meta.tests", "%d focused / %d full + %d subtests" % (
+        _focused["testcases"], _full["testcases"], _full["subtests"]), "text",
+    "%s and %s :: current testsuite/testcase counts" % (rel(P_FOCUSED_JUNIT), rel(P_FULL_JUNIT)))
 num("meta.cost", D["_campaign"]["cost_usd"], "usd",
     "%s :: pods.total_cost_usd + %s :: cost_usd_actual" % (rel(P_MANIFEST), rel(P_BX2_POD)))
 num("meta.evidence_revision", EVIDENCE_REVISION[:7], "text",
@@ -1283,6 +1508,7 @@ D["_flags"] = [
 
 # ---------------------------------------------------------------- content
 
+content["use_case_benchmark_catalog"] = use_case_catalog
 D["_content"] = content
 D["_numbers"] = NUM
 
@@ -1337,6 +1563,7 @@ PAGES = [
     ("cm_layperson_template.html", "layperson.html"),
     ("cm_investor_template.html", "investor.html"),
     ("cm_expert_template.html", "expert.html"),
+    ("cm_usecases_template.html", "usecases.html"),
 ]
 
 out_json = HERE / "cm_master_data_2026_08_03.json"

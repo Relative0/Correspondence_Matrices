@@ -273,6 +273,17 @@ table.wrap { font-size: 13px; }
 }
 .state-item h2 { font-size: 15px; margin: 0 0 5px; }
 .state-item > p:last-child { color: var(--text-secondary); font-size: 12.7px; margin: 0; max-width: none; }
+.evidence-update-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 13px; margin: 18px 0;
+}
+.evidence-update-card {
+  min-width: 0; padding: 16px 18px; background: var(--surface-1);
+  border: 1px solid var(--border); border-top: 3px solid var(--series-2); border-radius: 10px;
+}
+.evidence-update-card h3 { font-size: 15px; margin: 0 0 7px; }
+.evidence-update-card > p { color: var(--text-secondary); font-size: 13px; margin: 0; }
+.evidence-update-card .card-more { margin-top: 10px; }
 .boundary-strip {
   background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--warning);
   border-radius: 8px; padding: 12px 16px; margin: 16px 0 20px;
@@ -299,6 +310,37 @@ table.wrap { font-size: 13px; }
 .opportunity-detail { margin: 0; }
 .opportunity-detail dt { color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; margin-top: 9px; font-weight: 700; }
 .opportunity-detail dd { color: var(--text-secondary); font-size: 12.3px; margin: 2px 0 0; }
+
+.usecase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 18px 0 24px; }
+.usecase { background: var(--surface-1); border: 1px solid var(--border); border-top: 3px solid var(--warning); border-radius: 12px; padding: 18px; }
+.usecase.measured { border-top-color: var(--good); }
+.usecase.research { border-top-color: var(--series-2); }
+.usecase-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.usecase-pills { display: flex; flex: 0 1 48%; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+.usecase h3 { font-size: 17px; margin: 0; }
+.usecase-problem { color: var(--text-secondary); font-size: 13.5px; margin: 11px 0 15px; max-width: none; }
+.usecase-detail { margin: 0; }
+.usecase-detail dt { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .05em; margin-top: 12px; text-transform: uppercase; }
+.usecase-detail dd { color: var(--text-secondary); font-size: 12.8px; margin: 3px 0 0; }
+.pill.tier { color: var(--series-2); border-color: color-mix(in srgb, var(--series-2) 45%, transparent); }
+.usecase-benchmark { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 2px; }
+.usecase-benchmark > summary { color: var(--series-1); padding-top: 10px; }
+.usecase-benchmark-body { color: var(--text-secondary); font-size: 12.5px; padding: 3px 0 1px 18px; }
+.usecase-benchmark-body h4 { color: var(--text-primary); font-size: 12px; letter-spacing: .025em; margin: 15px 0 4px; text-transform: uppercase; }
+.usecase-benchmark-body p { font-size: 12.5px; margin: 4px 0; max-width: none; }
+.usecase-benchmark-body ul { margin: 5px 0 8px; padding-left: 18px; }
+.usecase-benchmark-body li { margin: 4px 0; }
+.benchmark-source-list a { overflow-wrap: anywhere; }
+.dominance-gate { border-left: 3px solid var(--good); padding-left: 10px; }
+.benchmark-downloads { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 16px; }
+.benchmark-downloads a { font-size: 12.5px; font-weight: 640; }
+.benchmark-priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 18px 0; }
+.benchmark-priority { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 15px; }
+.benchmark-priority h3 { font-size: 14px; margin: 9px 0 5px; }
+.benchmark-priority p { color: var(--text-secondary); font-size: 12.5px; margin: 0; }
+.route-intro { margin-top: 22px; }
+.route-intro > p { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; margin: 0; text-transform: uppercase; }
+.route-intro .pagenav { margin-top: 8px; }
 .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin: 16px 0 22px; }
 .risk-item { background: var(--surface-1); border: 1px solid var(--border); border-left: 3px solid var(--critical); border-radius: 9px; padding: 14px 16px; align-self: start; }
 .risk-num { color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; }
@@ -510,7 +552,7 @@ footer p { max-width: none; }
   .frontier-lane { grid-template-columns: 1fr; gap: 8px; }
   .decision-atlas { grid-template-columns: 1fr; }
   .decision-mini { min-height: 0; }
-  .project-state, .opportunity-map { grid-template-columns: 1fr; }
+  .project-state, .opportunity-map, .usecase-grid { grid-template-columns: 1fr; }
   .analysis-shell { padding: 17px 16px 20px; }
   .analysis-head { gap: 10px; }
   .analysis-close { flex: 0 0 auto; }

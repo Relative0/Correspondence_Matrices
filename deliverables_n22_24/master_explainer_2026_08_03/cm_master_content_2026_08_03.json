@@ -10,8 +10,8 @@
   "page": {
     "title": "Correspondence Matrices: a structural layer for Boolean computation",
     "lede": "What Boolean computation is, which tool solves which problem, what a Correspondence Matrix actually is, what the refreshed evidence shows, and what is still genuinely unsolved — written in layers, so you can stop at whatever depth you need.",
-    "standfirst": "This is the complete version. Three shorter cuts are derived from it and never add anything it does not contain.",
-    "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or the dated 2026-08-26 follow-up, and carries the file it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
+    "standfirst": "This is the complete evidence version. A simple one-pager, investor brief, technical summary, and dedicated use-case guide provide faster routes through the same evidence boundaries.",
+    "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated 2026-08-26/27 follow-up, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
   },
   "project_state": {
     "items": [
@@ -24,7 +24,7 @@
       {
         "label": "Structural wedge",
         "title": "Identity, persistence and transforms",
-        "summary": "Expression-identity keys, persistent compiled caching, serialisation and operator transformations are implemented; their workflow value is not yet demonstrated.",
+        "summary": "Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic all-hit reuse has now been measured; production workflow value is still unvalidated.",
         "kind": "implemented"
       },
       {
@@ -50,7 +50,7 @@
       {
         "title": "The setup premium may remain",
         "visible": "Preparation currently costs {{prep.min}}–{{prep.max}} the comparison compiler's setup.",
-        "test": "Profile canonicalisation, interning and lowering before funding optimisation work."
+        "test": "Target another measured preparation allocation or traversal and require paired exact evidence on representative and high-sharing cases."
       },
       {
         "title": "Structural reuse may not beat incumbents",
@@ -66,6 +66,55 @@
         "title": "The explicit-output boundary may be hard",
         "visible": "Bounded direct kernels completed at live_k={{guard.followup.min_k}}–{{guard.followup.max_k}}, but the supported public path still stops at live_k={{guard.k}} and complete output remains exponential.",
         "test": "Use a caller-backed, memory-safe protocol to compare equivalent whole-call artifacts before reconsidering the guard."
+      }
+    ]
+  },
+  "current_update": {
+    "title": "What the 2026-08-26/27 evidence added",
+    "lede": "These results close stale ‘never studied’ language without promoting synthetic diagnostics into production claims. They leave the accepted kernel, wrapper, guard, artifact, and corpus boundaries intact.",
+    "lay_lede": "Several missing checks have now been run. They tell us more about where CM does and does not help, but they still do not substitute for traffic from a real application.",
+    "items": [
+      {
+        "id": "late-cache",
+        "title": "Cache, family, and context reuse: measured synthetically",
+        "summary": "The flag called persistent cache was measured as a process-local, synthetic all-hit cache. Cached whole-call CM still took {{cache.whole.min}}–{{cache.whole.max}} BitSet time. With {{cache.evals}} cached evaluations, execution-only CM still took {{cache.exec.k16}} at k=16, {{cache.exec.k12}} at k=12, {{cache.exec.k8}} at k=8, and {{cache.exec.k4}} at k=4.",
+        "detail": "Related-family high-reuse cells remained {{family.bitset.min}}–{{family.bitset.max}} slower than BitSet. Across the synthetic partial-context grid, cached CM was {{context.speedup.min}}–{{context.speedup.max}} faster than uncached CM. The n=16, 500-context cells were hypothesis-generating near-parity points: {{context.f25.ratio}}, {{context.f5.ratio}}, and {{context.f75.ratio}} CM/BitSet at fixed fractions 0.25/0.50/0.75. They used only {{context.trials}} trials and no native CUDD restriction comparator. No byte-LRU, durable cache, production working set, hit distribution, RSS plateau, or production cache policy is validated.",
+        "audiences": ["master", "expert", "investor", "layperson"]
+      },
+      {
+        "id": "late-trace",
+        "title": "Metrics tracing: bounded diagnostic only",
+        "summary": "Full-rate V1 and V2 capture were rejected at median whole-call ratios {{trace.v1.ratio}} and {{trace.v2.ratio}}. Deterministic one-in-{{trace.sample_every}} V3 sampling was retained opt-in at {{trace.v3.ratio}}, with {{trace.mismatches}} exact mismatches, {{trace.drops}} drops, and {{trace.io_errors}} I/O errors.",
+        "detail": "The per-emitted-event gate failed. Sampling loses exact access order, and the anonymous metrics schema contains neither replayable expressions nor raw contexts. Synthetic single, family, and context traces passed mechanics, schema, privacy, exactness, and logical replay-summary checks; no real workload was found.",
+        "audiences": ["master", "expert", "investor"]
+      },
+      {
+        "id": "late-workload",
+        "title": "Workload intake: valid template, deliberately not ready",
+        "summary": "The strict owner-declared manifest validates structurally but reports not ready, with {{workload.blockers}} explicit blockers. It is a template, not a captured workload.",
+        "detail": "Real cache, edit/version, partial-context, selector, and native economics remain blocked on a named application and caller, artifact and output-order contract, budgets, lifecycle, capture duration, and separate metrics, expression, context, and upload approvals.",
+        "audiences": ["master", "expert", "investor", "layperson"]
+      },
+      {
+        "id": "late-dependency",
+        "title": "Native dependency feasibility: resolution stopped before algorithms",
+        "summary": "Three authorized disposable CPU attempts cost {{dependency.cost}} cumulatively and ended with {{dependency.postflight_pods}} pods. The final attempt built the pinned pure-Python astutils wheel, then failed closed because dd 0.6.0 requires source-only PLY 3.10 and that source build was not authorized.",
+        "detail": "Numba, dd.cudd, CUDD restriction, and native performance were never reached. They are untested, not failed. No dependency was integrated and no native or SIMD performance claim exists.",
+        "audiences": ["master", "expert", "investor"]
+      },
+      {
+        "id": "late-memory",
+        "title": "Temporary memory: refusal works; the estimator is not conservative",
+        "summary": "Direct output, benchmark, and remote surfaces have different output guards and no default temporary limit. In {{memory.cases}} bounded dense cases, the current estimate sat below median tracemalloc peak by {{memory.multiple.min}}–{{memory.multiple.max}}; typed refusal still occurred before materialisation in {{memory.refusals}}/{{memory.cases}} cases.",
+        "detail": "tracemalloc is not an RSS or native-memory upper bound, so these cases do not calibrate a universal multiplier. No default changed. Proposed {{memory.proposed.benchmark_mib}} MiB benchmark/remote and {{memory.proposed.direct_mib}} MiB direct profiles remain a future approval decision after estimator and compatibility work; they are not current settings.",
+        "audiences": ["master", "expert", "investor", "layperson"]
+      },
+      {
+        "id": "late-reliability",
+        "title": "Audit reliability and current validation",
+        "summary": "DP-R3 consolidated {{dpr3.helpers.before}} duplicate exact-file SHA-256 helpers into {{dpr3.helpers.after}} streaming helper with compatibility and source-snapshot coverage. Its tiny exact smoke passed integration but failed timing gates at {{dpr3.smoke.ratio}}; this is maintainability work, not a performance improvement.",
+        "detail": "The newest repository validation is {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests in the full suite. Test counts describe validation state, never benchmark evidence.",
+        "audiences": ["master", "expert", "investor"]
       }
     ]
   },
@@ -180,6 +229,133 @@
         "proof": "Real traces show a structural artifact benefit or a repeatable win against incremental alternatives."
       }
     ]
+  },
+  "use_cases": {
+    "title": "Where Correspondence Matrices might create distinctive value",
+    "lede": "CM is most interesting when a Boolean function is not a disposable answer but a long-lived object: it must retain useful structure, survive across sessions or versions, accept transformations, and answer related questions repeatedly. The cases below are reasoned application hypotheses, not claims of deployed advantage.",
+    "boundary": "Only the hardware/formal-verification adjacency has been tested on published domain expressions, and even there no deployed workflow was measured. Every other field below is a candidate whose CM-specific benefit still needs a real trace and a direct incumbent comparison.",
+    "advantages": [
+      {
+        "title": "Retain structure, not only an answer",
+        "text": "A flat truth vector answers what the function does. A CM can also retain operator and subexpression organization, so a later tool can inspect, transform, compare, or attribute parts of the computation instead of reconstructing them from output alone."
+      },
+      {
+        "title": "Reuse a compiled identity",
+        "text": "Expression keys, serialization, process-local compiled caching, and operator transforms are implemented. That creates a route to reuse across evaluations and related analyses, although durable production value has not yet been demonstrated."
+      },
+      {
+        "title": "Change the context without discarding the object",
+        "text": "Restrictions and partial evaluation can keep the stable part of a model while inputs, policies, interventions, or versions change. Synthetic context tests improved over uncached CM but did not establish an advantage over incumbent engines."
+      },
+      {
+        "title": "Keep exactness and provenance together",
+        "text": "Where complete explicit output is feasible, CM can couple an exact result with the structure that produced it. The output still grows exponentially with semantic support, so this is a bounded capability rather than an unlimited replacement for SAT or decision diagrams."
+      }
+    ],
+    "items": [
+      {
+        "id": "hardware",
+        "name": "Hardware verification and electronic design",
+        "status": "Measured adjacency",
+        "kind": "measured",
+        "problem": "Engineers repeatedly prove that optimized circuits preserve behavior, inspect logic cones, and assess the effect of design revisions.",
+        "cm_fit": "A reusable expression identity plus retained operator structure could link equivalent outputs back to the subcircuits that produced them, support structural difference between revisions, and avoid rebuilding unchanged logic for every related check.",
+        "information": "The function, its semantic support, operator composition, reusable subexpressions, and version lineage can remain attached to one artifact rather than being reduced to a one-off answer vector.",
+        "incumbents": "AIGs, ROBDD/CUDD, SAT/SMT, equivalence checkers, and synthesis tools already dominate this field. CM would need to complement them at an artifact or workflow boundary, not merely duplicate their core query.",
+        "proof": "Replay a real design history and show lower total workflow cost or clearer change attribution against the incumbent representation."
+      },
+      {
+        "id": "ai",
+        "name": "Artificial intelligence with hard rules",
+        "status": "High-value hypothesis",
+        "kind": "candidate",
+        "problem": "Agents and neuro-symbolic systems may reuse the same safety rules, permissions, or consistency constraints across many proposed actions and rapidly changing contexts.",
+        "cm_fit": "CM could compile the hard-rule layer once, retain which predicates and operators produced a decision, restrict it under each new context, and compare rule-set versions without treating every check as a fresh expression.",
+        "information": "Rule identity, composition, support, transformations, and decision provenance can survive alongside exact Boolean behavior; the learned model itself is not represented by the CM.",
+        "incumbents": "SAT/SMT, policy engines, Datalog, knowledge-graph reasoners, and ordinary compiled predicates may be better for existence queries or mature production integration.",
+        "proof": "Use a real guardrail or agent-policy trace to measure reuse, update frequency, explanation needs, and end-to-end cost against the deployed rules engine."
+      },
+      {
+        "id": "biology",
+        "name": "Computational biology and Boolean regulatory networks",
+        "status": "Research hypothesis",
+        "kind": "research",
+        "problem": "Boolean gene and signaling networks are repeatedly evaluated under knockouts, interventions, initial conditions, and model revisions while researchers track stable states and causal structure.",
+        "cm_fit": "A structured, reusable artifact could preserve each update rule and its dependencies, reuse unchanged network regions, and apply restrictions for interventions without flattening away the regulatory composition.",
+        "information": "Update-function lineage, shared regulatory modules, intervention context, and exact bounded behavior can stay connected, which may help compare model versions and explain changed attractors.",
+        "incumbents": "BDD-based attractor tools, SAT methods, graph algorithms, and specialized Boolean-network packages already exploit domain structure and may scale much further.",
+        "proof": "Benchmark real published networks on attractor or intervention workflows, including memory and repeated-query cost, against specialized BDD/SAT tools."
+      },
+      {
+        "id": "quantum",
+        "name": "Quantum-computing support logic",
+        "status": "Narrow research hypothesis",
+        "kind": "research",
+        "problem": "Quantum workflows contain classical Boolean subproblems: reversible-oracle logic, circuit-control conditions, syndrome predicates, and equivalence checks on compiled Boolean components.",
+        "cm_fit": "For those Boolean boundaries, CM could retain the construction of a predicate or reversible logic component, reuse compiled substructure across circuit revisions, and expose structural differences that a flat classical truth table loses.",
+        "information": "Classical predicate structure and provenance may be preserved. Quantum amplitudes, phase, entanglement, and general unitary evolution are outside the CM claim.",
+        "incumbents": "Quantum decision diagrams, ZX-calculus tools, SAT/SMT, reversible-logic synthesis, and circuit-specific equivalence systems target the genuinely quantum or reversible parts directly.",
+        "proof": "Choose one Boolean boundary in a real quantum toolchain and compare correctness, artifact reuse, change analysis, and total cost with the native representation."
+      },
+      {
+        "id": "compiler",
+        "name": "Compilers and program analysis",
+        "status": "High-value hypothesis",
+        "kind": "candidate",
+        "problem": "Compilers revisit path conditions, guards, and optimization predicates as program context evolves across passes and source revisions.",
+        "cm_fit": "CM could retain predicate construction, share repeated subexpressions, partially evaluate under known facts, and carry stable identity through transformations or incremental builds.",
+        "information": "The relationship between a result, its source predicate, its support, and the transformations already applied need not be discarded after one evaluation.",
+        "incumbents": "SSA-based dataflow, e-graphs, BDDs, SAT/SMT, abstract interpretation, and compiler-native memoization already solve overlapping pieces.",
+        "proof": "Instrument a real compiler or analyzer and test whether repeated predicates and context changes repay CM preparation against its native incremental machinery."
+      },
+      {
+        "id": "security",
+        "name": "Security policy and access control",
+        "status": "High-value hypothesis",
+        "kind": "candidate",
+        "problem": "Long-lived policies are evaluated repeatedly, revised frequently, and audited for accidental reachability, privilege escalation, and change impact.",
+        "cm_fit": "A CM artifact could keep policy clauses and composition attached to exact behavior, reuse unchanged structure, restrict under user or environment attributes, and compare versions structurally.",
+        "information": "Rule origin, logical composition, support, evaluation context, and version identity can remain available for audit rather than collapsing into a bare allow/deny result.",
+        "incumbents": "Policy decision points, Datalog, BDDs, SMT, and dedicated reachability analyzers have mature semantics and integrations.",
+        "proof": "Replay a scrubbed policy history with realistic queries and demonstrate better auditability or total repeated-query cost without weakening policy semantics."
+      },
+      {
+        "id": "configuration",
+        "name": "Configuration systems and product families",
+        "status": "High-value hypothesis",
+        "kind": "candidate",
+        "problem": "Feature models and configuration rules persist across releases while teams test many related contexts and ask what a changed flag can affect.",
+        "cm_fit": "Persistent expression identity, serialization, structural difference, and partial evaluation align with a workload made of related rule versions and many incomplete assignments.",
+        "information": "Feature dependencies, shared constraints, known context, and version-to-version changes can be carried together instead of rebuilding a flat evaluator for every release.",
+        "incumbents": "SAT, BDDs, constraint-programming systems, and feature-model analyzers are strong, specialized baselines.",
+        "proof": "Measure a real product-line history and require wins in reuse, explainable change impact, or total workflow cost against the existing analyzer."
+      },
+      {
+        "id": "regulated",
+        "name": "Regulated rule and decision systems",
+        "status": "Auditability hypothesis",
+        "kind": "candidate",
+        "problem": "Eligibility, pricing, triage, and compliance systems need repeatable decisions, controlled rule changes, contradiction checks, and explanations tied to the exact rule version.",
+        "cm_fit": "CM could serve as a versioned structural artifact whose exact Boolean behavior, rule composition, transformations, and reuse history remain available to evaluation and audit tools.",
+        "information": "The decision function and how it was assembled can stay together, reducing the information loss that occurs when a rule set becomes only generated executable code or isolated outcomes.",
+        "incumbents": "Decision tables, business-rule engines, DMN tooling, SAT/SMT, and conventional audit logs may already provide the required governance more simply.",
+        "proof": "Test a real governed rule lifecycle and compare traceability, change review, contradiction detection, and operating cost with the incumbent system."
+      }
+    ],
+    "fit": {
+      "good": [
+        "The same Boolean structure is evaluated, restricted, transformed, or compared many times.",
+        "Operator or subexpression lineage matters after the first answer is produced.",
+        "Version differences and partial contexts are first-class workflow objects.",
+        "The semantic support is bounded enough for the required explicit artifact, or the CM is used as a structural layer rather than forced to enumerate everything."
+      ],
+      "poor": [
+        "The job is a one-off complete evaluation where BitSet's low setup cost dominates.",
+        "The only question is whether one satisfying assignment exists; SAT is built for that.",
+        "A canonical symbolic graph under a fixed variable order is the required artifact; ROBDD/CUDD already supplies it.",
+        "The workload needs general quantum-state, numeric, probabilistic, or continuous computation rather than a Boolean structural layer."
+      ]
+    }
   },
   "toolbox": {
     "lede": "Each tool below is excellent at the thing it was built for and mediocre or irrelevant at the others. There is no honest single speed ranking across them, because they do not produce the same thing.",
@@ -798,7 +974,7 @@
       "superseded_number": "CM modestly ahead at controlled live_k 12 and 16 (0.944 / 0.925)",
       "what_it_claimed": "That at the whole-call boundary CM overtook BitSet once semantic support reached about 12, with a clear lead by 16.",
       "why_wrong": "Measured before the gap repair and on corpora whose admission rules did not hold exact support fixed, so the strata were not comparing like with like. Re-run on corrected-admission corpora under the same protocol, the sign reverses.",
-      "replaced_by": "BitSet leads at every semantic support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated wrapper sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on a re-run of the original protocol. Any crossover, if one exists, is above the live_k={{guard.k}} guard and is unmeasured.",
+      "replaced_by": "BitSet leads at every supported public-wrapper support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on the original-protocol rerun. Bounded direct kernels later completed above live_k={{guard.k}}, but the public wrapper refused every case; there is no above-guard public speed claim.",
       "date_or_pass": "benchmark refresh B2 + B4, 2026-08-03"
     },
     {
@@ -835,10 +1011,10 @@
     "lay": [
       "It is worth being clear about what kind of problem is left. “Is CM faster?” has no workload-free answer: B1/E3 and EPFL measured parity at the kernel, current B2/B4 V3 measured a modest bare CM lead, and the public wrapper remained slower. The remaining questions are about total cost, choosing, and capabilities that exist on paper but have never been shown to pay.",
       "Three of them are cheap to answer and would move the picture immediately. Three more are the experiments that would actually test whether the structural idea is worth anything beyond re-running the same expression. Two are engineering and formal gaps. And two are honest boundary questions — regions the measurements simply do not cover.",
-      "The preparation replication and first untouched selector transfer test are now complete. The next useful work is narrower: real reuse traces, another independently frozen selector family, and dependency-gated native comparators where the workload justifies them."
+      "The preparation replication and first untouched selector transfer test are complete. Synthetic cache, family, context, and tracing studies now narrow the hypotheses, and a strict workload manifest makes the missing input concrete. The next useful work starts with owner-declared real traffic; dependency-gated native comparators come only if that traffic justifies them."
     ],
     "technical": [
-      "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Optimisation priority remains preparation cost, cache behaviour, wrapper economics, and workload-aware backend selection.",
+      "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Preparation remains the leading raw optimisation surface; cache, family, context, selector, and native economics require a real workload and the strongest applicable incumbent.",
       "Several items below are marked <em>partially answered</em>. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism."
     ],
     "items": [
@@ -878,16 +1054,17 @@
       },
       {
         "id": "fr-cache",
-        "title": "The persistent cache has never been studied",
-        "status": "ranked-next-test",
-        "visual_label": "Study the cache",
-        "lay_statement": "One of the three things CM is left standing on is that it remembers what it has already compiled. Nobody has measured how often that memory actually helps under a realistic mix of work, or how sensitive it is to how much you let it remember.",
-        "technical_statement": "The persistent cache is named as the second optimisation surface, with cache-policy tuning as a ranked optimisation gated on the study existing. The only recorded production characteristic to date is incidental: the cache returns one object per digest, which is what keeps a known duplicated-slot behaviour narrow in practice — it requires mid-compile eviction or deliberate cross-builder mixing. Everything else is unmeasured: steady-state hit rate, working-set size, eviction policy, invalidation correctness when an expression changes, memory retention, and cold-versus-warm cost.",
-        "why_it_matters": "Without a universal kernel advantage, the cache is one of the remaining potential differentiators. An unmeasured differentiator is an architectural assertion.",
-        "what_would_change_the_picture": "<b>If it succeeds</b> — measured hit rates and a sensitivity curve for the cache size limit under realistic mixes — cache-policy tuning gains a quantified payoff and the differentiator gains empirical content. <b>If it fails</b> — low hit rates or high sensitivity to the size limit — the cache is a fragile differentiator, the duplicated-slot behaviour stops being exotic, and the amortisation argument weakens further on top of an already-substantial preparation cost.",
+        "title": "The process-local cache has synthetic all-hit evidence, not a production policy",
+        "status": "partially-answered",
+        "visual_label": "Capture real cache traffic",
+        "lay_statement": "The cache has now been tested under a deliberately easy all-hit pattern. It helped CM compared with running CM cold, but cached CM still took longer than BitSet. That answers the stale ‘never studied’ statement without proving that a durable cache would help a real application.",
+        "technical_statement": "The flag historically called persistent cache is process-local. Synthetic all-hit whole-call CM remained {{cache.whole.min}}–{{cache.whole.max}} behind BitSet, and {{cache.evals}}-evaluation execution-only ratios remained {{cache.exec.k16}} at k=16 through {{cache.exec.k4}} at k=4. No byte-LRU, durable store, production access order, working-set distribution, hit curve, eviction churn, invalidation lifecycle, RSS plateau, or production cache policy has been validated. Sampled metrics traces cannot supply exact access order for offline policy replay.",
+        "why_it_matters": "Without a universal kernel advantage, reuse is one of the remaining potential differentiators. The synthetic result narrows the claim to a real workload-distribution question.",
+        "what_would_change_the_picture": "A named owner-approved workload with artifact bytes, compile and lookup cost, exact bounded access order where separately approved, process boundaries, lifecycle and cache budgets could compare no cache, entry-LRU, byte-LRU, and cost-aware admission. Until then no production cache-policy change is justified.",
         "sources": [
-          "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §7 ranked next tests, item 4; §8 item 3",
-          "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_CLARIFICATIONS_2026-08-03.md — R2 clarification"
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv",
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv",
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Cache and repeated evaluation"
         ],
         "downside": "If hit rates are low or highly sensitive to how much is retained, one of the three remaining differentiators is fragile, and the amortisation argument weakens on top of an already-substantial setup cost."
       },
@@ -911,10 +1088,10 @@
       },
       {
         "id": "fr-canonical",
-        "title": "Canonical CM equivalence exists in the formalism and nowhere else",
+        "title": "Current CM keys are engineering identity, not global semantic canonicality",
         "status": "formal-not-demonstrated",
         "visual_label": "Prove equivalence",
-        "lay_statement": "CM's most distinctive claim is that two differently written expressions can be recognised as the same object by their structure. In practice the project has only ever checked that two things produce the same answers. Matching answers is required for sameness — it does not prove it.",
+        "lay_statement": "CM can give normalized structures stable engineering keys under documented rules. That is useful for caching and identity checks, but it is not a proof that every two semantically equal expressions always become one globally canonical object.",
         "technical_statement": "The current path establishes output equality, including full 2<sup>live_k</sup> packed equality against CUDD on all {{cudd.rows}} matched rows. None of that is a canonical CM-equivalence proof. Matrix equality requires the same normalised ordered basis; a truth table, a normalised CM and a reduced ordered BDD each identify a Boolean function under their own conventions, and none of those conventions is interchangeable with the others. What CM does have is compact interned canonical <em>keys</em>, resting on a documented hash-collision assumption, with one interned twin per builder — which is an engineering property, not a promise of global object identity, and the project's own clarifications say so.",
         "why_it_matters": "This is the capability that would distinguish CM from “a structural IR with a good cache”. Without it, the differentiator list reduces to keys, caching and serialisation — all real, all reproducible by other means.",
         "what_would_change_the_picture": "<b>If it succeeds</b> — a defined normal form with proven invariants, exhaustive validation over small Boolean functions and bases, and canonicalisation-cost and artifact-size figures comparable to ROBDDs — “canonical keys” becomes a defensible formal claim. <b>If it fails</b>, the negative result is still worth having: it would pin down that CM canonicality depends on arbitrary basis and order choices, fix the public language permanently at “output-based equivalence”, and force the prior question the project has not answered — whether the canonical artifact offers anything that ROBDDs, AIG normalisation or canonical truth representations do not already supply.",
@@ -927,31 +1104,32 @@
       },
       {
         "id": "fr-family",
-        "title": "Cross-expression and related-family reuse — preliminary, and it has not beaten the real baseline",
+        "title": "Related-family reuse stayed behind BitSet in the accepted synthetic study",
         "status": "partially-answered",
         "visual_label": "Retest family reuse",
-        "lay_statement": "If you evaluate a whole family of closely related expressions — successive versions of a policy, revisions of a circuit — CM ought to be able to reuse work between them. A first experiment showed it reusing work compared with a version of itself that had no cache. It has never been shown to beat the actual competitor.",
-        "technical_statement": "The project's own success criterion is that CM's preparation cost amortises across the family and that total family cost falls below repeated BitSet evaluation. Current state: a cross-expression subtree-cache implementation improved cached CM against <em>uncached CM</em> on shared-block cases, with mixed results on composition mixes, while BitSet remained faster by more than an order of magnitude in the strongest exact-output cases cited. A CM-versus-uncached-CM improvement is not the comparison the criterion names. The retest guidance is explicit: do not re-run the existing synthetic family sweep; use real edit, version and query families, and compare against hash-consed DAGs, e-graphs, incremental BDD managers and compiler memoisation as well as uncached CM.",
+        "lay_statement": "Synthetic families with heavy shared structure have now been measured. Reuse sometimes helped CM compared with itself and sometimes added overhead; BitSet still finished the reported high-reuse cells {{family.bitset.min}}–{{family.bitset.max}} faster. Real revisions remain unmeasured.",
+        "technical_statement": "The accepted high-reuse cells report cached CM/BitSet ratios {{family.bitset.min}}–{{family.bitset.max}}. Process-local reuse did not establish dominance over the strongest task-matched incumbent. The next test must use real edit, version, and query families and compare total task work against hash-consed CSE-flat, compiler memoisation, and applicable symbolic or incremental baselines; independently generated related formulas are not an edit trace.",
         "why_it_matters": "This is the workload shape a structural layer is supposed to be for. If it does not pay here, the persistent cache's story collapses back to “re-run the same compiled formula many times”, and the family and versioning domains — policy versions, circuit revisions, compiler passes — drop out of scope.",
         "what_would_change_the_picture": "<b>Question:</b> does CM's structural IR reduce cost when evaluating a family of related expressions? <b>Success:</b> preparation amortised across the family with total family cost below repeated BitSet evaluation, under fair total-cost accounting — the first demonstration that the structural layer buys something on a workload shape BitSet cannot exploit. <b>Failure:</b> structural reuse does not generalise beyond same-expression prepared evaluation, and the honest claim narrows to a scoped same-expression preparation cache.",
         "sources": [
-          "CM_experiment_A_related_families_report.md",
-          "CM slide deck (frozen at V4), “Three CM-Value Experiments” card 1 and priority experiment 04 — framing only"
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/family_high_reuse_summary.csv",
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Related-expression families"
         ],
         "downside": "If reuse does not generalise past re-running one identical expression, the caching story collapses to exactly that, and the versioning and family use cases — policy revisions, circuit revisions, compiler passes — drop out of scope."
       },
       {
         "id": "fr-partial",
-        "title": "Repeated partial contexts — tested, and CM lost",
+        "title": "Partial-context reuse produced a synthetic near-parity hypothesis surface",
         "status": "partially-answered",
         "visual_label": "Retest partial contexts",
-        "lay_statement": "Many real systems evaluate the same rule over and over with most of the inputs held fixed and a few varying. CM should be able to keep the fixed part's work. When this was tested, CM did beat a version of itself with no cache — and still lost to both BitSet and to the decision-diagram approach at every size tried.",
-        "technical_statement": "Success criterion: CM partial evaluation faster than full re-evaluation for repeated partial contexts. Current state: partially tested with a negative comparative result. Cached CM improved substantially over uncached CM, and in one fixed-fraction sweep by a larger factor still — but BitSet and ROBDD restriction remained faster throughout the tested range. The retest guidance calls for real context traces (sliding, random, locality-heavy, adversarially low-overlap, phase-changing) compared against CUDD restrict/cofactor and incremental SAT with assumptions, and asks for a break-even <em>surface</em> over original support, remaining live support, number of contexts, context overlap, output type, cache budget, and cold versus steady state — not a single ratio.",
+        "lay_statement": "A larger synthetic grid found that caching made CM {{context.speedup.min}}–{{context.speedup.max}} faster than uncached CM. Three high-reuse n=16 cells came close to BitSet, but with only {{context.trials}} trials and artificial contexts this is a place to investigate, not a production route.",
+        "technical_statement": "At n=16 and 500 contexts, cached CM/full-recompute BitSet ratios were {{context.f25.ratio}}, {{context.f5.ratio}}, and {{context.f75.ratio}} for fixed fractions 0.25/0.50/0.75. The grid used synthetic expressions and sliding-window contexts, only {{context.trials}} trials, remaining-variable outputs, and no native CUDD restriction comparator. A real trace must preserve original and remaining support, context overlap/locality and phase changes, query counts, output kind, process/cache lifetime, and separate BDD build, restriction, query, and extraction windows.",
         "why_it_matters": "Combined with the already-measured BitSet lead at every semantic support up to the guard, a second negative result here would mean the structural layer offers no execution-time advantage on incremental workloads either — and the value proposition would have to rest entirely on the artifacts rather than on time.",
         "what_would_change_the_picture": "<b>Question:</b> does CM preserve reusable structure across related variable assignments? <b>Success:</b> established on real traces against CUDD restrict/cofactor and incremental SAT — not merely against uncached CM — this gives CM a defensible operational niche independent of raw kernel speed, and populates the break-even surface the selector needs. <b>Failure:</b> partial-context reuse provides no measurable advantage over BitSet.",
         "sources": [
-          "CM_experiment_B_partial_contexts_report.md",
-          "CM slide deck (frozen at V4), “Three CM-Value Experiments” card 2 and priority experiment 05 — framing only"
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f*_summary.csv",
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_sliding_100_summary.csv",
+          "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Partial-context break-even surface"
         ],
         "downside": "If incremental workloads show no advantage either, then combined with the already-measured loss at the whole-call boundary, the structural layer offers no execution-time advantage anywhere, and the case must rest entirely on stored artifacts."
       },
@@ -989,7 +1167,7 @@
       {
         "id": "fr-aboveguard",
         "title": "Above the guard limit, bounded kernels work but the public boundary still refuses",
-        "status": "partially answered",
+        "status": "partially-answered",
         "visual_label": "Map the guard boundary",
         "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. A bounded follow-up did run the underlying exact kernels from {{guard.followup.min_k}} through {{guard.followup.max_k}}: all {{guard.followup.cases}} cases completed with {{guard.followup.mismatches}} wrong answers and {{guard.followup.timeouts}} timeouts. The public wrapper still refused every case, so this proves a small feasibility band, not permission to raise the limit or a CM speed win.",
         "technical_statement": "The original guard remains correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} earlier trials. The bounded subprocess follow-up then exercised exact direct kernels for live_k={{guard.followup.min_k}}–{{guard.followup.max_k}} under a 64 MiB estimate cap, 512 MiB RSS cap, 45-second timeout and three repetitions: {{guard.followup.cases}}/{{guard.followup.cases}} completed, with {{guard.followup.mismatches}} mismatches, {{guard.followup.timeouts}} timeouts and {{guard.followup.wrapper_non_refusals}} wrapper non-refusals. This closes the claim that nothing above the guard has been measured, but it did not compare equivalent whole-call CM and BitSet artifacts or justify a production policy change.",
@@ -1016,27 +1194,27 @@
       },
       {
         "priority": 2,
-        "experiment": "Profile preparation",
-        "decision": "Optimisation target",
-        "cost_level": 1,
-        "cost_label": "Low",
-        "what_it_settles": "Where the setup multiple comes from before anyone attempts to reduce it."
+        "experiment": "Harden temporary-memory estimators",
+        "decision": "Fail-closed safety",
+        "cost_level": 2,
+        "cost_label": "Medium",
+        "what_it_settles": "Whether representation-specific estimates can support a compatible default policy; no default changes during estimator work."
       },
       {
         "priority": 3,
-        "experiment": "Validate backend selection",
-        "decision": "Automatic routing",
-        "cost_level": 1,
-        "cost_label": "Low",
-        "what_it_settles": "Whether a fitted rule transfers to data it was not fitted on."
+        "experiment": "Reduce measured preparation allocations",
+        "decision": "Raw optimisation",
+        "cost_level": 2,
+        "cost_label": "Medium",
+        "what_it_settles": "Whether another exact, representative, cross-host preparation improvement exists after the one-memo change."
       },
       {
         "priority": 4,
-        "experiment": "Study persistent-cache behaviour",
-        "decision": "Cache value",
-        "cost_level": 1,
-        "cost_label": "Low",
-        "what_it_settles": "Whether realistic hit rates make the stored structural artifact useful."
+        "experiment": "Capture lane-specific real traces",
+        "decision": "Cache/version/context evidence",
+        "cost_level": 2,
+        "cost_label": "Medium",
+        "what_it_settles": "Whether owner-approved traffic clears the cache, edit/version, context, or selector entry gate."
       },
       {
         "priority": 5,
@@ -1288,6 +1466,24 @@
       "date": "2026-08-03",
       "what_was_checked": "The two claim-map rows that had not been re-run: the engine crossover point, and decision-diagram order search.",
       "outcome": "Crossover REVISED to workload-dependent. Order search CLOSED with data: best-of-ten is genuinely smaller at a real search cost, and dynamic reordering never triggers at these graph sizes."
+    },
+    {
+      "stage": "Deep performance and symmetric-boundary reconciliation",
+      "date": "2026-08-25/26",
+      "what_was_checked": "Preparation cost, exact backend selection, the strongest CSE-flat comparator, public-wrapper boundaries, above-guard feasibility, cache/family/context reuse, and held-out selector transfer.",
+      "outcome": "One redundant preparation memo was removed and replicated cross-host. Bare symmetric V3 measured {{symv3.bare.overall}} while the wrapper measured {{symv3.wrapper.overall}}; direct above-guard kernels completed exactly while the wrapper refused. Synthetic reuse narrowed hypotheses, and the frozen feature selector failed the untouched i10 gate."
+    },
+    {
+      "stage": "Metrics tracing, workload intake, dependency feasibility, and memory safety",
+      "date": "2026-08-26/27",
+      "what_was_checked": "Whether low-overhead anonymous tracing could identify real opportunities, whether a real owner/caller existed, whether pinned native dependencies resolved under the authorized contract, and whether the temporary-memory estimate could support a default.",
+      "outcome": "One-in-{{trace.sample_every}} tracing was retained only as a bounded diagnostic at {{trace.v3.ratio}}. The strict workload template remains not ready with {{workload.blockers}} blockers. Dependency resolution stopped before Numba/CUDD algorithms. The dense estimate underpredicted diagnostic peaks by {{memory.multiple.min}}–{{memory.multiple.max}}, so no default changed."
+    },
+    {
+      "stage": "Audit-tool consolidation and current validation",
+      "date": "2026-08-27",
+      "what_was_checked": "Whether exact-file provenance hashing could be consolidated without coupling distinct timing and corpus contracts, and whether the resulting repository remained green.",
+      "outcome": "{{dpr3.helpers.before}} duplicate SHA-256 helpers became {{dpr3.helpers.after}} streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Current validation: {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests full-suite."
     }
   ],
   "glossary": [
@@ -1631,7 +1827,7 @@
       "term": "materiality rule",
       "group": "statistics-and-protocol",
       "lay": "The pass mark, agreed in advance: how big an effect would have to be, and how confident you would have to be about it, before it is worth acting on. On the decisive experiment here, the pass mark was not met.",
-      "technical": "A conjunction of pre-registered conditions — an effect-size threshold, an interval excluding parity, and a break-even bound — all of which must hold for optimisation to be warranted. Its failure is what made the kernel-equivalence posture final."
+      "technical": "A conjunction of pre-registered conditions — an effect-size threshold, an interval excluding parity, and a break-even bound — all of which must hold for optimisation to be warranted. Its failure made parity the final posture for the EPFL AND/INV workload; later B2/B4 V3 prevents universalising that posture."
     },
     {
       "term": "packed-equality gate",

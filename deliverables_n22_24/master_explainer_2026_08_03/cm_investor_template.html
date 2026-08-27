@@ -37,7 +37,8 @@ document.body.prepend(topbar({
   brand: "Correspondence Matrices <span>· investor brief</span>",
   links: [["index.html", "← full knowledge base"], ["#market", "The problem"],
           ["#proven", "What's proven"], ["#open", "What's open"],
-          ["#roadmap", "Roadmap"], ["#credibility", "Why believe it"]],
+          ["#roadmap", "Roadmap"], ["#credibility", "Why believe it"],
+          ["usecases.html", "CM use cases"]],
 }));
 
 app.append(h("header", { class: "page" }, [
@@ -55,6 +56,7 @@ app.append(h("header", { class: "page" }, [
 /* ------------------------------------------------------------ bottom line */
 app.append(projectStatePanel());
 app.append(evidenceBoundary());
+app.append(currentEvidenceUpdate("investor"));
 
 app.append(tiles([
   ["Kernel vs naive baseline", T("kernel.local.pct") + " faster",
@@ -62,7 +64,7 @@ app.append(tiles([
   ["Kernel vs strong baseline", "parity",
     "{{flat.epfl}} externally, interval spanning parity — reported as equivalence, not as a win"],
   ["Setup cost to amortise", T("prep.min") + "–" + T("prep.max"),
-    "the top optimisation surface, currently unprofiled"],
+    "the top raw optimisation surface, now profiled and modestly improved"],
   ["Campaign cloud spend", FMT.usd(M.cost_usd),
     "against a $" + M.cost_cap_usd.toFixed(2) + " cap, all machines terminated — this is a capital-light research programme"],
 ]));
@@ -241,8 +243,9 @@ function buildCredibilitySection() {
   const nav = h("div", { class: "pagenav" });
   [
     ["index.html", "The full knowledge base", "Every figure with its source file, every caveat, every chart."],
-    ["expert.html", "Expert technical summary", "All intervals with their clustering basis, and protocol detail."],
-    ["layperson.html", "Plain-language version", "The same story with no numbers and no jargon."],
+    ["usecases.html", "CM Use Cases", "Field-specific hypotheses, alternatives, and the proof each needs."],
+    ["expert.html", "Technical Summary", "All intervals with their clustering basis, and protocol detail."],
+    ["layperson.html", "Simple One-Pager", "The same story in plain language."],
   ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
   s.append(nav);
   app.append(s);

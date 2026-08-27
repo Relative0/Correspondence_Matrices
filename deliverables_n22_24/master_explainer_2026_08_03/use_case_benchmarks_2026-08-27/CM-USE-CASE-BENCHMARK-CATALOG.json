@@ -1,0 +1,266 @@
+{
+  "schema_version": "cm-use-case-benchmark-catalog/v1",
+  "as_of": "2026-08-27",
+  "purpose": "Audited, field-specific benchmark candidates for testing whether a reusable CM structural artifact creates value beyond a one-off Boolean answer.",
+  "interpretation_rule": "A result on a CM-shaped synthetic stress suite is a mechanism demonstration, not domain dominance. A domain claim requires a preregistered confirmatory result on the natural corpus with the best artifact-equivalent incumbent.",
+  "fairness_protocol": [
+    "Freeze dataset revisions, parsers, translations, exclusions, seeds, and resource limits before timing.",
+    "Run every eligible natural-corpus item; do not retain only formulas on which CM is fast.",
+    "Separate cold construction, warm evaluation, version update, partial-context update, serialization, and explanation or change-impact tasks.",
+    "Compare equivalent outputs and capabilities. SAT witness search, BDD graph construction, explicit truth-vector generation, and policy authorization are different artifacts.",
+    "Publish failures, refusals, timeouts, memory peaks, and never-break-even cases alongside successful timings.",
+    "Label synthetic stress results separately and sweep the property intended to help CM: reuse, edit locality, shared-subgraph fraction, context delta, and residual semantic support."
+  ],
+  "priority_summary": [
+    {
+      "tier": "Tier A — test first",
+      "fields": "Configuration/product families; security-policy version audit; hardware design histories",
+      "reason": "These naturally combine long-lived Boolean structure, related versions or contexts, exactness, and change-impact questions."
+    },
+    {
+      "tier": "Tier A/B — bounded subset",
+      "fields": "Compiler and program-analysis predicates",
+      "reason": "The fit is strong for pure Boolean i1/path-condition families, but weak for general integer, memory, undefined-behavior, or interprocedural semantics."
+    },
+    {
+      "tier": "Tier B — conditional",
+      "fields": "AI-agent hard guardrails; biological update rules; regulated Boolean decision tables",
+      "reason": "There is a credible reusable-rule artifact, but mature domain engines already provide semantics CM must preserve exactly."
+    },
+    {
+      "tier": "Tier C — narrow research",
+      "fields": "Classical reversible and control logic in quantum toolchains",
+      "reason": "CM may help only at a Boolean boundary; it does not represent amplitudes, phase, entanglement, or general unitary evolution."
+    }
+  ],
+  "entries": [
+    {
+      "id": "hardware",
+      "field": "Hardware verification and electronic design",
+      "priority": "Tier A — test first",
+      "audit_verdict": "Sound and comparatively strong after narrowing the claim to repeated cone/version workflows. CM is not being proposed as a replacement for industrial equivalence checking or synthesis.",
+      "pain_point": "Design teams repeatedly rebuild and compare related logic cones after synthesis and optimization passes, while needing exact equivalence, localized change impact, and traceability from output behavior back to changed structure.",
+      "cm_role": "Use CM as a versioned intermediate artifact for bounded cones: retain operator/subexpression structure, reuse unchanged compiled regions, restrict under partial inputs, and report structural and behavioral deltas between revisions.",
+      "scope_correction": "Do not claim chip-level scalability, synthesis-quality dominance, or an advantage on one-off whole-netlist evaluation. Complete explicit output remains bounded by semantic support.",
+      "real_datasets": [
+        {
+          "name": "EPFL Combinational Benchmark Suite",
+          "url": "https://github.com/lsils/benchmarks",
+          "use": "Use original and best-result AIGER/BLIF/Verilog implementations as real circuit and related-implementation inputs; extract bounded output cones and retain circuit/fan-in metadata.",
+          "license_note": "Repository reports an MIT license; pin a commit and preserve circuit attribution."
+        },
+        {
+          "name": "EPFL suite description and methodology",
+          "url": "https://www.epfl.ch/labs/lsi/page-102566-en-html/benchmarks/",
+          "use": "Use the published circuit categories and ABC equivalence workflow to stratify arithmetic versus control cones and document how variants were produced.",
+          "license_note": "Methodology/source page; dataset license is governed by the repository."
+        }
+      ],
+      "synthetic_scenario": "Start from each real AIG cone, apply seeded equivalence-preserving ABC rewrite/refactor/resubstitution sequences, then inject localized behavior-changing edits. Sweep shared-subgraph fraction, edit radius, query reuse, and fixed-input fraction while retaining every seed.",
+      "baselines": ["ABC/AIG rewriting and equivalence", "ROBDD/CUDD", "SAT or SMT equivalence", "packed BitSet or compiled evaluator"],
+      "tasks": ["cold cone construction", "warm repeated exact evaluation", "equivalent-rewrite detection", "localized revision impact", "partial-input restriction", "serialize/reload and query"],
+      "dominance_gate": "Exact outputs and equivalence labels must match; on the natural version/cone trace, CM total workflow time must beat the fastest artifact-equivalent baseline with no memory/refusal regression, or provide a measured change-attribution capability the baseline lacks at acceptable cost."
+    },
+    {
+      "id": "ai",
+      "field": "AI-agent authorization and hard guardrails",
+      "priority": "Tier B — conditional",
+      "audit_verdict": "The original AI wording was too broad. The defensible use case is the deterministic Boolean policy layer around an agent, not learned inference, planning, or natural-language reasoning itself.",
+      "pain_point": "Agent systems repeatedly decide whether a principal, delegated agent, action, tool, resource, and context combination is allowed while policies, delegation depth, and tool inventories evolve. Operators also need a reviewable explanation of what changed.",
+      "cm_role": "Compile a bounded Boolean projection of the hard-guardrail layer, retain policy/subexpression identity across revisions, reuse it over request streams, and perform offline change-impact or counterfactual analysis. Keep the native policy engine as the semantic authority.",
+      "scope_correction": "Do not represent model weights, prompts, probabilistic confidence, open-ended planning, or the full typed semantics of Cedar/Rego as Boolean variables without an explicit translation contract.",
+      "real_datasets": [
+        {
+          "name": "AWS sample agentic AI delegation authorization",
+          "url": "https://github.com/aws-samples/sample-cedar-agentic-ai-authorization",
+          "use": "Replay the documented permit/deny delegation scenarios and derive versioned tool-policy request traces, including user role, MFA, delegation depth, agent capability, and tool risk.",
+          "license_note": "Sample/reference implementation; pin the repository revision and inspect its license before redistribution."
+        },
+        {
+          "name": "AllenAI RuleTaker",
+          "url": "https://github.com/allenai/ruletaker",
+          "use": "Optional secondary corpus for repeated deterministic rule-theory queries after using the repository's logical forms rather than timing natural-language parsing.",
+          "license_note": "Apache-2.0 repository; retain dataset attribution."
+        }
+      ],
+      "synthetic_scenario": "Generate seeded agent/tool/resource graphs with layered permit, forbid, delegation, tenant, time, and approval predicates. Produce request streams plus localized policy versions, preserving expected allow/deny outcomes and policy-clause provenance.",
+      "baselines": ["native Cedar authorizer", "OPA/Rego for a documented translatable subset", "BDD or SAT policy analysis", "ordinary compiled predicates with memoization"],
+      "tasks": ["request-stream authorization", "warm policy reuse", "policy-version impact", "counterfactual context restriction", "decision provenance", "serialize/reload"],
+      "dominance_gate": "CM must exactly match the native policy authority on the translated subset and show a repeatable offline audit/versioning or total repeated-query advantage. A synthetic request-stream win alone does not establish production-agent value."
+    },
+    {
+      "id": "biology",
+      "field": "Computational biology and Boolean regulatory networks",
+      "priority": "Tier B — conditional",
+      "audit_verdict": "Plausible for reusable update-rule and intervention families, but the earlier wording could be read as an attractor-analysis claim. Current CM evidence does not support replacing specialized Boolean-network dynamics tools.",
+      "pain_point": "Researchers reuse related Boolean update rules across knockouts, over-expression, environmental inputs, parameterizations, and model revisions while trying to preserve regulatory provenance and understand why behavior changed.",
+      "cm_role": "Compile individual update functions or bounded synchronous-step slices, retain regulatory-rule structure, reuse unchanged modules, and restrict under interventions. Treat attractor and transition-system analysis as separate downstream tasks unless CM gains explicit dynamics semantics.",
+      "scope_correction": "Do not claim whole-network attractor, asynchronous dynamics, or model-checking dominance. Preserve update semantics, input conventions, and multi-valued Booleanization metadata.",
+      "real_datasets": [
+        {
+          "name": "Biodivine Boolean Models benchmark collection",
+          "url": "https://github.com/sybila/biodivine-boolean-models",
+          "use": "Use the repository's validated BNET/AEON/SBML exports and metadata; stratify by variables, inputs, regulations, source repository, and model provenance.",
+          "license_note": "Model copyrights remain with original authors; follow each model's source and citation metadata before redistribution."
+        },
+        {
+          "name": "Cell Collective API and export tooling",
+          "url": "https://github.com/cellcollective/ccapi",
+          "use": "Obtain public Boolean rules, truth tables, and SBML-qual exports where permitted, then build intervention/version traces without discarding biological annotations.",
+          "license_note": "API client is MIT; model-specific rights and citations must be checked separately."
+        }
+      ],
+      "synthetic_scenario": "From each real network, create seeded knockout, constitutive-expression, input-fixation, and localized rule-edit families. Keep regulatory modules unchanged across most versions and record which attractor-facing question is only proxied by update-rule evaluation.",
+      "baselines": ["AEON/Biodivine BDD tooling", "BoolNet or bioLQM/GINsim", "SAT-based Boolean-network analysis", "plain compiled update functions"],
+      "tasks": ["compile update-rule family", "evaluate bounded synchronous step", "intervention restriction", "model-version diff", "shared-module reuse", "provenance recovery"],
+      "dominance_gate": "CM must match update semantics exactly and win on a real intervention/version workflow or provide demonstrably better rule-level provenance. Attractor speed cannot be claimed from update-function timing."
+    },
+    {
+      "id": "quantum",
+      "field": "Classical reversible and control logic in quantum toolchains",
+      "priority": "Tier C — narrow research",
+      "audit_verdict": "Correct only with a hard boundary around classical Boolean or reversible components. This is the weakest general-domain claim and should remain a targeted research experiment.",
+      "pain_point": "Quantum compilation flows contain classical reversible or control subcircuits that are rewritten across versions and must retain exact computational-basis behavior, ancilla/garbage conventions, and construction provenance.",
+      "cm_role": "Represent bounded Boolean output functions of reversible components, reuse their shared classical structure across variants, and compare structural or truth-functional deltas. Use a quantum-native checker for genuinely quantum semantics.",
+      "scope_correction": "CM does not represent amplitude, phase, interference, entanglement, noise, measurement probability, or general unitary equivalence. Multi-output reversible semantics and ancilla/garbage bits must be explicit.",
+      "real_datasets": [
+        {
+          "name": "RevLib reversible benchmark library",
+          "url": "https://www.revlib.org/",
+          "use": "Use machine-readable function specifications and REAL circuit realizations for classical reversible truth functions, including declared constants and garbage outputs.",
+          "license_note": "Cite individual contributors and confirm reuse terms for selected artifacts."
+        },
+        {
+          "name": "MQT Bench",
+          "url": "https://www.cda.cit.tum.de/mqtbench/index",
+          "use": "Use only circuits or extracted regions with a documented classical/reversible Boolean interpretation; the broader quantum suite is a negative-control boundary, not CM input.",
+          "license_note": "Follow the benchmark package/repository license and cite the MQT Bench publication."
+        }
+      ],
+      "synthetic_scenario": "Generate reversible Toffoli/CNOT networks with explicit ancilla and garbage declarations, create equivalence-preserving gate rewrites and localized oracle edits, and export each output as a bounded Boolean root with a full mapping checksum.",
+      "baselines": ["RevKit or reversible-logic simulator", "MQT QCEC for quantum-aware equivalence", "ROBDD/CUDD", "SAT/SMT miter", "packed truth-table evaluator"],
+      "tasks": ["multi-output truth-function extraction", "equivalent circuit revision", "localized oracle change", "ancilla restriction", "shared-subcircuit reuse", "round-trip provenance"],
+      "dominance_gate": "CM must match every declared output under constants/garbage conventions and win a classical reversible version workflow. No result may be generalized to quantum-state simulation or unitary equivalence."
+    },
+    {
+      "id": "compiler",
+      "field": "Compilers and program analysis",
+      "priority": "Tier A/B — bounded subset",
+      "audit_verdict": "Strong for families of pure Boolean predicates and incremental path contexts; unsound as a general compiler-verification claim without modeling integers, memory, poison, undefined behavior, and interprocedural effects.",
+      "pain_point": "Compilers repeatedly simplify, compare, and partially evaluate related branch and optimization predicates across passes, builds, and known program facts, often losing a stable cross-version identity for the logical slice.",
+      "cm_role": "Use CM for extracted pure-Boolean i1 predicate families: retain expression lineage, reuse shared subgraphs, restrict under known facts, and compare before/after predicates. Leave full IR refinement semantics to Alive2/SMT.",
+      "scope_correction": "Exclude or explicitly encode integer widths, overflow, poison, undefined behavior, memory, loops, and calls. A Boolean projection is valid only under a documented extraction contract.",
+      "real_datasets": [
+        {
+          "name": "Alive2 and LLVM transformation tests",
+          "url": "https://github.com/AliveToolkit/alive2",
+          "use": "Select transformations whose source/target condition is a supported pure Boolean slice; use Alive2 as the semantic oracle and retain before/after IR provenance.",
+          "license_note": "Alive2 is MIT; LLVM inputs retain their own repository licensing and attribution."
+        },
+        {
+          "name": "LLVM test suite and regression corpus",
+          "url": "https://github.com/llvm/llvm-test-suite",
+          "use": "Extract repeated branch/path predicates from public programs and preserve program/test provenance; use reference outputs only for overall correctness, not as Boolean equivalence labels.",
+          "license_note": "Inspect the LLVM test-suite license and per-benchmark notices, especially external suites."
+        }
+      ],
+      "synthetic_scenario": "Generate SSA-like Boolean DAGs with repeated guards, equivalent InstCombine-style rewrites, localized pass edits, and evolving fact sets. Include negative controls with integer/UB features that the importer must refuse rather than silently Booleanize.",
+      "baselines": ["Alive2/Z3", "LLVM InstCombine or SimplifyCFG", "e-graph rewriting", "ROBDD/CUDD", "compiled predicates with memoization"],
+      "tasks": ["pure-Boolean extraction", "before/after equivalence", "known-fact restriction", "incremental version update", "subexpression lineage", "refusal of unsupported semantics"],
+      "dominance_gate": "CM must agree with Alive2 on the accepted subset, refuse unsupported semantics, and beat the strongest Boolean baseline on a natural repeated-predicate trace or deliver measurable lineage/change-analysis value."
+    },
+    {
+      "id": "security",
+      "field": "Security policy and access control",
+      "priority": "Tier A — test first",
+      "audit_verdict": "One of the strongest fits for offline policy audit, related-version analysis, and repeated partial contexts. Native Cedar/OPA remains the online enforcement baseline and semantic authority.",
+      "pain_point": "Authorization teams need to know not only whether a request is allowed, but which rule caused it, whether a policy revision expands reachability, which users/resources are affected, and whether unchanged policy structure can be reused safely.",
+      "cm_role": "Compile a documented Boolean subset into a versioned audit artifact, retain rule/subexpression provenance, restrict under principal/resource/context attributes, and calculate exact bounded change-impact sets across revisions.",
+      "scope_correction": "Do not flatten typed entities, hierarchy, sets, strings, time, or deny-overrides semantics without a verified translation. Online request latency is unlikely to be CM's first dominance surface.",
+      "real_datasets": [
+        {
+          "name": "Cedar example use cases and performance artifacts",
+          "url": "https://github.com/cedar-policy/cedar-examples",
+          "use": "Use the application policies, schemas, entities, allow/deny requests, templated variants, and published benchmark folder as executable policy fixtures.",
+          "license_note": "Apache-2.0."
+        },
+        {
+          "name": "Cedar integration-test corpus",
+          "url": "https://github.com/cedar-policy/cedar-integration-tests",
+          "use": "Use handwritten and generated policy/entity/request cases as translation and differential-correctness tests before any timing claim.",
+          "license_note": "Follow the repository license and retain generated-corpus revision metadata."
+        },
+        {
+          "name": "OPA policy performance guidance",
+          "url": "https://www.openpolicyagent.org/docs/policy-performance",
+          "use": "Use OPA's benchmark methodology and metrics for any documented Cedar/Rego common subset; do not compare unlike policy semantics.",
+          "license_note": "Documentation and software are governed by the OPA project licenses."
+        }
+      ],
+      "synthetic_scenario": "Generate RBAC/ABAC policy families with permit/deny precedence, entity hierarchy, tenant isolation, localized edits, and request traces. Emit both a rich native form and an explicitly limited Boolean projection with differential labels.",
+      "baselines": ["native Cedar authorizer and symbolic compiler", "OPA/Rego on a common subset", "BDD or SAT policy analyzer", "indexed decision tables"],
+      "tasks": ["differential authorization", "policy-version reachability delta", "counterfactual restriction", "rule provenance", "warm request trace", "translation refusal/coverage"],
+      "dominance_gate": "Zero decision mismatches are mandatory. CM must beat the best audit-capable baseline on total version-analysis cost or produce exact change/provenance output not otherwise available; online latency alone is not sufficient."
+    },
+    {
+      "id": "configuration",
+      "field": "Configuration systems and product families",
+      "priority": "Tier A — strongest first experiment",
+      "audit_verdict": "The cleanest domain match: long-lived constraints, many partial assignments, related model versions, and exact change-impact questions directly exercise CM's proposed structural and context-reuse value.",
+      "pain_point": "Feature models evolve while configurators repeatedly add and retract partial selections, test validity, explain conflicts, identify dead options, and assess which products or constraints changed between releases.",
+      "cm_role": "Retain feature-constraint structure and identity across sessions and versions, reuse unchanged subgraphs, restrict under partial selections, and expose exact bounded differences for sliced feature neighborhoods.",
+      "scope_correction": "Whole-product enumeration is exponential and often inappropriate. Compare sliced/bounded explicit artifacts separately from SAT satisfiability, model counting, or BDD symbolic configuration.",
+      "real_datasets": [
+        {
+          "name": "FeatureIDE/FeatJAR models and analysis tooling",
+          "url": "https://github.com/FeatureIDE/FeatureIDE",
+          "use": "Use public example/fixture feature models and their analysis semantics; preserve hierarchical and cross-tree constraints when translating.",
+          "license_note": "FeatureIDE reports LGPL-3.0; verify model-specific notices."
+        },
+        {
+          "name": "torte reproducible feature-model experiments",
+          "url": "https://github.com/ekuiter/torte",
+          "use": "Use its curated feature-model benchmark, KConfig extraction, histories, transformation pipeline, and reproducibility metadata for real version families.",
+          "license_note": "Follow repository and constituent-model licenses."
+        },
+        {
+          "name": "Linux Kconfig history",
+          "url": "https://github.com/torvalds/linux",
+          "use": "Extract version-pinned Kconfig constraints and adjacent release histories through a published extractor; do not treat raw Kconfig syntax as a complete Boolean model without validation.",
+          "license_note": "Linux source is GPL-2.0-only; derived benchmark redistribution requires legal/license review."
+        }
+      ],
+      "synthetic_scenario": "Generate hierarchical feature models with seeded mandatory/optional/alternative groups, cross-tree constraints, localized release edits, and interactive sessions that add/retract selections. Sweep slice size, shared constraints, edit locality, and residual support.",
+      "baselines": ["FeatJAR SAT4J/Kissat/CaDiCaL analyses", "ROBDD feature configurator", "incremental SAT", "plain compiled predicates"],
+      "tasks": ["interactive partial configuration", "validity and conflict explanation", "version delta on bounded slice", "dead-feature query", "session reuse", "serialize/reload"],
+      "dominance_gate": "CM must preserve feature-model semantics and beat the fastest equivalent baseline on a real interaction/version trace for bounded slices, while reporting enumeration boundaries and all models that never amortize construction."
+    },
+    {
+      "id": "regulated",
+      "field": "Regulated rule and decision systems",
+      "priority": "Tier B — Boolean decision-table subset",
+      "audit_verdict": "Credible for audit and versioning of Boolean decision tables, but too broad if it implies that CM directly models numeric tax formulas, dates, aggregation, priorities, or the full DMN/OpenFisca language.",
+      "pain_point": "Governed decision services need reproducible outcomes, explicit rule-version provenance, overlap/gap detection, controlled changes, and regression evidence across many related cases.",
+      "cm_role": "Compile the explicitly Boolean portion of a decision table or eligibility rule set into a versioned artifact, retain rule composition, compare revisions, and enumerate exact bounded coverage or conflict regions.",
+      "scope_correction": "Numeric thresholds can become finite predicates only under a declared abstraction. Preserve DMN hit policy, rule priority, null/unknown handling, dates, and arithmetic in the native engine unless formally translated.",
+      "real_datasets": [
+        {
+          "name": "DMN Technology Compatibility Kit",
+          "url": "https://github.com/dmn-tck/tck",
+          "use": "Use reference DMN models with serialized inputs and expected outputs; select and declare the Boolean/decision-table subset, retaining hit-policy semantics and conformance identifiers.",
+          "license_note": "The project describes freely accessible test cases under a Creative Commons share-alike attribution model; verify repository license files for redistribution."
+        },
+        {
+          "name": "OpenFisca country packages",
+          "url": "https://openfisca.org/en/packages/",
+          "use": "Use package tests and version histories to identify bounded Boolean eligibility subgraphs; keep arithmetic microsimulation in OpenFisca as the oracle.",
+          "license_note": "OpenFisca core is AGPL; inspect each country package and input dataset license separately."
+        }
+      ],
+      "synthetic_scenario": "Generate DMN-like Boolean decision tables with explicit hit policies, seeded overlaps, gaps, shadowed rules, localized version edits, and regression cases. Also generate unsupported numeric/date cases that the CM importer must refuse or abstract explicitly.",
+      "baselines": ["DMN TCK-capable engine", "OpenFisca for selected eligibility rules", "decision-table index", "BDD/SAT coverage analyzer", "ordinary compiled predicates"],
+      "tasks": ["conformance replay", "coverage/overlap/gap analysis", "version regression", "bounded eligibility enumeration", "rule provenance", "unsupported-semantics refusal"],
+      "dominance_gate": "CM must match the native engine on every accepted test, preserve hit-policy behavior, and show lower total audit/version cost or better exact bounded coverage output. Passing a Boolean projection does not establish general rules-as-code dominance."
+    }
+  ]
+}

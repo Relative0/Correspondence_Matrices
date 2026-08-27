@@ -25,9 +25,9 @@ const DATA = /*__CM_DATA__*/null;
 <script>
 /* ================================================================== PAGE
    Master knowledge base. Every section is written in layers: a plain-language
-   paragraph first, then the technical layer, then the chart. The three derived
-   pages (layperson / investor / expert) are cuts of this content and never add
-   anything that is not here. */
+   paragraph first, then the technical layer, then the chart. Focused audience
+   views and the field-oriented use-case guide share this evidence base and its
+   decision boundaries. */
 
 const C = DATA._content;
 const M = DATA._campaign;
@@ -43,7 +43,7 @@ document.body.prepend(topbar({
     ["#s5", "5 · Open frontier"],
     ["#s6", "6 · How we know"],
     ["#s7", "7 · Glossary"],
-    ["#s8", "8 · Other versions"],
+    ["#s8", "8 · Other views"],
   ],
 }));
 
@@ -58,6 +58,23 @@ app.append(h("header", { class: "page" }, [
     P(C.page.honesty) }),
 ]));
 
+{
+  const routes = h("div", { class: "route-intro page" }, [
+    h("p", { text: "Choose a focused view" }),
+  ]);
+  const nav = h("div", { class: "pagenav" });
+  [
+    ["layperson.html", "Simple One-Pager", "A plain-language introduction and decision guide."],
+    ["usecases.html", "CM Use Cases", "How CM might help in hardware, AI, biology, quantum-support logic, computing, security, and other fields."],
+    ["investor.html", "Investor Brief", "What is proven, what remains open, and what the next evidence would buy."],
+    ["expert.html", "Technical Summary", "Dense benchmarks, intervals, protocols, corrections, and provenance."],
+  ].forEach(([href, title, description]) => nav.append(h("a", { href }, [
+    h("b", { text: title }), h("span", { text: description }),
+  ])));
+  routes.append(nav);
+  app.append(routes);
+}
+
 /* headline tiles ------------------------------------------------------- */
 app.append(tiles([
   ["CM vs a plain CSE kernel", f(DATA.e1_kernel_vs_cse.rows[0].value, 3),
@@ -71,6 +88,7 @@ app.append(tiles([
 ]));
 app.append(projectStatePanel());
 app.append(evidenceBoundary());
+app.append(currentEvidenceUpdate("master"));
 
 app.append(banner("note", "How to read this page", [
   "Every section opens with the conclusion and its plain-language explanation. Use <b>More</b> only when " +
@@ -371,12 +389,12 @@ app.append(banner("note", "How to read this page", [
     "sample of all real workloads.</li>" +
     "<li>No BDD-hard or deliberately order-sensitive formula families were measured. The corpora here are " +
     "small for CUDD, which is why dynamic reordering never triggered.</li>" +
-    "<li>Explicit-output behaviour above live_k = " + T("guard.k") + " is not characterised; the guard " +
-    "declines rather than measuring it, so nothing above that boundary should be extrapolated.</li>" +
+    "<li>Bounded direct kernels above live_k = " + T("guard.k") + " completed exactly, but the supported " +
+    "public wrapper refused every case; this is not an above-guard public speed claim.</li>" +
     "<li>No real deployed workload has been measured. Reuse counts — the variable that decides whether " +
     "compilation pays — have never been observed in production, only computed as break-even thresholds.</li>" +
-    "<li>Canonical CM structural equivalence has not been implemented or demonstrated. The current path " +
-    "establishes output equality only.</li>" }));
+    "<li>Current CM keys provide engineering identity under documented normalization and collision assumptions; " +
+    "they are not a theorem of global semantic canonicality.</li>" }));
   app.append(s);
 }
 
@@ -390,15 +408,17 @@ app.append(banner("note", "How to read this page", [
 
 /* ============================================================ SECTION 8 */
 {
-  const s = section("s8", "Section 8", "Shorter versions of this page",
-    "Each is a cut of this master page. None of them contains a claim, a number, or a caveat that is not here.");
+  const s = section("s8", "Section 8", "Other ways to read this evidence",
+    "Choose a shorter audience view or explore field-specific CM hypotheses. Every view inherits the same evidence boundaries.");
   const nav = h("div", { class: "pagenav" });
   [
-    ["layperson.html", "Layperson one-pager",
+    ["layperson.html", "Simple One-Pager",
       "What the problem is, which tool to reach for, and the decision flow — in plain language, with only a couple of vivid numbers."],
-    ["investor.html", "Investor brief",
+    ["usecases.html", "CM Use Cases",
+      "Field-by-field problems, CM-specific capabilities, retained information, incumbent methods, and the proof still required."],
+    ["investor.html", "Investor Brief",
       "The breadth of the problem, the honest evidence chain as the credibility argument, what is proven versus open, and the roadmap."],
-    ["expert.html", "Expert technical summary",
+    ["expert.html", "Technical Summary",
       "Dense: every chart, every interval with its clustering basis, protocol notes, and file-level provenance."],
   ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
   s.append(nav);

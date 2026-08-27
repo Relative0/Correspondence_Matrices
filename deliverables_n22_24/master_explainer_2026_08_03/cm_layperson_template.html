@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Boolean computation, and where Correspondence Matrices fit — the short version</title>
-<meta name="description" content="A plain-language one-pager: what the problem is, which tool to reach for, and what is still unknown. Derived from the CM master knowledge base.">
-<meta property="og:title" content="Correspondence Matrices — the short version">
+<title>Correspondence Matrices — simple one-pager</title>
+<meta name="description" content="A simple, plain-language one-pager: what the problem is, which tool to reach for, and what is still unknown. Derived from the CM master knowledge base.">
+<meta property="og:title" content="Correspondence Matrices — simple one-pager">
 <meta property="og:description" content="A plain-language guide to Boolean computation, the available tools, and where Correspondence Matrices fit.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,9 +33,10 @@ const C = DATA._content;
 const app = document.getElementById("app");
 
 document.body.prepend(topbar({
-  brand: "Correspondence Matrices <span>· the short version</span>",
+  brand: "Correspondence Matrices <span>· simple one-pager</span>",
   links: [["index.html", "← full knowledge base"], ["#tools", "The tools"],
-          ["#choose", "Which to use"], ["#unknown", "What we don't know"]],
+          ["#choose", "Which to use"], ["#unknown", "What we don't know"],
+          ["usecases.html", "CM use cases"]],
 }));
 
 app.append(h("header", { class: "page" }, [
@@ -47,6 +48,8 @@ app.append(h("header", { class: "page" }, [
     'This is the short cut of a longer, fully sourced <a href="index.html">knowledge base</a>. ' +
     "Everything here is in that page; nothing here is only here." }),
 ]));
+
+app.append(currentEvidenceUpdate("layperson"));
 
 /* ---------------------------------------------------------------- 1 */
 {
@@ -177,8 +180,9 @@ app.append(h("header", { class: "page" }, [
   const nav = h("div", { class: "pagenav" });
   [
     ["index.html", "The full knowledge base", "Everything above, plus the evidence, the charts, and the sources."],
-    ["investor.html", "Investor brief", "The size of the problem, the evidence chain, and the roadmap."],
-    ["expert.html", "Expert summary", "Dense technical version with all intervals and provenance."],
+    ["usecases.html", "CM Use Cases", "How CM might help in hardware, AI, biology, computing, and other fields."],
+    ["investor.html", "Investor Brief", "The size of the problem, the evidence chain, and the roadmap."],
+    ["expert.html", "Technical Summary", "Dense technical version with all intervals and provenance."],
   ].forEach(([href, t, d]) => nav.append(h("a", { href }, [h("b", { text: t }), h("span", { text: d })])));
   s.append(nav);
   app.append(s);

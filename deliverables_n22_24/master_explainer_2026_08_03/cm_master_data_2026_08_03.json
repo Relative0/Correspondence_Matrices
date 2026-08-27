@@ -2002,14 +2002,377 @@
       "deliverables_n22_24/bx2_cudd_orders_2026_08_03/bx2_pod_audit_2026_08_03.json :: terminated, cpu_flavor"
     ]
   },
+  "e19_current_evidence": {
+    "cache": {
+      "kind": "process-local synthetic all-hit cache; not durable persistence",
+      "whole_call_cm_over_bitset": {
+        "4": 11.884191435521325,
+        "8": 12.839066002074064,
+        "12": 9.061082575003555,
+        "16": 3.1317614994281957
+      },
+      "execution_only_cm_over_bitset_50": {
+        "4": 11.177616991088556,
+        "8": 8.914796643458441,
+        "12": 3.868535791425328,
+        "16": 2.799537147021495
+      },
+      "evaluations": 50
+    },
+    "family": {
+      "kind": "synthetic related-expression families",
+      "cm_cache_over_bitset": [
+        {
+          "live_k": 8,
+          "family_size": 25,
+          "ratio": 26.451705941754376
+        },
+        {
+          "live_k": 12,
+          "family_size": 25,
+          "ratio": 12.061643910507991
+        },
+        {
+          "live_k": 16,
+          "family_size": 25,
+          "ratio": 5.25122223162259
+        }
+      ]
+    },
+    "partial_context": {
+      "kind": "three-trial synthetic sliding-window grid; no native CUDD restriction comparator",
+      "cache_vs_uncached_speedup_min": 4.847989310400186,
+      "cache_vs_uncached_speedup_max": 7.3744487069114655,
+      "near_parity_n16_c500": {
+        "0.25": {
+          "source": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p25_c500_summary.csv",
+          "remaining_vars": 12,
+          "bitset_total_s": 0.03340899996692315,
+          "cm_cache_total_s": 0.03701830009231344,
+          "ratio": 1.108033767217328,
+          "trials": 3
+        },
+        "0.5": {
+          "source": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p5_c500_summary.csv",
+          "remaining_vars": 8,
+          "bitset_total_s": 0.03398100001504645,
+          "cm_cache_total_s": 0.032335099996998906,
+          "ratio": 0.951564108845568,
+          "trials": 3
+        },
+        "0.75": {
+          "source": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p75_c500_summary.csv",
+          "remaining_vars": 4,
+          "bitset_total_s": 0.03349880001042038,
+          "cm_cache_total_s": 0.03339830000186339,
+          "ratio": 0.9969998922789554,
+          "trials": 3
+        }
+      }
+    },
+    "tracing": {
+      "kind": "anonymous metrics-only diagnostic; not replayable workload capture",
+      "full_rate_ratios": [
+        1.3037053827001515,
+        1.1172622629713618
+      ],
+      "sample_every": 16,
+      "sampled_ratio": 1.0052119138806217,
+      "sampled_ratio_gate_pass": true,
+      "event_gate_pass": false,
+      "exact_mismatches": 0,
+      "drops": 0,
+      "io_errors": 0,
+      "content_modes": [
+        "metrics"
+      ],
+      "logical_replay_only": true
+    },
+    "workload_intake": {
+      "blockers": [
+        "manifest_status_is_template",
+        "placeholder:workload.label",
+        "placeholder:workload.owner_role",
+        "placeholder:workload.application",
+        "placeholder:workload.repository_or_system",
+        "placeholder:workload.caller_boundary",
+        "placeholder:workload.output_order_contract",
+        "placeholder:trace.planned_duration_or_calls",
+        "missing:workload.expected_calls_per_expression",
+        "approval_required:metrics_capture",
+        "missing:budgets.max_output_bytes",
+        "missing:budgets.max_temporary_bytes",
+        "missing:budgets.max_cache_bytes"
+      ],
+      "external_upload_approved": false,
+      "input_file": {
+        "bytes": 942,
+        "path": "docs\\audits\\2026-08-25-cm-deep-performance\\remaining-work\\three-lane-20260827-011536\\WORKLOAD-MANIFEST-TEMPLATE.json",
+        "sha256": "f7b07a04b6ffc2181806bd41b31f5bda36dd66720ffaa9b2576e3d302f1bd1dd"
+      },
+      "manifest_status": "template",
+      "ready_for_context_replay": false,
+      "ready_for_expression_replay": false,
+      "ready_for_metrics_capture": false,
+      "schema_version": "cm-real-workload/v1",
+      "validation_status": "pass"
+    },
+    "dependency_feasibility": {
+      "attempts": 3,
+      "cumulative_cost_usd": 0.001948,
+      "postflight_pods": 0,
+      "astutils_wheel_built": true,
+      "target_resolution_returncode": 1,
+      "verdict": "failed"
+    },
+    "temporary_memory": {
+      "measurement_scope": "Python tracemalloc peak during dense NumPy materialization; diagnostic only, not an RSS or native-allocator upper bound",
+      "cases": [
+        {
+          "elapsed_ns_median": 1533200,
+          "estimated_output_bytes": 256,
+          "estimated_temporary_bytes": 512,
+          "n_vars": 8,
+          "operation_slots": 40,
+          "output_sha256": "c6b67a1fba3f45661b96fb33ee44db113e8890338d616e258647e840c20e8a98",
+          "peak_over_estimated_temporary_median": 38.73046875,
+          "refusal_before_materialization": true,
+          "refusal_reason": "refusing to materialize full dense CM output requiring an estimated 512 temporary bytes; max_temporary_bytes=511",
+          "refusal_tracemalloc_peak_bytes": 3081,
+          "samples": [
+            {
+              "elapsed_ns": 5277100,
+              "tracemalloc_peak_bytes": 55434
+            },
+            {
+              "elapsed_ns": 1584000,
+              "tracemalloc_peak_bytes": 19862
+            },
+            {
+              "elapsed_ns": 1690800,
+              "tracemalloc_peak_bytes": 19846
+            },
+            {
+              "elapsed_ns": 1503100,
+              "tracemalloc_peak_bytes": 19830
+            },
+            {
+              "elapsed_ns": 1476400,
+              "tracemalloc_peak_bytes": 19814
+            },
+            {
+              "elapsed_ns": 1533200,
+              "tracemalloc_peak_bytes": 19790
+            },
+            {
+              "elapsed_ns": 1464400,
+              "tracemalloc_peak_bytes": 19766
+            }
+          ],
+          "tracemalloc_peak_bytes_max": 55434,
+          "tracemalloc_peak_bytes_median": 19830,
+          "tracemalloc_peak_bytes_min": 19766
+        },
+        {
+          "elapsed_ns_median": 2084900,
+          "estimated_output_bytes": 1024,
+          "estimated_temporary_bytes": 2048,
+          "n_vars": 10,
+          "operation_slots": 52,
+          "output_sha256": "26e45722afe378c931e5b9defdce4250c6335ecf08e209b65b73b48aa0c9e3b0",
+          "peak_over_estimated_temporary_median": 14.3876953125,
+          "refusal_before_materialization": true,
+          "refusal_reason": "refusing to materialize full dense CM output requiring an estimated 2048 temporary bytes; max_temporary_bytes=2047",
+          "refusal_tracemalloc_peak_bytes": 2947,
+          "samples": [
+            {
+              "elapsed_ns": 2623800,
+              "tracemalloc_peak_bytes": 60238
+            },
+            {
+              "elapsed_ns": 1943600,
+              "tracemalloc_peak_bytes": 29498
+            },
+            {
+              "elapsed_ns": 1995300,
+              "tracemalloc_peak_bytes": 29482
+            },
+            {
+              "elapsed_ns": 2038300,
+              "tracemalloc_peak_bytes": 29466
+            },
+            {
+              "elapsed_ns": 2206000,
+              "tracemalloc_peak_bytes": 29442
+            },
+            {
+              "elapsed_ns": 2164100,
+              "tracemalloc_peak_bytes": 29426
+            },
+            {
+              "elapsed_ns": 2084900,
+              "tracemalloc_peak_bytes": 29402
+            }
+          ],
+          "tracemalloc_peak_bytes_max": 60238,
+          "tracemalloc_peak_bytes_median": 29466,
+          "tracemalloc_peak_bytes_min": 29402
+        },
+        {
+          "elapsed_ns_median": 2666700,
+          "estimated_output_bytes": 4096,
+          "estimated_temporary_bytes": 8192,
+          "n_vars": 12,
+          "operation_slots": 64,
+          "output_sha256": "00fcb0274159ace1885bd2745b1963fd034658f7ff918e65fb03cbf2e0ab7401",
+          "peak_over_estimated_temporary_median": 6.060302734375,
+          "refusal_before_materialization": true,
+          "refusal_reason": "refusing to materialize full dense CM output requiring an estimated 8192 temporary bytes; max_temporary_bytes=8191",
+          "refusal_tracemalloc_peak_bytes": 2787,
+          "samples": [
+            {
+              "elapsed_ns": 3328500,
+              "tracemalloc_peak_bytes": 89118
+            },
+            {
+              "elapsed_ns": 2612500,
+              "tracemalloc_peak_bytes": 49686
+            },
+            {
+              "elapsed_ns": 2699900,
+              "tracemalloc_peak_bytes": 49670
+            },
+            {
+              "elapsed_ns": 2623700,
+              "tracemalloc_peak_bytes": 49646
+            },
+            {
+              "elapsed_ns": 2764100,
+              "tracemalloc_peak_bytes": 49630
+            },
+            {
+              "elapsed_ns": 2666700,
+              "tracemalloc_peak_bytes": 49614
+            },
+            {
+              "elapsed_ns": 2664800,
+              "tracemalloc_peak_bytes": 49598
+            }
+          ],
+          "tracemalloc_peak_bytes_max": 89118,
+          "tracemalloc_peak_bytes_median": 49646,
+          "tracemalloc_peak_bytes_min": 49598
+        },
+        {
+          "elapsed_ns_median": 3424000,
+          "estimated_output_bytes": 16384,
+          "estimated_temporary_bytes": 32768,
+          "n_vars": 14,
+          "operation_slots": 76,
+          "output_sha256": "ba51ce390e3d40cf908b0db1cd3168390cd0e1de20a8ac31b659b21d6b18976c",
+          "peak_over_estimated_temporary_median": 3.51470947265625,
+          "refusal_before_materialization": true,
+          "refusal_reason": "refusing to materialize full dense CM output requiring an estimated 32768 temporary bytes; max_temporary_bytes=32767",
+          "refusal_tracemalloc_peak_bytes": 2757,
+          "samples": [
+            {
+              "elapsed_ns": 4054400,
+              "tracemalloc_peak_bytes": 158706
+            },
+            {
+              "elapsed_ns": 4269600,
+              "tracemalloc_peak_bytes": 115170
+            },
+            {
+              "elapsed_ns": 3126400,
+              "tracemalloc_peak_bytes": 115170
+            },
+            {
+              "elapsed_ns": 3176300,
+              "tracemalloc_peak_bytes": 115170
+            },
+            {
+              "elapsed_ns": 3424000,
+              "tracemalloc_peak_bytes": 115170
+            },
+            {
+              "elapsed_ns": 3575500,
+              "tracemalloc_peak_bytes": 115170
+            },
+            {
+              "elapsed_ns": 3341300,
+              "tracemalloc_peak_bytes": 115170
+            }
+          ],
+          "tracemalloc_peak_bytes_max": 158706,
+          "tracemalloc_peak_bytes_median": 115170,
+          "tracemalloc_peak_bytes_min": 115170
+        }
+      ],
+      "refusal_before_materialization_count": 4,
+      "policy": {
+        "current_dense_estimate_output_multiple": 2,
+        "current_default_temporary_limit": null,
+        "proposed_benchmark_remote_mib": 16,
+        "proposed_direct_mib": 64,
+        "decision_state": "measurement complete; no default changed; policy approval deferred",
+        "source": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-TEMPORARY-MEMORY-POLICY-DECISION.md :: Executive decision, Current behavior inventory, Proposed post-validation policy requiring approval"
+      }
+    },
+    "provenance_consolidation": {
+      "duplicate_helpers_before": 3,
+      "streaming_helpers_after": 1,
+      "classification": "reliability/maintainability only; no performance improvement accepted",
+      "source": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R3-DUPLICATE-MAP.md :: Accepted scope; RESULTS.md :: Lane 3",
+      "smoke_ratio": 1.0402276549828073,
+      "exact_mismatches": 0,
+      "ratio_gate_pass": false,
+      "event_gate_pass": false
+    },
+    "validation": {
+      "focused": {
+        "total": 84,
+        "testcases": 84,
+        "subtests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "full": {
+        "total": 395,
+        "testcases": 391,
+        "subtests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "canonicality_boundary": {
+      "accepted_claim": "engineering identity under documented normalization and collision assumptions; not a formal theorem of global semantic canonicality",
+      "source": "docs/audits/2026-08-25-cm-deep-performance/CM-OPTIMIZATION-BACKLOG.md :: DP-T4"
+    },
+    "provenance": [
+      "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv :: cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median",
+      "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached",
+      "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/family_high_reuse_summary.csv :: ratio_cm_cache_over_bitset_median",
+      "partial context summary CSVs :: speedup and total-time fields, selected by n/context count/fixed fraction",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_summary.json, docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v2_summary.json, docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: ratio_median and gate fields",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/WORKLOAD-MANIFEST-TEMPLATE-VALIDATION.json :: validation and readiness fields",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility_run3/dependency_runpod_audit_run3_2026_08_26.json :: pods, total_cost_usd, build_astutils_wheel, download_binary_targets",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: cases[] and measurement_scope",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/dpr3_trace_overhead_smoke_summary.json :: ratio and exactness/gate fields",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/focused_pytest.xml and docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/full_pytest.xml :: testsuite attributes plus testcase count",
+      "deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: section-level accepted non-benchmark evidence extraction"
+    ]
+  },
   "_campaign": {
-    "evidence_revision": "1fd3907dbc1986cb2d8a9f0f8cab2b5920a415ce",
+    "evidence_revision": "4dbfffc1db749e85401d533c5a07cb529a41eb37",
     "campaign_revision": "eab8879edcb7fb13582ad9bdff7ea7c00238774d",
     "campaign": "CM comprehensive benchmark refresh 2026-08-03",
     "cost_usd": 0.017400000000000002,
     "cost_cap_usd": 5.0,
     "all_pods_terminated": true,
-    "tests": "334 passed, 0 failed, 4 subtests, 196.4 s (baseline 326 + 8 new EPFL parser tests)",
+    "tests": "84 focused tests; 391 tests plus 4 subtests in the full suite",
     "verdicts": {
       "B1": "REPLAY CONFIRMED",
       "B2": "COMPLETE — wrapper-boundary claim REVISED",
@@ -2040,7 +2403,8 @@
     },
     "provenance": [
       "deliverables_n22_24/cm_benchmark_refresh_manifest_2026_08_03.json :: whole file",
-      "deliverables_n22_24/b1_e3_replay_2026_08_03/cm_gap_e3_corrected_results_2026_08_02.json :: _meta"
+      "deliverables_n22_24/b1_e3_replay_2026_08_03/cm_gap_e3_corrected_results_2026_08_02.json :: _meta",
+      "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/focused_pytest.xml and docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/full_pytest.xml :: current testsuite/testcase counts"
     ]
   },
   "_superseded": [
@@ -2062,7 +2426,7 @@
       "superseded_number": "CM modestly ahead at controlled live_k 12 and 16 (0.944 / 0.925)",
       "what_it_claimed": "That at the whole-call boundary CM overtook BitSet once semantic support reached about 12, with a clear lead by 16.",
       "why_wrong": "Measured before the gap repair and on corpora whose admission rules did not hold exact support fixed, so the strata were not comparing like with like. Re-run on corrected-admission corpora under the same protocol, the sign reverses.",
-      "replaced_by": "BitSet leads at every semantic support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated wrapper sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on a re-run of the original protocol. Any crossover, if one exists, is above the live_k={{guard.k}} guard and is unmeasured.",
+      "replaced_by": "BitSet leads at every supported public-wrapper support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on the original-protocol rerun. Bounded direct kernels later completed above live_k={{guard.k}}, but the public wrapper refused every case; there is no above-guard public speed claim.",
       "date_or_pass": "benchmark refresh B2 + B4, 2026-08-03"
     },
     {
@@ -2118,8 +2482,8 @@
     "page": {
       "title": "Correspondence Matrices: a structural layer for Boolean computation",
       "lede": "What Boolean computation is, which tool solves which problem, what a Correspondence Matrix actually is, what the refreshed evidence shows, and what is still genuinely unsolved — written in layers, so you can stop at whatever depth you need.",
-      "standfirst": "This is the complete version. Three shorter cuts are derived from it and never add anything it does not contain.",
-      "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or the dated 2026-08-26 follow-up, and carries the file it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
+      "standfirst": "This is the complete evidence version. A simple one-pager, investor brief, technical summary, and dedicated use-case guide provide faster routes through the same evidence boundaries.",
+      "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated 2026-08-26/27 follow-up, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
     },
     "project_state": {
       "items": [
@@ -2132,7 +2496,7 @@
         {
           "label": "Structural wedge",
           "title": "Identity, persistence and transforms",
-          "summary": "Expression-identity keys, persistent compiled caching, serialisation and operator transformations are implemented; their workflow value is not yet demonstrated.",
+          "summary": "Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic all-hit reuse has now been measured; production workflow value is still unvalidated.",
           "kind": "implemented"
         },
         {
@@ -2158,7 +2522,7 @@
         {
           "title": "The setup premium may remain",
           "visible": "Preparation currently costs {{prep.min}}–{{prep.max}} the comparison compiler's setup.",
-          "test": "Profile canonicalisation, interning and lowering before funding optimisation work."
+          "test": "Target another measured preparation allocation or traversal and require paired exact evidence on representative and high-sharing cases."
         },
         {
           "title": "Structural reuse may not beat incumbents",
@@ -2174,6 +2538,82 @@
           "title": "The explicit-output boundary may be hard",
           "visible": "Bounded direct kernels completed at live_k={{guard.followup.min_k}}–{{guard.followup.max_k}}, but the supported public path still stops at live_k={{guard.k}} and complete output remains exponential.",
           "test": "Use a caller-backed, memory-safe protocol to compare equivalent whole-call artifacts before reconsidering the guard."
+        }
+      ]
+    },
+    "current_update": {
+      "title": "What the 2026-08-26/27 evidence added",
+      "lede": "These results close stale ‘never studied’ language without promoting synthetic diagnostics into production claims. They leave the accepted kernel, wrapper, guard, artifact, and corpus boundaries intact.",
+      "lay_lede": "Several missing checks have now been run. They tell us more about where CM does and does not help, but they still do not substitute for traffic from a real application.",
+      "items": [
+        {
+          "id": "late-cache",
+          "title": "Cache, family, and context reuse: measured synthetically",
+          "summary": "The flag called persistent cache was measured as a process-local, synthetic all-hit cache. Cached whole-call CM still took {{cache.whole.min}}–{{cache.whole.max}} BitSet time. With {{cache.evals}} cached evaluations, execution-only CM still took {{cache.exec.k16}} at k=16, {{cache.exec.k12}} at k=12, {{cache.exec.k8}} at k=8, and {{cache.exec.k4}} at k=4.",
+          "detail": "Related-family high-reuse cells remained {{family.bitset.min}}–{{family.bitset.max}} slower than BitSet. Across the synthetic partial-context grid, cached CM was {{context.speedup.min}}–{{context.speedup.max}} faster than uncached CM. The n=16, 500-context cells were hypothesis-generating near-parity points: {{context.f25.ratio}}, {{context.f5.ratio}}, and {{context.f75.ratio}} CM/BitSet at fixed fractions 0.25/0.50/0.75. They used only {{context.trials}} trials and no native CUDD restriction comparator. No byte-LRU, durable cache, production working set, hit distribution, RSS plateau, or production cache policy is validated.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor",
+            "layperson"
+          ]
+        },
+        {
+          "id": "late-trace",
+          "title": "Metrics tracing: bounded diagnostic only",
+          "summary": "Full-rate V1 and V2 capture were rejected at median whole-call ratios {{trace.v1.ratio}} and {{trace.v2.ratio}}. Deterministic one-in-{{trace.sample_every}} V3 sampling was retained opt-in at {{trace.v3.ratio}}, with {{trace.mismatches}} exact mismatches, {{trace.drops}} drops, and {{trace.io_errors}} I/O errors.",
+          "detail": "The per-emitted-event gate failed. Sampling loses exact access order, and the anonymous metrics schema contains neither replayable expressions nor raw contexts. Synthetic single, family, and context traces passed mechanics, schema, privacy, exactness, and logical replay-summary checks; no real workload was found.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor"
+          ]
+        },
+        {
+          "id": "late-workload",
+          "title": "Workload intake: valid template, deliberately not ready",
+          "summary": "The strict owner-declared manifest validates structurally but reports not ready, with {{workload.blockers}} explicit blockers. It is a template, not a captured workload.",
+          "detail": "Real cache, edit/version, partial-context, selector, and native economics remain blocked on a named application and caller, artifact and output-order contract, budgets, lifecycle, capture duration, and separate metrics, expression, context, and upload approvals.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor",
+            "layperson"
+          ]
+        },
+        {
+          "id": "late-dependency",
+          "title": "Native dependency feasibility: resolution stopped before algorithms",
+          "summary": "Three authorized disposable CPU attempts cost {{dependency.cost}} cumulatively and ended with {{dependency.postflight_pods}} pods. The final attempt built the pinned pure-Python astutils wheel, then failed closed because dd 0.6.0 requires source-only PLY 3.10 and that source build was not authorized.",
+          "detail": "Numba, dd.cudd, CUDD restriction, and native performance were never reached. They are untested, not failed. No dependency was integrated and no native or SIMD performance claim exists.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor"
+          ]
+        },
+        {
+          "id": "late-memory",
+          "title": "Temporary memory: refusal works; the estimator is not conservative",
+          "summary": "Direct output, benchmark, and remote surfaces have different output guards and no default temporary limit. In {{memory.cases}} bounded dense cases, the current estimate sat below median tracemalloc peak by {{memory.multiple.min}}–{{memory.multiple.max}}; typed refusal still occurred before materialisation in {{memory.refusals}}/{{memory.cases}} cases.",
+          "detail": "tracemalloc is not an RSS or native-memory upper bound, so these cases do not calibrate a universal multiplier. No default changed. Proposed {{memory.proposed.benchmark_mib}} MiB benchmark/remote and {{memory.proposed.direct_mib}} MiB direct profiles remain a future approval decision after estimator and compatibility work; they are not current settings.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor",
+            "layperson"
+          ]
+        },
+        {
+          "id": "late-reliability",
+          "title": "Audit reliability and current validation",
+          "summary": "DP-R3 consolidated {{dpr3.helpers.before}} duplicate exact-file SHA-256 helpers into {{dpr3.helpers.after}} streaming helper with compatibility and source-snapshot coverage. Its tiny exact smoke passed integration but failed timing gates at {{dpr3.smoke.ratio}}; this is maintainability work, not a performance improvement.",
+          "detail": "The newest repository validation is {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests in the full suite. Test counts describe validation state, never benchmark evidence.",
+          "audiences": [
+            "master",
+            "expert",
+            "investor"
+          ]
         }
       ]
     },
@@ -2288,6 +2728,133 @@
           "proof": "Real traces show a structural artifact benefit or a repeatable win against incremental alternatives."
         }
       ]
+    },
+    "use_cases": {
+      "title": "Where Correspondence Matrices might create distinctive value",
+      "lede": "CM is most interesting when a Boolean function is not a disposable answer but a long-lived object: it must retain useful structure, survive across sessions or versions, accept transformations, and answer related questions repeatedly. The cases below are reasoned application hypotheses, not claims of deployed advantage.",
+      "boundary": "Only the hardware/formal-verification adjacency has been tested on published domain expressions, and even there no deployed workflow was measured. Every other field below is a candidate whose CM-specific benefit still needs a real trace and a direct incumbent comparison.",
+      "advantages": [
+        {
+          "title": "Retain structure, not only an answer",
+          "text": "A flat truth vector answers what the function does. A CM can also retain operator and subexpression organization, so a later tool can inspect, transform, compare, or attribute parts of the computation instead of reconstructing them from output alone."
+        },
+        {
+          "title": "Reuse a compiled identity",
+          "text": "Expression keys, serialization, process-local compiled caching, and operator transforms are implemented. That creates a route to reuse across evaluations and related analyses, although durable production value has not yet been demonstrated."
+        },
+        {
+          "title": "Change the context without discarding the object",
+          "text": "Restrictions and partial evaluation can keep the stable part of a model while inputs, policies, interventions, or versions change. Synthetic context tests improved over uncached CM but did not establish an advantage over incumbent engines."
+        },
+        {
+          "title": "Keep exactness and provenance together",
+          "text": "Where complete explicit output is feasible, CM can couple an exact result with the structure that produced it. The output still grows exponentially with semantic support, so this is a bounded capability rather than an unlimited replacement for SAT or decision diagrams."
+        }
+      ],
+      "items": [
+        {
+          "id": "hardware",
+          "name": "Hardware verification and electronic design",
+          "status": "Measured adjacency",
+          "kind": "measured",
+          "problem": "Engineers repeatedly prove that optimized circuits preserve behavior, inspect logic cones, and assess the effect of design revisions.",
+          "cm_fit": "A reusable expression identity plus retained operator structure could link equivalent outputs back to the subcircuits that produced them, support structural difference between revisions, and avoid rebuilding unchanged logic for every related check.",
+          "information": "The function, its semantic support, operator composition, reusable subexpressions, and version lineage can remain attached to one artifact rather than being reduced to a one-off answer vector.",
+          "incumbents": "AIGs, ROBDD/CUDD, SAT/SMT, equivalence checkers, and synthesis tools already dominate this field. CM would need to complement them at an artifact or workflow boundary, not merely duplicate their core query.",
+          "proof": "Replay a real design history and show lower total workflow cost or clearer change attribution against the incumbent representation."
+        },
+        {
+          "id": "ai",
+          "name": "Artificial intelligence with hard rules",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "Agents and neuro-symbolic systems may reuse the same safety rules, permissions, or consistency constraints across many proposed actions and rapidly changing contexts.",
+          "cm_fit": "CM could compile the hard-rule layer once, retain which predicates and operators produced a decision, restrict it under each new context, and compare rule-set versions without treating every check as a fresh expression.",
+          "information": "Rule identity, composition, support, transformations, and decision provenance can survive alongside exact Boolean behavior; the learned model itself is not represented by the CM.",
+          "incumbents": "SAT/SMT, policy engines, Datalog, knowledge-graph reasoners, and ordinary compiled predicates may be better for existence queries or mature production integration.",
+          "proof": "Use a real guardrail or agent-policy trace to measure reuse, update frequency, explanation needs, and end-to-end cost against the deployed rules engine."
+        },
+        {
+          "id": "biology",
+          "name": "Computational biology and Boolean regulatory networks",
+          "status": "Research hypothesis",
+          "kind": "research",
+          "problem": "Boolean gene and signaling networks are repeatedly evaluated under knockouts, interventions, initial conditions, and model revisions while researchers track stable states and causal structure.",
+          "cm_fit": "A structured, reusable artifact could preserve each update rule and its dependencies, reuse unchanged network regions, and apply restrictions for interventions without flattening away the regulatory composition.",
+          "information": "Update-function lineage, shared regulatory modules, intervention context, and exact bounded behavior can stay connected, which may help compare model versions and explain changed attractors.",
+          "incumbents": "BDD-based attractor tools, SAT methods, graph algorithms, and specialized Boolean-network packages already exploit domain structure and may scale much further.",
+          "proof": "Benchmark real published networks on attractor or intervention workflows, including memory and repeated-query cost, against specialized BDD/SAT tools."
+        },
+        {
+          "id": "quantum",
+          "name": "Quantum-computing support logic",
+          "status": "Narrow research hypothesis",
+          "kind": "research",
+          "problem": "Quantum workflows contain classical Boolean subproblems: reversible-oracle logic, circuit-control conditions, syndrome predicates, and equivalence checks on compiled Boolean components.",
+          "cm_fit": "For those Boolean boundaries, CM could retain the construction of a predicate or reversible logic component, reuse compiled substructure across circuit revisions, and expose structural differences that a flat classical truth table loses.",
+          "information": "Classical predicate structure and provenance may be preserved. Quantum amplitudes, phase, entanglement, and general unitary evolution are outside the CM claim.",
+          "incumbents": "Quantum decision diagrams, ZX-calculus tools, SAT/SMT, reversible-logic synthesis, and circuit-specific equivalence systems target the genuinely quantum or reversible parts directly.",
+          "proof": "Choose one Boolean boundary in a real quantum toolchain and compare correctness, artifact reuse, change analysis, and total cost with the native representation."
+        },
+        {
+          "id": "compiler",
+          "name": "Compilers and program analysis",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "Compilers revisit path conditions, guards, and optimization predicates as program context evolves across passes and source revisions.",
+          "cm_fit": "CM could retain predicate construction, share repeated subexpressions, partially evaluate under known facts, and carry stable identity through transformations or incremental builds.",
+          "information": "The relationship between a result, its source predicate, its support, and the transformations already applied need not be discarded after one evaluation.",
+          "incumbents": "SSA-based dataflow, e-graphs, BDDs, SAT/SMT, abstract interpretation, and compiler-native memoization already solve overlapping pieces.",
+          "proof": "Instrument a real compiler or analyzer and test whether repeated predicates and context changes repay CM preparation against its native incremental machinery."
+        },
+        {
+          "id": "security",
+          "name": "Security policy and access control",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "Long-lived policies are evaluated repeatedly, revised frequently, and audited for accidental reachability, privilege escalation, and change impact.",
+          "cm_fit": "A CM artifact could keep policy clauses and composition attached to exact behavior, reuse unchanged structure, restrict under user or environment attributes, and compare versions structurally.",
+          "information": "Rule origin, logical composition, support, evaluation context, and version identity can remain available for audit rather than collapsing into a bare allow/deny result.",
+          "incumbents": "Policy decision points, Datalog, BDDs, SMT, and dedicated reachability analyzers have mature semantics and integrations.",
+          "proof": "Replay a scrubbed policy history with realistic queries and demonstrate better auditability or total repeated-query cost without weakening policy semantics."
+        },
+        {
+          "id": "configuration",
+          "name": "Configuration systems and product families",
+          "status": "High-value hypothesis",
+          "kind": "candidate",
+          "problem": "Feature models and configuration rules persist across releases while teams test many related contexts and ask what a changed flag can affect.",
+          "cm_fit": "Persistent expression identity, serialization, structural difference, and partial evaluation align with a workload made of related rule versions and many incomplete assignments.",
+          "information": "Feature dependencies, shared constraints, known context, and version-to-version changes can be carried together instead of rebuilding a flat evaluator for every release.",
+          "incumbents": "SAT, BDDs, constraint-programming systems, and feature-model analyzers are strong, specialized baselines.",
+          "proof": "Measure a real product-line history and require wins in reuse, explainable change impact, or total workflow cost against the existing analyzer."
+        },
+        {
+          "id": "regulated",
+          "name": "Regulated rule and decision systems",
+          "status": "Auditability hypothesis",
+          "kind": "candidate",
+          "problem": "Eligibility, pricing, triage, and compliance systems need repeatable decisions, controlled rule changes, contradiction checks, and explanations tied to the exact rule version.",
+          "cm_fit": "CM could serve as a versioned structural artifact whose exact Boolean behavior, rule composition, transformations, and reuse history remain available to evaluation and audit tools.",
+          "information": "The decision function and how it was assembled can stay together, reducing the information loss that occurs when a rule set becomes only generated executable code or isolated outcomes.",
+          "incumbents": "Decision tables, business-rule engines, DMN tooling, SAT/SMT, and conventional audit logs may already provide the required governance more simply.",
+          "proof": "Test a real governed rule lifecycle and compare traceability, change review, contradiction detection, and operating cost with the incumbent system."
+        }
+      ],
+      "fit": {
+        "good": [
+          "The same Boolean structure is evaluated, restricted, transformed, or compared many times.",
+          "Operator or subexpression lineage matters after the first answer is produced.",
+          "Version differences and partial contexts are first-class workflow objects.",
+          "The semantic support is bounded enough for the required explicit artifact, or the CM is used as a structural layer rather than forced to enumerate everything."
+        ],
+        "poor": [
+          "The job is a one-off complete evaluation where BitSet's low setup cost dominates.",
+          "The only question is whether one satisfying assignment exists; SAT is built for that.",
+          "A canonical symbolic graph under a fixed variable order is the required artifact; ROBDD/CUDD already supplies it.",
+          "The workload needs general quantum-state, numeric, probabilistic, or continuous computation rather than a Boolean structural layer."
+        ]
+      }
     },
     "toolbox": {
       "lede": "Each tool below is excellent at the thing it was built for and mediocre or irrelevant at the others. There is no honest single speed ranking across them, because they do not produce the same thing.",
@@ -2906,7 +3473,7 @@
         "superseded_number": "CM modestly ahead at controlled live_k 12 and 16 (0.944 / 0.925)",
         "what_it_claimed": "That at the whole-call boundary CM overtook BitSet once semantic support reached about 12, with a clear lead by 16.",
         "why_wrong": "Measured before the gap repair and on corpora whose admission rules did not hold exact support fixed, so the strata were not comparing like with like. Re-run on corrected-admission corpora under the same protocol, the sign reverses.",
-        "replaced_by": "BitSet leads at every semantic support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated wrapper sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on a re-run of the original protocol. Any crossover, if one exists, is above the live_k={{guard.k}} guard and is unmeasured.",
+        "replaced_by": "BitSet leads at every supported public-wrapper support measured: {{wrap.min_median}}–{{wrap.k4.median}} on the dedicated sweep, and {{b4.geomean.min}}–{{b4.geomean.max}} on the original-protocol rerun. Bounded direct kernels later completed above live_k={{guard.k}}, but the public wrapper refused every case; there is no above-guard public speed claim.",
         "date_or_pass": "benchmark refresh B2 + B4, 2026-08-03"
       },
       {
@@ -2943,10 +3510,10 @@
       "lay": [
         "It is worth being clear about what kind of problem is left. “Is CM faster?” has no workload-free answer: B1/E3 and EPFL measured parity at the kernel, current B2/B4 V3 measured a modest bare CM lead, and the public wrapper remained slower. The remaining questions are about total cost, choosing, and capabilities that exist on paper but have never been shown to pay.",
         "Three of them are cheap to answer and would move the picture immediately. Three more are the experiments that would actually test whether the structural idea is worth anything beyond re-running the same expression. Two are engineering and formal gaps. And two are honest boundary questions — regions the measurements simply do not cover.",
-        "The preparation replication and first untouched selector transfer test are now complete. The next useful work is narrower: real reuse traces, another independently frozen selector family, and dependency-gated native comparators where the workload justifies them."
+        "The preparation replication and first untouched selector transfer test are complete. Synthetic cache, family, context, and tracing studies now narrow the hypotheses, and a strict workload manifest makes the missing input concrete. The next useful work starts with owner-declared real traffic; dependency-gated native comparators come only if that traffic justifies them."
       ],
       "technical": [
-        "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Optimisation priority remains preparation cost, cache behaviour, wrapper economics, and workload-aware backend selection.",
+        "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Preparation remains the leading raw optimisation surface; cache, family, context, selector, and native economics require a real workload and the strongest applicable incumbent.",
         "Several items below are marked <em>partially answered</em>. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism."
       ],
       "items": [
@@ -2986,16 +3553,17 @@
         },
         {
           "id": "fr-cache",
-          "title": "The persistent cache has never been studied",
-          "status": "ranked-next-test",
-          "visual_label": "Study the cache",
-          "lay_statement": "One of the three things CM is left standing on is that it remembers what it has already compiled. Nobody has measured how often that memory actually helps under a realistic mix of work, or how sensitive it is to how much you let it remember.",
-          "technical_statement": "The persistent cache is named as the second optimisation surface, with cache-policy tuning as a ranked optimisation gated on the study existing. The only recorded production characteristic to date is incidental: the cache returns one object per digest, which is what keeps a known duplicated-slot behaviour narrow in practice — it requires mid-compile eviction or deliberate cross-builder mixing. Everything else is unmeasured: steady-state hit rate, working-set size, eviction policy, invalidation correctness when an expression changes, memory retention, and cold-versus-warm cost.",
-          "why_it_matters": "Without a universal kernel advantage, the cache is one of the remaining potential differentiators. An unmeasured differentiator is an architectural assertion.",
-          "what_would_change_the_picture": "<b>If it succeeds</b> — measured hit rates and a sensitivity curve for the cache size limit under realistic mixes — cache-policy tuning gains a quantified payoff and the differentiator gains empirical content. <b>If it fails</b> — low hit rates or high sensitivity to the size limit — the cache is a fragile differentiator, the duplicated-slot behaviour stops being exotic, and the amortisation argument weakens further on top of an already-substantial preparation cost.",
+          "title": "The process-local cache has synthetic all-hit evidence, not a production policy",
+          "status": "partially-answered",
+          "visual_label": "Capture real cache traffic",
+          "lay_statement": "The cache has now been tested under a deliberately easy all-hit pattern. It helped CM compared with running CM cold, but cached CM still took longer than BitSet. That answers the stale ‘never studied’ statement without proving that a durable cache would help a real application.",
+          "technical_statement": "The flag historically called persistent cache is process-local. Synthetic all-hit whole-call CM remained {{cache.whole.min}}–{{cache.whole.max}} behind BitSet, and {{cache.evals}}-evaluation execution-only ratios remained {{cache.exec.k16}} at k=16 through {{cache.exec.k4}} at k=4. No byte-LRU, durable store, production access order, working-set distribution, hit curve, eviction churn, invalidation lifecycle, RSS plateau, or production cache policy has been validated. Sampled metrics traces cannot supply exact access order for offline policy replay.",
+          "why_it_matters": "Without a universal kernel advantage, reuse is one of the remaining potential differentiators. The synthetic result narrows the claim to a real workload-distribution question.",
+          "what_would_change_the_picture": "A named owner-approved workload with artifact bytes, compile and lookup cost, exact bounded access order where separately approved, process boundaries, lifecycle and cache budgets could compare no cache, entry-LRU, byte-LRU, and cost-aware admission. Until then no production cache-policy change is justified.",
           "sources": [
-            "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §7 ranked next tests, item 4; §8 item 3",
-            "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_CLARIFICATIONS_2026-08-03.md — R2 clarification"
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Cache and repeated evaluation"
           ],
           "downside": "If hit rates are low or highly sensitive to how much is retained, one of the three remaining differentiators is fragile, and the amortisation argument weakens on top of an already-substantial setup cost."
         },
@@ -3019,10 +3587,10 @@
         },
         {
           "id": "fr-canonical",
-          "title": "Canonical CM equivalence exists in the formalism and nowhere else",
+          "title": "Current CM keys are engineering identity, not global semantic canonicality",
           "status": "formal-not-demonstrated",
           "visual_label": "Prove equivalence",
-          "lay_statement": "CM's most distinctive claim is that two differently written expressions can be recognised as the same object by their structure. In practice the project has only ever checked that two things produce the same answers. Matching answers is required for sameness — it does not prove it.",
+          "lay_statement": "CM can give normalized structures stable engineering keys under documented rules. That is useful for caching and identity checks, but it is not a proof that every two semantically equal expressions always become one globally canonical object.",
           "technical_statement": "The current path establishes output equality, including full 2<sup>live_k</sup> packed equality against CUDD on all {{cudd.rows}} matched rows. None of that is a canonical CM-equivalence proof. Matrix equality requires the same normalised ordered basis; a truth table, a normalised CM and a reduced ordered BDD each identify a Boolean function under their own conventions, and none of those conventions is interchangeable with the others. What CM does have is compact interned canonical <em>keys</em>, resting on a documented hash-collision assumption, with one interned twin per builder — which is an engineering property, not a promise of global object identity, and the project's own clarifications say so.",
           "why_it_matters": "This is the capability that would distinguish CM from “a structural IR with a good cache”. Without it, the differentiator list reduces to keys, caching and serialisation — all real, all reproducible by other means.",
           "what_would_change_the_picture": "<b>If it succeeds</b> — a defined normal form with proven invariants, exhaustive validation over small Boolean functions and bases, and canonicalisation-cost and artifact-size figures comparable to ROBDDs — “canonical keys” becomes a defensible formal claim. <b>If it fails</b>, the negative result is still worth having: it would pin down that CM canonicality depends on arbitrary basis and order choices, fix the public language permanently at “output-based equivalence”, and force the prior question the project has not answered — whether the canonical artifact offers anything that ROBDDs, AIG normalisation or canonical truth representations do not already supply.",
@@ -3035,31 +3603,32 @@
         },
         {
           "id": "fr-family",
-          "title": "Cross-expression and related-family reuse — preliminary, and it has not beaten the real baseline",
+          "title": "Related-family reuse stayed behind BitSet in the accepted synthetic study",
           "status": "partially-answered",
           "visual_label": "Retest family reuse",
-          "lay_statement": "If you evaluate a whole family of closely related expressions — successive versions of a policy, revisions of a circuit — CM ought to be able to reuse work between them. A first experiment showed it reusing work compared with a version of itself that had no cache. It has never been shown to beat the actual competitor.",
-          "technical_statement": "The project's own success criterion is that CM's preparation cost amortises across the family and that total family cost falls below repeated BitSet evaluation. Current state: a cross-expression subtree-cache implementation improved cached CM against <em>uncached CM</em> on shared-block cases, with mixed results on composition mixes, while BitSet remained faster by more than an order of magnitude in the strongest exact-output cases cited. A CM-versus-uncached-CM improvement is not the comparison the criterion names. The retest guidance is explicit: do not re-run the existing synthetic family sweep; use real edit, version and query families, and compare against hash-consed DAGs, e-graphs, incremental BDD managers and compiler memoisation as well as uncached CM.",
+          "lay_statement": "Synthetic families with heavy shared structure have now been measured. Reuse sometimes helped CM compared with itself and sometimes added overhead; BitSet still finished the reported high-reuse cells {{family.bitset.min}}–{{family.bitset.max}} faster. Real revisions remain unmeasured.",
+          "technical_statement": "The accepted high-reuse cells report cached CM/BitSet ratios {{family.bitset.min}}–{{family.bitset.max}}. Process-local reuse did not establish dominance over the strongest task-matched incumbent. The next test must use real edit, version, and query families and compare total task work against hash-consed CSE-flat, compiler memoisation, and applicable symbolic or incremental baselines; independently generated related formulas are not an edit trace.",
           "why_it_matters": "This is the workload shape a structural layer is supposed to be for. If it does not pay here, the persistent cache's story collapses back to “re-run the same compiled formula many times”, and the family and versioning domains — policy versions, circuit revisions, compiler passes — drop out of scope.",
           "what_would_change_the_picture": "<b>Question:</b> does CM's structural IR reduce cost when evaluating a family of related expressions? <b>Success:</b> preparation amortised across the family with total family cost below repeated BitSet evaluation, under fair total-cost accounting — the first demonstration that the structural layer buys something on a workload shape BitSet cannot exploit. <b>Failure:</b> structural reuse does not generalise beyond same-expression prepared evaluation, and the honest claim narrows to a scoped same-expression preparation cache.",
           "sources": [
-            "CM_experiment_A_related_families_report.md",
-            "CM slide deck (frozen at V4), “Three CM-Value Experiments” card 1 and priority experiment 04 — framing only"
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/family_high_reuse_summary.csv",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Related-expression families"
           ],
           "downside": "If reuse does not generalise past re-running one identical expression, the caching story collapses to exactly that, and the versioning and family use cases — policy revisions, circuit revisions, compiler passes — drop out of scope."
         },
         {
           "id": "fr-partial",
-          "title": "Repeated partial contexts — tested, and CM lost",
+          "title": "Partial-context reuse produced a synthetic near-parity hypothesis surface",
           "status": "partially-answered",
           "visual_label": "Retest partial contexts",
-          "lay_statement": "Many real systems evaluate the same rule over and over with most of the inputs held fixed and a few varying. CM should be able to keep the fixed part's work. When this was tested, CM did beat a version of itself with no cache — and still lost to both BitSet and to the decision-diagram approach at every size tried.",
-          "technical_statement": "Success criterion: CM partial evaluation faster than full re-evaluation for repeated partial contexts. Current state: partially tested with a negative comparative result. Cached CM improved substantially over uncached CM, and in one fixed-fraction sweep by a larger factor still — but BitSet and ROBDD restriction remained faster throughout the tested range. The retest guidance calls for real context traces (sliding, random, locality-heavy, adversarially low-overlap, phase-changing) compared against CUDD restrict/cofactor and incremental SAT with assumptions, and asks for a break-even <em>surface</em> over original support, remaining live support, number of contexts, context overlap, output type, cache budget, and cold versus steady state — not a single ratio.",
+          "lay_statement": "A larger synthetic grid found that caching made CM {{context.speedup.min}}–{{context.speedup.max}} faster than uncached CM. Three high-reuse n=16 cells came close to BitSet, but with only {{context.trials}} trials and artificial contexts this is a place to investigate, not a production route.",
+          "technical_statement": "At n=16 and 500 contexts, cached CM/full-recompute BitSet ratios were {{context.f25.ratio}}, {{context.f5.ratio}}, and {{context.f75.ratio}} for fixed fractions 0.25/0.50/0.75. The grid used synthetic expressions and sliding-window contexts, only {{context.trials}} trials, remaining-variable outputs, and no native CUDD restriction comparator. A real trace must preserve original and remaining support, context overlap/locality and phase changes, query counts, output kind, process/cache lifetime, and separate BDD build, restriction, query, and extraction windows.",
           "why_it_matters": "Combined with the already-measured BitSet lead at every semantic support up to the guard, a second negative result here would mean the structural layer offers no execution-time advantage on incremental workloads either — and the value proposition would have to rest entirely on the artifacts rather than on time.",
           "what_would_change_the_picture": "<b>Question:</b> does CM preserve reusable structure across related variable assignments? <b>Success:</b> established on real traces against CUDD restrict/cofactor and incremental SAT — not merely against uncached CM — this gives CM a defensible operational niche independent of raw kernel speed, and populates the break-even surface the selector needs. <b>Failure:</b> partial-context reuse provides no measurable advantage over BitSet.",
           "sources": [
-            "CM_experiment_B_partial_contexts_report.md",
-            "CM slide deck (frozen at V4), “Three CM-Value Experiments” card 2 and priority experiment 05 — framing only"
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f*_summary.csv",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_sliding_100_summary.csv",
+            "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/RUN-RESULTS.md — Partial-context break-even surface"
           ],
           "downside": "If incremental workloads show no advantage either, then combined with the already-measured loss at the whole-call boundary, the structural layer offers no execution-time advantage anywhere, and the case must rest entirely on stored artifacts."
         },
@@ -3097,7 +3666,7 @@
         {
           "id": "fr-aboveguard",
           "title": "Above the guard limit, bounded kernels work but the public boundary still refuses",
-          "status": "partially answered",
+          "status": "partially-answered",
           "visual_label": "Map the guard boundary",
           "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. A bounded follow-up did run the underlying exact kernels from {{guard.followup.min_k}} through {{guard.followup.max_k}}: all {{guard.followup.cases}} cases completed with {{guard.followup.mismatches}} wrong answers and {{guard.followup.timeouts}} timeouts. The public wrapper still refused every case, so this proves a small feasibility band, not permission to raise the limit or a CM speed win.",
           "technical_statement": "The original guard remains correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} earlier trials. The bounded subprocess follow-up then exercised exact direct kernels for live_k={{guard.followup.min_k}}–{{guard.followup.max_k}} under a 64 MiB estimate cap, 512 MiB RSS cap, 45-second timeout and three repetitions: {{guard.followup.cases}}/{{guard.followup.cases}} completed, with {{guard.followup.mismatches}} mismatches, {{guard.followup.timeouts}} timeouts and {{guard.followup.wrapper_non_refusals}} wrapper non-refusals. This closes the claim that nothing above the guard has been measured, but it did not compare equivalent whole-call CM and BitSet artifacts or justify a production policy change.",
@@ -3124,27 +3693,27 @@
         },
         {
           "priority": 2,
-          "experiment": "Profile preparation",
-          "decision": "Optimisation target",
-          "cost_level": 1,
-          "cost_label": "Low",
-          "what_it_settles": "Where the setup multiple comes from before anyone attempts to reduce it."
+          "experiment": "Harden temporary-memory estimators",
+          "decision": "Fail-closed safety",
+          "cost_level": 2,
+          "cost_label": "Medium",
+          "what_it_settles": "Whether representation-specific estimates can support a compatible default policy; no default changes during estimator work."
         },
         {
           "priority": 3,
-          "experiment": "Validate backend selection",
-          "decision": "Automatic routing",
-          "cost_level": 1,
-          "cost_label": "Low",
-          "what_it_settles": "Whether a fitted rule transfers to data it was not fitted on."
+          "experiment": "Reduce measured preparation allocations",
+          "decision": "Raw optimisation",
+          "cost_level": 2,
+          "cost_label": "Medium",
+          "what_it_settles": "Whether another exact, representative, cross-host preparation improvement exists after the one-memo change."
         },
         {
           "priority": 4,
-          "experiment": "Study persistent-cache behaviour",
-          "decision": "Cache value",
-          "cost_level": 1,
-          "cost_label": "Low",
-          "what_it_settles": "Whether realistic hit rates make the stored structural artifact useful."
+          "experiment": "Capture lane-specific real traces",
+          "decision": "Cache/version/context evidence",
+          "cost_level": 2,
+          "cost_label": "Medium",
+          "what_it_settles": "Whether owner-approved traffic clears the cache, edit/version, context, or selector entry gate."
         },
         {
           "priority": 5,
@@ -3396,6 +3965,24 @@
         "date": "2026-08-03",
         "what_was_checked": "The two claim-map rows that had not been re-run: the engine crossover point, and decision-diagram order search.",
         "outcome": "Crossover REVISED to workload-dependent. Order search CLOSED with data: best-of-ten is genuinely smaller at a real search cost, and dynamic reordering never triggers at these graph sizes."
+      },
+      {
+        "stage": "Deep performance and symmetric-boundary reconciliation",
+        "date": "2026-08-25/26",
+        "what_was_checked": "Preparation cost, exact backend selection, the strongest CSE-flat comparator, public-wrapper boundaries, above-guard feasibility, cache/family/context reuse, and held-out selector transfer.",
+        "outcome": "One redundant preparation memo was removed and replicated cross-host. Bare symmetric V3 measured {{symv3.bare.overall}} while the wrapper measured {{symv3.wrapper.overall}}; direct above-guard kernels completed exactly while the wrapper refused. Synthetic reuse narrowed hypotheses, and the frozen feature selector failed the untouched i10 gate."
+      },
+      {
+        "stage": "Metrics tracing, workload intake, dependency feasibility, and memory safety",
+        "date": "2026-08-26/27",
+        "what_was_checked": "Whether low-overhead anonymous tracing could identify real opportunities, whether a real owner/caller existed, whether pinned native dependencies resolved under the authorized contract, and whether the temporary-memory estimate could support a default.",
+        "outcome": "One-in-{{trace.sample_every}} tracing was retained only as a bounded diagnostic at {{trace.v3.ratio}}. The strict workload template remains not ready with {{workload.blockers}} blockers. Dependency resolution stopped before Numba/CUDD algorithms. The dense estimate underpredicted diagnostic peaks by {{memory.multiple.min}}–{{memory.multiple.max}}, so no default changed."
+      },
+      {
+        "stage": "Audit-tool consolidation and current validation",
+        "date": "2026-08-27",
+        "what_was_checked": "Whether exact-file provenance hashing could be consolidated without coupling distinct timing and corpus contracts, and whether the resulting repository remained green.",
+        "outcome": "{{dpr3.helpers.before}} duplicate SHA-256 helpers became {{dpr3.helpers.after}} streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Current validation: {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests full-suite."
       }
     ],
     "glossary": [
@@ -3739,7 +4326,7 @@
         "term": "materiality rule",
         "group": "statistics-and-protocol",
         "lay": "The pass mark, agreed in advance: how big an effect would have to be, and how confident you would have to be about it, before it is worth acting on. On the decisive experiment here, the pass mark was not met.",
-        "technical": "A conjunction of pre-registered conditions — an effect-size threshold, an interval excluding parity, and a break-even bound — all of which must hold for optimisation to be warranted. Its failure is what made the kernel-equivalence posture final."
+        "technical": "A conjunction of pre-registered conditions — an effect-size threshold, an interval excluding parity, and a break-even bound — all of which must hold for optimisation to be warranted. Its failure made parity the final posture for the EPFL AND/INV workload; later B2/B4 V3 prevents universalising that posture."
       },
       {
         "term": "packed-equality gate",
@@ -3783,7 +4370,372 @@
         "lay": "A cheap check that runs before the expensive work and stops everything if it fails — such as a small pilot run, or verifying the test set's fingerprint.",
         "technical": "A deterministic pilot plus a pre-registered runtime bound before each full run, alongside corpus digest verification and truth-digest re-verification at measurement time."
       }
-    ]
+    ],
+    "use_case_benchmark_catalog": {
+      "schema_version": "cm-use-case-benchmark-catalog/v1",
+      "as_of": "2026-08-27",
+      "purpose": "Audited, field-specific benchmark candidates for testing whether a reusable CM structural artifact creates value beyond a one-off Boolean answer.",
+      "interpretation_rule": "A result on a CM-shaped synthetic stress suite is a mechanism demonstration, not domain dominance. A domain claim requires a preregistered confirmatory result on the natural corpus with the best artifact-equivalent incumbent.",
+      "fairness_protocol": [
+        "Freeze dataset revisions, parsers, translations, exclusions, seeds, and resource limits before timing.",
+        "Run every eligible natural-corpus item; do not retain only formulas on which CM is fast.",
+        "Separate cold construction, warm evaluation, version update, partial-context update, serialization, and explanation or change-impact tasks.",
+        "Compare equivalent outputs and capabilities. SAT witness search, BDD graph construction, explicit truth-vector generation, and policy authorization are different artifacts.",
+        "Publish failures, refusals, timeouts, memory peaks, and never-break-even cases alongside successful timings.",
+        "Label synthetic stress results separately and sweep the property intended to help CM: reuse, edit locality, shared-subgraph fraction, context delta, and residual semantic support."
+      ],
+      "priority_summary": [
+        {
+          "tier": "Tier A — test first",
+          "fields": "Configuration/product families; security-policy version audit; hardware design histories",
+          "reason": "These naturally combine long-lived Boolean structure, related versions or contexts, exactness, and change-impact questions."
+        },
+        {
+          "tier": "Tier A/B — bounded subset",
+          "fields": "Compiler and program-analysis predicates",
+          "reason": "The fit is strong for pure Boolean i1/path-condition families, but weak for general integer, memory, undefined-behavior, or interprocedural semantics."
+        },
+        {
+          "tier": "Tier B — conditional",
+          "fields": "AI-agent hard guardrails; biological update rules; regulated Boolean decision tables",
+          "reason": "There is a credible reusable-rule artifact, but mature domain engines already provide semantics CM must preserve exactly."
+        },
+        {
+          "tier": "Tier C — narrow research",
+          "fields": "Classical reversible and control logic in quantum toolchains",
+          "reason": "CM may help only at a Boolean boundary; it does not represent amplitudes, phase, entanglement, or general unitary evolution."
+        }
+      ],
+      "entries": [
+        {
+          "id": "hardware",
+          "field": "Hardware verification and electronic design",
+          "priority": "Tier A — test first",
+          "audit_verdict": "Sound and comparatively strong after narrowing the claim to repeated cone/version workflows. CM is not being proposed as a replacement for industrial equivalence checking or synthesis.",
+          "pain_point": "Design teams repeatedly rebuild and compare related logic cones after synthesis and optimization passes, while needing exact equivalence, localized change impact, and traceability from output behavior back to changed structure.",
+          "cm_role": "Use CM as a versioned intermediate artifact for bounded cones: retain operator/subexpression structure, reuse unchanged compiled regions, restrict under partial inputs, and report structural and behavioral deltas between revisions.",
+          "scope_correction": "Do not claim chip-level scalability, synthesis-quality dominance, or an advantage on one-off whole-netlist evaluation. Complete explicit output remains bounded by semantic support.",
+          "real_datasets": [
+            {
+              "name": "EPFL Combinational Benchmark Suite",
+              "url": "https://github.com/lsils/benchmarks",
+              "use": "Use original and best-result AIGER/BLIF/Verilog implementations as real circuit and related-implementation inputs; extract bounded output cones and retain circuit/fan-in metadata.",
+              "license_note": "Repository reports an MIT license; pin a commit and preserve circuit attribution."
+            },
+            {
+              "name": "EPFL suite description and methodology",
+              "url": "https://www.epfl.ch/labs/lsi/page-102566-en-html/benchmarks/",
+              "use": "Use the published circuit categories and ABC equivalence workflow to stratify arithmetic versus control cones and document how variants were produced.",
+              "license_note": "Methodology/source page; dataset license is governed by the repository."
+            }
+          ],
+          "synthetic_scenario": "Start from each real AIG cone, apply seeded equivalence-preserving ABC rewrite/refactor/resubstitution sequences, then inject localized behavior-changing edits. Sweep shared-subgraph fraction, edit radius, query reuse, and fixed-input fraction while retaining every seed.",
+          "baselines": [
+            "ABC/AIG rewriting and equivalence",
+            "ROBDD/CUDD",
+            "SAT or SMT equivalence",
+            "packed BitSet or compiled evaluator"
+          ],
+          "tasks": [
+            "cold cone construction",
+            "warm repeated exact evaluation",
+            "equivalent-rewrite detection",
+            "localized revision impact",
+            "partial-input restriction",
+            "serialize/reload and query"
+          ],
+          "dominance_gate": "Exact outputs and equivalence labels must match; on the natural version/cone trace, CM total workflow time must beat the fastest artifact-equivalent baseline with no memory/refusal regression, or provide a measured change-attribution capability the baseline lacks at acceptable cost."
+        },
+        {
+          "id": "ai",
+          "field": "AI-agent authorization and hard guardrails",
+          "priority": "Tier B — conditional",
+          "audit_verdict": "The original AI wording was too broad. The defensible use case is the deterministic Boolean policy layer around an agent, not learned inference, planning, or natural-language reasoning itself.",
+          "pain_point": "Agent systems repeatedly decide whether a principal, delegated agent, action, tool, resource, and context combination is allowed while policies, delegation depth, and tool inventories evolve. Operators also need a reviewable explanation of what changed.",
+          "cm_role": "Compile a bounded Boolean projection of the hard-guardrail layer, retain policy/subexpression identity across revisions, reuse it over request streams, and perform offline change-impact or counterfactual analysis. Keep the native policy engine as the semantic authority.",
+          "scope_correction": "Do not represent model weights, prompts, probabilistic confidence, open-ended planning, or the full typed semantics of Cedar/Rego as Boolean variables without an explicit translation contract.",
+          "real_datasets": [
+            {
+              "name": "AWS sample agentic AI delegation authorization",
+              "url": "https://github.com/aws-samples/sample-cedar-agentic-ai-authorization",
+              "use": "Replay the documented permit/deny delegation scenarios and derive versioned tool-policy request traces, including user role, MFA, delegation depth, agent capability, and tool risk.",
+              "license_note": "Sample/reference implementation; pin the repository revision and inspect its license before redistribution."
+            },
+            {
+              "name": "AllenAI RuleTaker",
+              "url": "https://github.com/allenai/ruletaker",
+              "use": "Optional secondary corpus for repeated deterministic rule-theory queries after using the repository's logical forms rather than timing natural-language parsing.",
+              "license_note": "Apache-2.0 repository; retain dataset attribution."
+            }
+          ],
+          "synthetic_scenario": "Generate seeded agent/tool/resource graphs with layered permit, forbid, delegation, tenant, time, and approval predicates. Produce request streams plus localized policy versions, preserving expected allow/deny outcomes and policy-clause provenance.",
+          "baselines": [
+            "native Cedar authorizer",
+            "OPA/Rego for a documented translatable subset",
+            "BDD or SAT policy analysis",
+            "ordinary compiled predicates with memoization"
+          ],
+          "tasks": [
+            "request-stream authorization",
+            "warm policy reuse",
+            "policy-version impact",
+            "counterfactual context restriction",
+            "decision provenance",
+            "serialize/reload"
+          ],
+          "dominance_gate": "CM must exactly match the native policy authority on the translated subset and show a repeatable offline audit/versioning or total repeated-query advantage. A synthetic request-stream win alone does not establish production-agent value."
+        },
+        {
+          "id": "biology",
+          "field": "Computational biology and Boolean regulatory networks",
+          "priority": "Tier B — conditional",
+          "audit_verdict": "Plausible for reusable update-rule and intervention families, but the earlier wording could be read as an attractor-analysis claim. Current CM evidence does not support replacing specialized Boolean-network dynamics tools.",
+          "pain_point": "Researchers reuse related Boolean update rules across knockouts, over-expression, environmental inputs, parameterizations, and model revisions while trying to preserve regulatory provenance and understand why behavior changed.",
+          "cm_role": "Compile individual update functions or bounded synchronous-step slices, retain regulatory-rule structure, reuse unchanged modules, and restrict under interventions. Treat attractor and transition-system analysis as separate downstream tasks unless CM gains explicit dynamics semantics.",
+          "scope_correction": "Do not claim whole-network attractor, asynchronous dynamics, or model-checking dominance. Preserve update semantics, input conventions, and multi-valued Booleanization metadata.",
+          "real_datasets": [
+            {
+              "name": "Biodivine Boolean Models benchmark collection",
+              "url": "https://github.com/sybila/biodivine-boolean-models",
+              "use": "Use the repository's validated BNET/AEON/SBML exports and metadata; stratify by variables, inputs, regulations, source repository, and model provenance.",
+              "license_note": "Model copyrights remain with original authors; follow each model's source and citation metadata before redistribution."
+            },
+            {
+              "name": "Cell Collective API and export tooling",
+              "url": "https://github.com/cellcollective/ccapi",
+              "use": "Obtain public Boolean rules, truth tables, and SBML-qual exports where permitted, then build intervention/version traces without discarding biological annotations.",
+              "license_note": "API client is MIT; model-specific rights and citations must be checked separately."
+            }
+          ],
+          "synthetic_scenario": "From each real network, create seeded knockout, constitutive-expression, input-fixation, and localized rule-edit families. Keep regulatory modules unchanged across most versions and record which attractor-facing question is only proxied by update-rule evaluation.",
+          "baselines": [
+            "AEON/Biodivine BDD tooling",
+            "BoolNet or bioLQM/GINsim",
+            "SAT-based Boolean-network analysis",
+            "plain compiled update functions"
+          ],
+          "tasks": [
+            "compile update-rule family",
+            "evaluate bounded synchronous step",
+            "intervention restriction",
+            "model-version diff",
+            "shared-module reuse",
+            "provenance recovery"
+          ],
+          "dominance_gate": "CM must match update semantics exactly and win on a real intervention/version workflow or provide demonstrably better rule-level provenance. Attractor speed cannot be claimed from update-function timing."
+        },
+        {
+          "id": "quantum",
+          "field": "Classical reversible and control logic in quantum toolchains",
+          "priority": "Tier C — narrow research",
+          "audit_verdict": "Correct only with a hard boundary around classical Boolean or reversible components. This is the weakest general-domain claim and should remain a targeted research experiment.",
+          "pain_point": "Quantum compilation flows contain classical reversible or control subcircuits that are rewritten across versions and must retain exact computational-basis behavior, ancilla/garbage conventions, and construction provenance.",
+          "cm_role": "Represent bounded Boolean output functions of reversible components, reuse their shared classical structure across variants, and compare structural or truth-functional deltas. Use a quantum-native checker for genuinely quantum semantics.",
+          "scope_correction": "CM does not represent amplitude, phase, interference, entanglement, noise, measurement probability, or general unitary equivalence. Multi-output reversible semantics and ancilla/garbage bits must be explicit.",
+          "real_datasets": [
+            {
+              "name": "RevLib reversible benchmark library",
+              "url": "https://www.revlib.org/",
+              "use": "Use machine-readable function specifications and REAL circuit realizations for classical reversible truth functions, including declared constants and garbage outputs.",
+              "license_note": "Cite individual contributors and confirm reuse terms for selected artifacts."
+            },
+            {
+              "name": "MQT Bench",
+              "url": "https://www.cda.cit.tum.de/mqtbench/index",
+              "use": "Use only circuits or extracted regions with a documented classical/reversible Boolean interpretation; the broader quantum suite is a negative-control boundary, not CM input.",
+              "license_note": "Follow the benchmark package/repository license and cite the MQT Bench publication."
+            }
+          ],
+          "synthetic_scenario": "Generate reversible Toffoli/CNOT networks with explicit ancilla and garbage declarations, create equivalence-preserving gate rewrites and localized oracle edits, and export each output as a bounded Boolean root with a full mapping checksum.",
+          "baselines": [
+            "RevKit or reversible-logic simulator",
+            "MQT QCEC for quantum-aware equivalence",
+            "ROBDD/CUDD",
+            "SAT/SMT miter",
+            "packed truth-table evaluator"
+          ],
+          "tasks": [
+            "multi-output truth-function extraction",
+            "equivalent circuit revision",
+            "localized oracle change",
+            "ancilla restriction",
+            "shared-subcircuit reuse",
+            "round-trip provenance"
+          ],
+          "dominance_gate": "CM must match every declared output under constants/garbage conventions and win a classical reversible version workflow. No result may be generalized to quantum-state simulation or unitary equivalence."
+        },
+        {
+          "id": "compiler",
+          "field": "Compilers and program analysis",
+          "priority": "Tier A/B — bounded subset",
+          "audit_verdict": "Strong for families of pure Boolean predicates and incremental path contexts; unsound as a general compiler-verification claim without modeling integers, memory, poison, undefined behavior, and interprocedural effects.",
+          "pain_point": "Compilers repeatedly simplify, compare, and partially evaluate related branch and optimization predicates across passes, builds, and known program facts, often losing a stable cross-version identity for the logical slice.",
+          "cm_role": "Use CM for extracted pure-Boolean i1 predicate families: retain expression lineage, reuse shared subgraphs, restrict under known facts, and compare before/after predicates. Leave full IR refinement semantics to Alive2/SMT.",
+          "scope_correction": "Exclude or explicitly encode integer widths, overflow, poison, undefined behavior, memory, loops, and calls. A Boolean projection is valid only under a documented extraction contract.",
+          "real_datasets": [
+            {
+              "name": "Alive2 and LLVM transformation tests",
+              "url": "https://github.com/AliveToolkit/alive2",
+              "use": "Select transformations whose source/target condition is a supported pure Boolean slice; use Alive2 as the semantic oracle and retain before/after IR provenance.",
+              "license_note": "Alive2 is MIT; LLVM inputs retain their own repository licensing and attribution."
+            },
+            {
+              "name": "LLVM test suite and regression corpus",
+              "url": "https://github.com/llvm/llvm-test-suite",
+              "use": "Extract repeated branch/path predicates from public programs and preserve program/test provenance; use reference outputs only for overall correctness, not as Boolean equivalence labels.",
+              "license_note": "Inspect the LLVM test-suite license and per-benchmark notices, especially external suites."
+            }
+          ],
+          "synthetic_scenario": "Generate SSA-like Boolean DAGs with repeated guards, equivalent InstCombine-style rewrites, localized pass edits, and evolving fact sets. Include negative controls with integer/UB features that the importer must refuse rather than silently Booleanize.",
+          "baselines": [
+            "Alive2/Z3",
+            "LLVM InstCombine or SimplifyCFG",
+            "e-graph rewriting",
+            "ROBDD/CUDD",
+            "compiled predicates with memoization"
+          ],
+          "tasks": [
+            "pure-Boolean extraction",
+            "before/after equivalence",
+            "known-fact restriction",
+            "incremental version update",
+            "subexpression lineage",
+            "refusal of unsupported semantics"
+          ],
+          "dominance_gate": "CM must agree with Alive2 on the accepted subset, refuse unsupported semantics, and beat the strongest Boolean baseline on a natural repeated-predicate trace or deliver measurable lineage/change-analysis value."
+        },
+        {
+          "id": "security",
+          "field": "Security policy and access control",
+          "priority": "Tier A — test first",
+          "audit_verdict": "One of the strongest fits for offline policy audit, related-version analysis, and repeated partial contexts. Native Cedar/OPA remains the online enforcement baseline and semantic authority.",
+          "pain_point": "Authorization teams need to know not only whether a request is allowed, but which rule caused it, whether a policy revision expands reachability, which users/resources are affected, and whether unchanged policy structure can be reused safely.",
+          "cm_role": "Compile a documented Boolean subset into a versioned audit artifact, retain rule/subexpression provenance, restrict under principal/resource/context attributes, and calculate exact bounded change-impact sets across revisions.",
+          "scope_correction": "Do not flatten typed entities, hierarchy, sets, strings, time, or deny-overrides semantics without a verified translation. Online request latency is unlikely to be CM's first dominance surface.",
+          "real_datasets": [
+            {
+              "name": "Cedar example use cases and performance artifacts",
+              "url": "https://github.com/cedar-policy/cedar-examples",
+              "use": "Use the application policies, schemas, entities, allow/deny requests, templated variants, and published benchmark folder as executable policy fixtures.",
+              "license_note": "Apache-2.0."
+            },
+            {
+              "name": "Cedar integration-test corpus",
+              "url": "https://github.com/cedar-policy/cedar-integration-tests",
+              "use": "Use handwritten and generated policy/entity/request cases as translation and differential-correctness tests before any timing claim.",
+              "license_note": "Follow the repository license and retain generated-corpus revision metadata."
+            },
+            {
+              "name": "OPA policy performance guidance",
+              "url": "https://www.openpolicyagent.org/docs/policy-performance",
+              "use": "Use OPA's benchmark methodology and metrics for any documented Cedar/Rego common subset; do not compare unlike policy semantics.",
+              "license_note": "Documentation and software are governed by the OPA project licenses."
+            }
+          ],
+          "synthetic_scenario": "Generate RBAC/ABAC policy families with permit/deny precedence, entity hierarchy, tenant isolation, localized edits, and request traces. Emit both a rich native form and an explicitly limited Boolean projection with differential labels.",
+          "baselines": [
+            "native Cedar authorizer and symbolic compiler",
+            "OPA/Rego on a common subset",
+            "BDD or SAT policy analyzer",
+            "indexed decision tables"
+          ],
+          "tasks": [
+            "differential authorization",
+            "policy-version reachability delta",
+            "counterfactual restriction",
+            "rule provenance",
+            "warm request trace",
+            "translation refusal/coverage"
+          ],
+          "dominance_gate": "Zero decision mismatches are mandatory. CM must beat the best audit-capable baseline on total version-analysis cost or produce exact change/provenance output not otherwise available; online latency alone is not sufficient."
+        },
+        {
+          "id": "configuration",
+          "field": "Configuration systems and product families",
+          "priority": "Tier A — strongest first experiment",
+          "audit_verdict": "The cleanest domain match: long-lived constraints, many partial assignments, related model versions, and exact change-impact questions directly exercise CM's proposed structural and context-reuse value.",
+          "pain_point": "Feature models evolve while configurators repeatedly add and retract partial selections, test validity, explain conflicts, identify dead options, and assess which products or constraints changed between releases.",
+          "cm_role": "Retain feature-constraint structure and identity across sessions and versions, reuse unchanged subgraphs, restrict under partial selections, and expose exact bounded differences for sliced feature neighborhoods.",
+          "scope_correction": "Whole-product enumeration is exponential and often inappropriate. Compare sliced/bounded explicit artifacts separately from SAT satisfiability, model counting, or BDD symbolic configuration.",
+          "real_datasets": [
+            {
+              "name": "FeatureIDE/FeatJAR models and analysis tooling",
+              "url": "https://github.com/FeatureIDE/FeatureIDE",
+              "use": "Use public example/fixture feature models and their analysis semantics; preserve hierarchical and cross-tree constraints when translating.",
+              "license_note": "FeatureIDE reports LGPL-3.0; verify model-specific notices."
+            },
+            {
+              "name": "torte reproducible feature-model experiments",
+              "url": "https://github.com/ekuiter/torte",
+              "use": "Use its curated feature-model benchmark, KConfig extraction, histories, transformation pipeline, and reproducibility metadata for real version families.",
+              "license_note": "Follow repository and constituent-model licenses."
+            },
+            {
+              "name": "Linux Kconfig history",
+              "url": "https://github.com/torvalds/linux",
+              "use": "Extract version-pinned Kconfig constraints and adjacent release histories through a published extractor; do not treat raw Kconfig syntax as a complete Boolean model without validation.",
+              "license_note": "Linux source is GPL-2.0-only; derived benchmark redistribution requires legal/license review."
+            }
+          ],
+          "synthetic_scenario": "Generate hierarchical feature models with seeded mandatory/optional/alternative groups, cross-tree constraints, localized release edits, and interactive sessions that add/retract selections. Sweep slice size, shared constraints, edit locality, and residual support.",
+          "baselines": [
+            "FeatJAR SAT4J/Kissat/CaDiCaL analyses",
+            "ROBDD feature configurator",
+            "incremental SAT",
+            "plain compiled predicates"
+          ],
+          "tasks": [
+            "interactive partial configuration",
+            "validity and conflict explanation",
+            "version delta on bounded slice",
+            "dead-feature query",
+            "session reuse",
+            "serialize/reload"
+          ],
+          "dominance_gate": "CM must preserve feature-model semantics and beat the fastest equivalent baseline on a real interaction/version trace for bounded slices, while reporting enumeration boundaries and all models that never amortize construction."
+        },
+        {
+          "id": "regulated",
+          "field": "Regulated rule and decision systems",
+          "priority": "Tier B — Boolean decision-table subset",
+          "audit_verdict": "Credible for audit and versioning of Boolean decision tables, but too broad if it implies that CM directly models numeric tax formulas, dates, aggregation, priorities, or the full DMN/OpenFisca language.",
+          "pain_point": "Governed decision services need reproducible outcomes, explicit rule-version provenance, overlap/gap detection, controlled changes, and regression evidence across many related cases.",
+          "cm_role": "Compile the explicitly Boolean portion of a decision table or eligibility rule set into a versioned artifact, retain rule composition, compare revisions, and enumerate exact bounded coverage or conflict regions.",
+          "scope_correction": "Numeric thresholds can become finite predicates only under a declared abstraction. Preserve DMN hit policy, rule priority, null/unknown handling, dates, and arithmetic in the native engine unless formally translated.",
+          "real_datasets": [
+            {
+              "name": "DMN Technology Compatibility Kit",
+              "url": "https://github.com/dmn-tck/tck",
+              "use": "Use reference DMN models with serialized inputs and expected outputs; select and declare the Boolean/decision-table subset, retaining hit-policy semantics and conformance identifiers.",
+              "license_note": "The project describes freely accessible test cases under a Creative Commons share-alike attribution model; verify repository license files for redistribution."
+            },
+            {
+              "name": "OpenFisca country packages",
+              "url": "https://openfisca.org/en/packages/",
+              "use": "Use package tests and version histories to identify bounded Boolean eligibility subgraphs; keep arithmetic microsimulation in OpenFisca as the oracle.",
+              "license_note": "OpenFisca core is AGPL; inspect each country package and input dataset license separately."
+            }
+          ],
+          "synthetic_scenario": "Generate DMN-like Boolean decision tables with explicit hit policies, seeded overlaps, gaps, shadowed rules, localized version edits, and regression cases. Also generate unsupported numeric/date cases that the CM importer must refuse or abstract explicitly.",
+          "baselines": [
+            "DMN TCK-capable engine",
+            "OpenFisca for selected eligibility rules",
+            "decision-table index",
+            "BDD/SAT coverage analyzer",
+            "ordinary compiled predicates"
+          ],
+          "tasks": [
+            "conformance replay",
+            "coverage/overlap/gap analysis",
+            "version regression",
+            "bounded eligibility enumeration",
+            "rule provenance",
+            "unsupported-semantics refusal"
+          ],
+          "dominance_gate": "CM must match the native engine on every accepted test, preserve hit-policy behavior, and show lower total audit/version cost or better exact bounded coverage output. Passing a Boolean projection does not establish general rules-as-code dominance."
+        }
+      ]
+    }
   },
   "_numbers": {
     "kernel.local": {
@@ -4662,10 +5614,238 @@
       "prov": "deliverables_n22_24/bx2_cudd_orders_2026_08_03/cm_bx2_cudd_orders_results_2026_08_03.json :: _meta.n_orders",
       "note": ""
     },
+    "cache.whole.min": {
+      "value": 3.1317614994281957,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv :: min(cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median)",
+      "note": ""
+    },
+    "cache.whole.max": {
+      "value": 12.839066002074064,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv :: max(cm_persistent_cache_no_reinflate_time_s_median / bitset_time_s_median)",
+      "note": ""
+    },
+    "cache.exec.k4": {
+      "value": 11.177616991088556,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: n_vars=4 ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached",
+      "note": ""
+    },
+    "cache.exec.k8": {
+      "value": 8.914796643458441,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: n_vars=8 ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached",
+      "note": ""
+    },
+    "cache.exec.k12": {
+      "value": 3.868535791425328,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: n_vars=12 ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached",
+      "note": ""
+    },
+    "cache.exec.k16": {
+      "value": 2.799537147021495,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: n_vars=16 ratio_cm_hybrid_no_reinflate_cached_over_bitset_cached",
+      "note": ""
+    },
+    "cache.evals": {
+      "value": 50,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv :: cm_eval_repeat_median",
+      "note": ""
+    },
+    "family.bitset.min": {
+      "value": 5.25122223162259,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/family_high_reuse_summary.csv :: min(ratio_cm_cache_over_bitset_median)",
+      "note": ""
+    },
+    "family.bitset.max": {
+      "value": 26.451705941754376,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/family_high_reuse_summary.csv :: max(ratio_cm_cache_over_bitset_median)",
+      "note": ""
+    },
+    "context.speedup.min": {
+      "value": 4.847989310400186,
+      "fmt": "x2",
+      "prov": "partial context summary CSVs :: min(speedup_cm_cache_vs_cm_no_cache_median)",
+      "note": ""
+    },
+    "context.speedup.max": {
+      "value": 7.3744487069114655,
+      "fmt": "x2",
+      "prov": "partial context summary CSVs :: max(speedup_cm_cache_vs_cm_no_cache_median)",
+      "note": ""
+    },
+    "context.f25.ratio": {
+      "value": 1.108033767217328,
+      "fmt": "ratio3",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p25_c500_summary.csv :: n_vars=16,c=500 cm_cache_total / bitset_full_recompute_total",
+      "note": ""
+    },
+    "context.f5.ratio": {
+      "value": 0.951564108845568,
+      "fmt": "ratio3",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p5_c500_summary.csv :: n_vars=16,c=500 cm_cache_total / bitset_full_recompute_total",
+      "note": ""
+    },
+    "context.f75.ratio": {
+      "value": 0.9969998922789554,
+      "fmt": "ratio3",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/partial_f0p75_c500_summary.csv :: n_vars=16,c=500 cm_cache_total / bitset_full_recompute_total",
+      "note": ""
+    },
+    "context.trials": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "selected n=16,c=500 partial context rows :: trials",
+      "note": ""
+    },
+    "trace.v1.ratio": {
+      "value": 1.3037053827001515,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_summary.json :: ratio_median",
+      "note": ""
+    },
+    "trace.v2.ratio": {
+      "value": 1.1172622629713618,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v2_summary.json :: ratio_median",
+      "note": ""
+    },
+    "trace.v3.ratio": {
+      "value": 1.0052119138806217,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: ratio_median",
+      "note": ""
+    },
+    "trace.sample_every": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: sample_every",
+      "note": ""
+    },
+    "trace.mismatches": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: exact_mismatches",
+      "note": ""
+    },
+    "trace.drops": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: trace_dropped_events",
+      "note": ""
+    },
+    "trace.io_errors": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/trace_overhead_v3_sample16_summary.json :: trace_io_errors",
+      "note": ""
+    },
+    "workload.blockers": {
+      "value": 13,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/WORKLOAD-MANIFEST-TEMPLATE-VALIDATION.json :: len(blockers)",
+      "note": ""
+    },
+    "dependency.attempts": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "three dependency audit JSON files :: sum(len(pods))",
+      "note": ""
+    },
+    "dependency.cost": {
+      "value": 0.001948,
+      "fmt": "usd",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility_run3/dependency_runpod_audit_run3_2026_08_26.json :: total_cost_usd",
+      "note": ""
+    },
+    "dependency.postflight_pods": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_run3_postflight_inventory.json :: pod_count",
+      "note": ""
+    },
+    "memory.cases": {
+      "value": 4,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: len(cases)",
+      "note": ""
+    },
+    "memory.multiple.min": {
+      "value": 3.51470947265625,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: min(cases[].peak_over_estimated_temporary_median)",
+      "note": ""
+    },
+    "memory.multiple.max": {
+      "value": 38.73046875,
+      "fmt": "x2",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: max(cases[].peak_over_estimated_temporary_median)",
+      "note": ""
+    },
+    "memory.refusals": {
+      "value": 4,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: count(cases[].refusal_before_materialization)",
+      "note": ""
+    },
+    "memory.proposed.benchmark_mib": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: temporary_memory_policy.proposed_benchmark_remote_mib",
+      "note": ""
+    },
+    "memory.proposed.direct_mib": {
+      "value": 64,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: temporary_memory_policy.proposed_direct_mib",
+      "note": ""
+    },
+    "dpr3.helpers.before": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: provenance_consolidation.duplicate_helpers_before",
+      "note": ""
+    },
+    "dpr3.helpers.after": {
+      "value": 1,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: provenance_consolidation.streaming_helpers_after",
+      "note": ""
+    },
+    "dpr3.smoke.ratio": {
+      "value": 1.0402276549828073,
+      "fmt": "ratio4",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/dpr3_trace_overhead_smoke_summary.json :: ratio_median",
+      "note": ""
+    },
+    "tests.focused": {
+      "value": 84,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/focused_pytest.xml :: count(testcase)",
+      "note": ""
+    },
+    "tests.full": {
+      "value": 391,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/full_pytest.xml :: count(testcase)",
+      "note": ""
+    },
+    "tests.full.subtests": {
+      "value": 4,
+      "fmt": "int",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/full_pytest.xml :: testsuite.tests - count(testcase)",
+      "note": ""
+    },
     "meta.tests": {
-      "value": "334 passed",
+      "value": "84 focused / 391 full + 4 subtests",
       "fmt": "text",
-      "prov": "deliverables_n22_24/cm_benchmark_refresh_manifest_2026_08_03.json :: tests.result",
+      "prov": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/focused_pytest.xml and docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/full_pytest.xml :: current testsuite/testcase counts",
       "note": ""
     },
     "meta.cost": {
@@ -4675,7 +5855,7 @@
       "note": ""
     },
     "meta.evidence_revision": {
-      "value": "1fd3907",
+      "value": "4dbfffc",
       "fmt": "text",
       "prov": "evidence revision pinned by the site builder",
       "note": ""
