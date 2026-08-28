@@ -20,6 +20,12 @@ HTML/ZIP files, or unsubmitted support drafts are added by this publication.
 Downloaded copies of provider documentation are not republished; official
 sources remain linked. New unrelated CRSE proposal files are left unstaged.
 
+One exception to the scratch-directory exclusion is the 54-byte
+`fixture.dimacs` in the frozen feature-model regression's `pytest-tmp`
+directory. Its SHA-256 is explicitly pinned by the historical audit and by
+the publication checker; it is scientific input evidence, not a live scratch
+directory. No other file is admitted through this exception.
+
 Existing tests and evidence use some preserved historical controller source.
 Those scripts are included for inspection and fake-client verification, not
 as permission to create another pod. Local credential paths may be documented;

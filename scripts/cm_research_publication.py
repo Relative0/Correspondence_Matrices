@@ -23,6 +23,8 @@ SITE = Path("deliverables_n22_24/master_explainer_2026_08_03")
 CAMPAIGN = Path("docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909")
 READERS = Path("docs/research/readers")
 MANIFEST = Path("docs/research/SOURCE-SHA256.json")
+PINNED_FIXTURE = (SITE / "use_case_benchmarks_2026-08-27/runs/configuration-fm-frozen-audit-regression-2026-08-27/pytest-tmp/test_dimacs_parser_preserves_f0/fixture.dimacs").as_posix()
+PINNED_FIXTURE_SHA256 = "ed6657f83632435d5877551ec442560247aba5ee8944a3fff94669147ae85e9b"
 EXTRA_FILES = (
     "scripts/cm_measurement_verify.py", "scripts/cm_memory_estimator_study.py",
     "scripts/cm_runpod_readiness.py", "scripts/cm_research_publication.py",
@@ -39,6 +41,10 @@ def git(*args, root=ROOT):
 
 def excluded(name):
     path = PurePosixPath(name.replace("\\", "/"))
+    # This 54-byte fixture is part of a pinned scientific checksum manifest,
+    # despite its historical directory name. No other scratch is admitted.
+    if path.as_posix() == PINNED_FIXTURE:
+        return False
     parts = [part.lower() for part in path.parts]
     return (
         path.is_absolute() or ".." in parts or not parts or ":" in parts[0]
@@ -68,6 +74,8 @@ def scan_bytes(name, data, depth=0):
     """Refuse suspected secret values without including them in error messages."""
     if excluded(name):
         raise ValueError("excluded publication path: " + name)
+    if name.replace("\\", "/") == PINNED_FIXTURE and hashlib.sha256(data).hexdigest() != PINNED_FIXTURE_SHA256:
+        raise ValueError("pinned parser fixture changed")
     if len(data) > MAX_FILE:
         raise ValueError("publication file too large: " + name)
     if name.lower().endswith(".zip"):

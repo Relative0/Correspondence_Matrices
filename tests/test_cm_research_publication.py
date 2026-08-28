@@ -33,6 +33,12 @@ class ResearchPublicationTests(unittest.TestCase):
                      "docs/runpod/RUNPOD-SETUP-HANDOFF-2026-08-28.md", "tests/test_output_budget.py"):
             self.assertFalse(publication.excluded(path))
 
+    def test_frozen_fixture_is_explicitly_allowed_and_hash_pinned(self):
+        self.assertFalse(publication.excluded(publication.PINNED_FIXTURE))
+        publication.scan_bytes(publication.PINNED_FIXTURE, (ROOT / publication.PINNED_FIXTURE).read_bytes())
+        with self.assertRaisesRegex(ValueError, 'pinned parser fixture changed'):
+            publication.scan_bytes(publication.PINNED_FIXTURE, b'changed')
+
     def test_secret_signature_errors_do_not_echo_values(self):
         secret = b"rpa_" + b"X" * 36
         with self.assertRaises(ValueError) as error:

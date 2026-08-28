@@ -11,10 +11,10 @@ repository snapshot without rerunning scientific timing experiments.
 - 61 Runpod setup, fake-client transport and accounting tests passed.
 - 17 bounded measurement-verification tests passed.
 - Six static website-navigation tests passed.
-- 15 new publication tests passed: path exclusions, credential-signature
+- 16 new publication tests passed: path exclusions, credential-signature
   redaction, sensitive JSON fields, nested archive checks, link conversion,
   numerical units/provenance, superscripts and reader coverage.
-- Total: **120 local tests passed**, across the above distinct suites.
+- Total: **121 local tests passed**, across the above distinct suites.
 - All six generated Markdown editions passed the reproducibility check;
   their local links and the research index resolved.
 - The selected publication files passed the credential/path scan, including
@@ -39,6 +39,13 @@ Staging required Git's per-command `core.longpaths=true` for the nested
 source snapshots. Frozen CRLF records are marked `cr-at-eol` for whitespace
 checking, not converted to LF. Historical trailing spaces/blank lines are
 retained where they belong to hashed evidence; they are not reformatted.
+
+The first extracted-copy test exposed one omitted 54-byte parser fixture
+inside a historically named `pytest-tmp` directory. Unlike live scratch,
+this file is required by the frozen audit's checksum manifest. It is now an
+explicit hash-pinned publication exception; the historical manifest and
+fixture bytes were not changed. The download receipt records the repeated
+extracted-copy verification after this correction.
 
 The companion source manifest hashes Git-index bytes, not assumptions about
 Windows line-ending conversion. The downloadable archive is built from the
