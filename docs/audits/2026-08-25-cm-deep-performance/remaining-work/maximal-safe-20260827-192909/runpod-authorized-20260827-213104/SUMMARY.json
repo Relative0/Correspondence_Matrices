@@ -1,0 +1,57 @@
+{
+  "account_zero_postflight": true,
+  "actual_invoiced_cost": "not queried; no confirmed pod runtime",
+  "api_creation_requests": 1,
+  "approval_received": true,
+  "attempt_records": [
+    {
+      "creation_attempted": true,
+      "error": "RuntimeError: pod creation failed HTTP 500: None",
+      "folder": ".",
+      "http_status": 500,
+      "postflight_pod_count": 0,
+      "status": "orchestrator_error"
+    },
+    {
+      "creation_attempted": false,
+      "error": "RuntimeError: approved CPU flavor is unavailable",
+      "folder": "retry-v2",
+      "http_status": null,
+      "postflight_pod_count": 0,
+      "status": "orchestrator_error"
+    },
+    {
+      "creation_attempted": false,
+      "error": "RuntimeError: approved CPU flavor is unavailable",
+      "folder": "v2-execute-001",
+      "http_status": null,
+      "postflight_pod_count": 0,
+      "status": "orchestrator_error"
+    },
+    {
+      "creation_attempted": false,
+      "error": "RuntimeError: approved CPU flavor is unavailable",
+      "folder": "v2-execute-002",
+      "http_status": null,
+      "postflight_pod_count": 0,
+      "status": "orchestrator_error"
+    }
+  ],
+  "calibration_or_policy_acceptance": false,
+  "confirmed_pod_ids": [],
+  "credential_copied_to_worker": false,
+  "credential_file": "../.env.runpod.local",
+  "credential_file_git_ignored": true,
+  "credential_file_rename": ".env.txt -> .env.runpod.local in the same campaign directory",
+  "credential_value_logged": false,
+  "next_action": "Wait for stable Secure CPU availability or provider recovery, recheck the unchanged approval caps and manifest, then retry this same single smoke. No broader run or replacement for an existing pod is approved.",
+  "package_id": "CM-MEMORY-SMOKE-20260827-192909",
+  "remote_results_received": false,
+  "remote_study_verified": false,
+  "remote_tests_verified": false,
+  "schema": "cm-runpod-smoke-attempt/v1",
+  "source_archive_bytes": 163940,
+  "source_files": 65,
+  "source_hashes_match": true,
+  "status": "blocked_provider"
+}

@@ -1,0 +1,29 @@
+FROM python:3.10-slim@sha256:a0c2acf33d1ad5355112e8ae578908f867a76f70f487b4632792d96889d78b7a
+
+ARG D4_COMMIT=333370cc1e843dd0749c1efe88516e72b5239174
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        cmake \
+        git \
+        libboost-program-options-dev \
+        libgmp-dev \
+        ninja-build \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python -m pip install --no-cache-dir \
+        dd==0.5.7 \
+        numpy==2.2.6 \
+        psutil==7.0.0 \
+        python-sat==1.8.dev24
+
+RUN git clone https://github.com/crillab/d4.git /opt/d4 \
+    && git -C /opt/d4 checkout "${D4_COMMIT}" \
+    && make -C /opt/d4 -j2 \
+    && test "$(git -C /opt/d4 rev-parse HEAD)" = "${D4_COMMIT}"
+
+ENV D4_BINARY=/opt/d4/d4
+WORKDIR /workspace

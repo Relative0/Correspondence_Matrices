@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — feature-model results and independence audit</title>
+<meta name="description" content="Saved real feature-model results, independent correctness checks, measurement gaps, qualified comparisons, raw data and reproducible audit tools.">
+<meta property="og:title" content="Correspondence Matrices — feature-model results and audit">
+<meta property="og:description" content="Correctness checked; performance provisional. Explore the bounded results, evidence limits and reproducible artifacts.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section class="sec">
+    <h1>Feature-model results and audit</h1>
+    <p>This source template is populated by the site builder. <a href="feature-model-evidence.html">Open the generated results page</a>, or <a href="use_case_benchmarks_2026-08-27/CONFIGURATION-FM-INDEPENDENCE-AUDIT-2026-08-27.md">read the audit report</a>.</p>
+  </section>
+</main>
+<script>
+const DATA = /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+<script>
+const E = DATA.e20_feature_model_audit;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· results and audit</span>",
+  links: [["index.html", "Full knowledge base"], ["layperson.html", "Simple One-Pager"],
+          ["expert.html", "Technical Summary"], ["investor.html", "Investor overview"],
+          ["usecases.html", "CM Use Cases"],
+          ["#summary", "Results & audit"], ["#comparisons", "Comparisons"],
+          ["#gaps", "Measurement gaps"], ["#downloads", "Data & tools"]],
+}));
+
+// Text-only evidence tables: data is not interpreted as HTML.
+function evidenceTable(headers, rows, label) {
+  const t = h("table", { "aria-label": label });
+  t.append(h("thead", {}, [h("tr", {}, headers.map(text => h("th", { scope: "col", text })))]));
+  t.append(h("tbody", {}, rows.map(row => h("tr", {}, row.map(text => h("td", { text }))))));
+  return h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": label }, [t]);
+}
+const interval = stats => stats.cluster_bootstrap_ci95.map(x => f(x, 3)).join("–");
+
+app.append(h("header", { class: "page" }, [
+  h("h1", { text: "Feature-model results: what passed, what remains provisional" }),
+  h("p", { class: "lede", text: "Real configuration models now provide concrete evidence for bounded Boolean tasks. Independently checked answers are a stronger result than before—but they do not repair unequal timing, memory or artifact contracts." }),
+  h("p", { class: "meta", text: `Audit: ${E.audit_date} · Website updated: ${E.website_update_date}. This page displays saved experiments; it does not run benchmarks in your browser.` }),
+]));
+
+{
+  const s = section("summary", "The result", "Correctness checked; performance provisional",
+    "{{fm.models}} official model versions from {{fm.histories}} histories, sampled at bounded widths. These are conditioned neighborhoods of real models, not whole-model enumeration or natural user sessions.");
+  s.append(tiles([
+    ["Saved endpoint cases", T("fm.cases"), "CM, ROBDD and d-DNNF artifacts independently replayed"],
+    ["Source-reconstructed delta pairs", T("fm.delta_cases"), "bounded differences across admitted version transitions"],
+    ["Measurement / independence gaps", T("fm.gaps"), "{{fm.high_gaps}} high priority; not silently treated as closed"],
+    ["Frozen scoped tests", T("fm.tests"), "passed; not the full repository suite"],
+  ]));
+  s.append(h("p", { text: "Histories: " + E.histories.join(", ") + "." }));
+  s.append(banner("warn", "Claims this evidence does not support", [
+    "No general CM dominance, production reuse savings, whole-model scalability or global version equivalence follows. Do not use cold d4 divided by warm popcount as a speedup, unequal version-delta work as a warm-kernel ranking, or raw file bytes as intrinsic representation compactness.",
+    "Earlier acquisition-limited pilot notes are historical. The selected full cohort subsequently completed; the later audit and its exact run identities below govern this page. Newer trials from another task are not automatically included.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("correctness", "Independent replay", "What was actually checked",
+    "Each representation was checked against a separately written exhaustive scalar CNF oracle over {{fm.assignments}} assignments per representation. The artifact checker imports neither the CM producer nor CUDD/d4.");
+  s.append(evidenceTable(["Check", "Coverage", "Result / qualification"], [
+    ["CM instruction replay", T("fm.cases") + " cases", "Exact; cached packed answers ignored"],
+    ["Complemented-edge ROBDD JSON replay", T("fm.cases") + " cases", "Exact without CUDD; not the unsaved group-sifted graphs"],
+    ["d-DNNF arc-graph replay and structural counting", T("fm.cases") + " cases", "Exact; deterministic OR, decomposable AND and omitted variables checked"],
+    ["Official inputs and original endpoint witnesses", T("fm.models") + " inputs / " + T("fm.cases") + " slices", "Rehashed, reparsed and source-to-slice reconstruction exact"],
+    ["Version-delta source reconstruction", T("fm.delta_cases") + " pairs", "Exact using retained retrospective joint witnesses"],
+    ["Transition admissions", T("fm.admitted") + " admitted / " + T("fm.transitions") + " attempted", T("fm.refused") + " Linux refusal corroborated by MiniSat22 as well as CaDiCaL195"],
+    ["Frozen regression suite", T("fm.tests") + " tests", "Passed; scoped producer and auditor tests"],
+  ], "Correctness checks and their scope"));
+  s.append(banner("note", "Independence is not third-party certification", [
+    "Separate parsing, mapping, interpreters and scalar checks reduce shared-implementation errors. They are not external certification or a proof for every input. The Linux refusal is two-solver corroboration under exact shared feature names; no machine-checked UNSAT proof was produced.",
+    "Original joint version witnesses were missing. Valid witnesses were regenerated, retained and used to reproduce every saved residual exactly. They are not recovered original process state. Actual group-sifted graphs remain producer-checked only because those graphs were not saved.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("comparisons", "Qualified historical timings", "Warm complete-output ratios, not an overall ranking",
+    "CM time divided by comparator time: below one favors CM for this recorded task only. Histories receive equal weight; intervals are descriptive history-cluster sensitivity checks. They do not correct timing bias or establish production behavior.");
+  s.append(evidenceTable(["Width k", "Cases", "CM / direct CNF", "Cluster interval", "CM / CUDD extraction", "Cluster interval"], E.rows.map(row => [
+    row.k, row.cases,
+    f(row.statistics.endpoint_cm_over_cnf.equal_history_geomean, 3), interval(row.statistics.endpoint_cm_over_cnf),
+    f(row.statistics.endpoint_cm_over_cudd_extraction.equal_history_geomean, 3), interval(row.statistics.endpoint_cm_over_cudd_extraction),
+  ]), "Provisional warm complete-output ratios"));
+  s.append(banner("warn", "The CUDD comparison is sensitive to the cohort", [
+    "At k=16, CM / CUDD is {{fm.cudd.ratio}}, with interval {{fm.cudd.lo}}–{{fm.cudd.hi}} crossing parity. A leave-one-history-out check reaches approximately parity. The aggregate is not a robust ‘CM wins’ headline.",
+    "At k=16, the CM / direct-CNF warm-output ratio is {{fm.cnf.ratio}} [{{fm.cnf.lo}}, {{fm.cnf.hi}}]. This promising bounded result remains task-specific and provisional; it excludes a complete cold pipeline and cannot be promoted to a global solver comparison.",
+  ]));
+  s.append(h("h3", { text: "Which methods and tasks are represented?" }));
+  s.append(evidenceTable(["Task / arm", "Saved evidence", "Boundary"], [
+    ["Complete bounded vector", "CM, direct packed CNF, CSE-flat, CUDD and CaDiCaL", "Count, witness and dense output are different requested artifacts"],
+    ["Warm point queries and partial configurations", T("fm.partial_rows") + " partial-context rows plus point-query records", "Producer-checked tasks; independent graph replay does not independently time these APIs"],
+    ["Exact count / compiled relation", "Native d4 count and d-DNNF supplement", "Cold process count cannot be ranked against an existing vector's warm popcount"],
+    ["BDD order", "Declared-initial-order CUDD plus group-sifting supplement", "Automatic reordering was not explicitly disabled; actual sifted graphs were not retained"],
+    ["Version delta", T("fm.delta_cases") + " admitted bounded cases", "Correctness supported; first-touch work and fresh/shared arms are not matched"],
+    ["Memory and reload", "Sampled whole-process RSS and serialization records", "Unequal tasks / encodings / load windows; not normalized representation costs"],
+    ["Native CUDD ZDD", "Not evaluated in this cohort", "No substitute is presented as a native ZDD result"],
+  ], "Recorded tasks, baselines and limitations"));
+  app.append(s);
+}
+
+{
+  const s = section("coverage", "Workload coverage", "Most sampled contexts were sparse, and most deltas unchanged",
+    "{{fm.unchanged}} of {{fm.delta_cases}} delta cases were unchanged. At k=16, only {{fm.valid_points}} of {{fm.points}} sampled point queries were valid ({{fm.valid_pct}}). These are important limits on what the timing mix represents.");
+  s.append(evidenceTable(["Width k", "Valid point queries / total", "Median solution density", "Unchanged delta cases / total", "Distinct endpoint relations"], E.rows.map(row => [
+    row.k, `${row.measurement.valid_point_queries} / ${row.measurement.point_queries}`,
+    row.statistics.median_solution_density.toPrecision(4),
+    `${row.statistics.delta_unchanged_cases} / ${row.statistics.delta_cases}`,
+    row.statistics.unique_endpoint_relation_digests,
+  ]), "Workload density and change coverage"));
+  s.append(h("p", { text: "Conditioning fixes outside features and auxiliary variables; it is not existential projection. A zero local delta does not mean the full versions are equivalent. Multiple contexts, edit-local slices, balanced valid/invalid controls, held-out histories and natural session traces remain necessary." }));
+  app.append(s);
+}
+
+{
+  const s = section("artifacts", "Serialization accounting", "Compare the contents, not just the file size",
+    "Median bytes below separate structure, cached output and metadata. These are observed encoding choices, not theoretical minimum sizes or newly benchmarked serializers.");
+  const formats = [
+    ["CM original JSON, including cached hex vector", "cm_raw_json_bytes_median"],
+    ["CM structure-only compact JSON", "cm_structure_only_compact_json_bytes_median"],
+    ["Separate packed answer vector", "packed_vector_binary_bytes_median"],
+    ["ROBDD original JSON", "bdd_raw_json_bytes_median"],
+    ["ROBDD compact JSON", "bdd_compact_json_bytes_median"],
+    ["d4 raw arc file", "ddnnf_raw_bytes_median"],
+    ["d4 arcs + audit-defined universe/order/digest manifest", "ddnnf_raw_plus_universe_bytes_median"],
+  ];
+  s.append(evidenceTable(["Component", ...E.rows.map(row => `k=${row.k} bytes`)],
+    formats.map(([label, key]) => [label, ...E.rows.map(row => commas(row.measurement[key]))]), "Median serialized bytes by component"));
+  s.append(h("p", { text: "The d4 bundle is an accounting example. Original feature-name maps and runtime dependencies still need consistent treatment across all arms. The audit recomputed actual serialized graph nodes and arcs; d4's internal counters were not those file counts. This was an accounting discrepancy, not a wrong Boolean answer." }));
+  app.append(s);
+}
+
+{
+  const s = section("gaps", "Open measurement and independence gaps", "What must change before stronger performance claims",
+    "All {{fm.gaps}} findings are retained below, with {{fm.high_gaps}} high-priority findings. Open a finding for its evidence, required interpretation and the source snapshot examined by the audit.");
+  E.gaps.forEach(gap => {
+    const d = h("details", { class: "usecase-benchmark", id: gap.id });
+    d.append(h("summary", { text: `${gap.id} · ${gap.severity} priority · ${gap.title}` }));
+    d.append(h("div", { class: "usecase-benchmark-body" }, [
+      h("p", { text: gap.evidence }),
+      h("p", {}, [h("strong", { text: "Required interpretation / next action: " }), document.createTextNode(gap.disposition)]),
+      h("a", { href: gap.source_href, text: `Observed source: ${gap.symbol}, lines ${gap.start_line}–${gap.end_line}` }),
+      h("p", { class: "meta", text: "This is the audit's observed source snapshot, not proof of the exact dirty implementation loaded by the historical timing process." }),
+    ]));
+    s.append(d);
+  });
+  s.append(h("p", { text: "Protocol accounting also retains an endpoint-selection discrepancy: the written incidence tie-break mentions feature names, while the runner used DIMACS variable IDs. Source reconstruction validates the selection actually executed." }));
+  app.append(s);
+}
+
+{
+  const s = section("scope", "Updates and independence", "Pinned evidence does not silently absorb another task's trials",
+    "This page is built from explicit run identities and checksummed artifacts. If those selected files change, the build refuses to reuse their old audit status. A later experiment needs a new evidence selection and review.");
+  s.append(h("p", { text: "Legacy benchmark charts elsewhere retain their own campaign identity. The feature-model data below has a separate identity; the older campaign revision does not identify the later dirty compiler state." }));
+  s.append(h("p", { text: `Source reconstruction used the existing local virtualenv (python-sat ${E.source_qualification.audit_pysat}), versus historical python-sat ${E.source_qualification.original_pysat}. Docker was unavailable for this follow-up. No performance comparison is made across those environments.` }));
+  s.append(h("p", { text: "The audit rechecked allowlisted sources and saved artifacts before and after each phase, and ran scoped regression from a frozen copy. That does not prove the whole machine was idle. Separate memory-policy trials or other later work are not retiming or certification of this cohort." }));
+  s.append(evidenceTable(["Selected run", "Role", "Verified files"], E.runs.map(run => [run.id, run.role, run.files_verified]), "Exact selected run identities"));
+  const checksums = h("ul", { class: "benchmark-source-list" });
+  E.runs.forEach(run => checksums.append(h("li", {}, [
+    h("a", { href: run.checksum_href, text: run.role + " checksums" }),
+    document.createTextNode(" · manifest SHA-256 "), h("code", { text: run.checksum_sha256 }),
+  ])));
+  s.append(checksums);
+  app.append(s);
+}
+
+{
+  const s = section("downloads", "Reproduce and inspect", "Reports, reusable data, raw results and audit tools",
+    "The audit tools can replay the saved artifacts without CUDD or d4 binaries. Source reconstruction additionally needs the pinned official DIMACS payloads and the declared SAT dependencies. The README documents commands and new-output-directory requirements.");
+  const list = h("ul", { class: "benchmark-source-list" });
+  E.links.forEach(link => list.append(h("li", {}, [
+    h("a", { href: link.href, text: link.label }),
+    link.note && h("span", { text: " — " + link.note }),
+  ])));
+  s.append(list);
+  s.append(h("p", { text: "Raw files preserve their original labels and provisional ratios for traceability; use this audit's qualifications when interpreting them. This results page is not a benchmark runner." }));
+  s.append(h("h3", { text: "Earlier experiments and other use-case materials" }));
+  const earlier = [
+    ["CONFIGURATION-REPRESENTATION-BATTERY-RESULTS.md", "Earlier real/synthetic representation battery"],
+    ["HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md", "EPFL hardware context pilot"],
+    ["CM_USE_CASE_BENCHMARK_RESEARCH_2026-08-27.md", "Research dossier for all eight use cases"],
+    ["synthetic/MANIFEST.json", "Reusable synthetic demonstration suites"],
+  ];
+  s.append(h("ul", { class: "benchmark-source-list" }, earlier.map(([path, label]) =>
+    h("li", {}, [h("a", { href: "use_case_benchmarks_2026-08-27/" + path, text: label })]))));
+  s.append(h("p", { text: "These earlier materials retain their own scope and audit status. This deeper feature-model audit does not certify every other dataset or domain." }));
+  s.append(h("h3", { text: "Primary format and ordering references" }));
+  s.append(h("ul", {}, E.primary_sources.map((href, i) => h("li", {}, [
+    h("a", { href, text: i === 0 ? "Pinned official d4 arc-format description" : "Pinned official dd/CUDD ordering implementation" }),
+  ]))));
+  app.append(s);
+}
+
+app.append(banner("note", "Next measurement gate", [
+  "Freeze the chosen implementation under a new run identity. Match cold/warm, fresh/shared, fixed/group-sifted, count/output and load/reuse tasks; retain ordering configuration, host-load metadata, failures and actual artifacts. More datasets should extend those repaired comparisons, not hide these limitations.",
+]));
+app.append(pageFooter("Feature-model audit scope only. Correctness passes are not performance certification or claims of production dominance.", true));
+</script>
+</body>
+</html>

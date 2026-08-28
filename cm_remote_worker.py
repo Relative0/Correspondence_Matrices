@@ -18,6 +18,14 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
     # refuses to record a words run against such a worker.
     diagnostics: dict[str, Any] = {"remote_words_eval": bool(request.words_eval)}
     try:
+        t_budget = time.perf_counter()
+        output_budget = OutputBudget(
+            max_output_bytes=request.max_output_bytes,
+            max_temporary_bytes=request.max_temporary_bytes,
+            max_output_vars=request.max_full_output_vars,
+            allow_reduced_output=request.allow_reduced_output,
+        )
+        budget_s = time.perf_counter() - t_budget
         expr = request.to_expr()
         t_compile = time.perf_counter()
         compiled = compile_expr(expr, diagnostics=diagnostics, use_persistent_cache=request.use_persistent_cache)
@@ -25,12 +33,6 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
 
         t_exec = time.perf_counter()
         result = None
-        output_budget = OutputBudget(
-            max_output_bytes=request.max_output_bytes,
-            max_temporary_bytes=request.max_temporary_bytes,
-            max_output_vars=request.max_full_output_vars,
-            allow_reduced_output=request.allow_reduced_output,
-        )
         for _ in range(max(1, request.eval_repeat)):
             result = evaluate_compiled(
                 compiled,
@@ -43,7 +45,9 @@ def execute_cm_request(request: CMRemoteRequest) -> CMRemoteResponse:
                 allow_reduced_output=request.allow_reduced_output,
                 max_full_output_vars=request.max_full_output_vars,
             )
-        exec_s = time.perf_counter() - t_exec
+        # Keep admission charged to execution as before, despite validating it
+        # before compilation so malformed requests cannot populate the cache.
+        exec_s = budget_s + time.perf_counter() - t_exec
         repr_name, payload = result_payload(result, return_format=request.return_format)
         return CMRemoteResponse(
             request_id=request.request_id,

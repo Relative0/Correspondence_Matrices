@@ -1,0 +1,108 @@
+# Correspondence Matrices: research library
+
+Read the material directly on GitHub, or download it to inspect the
+interactive explainer, raw measurements, source snapshots and tests locally.
+This library integrates the project's August 27–28, 2026 follow-up work.
+Evidence boundaries and unsuccessful experiments are retained.
+
+## Start reading
+
+| Reader | What it covers |
+| --- | --- |
+| [Simple One-Pager](readers/SIMPLE-ONE-PAGER.md) | The idea, suitable problems and important limits, in plain language. |
+| [Technical Summary](readers/TECHNICAL-SUMMARY.md) | Representation, output contracts, comparison rules and remaining work. |
+| [CM Use Cases](readers/CM-USE-CASES.md) | All eight fields: pain points, proposed CM roles, incumbents, real datasets, synthetic scenarios and success criteria. |
+| [Master Explainer](readers/MASTER-EXPLAINER.md) | The full authored knowledge-base content, including corrections and number provenance. |
+| [Verified Runpod smoke](readers/RUNPOD-MEMORY-SMOKE.md) | Executed results, memory findings, cleanup and remaining measurement gaps. |
+| [Runpod setup and handoff](readers/RUNPOD-SETUP.md) | Working configuration and distinctions between historical workflows; no credentials. |
+
+The generated Markdown readers do not require JavaScript. They are reading
+editions, not screenshots or pixel-identical copies of the interactive pages.
+Use the downloaded HTML for charts, controls and progressive disclosure.
+
+## Download and view the interactive explainer
+
+- [Download the research snapshot ZIP](https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/downloads/CM-Research-2026-08-28.zip?raw=true).
+- [Snapshot identity and checksums](https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/downloads/README.md).
+- [Download the latest complete repository](https://github.com/Relative0/Correspondence_Matrices/archive/refs/heads/main.zip).
+
+Extract the ZIP fully, then open:
+
+```text
+Correspondence-Matrices-research-2026-08-28/deliverables_n22_24/master_explainer_2026_08_03/index.html
+```
+
+The same directory contains `layperson.html`, `expert.html`, `usecases.html`
+and `feature-model-evidence.html`. Open them in a normal browser after
+extraction; GitHub's source-file viewer is not the interactive website.
+The site displays saved evidence and does not launch paid tests.
+
+Some frozen source snapshots have long filenames. On Windows, extract to a
+short directory with a long-path-capable extractor; Python's built-in
+extractor is one option:
+
+```powershell
+python -m zipfile -e CM-Research-2026-08-28.zip C:\CM
+```
+
+For a Git checkout, use `git -c core.longpaths=true clone` with the repository
+URL and a short destination. This flag applies to that command, not a global
+Git setting. Scientific source snapshots have deliberately not been renamed.
+
+The snapshot preserves repository-relative paths. Its manifest provides
+per-file SHA-256 hashes, while the download page records the archive hash
+and exact source commit. The branch ZIP is a moving snapshot; use the
+commit-pinned download for a reproducible version.
+[GitHub's archive documentation](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
+
+## What has actually been measured?
+
+| Evidence | Verified scope | What it does not establish |
+| --- | --- | --- |
+| [Feature-model evidence and independence audit](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-INDEPENDENCE-AUDIT-2026-08-27.md) | Bounded real-model slices, native CUDD and other representation results, version-delta and artifact audits. | Full-model superiority, independent third-party replication, or repaired cold/warm, memory and serialization comparisons. |
+| [Measurement-repair protocol](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-MEASUREMENT-RERUN-PROTOCOL-2026-08-28.md) | A specified protocol and a separate 28-cell local functional pilot. | Execution of the complete repaired benchmark campaign. |
+| [EPFL context pilot](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md) | A published hardware-expression adjacency and bounded context tests. | A deployed design workflow or whole-chip scalability. |
+| [Runpod memory smoke](readers/RUNPOD-MEMORY-SMOKE.md) | 70 passing focused tests; 312 successful rows, including 72 comparable representation calls; verified pod deletion. | Real-world workload performance, full estimator calibration, or production acceptance. |
+
+In the memory smoke, the old estimate was too low in 66/72 comparable
+calls. The candidate covered all 72 but sometimes overestimated by about
+185×. Those are traced-memory estimates on small synthetic cases—not CM
+speedups. The candidate remains diagnostic, not production-approved.
+
+## Datasets, protocols and raw results
+
+- [Eight-field benchmark research](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CM_USE_CASE_BENCHMARK_RESEARCH_2026-08-27.md)
+  and [machine-readable dataset catalog](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CM-USE-CASE-BENCHMARK-CATALOG.json).
+- [Feature-model representation battery](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-REPRESENTATION-BATTERY-RESULTS.md)
+  and [history shootout protocol](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-HISTORY-SHOOTOUT-PROTOCOL.md).
+- [Benchmark run directories](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs)
+  and [independence-audit artifacts](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/independence_audit_2026_08_27).
+- [Successful cloud-smoke raw evidence](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/http-ephemeral-execute-001/evidence/run-output)
+  and [campaign continuation, including failed attempts](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/RUNPOD-CONTINUATION-20260828.md).
+- [Memory estimator model](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/MEMORY-ESTIMATOR-MODEL.md),
+  [preregistration](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/PREREGISTRATION.md)
+  and [local verification continuation](../audits/CM-VERIFICATION-CONTINUATION-2026-08-28.md).
+
+Dataset references are leads for reproductions, not claims that every
+dataset has been benchmarked. Acquisition, subset selection, semantics,
+license and exclusion rules remain part of each protocol. Upstream corpora
+and libraries retain their own licenses; this package grants no new rights
+to third-party data. External repository clones, credentials and installed
+dependencies are not bundled. See [publication notes](PUBLICATION-NOTES.md).
+
+## Reproduce the documentation and checks
+
+From the repository root, with the project's dependencies available:
+
+```powershell
+python -B deliverables_n22_24/master_explainer_2026_08_03/cm_master_build_2026_08_03.py
+python -B scripts/cm_research_publication.py readers
+python -B scripts/cm_research_publication.py readers --check
+python -B -m unittest discover -s tests -p 'test_cm_research_publication.py'
+python -B -m unittest discover -s tests -p '*website.py'
+python -B -m unittest discover -s tests -p 'test_cm_runpod_*.py'
+```
+
+Reading, rebuilding documentation and running the fake-client tests do not
+start cloud resources. Historical cloud controllers are provenance, not
+reusable launch commands: their one-shot authorizations are consumed.

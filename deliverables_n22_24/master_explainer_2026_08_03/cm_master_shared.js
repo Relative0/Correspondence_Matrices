@@ -653,6 +653,9 @@ function heatGrid(cfg) {
 
 /* ================================================== page furniture */
 function topbar(cfg) {
+  if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
+    cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
+  }
   const bar = h("div", { class: "topbar" });
   const inner = h("div", { class: "inner" });
   inner.append(h("div", { class: "brand", html: cfg.brand }));
@@ -766,6 +769,21 @@ function evidenceBoundary() {
   return b;
 }
 
+function featureModelAuditUpdate() {
+  const s = section("feature-model-audit", "Feature-model evidence · 2026-08-27",
+    "Real-model results: correctness checked, performance provisional",
+    "The saved cohort covers {{fm.models}} official model versions across {{fm.histories}} histories. Independent CM, ROBDD and d-DNNF replay passed {{fm.cases}} bounded cases; source reconstruction passed {{fm.delta_cases}} version-delta pairs.");
+  s.append(banner("warn", "Do not turn correctness into a speed claim", [
+    "The audit documents {{fm.gaps}} measurement and independence gaps ({{fm.high_gaps}} high priority). Cold/warm timing, version-delta work, memory and serialization are not fully matched. These results do not establish production or domain dominance.",
+  ]));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "feature-model-evidence.html", text: "Read the results, qualifications and evidence" }),
+    h("a", { href: "feature-model-evidence.html#gaps", text: "Review every measurement gap" }),
+    h("a", { href: "feature-model-evidence.html#downloads", text: "Reuse the data and audit tools" }),
+  ]));
+  return s;
+}
+
 function currentEvidenceUpdate(audience = "master") {
   const c = DATA._content.current_update;
   const s = section("latest-evidence", "Evidence update · 2026-08-26/27", c.title,
@@ -834,6 +852,10 @@ function useCaseMap(items) {
       ]),
     ]));
     c.append(h("p", { class: "usecase-problem", html: P(audit?.pain_point || item.problem) }));
+    if (item.id === "configuration") {
+      c.append(h("p", { html: P("Saved real-model evidence now exists: {{fm.cases}} bounded cases and {{fm.delta_cases}} source-reconstructed delta pairs. Performance remains provisional.") }));
+      c.append(h("a", { href: "feature-model-evidence.html", text: "Configuration results & independence audit" }));
+    }
     c.append(h("dl", { class: "usecase-detail" }, [
       audit && h("dt", { text: "Audit conclusion" }), audit && h("dd", { html: P(audit.audit_verdict) }),
       h("dt", { text: "Why CM could fit" }), h("dd", { html: P(audit?.cm_role || item.cm_fit) }),
@@ -1870,13 +1892,14 @@ function pageFooter(extra, minimal) {
   }
   foot.append(h("p", {
     html:
-      `Built from evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> (campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>) ` +
+      `Legacy benchmark evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> (campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>) ` +
       `by <code>cm_master_build_2026_08_03.py</code>, which reads every number from the evidence files listed under each figure. ` +
+      `The <a href="feature-model-evidence.html#scope">feature-model follow-up has separate run identities</a>. ` +
       `No benchmark was re-run and no committed evidence file was modified to produce this site.`,
   }));
   foot.append(h("p", {
     html:
-      `Local measurements: ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy}. ` +
+      `Legacy campaign only — local measurements: ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy}. ` +
       `Pod measurements: Linux / AMD EPYC, cpu3c flavour, all pods terminated (${M.all_pods_terminated}). ` +
       `Total cloud spend for the whole campaign ${FMT.usd(M.cost_usd)} against a $${M.cost_cap_usd.toFixed(2)} cap. ` +
       `Test suite: ${M.tests}.`,

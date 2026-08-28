@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="6" time="8.814" timestamp="2026-08-27T19:33:11.301613+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_output_budget" name="test_refusal_clears_prior_output_diagnostics[False]" time="0.550"><failure message="AssertionError: assert 'ok' == 'refused'&#10;  &#10;  - refused&#10;  + ok">dense = False
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002F098D5CE20&gt;
+
+    @pytest.mark.parametrize("dense", [False, True])
+    def test_refusal_clears_prior_output_diagnostics(dense, monkeypatch) -&gt; None:
+        import cm_ir
+    
+        node = compile_expr_to_cm_ir(Var(0), reuse_cache=False, persistent_cache=False)
+        diagnostics = {}
+    
+        def call(budget):
+            if dense:
+                return materialize_cm(node, ["x0"], [], diagnostics=diagnostics, output_budget=budget)
+            return materialize_hybrid_no_reinflate(
+                node, ["x0"], diagnostics=diagnostics, output_budget=budget, flat_eval=True
+            )
+    
+        call(None)
+        assert diagnostics["output_budget_status"] == "ok"
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("refused call reached material allocation")
+    
+        monkeypatch.setattr(cm_ir, "_materialize_ir_tagged", forbidden)
+        from cmbench.backends.bitset_engine import CMNodeEngineSelection
+        monkeypatch.setattr(CMNodeEngineSelection, "evaluate_node", forbidden)
+        with pytest.raises(OutputBudgetExceeded):
+            call(OutputBudget(max_output_bytes=0))
+&gt;       assert diagnostics["output_budget_status"] == "refused"
+E       AssertionError: assert 'ok' == 'refused'
+E         
+E         - refused
+E         + ok
+
+tests\test_output_budget.py:213: AssertionError</failure></testcase><testcase classname="tests.test_output_budget" name="test_refusal_clears_prior_output_diagnostics[True]" time="0.044"><failure message="assert 2 == 0">dense = True
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002F0B1ACFBE0&gt;
+
+    @pytest.mark.parametrize("dense", [False, True])
+    def test_refusal_clears_prior_output_diagnostics(dense, monkeypatch) -&gt; None:
+        import cm_ir
+    
+        node = compile_expr_to_cm_ir(Var(0), reuse_cache=False, persistent_cache=False)
+        diagnostics = {}
+    
+        def call(budget):
+            if dense:
+                return materialize_cm(node, ["x0"], [], diagnostics=diagnostics, output_budget=budget)
+            return materialize_hybrid_no_reinflate(
+                node, ["x0"], diagnostics=diagnostics, output_budget=budget, flat_eval=True
+            )
+    
+        call(None)
+        assert diagnostics["output_budget_status"] == "ok"
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("refused call reached material allocation")
+    
+        monkeypatch.setattr(cm_ir, "_materialize_ir_tagged", forbidden)
+        from cmbench.backends.bitset_engine import CMNodeEngineSelection
+        monkeypatch.setattr(CMNodeEngineSelection, "evaluate_node", forbidden)
+        with pytest.raises(OutputBudgetExceeded):
+            call(OutputBudget(max_output_bytes=0))
+        assert diagnostics["output_budget_status"] == "refused"
+&gt;       assert diagnostics["final_output_elements"] == 0
+E       assert 2 == 0
+
+tests\test_output_budget.py:214: AssertionError</failure></testcase><testcase classname="tests.test_output_budget" name="test_remote_limits_preserve_null_and_reject_fraction[max_output_bytes]" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'max_output_bytes'
+
+    @pytest.mark.parametrize("field", ["max_output_bytes", "max_temporary_bytes", "max_full_output_vars"])
+    def test_remote_limits_preserve_null_and_reject_fraction(field) -&gt; None:
+        payload = CMRemoteRequest.from_expr(Var(0), ["x0"]).to_dict()
+        payload[field] = None
+        assert getattr(CMRemoteRequest.from_dict(payload), field) is None
+        payload[field] = -0.5
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_output_budget.py:280: Failed</failure></testcase><testcase classname="tests.test_output_budget" name="test_remote_limits_preserve_null_and_reject_fraction[max_temporary_bytes]" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'max_temporary_bytes'
+
+    @pytest.mark.parametrize("field", ["max_output_bytes", "max_temporary_bytes", "max_full_output_vars"])
+    def test_remote_limits_preserve_null_and_reject_fraction(field) -&gt; None:
+        payload = CMRemoteRequest.from_expr(Var(0), ["x0"]).to_dict()
+        payload[field] = None
+        assert getattr(CMRemoteRequest.from_dict(payload), field) is None
+        payload[field] = -0.5
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_output_budget.py:280: Failed</failure></testcase><testcase classname="tests.test_output_budget" name="test_remote_limits_preserve_null_and_reject_fraction[max_full_output_vars]" time="0.002"><failure message="Failed: DID NOT RAISE &lt;class 'ValueError'&gt;">field = 'max_full_output_vars'
+
+    @pytest.mark.parametrize("field", ["max_output_bytes", "max_temporary_bytes", "max_full_output_vars"])
+    def test_remote_limits_preserve_null_and_reject_fraction(field) -&gt; None:
+        payload = CMRemoteRequest.from_expr(Var(0), ["x0"]).to_dict()
+        payload[field] = None
+        assert getattr(CMRemoteRequest.from_dict(payload), field) is None
+        payload[field] = -0.5
+&gt;       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE &lt;class 'ValueError'&gt;
+
+tests\test_output_budget.py:280: Failed</failure></testcase><testcase classname="tests.test_output_budget" name="test_legacy_remote_missing_limits_and_refusal_has_no_payload" time="0.003"><failure message="KeyError: 'output_budget_status'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002F0B197BAF0&gt;
+
+    def test_legacy_remote_missing_limits_and_refusal_has_no_payload(monkeypatch) -&gt; None:
+        import cm_remote_worker
+    
+        payload = {"request_id": "legacy", "expr": CMRemoteRequest.from_expr(Var(0), ["x0"]).expr,
+                   "vars_all": ["x0"]}
+        legacy = CMRemoteRequest.from_dict(payload)
+        assert legacy.max_output_bytes == 1 &lt;&lt; 16
+        assert legacy.max_temporary_bytes is None
+        assert legacy.max_full_output_vars is None
+    
+        def forbidden(*args, **kwargs):
+            pytest.fail("refusal reached serialization")
+    
+        monkeypatch.setattr(cm_remote_worker, "result_payload", forbidden)
+        payload["max_output_bytes"] = 0
+        response = cm_remote_worker.execute_cm_request(CMRemoteRequest.from_dict(payload))
+        assert response.status == "refused"
+        assert response.result is None
+&gt;       assert response.diagnostics["output_budget_status"] == "refused"
+E       KeyError: 'output_budget_status'
+
+tests\test_output_budget.py:302: KeyError</failure></testcase></testsuite></testsuites>

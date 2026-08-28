@@ -10,6 +10,7 @@ import numpy as np
 
 from cm_expr_serde import expr_from_json, expr_to_json
 from cm_exprlib import Expr
+from cmbench.output_budget import OutputBudget
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,13 @@ class CMRemoteRequest:
 
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "CMRemoteRequest":
+        # Validate before coercion: int(-0.5), int(True), and int("16") must not
+        # silently turn malformed limits into valid remote admission policies.
+        budget = OutputBudget(
+            max_output_bytes=data.get("max_output_bytes", 1 << 16),
+            max_temporary_bytes=data.get("max_temporary_bytes"),
+            max_output_vars=data.get("max_full_output_vars"),
+        )
         return cls(
             request_id=str(data["request_id"]),
             expr=dict(data["expr"]),
@@ -74,19 +82,9 @@ class CMRemoteRequest:
             eval_repeat=int(data.get("eval_repeat", 1)),
             return_format=str(data.get("return_format", "packed_bitset_or_summary")),
             allow_reduced_output=bool(data.get("allow_reduced_output", False)),
-            max_full_output_vars=(
-                None if data.get("max_full_output_vars") is None else int(data.get("max_full_output_vars"))
-            ),
-            max_output_bytes=(
-                None
-                if data.get("max_output_bytes", 1 << 16) is None
-                else int(data.get("max_output_bytes", 1 << 16))
-            ),
-            max_temporary_bytes=(
-                None
-                if data.get("max_temporary_bytes") is None
-                else int(data.get("max_temporary_bytes"))
-            ),
+            max_full_output_vars=budget.max_output_vars,
+            max_output_bytes=budget.max_output_bytes,
+            max_temporary_bytes=budget.max_temporary_bytes,
             words_eval=bool(data.get("words_eval", False)),
         )
 

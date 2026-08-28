@@ -1,4 +1,4 @@
-"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-27).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-28).
 
 Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
 campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
@@ -13,6 +13,7 @@ self-contained master page, three derived audience pages, and a use-case guide.
     investor.html                    problem / evidence / roadmap cut
     expert.html                      dense technical cut
     usecases.html                    field-oriented application hypotheses
+    feature-model-evidence.html       saved real-model results and audit gaps
 
 Every number rendered on any page is read from a raw or summary evidence file
 by this script and carried in `_numbers` with a file+field provenance string.
@@ -37,11 +38,14 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from cm_feature_model_evidence import build_feature_model_evidence
+
 HERE = Path(__file__).resolve().parent
 DELIV = HERE.parent
 REPO = DELIV.parent
 
-# The evidence inputs used by this site are frozen at this revision.  Do not
+# The legacy campaign inputs are frozen at this revision. The feature-model
+# follow-up has its own separately pinned run/checksum identities. Do not
 # derive this value from the checkout's current HEAD: doing so makes a rebuild
 # change its own output after the generated site is committed.
 EVIDENCE_REVISION = "4dbfffc1db749e85401d533c5a07cb529a41eb37"
@@ -1506,6 +1510,12 @@ D["_flags"] = [
     },
 ]
 
+# ---------------------------------------------------------------- feature-model audit (separately pinned)
+
+D["e20_feature_model_audit"], feature_model_numbers = build_feature_model_evidence(HERE)
+for key, record in feature_model_numbers.items():
+    num(key, record["value"], record["fmt"], record["prov"], record["note"])
+
 # ---------------------------------------------------------------- content
 
 content["use_case_benchmark_catalog"] = use_case_catalog
@@ -1564,6 +1574,7 @@ PAGES = [
     ("cm_investor_template.html", "investor.html"),
     ("cm_expert_template.html", "expert.html"),
     ("cm_usecases_template.html", "usecases.html"),
+    ("cm_feature_model_template.html", "feature-model-evidence.html"),
 ]
 
 out_json = HERE / "cm_master_data_2026_08_03.json"

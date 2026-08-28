@@ -1,0 +1,38 @@
+{
+  "checked_utc": "2026-08-27T16:39:58.307118+00:00",
+  "offers": [
+    {
+      "availability": "HIGH",
+      "compute_usd_per_hour": 0.24,
+      "cpu_id": "cpu3c",
+      "data_centers": [],
+      "projected_20_min_compute_usd": 0.08,
+      "ram_gb": 16,
+      "vcpu": 8
+    },
+    {
+      "availability": "HIGH",
+      "compute_usd_per_hour": 0.32,
+      "cpu_id": "cpu3g",
+      "data_centers": [],
+      "projected_20_min_compute_usd": 0.106667,
+      "ram_gb": 32,
+      "vcpu": 8
+    },
+    {
+      "availability": "NONE",
+      "compute_usd_per_hour": 0.28,
+      "cpu_id": "cpu5c",
+      "data_centers": [],
+      "projected_20_min_compute_usd": 0.093333,
+      "ram_gb": 16,
+      "vcpu": 8
+    }
+  ],
+  "read_only": true,
+  "request_schema_sections": {
+    "BaseContainerConfig": "    BaseContainerConfig:\n      type: object\n      description: >\n        Container configuration universal to every containerized resource.\n        Compose ContainerConfig instead unless the resource cannot support\n        private registries (clusters, until the upstream input accepts a\n        registry credential).\n      properties:\n        args:\n          type: string\n          description: Arguments passed to the container entrypoint\n          examples:\n            - ''\n        disk:\n          type: integer\n          minimum: 1\n          description: Container disk in GB (ephemeral, wiped on restart)\n          examples:\n            - 50\n        env:\n          type: object\n          additionalProperties:\n            type: string\n          description: Environment variables as key-value pairs\n          examples:\n            - JUPYTER_PASSWORD: hunter2\n        image:\n          type: string\n          description: Docker image reference\n          examples:\n            - runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404\n        ports:\n          type: array\n          description: Exposed ports, formatted as port/protocol\n          items:\n            type: string\n          examples:\n            - - 8888/http\n              - 22/tcp\n",
+    "BaseCpuConfig": "    BaseCpuConfig:\n      type: object\n      required:\n        - id\n        - vcpuCount\n      properties:\n        id:\n          type: string\n          description: CPU flavor identifier, as returned by GET /v2/catalog/cpus.\n          examples:\n            - cpu5c\n          minLength: 1\n        vcpuCount:\n          type: integer\n          minimum: 2\n          description: >-\n            Number of vCPUs. Must be valid for the selected CPU flavor and must\n            be a power of two.\n          examples:\n            - 4\n"
+  },
+  "resource_writes": 0
+}

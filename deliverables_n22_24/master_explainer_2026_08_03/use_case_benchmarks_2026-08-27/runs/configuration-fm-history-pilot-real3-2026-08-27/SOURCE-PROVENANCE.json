@@ -1,0 +1,286 @@
+{
+  "acquisition_policy": "read-only exact Git objects; no source scripts executed",
+  "diagnostic_limit_models": 0,
+  "diagnostic_model_ids": [
+    "automotive2@2_1",
+    "FinancialServices01@2017-05-22",
+    "BusyBox@2007-05-20_17-12-43"
+  ],
+  "schema_version": "1.0",
+  "selected_payloads": [
+    {
+      "archive_member": null,
+      "cache_filename": "a4fd10d684296bb0cf1aa3ad2a1dc8e525ada838.dimacs",
+      "dimacs_sha256": "80870caebe19aded263a4bc412ea369d98dfe3f43e639c65141edb5db3c7894c",
+      "dimacs_size_bytes": 3925508,
+      "git_blob_sha1": "a4fd10d684296bb0cf1aa3ad2a1dc8e525ada838",
+      "history": "automotive2",
+      "model_id": "automotive2@2_1",
+      "ordinal": 0,
+      "raw_sha256": "80870caebe19aded263a4bc412ea369d98dfe3f43e639c65141edb5db3c7894c",
+      "raw_size_bytes": 3925508,
+      "source_filename": "Knüppel2017-2_1.dimacs",
+      "source_location": "derived_dimacs",
+      "transition_labels": [
+        "first"
+      ],
+      "version": "2_1"
+    },
+    {
+      "archive_member": null,
+      "cache_filename": "8cdec0df197c1d20ef01ffefe0b470545ed26e29.dimacs",
+      "dimacs_sha256": "e466d4d3ad031a3b843dde6f34e7b13aad2c060d7c485e23cf05b611584febcb",
+      "dimacs_size_bytes": 79908,
+      "git_blob_sha1": "8cdec0df197c1d20ef01ffefe0b470545ed26e29",
+      "history": "FinancialServices01",
+      "model_id": "FinancialServices01@2017-05-22",
+      "ordinal": 0,
+      "raw_sha256": "e466d4d3ad031a3b843dde6f34e7b13aad2c060d7c485e23cf05b611584febcb",
+      "raw_size_bytes": 79908,
+      "source_filename": "Nieke2018-2017-05-22.dimacs",
+      "source_location": "derived_dimacs",
+      "transition_labels": [
+        "first"
+      ],
+      "version": "2017-05-22"
+    },
+    {
+      "archive_member": null,
+      "cache_filename": "7e4685860bdf13a4b7b1b72242cb4411c429f906.dimacs",
+      "dimacs_sha256": "1568a1dea5ef192366a643e5a1e3474c9467c55290015f986cb632f3fc77ec24",
+      "dimacs_size_bytes": 18135,
+      "git_blob_sha1": "7e4685860bdf13a4b7b1b72242cb4411c429f906",
+      "history": "BusyBox",
+      "model_id": "BusyBox@2007-05-20_17-12-43",
+      "ordinal": 0,
+      "raw_sha256": "1568a1dea5ef192366a643e5a1e3474c9467c55290015f986cb632f3fc77ec24",
+      "raw_size_bytes": 18135,
+      "source_filename": "Pett2021-2007-05-20_17-12-43.dimacs",
+      "source_location": "derived_dimacs",
+      "transition_labels": [
+        "first"
+      ],
+      "version": "2007-05-20_17-12-43"
+    }
+  ],
+  "selection_policy": "first, middle, and last adjacent transition per Complete.csv history",
+  "source_branch": "master",
+  "source_commit": "afa60ee2c836e7bdc4068e0f4f128ea31158d2ad",
+  "source_url": "https://github.com/SoftVarE-Group/feature-model-benchmark.git",
+  "tracked_inputs": {
+    "LICENSE": {
+      "sha256": "410ec48b7f6160cf092afd3fec0eb887ab450044c400ce74d5bc8f10f4b02c0c",
+      "size_bytes": 1092
+    },
+    "README.md": {
+      "sha256": "8bbf8e11360410f9f0e14f390d588d8bef2d1d8c461d1b2426de3cfef580d9bc",
+      "size_bytes": 7069
+    },
+    "statistics/Complete.csv": {
+      "sha256": "cf97d9c1913e06249a3132dfd56d2558047a912fcf03a7eb7ffe5de09ae1750e",
+      "size_bytes": 1158250
+    },
+    "statistics/Overview.csv": {
+      "sha256": "7f6fda23d015184545e0af65f5b73976c44c3cdf1f1da6301a07b2f7fbbee4a3",
+      "size_bytes": 168160
+    }
+  },
+  "transitions": [
+    {
+      "history": "automotive2",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2_1",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2_2"
+        },
+        {
+          "earlier_ordinal": 1,
+          "earlier_version": "2_2",
+          "label": "middle",
+          "later_ordinal": 2,
+          "later_version": "2_3"
+        },
+        {
+          "earlier_ordinal": 2,
+          "earlier_version": "2_3",
+          "label": "last",
+          "later_ordinal": 3,
+          "later_version": "2_4"
+        }
+      ],
+      "version_count": 4
+    },
+    {
+      "history": "FinancialServices01",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2017-05-22",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2017-09-28"
+        },
+        {
+          "earlier_ordinal": 4,
+          "earlier_version": "2017-12-22",
+          "label": "middle",
+          "later_ordinal": 5,
+          "later_version": "2018-01-23"
+        },
+        {
+          "earlier_ordinal": 8,
+          "earlier_version": "2018-04-23",
+          "label": "last",
+          "later_ordinal": 9,
+          "later_version": "2018-05-09"
+        }
+      ],
+      "version_count": 10
+    },
+    {
+      "history": "BusyBox",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2007-05-20_17-12-43",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2007-05-20_21-51-38"
+        },
+        {
+          "earlier_ordinal": 123,
+          "earlier_version": "2008-07-15_22-01-49",
+          "label": "middle",
+          "later_ordinal": 124,
+          "later_version": "2008-07-17_18-26-45"
+        },
+        {
+          "earlier_ordinal": 247,
+          "earlier_version": "2010-05-04_15-45-25",
+          "label": "last",
+          "later_ordinal": 248,
+          "later_version": "2010-05-09_00-13-40"
+        }
+      ],
+      "version_count": 249
+    },
+    {
+      "history": "Fiasco",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2017-09-26_11-30-56",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2018-02-09_09-07-43"
+        },
+        {
+          "earlier_ordinal": 14,
+          "earlier_version": "2018-08-20_14-36-18",
+          "label": "middle",
+          "later_ordinal": 15,
+          "later_version": "2018-11-01_09-46-44"
+        },
+        {
+          "earlier_ordinal": 29,
+          "earlier_version": "2020-10-20_12-35-53",
+          "label": "last",
+          "later_ordinal": 30,
+          "later_version": "2020-12-01_14-09-14"
+        }
+      ],
+      "version_count": 31
+    },
+    {
+      "history": "Linux",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2013-11-06T06_39_45+01_00",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2013-12-11T15_52_34+01_00"
+        },
+        {
+          "earlier_ordinal": 24,
+          "earlier_version": "2015-11-03T18_59_10-08_00",
+          "label": "middle",
+          "later_ordinal": 25,
+          "later_version": "2016-01-07T14_11_32+01_00"
+        },
+        {
+          "earlier_ordinal": 48,
+          "earlier_version": "2017-12-17T13_57_26+01_00",
+          "label": "last",
+          "later_ordinal": 49,
+          "later_version": "2018-01-08T11_10_40+01_00"
+        }
+      ],
+      "version_count": 50
+    },
+    {
+      "history": "soletta",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2015-06-26_18-38-56",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2015-06-26_23-03-00"
+        },
+        {
+          "earlier_ordinal": 75,
+          "earlier_version": "2015-11-25_17-57-13",
+          "label": "middle",
+          "later_ordinal": 76,
+          "later_version": "2015-11-27_14-29-46"
+        },
+        {
+          "earlier_ordinal": 150,
+          "earlier_version": "2017-03-01_15-25-44",
+          "label": "last",
+          "later_ordinal": 151,
+          "later_version": "2017-03-09_21-02-40"
+        }
+      ],
+      "version_count": 152
+    },
+    {
+      "history": "uClibc",
+      "ordering_basis": "Complete.csv row order with explicit Version field",
+      "transitions": [
+        {
+          "earlier_ordinal": 0,
+          "earlier_version": "2008-06-05_13-46-47",
+          "label": "first",
+          "later_ordinal": 1,
+          "later_version": "2008-06-07_15-19-18"
+        },
+        {
+          "earlier_ordinal": 69,
+          "earlier_version": "2013-02-20_13-45-10",
+          "label": "middle",
+          "later_ordinal": 70,
+          "later_version": "2013-03-14_22-27-19"
+        },
+        {
+          "earlier_ordinal": 138,
+          "earlier_version": "2020-10-02_19-10-36",
+          "label": "last",
+          "later_ordinal": 139,
+          "later_version": "2020-12-24_11-54-53"
+        }
+      ],
+      "version_count": 140
+    }
+  ]
+}

@@ -66,6 +66,7 @@ app.append(h("header", { class: "page" }, [
   [
     ["layperson.html", "Simple One-Pager", "A plain-language introduction and decision guide."],
     ["usecases.html", "CM Use Cases", "How CM might help in hardware, AI, biology, quantum-support logic, computing, security, and other fields."],
+    ["feature-model-evidence.html", "Results & audit", "Real feature-model results, independent correctness checks, measurement gaps, and reusable evidence."],
     ["investor.html", "Investor Brief", "What is proven, what remains open, and what the next evidence would buy."],
     ["expert.html", "Technical Summary", "Dense benchmarks, intervals, protocols, corrections, and provenance."],
   ].forEach(([href, title, description]) => nav.append(h("a", { href }, [
@@ -88,6 +89,7 @@ app.append(tiles([
 ]));
 app.append(projectStatePanel());
 app.append(evidenceBoundary());
+app.append(featureModelAuditUpdate());
 app.append(currentEvidenceUpdate("master"));
 
 app.append(banner("note", "How to read this page", [
@@ -111,8 +113,8 @@ app.append(banner("note", "How to read this page", [
   s.append(h("h3", { text: "Where the underlying problem shows up" }));
   s.append(h("p", { html:
     "Ten domains, each with the question it is really asking. These are candidate application areas — " +
-    "of the evidence on this site, only the formal-verification and hardware-synthesis row has been " +
-    "measured against, via the EPFL circuits in section 4." }));
+    "this site includes EPFL hardware expressions and bounded neighborhoods of real feature models. " +
+    "The latter have a separate results-and-audit page; neither corpus establishes a deployed workflow advantage." }));
   s.append(moreBlock([domainGrid(C.domains.items)], "Browse all 10 candidate domains"));
   app.append(s);
 }

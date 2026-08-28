@@ -1,0 +1,81 @@
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\util\connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\brian\AppData\Local\Programs\Python\Python313\Lib\socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connectionpool.py", line 788, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1106, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connection.py", line 211, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: HTTPSConnection(host='rest.runpod.io', port=443): Failed to resolve 'rest.runpod.io' ([Errno 11001] getaddrinfo failed)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\connectionpool.py", line 842, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\urllib3\util\retry.py", line 543, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='rest.runpod.io', port=443): Max retries exceeded with url: /v1/pods (Caused by NameResolutionError("HTTPSConnection(host='rest.runpod.io', port=443): Failed to resolve 'rest.runpod.io' ([Errno 11001] getaddrinfo failed)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\runpod-authorized-20260827-213104\runpod_smoke_controller.py", line 570, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\runpod-authorized-20260827-213104\runpod_smoke_controller.py", line 566, in main
+    return watchdog() if args.watchdog else run()
+           ~~~~~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\runpod-authorized-20260827-213104\runpod_smoke_controller.py", line 420, in watchdog
+    matching = [row for row in safe_pods(client) if row.get("name") == name]
+                               ~~~~~~~~~^^^^^^^^
+  File "C:\Users\brian\Documents\CM_Computation\docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\runpod-authorized-20260827-213104\runpod_smoke_controller.py", line 241, in safe_pods
+    response = client.get(REST_V1 + "/pods", timeout=10, allow_redirects=False)
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\requests\sessions.py", line 671, in get
+    return self.request("GET", url, params=params, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\brian\Documents\CM_Computation\.venv\Lib\site-packages\requests\adapters.py", line 729, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='rest.runpod.io', port=443): Max retries exceeded with url: /v1/pods (Caused by NameResolutionError("HTTPSConnection(host='rest.runpod.io', port=443): Failed to resolve 'rest.runpod.io' ([Errno 11001] getaddrinfo failed)"))

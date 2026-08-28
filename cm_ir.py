@@ -1879,6 +1879,21 @@ def _record_output_budget_diagnostics(
     )
     diagnostics["output_budget_output_vars"] = int(decision.estimate.variable_count)
     diagnostics["output_budget_reason"] = decision.reason
+    if not decision.allowed:
+        # A diagnostics object may span several calls. A refused call produced
+        # no artifact, even when an earlier call using that object succeeded.
+        _record_final_output_diagnostics(
+            diagnostics,
+            final_cm_materialization_performed=0,
+            final_cm_materialization_time_s=0.0,
+            final_truth_table_materialization_time_s=0.0,
+            final_bitset_returned=0,
+            final_output_elements=0,
+            final_output_representation_code=-1,
+            large_n_output_guard_triggered=1,
+        )
+        diagnostics.pop("cached_exec_engine_kind", None)
+        diagnostics.pop("cached_exec_engine_live_k", None)
 
 
 def materialize_cm(
@@ -2100,7 +2115,6 @@ def materialize_hybrid_no_reinflate(
     live_vars = node.vars if not fixed_map else tuple(v for v in node.vars if v not in fixed_map)
     live_k = len(live_vars)
     n = len(vars_key)
-    nominal_out_elems = 1 << n
     budget = _effective_output_budget(
         output_budget,
         max_full_output_vars=max_full_output_vars,
@@ -2110,24 +2124,24 @@ def materialize_hybrid_no_reinflate(
         "packed_bitset" if live_k <= hybrid_threshold else "truth_table_uint8"
     )
     operation_slots = _cm_node_count(node)
-    decision = require_output_budget(
-        decide_output_budget(
-            budget,
-            estimate_explicit_output(
-                n,
-                representation,
-                operation_slots=operation_slots,
-            ),
-            reduced_estimate=estimate_explicit_output(
-                live_k,
-                representation,
-                operation_slots=operation_slots,
-            ),
-            artifact_name="full no-reinflate output",
-            reduced_artifact_name="reduced no-reinflate output",
-        )
+    decision = decide_output_budget(
+        budget,
+        estimate_explicit_output(
+            n,
+            representation,
+            operation_slots=operation_slots,
+        ),
+        reduced_estimate=estimate_explicit_output(
+            live_k,
+            representation,
+            operation_slots=operation_slots,
+        ),
+        artifact_name="full no-reinflate output",
+        reduced_artifact_name="reduced no-reinflate output",
     )
     _record_output_budget_diagnostics(diagnostics, decision)
+    require_output_budget(decision)
+    nominal_out_elems = 1 << n
     use_reduced_output = decision.status is OutputStatus.REDUCED
     output_vars = live_vars if use_reduced_output else vars_key
     output_k = len(output_vars)
