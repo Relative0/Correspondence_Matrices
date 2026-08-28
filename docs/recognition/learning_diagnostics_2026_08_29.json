@@ -1,0 +1,358 @@
+{
+  "schema": "crse-exploratory-learning-diagnostics/v1",
+  "recorded_on": "2026-08-29",
+  "provenance": "Transcribed from successful local read-only tool outputs in this task. The original pilot artifacts remain in ignored docs/recognition/runs/pilot-20260828-001. The follow-up ablation ran only in memory; its raw timing rows and fitted candidate model artifacts were not persisted. This summary does not replace an independently reproducible benchmark run.",
+  "interpretation": "Exploratory generated-corpus measurements on one machine, without confidence intervals. No model or runtime implementation was promoted. Test formulas were not used for fitting, but the ablation was motivated by inspecting prior test results.",
+  "original_pilot_cost_diagnosis": {
+    "model_bytes": 1684,
+    "nodes": 7,
+    "leaves": 4,
+    "depth": 3,
+    "split_features": [
+      "depth",
+      "log2_queries"
+    ],
+    "all_guard_features": 10,
+    "fit_ms": 5.2726,
+    "training_wall_ms": 209.7085,
+    "recorded_source_matches_current": true,
+    "splits": {
+      "validation": {
+        "formulas": 16,
+        "chosen": {
+          "direct": 8,
+          "cse": 8
+        },
+        "median_nodes": 27.5,
+        "median_cse_us": 95.7,
+        "median_feature_us": 81,
+        "median_decision_us": 10.3,
+        "median_learned_total_us": 119.05,
+        "median_feature_fraction": 0.4483977130107377,
+        "measured_geomean_speedup": 0.6466337243489362,
+        "execution_only_choice_replay_speedup": 1.6062309075516463,
+        "choice_plus_decision_replay_speedup": 1.227894880338965,
+        "oracle_zero_overhead_speedup": 1.74317590296367,
+        "families": {
+          "mixed": {
+            "n": 4,
+            "measured_speedup": 0.642647723670633,
+            "execution_only_choice_replay_speedup": 2.111698101671788
+          },
+          "parity": {
+            "n": 4,
+            "measured_speedup": 0.6417247021220907,
+            "execution_only_choice_replay_speedup": 1.7236933006727542
+          },
+          "redundant": {
+            "n": 4,
+            "measured_speedup": 0.707224338456156,
+            "execution_only_choice_replay_speedup": 1.3199077280457785
+          },
+          "shared": {
+            "n": 4,
+            "measured_speedup": 0.5994520849201399,
+            "execution_only_choice_replay_speedup": 1.3854680626120064
+          }
+        }
+      },
+      "test": {
+        "formulas": 16,
+        "chosen": {
+          "cse": 10,
+          "direct": 6
+        },
+        "median_nodes": 20.5,
+        "median_cse_us": 94.8,
+        "median_feature_us": 63.4,
+        "median_decision_us": 10.15,
+        "median_learned_total_us": 147.25,
+        "median_feature_fraction": 0.45204628459018636,
+        "measured_geomean_speedup": 0.6127119373527746,
+        "execution_only_choice_replay_speedup": 1.500050275403991,
+        "choice_plus_decision_replay_speedup": 1.220329195931628,
+        "oracle_zero_overhead_speedup": 1.6452677870309729,
+        "families": {
+          "mixed": {
+            "n": 4,
+            "measured_speedup": 0.6627876328452345,
+            "execution_only_choice_replay_speedup": 1.7278537344904825
+          },
+          "parity": {
+            "n": 4,
+            "measured_speedup": 0.6444446755049809,
+            "execution_only_choice_replay_speedup": 1.7905360250700235
+          },
+          "redundant": {
+            "n": 4,
+            "measured_speedup": 0.5635772303139948,
+            "execution_only_choice_replay_speedup": 1.2674913318472725
+          },
+          "shared": {
+            "n": 4,
+            "measured_speedup": 0.585479768378112,
+            "execution_only_choice_replay_speedup": 1.291184258995839
+          }
+        }
+      },
+      "family_test": {
+        "formulas": 4,
+        "chosen": {
+          "cse": 3,
+          "direct": 1
+        },
+        "median_nodes": 45.5,
+        "median_cse_us": 157.4,
+        "median_feature_us": 124.1,
+        "median_decision_us": 10.5,
+        "median_learned_total_us": 336.1,
+        "median_feature_fraction": 0.4838124650347543,
+        "measured_geomean_speedup": 0.5858921226572765,
+        "execution_only_choice_replay_speedup": 1.5720108036240363,
+        "choice_plus_decision_replay_speedup": 1.339637695727872,
+        "oracle_zero_overhead_speedup": 2.8127072124390744,
+        "families": {
+          "mux": {
+            "n": 4,
+            "measured_speedup": 0.5858921226572765,
+            "execution_only_choice_replay_speedup": 1.5720108036240363
+          }
+        }
+      }
+    }
+  },
+  "fresh_feature_ablation": {
+    "kind": "exploratory in-memory diagnostic, not integrated or promoted",
+    "training": "original 48 training formulas only; fixed depth/min-leaf/gain; no new-label fitting",
+    "fresh_seed": 20260829,
+    "rounds": 5,
+    "fresh_formulas": 40,
+    "duplicate_groups_excluded_before_measurement": 1,
+    "formula_group_overlap_with_entire_original_pilot": 0,
+    "measurements": 1200,
+    "checked_outputs": 37320,
+    "mismatches": 0,
+    "seconds": 0.6707776999974158,
+    "split_results": {
+      "test": {
+        "direct": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 0.8806581730841173,
+          "max_slowdown": 29.263420724094882,
+          "ge_2x_slowdowns": 9,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "cse": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 1,
+          "max_slowdown": 1,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "cm": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 0.4880928416159909,
+          "max_slowdown": 3.4925187032418954,
+          "ge_2x_slowdowns": 17,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "original": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 0.6933355846349848,
+          "max_slowdown": 2.2304832713754648,
+          "ge_2x_slowdowns": 1,
+          "median_feature_us": 100,
+          "median_decision_us": 9.4,
+          "choices": {
+            "direct": 11,
+            "cse": 21
+          },
+          "reasons": {
+            "learned": 11,
+            "outside_training_range": 5,
+            "insufficient_predicted_gain": 16
+          }
+        },
+        "queries_only": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 1.2295706200790812,
+          "max_slowdown": 1.2159383033419022,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 1.1,
+          "median_decision_us": 9.3,
+          "choices": {
+            "direct": 9,
+            "cse": 23
+          },
+          "reasons": {
+            "learned": 9,
+            "insufficient_predicted_gain": 23
+          }
+        },
+        "queries_depth": {
+          "n": 32,
+          "geomean_speedup_vs_cse": 0.9329846084923104,
+          "max_slowdown": 1.4451266308518802,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 41.05,
+          "median_decision_us": 9.85,
+          "choices": {
+            "direct": 12,
+            "cse": 20
+          },
+          "reasons": {
+            "learned": 12,
+            "insufficient_predicted_gain": 19,
+            "outside_training_range": 1
+          }
+        }
+      },
+      "family_test": {
+        "direct": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 2.1728241582947634,
+          "max_slowdown": 1.37348828420257,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "cse": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 1,
+          "max_slowdown": 1,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "cm": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 0.42103484443465555,
+          "max_slowdown": 3.5496957403651117,
+          "ge_2x_slowdowns": 5,
+          "median_feature_us": 0,
+          "median_decision_us": 0
+        },
+        "original": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 0.6975667845775984,
+          "max_slowdown": 1.988078541374474,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 141.4,
+          "median_decision_us": 9.2,
+          "choices": {
+            "direct": 3,
+            "cse": 5
+          },
+          "reasons": {
+            "learned": 3,
+            "outside_training_range": 2,
+            "insufficient_predicted_gain": 3
+          }
+        },
+        "queries_only": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 1.7185878126498795,
+          "max_slowdown": 1.157162726008345,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 1.05,
+          "median_decision_us": 9.25,
+          "choices": {
+            "direct": 3,
+            "cse": 5
+          },
+          "reasons": {
+            "learned": 3,
+            "insufficient_predicted_gain": 5
+          }
+        },
+        "queries_depth": {
+          "n": 8,
+          "geomean_speedup_vs_cse": 1.0588008202471404,
+          "max_slowdown": 1.4277699859747546,
+          "ge_2x_slowdowns": 0,
+          "median_feature_us": 57.15,
+          "median_decision_us": 9.7,
+          "choices": {
+            "direct": 4,
+            "cse": 4
+          },
+          "reasons": {
+            "learned": 4,
+            "outside_training_range": 1,
+            "insufficient_predicted_gain": 3
+          }
+        }
+      }
+    },
+    "candidate_trees": {
+      "queries_only": {
+        "feature": 1,
+        "threshold": 1.5,
+        "left": {
+          "costs": [
+            1,
+            3.666216523576657,
+            11.13569607836556
+          ],
+          "samples": 15
+        },
+        "right": {
+          "costs": [
+            3.0272861827911766,
+            1.17549906617574,
+            2.4068269979261965
+          ],
+          "samples": 33
+        }
+      },
+      "queries_depth": {
+        "feature": 1,
+        "threshold": 1.5,
+        "left": {
+          "costs": [
+            1,
+            3.666216523576657,
+            11.13569607836556
+          ],
+          "samples": 15
+        },
+        "right": {
+          "feature": 3,
+          "threshold": 7.5,
+          "left": {
+            "feature": 1,
+            "threshold": 4.5,
+            "left": {
+              "costs": [
+                1.0035596933187294,
+                1.5438374491385438,
+                3.4996358411239985
+              ],
+              "samples": 8
+            },
+            "right": {
+              "costs": [
+                1.4825247119833354,
+                1,
+                1.5792108252968646
+              ],
+              "samples": 5
+            }
+          },
+          "right": {
+            "costs": [
+              4.222967146282116,
+              1.0720384795345537,
+              2.1766075038044095
+            ],
+            "samples": 20
+          }
+        }
+      }
+    },
+    "dataset_digest": "c56f9f7cd4885bcb61e9b1d6d68b65cd2f354e4e95fb43b83d767b72ce9e8c48"
+  }
+}
