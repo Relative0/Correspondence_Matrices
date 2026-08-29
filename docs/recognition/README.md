@@ -18,13 +18,32 @@ packaging/deployment, and production promotion. Docker and a VM are not needed.
 
 ## What is implemented
 
+Current implementation: [Milestones A/B and measured results](LEARNING_MILESTONES_AB_2026_08_29.md)
+and [Milestone C graph-learning results](LEARNING_MILESTONE_C_2026_08_29.md).
+The [complete register](experiment_register.json) preserves all 18 research tracks;
+the [roadmap](LEARNING_ROADMAP.md) distinguishes measured slices from pending work.
+There is a trained NumPy MLP path with independent exact acceptance, retained
+feature ablations and a query-count rule. The optional isolated PyTorch path now
+trains and reloads matrix MLP, CNN, graph GNN, fused, and graph-retrieval models.
+Its generated-data representation signal passed, retrieval missed its threshold,
+and transfer to a real all-negative EPFL slice was poor. No model is promoted;
+broader graph/hierarchical work and live-LLM experiments remain pending.
+
+The guide below describes the original routing pilot, which remains available
+unchanged by default. Use `--feature-ablation` for the optional routing arms.
+The NumPy neural entry point is `scripts/cm_recognition_learning.py`, also
+preview-only unless `--run` and a new `--output` are supplied. The explicitly
+optional PyTorch entry point is `scripts/cm_recognition_neural.py` and must be run
+with `.venv-crse-neural/Scripts/python.exe` and a new output directory.
+
 Research follow-ups:
 
 - [Learning diagnosis and feature-cost ablations](LEARNING_INVESTIGATION_2026_08_29.md).
 - [CM neural-learning assessment and proposed benchmark](CM_NEURAL_BENCHMARK_ASSESSMENT_2026_08_29.md).
 
-These distinguish the implemented decision-tree pilot from exploratory
-in-memory diagnostics and neural experiments that are only recommendations.
+These historical notes distinguish the original decision-tree pilot from its
+then-exploratory diagnostics and proposed neural work; the implemented follow-up
+and current limitations are in the Milestones A/B report above.
 
 This first research slice learns **which exact computation strategy to use**.
 It does not yet discover new Boolean identities or learn to output truth values.
@@ -72,9 +91,24 @@ Run the initial generated-corpus experiment, choosing a **new** output directory
 .\.venv\Scripts\python.exe -B scripts/cm_recognition_experiment.py --run --output docs/recognition/runs/pilot-001
 ```
 
-On Linux, use the same script with the project's Python interpreter. No code in
-this research package calls Docker, Runpod, a shell, a launcher, or the network.
-NumPy is the only non-standard dependency; it is already used by this repository.
+Run another approved optional PyTorch representation experiment only with the
+isolated environment and another new output directory:
+
+```powershell
+.\.venv-crse-neural\Scripts\python.exe -B scripts/cm_recognition_neural.py --output docs/recognition/runs/neural-new-id
+```
+
+That command performs actual bounded training immediately; it has no preview
+mode. The retained `neural-20260829-001` run already consumed one of the three
+approved manual experiment slots. Verify a completed run separately with
+`scripts/crse_neural_verify.py`. Do not tune on the retained EPFL evaluation
+slice and relabel the result as confirmation.
+
+On Linux, use the same scripts with compatible isolated interpreters. No research
+entry point calls Docker, Runpod, a launcher, or the network. The default path
+uses the repository's existing NumPy dependency. The optional path lazy-imports
+the pinned PyTorch CPU environment recorded in the dependency manifest; it does
+not alter default imports or install packages at runtime.
 
 Useful parameters: --sizes 6,8,10, --query-counts 1,8,64, --rounds 3,
 --train-per-family 12, --validation-per-family 4, --test-per-family 4,

@@ -1,0 +1,699 @@
+{
+  "schema": "crse-experiment-register/v1",
+  "updated": "2026-08-29",
+  "checkpoint": "db952fb6772231ff8193811511afa49ab499d729",
+  "allowed_statuses": [
+    "planned",
+    "implemented",
+    "smoke-tested",
+    "measured",
+    "replicated",
+    "negative-result",
+    "blocked-with-reason"
+  ],
+  "completion_rule": "A status describes only the explicit measured slice; minimum_scope remains outstanding unless separately evidenced.",
+  "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",
+  "applications": [
+    {
+      "priority": "First",
+      "name": "Configuration/product families",
+      "boundary": "Partial selections, dead-feature/validity queries, version deltas and reuse; compare incremental SAT/BDD/exact CM, not whole-product enumeration against a yes/no solver",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "First",
+      "name": "Hardware verification/design",
+      "boundary": "Bounded EPFL-style cones, repeated revisions, hidden motifs, restriction, equivalent rewrites and localized changes; compare ABC/AIG/CUDD/SAT/exact packed paths",
+      "status": "measured",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Evaluation-only transfer smoke on 16 provenance-reviewed eight-variable EPFL cones from 15 circuits; all were non-affine, so only specificity and exact rejection were measured."
+        }
+      ]
+    },
+    {
+      "priority": "Next",
+      "name": "Security/access-control policy audit",
+      "boundary": "Exact bounded change-impact and context restriction; native Cedar/OPA semantics remain authoritative for a verified Boolean subset",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "Next",
+      "name": "Compiler/program-analysis predicates",
+      "boundary": "Pure Boolean i1/guard families and known-fact rewrites; do not silently model integer overflow, memory, poison, or undefined behavior as ordinary Booleans",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "Later",
+      "name": "AI-agent hard guardrails",
+      "boundary": "Deterministic authorization logic, delegation/tool-policy versions and provenance; not open-ended reasoning or neural confidence as permission",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "Later",
+      "name": "Boolean biological networks",
+      "boundary": "Update-rule/intervention families with preserved update semantics; update speed is not an attractor-analysis result",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "Later",
+      "name": "Regulated rules/decision tables",
+      "boundary": "Boolean eligibility, coverage, overlaps and version regressions; preserve priority/hit-policy and refuse unsupported numeric/date/null semantics",
+      "status": "planned",
+      "results": []
+    },
+    {
+      "priority": "Narrow",
+      "name": "Classical reversible/control logic",
+      "boundary": "Boolean output functions with explicit constants, ancilla and garbage conventions; no claims about quantum amplitudes, phase, entanglement or unitary simulation",
+      "status": "planned",
+      "results": []
+    }
+  ],
+  "tracks": [
+    {
+      "id": "R01",
+      "name": "Task-aware routing and cost prediction",
+      "minimum_scope": "Direct/CSE/CM, bigint/words, later task-eligible BDD/SAT/counting; cheap features, query-count rules, learned feature acquisition, feasibility and tail-risk prediction",
+      "hypothesis": "Choose an exact backend from pre-execution features and measured costs.",
+      "input_output_contract": "AST plus query contract -> exact packed result",
+      "representation": "AST features",
+      "models_and_deterministic_controls": "fixed direct/CSE/CM, query-count rule, cost tree",
+      "exact_checker": "Independent NumPy interpreter",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Compare the query-count rule against cheap learned policies on source/template-grouped natural data; do not scale this synthetic router as a claimed learning win.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Query-only cost tree measured; faster than CSE but slower than equally cheap query rule. Other portfolio/tasks remain planned."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "negative-result",
+      "status_reason": "Query-only cost tree measured; faster than CSE but slower than equally cheap query rule. Other portfolio/tasks remain planned.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R02",
+      "name": "Computational-subclass recognition",
+      "minimum_scope": "Hidden affine/XOR, Horn, dual-Horn, 2-CNF, low-width/separator structure, independent components, cardinality/threshold constraints, mux/ITE, arithmetic blocks and adders",
+      "hypothesis": "Recognizing a hidden subclass can reduce exact execution work.",
+      "input_output_contract": "bounded AST -> subclass proposal with exact evidence",
+      "representation": "AST, local CM, later graph",
+      "models_and_deterministic_controls": "exact affine detector, CM simplifier, MLP, later GNN",
+      "exact_checker": "Complete local truth-vector equivalence",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Add natural positive and negative examples for another subclass without tuning on the retained EPFL slice.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Only hidden affine recognition measured; NN overhead and near-match classification were poor. Other subclasses remain planned."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Hidden-affine classification now compares matched matrix, CNN, GNN and fused inputs. Graph/fused learned generated held-out structure, but all models transferred poorly to the all-negative EPFL slice; other subclasses remain planned."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Hidden-affine classification now compares matched matrix, CNN, GNN and fused inputs. Graph/fused learned generated held-out structure, but all models transferred poorly to the all-negative EPFL slice; other subclasses remain planned.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R03",
+      "name": "Verified motifs and semantic macros",
+      "minimum_scope": "Obscured/redundantly written XOR, mux, comparators, half/full adders, repeated cones, and generalized functions; verified boundary and replacement",
+      "hypothesis": "Verified functional motifs can replace obscured source regions.",
+      "input_output_contract": "source region -> candidate AST and acceptance evidence",
+      "representation": "boundary variables, AST, local CM",
+      "models_and_deterministic_controls": "no rewrite, exact detector, deterministic rewrite, learned proposal",
+      "exact_checker": "Independent original/candidate truth evaluation",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Extend the exact proposal boundary to a bounded mux or repeated-cone replacement with deterministic controls.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Only root affine replacement measured with independent acceptance. No generalized macro/rule discovery."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Neural motif gates produced exact-checked affine replacements: 630 accepted, 552 semantic rejections and zero final mismatches across repeated cells. Generalized macro/rule discovery remains pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Neural motif gates produced exact-checked affine replacements: 630 accepted, 552 semantic rejections and zero final mismatches across repeated cells. Generalized macro/rule discovery remains pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R04",
+      "name": "Rewrite profitability and scheduling",
+      "minimum_scope": "Region/rule/direction selection, sequences, stopping, cost-aware factoring versus expansion, and preservation of sharing",
+      "hypothesis": "Ranking region/rule/direction can save more work than selection costs.",
+      "input_output_contract": "AST plus cost contract -> finite rewrite schedule",
+      "representation": "shared AST/CM IR",
+      "models_and_deterministic_controls": "fixed rule order, greedy measured costs, learned ranker",
+      "exact_checker": "Admitted identities and per-instance exact checks",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Compare stop/one-rewrite choices with equal candidate budgets.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R05",
+      "name": "Generalized rule discovery",
+      "minimum_scope": "Infer identities over metavariables, synthesize macros, prove before admission, compile cheap matchers, prevent rewrite cycles",
+      "hypothesis": "Proved discoveries can become inexpensive reusable deterministic rules.",
+      "input_output_contract": "bounded metavariable DSL -> proved rule and compiled matcher",
+      "representation": "Boolean DSL and proof provenance",
+      "models_and_deterministic_controls": "grammar enumeration, existing rules, neural/LLM proposal",
+      "exact_checker": "Exhaustive metavariable proof plus use-site conditions",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Prove a small identity, detect duplicate/cyclic rules, then compile a matcher.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R06",
+      "name": "CM decomposition and layout",
+      "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
+      "hypothesis": "Exact block structure can justify a cheaper CM partition.",
+      "input_output_contract": "aligned CM -> verified decomposition and reconstruction",
+      "representation": "cofactors, blocks, GF(2) factors",
+      "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
+      "exact_checker": "Exact reconstruction under explicit order and masks",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Bounded cofactor teacher and layout tests, then partition profitability.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Exact layout/transposition/negation/cofactor teacher tested. Partition ranking and GF(2) decomposition experiments remain planned."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "smoke-tested",
+      "status_reason": "Exact layout/transposition/negation/cofactor teacher tested. Partition ranking and GF(2) decomposition experiments remain planned.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R07",
+      "name": "Order and compilation selection",
+      "minimum_scope": "BDD variable order including native reordering controls, AIG cuts/balancing/refactoring/resubstitution, compact representations, low-width decomposition, and query-appropriate targets",
+      "hypothesis": "Task-specific order/compilation advice can amortize preparation.",
+      "input_output_contract": "AST and task -> bounded order/compilation proposal",
+      "representation": "BDD, AIG, CM IR",
+      "models_and_deterministic_controls": "native order controls, fixed orders, learned ranking",
+      "exact_checker": "Bounded exact equivalence with manager/order identity",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Inspect existing adapters before an equal-budget order experiment.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R08",
+      "name": "Functional similarity and retrieval",
+      "minimum_scope": "Rank equivalent/complementary/related functions, semantic embeddings, nearest-candidate lookup, and exact follow-up verification; compare hashing and deterministic signatures",
+      "hypothesis": "Functional embeddings may reduce verified candidate lookup costs.",
+      "input_output_contract": "query function and library -> ranked candidate IDs",
+      "representation": "local CM, graph embeddings",
+      "models_and_deterministic_controls": "hashing, deterministic signatures, contrastive retrieval",
+      "exact_checker": "Exact equivalence/complement check after retrieval",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Compare deterministic truth/signature retrieval and train on more independent functional groups before another sealed evaluation.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "An actual contrastive GNN was trained on exact-equivalent graph pairs. Top-1 exact retrieval was 0.469 on both test seeds, missing the predeclared 0.80 threshold; exact checks safely rejected misses."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "negative-result",
+      "status_reason": "An actual contrastive GNN was trained on exact-equivalent graph pairs. Top-1 exact retrieval was 0.469 on both test seeds, missing the predeclared 0.80 threshold; exact checks safely rejected misses."
+    },
+    {
+      "id": "R09",
+      "name": "Partial contexts, sessions, and versions",
+      "minimum_scope": "Choose specialization, incremental updates, reusable compiled regions, cache policies, and change-impact strategy; correct invalidation, context identity, provenance, serialize/reload",
+      "hypothesis": "Related contexts/versions may repay selective compilation and reuse.",
+      "input_output_contract": "AST history plus context identity -> exact query/update result",
+      "representation": "DAG, context keys, compiled regions",
+      "models_and_deterministic_controls": "result cache, compiled cache, incremental exact, learned policy",
+      "exact_checker": "Context-aware invalidation and independent output checks",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Natural version/context trace with serialize/reload and stale-key tests.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R10",
+      "name": "SAT/equivalence/counting guidance",
+      "minimum_scope": "Bounded initial variable/polarity hints, portfolio choice and component/order advice; maintain exact solver completeness and independent checking",
+      "hypothesis": "Bounded advice may improve exact solver portfolios without changing completeness.",
+      "input_output_contract": "SAT/equivalence/count task -> hint or adapter choice",
+      "representation": "CNF/miter, components, variable order",
+      "models_and_deterministic_controls": "unhinted solver, fixed order, learned hints",
+      "exact_checker": "Witness or independent UNSAT/count certificate as required",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Find a verified bounded adapter; do not invoke an unbounded native solver.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R11",
+      "name": "CMs as exact training teachers",
+      "minimum_scope": "Supervise graph models from local truth functions, cofactor relations, functional distances, and verified transformation costs; no full CM required at inference",
+      "hypothesis": "Exact local semantics can supervise models that need no full CM at inference.",
+      "input_output_contract": "bounded expression -> CM/cofactor training labels",
+      "representation": "local CM teacher and source graph",
+      "models_and_deterministic_controls": "supervised teacher, unsupervised/structural controls",
+      "exact_checker": "Independent Boolean semantics and layout tests",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Add explicit cofactor-relation and functional-distance targets with matched deterministic controls.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Exact CM labels train the matrix MLP. CM-supervised graph training remains pending."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Exact CM labels now supervise a source-DAG GNN that does not require the full CM for classification inference. Rich cofactor/distance targets and larger independent sources remain pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Exact CM labels now supervise a source-DAG GNN that does not require the full CM for classification inference. Rich cofactor/distance targets and larger independent sources remain pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R12",
+      "name": "Neural representation comparisons",
+      "minimum_scope": "Dense CM/block MLP or CNN; recursive/shared-block model; source AST/AIG/CM-IR GNN; hierarchical/transformer and fused graph+CM variants",
+      "hypothesis": "Representation choice affects usefulness beyond parameter count.",
+      "input_output_contract": "expression or CM -> motif/profitability score",
+      "representation": "dense/block MLP/CNN, recursive, AST/AIG/CM-IR GNN, transformer, fused",
+      "models_and_deterministic_controls": "matched task/data/budget models and exact controls",
+      "exact_checker": "All accepted proposals independently verified",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Add recursive/shared-block and hierarchical controls plus natural positive examples; retain the current run as sealed evidence.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Actual 65,793-parameter NumPy MLP train/save/reload/infer/evaluate measured for two seeds. CNN/GNN/fused/transformer paths remain pending."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Actual matrix MLP, matrix CNN, graph GNN and fused models were trained/reloaded under matched budgets. Graph/fused won on generated held-out structure; CNN collapsed and every representation showed weak EPFL specificity."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Actual matrix MLP, matrix CNN, graph GNN and fused models were trained/reloaded under matched budgets. Graph/fused won on generated held-out structure; CNN collapsed and every representation showed weak EPFL specificity.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R13",
+      "name": "Learning-method comparisons",
+      "minimum_scope": "Cost-sensitive regression/ranking, linear models, trees/rule lists, forests/boosting/quantile models; supervised, contrastive/self-supervised, multitask, imitation, transfer, and curriculum learning",
+      "hypothesis": "Learning objectives differ in cost and generalization.",
+      "input_output_contract": "allowed training data -> frozen model and policy",
+      "representation": "cost features, graph/CM representations",
+      "models_and_deterministic_controls": "linear, tree/rules, forest/boosting/quantile, supervised/contrastive/multitask/imitation/transfer/curriculum",
+      "exact_checker": "Frozen splits, exact labels, total-cost evaluation",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Compare the GNN with a deterministic signature retriever and one non-neural linear/ranking control on the same splits.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Only cost trees/feature ablations and supervised MLP exercised; all other listed methods remain planned."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Supervised classification and contrastive retrieval are now both exercised in addition to trees/MLPs. Forests, boosting, ranking, transfer, curriculum and other listed methods remain pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Supervised classification and contrastive retrieval are now both exercised in addition to trees/MLPs. Forests, boosting, ranking, transfer, curriculum and other listed methods remain pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R14",
+      "name": "Adaptive/sequential learning",
+      "minimum_scope": "Active learning, hard negatives, counterexample-guided refinement, replayed contextual bandits, bounded reinforcement learning, phase changes and drift; no automatic production adaptation",
+      "hypothesis": "Finite adaptive policies can use difficult examples efficiently.",
+      "input_output_contract": "logged or generated bounded stream -> offline policy",
+      "representation": "counterexamples, replay buffer, action probabilities",
+      "models_and_deterministic_controls": "static policy, random acquisition, active/bandit/RL controls",
+      "exact_checker": "Exact feedback with no future or unchosen-label leakage",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Prepare finite replay with propensities before adaptive learning.",
+      "results": [],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "planned",
+      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+    },
+    {
+      "id": "R15",
+      "name": "LLM-assisted learning and discovery",
+      "minimum_scope": "Offline DSL rule/macro proposals and bounded symbolic program synthesis, strategy/cost ranking, proof candidates, explanatory reports, few-shot/retrieval controls, optional approved adapter fine-tuning and teacher-to-small-model distillation",
+      "hypothesis": "Offline LLM proposals may find useful independently provable candidates.",
+      "input_output_contract": "bounded declarative prompt -> inert Boolean DSL proposal",
+      "representation": "DSL, retrieval context, proof candidate",
+      "models_and_deterministic_controls": "fake provider tests, grammar enumeration, random order, non-LLM models",
+      "exact_checker": "Bounded parser and independent proof checker",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Provider boundary and unsafe/malformed-output tests; live model requires approval.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Only deterministic fake offline provider and bounded inert DSL tests. No live LLM inference, fine-tuning, discovery or distillation result."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "smoke-tested",
+      "status_reason": "Only deterministic fake offline provider and bounded inert DSL tests. No live LLM inference, fine-tuning, discovery or distillation result.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R16",
+      "name": "Inference and training efficiency",
+      "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
+      "hypothesis": "Reducing feature/model overhead may matter more than prediction quality.",
+      "input_output_contract": "frozen model and workload -> lower-cost equivalent inference",
+      "representation": "features, batches, embeddings, compiled/quantized weights",
+      "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
+      "exact_checker": "Prediction agreement where required and exact accepted outputs",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Profile batched versus single-request inference and test a bounded early-exit/distillation control without JIT.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Feature, warm inference and model-load overhead measured. Batching/distillation/quantization/binarization/compilation remain planned."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "Parameter bytes, graph-input memory, training time, safe load time, representation construction, inference, verification and fallback latency are retained. Quantization/distillation/compilation remain pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "Parameter bytes, graph-input memory, training time, safe load time, representation construction, inference, verification and fallback latency are retained. Quantization/distillation/compilation remain pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R17",
+      "name": "Confidence, novelty, and abstention",
+      "minimum_scope": "Calibration, out-of-distribution behavior, feasibility, uncertainty-triggered fallback, negative transfer, adversarial near-matches, and hardware transfer",
+      "hypothesis": "Abstention can limit losses under novelty and uncertainty.",
+      "input_output_contract": "request plus calibrated score -> proposal or fallback",
+      "representation": "training ranges, uncertainty, feasibility",
+      "models_and_deterministic_controls": "always fallback, fixed thresholds, calibrated policy",
+      "exact_checker": "Exact fallback and all rejection costs retained",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Fit calibration on validation only, freeze it, then test abstention on a new natural source family.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Bypass/range guards, exact rejection, timeout tests and uncalibrated Brier diagnostics only; calibrated novelty/hardware transfer remain pending."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "The EPFL transfer check exposed severe negative transfer and uncalibrated false proposals; exact rejection and the learned-bypass switch preserved all outputs. Calibrated novelty remains pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "The EPFL transfer check exposed severe negative transfer and uncalibrated false proposals; exact rejection and the learned-bypass switch preserved all outputs. Calibrated novelty remains pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    },
+    {
+      "id": "R18",
+      "name": "Negative controls and hard limits",
+      "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
+      "hypothesis": "Exact packed primitives and low-headroom cases can defeat learning.",
+      "input_output_contract": "matched exact workload -> overhead-inclusive negative-control comparison",
+      "representation": "random/dense tables, packed bits, anti-reduction AST",
+      "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
+      "exact_checker": "Exact output and complete failure accounting",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "next_experiment": "Add dense incompressible/no-sharing cases and packed primitive controls with the same output contract.",
+      "results": [
+        {
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestones_ab_results.json",
+          "scope": "Hard one-bit near-matches and overhead-dominated negative results retained. Raw primitive and dense/no-sharing controls remain planned."
+        },
+        {
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_c_results.json",
+          "scope": "One-bit near-matches, CNN collapse, failed retrieval threshold and poor all-negative EPFL transfer are retained as negative controls/results. Dense random and raw packed-operation controls remain pending."
+        }
+      ],
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "status": "measured",
+      "status_reason": "One-bit near-matches, CNN collapse, failed retrieval threshold and poor all-negative EPFL transfer are retained as negative controls/results. Dense random and raw packed-operation controls remain pending.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+    }
+  ],
+  "milestones": {
+    "A": "implemented and measured within foundation slice",
+    "B": "first actual NumPy MLP comparison measured; negative result",
+    "C": "pending: framework approval and eligible natural-source contract",
+    "D": "planned; teacher/provider tests are not transformation/reuse experiments",
+    "E": "planned"
+  },
+  "dependency_request": "NEURAL_DEPENDENCY_REQUEST.md"
+}

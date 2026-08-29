@@ -1,5 +1,20 @@
 # CRSE — active computation-first workstream
 
+## Current learning implementation follow-up — 2026-08-29
+
+[Milestones A/B report](docs/recognition/LEARNING_MILESTONES_AB_2026_08_29.md),
+[Milestone C report](docs/recognition/LEARNING_MILESTONE_C_2026_08_29.md), and
+[all 18 research tracks](docs/recognition/experiment_register.json).
+The foundation now includes retained feature ablations, a query-count rule and
+an exact CM/cofactor teacher. Two small NumPy MLPs were actually trained,
+saved/reloaded and evaluated with independent replacement checks. They were
+slower than exact controls; the negative results are retained. The approved
+isolated PyTorch path now trains matrix, CNN, GNN, fused, and contrastive graph
+models. Its synthetic representation signal passed, retrieval missed its target,
+and EPFL transfer was poor; no model is promoted. Live LLM work remains pending.
+
+The remainder records the earlier checkpoint and its original pilot evidence.
+
 Updated 2026-08-29 following the owner's explicit request to focus on local
 comparisons and results, bypass the Windows software work for now, and commit
 this task's work.

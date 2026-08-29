@@ -28,6 +28,7 @@ from .corpus import Case, FAMILIES, make_corpus
 from .features import FEATURE_NAMES, IneligibleExpression, extract_features, structural_digest
 from .learning import CostTree, fit_cost_tree
 from .portfolio import BACKENDS, admit, prepare, reference_bits
+from .routing import FeatureRouter, fit_router, query_rule, routing_features
 
 
 @dataclass(frozen=True)
@@ -41,8 +42,12 @@ class Config:
     held_out_family: str = "mux"
     rounds: int = 3
     max_seconds: float = 120.0
+    feature_ablation: bool = False
+    learned_enabled: bool = True
 
     def validate(self) -> None:
+        if type(self.feature_ablation) is not bool or type(self.learned_enabled) is not bool:
+            raise ValueError("ablation and learned-advice switches must be Boolean")
         if type(self.seed) is not int or not 0 <= self.seed <= 2**32 - 1:
             raise ValueError("seed must be an unsigned 32-bit integer")
         if type(self.rounds) is not int or not 1 <= self.rounds <= 7:
@@ -90,7 +95,11 @@ def source_fingerprints() -> dict[str, str]:
     paths = [root / name for name in ("cm_exprlib.py", "cm_expr_serde.py", "cm_ir.py",
                                       "bitset_backend.py", "cmbench/__init__.py",
                                       "scripts/cm_recognition_experiment.py")]
-    paths.extend(sorted(Path(__file__).parent.glob("*.py")))
+    paths.extend(sorted(Path(__file__).parent.rglob("*.py")))
+    paths.extend(sorted((root / "scripts").glob("cm_recognition_learning*.py")))
+    paths.append(root / "cmbench/output_budget.py")
+    for directory in ("expr", "backends", "results", "tracing"):
+        paths.extend(sorted((root / "cmbench" / directory).rglob("*.py")))
     return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 
 
@@ -107,6 +116,7 @@ def _rule(features: tuple[float, ...]) -> str:
 def _measure(
     case: Case, arm: str, round_index: int, expected: int,
     model: CostTree | None, cache: dict[tuple[str, int], int],
+    routers: dict[str, FeatureRouter] | None = None, learned_enabled: bool = True,
 ) -> dict[str, Any]:
     row = {
         "case_id": case.case_id, "family": case.family, "split": case.split,
@@ -114,12 +124,30 @@ def _measure(
         "arm": arm, "selected": arm, "reason": "fixed", "status": "ok",
         "feature_ns": 0, "decision_ns": 0, "cache_hit": False,
         "total_ns": 0, "audit_ns": 0, "mismatches": 0, "error_type": "",
+        "build_ns": 0, "kernel_ns": 0,
     }
     started = time.perf_counter_ns()
     try:
         backend = arm
         cached = None
-        if arm in ("learned", "rule"):
+        if arm.startswith("learned") and not learned_enabled:
+            if model is None:
+                raise ValueError("missing training fallback")
+            backend, row["reason"] = model.fallback, "learned_disabled"
+        elif arm == "query_rule":
+            t0 = time.perf_counter_ns()
+            backend, row["reason"] = query_rule(case.queries), "predeclared_query_rule"
+            row["decision_ns"] = time.perf_counter_ns() - t0
+        elif routers and arm in routers:
+            router = routers[arm]
+            t0 = time.perf_counter_ns()
+            values = routing_features(case.expr, case.n_vars, case.queries, router.feature_schema)
+            t1 = time.perf_counter_ns()
+            decision = router.select(values)
+            backend, row["reason"] = decision.backend, decision.reason
+            row["feature_ns"] = t1 - t0
+            row["decision_ns"] = time.perf_counter_ns() - t1
+        elif arm in ("learned", "rule"):
             t0 = time.perf_counter_ns()
             values = extract_features(case.expr, case.n_vars, case.queries).values
             t1 = time.perf_counter_ns()
@@ -143,8 +171,12 @@ def _measure(
         if cached is not None:
             outputs = [cached for _ in range(case.queries)]
         else:
+            build_started = time.perf_counter_ns()
             evaluate = prepare(backend, case.expr, case.n_vars)
+            row["build_ns"] = time.perf_counter_ns() - build_started
+            kernel_started = time.perf_counter_ns()
             outputs = [evaluate() for _ in range(case.queries)]
+            row["kernel_ns"] = time.perf_counter_ns() - kernel_started
         row["total_ns"] = max(1, time.perf_counter_ns() - started)
         audit_started = time.perf_counter_ns()
         row["mismatches"] = sum(type(value) is not int or value != expected for value in outputs)
@@ -189,7 +221,8 @@ def summarize(rows: list[dict[str, Any]], fallback: str, rounds: int) -> dict[st
                 medians[(i, fallback)] / min(medians[(i, b)] for b in BACKENDS) for i in eligible
             ])
         arms = {}
-        for arm in (*BACKENDS, "rule", "learned", "exact_cache"):
+        for arm in (*BACKENDS, "rule", "learned", "exact_cache", "query_rule",
+                    "learned_queries", "learned_queries_depth"):
             paired = [i for i in eligible if (i, arm) in medians]
             if not paired:
                 continue
@@ -199,6 +232,7 @@ def summarize(rows: list[dict[str, Any]], fallback: str, rounds: int) -> dict[st
                 "paired_instances": len(paired),
                 "geomean_speedup_over_fixed_train": 1 / _geomean(slowdowns),
                 "p95_slowdown_over_fixed_train": ordered[math.ceil(0.95 * len(ordered)) - 1],
+                "p99_slowdown_over_fixed_train": ordered[math.ceil(0.99 * len(ordered)) - 1],
                 "max_slowdown_over_fixed_train": max(slowdowns),
                 "catastrophic_ge_2x": sum(s >= 2 for s in slowdowns),
                 "mean_regret_over_oracle": statistics.fmean(
@@ -231,6 +265,8 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
     cache: dict[tuple[str, int], int] = {}
     model = None
     model_hash = None
+    routers: dict[str, FeatureRouter] = {}
+    router_hashes = {}
     status = "complete"
     error_type = ""
     fit_ns = train_wall_ns = 0
@@ -267,10 +303,13 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
                 case_rows = []
                 for round_index in range(config.rounds):
                     arms = list(BACKENDS) if model is None else [*BACKENDS, "rule", "learned", "exact_cache"]
+                    if model is not None and config.feature_ablation:
+                        arms += ["query_rule", *routers]
                     order_rng.shuffle(arms)
                     for arm in arms:
                         budget.check()
-                        row = _measure(case, arm, round_index, expected, model, cache)
+                        row = _measure(case, arm, round_index, expected, model, cache,
+                                       routers, config.learned_enabled)
                         row["execution_index"] = len(rows)
                         rows.append(row)
                         case_rows.append(row)
@@ -289,6 +328,10 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
                 budget.check()
                 fit_started = time.perf_counter_ns()
                 model = fit_cost_tree(training_x, training_y)
+                if config.feature_ablation:
+                    routers = {name: fit_router(training_x, training_y, schema) for name, schema in (
+                        ("learned_queries", "queries/v1"), ("learned_queries_depth", "queries-depth/v1"))}
+                    router_hashes = {name: _sha(router.to_dict()) for name, router in routers.items()}
                 fit_ns = time.perf_counter_ns() - fit_started
                 model_hash = _sha(model.to_dict())
                 train_wall_ns = time.perf_counter_ns() - train_started
@@ -296,6 +339,8 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
                     progress(f"Model frozen; training-selected constant baseline: {model.fallback}")
     except BudgetExhausted as exc:
         status, error_type = "budget_exhausted", type(exc).__name__
+    except KeyboardInterrupt as exc:
+        status, error_type = "interrupted", type(exc).__name__
     except (IneligibleExpression, RuntimeError) as exc:
         if status == "complete":
             status = "error"
@@ -304,6 +349,8 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
     if before != after:
         status = "source_changed_during_run"
     frozen_unchanged = model is not None and _sha(model.to_dict()) == model_hash
+    frozen_unchanged = frozen_unchanged and all(_sha(router.to_dict()) == router_hashes[name]
+                                               for name, router in routers.items())
     if model is not None and not frozen_unchanged:
         status = "model_changed_during_evaluation"
     summary = summarize(rows, model.fallback, config.rounds) if model is not None else {}
@@ -327,6 +374,8 @@ def run_experiment(config: Config, progress: Callable[[str], None] | None = None
         "training_only_fallback": model.fallback if model else None,
         "model_sha256": model_hash, "corpus_sha256": _sha(documents),
         "feature_names": list(FEATURE_NAMES), "model": model.to_dict() if model else None,
+        "router_models": {name: router.to_dict() for name, router in routers.items()},
+        "router_sha256": router_hashes,
         "fit_ns": fit_ns, "training_wall_ns": train_wall_ns,
         "wall_seconds": time.perf_counter() - budget.started,
         "observed_training_break_even_sessions": break_even,
@@ -384,6 +433,8 @@ def write_artifacts(output: Path, result: dict[str, Any]) -> None:
     write_json("corpus.json", result["corpus"])
     if result["model"] is not None:
         write_json("model.json", result["model"])
+    if result.get("router_models"):
+        write_json("router_models.json", result["router_models"])
     with (output / "raw.csv").open("x", encoding="utf-8", newline="") as handle:
         if result["rows"]:
             writer = csv.DictWriter(handle, fieldnames=list(result["rows"][0]))
@@ -394,6 +445,10 @@ def write_artifacts(output: Path, result: dict[str, Any]) -> None:
     names = ["summary.json", "corpus.json", "raw.csv", "report.md"]
     if result["model"] is not None:
         names.append("model.json")
+    if result.get("router_models"):
+        names.append("router_models.json")
+    if (output / "run_spec.json").is_file():
+        names.append("run_spec.json")
     write_json("manifest.json", {
         "schema": "crse-local-artifacts/v1", "status": result["status"],
         "files_sha256": {name: hashlib.sha256((output / name).read_bytes()).hexdigest() for name in names},

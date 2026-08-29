@@ -1,0 +1,58 @@
+{
+  "schema": "crse-finite-learning-batch/v1",
+  "date": "2026-08-29",
+  "purpose": "Retain Milestone A ablation and a first actual neural motif comparison, including negative outcomes.",
+  "network": false,
+  "dependency_installs": false,
+  "threads_per_process": 1,
+  "concurrent_experiments": 1,
+  "total_planned_wall_budget_seconds": 360,
+  "artifact_amendment": {
+    "reason": "Include run_spec.json in the routing artifact manifest. No model, data, hyperparameter, threshold or decision policy changed after test inspection.",
+    "additional_runs": ["routing-ablation-20260829-002", "affine-mlp-20260829-002"],
+    "settings": "Identical to -001, except new output directories and 60-second cooperative limits per run.",
+    "additional_wall_budget_seconds": 120,
+    "previous_runs": "Retained unchanged; repeated timings are not independent replication or tuning."
+  },
+  "training_seeds_total": 2,
+  "runs": [
+    {
+      "id": "routing-ablation-20260829-001",
+      "entry_point": "scripts/cm_recognition_experiment.py",
+      "arguments": "--run --feature-ablation --seed 20260830 --sizes 4,6,8 --train-per-family 12 --validation-per-family 4 --test-per-family 8 --query-counts 1,8,64 --rounds 3 --max-seconds 120 --output docs/recognition/runs/routing-ablation-20260829-001",
+      "training": "three bounded cost-tree fits from measured training costs; no test tuning",
+      "epochs": null,
+      "batch_size": "48 training formulas",
+      "memory_estimate_bytes": 67108864,
+      "maximum_variables": 8,
+      "interpretation": "Fresh exploratory ablation; preserves original corpus split contract and its documented semantic/template leakage limitations. Not confirmation of the historical in-memory diagnostic."
+    },
+    {
+      "id": "affine-mlp-20260829-001",
+      "entry_point": "scripts/cm_recognition_learning.py",
+      "arguments": "--run --output docs/recognition/runs/affine-mlp-20260829-001",
+      "data_seed": 20260829,
+      "training_seeds": [20260829, 20260830],
+      "parent_counts_train_validation_test_confirmatory": [64, 16, 16, 8],
+      "total_formulas": 208,
+      "epochs": 40,
+      "batch_size": 32,
+      "hidden_units": 128,
+      "parameters": 65793,
+      "rounds": 3,
+      "maximum_variables": 8,
+      "memory_estimate_bytes": 268435456,
+      "interpretation": "Narrow affine/one-bit-near generated mechanism smoke. Templates and affine-support permutation/complement groups do not cross splits. Too few independent clusters for a confirmatory generalization claim."
+    }
+  ],
+  "criteria": {
+    "accepted_semantic_mismatches": 0,
+    "material_speedup": 1.1,
+    "maximum_p95_slowdown": 1.1,
+    "no_increase_in_at_least_2x_slowdowns": true,
+    "automatic_promotion": false,
+    "independent_source_and_machine_replication": "pending"
+  },
+  "bounds_are_cooperative_not_OS_containment": true,
+  "preflight": "One 10-formula, one-seed, two-epoch, eight-hidden-unit integration run retained separately at affine-preflight-20260829-001; not scientific evidence."
+}

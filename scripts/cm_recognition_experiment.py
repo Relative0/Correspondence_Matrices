@@ -4,9 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from dataclasses import asdict
 from pathlib import Path
+
+# Process-local thread request, before NumPy/BLAS imports. Not OS containment.
+for _name in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ[_name] = "1"
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -37,12 +42,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--held-out-family", choices=FAMILIES, default="mux")
     parser.add_argument("--rounds", type=int, default=3)
     parser.add_argument("--max-seconds", type=float, default=120.0)
+    parser.add_argument("--feature-ablation", action="store_true")
+    parser.add_argument("--disable-learned", action="store_true")
     args = parser.parse_args(argv)
     config = Config(
         seed=args.seed, train_per_family=args.train_per_family,
         validation_per_family=args.validation_per_family, test_per_family=args.test_per_family,
         sizes=args.sizes, query_counts=args.query_counts, held_out_family=args.held_out_family,
         rounds=args.rounds, max_seconds=args.max_seconds,
+        feature_ablation=args.feature_ablation, learned_enabled=not args.disable_learned,
     )
     try:
         config.validate()
@@ -55,6 +63,14 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("--run requires --output pointing to a new directory")
         # No overwrite, cleanup, subprocess, credential lookup, or cloud effect.
         args.output.mkdir(parents=True, exist_ok=False)
+        with (args.output / "run_spec.json").open("x", encoding="utf-8") as handle:
+            json.dump({"schema": "crse-run-spec/v1", "status": "planned", "config": asdict(config),
+                       "output": str(args.output.resolve()), "training_steps": "one bounded tree fit per schema",
+                       "batch_size": "all training formulas", "threads": 1,
+                       "memory_estimate_bytes": 64 * 1024 * 1024,
+                       "memory_estimate_is_hard_limit": False,
+                       "thread_environment": {name: os.environ.get(name) for name in
+                           ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS")}}, handle, indent=2)
         result = run_experiment(config, progress=lambda message: print(message, flush=True))
         write_artifacts(args.output, result)
         print(f"Status: {result['status']}; mismatches: {result['semantic_mismatches']}")

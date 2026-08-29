@@ -1,0 +1,1487 @@
+{
+  "schema": "crse-learning-milestones-ab/v1",
+  "date": "2026-08-29",
+  "routing_run": "routing-ablation-20260829-002",
+  "neural_run": "affine-mlp-20260829-002",
+  "routing_dataset_sha256": "2d07dc6ddc2a16f5a1e5b9b9cf6866a3da6343e2532d53a09d9cb79f3251ccce",
+  "neural_dataset_sha256": "c021ee0655add4a3765c943392ed45d05f27f734e225a031ec9d16bea2a9da0f",
+  "routing_test": {
+    "arms": {
+      "cm": {
+        "catastrophic_ge_2x": 20,
+        "geomean_speedup_over_fixed_train": 0.4561191263748022,
+        "max_slowdown_over_fixed_train": 3.6950286806883366,
+        "mean_regret_over_oracle": 5.09461622134525,
+        "p95_slowdown_over_fixed_train": 3.52306182531894,
+        "p99_slowdown_over_fixed_train": 3.6950286806883366,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 8325900
+      },
+      "cse": {
+        "catastrophic_ge_2x": 0,
+        "geomean_speedup_over_fixed_train": 1.0,
+        "max_slowdown_over_fixed_train": 1.0,
+        "mean_regret_over_oracle": 1.247413310234548,
+        "p95_slowdown_over_fixed_train": 1.0,
+        "p99_slowdown_over_fixed_train": 1.0,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 4185000
+      },
+      "direct": {
+        "catastrophic_ge_2x": 4,
+        "geomean_speedup_over_fixed_train": 1.2811063824724855,
+        "max_slowdown_over_fixed_train": 5.650418229016441,
+        "mean_regret_over_oracle": 0.6776815701837243,
+        "p95_slowdown_over_fixed_train": 5.550900900900901,
+        "p99_slowdown_over_fixed_train": 5.650418229016441,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 9615300
+      },
+      "exact_cache": {
+        "catastrophic_ge_2x": 0,
+        "geomean_speedup_over_fixed_train": 0.6450531539637717,
+        "max_slowdown_over_fixed_train": 1.9063926940639269,
+        "mean_regret_over_oracle": 2.7929849818015953,
+        "p95_slowdown_over_fixed_train": 1.904632152588556,
+        "p99_slowdown_over_fixed_train": 1.9063926940639269,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 5938500
+      },
+      "learned": {
+        "catastrophic_ge_2x": 8,
+        "geomean_speedup_over_fixed_train": 0.6137339369587133,
+        "max_slowdown_over_fixed_train": 2.808333333333333,
+        "mean_regret_over_oracle": 2.6808870410584675,
+        "p95_slowdown_over_fixed_train": 2.46483704974271,
+        "p99_slowdown_over_fixed_train": 2.808333333333333,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 6404400
+      },
+      "learned_queries": {
+        "catastrophic_ge_2x": 0,
+        "geomean_speedup_over_fixed_train": 1.162224840986238,
+        "max_slowdown_over_fixed_train": 1.7886178861788617,
+        "mean_regret_over_oracle": 0.6399747847437185,
+        "p95_slowdown_over_fixed_train": 1.2736418511066399,
+        "p99_slowdown_over_fixed_train": 1.7886178861788617,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 4163600
+      },
+      "learned_queries_depth": {
+        "catastrophic_ge_2x": 0,
+        "geomean_speedup_over_fixed_train": 0.7948993408150565,
+        "max_slowdown_over_fixed_train": 1.910569105691057,
+        "mean_regret_over_oracle": 1.6614059337876217,
+        "p95_slowdown_over_fixed_train": 1.8814814814814815,
+        "p99_slowdown_over_fixed_train": 1.910569105691057,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 5231600
+      },
+      "query_rule": {
+        "catastrophic_ge_2x": 0,
+        "geomean_speedup_over_fixed_train": 1.5638782693908992,
+        "max_slowdown_over_fixed_train": 1.096774193548387,
+        "mean_regret_over_oracle": 0.1738888366179992,
+        "p95_slowdown_over_fixed_train": 1.0874384236453203,
+        "p99_slowdown_over_fixed_train": 1.096774193548387,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 3790800
+      },
+      "rule": {
+        "catastrophic_ge_2x": 7,
+        "geomean_speedup_over_fixed_train": 0.6619611795559243,
+        "max_slowdown_over_fixed_train": 3.270238095238095,
+        "mean_regret_over_oracle": 2.2611181188143727,
+        "p95_slowdown_over_fixed_train": 2.1646655231560894,
+        "p99_slowdown_over_fixed_train": 3.270238095238095,
+        "paired_instances": 32,
+        "sum_instance_median_ns": 6697200
+      }
+    },
+    "complete_baseline_instances": 32,
+    "observed_instances": 32,
+    "optimistic_oracle_speedup_over_fixed_train": 1.7829173519639392
+  },
+  "routing_models_sha256": {
+    "full": "981e3948d2993c8a776adab5ad505864184a85caeb9bd98dec341711ccb1a46e",
+    "learned_queries": "b324fa4c1fe951871b9991850bc5a07f9b93b57a498b557fef09f87118e9035d",
+    "learned_queries_depth": "bdcd74a56d06a3a746e4687f962ad81210056275ac05d44e5fab9ef8ef6bd67f"
+  },
+  "neural_models": [
+    {
+      "activations": [
+        "relu",
+        "sigmoid"
+      ],
+      "file": "model-20260829.json",
+      "fit_ns": 61929800,
+      "graph_memory_bytes": null,
+      "graph_memory_reason": "matrix MLP, no graph model",
+      "layers": [
+        512,
+        128,
+        1
+      ],
+      "parameter_bytes": 263172,
+      "parameters": 65793,
+      "reload_ns": 4088200,
+      "reload_predictions_identical": true,
+      "seed": 20260829,
+      "serialized_bytes": 360371,
+      "training": {
+        "batch_size": 32,
+        "dataset_sha256": "c021ee0655add4a3765c943392ed45d05f27f734e225a031ec9d16bea2a9da0f",
+        "epochs": 40,
+        "final_weights_sha256": "978c3de6993c9ef2ef041b216f267d774c4e622782ebdefc2bb2109fea01dd4b",
+        "initial_weights_sha256": "434ba4f961c9e7026d38cdda094eec1731e4addc0f68b88736d1354a5e73e72c",
+        "learning_rate": 0.03,
+        "loss_history": [
+          {
+            "binary_cross_entropy": 0.7170929908752441,
+            "epoch": 1
+          },
+          {
+            "binary_cross_entropy": 0.7127360105514526,
+            "epoch": 2
+          },
+          {
+            "binary_cross_entropy": 0.7093019485473633,
+            "epoch": 3
+          },
+          {
+            "binary_cross_entropy": 0.7060249447822571,
+            "epoch": 4
+          },
+          {
+            "binary_cross_entropy": 0.7033140659332275,
+            "epoch": 5
+          },
+          {
+            "binary_cross_entropy": 0.7007579803466797,
+            "epoch": 6
+          },
+          {
+            "binary_cross_entropy": 0.6986042261123657,
+            "epoch": 7
+          },
+          {
+            "binary_cross_entropy": 0.6967886686325073,
+            "epoch": 8
+          },
+          {
+            "binary_cross_entropy": 0.6951154470443726,
+            "epoch": 9
+          },
+          {
+            "binary_cross_entropy": 0.6936439275741577,
+            "epoch": 10
+          },
+          {
+            "binary_cross_entropy": 0.6923408508300781,
+            "epoch": 11
+          },
+          {
+            "binary_cross_entropy": 0.691205620765686,
+            "epoch": 12
+          },
+          {
+            "binary_cross_entropy": 0.6901674270629883,
+            "epoch": 13
+          },
+          {
+            "binary_cross_entropy": 0.6893589496612549,
+            "epoch": 14
+          },
+          {
+            "binary_cross_entropy": 0.6883019208908081,
+            "epoch": 15
+          },
+          {
+            "binary_cross_entropy": 0.6876862645149231,
+            "epoch": 16
+          },
+          {
+            "binary_cross_entropy": 0.6870293617248535,
+            "epoch": 17
+          },
+          {
+            "binary_cross_entropy": 0.686170220375061,
+            "epoch": 18
+          },
+          {
+            "binary_cross_entropy": 0.6854596138000488,
+            "epoch": 19
+          },
+          {
+            "binary_cross_entropy": 0.6848672032356262,
+            "epoch": 20
+          },
+          {
+            "binary_cross_entropy": 0.6843067407608032,
+            "epoch": 21
+          },
+          {
+            "binary_cross_entropy": 0.6839431524276733,
+            "epoch": 22
+          },
+          {
+            "binary_cross_entropy": 0.683349609375,
+            "epoch": 23
+          },
+          {
+            "binary_cross_entropy": 0.6828609108924866,
+            "epoch": 24
+          },
+          {
+            "binary_cross_entropy": 0.6823980808258057,
+            "epoch": 25
+          },
+          {
+            "binary_cross_entropy": 0.6820974946022034,
+            "epoch": 26
+          },
+          {
+            "binary_cross_entropy": 0.6815860271453857,
+            "epoch": 27
+          },
+          {
+            "binary_cross_entropy": 0.6811976432800293,
+            "epoch": 28
+          },
+          {
+            "binary_cross_entropy": 0.6808704137802124,
+            "epoch": 29
+          },
+          {
+            "binary_cross_entropy": 0.6804826259613037,
+            "epoch": 30
+          },
+          {
+            "binary_cross_entropy": 0.6803661584854126,
+            "epoch": 31
+          },
+          {
+            "binary_cross_entropy": 0.6797811388969421,
+            "epoch": 32
+          },
+          {
+            "binary_cross_entropy": 0.6794783473014832,
+            "epoch": 33
+          },
+          {
+            "binary_cross_entropy": 0.6791576147079468,
+            "epoch": 34
+          },
+          {
+            "binary_cross_entropy": 0.6790408492088318,
+            "epoch": 35
+          },
+          {
+            "binary_cross_entropy": 0.6785441637039185,
+            "epoch": 36
+          },
+          {
+            "binary_cross_entropy": 0.6781710386276245,
+            "epoch": 37
+          },
+          {
+            "binary_cross_entropy": 0.6779932975769043,
+            "epoch": 38
+          },
+          {
+            "binary_cross_entropy": 0.6775543689727783,
+            "epoch": 39
+          },
+          {
+            "binary_cross_entropy": 0.6772172451019287,
+            "epoch": 40
+          }
+        ],
+        "optimizer": "minibatch-SGD",
+        "parameters_updated": true,
+        "preprocessing": "training-only-mean-std-small-scale-clamped-to-one",
+        "rows": 128,
+        "seed": 20260829,
+        "status": "complete",
+        "steps": 160,
+        "training_ids_sha256": "6d5afde569b130cef16be06e031f3709a43a9de0e18424b42d4bdcc84311a249"
+      },
+      "weights_dtype": "float32"
+    },
+    {
+      "activations": [
+        "relu",
+        "sigmoid"
+      ],
+      "file": "model-20260830.json",
+      "fit_ns": 48126400,
+      "graph_memory_bytes": null,
+      "graph_memory_reason": "matrix MLP, no graph model",
+      "layers": [
+        512,
+        128,
+        1
+      ],
+      "parameter_bytes": 263172,
+      "parameters": 65793,
+      "reload_ns": 3733300,
+      "reload_predictions_identical": true,
+      "seed": 20260830,
+      "serialized_bytes": 360371,
+      "training": {
+        "batch_size": 32,
+        "dataset_sha256": "c021ee0655add4a3765c943392ed45d05f27f734e225a031ec9d16bea2a9da0f",
+        "epochs": 40,
+        "final_weights_sha256": "c5b2e13a1d0c7c3a36a871b6c99a633745070bf79f5a7bea4c973087aa8c1ef9",
+        "initial_weights_sha256": "38e0831c30384129ddb078bdedaa29a41ec708491b398e078e48b6c8af5e295a",
+        "learning_rate": 0.03,
+        "loss_history": [
+          {
+            "binary_cross_entropy": 0.7300225496292114,
+            "epoch": 1
+          },
+          {
+            "binary_cross_entropy": 0.7223168015480042,
+            "epoch": 2
+          },
+          {
+            "binary_cross_entropy": 0.7166701555252075,
+            "epoch": 3
+          },
+          {
+            "binary_cross_entropy": 0.7121679782867432,
+            "epoch": 4
+          },
+          {
+            "binary_cross_entropy": 0.7085085511207581,
+            "epoch": 5
+          },
+          {
+            "binary_cross_entropy": 0.7051126956939697,
+            "epoch": 6
+          },
+          {
+            "binary_cross_entropy": 0.702296793460846,
+            "epoch": 7
+          },
+          {
+            "binary_cross_entropy": 0.6999375820159912,
+            "epoch": 8
+          },
+          {
+            "binary_cross_entropy": 0.6977673768997192,
+            "epoch": 9
+          },
+          {
+            "binary_cross_entropy": 0.6959548592567444,
+            "epoch": 10
+          },
+          {
+            "binary_cross_entropy": 0.6943334937095642,
+            "epoch": 11
+          },
+          {
+            "binary_cross_entropy": 0.6929129362106323,
+            "epoch": 12
+          },
+          {
+            "binary_cross_entropy": 0.691801905632019,
+            "epoch": 13
+          },
+          {
+            "binary_cross_entropy": 0.6905527114868164,
+            "epoch": 14
+          },
+          {
+            "binary_cross_entropy": 0.6895321011543274,
+            "epoch": 15
+          },
+          {
+            "binary_cross_entropy": 0.6887612342834473,
+            "epoch": 16
+          },
+          {
+            "binary_cross_entropy": 0.6878589987754822,
+            "epoch": 17
+          },
+          {
+            "binary_cross_entropy": 0.687236487865448,
+            "epoch": 18
+          },
+          {
+            "binary_cross_entropy": 0.686468243598938,
+            "epoch": 19
+          },
+          {
+            "binary_cross_entropy": 0.6858521699905396,
+            "epoch": 20
+          },
+          {
+            "binary_cross_entropy": 0.6851770877838135,
+            "epoch": 21
+          },
+          {
+            "binary_cross_entropy": 0.6846315264701843,
+            "epoch": 22
+          },
+          {
+            "binary_cross_entropy": 0.6840189695358276,
+            "epoch": 23
+          },
+          {
+            "binary_cross_entropy": 0.6835051774978638,
+            "epoch": 24
+          },
+          {
+            "binary_cross_entropy": 0.68299400806427,
+            "epoch": 25
+          },
+          {
+            "binary_cross_entropy": 0.6825977563858032,
+            "epoch": 26
+          },
+          {
+            "binary_cross_entropy": 0.6823341846466064,
+            "epoch": 27
+          },
+          {
+            "binary_cross_entropy": 0.6819621324539185,
+            "epoch": 28
+          },
+          {
+            "binary_cross_entropy": 0.6813800930976868,
+            "epoch": 29
+          },
+          {
+            "binary_cross_entropy": 0.6808478236198425,
+            "epoch": 30
+          },
+          {
+            "binary_cross_entropy": 0.6804670095443726,
+            "epoch": 31
+          },
+          {
+            "binary_cross_entropy": 0.6802049875259399,
+            "epoch": 32
+          },
+          {
+            "binary_cross_entropy": 0.6796479225158691,
+            "epoch": 33
+          },
+          {
+            "binary_cross_entropy": 0.6793501377105713,
+            "epoch": 34
+          },
+          {
+            "binary_cross_entropy": 0.6790183186531067,
+            "epoch": 35
+          },
+          {
+            "binary_cross_entropy": 0.6785027980804443,
+            "epoch": 36
+          },
+          {
+            "binary_cross_entropy": 0.6780940294265747,
+            "epoch": 37
+          },
+          {
+            "binary_cross_entropy": 0.6777395009994507,
+            "epoch": 38
+          },
+          {
+            "binary_cross_entropy": 0.6773794889450073,
+            "epoch": 39
+          },
+          {
+            "binary_cross_entropy": 0.6770109534263611,
+            "epoch": 40
+          }
+        ],
+        "optimizer": "minibatch-SGD",
+        "parameters_updated": true,
+        "preprocessing": "training-only-mean-std-small-scale-clamped-to-one",
+        "rows": 128,
+        "seed": 20260830,
+        "status": "complete",
+        "steps": 160,
+        "training_ids_sha256": "6d5afde569b130cef16be06e031f3709a43a9de0e18424b42d4bdcc84311a249"
+      },
+      "weights_dtype": "float32"
+    }
+  ],
+  "neural_summary": {
+    "20260829/confirmatory/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 12,
+      "geomean_speedup_over_cse": 0.3816498069621259,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.14684931891492814,
+      "instances": 16,
+      "max_slowdown_over_cse": 3.976530612244898,
+      "mean_regret_over_nonlearned_oracle": 7.067924464951325,
+      "p95_slowdown_over_cse": 3.976530612244898,
+      "p99_slowdown_over_cse": 3.976530612244898,
+      "sum_instance_median_ns": 5877500,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.38477503783855205,
+      "instances": 16,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 1.953820997884911,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 2533300,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 4,
+      "geomean_speedup_over_cse": 1.4334650976108565,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.551561587173461,
+      "instances": 16,
+      "max_slowdown_over_cse": 2.1869853917662683,
+      "mean_regret_over_nonlearned_oracle": 1.9341769157359048,
+      "p95_slowdown_over_cse": 2.1869853917662683,
+      "p99_slowdown_over_cse": 2.1869853917662683,
+      "sum_instance_median_ns": 3665000,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.574402656803241,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.605790841844584,
+      "instances": 16,
+      "max_slowdown_over_cse": 1.0453172205438066,
+      "mean_regret_over_nonlearned_oracle": 1.0600169373561394,
+      "p95_slowdown_over_cse": 1.0453172205438066,
+      "p99_slowdown_over_cse": 1.0453172205438066,
+      "sum_instance_median_ns": 1354300,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 15,
+      "geomean_speedup_over_cse": 0.17655669040575403,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.06793460723152352,
+      "instances": 16,
+      "max_slowdown_over_cse": 13.566465256797583,
+      "mean_regret_over_nonlearned_oracle": 18.24926018652191,
+      "p95_slowdown_over_cse": 13.566465256797583,
+      "p99_slowdown_over_cse": 13.566465256797583,
+      "sum_instance_median_ns": 12276200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 16,
+      "geomean_speedup_over_cse": 0.18303646555557754,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.0704278629599822,
+      "instances": 16,
+      "max_slowdown_over_cse": 11.600292825768667,
+      "mean_regret_over_nonlearned_oracle": 16.07776597815148,
+      "p95_slowdown_over_cse": 11.600292825768667,
+      "p99_slowdown_over_cse": 11.600292825768667,
+      "sum_instance_median_ns": 12299900,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 16,
+      "geomean_speedup_over_cse": 0.03052320936706947,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.011744569039168203,
+      "instances": 16,
+      "max_slowdown_over_cse": 63.874084919472914,
+      "mean_regret_over_nonlearned_oracle": 106.23206759738036,
+      "p95_slowdown_over_cse": 63.874084919472914,
+      "p99_slowdown_over_cse": 63.874084919472914,
+      "sum_instance_median_ns": 68961600,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/confirmatory/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 4,
+      "geomean_speedup_over_cse": 0.6126312823923591,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.23572522486360062,
+      "instances": 16,
+      "max_slowdown_over_cse": 2.583798140770252,
+      "mean_regret_over_nonlearned_oracle": 4.023355679398523,
+      "p95_slowdown_over_cse": 2.583798140770252,
+      "p99_slowdown_over_cse": 2.583798140770252,
+      "sum_instance_median_ns": 5071400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 22,
+      "geomean_speedup_over_cse": 0.3953087412780804,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.1420968721162747,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.8445154419595315,
+      "mean_regret_over_nonlearned_oracle": 7.255576677554842,
+      "p95_slowdown_over_cse": 3.8054711246200608,
+      "p99_slowdown_over_cse": 3.8445154419595315,
+      "sum_instance_median_ns": 11405600,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.35945795596843755,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 2.103676594542781,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 5126200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 8,
+      "geomean_speedup_over_cse": 1.4092335377149499,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.5065602069491859,
+      "instances": 32,
+      "max_slowdown_over_cse": 2.151928320997273,
+      "mean_regret_over_nonlearned_oracle": 2.165906844611436,
+      "p95_slowdown_over_cse": 2.1416971173365815,
+      "p99_slowdown_over_cse": 2.151928320997273,
+      "sum_instance_median_ns": 7475800,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.6560811296940057,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.5952915377977083,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0866873065015479,
+      "mean_regret_over_nonlearned_oracle": 1.132624474186867,
+      "p95_slowdown_over_cse": 1.0617886178861788,
+      "p99_slowdown_over_cse": 1.0866873065015479,
+      "sum_instance_median_ns": 2572000,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 31,
+      "geomean_speedup_over_cse": 0.18524342517744488,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.06658722297087655,
+      "instances": 32,
+      "max_slowdown_over_cse": 14.133550488599349,
+      "mean_regret_over_nonlearned_oracle": 18.13429949481321,
+      "p95_slowdown_over_cse": 13.726006191950464,
+      "p99_slowdown_over_cse": 14.133550488599349,
+      "sum_instance_median_ns": 23204100,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.1674458974269128,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.060189760024378716,
+      "instances": 32,
+      "max_slowdown_over_cse": 15.196594427244582,
+      "mean_regret_over_nonlearned_oracle": 21.165029040950024,
+      "p95_slowdown_over_cse": 12.738211382113821,
+      "p99_slowdown_over_cse": 15.196594427244582,
+      "sum_instance_median_ns": 26820200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.030007865446235966,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.010786565976279895,
+      "instances": 32,
+      "max_slowdown_over_cse": 71.4783281733746,
+      "mean_regret_over_nonlearned_oracle": 116.25119171855164,
+      "p95_slowdown_over_cse": 69.52032520325203,
+      "p99_slowdown_over_cse": 71.4783281733746,
+      "sum_instance_median_ns": 139547100,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/test/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 10,
+      "geomean_speedup_over_cse": 0.6088925707388932,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.2188712788821698,
+      "instances": 32,
+      "max_slowdown_over_cse": 2.434429557450264,
+      "mean_regret_over_nonlearned_oracle": 4.304979246293126,
+      "p95_slowdown_over_cse": 2.419404715887128,
+      "p99_slowdown_over_cse": 2.434429557450264,
+      "sum_instance_median_ns": 10149300,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 22,
+      "geomean_speedup_over_cse": 0.36716545045517435,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.14046817274925583,
+      "instances": 32,
+      "max_slowdown_over_cse": 4.215876089060988,
+      "mean_regret_over_nonlearned_oracle": 7.090332056251015,
+      "p95_slowdown_over_cse": 4.05049504950495,
+      "p99_slowdown_over_cse": 4.215876089060988,
+      "sum_instance_median_ns": 13292700,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.3825745929392805,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 1.899290666672015,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 5615000,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 10,
+      "geomean_speedup_over_cse": 1.1029265223252254,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.4219516653205093,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.276627775686865,
+      "mean_regret_over_nonlearned_oracle": 3.2377318127274153,
+      "p95_slowdown_over_cse": 3.1744940817105767,
+      "p99_slowdown_over_cse": 3.276627775686865,
+      "sum_instance_median_ns": 11021400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.6515578817557155,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.6318440843283532,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0599700149925038,
+      "mean_regret_over_nonlearned_oracle": 0.9185014596195671,
+      "p95_slowdown_over_cse": 1.0583832335329342,
+      "p99_slowdown_over_cse": 1.0599700149925038,
+      "sum_instance_median_ns": 2821900,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 29,
+      "geomean_speedup_over_cse": 0.19606693869913244,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.07501022926167145,
+      "instances": 32,
+      "max_slowdown_over_cse": 12.162790697674419,
+      "mean_regret_over_nonlearned_oracle": 15.244294082251901,
+      "p95_slowdown_over_cse": 12.145209580838323,
+      "p99_slowdown_over_cse": 12.162790697674419,
+      "sum_instance_median_ns": 23662600,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.22503221237642282,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.08609160704813569,
+      "instances": 32,
+      "max_slowdown_over_cse": 10.681137724550899,
+      "mean_regret_over_nonlearned_oracle": 13.152695299626675,
+      "p95_slowdown_over_cse": 10.389405204460967,
+      "p99_slowdown_over_cse": 10.681137724550899,
+      "sum_instance_median_ns": 21788400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.03287467016334836,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.01257701355575611,
+      "instances": 32,
+      "max_slowdown_over_cse": 70.16467065868264,
+      "mean_regret_over_nonlearned_oracle": 95.67328657335158,
+      "p95_slowdown_over_cse": 64.2247191011236,
+      "p99_slowdown_over_cse": 70.16467065868264,
+      "sum_instance_median_ns": 138970100,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260829/validation/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 5,
+      "geomean_speedup_over_cse": 0.6081628355356646,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.23266764924585548,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.455777192322168,
+      "mean_regret_over_nonlearned_oracle": 3.9934418347382783,
+      "p95_slowdown_over_cse": 3.4119893088965254,
+      "p99_slowdown_over_cse": 3.455777192322168,
+      "sum_instance_median_ns": 10148200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 12,
+      "geomean_speedup_over_cse": 0.38878429281971577,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.14806555140959327,
+      "instances": 16,
+      "max_slowdown_over_cse": 3.902330743618202,
+      "mean_regret_over_nonlearned_oracle": 6.99513673605124,
+      "p95_slowdown_over_cse": 3.902330743618202,
+      "p99_slowdown_over_cse": 3.902330743618202,
+      "sum_instance_median_ns": 5777800,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.3808424212195557,
+      "instances": 16,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 1.983370401309461,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 2546500,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 4,
+      "geomean_speedup_over_cse": 1.4474182422423962,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.5512382678929475,
+      "instances": 16,
+      "max_slowdown_over_cse": 2.25164113785558,
+      "mean_regret_over_nonlearned_oracle": 1.9495063146212686,
+      "p95_slowdown_over_cse": 2.25164113785558,
+      "p99_slowdown_over_cse": 2.25164113785558,
+      "sum_instance_median_ns": 3666400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.5823526746559797,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.6026270238392232,
+      "instances": 16,
+      "max_slowdown_over_cse": 1.0402384500745157,
+      "mean_regret_over_nonlearned_oracle": 1.0825574949280306,
+      "p95_slowdown_over_cse": 1.0402384500745157,
+      "p99_slowdown_over_cse": 1.0402384500745157,
+      "sum_instance_median_ns": 1345700,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 15,
+      "geomean_speedup_over_cse": 0.17501939277944828,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.06665480930650149,
+      "instances": 16,
+      "max_slowdown_over_cse": 13.706408345752608,
+      "mean_regret_over_nonlearned_oracle": 18.714130686050442,
+      "p95_slowdown_over_cse": 13.706408345752608,
+      "p99_slowdown_over_cse": 13.706408345752608,
+      "sum_instance_median_ns": 12409400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 16,
+      "geomean_speedup_over_cse": 0.1778964249459528,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.06775050520271965,
+      "instances": 16,
+      "max_slowdown_over_cse": 11.614243323442137,
+      "mean_regret_over_nonlearned_oracle": 16.488368613168152,
+      "p95_slowdown_over_cse": 11.614243323442137,
+      "p99_slowdown_over_cse": 11.614243323442137,
+      "sum_instance_median_ns": 12838400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 16,
+      "geomean_speedup_over_cse": 0.03309820190905052,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.012605199353056524,
+      "instances": 16,
+      "max_slowdown_over_cse": 55.62759643916914,
+      "mean_regret_over_nonlearned_oracle": 97.72066804664374,
+      "p95_slowdown_over_cse": 55.62759643916914,
+      "p99_slowdown_over_cse": 55.62759643916914,
+      "sum_instance_median_ns": 63677200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/confirmatory/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 4,
+      "geomean_speedup_over_cse": 0.6192622548268444,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.23584133649813688,
+      "instances": 16,
+      "max_slowdown_over_cse": 2.517505470459519,
+      "mean_regret_over_nonlearned_oracle": 4.027326966301542,
+      "p95_slowdown_over_cse": 2.517505470459519,
+      "p99_slowdown_over_cse": 2.517505470459519,
+      "sum_instance_median_ns": 5023700,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 22,
+      "geomean_speedup_over_cse": 0.39805902977259044,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.14258053280553257,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.8735059760956174,
+      "mean_regret_over_nonlearned_oracle": 7.253986240364878,
+      "p95_slowdown_over_cse": 3.807897545357524,
+      "p99_slowdown_over_cse": 3.8735059760956174,
+      "sum_instance_median_ns": 11271300,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.3581894195114435,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 2.1304331975271786,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 5113100,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 8,
+      "geomean_speedup_over_cse": 1.4047700842182085,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.5031737810131617,
+      "instances": 32,
+      "max_slowdown_over_cse": 2.265677966101695,
+      "mean_regret_over_nonlearned_oracle": 2.23736665995706,
+      "p95_slowdown_over_cse": 2.133579942457871,
+      "p99_slowdown_over_cse": 2.265677966101695,
+      "sum_instance_median_ns": 7521800,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.6580046759111728,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.5938797324118821,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.1055194805194806,
+      "mean_regret_over_nonlearned_oracle": 1.143050254492206,
+      "p95_slowdown_over_cse": 1.0752136752136752,
+      "p99_slowdown_over_cse": 1.1055194805194806,
+      "sum_instance_median_ns": 2558000,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 31,
+      "geomean_speedup_over_cse": 0.1821164708557577,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.06523219297929658,
+      "instances": 32,
+      "max_slowdown_over_cse": 14.472312703583063,
+      "mean_regret_over_nonlearned_oracle": 18.681267989114392,
+      "p95_slowdown_over_cse": 14.44957264957265,
+      "p99_slowdown_over_cse": 14.472312703583063,
+      "sum_instance_median_ns": 23447200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.20222309232689234,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.07243417205237862,
+      "instances": 32,
+      "max_slowdown_over_cse": 12.407582938388625,
+      "mean_regret_over_nonlearned_oracle": 16.813380904633735,
+      "p95_slowdown_over_cse": 12.297077922077921,
+      "p99_slowdown_over_cse": 12.407582938388625,
+      "sum_instance_median_ns": 22257600,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.033333476191884155,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.011939698487469515,
+      "instances": 32,
+      "max_slowdown_over_cse": 70.56168831168831,
+      "mean_regret_over_nonlearned_oracle": 105.74070851603989,
+      "p95_slowdown_over_cse": 67.05529225908373,
+      "p99_slowdown_over_cse": 70.56168831168831,
+      "sum_instance_median_ns": 125053700,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/test/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 10,
+      "geomean_speedup_over_cse": 0.605128300562726,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.21675055470850915,
+      "instances": 32,
+      "max_slowdown_over_cse": 2.525277435265105,
+      "mean_regret_over_nonlearned_oracle": 4.394833584543758,
+      "p95_slowdown_over_cse": 2.4716101694915253,
+      "p99_slowdown_over_cse": 2.525277435265105,
+      "sum_instance_median_ns": 10136000,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/cm": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 23,
+      "geomean_speedup_over_cse": 0.36135441781187444,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.1374513360759819,
+      "instances": 32,
+      "max_slowdown_over_cse": 4.1702755905511815,
+      "mean_regret_over_nonlearned_oracle": 7.322268545059572,
+      "p95_slowdown_over_cse": 4.117134559535334,
+      "p99_slowdown_over_cse": 4.1702755905511815,
+      "sum_instance_median_ns": 13665600,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/cse": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.0,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.3803781808128903,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.0,
+      "mean_regret_over_nonlearned_oracle": 1.910941035569568,
+      "p95_slowdown_over_cse": 1.0,
+      "p99_slowdown_over_cse": 1.0,
+      "sum_instance_median_ns": 5644700,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/direct": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 10,
+      "geomean_speedup_over_cse": 1.1201827363739674,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.4260930714399353,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.206649036645259,
+      "mean_regret_over_nonlearned_oracle": 3.1350117978588656,
+      "p95_slowdown_over_cse": 3.158034026465028,
+      "p99_slowdown_over_cse": 3.206649036645259,
+      "sum_instance_median_ns": 11089900,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/exact_cache": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 0,
+      "geomean_speedup_over_cse": 1.620578319304367,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.6164326329618065,
+      "instances": 32,
+      "max_slowdown_over_cse": 1.1374636979670862,
+      "mean_regret_over_nonlearned_oracle": 1.002779678488345,
+      "p95_slowdown_over_cse": 1.069937369519833,
+      "p99_slowdown_over_cse": 1.1374636979670862,
+      "sum_instance_median_ns": 2871900,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/exact_detector": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 29,
+      "geomean_speedup_over_cse": 0.19415921811256426,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.07385393017371038,
+      "instances": 32,
+      "max_slowdown_over_cse": 12.939873417721518,
+      "mean_regret_over_nonlearned_oracle": 15.767552685139265,
+      "p95_slowdown_over_cse": 12.83808095952024,
+      "p99_slowdown_over_cse": 12.939873417721518,
+      "sum_instance_median_ns": 23875100,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/mlp": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 31,
+      "geomean_speedup_over_cse": 0.21190031423681815,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.08060225604308072,
+      "instances": 32,
+      "max_slowdown_over_cse": 10.887795275590552,
+      "mean_regret_over_nonlearned_oracle": 13.087289101085995,
+      "p95_slowdown_over_cse": 9.81655172413793,
+      "p99_slowdown_over_cse": 10.887795275590552,
+      "sum_instance_median_ns": 23094200,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/mlp_cold": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 32,
+      "geomean_speedup_over_cse": 0.033764100565348794,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.012843127149830857,
+      "instances": 32,
+      "max_slowdown_over_cse": 60.436708860759495,
+      "mean_regret_over_nonlearned_oracle": 93.39166247125445,
+      "p95_slowdown_over_cse": 59.72713643178411,
+      "p99_slowdown_over_cse": 60.436708860759495,
+      "sum_instance_median_ns": 135230400,
+      "virtual_best_is_oracle_not_deployable": true
+    },
+    "20260830/validation/tiny_tree": {
+      "ci_limitation": "Only one held-out generating template/support group per split; no independent-cluster interval justified.",
+      "clustered_ci95": null,
+      "ge_2x": 5,
+      "geomean_speedup_over_cse": 0.6097947936446635,
+      "geomean_speedup_over_virtual_best_nonlearned": 0.231952634275729,
+      "instances": 32,
+      "max_slowdown_over_cse": 3.421231582924065,
+      "mean_regret_over_nonlearned_oracle": 3.9735745546294527,
+      "p95_slowdown_over_cse": 3.415500945179584,
+      "p99_slowdown_over_cse": 3.421231582924065,
+      "sum_instance_median_ns": 10215700,
+      "virtual_best_is_oracle_not_deployable": true
+    }
+  },
+  "classification": {
+    "20260829/confirmatory/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 8
+    },
+    "20260829/confirmatory/mlp": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.25,
+      "accepted_false_positives": 0,
+      "brier_score": 0.25876227457640066,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 4,
+      "false_positive": 4,
+      "precision": 0.5,
+      "proposal_coverage": 0.5,
+      "recall": 0.5,
+      "rejection_count": 4,
+      "true_positive": 4
+    },
+    "20260829/confirmatory/mlp_cold": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.25,
+      "accepted_false_positives": 0,
+      "brier_score": 0.25876227457640066,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 4,
+      "false_positive": 4,
+      "precision": 0.5,
+      "proposal_coverage": 0.5,
+      "recall": 0.5,
+      "rejection_count": 4,
+      "true_positive": 4
+    },
+    "20260829/test/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 16
+    },
+    "20260829/test/mlp": {
+      "abstention_rate": 0.28125,
+      "accepted_coverage": 0.34375,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2660055210632343,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 5,
+      "false_positive": 12,
+      "precision": 0.4782608695652174,
+      "proposal_coverage": 0.71875,
+      "recall": 0.6875,
+      "rejection_count": 12,
+      "true_positive": 11
+    },
+    "20260829/test/mlp_cold": {
+      "abstention_rate": 0.28125,
+      "accepted_coverage": 0.34375,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2660055210632343,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 5,
+      "false_positive": 12,
+      "precision": 0.4782608695652174,
+      "proposal_coverage": 0.71875,
+      "recall": 0.6875,
+      "rejection_count": 12,
+      "true_positive": 11
+    },
+    "20260829/validation/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 16
+    },
+    "20260829/validation/mlp": {
+      "abstention_rate": 0.6875,
+      "accepted_coverage": 0.15625,
+      "accepted_false_positives": 0,
+      "brier_score": 0.26238042118513394,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 11,
+      "false_positive": 5,
+      "precision": 0.5,
+      "proposal_coverage": 0.3125,
+      "recall": 0.3125,
+      "rejection_count": 5,
+      "true_positive": 5
+    },
+    "20260829/validation/mlp_cold": {
+      "abstention_rate": 0.6875,
+      "accepted_coverage": 0.15625,
+      "accepted_false_positives": 0,
+      "brier_score": 0.26238042118513394,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 11,
+      "false_positive": 5,
+      "precision": 0.5,
+      "proposal_coverage": 0.3125,
+      "recall": 0.3125,
+      "rejection_count": 5,
+      "true_positive": 5
+    },
+    "20260830/confirmatory/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 8
+    },
+    "20260830/confirmatory/mlp": {
+      "abstention_rate": 0.4375,
+      "accepted_coverage": 0.25,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2647887841640612,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 4,
+      "false_positive": 5,
+      "precision": 0.4444444444444444,
+      "proposal_coverage": 0.5625,
+      "recall": 0.5,
+      "rejection_count": 5,
+      "true_positive": 4
+    },
+    "20260830/confirmatory/mlp_cold": {
+      "abstention_rate": 0.4375,
+      "accepted_coverage": 0.25,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2647887841640612,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 16,
+      "false_negative": 4,
+      "false_positive": 5,
+      "precision": 0.4444444444444444,
+      "proposal_coverage": 0.5625,
+      "recall": 0.5,
+      "rejection_count": 5,
+      "true_positive": 4
+    },
+    "20260830/test/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 16
+    },
+    "20260830/test/mlp": {
+      "abstention_rate": 0.59375,
+      "accepted_coverage": 0.21875,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2635441534741123,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 9,
+      "false_positive": 6,
+      "precision": 0.5384615384615384,
+      "proposal_coverage": 0.40625,
+      "recall": 0.4375,
+      "rejection_count": 6,
+      "true_positive": 7
+    },
+    "20260830/test/mlp_cold": {
+      "abstention_rate": 0.59375,
+      "accepted_coverage": 0.21875,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2635441534741123,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 9,
+      "false_positive": 6,
+      "precision": 0.5384615384615384,
+      "proposal_coverage": 0.40625,
+      "recall": 0.4375,
+      "rejection_count": 6,
+      "true_positive": 7
+    },
+    "20260830/validation/exact_detector": {
+      "abstention_rate": 0.5,
+      "accepted_coverage": 0.5,
+      "accepted_false_positives": 0,
+      "brier_score": 0.0,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 0,
+      "false_positive": 0,
+      "precision": 1.0,
+      "proposal_coverage": 0.5,
+      "recall": 1.0,
+      "rejection_count": 0,
+      "true_positive": 16
+    },
+    "20260830/validation/mlp": {
+      "abstention_rate": 0.59375,
+      "accepted_coverage": 0.21875,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2639287316373674,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 9,
+      "false_positive": 6,
+      "precision": 0.5384615384615384,
+      "proposal_coverage": 0.40625,
+      "recall": 0.4375,
+      "rejection_count": 6,
+      "true_positive": 7
+    },
+    "20260830/validation/mlp_cold": {
+      "abstention_rate": 0.59375,
+      "accepted_coverage": 0.21875,
+      "accepted_false_positives": 0,
+      "brier_score": 0.2639287316373674,
+      "calibration": "descriptive Brier score only; no fitted calibration or confidence guarantee",
+      "cases": 32,
+      "false_negative": 9,
+      "false_positive": 6,
+      "precision": 0.5384615384615384,
+      "proposal_coverage": 0.40625,
+      "recall": 0.4375,
+      "rejection_count": 6,
+      "true_positive": 7
+    }
+  },
+  "proposal_reasons": {
+    "abstained": 744,
+    "exact_instance_equivalence_and_node_reduction": 468,
+    "fixed": 1920,
+    "insufficient_predicted_gain": 30,
+    "learned": 72,
+    "outside_training_range": 378,
+    "semantic_mismatch": 228
+  },
+  "wall_seconds": {
+    "routing": 0.7408929999946849,
+    "neural": 7.211648899989086
+  },
+  "semantic_mismatches": 0,
+  "verification": {
+    "focused_unittest": 63,
+    "pytest_tests": 173,
+    "pytest_subtests": 146,
+    "audit": "verification/learning-20260829-002.json"
+  },
+  "limits": [
+    "Generated mechanism data only",
+    "No fitted confidence calibration",
+    "One held-out template/support cluster per neural split; no meaningful cluster interval",
+    "No natural-source or second-machine replication",
+    "No neural speedup established",
+    "Routing split contract remains exploratory and lacks semantic/template grouping",
+    "All remaining tracks are pending beyond the explicitly measured slice"
+  ]
+}
