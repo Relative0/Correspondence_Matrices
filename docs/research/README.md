@@ -5,6 +5,15 @@ interactive explainer, raw measurements, source snapshots and tests locally.
 This library integrates the project's August 27–28, 2026 follow-up work.
 Evidence boundaries and unsuccessful experiments are retained.
 
+Latest comparative follow-up: [structural persistence and trace provenance](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md).
+CM, structural CSE and direct CNF passed 144/144 frozen serialize/reload cells
+on eight cached-real conditioned slices, producing 288 exact relation rows.
+The same work records 48 generated task controls and zero observed natural traces.
+A bounded public-source search found useful PROFilE endpoint configurations,
+but not ordered user-event sessions; its non-commercial datasets are linked,
+not redistributed. These are correctness and provenance results, not a
+performance, memory, full-model or independent-replication claim.
+
 ## Start reading
 
 | Reader | What it covers |
@@ -15,6 +24,7 @@ Evidence boundaries and unsuccessful experiments are retained.
 | [Master Explainer](readers/MASTER-EXPLAINER.md) | The full authored knowledge-base content, including corrections and number provenance. |
 | [Verified Runpod smoke](readers/RUNPOD-MEMORY-SMOKE.md) | Executed results, memory findings, cleanup and remaining measurement gaps. |
 | [Runpod setup and handoff](readers/RUNPOD-SETUP.md) | Working configuration and distinctions between historical workflows; no credentials. |
+| [Structural persistence and trace provenance](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | Frozen CM/CSE/direct-CNF structural reload evidence, exact claim boundaries and the natural-session admission contract. |
 
 The generated Markdown readers do not require JavaScript. They are reading
 editions, not screenshots or pixel-identical copies of the interactive pages.
@@ -63,6 +73,7 @@ commit-pinned download for a reproducible version.
 | [Measurement-repair protocol](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-MEASUREMENT-RERUN-PROTOCOL-2026-08-28.md) | A specified protocol and a separate 28-cell local functional pilot. | Execution of the complete repaired benchmark campaign. |
 | [EPFL context pilot](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md) | A published hardware-expression adjacency and bounded context tests. | A deployed design workflow or whole-chip scalability. |
 | [Runpod memory smoke](readers/RUNPOD-MEMORY-SMOKE.md) | 70 passing focused tests; 312 successful rows, including 72 comparable representation calls; verified pod deletion. | Real-world workload performance, full estimator calibration, or production acceptance. |
+| [Structural persistence pilot](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | CM/CSE/direct-CNF structures reload to exact bounded relations in 144/144 cells; generated and natural trace provenance are mechanically separated. | Native-backend persistence, timing/RSS/file-size rankings, natural user traces, full models or external replication. |
 
 In the memory smoke, the old estimate was too low in 66/72 comparable
 calls. The candidate covered all 72 but sometimes overestimated by about

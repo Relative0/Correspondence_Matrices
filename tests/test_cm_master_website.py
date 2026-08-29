@@ -67,6 +67,28 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
             text = (SITE / name).read_text(encoding="utf-8")
             self.assertIn("What the 2026-08-26/27 evidence added", text, name)
 
+    def test_master_links_latest_persistence_and_trace_evidence(self):
+        text = (SITE / "index.html").read_text(encoding="utf-8")
+        report = ROOT / "docs" / "research" / "PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md"
+        summary = json.loads(
+            (
+                ROOT
+                / "docs"
+                / "research"
+                / "verification"
+                / "comparative-persistence-pilot-v2-2026-08-29"
+                / "summary.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertTrue(report.is_file())
+        self.assertIn("Latest verified research · 2026-08-29", text)
+        self.assertIn("144/144 frozen serialize/reload cells", text)
+        self.assertIn("zero observed natural sessions", text)
+        self.assertIn("PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md", text)
+        self.assertEqual(summary["reconciliation"]["observed_cells"], 144)
+        self.assertEqual(summary["exact_relation_rows"], 288)
+        self.assertFalse(summary["trace_audit"]["natural_claim_permitted"])
+
     def test_use_case_page_keeps_hypotheses_and_boundaries_visible(self):
         text = (SITE / "usecases.html").read_text(encoding="utf-8")
         self.assertIn("Quantum-computing support logic", text)
