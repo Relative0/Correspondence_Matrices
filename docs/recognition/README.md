@@ -19,7 +19,8 @@ packaging/deployment, and production promotion. Docker and a VM are not needed.
 ## What is implemented
 
 Current implementation: [Milestones A/B and measured results](LEARNING_MILESTONES_AB_2026_08_29.md)
-and [Milestone C graph-learning results](LEARNING_MILESTONE_C_2026_08_29.md).
+and [Milestone C graph-learning results](LEARNING_MILESTONE_C_2026_08_29.md), plus
+[Milestone D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md).
 The [complete register](experiment_register.json) preserves all 18 research tracks;
 the [roadmap](LEARNING_ROADMAP.md) distinguishes measured slices from pending work.
 There is a trained NumPy MLP path with independent exact acceptance, retained
@@ -28,6 +29,11 @@ trains and reloads matrix MLP, CNN, graph GNN, fused, and graph-retrieval models
 Its generated-data representation signal passed, retrieval missed its threshold,
 and transfer to a real all-negative EPFL slice was poor. No model is promoted;
 broader graph/hierarchical work and live-LLM experiments remain pending.
+Milestone D now measures complete-vector, point, restriction and repeated-vector
+requests through direct, CSE, CM-IR and explicit dense-CM paths. Its fitted
+task/query router helped restrictions and repeated work but slowed complete
+vectors; exact caching was the strongest reuse control, while dense-CM
+construction and per-instance rewrite proof were negative results.
 
 The guide below describes the original routing pilot, which remains available
 unchanged by default. Use `--feature-ablation` for the optional routing arms.
@@ -35,6 +41,9 @@ The NumPy neural entry point is `scripts/cm_recognition_learning.py`, also
 preview-only unless `--run` and a new `--output` are supplied. The explicitly
 optional PyTorch entry point is `scripts/cm_recognition_neural.py` and must be run
 with `.venv-crse-neural/Scripts/python.exe` and a new output directory.
+The default-environment Milestone D entry point is
+`scripts/cm_recognition_computation.py`; it immediately runs the finite
+task-computation benchmark and refuses an existing output directory.
 
 Research follow-ups:
 
@@ -98,8 +107,23 @@ isolated environment and another new output directory:
 .\.venv-crse-neural\Scripts\python.exe -B scripts/cm_recognition_neural.py --output docs/recognition/runs/neural-new-id
 ```
 
-That command performs actual bounded training immediately; it has no preview
-mode. The retained `neural-20260829-001` run already consumed one of the three
+Run a fresh bounded Milestone D task-computation experiment with the default
+project environment and a new output directory:
+
+```powershell
+.\.venv\Scripts\python.exe -B scripts/cm_recognition_computation.py --output docs/recognition/runs/computation-new-id
+```
+
+Verify its retained hashes, exact workload outputs, fitted policy, rewrite
+decisions, and learned bypass independently:
+
+```powershell
+.\.venv\Scripts\python.exe -B scripts/crse_computation_verify.py docs/recognition/runs/computation-new-id --output docs/recognition/verification/computation-new-id.json
+```
+
+The optional PyTorch command performs actual bounded training immediately; it
+has no preview mode. The retained `neural-20260829-001` run already consumed one of
+the three
 approved manual experiment slots. Verify a completed run separately with
 `scripts/crse_neural_verify.py`. Do not tune on the retained EPFL evaluation
 slice and relabel the result as confirmation.

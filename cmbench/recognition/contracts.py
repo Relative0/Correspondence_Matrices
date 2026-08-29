@@ -60,6 +60,12 @@ class Proposal:
     schema: str = "crse-affine-instance-proposal/v1"
 
 
+PROPOSAL_SCHEMAS = frozenset({
+    "crse-affine-instance-proposal/v1",
+    "crse-region-instance-proposal/v1",
+})
+
+
 @dataclass(frozen=True)
 class Check:
     accepted: bool
@@ -88,7 +94,7 @@ def check_proposal(original: Expr, proposal: Proposal, task: Task, budget: Reque
     reason = "invalid_proposal"
     try:
         budget.check(proposal=True)
-        if (type(proposal) is not Proposal or proposal.schema != "crse-affine-instance-proposal/v1"
+        if (type(proposal) is not Proposal or proposal.schema not in PROPOSAL_SCHEMAS
                 or proposal.origin not in ("learned", "handwritten")
                 or not isinstance(proposal.model_version, str) or not 1 <= len(proposal.model_version) <= 128
                 or proposal.source_region_sha256 != source):

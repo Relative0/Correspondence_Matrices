@@ -8,13 +8,20 @@ remain deferred. Existing historical evidence remains unchanged.
 
 ## Working sequence
 
-Current checkpoints: [A/B implementation and results](LEARNING_MILESTONES_AB_2026_08_29.md)
-and [C implementation and results](LEARNING_MILESTONE_C_2026_08_29.md). A/B and
-the first bounded slice of C are implemented and measured. C now includes actual
+Current checkpoints: [A/B implementation and results](LEARNING_MILESTONES_AB_2026_08_29.md),
+[C implementation and results](LEARNING_MILESTONE_C_2026_08_29.md), and the
+[first D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md). A/B, the
+first bounded slice of C, and the first bounded slice of D are implemented and
+measured. C includes actual
 matrix MLP, CNN, GNN, fused, and contrastive retrieval training plus a frozen
 EPFL evaluation slice. Its synthetic representation signal passed, retrieval
-missed its threshold, and EPFL transfer was poor. This is a measured smoke, not
-broad graph-learning completion. D/E remain pending. The
+missed its threshold, and EPFL transfer was poor. D now measures four separate
+task contracts through direct, CSE, CM-IR and explicit dense-CM paths, a fitted
+task/query router, exact caching, and stop/one-rewrite scheduling on a new EPFL
+slice. Routing gains were task-specific; dense-CM construction and per-instance
+rewrite proof were negative results. These are measured smokes, not broad
+graph-learning or transformation/reuse completion. Further D work and E remain
+pending. The
 [optional framework request](NEURAL_DEPENDENCY_REQUEST.md) was approved and
 executed in an isolated environment.
 
@@ -28,8 +35,11 @@ executed in an isolated environment.
    retrieval slice is measured with exact CM supervision and a provenance-reviewed
    local EPFL source. Extend it with natural positive examples, richer targets,
    recursive/hierarchical controls, calibration and independent replication.
-4. **D: transformations and reuse.** Add separate finite experiments for rewrite
-   scheduling, proved macro discovery, partitions/GF(2), BDD/AIG, and versions.
+4. **D: transformations and reuse.** The first task-matched slice is measured:
+   complete vectors, points, restrictions and repeated vectors across direct,
+   CSE, CM-IR and explicit CM, plus a cost policy, exact cache and one checked
+   root rewrite. Continue with compiled proved rules, partitions/GF(2), BDD/AIG,
+   and explicit version/invalidation workflows.
 5. **E: remaining methods and applications.** Offline LLM proposals and optional
    approved distillation, learning-method comparisons, adaptive replay, solver
    guidance, negative controls, and remaining application families.

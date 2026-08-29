@@ -3,7 +3,8 @@
 ## Current learning implementation follow-up — 2026-08-29
 
 [Milestones A/B report](docs/recognition/LEARNING_MILESTONES_AB_2026_08_29.md),
-[Milestone C report](docs/recognition/LEARNING_MILESTONE_C_2026_08_29.md), and
+[Milestone C report](docs/recognition/LEARNING_MILESTONE_C_2026_08_29.md),
+[Milestone D report](docs/recognition/LEARNING_MILESTONE_D_2026_08_29.md), and
 [all 18 research tracks](docs/recognition/experiment_register.json).
 The foundation now includes retained feature ablations, a query-count rule and
 an exact CM/cofactor teacher. Two small NumPy MLPs were actually trained,
@@ -12,6 +13,13 @@ slower than exact controls; the negative results are retained. The approved
 isolated PyTorch path now trains matrix, CNN, GNN, fused, and contrastive graph
 models. Its synthetic representation signal passed, retrieval missed its target,
 and EPFL transfer was poor; no model is promoted. Live LLM work remains pending.
+Milestone D now exercises actual direct, structural-CSE, CM-IR, and explicit
+dense correspondence-matrix construction across complete-vector, point,
+restriction, and repeated-vector tasks. All 7,040 timed rows and 560 independently
+recomputed workloads were exact. The fitted task/query policy helped restrictions
+and repeated work but was mixed elsewhere; exact answer reuse was stronger, and
+dense-CM construction plus per-request rewrite proof were retained negative
+results. No runtime default is promoted.
 
 The remainder records the earlier checkpoint and its original pilot evidence.
 

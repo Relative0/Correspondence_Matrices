@@ -1,0 +1,92 @@
+{
+  "schema": "crse-learning-milestone-d-results/v1",
+  "date": "2026-08-29",
+  "status": "measured",
+  "run": "docs/recognition/runs/computation-20260829-001",
+  "report": "LEARNING_MILESTONE_D_2026_08_29.md",
+  "verification": "verification/computation-20260829-001.json",
+  "wall_seconds": 7.123437800008105,
+  "resource_limits": {
+    "variables": 8,
+    "cpu_threads": 1,
+    "cooperative_wall_seconds": 120,
+    "network": false
+  },
+  "data": {
+    "generated_cases": 44,
+    "generated_training_cases": 24,
+    "generated_evaluation_cases": 20,
+    "epfl_evaluation_cases": 12,
+    "epfl_unique_circuits": 9,
+    "epfl_prior_record_overlap": 0,
+    "epfl_detected_root_motifs": {
+      "none": 12
+    }
+  },
+  "tasks": [
+    "complete_vector",
+    "single_assignment",
+    "partial_restriction",
+    "repeated_vector"
+  ],
+  "exact_backends": [
+    "direct",
+    "cse",
+    "cm_ir",
+    "explicit_cm"
+  ],
+  "row_counts": {
+    "training": 1920,
+    "evaluation": 5120,
+    "unique_task_workloads_verified": 560
+  },
+  "semantic_mismatches": 0,
+  "failed_rows": 0,
+  "learned_bypass_mismatches": 0,
+  "task_router_speedup_over_rule": {
+    "test": {
+      "complete_vector": 0.912477197375356,
+      "single_assignment": 0.9702407158564528,
+      "partial_restriction": 1.653667414111515,
+      "repeated_vector": 1.2270757249994004
+    },
+    "confirmatory": {
+      "complete_vector": 0.9093528752871393,
+      "single_assignment": 0.9767874068908898,
+      "partial_restriction": 1.6011011025716089,
+      "repeated_vector": 1.21194292227511
+    },
+    "epfl_d": {
+      "complete_vector": 0.883579044895487,
+      "single_assignment": 1.0142444801363732,
+      "partial_restriction": 1.5300509335280779,
+      "repeated_vector": 1.1245105114370402
+    }
+  },
+  "answer_cache_repeated_vector_speedup_over_rule": {
+    "validation": 1.4471747745925554,
+    "test": 1.452032472321206,
+    "confirmatory": 1.4351428387940448,
+    "epfl_d": 1.43713667408739
+  },
+  "explicit_cm_epfl_speedup_over_rule": {
+    "complete_vector": 0.09265341533470893,
+    "single_assignment": 0.29335716444091625,
+    "partial_restriction": 0.2707661406062192,
+    "repeated_vector": 0.4717157723585764
+  },
+  "rewrite": {
+    "unique_evaluation_functions": 32,
+    "functions_with_candidate": 10,
+    "proposed_workloads": 100,
+    "accepted_workloads": 100,
+    "accepted_semantic_errors": 0,
+    "epfl_proposals": 0,
+    "result": "negative: exact CM detection and per-instance proof dominated downstream savings"
+  },
+  "promotion": {
+    "task_router": false,
+    "rewrite": false,
+    "backend_default_change": false
+  }
+}
