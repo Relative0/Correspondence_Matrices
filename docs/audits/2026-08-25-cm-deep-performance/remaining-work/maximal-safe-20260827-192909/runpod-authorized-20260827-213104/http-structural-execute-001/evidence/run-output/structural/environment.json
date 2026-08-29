@@ -1,0 +1,46 @@
+{
+  "affinity": [
+    86,
+    182
+  ],
+  "command": [
+    "scripts/cm_memory_estimator_study.py",
+    "--execution",
+    "runpod",
+    "--supports",
+    "6",
+    "8",
+    "12",
+    "16",
+    "--families",
+    "mixed-chain",
+    "shared-diamond",
+    "wide-and",
+    "alternating-tree",
+    "reconvergent-xor",
+    "--contexts",
+    "none",
+    "--schedules",
+    "cold",
+    "warm",
+    "--repetitions",
+    "3",
+    "--output-dir",
+    "/workspace/cm-memory-smoke/run-output/structural"
+  ],
+  "executable": "/usr/local/bin/python",
+  "execution": "runpod",
+  "logical_cpus": 192,
+  "machine": "x86_64",
+  "packages": {
+    "numpy": "2.3.2",
+    "psutil": null,
+    "pytest": "9.0.2",
+    "sympy": "1.14.0"
+  },
+  "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+  "processor": "",
+  "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+  "rss_definition": "process lifetime high-water, not window peak",
+  "schema": "cm-memory-study/v1"
+}

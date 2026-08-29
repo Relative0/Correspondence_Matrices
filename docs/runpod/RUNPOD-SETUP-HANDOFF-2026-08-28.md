@@ -1,5 +1,23 @@
 # CM Runpod setup and cross-task handoff
 
+Latest result, 05:19 UTC on 2026-08-29: **the authorized structural phase
+worked and its single create is consumed**. New controller
+`runpod_structural_controller_v4.py` used the established root-loader HTTPS
+route with 12-GB container storage and zero pod volume. One Secure 2-vCPU /
+4-GB pod completed all 70 focused tests plus the exact five-family k=6,8,12,16
+grid: 240 jobs, 360 comparable calls and 1,560 exact/`ok` rows. It was deleted;
+both inventories are empty and all three campaign pod details return 404 from
+both APIs. See
+[`HTTP-STRUCTURAL-RESULT-20260829.md`](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/HTTP-STRUCTURAL-RESULT-20260829.md).
+Do not rerun `http-structural-execute-001` or create a replacement.
+
+Current billing behavior differs across API versions: v2 returned internally
+reconciled `metadata` plus `records` for the two prior pods ($0.001686 total),
+while the documented v1 history endpoint returned an empty list for the same
+window. The frozen structural preflight reconciles v2 records and aggregates
+fail closed; preserve that behavior rather than comparing incompatible row
+counts. Billing for the newest pod may still lag.
+
 Current result, 09:05 UTC: **the zero-volume HTTP smoke worked**. One
 Secure CPU pod ran the approved 65-file workload, passed all 70 focused
 tests and returned 312 successful measurement rows. It was deleted, and
