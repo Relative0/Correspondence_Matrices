@@ -5,10 +5,13 @@ interactive explainer, raw measurements, source snapshots and tests locally.
 This library integrates the project's August 27–28, 2026 follow-up work.
 Evidence boundaries and unsuccessful experiments are retained.
 
-Latest comparative follow-up: [structural persistence and trace provenance](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md).
-CM, structural CSE and direct CNF passed 144/144 frozen serialize/reload cells
-on eight cached-real conditioned slices, producing 288 exact relation rows.
-The same work records 48 generated task controls and zero observed natural traces.
+Latest comparative follow-up: [fresh-process structural persistence](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md).
+CM, structural CSE, direct CNF and a portable `dd.autoref` ROBDD control passed
+256/256 counterbalanced cells using 512 distinct within-cell supervised build
+and reload/query processes, producing 512 exact relation rows. Native CUDD BDD,
+CUDD ZDD and d4 d-DNNF persistence remain explicit admission refusals. The
+preceding [persistence and trace-provenance work](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md)
+records 48 generated task controls and zero observed natural traces.
 A bounded public-source search found useful PROFilE endpoint configurations,
 but not ordered user-event sessions; its non-commercial datasets are linked,
 not redistributed. These are correctness and provenance results, not a
@@ -24,6 +27,7 @@ performance, memory, full-model or independent-replication claim.
 | [Master Explainer](readers/MASTER-EXPLAINER.md) | The full authored knowledge-base content, including corrections and number provenance. |
 | [Verified Runpod smoke](readers/RUNPOD-MEMORY-SMOKE.md) | Executed results, memory findings, cleanup and remaining measurement gaps. |
 | [Runpod setup and handoff](readers/RUNPOD-SETUP.md) | Working configuration and distinctions between historical workflows; no credentials. |
+| [Fresh-process persistence](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md) | Frozen CM/CSE/direct-CNF/portable-ROBDD build-and-reload evidence, native admission refusals and exact measurement boundaries. |
 | [Structural persistence and trace provenance](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | Frozen CM/CSE/direct-CNF structural reload evidence, exact claim boundaries and the natural-session admission contract. |
 
 The generated Markdown readers do not require JavaScript. They are reading
@@ -74,6 +78,7 @@ commit-pinned download for a reproducible version.
 | [EPFL context pilot](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md) | A published hardware-expression adjacency and bounded context tests. | A deployed design workflow or whole-chip scalability. |
 | [Runpod memory smoke](readers/RUNPOD-MEMORY-SMOKE.md) | 70 passing focused tests; 312 successful rows, including 72 comparable representation calls; verified pod deletion. | Real-world workload performance, full estimator calibration, or production acceptance. |
 | [Structural persistence pilot](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | CM/CSE/direct-CNF structures reload to exact bounded relations in 144/144 cells; generated and natural trace provenance are mechanically separated. | Native-backend persistence, timing/RSS/file-size rankings, natural user traces, full models or external replication. |
+| [Fresh-process persistence pilot](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md) | CM/CSE/direct-CNF/portable-ROBDD structures were built and reloaded in different owned processes in 256/256 cells; all 512 relation rows and independent structure replays were exact. | Native CUDD/ZDD/d4 persistence, Linux process-tree RSS, performance or broad size rankings, full models or external replication. |
 
 In the memory smoke, the old estimate was too low in 66/72 comparable
 calls. The candidate covered all 72 but sometimes overestimated by about
@@ -90,6 +95,9 @@ speedups. The candidate remains diagnostic, not production-approved.
   and [independence-audit artifacts](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/independence_audit_2026_08_27).
 - [Successful cloud-smoke raw evidence](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/http-ephemeral-execute-001/evidence/run-output)
   and [campaign continuation, including failed attempts](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/RUNPOD-CONTINUATION-20260828.md).
+- [Fresh-process persistence raw evidence](verification/fresh-process-persistence-v2-2026-08-29),
+  including the frozen plan, append-only ledger, 256 downloadable artifacts,
+  source snapshot and [attempt receipt](verification/fresh-process-persistence-attempts-2026-08-29.json).
 - [Memory estimator model](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/MEMORY-ESTIMATOR-MODEL.md),
   [preregistration](../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/PREREGISTRATION.md)
   and [local verification continuation](../audits/CM-VERIFICATION-CONTINUATION-2026-08-28.md).
@@ -109,6 +117,7 @@ From the repository root, with the project's dependencies available:
 python -B deliverables_n22_24/master_explainer_2026_08_03/cm_master_build_2026_08_03.py
 python -B scripts/cm_research_publication.py readers
 python -B scripts/cm_research_publication.py readers --check
+python -B scripts/cm_comparative_fresh_persistence_pilot.py verify --output docs/research/verification/fresh-process-persistence-v2-2026-08-29
 python -B -m unittest discover -s tests -p 'test_cm_research_publication.py'
 python -B -m unittest discover -s tests -p '*website.py'
 python -B -m unittest discover -s tests -p 'test_cm_runpod_*.py'

@@ -1,5 +1,10 @@
 # Structural persistence and trace-provenance progress
 
+Continuation: the subsequent
+[fresh-process persistence campaign](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md)
+completed the local build/reload process-isolation priority for CM, CSE, direct
+CNF and a portable ROBDD control. Native CUDD/ZDD/d4 gates remain open.
+
 CM, structural common-subexpression elimination (CSE) and the direct-CNF
 control passed the expanded frozen structural serialize/reload pilot on eight
 cached real feature-model slices. The run produced 144/144 successful cells
