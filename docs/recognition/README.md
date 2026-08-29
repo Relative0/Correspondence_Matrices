@@ -20,7 +20,8 @@ packaging/deployment, and production promotion. Docker and a VM are not needed.
 
 Current implementation: [Milestones A/B and measured results](LEARNING_MILESTONES_AB_2026_08_29.md)
 and [Milestone C graph-learning results](LEARNING_MILESTONE_C_2026_08_29.md), plus
-[Milestone D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md).
+[Milestone D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md) and
+[Milestone D2 proved-rule reuse](PROVED_RULE_MILESTONE_D2_2026_08_29.md).
 The [complete register](experiment_register.json) preserves all 18 research tracks;
 the [roadmap](LEARNING_ROADMAP.md) distinguishes measured slices from pending work.
 There is a trained NumPy MLP path with independent exact acceptance, retained
@@ -34,6 +35,10 @@ requests through direct, CSE, CM-IR and explicit dense-CM paths. Its fitted
 task/query router helped restrictions and repeated work but slowed complete
 vectors; exact caching was the strongest reuse control, while dense-CM
 construction and per-instance rewrite proof were negative results.
+Milestone D2 proves one AIG-XOR identity over metavariables, compiles a bounded
+sharing-preserving matcher, and compares repeated reuse against explicit CM
+proof at every site. It was exact and faster than repeated CM proof, but slower
+than the no-rewrite CSE control, so no rewrite is promoted.
 
 The guide below describes the original routing pilot, which remains available
 unchanged by default. Use `--feature-ablation` for the optional routing arms.
@@ -44,6 +49,8 @@ with `.venv-crse-neural/Scripts/python.exe` and a new output directory.
 The default-environment Milestone D entry point is
 `scripts/cm_recognition_computation.py`; it immediately runs the finite
 task-computation benchmark and refuses an existing output directory.
+The D2 entry point is `scripts/cm_recognition_rules.py`; it runs the fixed
+proved-rule comparison and likewise refuses an existing output directory.
 
 Research follow-ups:
 
@@ -55,7 +62,8 @@ then-exploratory diagnostics and proposed neural work; the implemented follow-up
 and current limitations are in the Milestones A/B report above.
 
 This first research slice learns **which exact computation strategy to use**.
-It does not yet discover new Boolean identities or learn to output truth values.
+The later D2 slice admits one manually specified proved identity; it does not
+yet discover rules or learn to output truth values.
 
 The program generates Boolean expressions, measures three exact implementations,
 fits a small cost-sensitive decision tree, freezes it, and evaluates it on unseen
@@ -119,6 +127,13 @@ decisions, and learned bypass independently:
 
 ```powershell
 .\.venv\Scripts\python.exe -B scripts/crse_computation_verify.py docs/recognition/runs/computation-new-id --output docs/recognition/verification/computation-new-id.json
+```
+
+Run and verify a fresh bounded proved-rule comparison:
+
+```powershell
+.\.venv\Scripts\python.exe -B scripts/cm_recognition_rules.py --output docs/recognition/runs/rule-new-id
+.\.venv\Scripts\python.exe -B scripts/crse_rule_verify.py docs/recognition/runs/rule-new-id --output docs/recognition/verification/rule-new-id.json
 ```
 
 The optional PyTorch command performs actual bounded training immediately; it

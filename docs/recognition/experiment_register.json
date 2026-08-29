@@ -36,6 +36,11 @@
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "Four exact task contracts measured on 12 evaluation-only EPFL cones selected after excluding every Milestone-C record ID; all outputs verified, no natural root motif found, and no backend promoted."
+        },
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "The proved matcher found five internal AIG-XOR sites in two of 12 evaluation-only EPFL cones with zero output errors; matching still lost to the no-rewrite CSE control."
         }
       ]
     },
@@ -182,7 +187,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add provenance-reviewed natural mux/majority positives and compare a compiled structural matcher with per-instance CM detection.",
+      "next_experiment": "Add a second independently proved mux or factoring macro and measure interactions and deterministic priority.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -198,11 +203,16 @@
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "The bounded exact candidate path now covers canonical affine, three-input mux and three-input majority roots. The retained run found and safely accepted only ten generated affine functions; no natural EPFL D candidate was found."
+        },
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "A fixed compiled matcher now recognizes an exhaustively proved AIG-XOR macro at structurally equal metavariable bindings. It applied exactly at 128 generated sites and five internal sites in two evaluation-only EPFL cones."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "The bounded exact candidate path now covers canonical affine, three-input mux and three-input majority roots. The retained run found and safely accepted only ten generated affine functions; no natural EPFL D candidate was found.",
+      "status_reason": "A fixed compiled matcher now recognizes an exhaustively proved AIG-XOR macro at structurally equal metavariable bindings. It applied exactly at 128 generated sites and five internal sites in two evaluation-only EPFL cones.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     },
     {
@@ -226,17 +236,22 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Prove one bounded rule over metavariables, compile a cheap matcher, and measure repeated applications without repeating the full instance proof.",
+      "next_experiment": "Measure the fixed rule in related DAG versions with structural match caching, changed-cone invalidation, and a no-rewrite control.",
       "results": [
         {
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "A stop-versus-one-rewrite experiment accepted 100 exact workload instances with zero errors, but full CM detection and per-instance proof dominated every downstream saving (aggregate speedups about 0.03-0.24 versus the task rule)."
+        },
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "One universal Boolean proof replaced per-instance explicit-CM proof. Warm compiled reuse was 2.09-2.91x faster end to end than per-site CM proof on generated batches, but remained slower than no rewrite, so no scheduler is promoted."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
-      "status": "negative-result",
-      "status_reason": "A stop-versus-one-rewrite experiment accepted 100 exact workload instances with zero errors, but full CM detection and per-instance proof dominated every downstream saving (aggregate speedups about 0.03-0.24 versus the task rule)."
+      "status": "measured",
+      "status_reason": "One universal Boolean proof replaced per-instance explicit-CM proof. Warm compiled reuse was 2.09-2.91x faster end to end than per-site CM proof on generated batches, but remained slower than no rewrite, so no scheduler is promoted."
     },
     {
       "id": "R05",
@@ -259,11 +274,17 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Prove a small identity, detect duplicate/cyclic rules, then compile a matcher.",
-      "results": [],
+      "next_experiment": "Add bounded duplicate/overlap/conflict checks for a two-rule pack before attempting any learned rule proposal.",
+      "results": [
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "The first generalized rule boundary is implemented: exhaustive Boolean metavariable evidence, strict hashed inert artifact, repeated-binding side conditions, and a fixed non-executable matcher. Rule discovery itself remains planned."
+        }
+      ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
-      "status": "planned",
-      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
+      "status": "measured",
+      "status_reason": "The first generalized rule boundary is implemented: exhaustive Boolean metavariable evidence, strict hashed inert artifact, repeated-binding side conditions, and a fixed non-executable matcher. Rule discovery itself remains planned."
     },
     {
       "id": "R06",
@@ -628,7 +649,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Batch task decisions and test a zero-allocation compiled rule matcher before any larger neural inference path.",
+      "next_experiment": "Cache structural UIDs and match results across two related DAG versions and charge invalidation inside the timed arm.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -644,11 +665,16 @@
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "Construction, routing, candidate, proof, kernel, cache and audit costs are separated. Cheap task routing helped restrictions/reuse, while complete-vector routing overhead and dense-CM construction remained material."
+        },
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "Proof, artifact load, matcher, candidate, per-instance CM verification, CSE build and kernel costs are separated. The one-time proof-plus-compile cost was 0.469 ms and observed break-even versus repeated CM proof was one application."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "Construction, routing, candidate, proof, kernel, cache and audit costs are separated. Cheap task routing helped restrictions/reuse, while complete-vector routing overhead and dense-CM construction remained material.",
+      "status_reason": "Proof, artifact load, matcher, candidate, per-instance CM verification, CSE build and kernel costs are separated. The one-time proof-plus-compile cost was 0.469 ms and observed break-even versus repeated CM proof was one application.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     },
     {
@@ -711,7 +737,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add dense incompressible/no-sharing functions and raw packed primitive controls under the same four task contracts.",
+      "next_experiment": "Add dense no-match and overlapping-match adversarial cases plus explicit matcher resource-limit tests.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -727,11 +753,16 @@
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "Dense CM construction and per-instance rewrite proof serve as retained overhead controls: both lost to simpler exact paths at this bounded scale while preserving zero semantic errors."
+        },
+        {
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
+          "machine_summary": "proved_rule_milestone_d2_results.json",
+          "scope": "Sixteen binding-corrupted near matches produced zero false matches. No-rewrite was 2.33-2.43x faster than warm compiled matching on generated batches and 2.75x faster on EPFL, retaining a clear profitability negative control."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "Dense CM construction and per-instance rewrite proof serve as retained overhead controls: both lost to simpler exact paths at this bounded scale while preserving zero semantic errors.",
+      "status_reason": "Sixteen binding-corrupted near matches produced zero false matches. No-rewrite was 2.33-2.43x faster than warm compiled matching on generated batches and 2.75x faster on EPFL, retaining a clear profitability negative control.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     }
   ],

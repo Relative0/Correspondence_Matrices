@@ -10,9 +10,10 @@ remain deferred. Existing historical evidence remains unchanged.
 
 Current checkpoints: [A/B implementation and results](LEARNING_MILESTONES_AB_2026_08_29.md),
 [C implementation and results](LEARNING_MILESTONE_C_2026_08_29.md), and the
-[first D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md). A/B, the
-first bounded slice of C, and the first bounded slice of D are implemented and
-measured. C includes actual
+[first D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md), followed
+by the [D2 proved-rule reuse result](PROVED_RULE_MILESTONE_D2_2026_08_29.md).
+A/B, the first bounded slice of C, and two bounded slices of D are implemented
+and measured. C includes actual
 matrix MLP, CNN, GNN, fused, and contrastive retrieval training plus a frozen
 EPFL evaluation slice. Its synthetic representation signal passed, retrieval
 missed its threshold, and EPFL transfer was poor. D now measures four separate
@@ -20,7 +21,10 @@ task contracts through direct, CSE, CM-IR and explicit dense-CM paths, a fitted
 task/query router, exact caching, and stop/one-rewrite scheduling on a new EPFL
 slice. Routing gains were task-specific; dense-CM construction and per-instance
 rewrite proof were negative results. These are measured smokes, not broad
-graph-learning or transformation/reuse completion. Further D work and E remain
+graph-learning or transformation/reuse completion. D2 now proves one AIG-XOR
+motif over Boolean metavariables and reuses a fixed structural matcher. It beats
+repeating explicit CM proof, including at five internal sites in two EPFL cones,
+but still loses to the no-rewrite CSE control. Further D work and E remain
 pending. The
 [optional framework request](NEURAL_DEPENDENCY_REQUEST.md) was approved and
 executed in an isolated environment.
@@ -38,8 +42,10 @@ executed in an isolated environment.
 4. **D: transformations and reuse.** The first task-matched slice is measured:
    complete vectors, points, restrictions and repeated vectors across direct,
    CSE, CM-IR and explicit CM, plus a cost policy, exact cache and one checked
-   root rewrite. Continue with compiled proved rules, partitions/GF(2), BDD/AIG,
-   and explicit version/invalidation workflows.
+   root rewrite. The first compiled proved rule is also measured, with strict
+   artifact admission, near-match controls and internal EPFL applications.
+   Continue with rule packs, partitions/GF(2), BDD/AIG, and explicit
+   version/invalidation workflows.
 5. **E: remaining methods and applications.** Offline LLM proposals and optional
    approved distillation, learning-method comparisons, adaptive replay, solver
    guidance, negative controls, and remaining application families.

@@ -1,0 +1,57 @@
+{
+  "schema": "crse-proved-rule-milestone-d2-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/rule-20260829-002",
+  "verification": {
+    "path": "docs/recognition/verification/rule-20260829-002.json",
+    "status": "pass",
+    "artifacts_verified": 7,
+    "measurement_rows_verified": 60,
+    "generated_regions_verified": 144,
+    "epfl_cases_verified": 12,
+    "proof_rows_reproduced": 4,
+    "semantic_mismatches": 0
+  },
+  "rule": {
+    "id": "aig-xor-dnf/v1",
+    "text": "NOT(NOT(A AND NOT B) AND NOT(NOT A AND B)) -> A XOR B",
+    "metavariables": ["A", "B"],
+    "proof_rows": 4,
+    "artifact_sha256": "a9cd7ea24ef2940010344d01a2433f3e5f6c3703a7b9a09e052946d1913bc65a",
+    "proof_ns": 310900,
+    "compile_ns": 158400,
+    "one_time_proof_and_compile_ns": 469300,
+    "artifact_is_inert": true,
+    "matcher_is_fixed_built_in": true
+  },
+  "data": {
+    "generated_positive_regions": 128,
+    "negative_near_matches": 16,
+    "negative_false_matches": 0,
+    "epfl_evaluation_cases": 12,
+    "epfl_training_use": false,
+    "epfl_internal_applications": 5,
+    "epfl_matched_cases": 2
+  },
+  "timing": {
+    "rounds": 3,
+    "cpu_threads": 1,
+    "estimated_break_even_applications_vs_instance_cm": 1,
+    "median_saved_rewrite_ns_per_application": 482753.125,
+    "generated": {
+      "q1": {"applications": 1, "compiled_warm_ns": 377000, "instance_cm_ns": 1098700, "no_rewrite_ns": 162100, "speedup_vs_instance_cm": 2.9143236074270558, "speedup_vs_no_rewrite": 0.429973474801061},
+      "q8": {"applications": 8, "compiled_warm_ns": 2971600, "instance_cm_ns": 6788000, "no_rewrite_ns": 1252700, "speedup_vs_instance_cm": 2.2842912908870643, "speedup_vs_no_rewrite": 0.42155741014941445},
+      "q32": {"applications": 32, "compiled_warm_ns": 11762400, "instance_cm_ns": 28455600, "no_rewrite_ns": 4836300, "speedup_vs_instance_cm": 2.4192001632319933, "speedup_vs_no_rewrite": 0.41116608855335646},
+      "q128": {"applications": 128, "compiled_warm_ns": 44971000, "instance_cm_ns": 94042100, "no_rewrite_ns": 18661400, "speedup_vs_instance_cm": 2.091172088679371, "speedup_vs_no_rewrite": 0.41496519979542373}
+    },
+    "epfl_q12": {"applications": 5, "compiled_warm_ns": 15240600, "instance_cm_ns": 17837600, "no_rewrite_ns": 5549200, "speedup_vs_instance_cm": 1.1704001154810177, "speedup_vs_no_rewrite": 0.36410640001049827},
+    "machine_specific": true
+  },
+  "criteria": {
+    "safety_met": true,
+    "bounded_reuse_demonstrated": true,
+    "production_promotion": false
+  },
+  "interpretation": "The universal compiled rule removes repeated dense-CM proof cost, but matching is not yet profitable versus skipping the rewrite under the current small CSE workloads."
+}
