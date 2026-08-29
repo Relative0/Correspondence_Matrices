@@ -1,0 +1,56 @@
+name: CM research reproducibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# No secrets, cloud jobs, deployment, release upload or repository writes.
+permissions:
+  contents: read
+
+concurrency:
+  group: research-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  focused-checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUTF8: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      # Process-local Git settings apply to checkout, without changing host config.
+      GIT_CONFIG_COUNT: '2'
+      GIT_CONFIG_KEY_0: core.longpaths
+      GIT_CONFIG_VALUE_0: 'true'
+      GIT_CONFIG_KEY_1: core.autocrlf
+      GIT_CONFIG_VALUE_1: 'false'
+    steps:
+      - name: Check out reviewed repository contents
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+      - name: Set up JavaScript syntax checker
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install the version-pinned focused-test dependencies
+        run: python -m pip install --disable-pip-version-check --only-binary=:all: -r requirements-research-ci.txt
+      - name: Validate dependency compatibility
+        run: python -m pip check
+      - name: Verify current code and the immutable extracted snapshot
+        run: python -B scripts/cm_research_check.py --report tmp/research-ci-check.json

@@ -30,7 +30,6 @@ AUDITOR = (
 SOURCES = (
     "scripts/cm_measurement_verify.py", "tests/test_cm_measurement_verify.py",
     "tests/test_cm_measurement_protocol.py",
-    "scripts/cm_process_supervisor.py", "tests/test_cm_process_supervisor.py",
     "cm_ir.py", "bitset_backend.py", "cm_exprlib.py", "cmbench/__init__.py",
     "cmbench/output_budget.py", "scripts/cm_benchmark_provenance.py",
     "cmbench/reporting/__init__.py", "cmbench/reporting/provenance.py",
@@ -96,9 +95,8 @@ def validate_request(request):
 def validate_result(result, request, frozen):
     """Validate every v2 field before accepting an exactness or timing result.
 
-    This validator alone checks reported provenance. The v3 controller also
-    requires the worker PID to have been observed in its owned job; neither
-    mechanism is security attestation. The pilot hashes its frozen sources.
+    PID/interpreter/source fields are reported provenance, not OS process
+    binding or attestation. The pilot separately hashes its frozen sources.
     """
     k = validate_request(request)
     require(isinstance(result, dict), "worker result object")
@@ -386,37 +384,26 @@ def append_record(path, record):
         os.fsync(handle.fileno())
 
 
-def run_cell(frozen, ledger, cell_id, request, expected, invoke=None, timeout=15):
+def run_cell(frozen, ledger, cell_id, request, expected, invoke=subprocess.run, timeout=15):
     append_record(ledger, {"cell_id": cell_id, "status": "running", "request_sha256": digest(request)})
     started = time.perf_counter_ns()
     row = {"cell_id": cell_id, "status": "error", "request_sha256": digest(request)}
     try:
         k = validate_request(request)
         require(type(expected) is int and 0 <= expected < 1 << (1 << k), "invalid expected output")
-        command = [sys.executable, "-B", str(frozen / "scripts/cm_measurement_verify.py"), "--worker"]
-        if invoke is None:
-            from scripts.cm_process_supervisor import Limits, run
-            proc = run(command, input=encoded(request) + b"\n", cwd=frozen,
-                       limits=Limits(timeout_seconds=timeout, stdout_bytes=MAX_RECORD))
-            row["supervision"] = proc.resources
-            row["supervisor_status"] = proc.status
-            row["launched_pid"] = proc.pid
-            require(proc.status in {"ok", "refused", "timeout", "error", "output_limit"}, "unknown supervisor status")
-            if proc.status != "ok":
-                row.update(status=proc.status if proc.status in {"refused", "timeout"} else "error",
-                           reason=proc.reason, returncode=proc.returncode)
-            else:
-                require(proc.resources.get("cleanup_verified") is True and
-                        proc.resources.get("attached_before_resume") is True and
-                        proc.resources.get("streams_closed") is True, "supervision incomplete")
+        proc = invoke([sys.executable, "-B", str(frozen / "scripts/cm_measurement_verify.py"), "--worker"],
+                      input=encoded(request) + b"\n", cwd=frozen, capture_output=True,
+                      timeout=timeout, check=False)
+        require(type(proc.returncode) is int and isinstance(proc.stdout, bytes) and isinstance(proc.stderr, bytes), "worker transport result")
+        if proc.returncode:
+            row.update(reason="worker_nonzero_exit", returncode=proc.returncode,
+                       stderr_excerpt=proc.stderr[:4096].decode("utf-8", errors="replace"))
+        elif len(proc.stdout) > MAX_RECORD:
+            row.update(reason="oversized_worker_output")
         else:
-            row["supervision"] = {"backend": "injected_test_transport", "os_binding_verified": False}
-            proc = invoke(command, input=encoded(request) + b"\n", cwd=frozen, capture_output=True,
-                          timeout=timeout, check=False)
-        if invoke is None and proc.status != "ok":
-            pass  # Preserve a supervised refusal/timeout/error without parsing output.
-        else:
-            accept_cell_output(row, proc, request, frozen, expected, require_job_binding=invoke is None)
+            result = strict_json(proc.stdout)
+            value = validate_result(result, request, frozen)
+            row.update(status="ok" if value == expected else "mismatch", result=result)
     except subprocess.TimeoutExpired:
         row.update(status="timeout", reason="worker_deadline")
     except MemoryError:
@@ -427,22 +414,6 @@ def run_cell(frozen, ledger, cell_id, request, expected, invoke=None, timeout=15
     row["controller_wall_ns"] = time.perf_counter_ns() - started
     append_record(ledger, row)
     return row
-
-
-def accept_cell_output(row, proc, request, frozen, expected, require_job_binding):
-    require(type(proc.returncode) is int and isinstance(proc.stdout, bytes) and isinstance(proc.stderr, bytes), "worker transport result")
-    if proc.returncode:
-        row.update(reason="worker_nonzero_exit", returncode=proc.returncode,
-                   stderr_excerpt=proc.stderr[:4096].decode("utf-8", errors="replace"))
-    elif len(proc.stdout) > MAX_RECORD:
-        row.update(reason="oversized_worker_output")
-    else:
-        result = strict_json(proc.stdout)
-        value = validate_result(result, request, frozen)
-        if require_job_binding:
-            require(result["pid"] in proc.resources["observed_job_pids"], "worker PID not observed in owned job")
-            row["worker_pid_observed_in_owned_job"] = True
-        row.update(status="ok" if value == expected else "mismatch", result=result)
 
 
 def read_ledger(path):
@@ -514,15 +485,12 @@ def pilot(output):
                 {"cell_id": f"cell-{number}-independent", "mode": "independent_replay", "case": _case["id"], "arm": arm},
                 {"cell_id": f"cell-{number}-reload", "mode": "reload", "case": _case["id"], "arm": arm},
             ))
-    plan = {"schema": "cm-verification-pilot/v3", "seed": SEED, "cases": cases, "scheduled_cells": scheduled,
+    plan = {"schema": "cm-verification-pilot/v2", "seed": SEED, "cases": cases, "scheduled_cells": scheduled,
             "arms": ARMS, "warm_rounds": WARM_ROUNDS, "maximum_worker_seconds": 15,
             "arm_order": "fixed plumbing pilot; not counterbalanced performance evidence",
             "execution": "local_functional_verification", "performance_ranking_permitted": False,
             "source_manifest_sha256": snapshot["manifest_sha256"],
-            "resource_supervision": "Windows owned Job Object; unsupported OS refuses before launch",
-            "memory_metric": "kernel-reported job committed high-water; not RSS or proven admitted peak",
-            "worker_result_schema": "v2; unchanged timing fields, v3 controller lifecycle",
-            "not_measured": ["native_CUDD", "ZDD", "d4", "whole_tree_RSS", "version_reuse", "real_corpus_performance"]}
+            "not_measured": ["native_CUDD", "ZDD", "d4", "peak_memory", "version_reuse", "real_corpus_performance"]}
     (output / "plan.json").write_bytes(encoded(plan) + b"\n")
     ledger = output / "cells.jsonl"
     auditor = independent_auditor(frozen)
@@ -572,9 +540,9 @@ def pilot(output):
     state = read_ledger(ledger)
     changes = [name for name in SOURCES if hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != observed[name]]
     reconciliation = reconcile_schedule(state, scheduled)
-    passed = (not changes and reconciliation["all_scheduled_cells_retained"] and not state["unfinished"] and
+    passed = (reconciliation["all_scheduled_cells_retained"] and not state["unfinished"] and
               not state["partial_tail"] and all(row["status"] == "ok" for row in state["cells"].values()))
-    summary = {"schema": "cm-verification-pilot-result/v3", "status": "passed" if passed else "failed",
+    summary = {"schema": "cm-verification-pilot-result/v2", "status": "passed" if passed else "failed",
                "case_count": len(cases), "cell_count": len(rows), "outcomes": dict(Counter(row["status"] for row in rows)),
                "scheduled_cell_count": len(scheduled), **reconciliation, "frozen_sources_unchanged": True,
                "concurrent_live_source_changes": changes, "cloud_run": False,
