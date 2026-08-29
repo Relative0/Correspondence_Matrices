@@ -21,7 +21,8 @@ packaging/deployment, and production promotion. Docker and a VM are not needed.
 Current implementation: [Milestones A/B and measured results](LEARNING_MILESTONES_AB_2026_08_29.md)
 and [Milestone C graph-learning results](LEARNING_MILESTONE_C_2026_08_29.md), plus
 [Milestone D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md) and
-[Milestone D2 proved-rule reuse](PROVED_RULE_MILESTONE_D2_2026_08_29.md).
+[Milestone D2 proved-rule reuse](PROVED_RULE_MILESTONE_D2_2026_08_29.md), followed
+by [Milestone D3 versioned rule caching](VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md).
 The [complete register](experiment_register.json) preserves all 18 research tracks;
 the [roadmap](LEARNING_ROADMAP.md) distinguishes measured slices from pending work.
 There is a trained NumPy MLP path with independent exact acceptance, retained
@@ -39,6 +40,10 @@ Milestone D2 proves one AIG-XOR identity over metavariables, compiles a bounded
 sharing-preserving matcher, and compares repeated reuse against explicit CM
 proof at every site. It was exact and faster than repeated CM proof, but slower
 than the no-rewrite CSE control, so no rewrite is promoted.
+Milestone D3 adds a proved De Morgan OR rule, deterministic overlap priority,
+and exact per-cone cache invalidation across three generated DAG versions. The
+cache was about 2.1x faster than fresh rematching on sparse changed versions,
+but the no-rewrite CSE control remained faster.
 
 The guide below describes the original routing pilot, which remains available
 unchanged by default. Use `--feature-ablation` for the optional routing arms.
@@ -51,6 +56,8 @@ The default-environment Milestone D entry point is
 task-computation benchmark and refuses an existing output directory.
 The D2 entry point is `scripts/cm_recognition_rules.py`; it runs the fixed
 proved-rule comparison and likewise refuses an existing output directory.
+The D3 entry point is `scripts/cm_recognition_versioned_rules.py`; it runs the
+three-version rule-pack cache comparison.
 
 Research follow-ups:
 
@@ -134,6 +141,13 @@ Run and verify a fresh bounded proved-rule comparison:
 ```powershell
 .\.venv\Scripts\python.exe -B scripts/cm_recognition_rules.py --output docs/recognition/runs/rule-new-id
 .\.venv\Scripts\python.exe -B scripts/crse_rule_verify.py docs/recognition/runs/rule-new-id --output docs/recognition/verification/rule-new-id.json
+```
+
+Run and verify a fresh versioned rule-pack cache comparison:
+
+```powershell
+.\.venv\Scripts\python.exe -B scripts/cm_recognition_versioned_rules.py --output docs/recognition/runs/versioned-rule-new-id
+.\.venv\Scripts\python.exe -B scripts/crse_versioned_rule_verify.py docs/recognition/runs/versioned-rule-new-id --output docs/recognition/verification/versioned-rule-new-id.json
 ```
 
 The optional PyTorch command performs actual bounded training immediately; it

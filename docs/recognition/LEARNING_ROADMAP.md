@@ -11,8 +11,9 @@ remain deferred. Existing historical evidence remains unchanged.
 Current checkpoints: [A/B implementation and results](LEARNING_MILESTONES_AB_2026_08_29.md),
 [C implementation and results](LEARNING_MILESTONE_C_2026_08_29.md), and the
 [first D task-computation results](LEARNING_MILESTONE_D_2026_08_29.md), followed
-by the [D2 proved-rule reuse result](PROVED_RULE_MILESTONE_D2_2026_08_29.md).
-A/B, the first bounded slice of C, and two bounded slices of D are implemented
+by the [D2 proved-rule reuse result](PROVED_RULE_MILESTONE_D2_2026_08_29.md) and
+the [D3 versioned rule-cache result](VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md).
+A/B, the first bounded slice of C, and three bounded slices of D are implemented
 and measured. C includes actual
 matrix MLP, CNN, GNN, fused, and contrastive retrieval training plus a frozen
 EPFL evaluation slice. Its synthetic representation signal passed, retrieval
@@ -24,7 +25,10 @@ rewrite proof were negative results. These are measured smokes, not broad
 graph-learning or transformation/reuse completion. D2 now proves one AIG-XOR
 motif over Boolean metavariables and reuses a fixed structural matcher. It beats
 repeating explicit CM proof, including at five internal sites in two EPFL cones,
-but still loses to the no-rewrite CSE control. Further D work and E remain
+but still loses to the no-rewrite CSE control. D3 adds a second proved rule,
+deterministic overlap priority, and exact changed-cone invalidation across three
+generated DAG versions. Persistent caching halves fresh rematching cost on
+sparse changes but still loses to no rewrite. Further D work and E remain
 pending. The
 [optional framework request](NEURAL_DEPENDENCY_REQUEST.md) was approved and
 executed in an isolated environment.
@@ -43,9 +47,10 @@ executed in an isolated environment.
    complete vectors, points, restrictions and repeated vectors across direct,
    CSE, CM-IR and explicit CM, plus a cost policy, exact cache and one checked
    root rewrite. The first compiled proved rule is also measured, with strict
-   artifact admission, near-match controls and internal EPFL applications.
-   Continue with rule packs, partitions/GF(2), BDD/AIG, and explicit
-   version/invalidation workflows.
+   artifact admission, near-match controls and internal EPFL applications. A
+   two-rule pack and versioned structural cache now exercise deterministic
+   overlap and localized invalidation. Continue with profitability scheduling,
+   natural version histories, partitions/GF(2), and BDD/AIG controls.
 5. **E: remaining methods and applications.** Offline LLM proposals and optional
    approved distillation, learning-method comparisons, adaptive replay, solver
    guidance, negative controls, and remaining application families.

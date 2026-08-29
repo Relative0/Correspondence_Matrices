@@ -1,0 +1,54 @@
+{
+  "schema": "crse-versioned-rule-cache-milestone-d3-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/versioned-rule-20260829-002",
+  "verification": {
+    "path": "docs/recognition/verification/versioned-rule-20260829-002.json",
+    "status": "pass",
+    "artifacts_verified": 6,
+    "proof_rows_reproduced": 8,
+    "versions_verified": 3,
+    "cones_per_version": 32,
+    "measurement_rows_verified": 27,
+    "changed_cone_invalidations_verified": 8,
+    "semantic_mismatches": 0
+  },
+  "pack": {
+    "id": "boolean-aig-core/v1",
+    "artifact_sha256": "540b9039a4de4c7295b2dfb888a1555c4d7c66cf389e44fff357f1591565a6d9",
+    "rules": ["aig-xor-dnf/v1", "aig-demorgan-or/v1"],
+    "priority": ["aig-xor-dnf/v1", "aig-demorgan-or/v1"],
+    "proof_rows": 8,
+    "proof_ns": 873500,
+    "compile_ns": 204200,
+    "artifact_is_inert": true,
+    "learned_components": 0
+  },
+  "data": {
+    "versions": 3,
+    "cones_per_version": 32,
+    "structurally_distinct_cones_per_version": 32,
+    "changed_cones_v2": 4,
+    "changed_cones_v3": 4,
+    "applications_per_cold_version": 64,
+    "source": "generated related DAG mechanism fixtures"
+  },
+  "timing": {
+    "rounds": 3,
+    "cpu_threads": 1,
+    "versions": {
+      "v1": {"cache_hits": 0, "invalidations": 0, "reused_applications": 0, "cached_ns": 17243100, "fresh_pack_ns": 14535100, "no_rewrite_ns": 3390300, "cache_speedup_vs_fresh": 0.8429516734229924, "cache_speedup_vs_no_rewrite": 0.19661777754580093},
+      "v2": {"cache_hits": 28, "invalidations": 4, "reused_applications": 56, "cached_ns": 6860900, "fresh_pack_ns": 14292700, "no_rewrite_ns": 3397900, "cache_speedup_vs_fresh": 2.0832106574939147, "cache_speedup_vs_no_rewrite": 0.49525572446763544},
+      "v3": {"cache_hits": 28, "invalidations": 4, "reused_applications": 56, "cached_ns": 6798900, "fresh_pack_ns": 14323500, "no_rewrite_ns": 3385800, "cache_speedup_vs_fresh": 2.1067378546529585, "cache_speedup_vs_no_rewrite": 0.49799232228742885}
+    },
+    "sequence": {"cached_ns": 31339500, "fresh_pack_ns": 43295700, "no_rewrite_ns": 10327900, "cache_speedup_vs_fresh": 1.3815057674819318, "cache_speedup_vs_no_rewrite": 0.32954897174492254},
+    "machine_specific": true
+  },
+  "criteria": {
+    "safety_met": true,
+    "exact_invalidation_met": true,
+    "production_promotion": false
+  },
+  "interpretation": "Exact structural caching halves rematching cost on sparse changed versions, but cache identity and rewrite overhead still lose to the no-rewrite CSE control."
+}

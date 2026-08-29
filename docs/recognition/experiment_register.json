@@ -41,6 +41,11 @@
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "The proved matcher found five internal AIG-XOR sites in two of 12 evaluation-only EPFL cones with zero output errors; matching still lost to the no-rewrite CSE control."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "Generated hardware-style related DAG cones demonstrated exact two-rule overlap priority, structural cache hits and changed-cone invalidation; natural version histories remain pending."
         }
       ]
     },
@@ -187,7 +192,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add a second independently proved mux or factoring macro and measure interactions and deterministic priority.",
+      "next_experiment": "Add a nonoverlapping factoring or mux rule and test multi-step normalization and loop refusal.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -208,11 +213,16 @@
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "A fixed compiled matcher now recognizes an exhaustively proved AIG-XOR macro at structurally equal metavariable bindings. It applied exactly at 128 generated sites and five internal sites in two evaluation-only EPFL cones."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "The fixed proved macro boundary now contains two rules: the specific AIG-XOR macro and a general De Morgan OR macro. Deterministic priority resolves their intentional overlap, with eight proof rows and zero output errors."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "A fixed compiled matcher now recognizes an exhaustively proved AIG-XOR macro at structurally equal metavariable bindings. It applied exactly at 128 generated sites and five internal sites in two evaluation-only EPFL cones.",
+      "status_reason": "The fixed proved macro boundary now contains two rules: the specific AIG-XOR macro and a general De Morgan OR macro. Deterministic priority resolves their intentional overlap, with eight proof rows and zero output errors.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     },
     {
@@ -236,7 +246,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Measure the fixed rule in related DAG versions with structural match caching, changed-cone invalidation, and a no-rewrite control.",
+      "next_experiment": "Freeze a cheap skip/apply profitability rule and confirm it on unseen version histories with no-rewrite retained.",
       "results": [
         {
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
@@ -247,11 +257,16 @@
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "One universal Boolean proof replaced per-instance explicit-CM proof. Warm compiled reuse was 2.09-2.91x faster end to end than per-site CM proof on generated batches, but remained slower than no rewrite, so no scheduler is promoted."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "Persistent exact structural caching was 2.08-2.11x faster than fresh rematching on sparse changed versions and 1.382x faster over the cold-plus-two-change sequence. It still lost to no rewrite, so no scheduler is promoted."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "One universal Boolean proof replaced per-instance explicit-CM proof. Warm compiled reuse was 2.09-2.91x faster end to end than per-site CM proof on generated batches, but remained slower than no rewrite, so no scheduler is promoted."
+      "status_reason": "Persistent exact structural caching was 2.08-2.11x faster than fresh rematching on sparse changed versions and 1.382x faster over the cold-plus-two-change sequence. It still lost to no rewrite, so no scheduler is promoted."
     },
     {
       "id": "R05",
@@ -274,17 +289,22 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add bounded duplicate/overlap/conflict checks for a two-rule pack before attempting any learned rule proposal.",
+      "next_experiment": "Add bounded normalization-loop, duplicate-rule and semantic-overlap refusal tests before any proposed-rule ingestion.",
       "results": [
         {
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "The first generalized rule boundary is implemented: exhaustive Boolean metavariable evidence, strict hashed inert artifact, repeated-binding side conditions, and a fixed non-executable matcher. Rule discovery itself remains planned."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "A strict two-rule pack now records proof rows, hashes, fixed priority and overlap accounting. It selects only built-in matchers; learned rule discovery, duplicate semantic detection and larger conflict graphs remain pending."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "The first generalized rule boundary is implemented: exhaustive Boolean metavariable evidence, strict hashed inert artifact, repeated-binding side conditions, and a fixed non-executable matcher. Rule discovery itself remains planned."
+      "status_reason": "A strict two-rule pack now records proof rows, hashes, fixed priority and overlap accounting. It selects only built-in matchers; learned rule discovery, duplicate semantic detection and larger conflict graphs remain pending."
     },
     {
       "id": "R06",
@@ -406,17 +426,22 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add a finite two-version workload with explicit cache identity, invalidation, serialized provenance and a localized change.",
+      "next_experiment": "Repeat on actual related revisions with additions, deletions, reverts and serialized cache provenance.",
       "results": [
         {
           "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
           "scope": "An exact per-request answer cache improved repeated-vector work by 1.435-1.452x across validation, test, confirmatory and EPFL D splits. Version identity, invalidation and cross-request sessions remain pending."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "Three related DAG versions now use stable cone IDs, exact canonical source identity and changed-cone invalidation. Each sparse transition produced 28 hits, four invalidations, 56 reused applications and zero stale results."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "An exact per-request answer cache improved repeated-vector work by 1.435-1.452x across validation, test, confirmatory and EPFL D splits. Version identity, invalidation and cross-request sessions remain pending."
+      "status_reason": "Three related DAG versions now use stable cone IDs, exact canonical source identity and changed-cone invalidation. Each sparse transition produced 28 hits, four invalidations, 56 reused applications and zero stale results."
     },
     {
       "id": "R10",
@@ -649,7 +674,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Cache structural UIDs and match results across two related DAG versions and charge invalidation inside the timed arm.",
+      "next_experiment": "Add a pre-identity skip gate and compare full canonical bytes with a bounded incremental structural-ID scheme.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -670,11 +695,16 @@
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "Proof, artifact load, matcher, candidate, per-instance CM verification, CSE build and kernel costs are separated. The one-time proof-plus-compile cost was 0.469 ms and observed break-even versus repeated CM proof was one application."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "Canonical identity, cache, matching, CSE build and kernel costs are separated. Cache hits halved fresh rematching time on changed versions, but identity and rewrite overhead kept the cached sequence 3.03x slower than no rewrite."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "Proof, artifact load, matcher, candidate, per-instance CM verification, CSE build and kernel costs are separated. The one-time proof-plus-compile cost was 0.469 ms and observed break-even versus repeated CM proof was one application.",
+      "status_reason": "Canonical identity, cache, matching, CSE build and kernel costs are separated. Cache hits halved fresh rematching time on changed versions, but identity and rewrite overhead kept the cached sequence 3.03x slower than no rewrite.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     },
     {
@@ -737,7 +767,7 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add dense no-match and overlapping-match adversarial cases plus explicit matcher resource-limit tests.",
+      "next_experiment": "Add adversarial pack changes, removed cones, reverts, digest collisions via injected test doubles, and cache-capacity refusal.",
       "results": [
         {
           "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
@@ -758,11 +788,16 @@
           "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
           "scope": "Sixteen binding-corrupted near matches produced zero false matches. No-rewrite was 2.33-2.43x faster than warm compiled matching on generated batches and 2.75x faster on EPFL, retaining a clear profitability negative control."
+        },
+        {
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
+          "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "scope": "Cold-cache overhead and the no-rewrite arm remain explicit negative controls. Exact hashing plus byte equality prevents stale or collision-only hits; all eight declared changed cones invalidated exactly."
         }
       ],
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "status": "measured",
-      "status_reason": "Sixteen binding-corrupted near matches produced zero false matches. No-rewrite was 2.33-2.43x faster than warm compiled matching on generated batches and 2.75x faster on EPFL, retaining a clear profitability negative control.",
+      "status_reason": "Cold-cache overhead and the no-rewrite arm remain explicit negative controls. Exact hashing plus byte equality prevents stale or collision-only hits; all eight declared changed cones invalidated exactly.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
     }
   ],
