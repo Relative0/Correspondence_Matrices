@@ -1,0 +1,90 @@
+{
+  "advice_off_exact": true,
+  "assumption_expected_statuses": {
+    "false": 80,
+    "true": 80
+  },
+  "count_task_measured": false,
+  "dataset_cases": 20,
+  "date": "2026-08-30",
+  "evaluation_measurement_rows": 960,
+  "exact": true,
+  "interpretation": "The exact SAT/session/miter infrastructure passed. The tree learned fresh-versus-resident structure but was 4.2% slower than resident default on sealed geometric mean after charging advice overhead.",
+  "local_second_machine_gate": false,
+  "model_fallback": "reused_default",
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+  "run": "docs/recognition/runs/sat-guidance-e2-20260830-002",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "predeclared Windows timing gate failed",
+    "used": false
+  },
+  "sat_unsat_controls": {
+    "raw": 8,
+    "sat": 4,
+    "unsat": 8
+  },
+  "schema": "crse-learning-milestone-e2-sat-guidance-summary/v1",
+  "sealed_test": {
+    "best_fixed_action": "reused_default",
+    "cost_tree_geomean_ratio_to_best_fixed": 1.042010228793846,
+    "cost_tree_p95_ratio_to_best_fixed": 1.0841350938889258,
+    "cost_tree_selected_actions": {
+      "fresh_default": 30,
+      "reused_default": 50
+    },
+    "method_geomean_regret_to_per_task_oracle": {
+      "advice_off": 1.0268226067695128,
+      "cost_tree": 1.0438793578303258,
+      "fresh_default": 1.578050499558624,
+      "reused_component": 1.1205903749770945,
+      "reused_default": 1.0017937722536978,
+      "reused_occurrence": 1.1188346357054828
+    },
+    "semantic_rows": 480,
+    "split": "sealed_test",
+    "tasks": 16
+  },
+  "solver": {
+    "adapter": "pysat.solvers.Cadical195",
+    "python_sat_version": "1.8.dev20"
+  },
+  "status": "complete",
+  "task_comparison_rows": 160,
+  "task_instances": 80,
+  "training_measurement_rows": 960,
+  "validation": {
+    "best_fixed_action": "reused_default",
+    "cost_tree_geomean_ratio_to_best_fixed": 1.038524486392452,
+    "cost_tree_p95_ratio_to_best_fixed": 1.071423407792959,
+    "cost_tree_selected_actions": {
+      "fresh_default": 20,
+      "reused_default": 60
+    },
+    "method_geomean_regret_to_per_task_oracle": {
+      "advice_off": 1.0294601191912343,
+      "cost_tree": 1.0504812494481222,
+      "fresh_default": 1.6025691687174717,
+      "reused_component": 1.1251485578902447,
+      "reused_default": 1.0115132220880074,
+      "reused_occurrence": 1.1336914618603775
+    },
+    "semantic_rows": 480,
+    "split": "validation",
+    "tasks": 16
+  },
+  "verification": {
+    "dataset_cases": 20,
+    "exact": true,
+    "manifest_sha256": "839f753628beb941f30532ec17c16ca12ed90c2cadd9b5916cf4797d07f8716e",
+    "measurement_rows": 1920,
+    "model_sha256": "21cc4338bbf52e835a89964d6c5c4d352f879a1fe659022a662f6e426923d4cf",
+    "path": "docs/recognition/verification/sat-guidance-e2-20260830-002.json",
+    "schema": "crse-sat-guidance-verification/v1",
+    "status": "passed",
+    "task_comparison_rows": 160,
+    "task_instances": 80,
+    "trusted_solver_replays": 220
+  }
+}

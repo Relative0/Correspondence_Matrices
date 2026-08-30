@@ -88,10 +88,12 @@ class BenchmarkConfig:
     no_robdd_dd: bool = False
 
     robdd_dd_backend: Literal["auto", "cudd", "autoref"] = "auto"
-    robdd_order_policy: Literal["fixed", "expr", "random", "best-of-k"] = "fixed"
+    robdd_order_policy: Literal["fixed", "expr", "interaction", "random", "best-of-k"] = "fixed"
     robdd_order_seed: int | None = None
     robdd_order_sweeps: int = 1
-    robdd_selection_objective: Literal["composite", "min_nodes", "min_build_time"] = "composite"
+    robdd_selection_objective: Literal[
+        "composite", "min_nodes", "min_build_time", "build_plus_query"
+    ] = "composite"
     robdd_dynamic_reordering: bool = False
     robdd_reorder_method: str = "sift"
     robdd_measure_tt_extract: bool = False
@@ -157,9 +159,10 @@ class BenchmarkConfig:
             raise ValueError("sizes must be >= 0")
         if self.robdd_order_sweeps < 1:
             raise ValueError("robdd_order_sweeps must be >= 1")
-        if self.robdd_order_policy not in {"fixed", "expr", "random", "best-of-k"}:
+        if self.robdd_order_policy not in {"fixed", "expr", "interaction", "random", "best-of-k"}:
             raise ValueError("invalid robdd_order_policy")
-        if self.robdd_selection_objective not in {"composite", "min_nodes", "min_build_time"}:
+        if self.robdd_selection_objective not in {
+                "composite", "min_nodes", "min_build_time", "build_plus_query"}:
             raise ValueError("invalid robdd_selection_objective")
         if self.cm_exec_target not in {"local", "runpod"}:
             raise ValueError("invalid cm_exec_target")

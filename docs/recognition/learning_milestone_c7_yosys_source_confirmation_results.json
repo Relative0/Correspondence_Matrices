@@ -1,0 +1,339 @@
+{
+  "cache_telemetry": [
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 0,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 1,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 2,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 3,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 4,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 5,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 6,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 7,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 133,
+      "method": "cached_packed_source_anf",
+      "repetition": 8,
+      "split": "sealed_a"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 0,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 1,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 2,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 3,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 4,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 5,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 6,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 7,
+      "split": "sealed_b"
+    },
+    {
+      "evictions": 0,
+      "final_entries": 135,
+      "method": "cached_packed_source_anf",
+      "repetition": 8,
+      "split": "sealed_b"
+    }
+  ],
+  "criteria": {
+    "c6_baseline_cost": true,
+    "exact": true,
+    "independent_source": true,
+    "legacy_set_cost": false,
+    "production_promotion": false,
+    "safety": true,
+    "strong_baseline_cost": true
+  },
+  "dataset_audit": {
+    "alpha_structural_duplicates": 0,
+    "families_by_split": {
+      "sealed_a": [
+        "arith_add",
+        "arith_mul",
+        "bin2onehot",
+        "mux_index",
+        "popcount"
+      ],
+      "sealed_b": [
+        "arith_add",
+        "arith_mul",
+        "bin2onehot",
+        "popcount"
+      ]
+    },
+    "positive_count": 20,
+    "rows": 40,
+    "semantic_duplicates": 0,
+    "size_counts": {
+      "10": 1,
+      "2": 3,
+      "3": 4,
+      "4": 5,
+      "5": 4,
+      "6": 8,
+      "7": 7,
+      "8": 7,
+      "9": 1
+    },
+    "split_label_counts": {
+      "sealed_a/0": 10,
+      "sealed_a/1": 10,
+      "sealed_b/0": 10,
+      "sealed_b/1": 10
+    }
+  },
+  "date": "2026-08-30",
+  "development_runs": [
+    "docs/recognition/runs/yosys-source-anf-confirmation-20260830-001"
+  ],
+  "interpretation": "Packed exact source ANF transferred beyond EPFL and beat direct bitset truth-vector ANF, but retained set ANF remained faster on this sparse family. Use an exact cost-aware representation portfolio; do not promote packed ANF universally.",
+  "method_summary": {
+    "bitset_truth_vector_anf/sealed_a": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 1401500,
+      "median_signature_ns": 143350.0,
+      "median_total_ns": 143500.0,
+      "p95_total_ns": 1264600,
+      "semantic_mismatches": 0
+    },
+    "bitset_truth_vector_anf/sealed_b": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 5915200,
+      "median_signature_ns": 182150.0,
+      "median_total_ns": 182350.0,
+      "p95_total_ns": 2835700,
+      "semantic_mismatches": 0
+    },
+    "cached_packed_source_anf/sealed_a": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 738000,
+      "median_signature_ns": 92750.0,
+      "median_total_ns": 127700.0,
+      "p95_total_ns": 668700,
+      "semantic_mismatches": 0
+    },
+    "cached_packed_source_anf/sealed_b": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 2562300,
+      "median_signature_ns": 100800.0,
+      "median_total_ns": 166450.0,
+      "p95_total_ns": 1388400,
+      "semantic_mismatches": 0
+    },
+    "numpy_truth_vector_anf/sealed_a": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 1529900,
+      "median_signature_ns": 271800.0,
+      "median_total_ns": 272000.0,
+      "p95_total_ns": 1451500,
+      "semantic_mismatches": 0
+    },
+    "numpy_truth_vector_anf/sealed_b": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 6128100,
+      "median_signature_ns": 358900.0,
+      "median_total_ns": 359100.0,
+      "p95_total_ns": 3035200,
+      "semantic_mismatches": 0
+    },
+    "packed_source_anf/sealed_a": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 738400,
+      "median_signature_ns": 87350.0,
+      "median_total_ns": 121300.0,
+      "p95_total_ns": 657300,
+      "semantic_mismatches": 0
+    },
+    "packed_source_anf/sealed_b": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 2567600,
+      "median_signature_ns": 117300.0,
+      "median_total_ns": 167300.0,
+      "p95_total_ns": 1353700,
+      "semantic_mismatches": 0
+    },
+    "set_source_anf/sealed_a": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 738400,
+      "median_signature_ns": 53450.0,
+      "median_total_ns": 65800.0,
+      "p95_total_ns": 574000,
+      "semantic_mismatches": 0
+    },
+    "set_source_anf/sealed_b": {
+      "accepted": 10,
+      "accuracy": 1.0,
+      "canonical_partition_accuracy": 1.0,
+      "cases": 20,
+      "maximum_total_ns": 2385300,
+      "median_signature_ns": 52750.0,
+      "median_total_ns": 68150.0,
+      "p95_total_ns": 1205700,
+      "semantic_mismatches": 0
+    }
+  },
+  "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+  "retained_c6": {
+    "cached_packed_core": true,
+    "manifest_sha256": "092b8b8b2f3a92b7eb6de66ac95f49c393669c8b180996634efb7fa32fcb7f6c",
+    "packed_core": true,
+    "path": "docs/recognition/runs/natural-source-anf-hybrid-20260830-004",
+    "source_hybrid": false
+  },
+  "run": "docs/recognition/runs/yosys-source-anf-confirmation-20260830-002",
+  "schema": "crse-learning-milestone-c7-yosys-source-confirmation-summary/v1",
+  "semantic_mismatches": 0,
+  "source_provenance": {
+    "license": "ISC",
+    "network_access_performed": false,
+    "source": "YosysHQ/yosys-bench human-authored generator semantics",
+    "source_checkout_modified": false,
+    "source_manifest": "docs/recognition/source_fixtures/yosys-bench-human-decomposition-20260830/SOURCE_MANIFEST.json",
+    "source_manifest_sha256": "de7049d1b518f767007e242f72f5faf1504161fdb32584947bfc90d8e2c53965",
+    "upstream_commit": "52ff6fa991f2ab509618d8aaad02f307aac78848",
+    "upstream_url": "https://github.com/YosysHQ/yosys-bench.git"
+  },
+  "status": "complete",
+  "verification": {
+    "cache_streams_replayed": 2,
+    "criteria": {
+      "c6_baseline_cost": true,
+      "exact": true,
+      "independent_source": true,
+      "legacy_set_cost": false,
+      "production_promotion": false,
+      "safety": true,
+      "strong_baseline_cost": true
+    },
+    "dataset_rows": 40,
+    "manifest_sha256": "57d09fb799a447354b1040eadb60d14601abcd2e2009f63df9cba5754c649ae1",
+    "packed_set_matches": 40,
+    "path": "docs/recognition/verification/yosys-source-anf-confirmation-20260830-002.json",
+    "raw_rows_replayed": 200,
+    "run": "docs/recognition/runs/yosys-source-anf-confirmation-20260830-002",
+    "schema": "crse-yosys-source-anf-confirmation-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass",
+    "truth_tables_reconstructed": 40,
+    "verifier_sha256": "03c90cb741497b7fd5d396710206a0155e5383f7d39d10fd271d01130e0e901a"
+  }
+}

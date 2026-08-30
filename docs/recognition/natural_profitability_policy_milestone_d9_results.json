@@ -1,0 +1,60 @@
+{
+  "schema": "crse-natural-profitability-policy-milestone-d9-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/natural-profitability-policy-20260829-003",
+  "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/natural-profitability-policy-20260829-003.json",
+    "artifacts_verified": 15,
+    "cases_verified": 23,
+    "evaluation_speedup": 0.9817540299544331,
+    "measurement_rows_verified": 501,
+    "policy_sha256": "9b78afc137133a37bfe029ca0161086528dfaeeb26dce33d78a89d4a7934301b",
+    "schema": "crse-natural-profitability-policy-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass"
+  },
+  "data": {
+    "training_cases": 10,
+    "validation_cases": 2,
+    "evaluation_cases": 11,
+    "evaluation_workloads": 33,
+    "measurement_rows": 501,
+    "semantic_checks": 28056,
+    "prior_d5_d8_structural_overlap_count": 0,
+    "circuit_disjoint": true,
+    "new_blif_representation": true,
+    "independent_benchmark_family": false
+  },
+  "policy": {
+    "sha256": "9b78afc137133a37bfe029ca0161086528dfaeeb26dce33d78a89d4a7934301b",
+    "apply_count": 0,
+    "abstain_count": 33,
+    "decision_reasons": {
+      "insufficient_predicted_gain": 23,
+      "outside_training_range": 10
+    }
+  },
+  "timing": {
+    "frozen_gate_speedup_over_no_rewrite": 0.9817540299544331,
+    "one_pass_speedup_over_no_rewrite": 0.4289574666589984,
+    "frozen_gate_regret_fraction": 0.018585072725816873,
+    "median_cell_totals_ns": {
+      "frozen_gate": 109399500,
+      "no_rewrite": 107403400,
+      "one_pass": 250382400
+    }
+  },
+  "semantic_mismatches": 0,
+  "criteria": {
+    "circuit_disjoint_met": true,
+    "independent_benchmark_family_met": false,
+    "leakage_control_met": true,
+    "new_representation_met": true,
+    "production_promotion": false,
+    "profitability_met": false,
+    "safety_met": true
+  },
+  "interpretation": "The leakage-controlled gate and abstention contract passed, but the learned policy found no profitable rewrite region and production promotion remains refused."
+}

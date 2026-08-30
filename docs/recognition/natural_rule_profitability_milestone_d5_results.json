@@ -1,0 +1,153 @@
+{
+  "schema": "crse-natural-rule-profitability-milestone-d5-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/natural-rule-20260829-001",
+  "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/natural-rule-20260829-001.json",
+    "artifacts_verified": 6,
+    "measurement_rows_verified": 36,
+    "natural_cases_verified": 32,
+    "natural_rule_applications_verified": 451,
+    "proof_rows_reproduced": 16,
+    "schema": "crse-natural-rule-profitability-verification/v1",
+    "semantic_mismatches": 0,
+    "sessions_verified": 3,
+    "status": "pass"
+  },
+  "pack": {
+    "artifact_is_inert": true,
+    "artifact_sha256": "f5aff35bb7f742670a1d13b6a1b1c6d382db84d2bd64b1c1a2ca5d64f22c5dca",
+    "pack_id": "boolean-aig-factor-core/v2",
+    "proof_rows": 16,
+    "rule_ids": [
+      "aig-xor-dnf/v1",
+      "aig-demorgan-or/v1",
+      "boolean-common-factor/v1"
+    ]
+  },
+  "data": {
+    "cases": 32,
+    "eligible": 48,
+    "circuits": 15,
+    "support_range": [
+      9,
+      12
+    ],
+    "sessions": 3,
+    "reuse_schedule": [
+      1,
+      8,
+      32,
+      128
+    ],
+    "training_use": false,
+    "prior_epfl_slices_overlap": false
+  },
+  "timing": {
+    "by_expected_reuses": {
+      "1": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.4502111637041003,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.23845776038471667,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.9778690091173008
+      },
+      "128": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 1.163830918224387,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 1.0037257984931482,
+        "gated_cached_speedup_over_no_rewrite_geomean": 1.1671932622260217
+      },
+      "32": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.8059998946400642,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.5825940230292581,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.7953421613038334
+      },
+      "8": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.5907308033026744,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.3464826924465086,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.9671634584609811
+      }
+    },
+    "gated_sequence_speedup_over_fresh_pack": 1.5171936479979227,
+    "gated_sequence_speedup_over_no_rewrite": 1.029994749944959,
+    "median_sequence_total_ns": {
+      "cached_pack": 207466800,
+      "fresh_pack": 268757200,
+      "gated_cached": 177141000,
+      "no_rewrite": 182454300
+    },
+    "natural_rule_incidence": {
+      "aig-demorgan-or/v1": {
+        "applications": 433,
+        "cases_with_rule": 31
+      },
+      "aig-xor-dnf/v1": {
+        "applications": 18,
+        "cases_with_rule": 9
+      },
+      "boolean-common-factor/v1": {
+        "applications": 0,
+        "cases_with_rule": 0
+      }
+    },
+    "optimistic_free_oracle": {
+      "cached_pack_oracle_speedup": 1.1210365272956284,
+      "fresh_pack_oracle_speedup": 1.0218930311282173,
+      "no_rewrite_cone_total_ns": 182454300
+    },
+    "sessions": {
+      "session-1": {
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 0,
+        "gated_cache_misses": 16,
+        "gated_speedup_over_fresh_pack": 1.2357862290646422,
+        "gated_speedup_over_no_rewrite": 0.8338232342257871,
+        "median_total_ns": {
+          "cached_pack": 97766200,
+          "fresh_pack": 89885900,
+          "gated_cached": 72735800,
+          "no_rewrite": 60648800
+        }
+      },
+      "session-2": {
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 16,
+        "gated_cache_misses": 0,
+        "gated_speedup_over_fresh_pack": 1.7303080020594948,
+        "gated_speedup_over_no_rewrite": 1.1556032859700758,
+        "median_total_ns": {
+          "cached_pack": 55135600,
+          "fresh_pack": 90065300,
+          "gated_cached": 52051600,
+          "no_rewrite": 60151000
+        }
+      },
+      "session-3": {
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 16,
+        "gated_cache_misses": 0,
+        "gated_speedup_over_fresh_pack": 1.7336336989428183,
+        "gated_speedup_over_no_rewrite": 1.1684658451198928,
+        "median_total_ns": {
+          "cached_pack": 54230100,
+          "fresh_pack": 90077700,
+          "gated_cached": 51958900,
+          "no_rewrite": 60712200
+        }
+      }
+    },
+    "timing_is_machine_specific": true
+  },
+  "criteria": {
+    "gated_beats_fresh_pack": true,
+    "gated_beats_no_rewrite": true,
+    "production_promotion": false,
+    "safety_met": true,
+    "sealed_natural_source_met": true
+  },
+  "semantic_mismatches": 0,
+  "interpretation": "The gated cache achieved a small 1.030x three-session gain on sealed natural cones. Cold use lost, warm sessions gained 1.156-1.168x, and only the 128-execution stratum was clearly profitable."
+}

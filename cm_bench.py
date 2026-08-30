@@ -4736,12 +4736,12 @@ def main():
     ap.add_argument("--no-dd", action="store_true")
     ap.add_argument("--robdd-dd-backend", choices=["auto", "cudd", "autoref"], default="auto")
     ap.add_argument("--no-robdd-dd", action="store_true")
-    ap.add_argument("--robdd-order-policy", choices=["fixed", "expr", "random", "best-of-k"], default="fixed")
+    ap.add_argument("--robdd-order-policy", choices=["fixed", "expr", "interaction", "random", "best-of-k"], default="fixed")
     ap.add_argument("--robdd-order-seed", type=int, default=None)
     ap.add_argument("--robdd-order-sweeps", type=int, default=1)
     ap.add_argument(
         "--robdd-selection-objective",
-        choices=["composite", "min_nodes", "min_build_time"],
+        choices=["composite", "min_nodes", "min_build_time", "build_plus_query"],
         default="composite",
     )
     ap.add_argument("--robdd-dynamic-reordering", action="store_true")

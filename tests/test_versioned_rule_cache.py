@@ -10,8 +10,9 @@ from cm_expr_serde import expr_from_json, expr_to_json_dag
 from cm_exprlib import And, Not, Or, Var, Xor
 from cmbench.recognition.proved_rules import aig_xor_expr, canonical
 from cmbench.recognition.rule_pack import (
-    OR_RULE_ID, XOR_RULE_ID, CompiledRulePack, ProvedRulePack, StructuralConeCache,
-    aig_or_expr, compile_rule_pack, prove_rule_pack,
+    FACTOR_RULE_ID, OR_RULE_ID, RULE_PRIORITY_V2, XOR_RULE_ID, CompiledRulePack,
+    ProvedRulePack, StructuralConeCache, aig_or_expr, compile_rule_pack,
+    factored_or_expr, prove_rule_pack, prove_rule_pack_v2,
 )
 from cmbench.recognition.teacher import teach
 from cmbench.recognition.versioned_rule_experiment import (
@@ -36,6 +37,26 @@ class ProvedRulePackTests(unittest.TestCase):
         document["payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
         with self.assertRaises(ValueError):
             ProvedRulePack.from_dict(document)
+
+    def test_v2_pack_proves_and_applies_nonoverlapping_factor_rule(self):
+        pack = prove_rule_pack_v2()
+        self.assertEqual(pack.document["priority"], list(RULE_PRIORITY_V2))
+        self.assertEqual(sum(len(rule["proof_rows"]) for rule in pack.document["rules"]), 16)
+        matcher = compile_rule_pack(pack)
+        a = Or(Var(0), Var(1))
+        source = factored_or_expr(a, Var(2), Var(3))
+        rewrite = matcher.rewrite(source, 8)
+        self.assertEqual(rewrite.applications_by_rule[FACTOR_RULE_ID], 1)
+        self.assertEqual(rewrite.conflicts, 0)
+        self.assertEqual(teach(source, 8).bits, teach(rewrite.result, 8).bits)
+
+    def test_v2_factor_match_handles_commuted_products(self):
+        matcher = compile_rule_pack(prove_rule_pack_v2())
+        shared = And(Var(0), Var(1))
+        source = Or(And(Var(2), shared), And(Var(3), shared))
+        rewrite = matcher.rewrite(source, 8)
+        self.assertEqual(rewrite.applications_by_rule[FACTOR_RULE_ID], 1)
+        self.assertEqual(teach(source, 8).bits, teach(rewrite.result, 8).bits)
 
     def test_priority_selects_xor_and_pack_preserves_sharing(self):
         matcher = compile_rule_pack(prove_rule_pack())
@@ -74,6 +95,37 @@ class StructuralConeCacheTests(unittest.TestCase):
         self.assertTrue(pack_changed.invalidated)
         self.assertEqual(cache.invalidate_missing(set()), 1)
         self.assertEqual(cache.size, 0)
+
+    def test_digest_collision_still_compares_exact_canonical_source(self):
+        matcher = compile_rule_pack(prove_rule_pack_v2())
+        collision = lambda _value: "0" * 64
+        cache = StructuralConeCache(max_entries=2, identity_hasher=collision)
+        first = cache.rewrite("cone-a", aig_or_expr(Var(0), Var(1)), matcher)
+        second = cache.rewrite("cone-a", aig_or_expr(Var(0), Var(2)), matcher)
+        self.assertFalse(first.cache_hit)
+        self.assertFalse(second.cache_hit)
+        self.assertTrue(second.invalidated)
+        self.assertEqual(second.reason, "source_changed")
+
+    def test_cache_serialization_reproduces_before_accepting_hits(self):
+        matcher = compile_rule_pack(prove_rule_pack_v2())
+        source = factored_or_expr(Var(0), Var(1), Var(2))
+        cache = StructuralConeCache(max_entries=2)
+        cache.rewrite("cone-a", source, matcher)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "cache.json"
+            cache.save(path)
+            restored = StructuralConeCache.load(path, matcher)
+            hit = restored.rewrite("cone-a", expr_from_json(expr_to_json_dag(source)), matcher)
+        self.assertTrue(hit.cache_hit)
+        self.assertEqual(hit.reason, "unchanged_structural_identity")
+
+    def test_cache_refuses_capacity_overflow(self):
+        matcher = compile_rule_pack(prove_rule_pack_v2())
+        cache = StructuralConeCache(max_entries=1)
+        cache.rewrite("cone-a", aig_or_expr(Var(0), Var(1)), matcher)
+        with self.assertRaises(ValueError):
+            cache.rewrite("cone-b", aig_or_expr(Var(0), Var(2)), matcher)
 
     def test_related_versions_have_exact_declared_change_sets(self):
         config = VersionedRuleConfig(data_seed=17, cone_count=8,

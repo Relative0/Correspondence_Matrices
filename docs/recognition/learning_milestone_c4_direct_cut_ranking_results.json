@@ -1,0 +1,479 @@
+{
+  "schema": "crse-learning-milestone-c4-direct-cut-ranking-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+  "run": "docs/recognition/runs/natural-cut-ranking-20260829-001",
+  "verification": {
+    "path": "docs/recognition/verification/natural-cut-ranking-20260829-001.json",
+    "dataset_rows_regenerated": 188,
+    "evaluation_predictions_replayed": 408,
+    "exact_controls_checked": 68,
+    "limits": {
+      "max_parameters": 80651,
+      "max_variables": 10,
+      "threads": 2,
+      "wall_seconds": 40.380340100004105
+    },
+    "manifest_sha256": "0d1beacd8b0fb71f96a6800450ff3806608e528104abac3153f5ff052ed93a1e",
+    "matched_pairs_regenerated": 94,
+    "models_loaded": 6,
+    "pair_rankings_replayed": 204,
+    "run": "C:\\Users\\brian\\Documents\\CM_Computation\\docs\\recognition\\runs\\natural-cut-ranking-20260829-001",
+    "scalar_truth_tables_recomputed": 188,
+    "schema": "crse-natural-cut-ranking-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass",
+    "validation_predictions_replayed": 144
+  },
+  "dataset": {
+    "alpha_structural_duplicates": 0,
+    "circuit_overlap": 0,
+    "circuits_by_split": {
+      "confirmatory": [
+        "sin",
+        "sqrt",
+        "voter"
+      ],
+      "test": [
+        "square"
+      ],
+      "train": [
+        "adder",
+        "hyp",
+        "mem_ctrl",
+        "multiplier",
+        "router"
+      ],
+      "validation": [
+        "div"
+      ]
+    },
+    "label_counts": {
+      "confirmatory/0": 18,
+      "confirmatory/1": 18,
+      "test/0": 16,
+      "test/1": 16,
+      "train/0": 48,
+      "train/1": 48,
+      "validation/0": 12,
+      "validation/1": 12
+    },
+    "matched_pairs": 94,
+    "median_depth_delta": 0.0,
+    "median_source_edges_delta": 0.0,
+    "median_source_nodes_delta": 0.0,
+    "natural_positive_count": 94,
+    "rows": 188,
+    "same_n_vars_fraction": 1.0,
+    "same_variant_fraction": 0.9148936170212766,
+    "semantic_duplicates": 0,
+    "size_counts": {
+      "10": 28,
+      "4": 40,
+      "5": 24,
+      "6": 52,
+      "7": 20,
+      "8": 22,
+      "9": 2
+    },
+    "split_counts": {
+      "confirmatory": 36,
+      "test": 32,
+      "train": 96,
+      "validation": 24
+    },
+    "variant_counts": {
+      "depth": 70,
+      "original": 60,
+      "size": 58
+    }
+  },
+  "models": [
+    {
+      "architecture": "structural_pair_ranker",
+      "artifact_sha256": "e8d1ef68bcc5b7e1d7b17ad1b81eab66e73a76160455d6ab65c5c52c188be36a",
+      "file": "model-structural_pair_ranker-seed-1049.json",
+      "final_cut_loss": 0.0,
+      "final_loss": 0.9078321655591329,
+      "final_ranking_loss": 0.4514973660310109,
+      "fit_ns": 1879068400,
+      "parameters": 18,
+      "seed": 1049
+    },
+    {
+      "architecture": "structural_pair_ranker",
+      "artifact_sha256": "9af22247c2fda813bb72da874dfd9e18249b829a08e84a6359874bdbc074f409",
+      "file": "model-structural_pair_ranker-seed-1301.json",
+      "final_cut_loss": 0.0,
+      "final_loss": 0.9048650860786438,
+      "final_ranking_loss": 0.4476510485013326,
+      "fit_ns": 1982177400,
+      "parameters": 18,
+      "seed": 1301
+    },
+    {
+      "architecture": "direct_cut_gnn",
+      "artifact_sha256": "52726044d8abcb737173de599aa157c8452941e058440c65f383e5bbbf37e282",
+      "file": "model-direct_cut_gnn-seed-1049.json",
+      "final_cut_loss": 0.40930957595507306,
+      "final_loss": 0.3673408428827922,
+      "final_ranking_loss": 0.0,
+      "fit_ns": 3216212900,
+      "parameters": 80651,
+      "seed": 1049
+    },
+    {
+      "architecture": "direct_cut_gnn",
+      "artifact_sha256": "f8b2e4612ab2da1867f2136d38b8411a8ea1ee9d3959f393557f62cac18cac5d",
+      "file": "model-direct_cut_gnn-seed-1301.json",
+      "final_cut_loss": 0.4453861514727275,
+      "final_loss": 0.5133147637049357,
+      "final_ranking_loss": 0.004930986712376277,
+      "fit_ns": 3076757100,
+      "parameters": 80651,
+      "seed": 1301
+    },
+    {
+      "architecture": "cut_rank_gnn",
+      "artifact_sha256": "8bb1b71650009918fa99a0b7a00363ab44375176f3f9d73e016241cbd7723acb",
+      "file": "model-cut_rank_gnn-seed-1049.json",
+      "final_cut_loss": 0.44404565294583637,
+      "final_loss": 0.4200422664483388,
+      "final_ranking_loss": 0.0,
+      "fit_ns": 3066425600,
+      "parameters": 80651,
+      "seed": 1049
+    },
+    {
+      "architecture": "cut_rank_gnn",
+      "artifact_sha256": "317b847ded88364ba451fc33324db38eb5d91fae74f459a701e61d0bea5bd096",
+      "file": "model-cut_rank_gnn-seed-1301.json",
+      "final_cut_loss": 0.4647047221660614,
+      "final_loss": 0.4292542139689128,
+      "final_ranking_loss": 0.0,
+      "fit_ns": 3184454600,
+      "parameters": 80651,
+      "seed": 1301
+    }
+  ],
+  "classification": {
+    "cut_rank_gnn/seed-1049/confirmatory": {
+      "accepted": 4,
+      "accepted_positive_recall": 0.2222222222222222,
+      "balanced_accuracy": 0.6388888888888888,
+      "canonical_partition_recall": 0.2777777777777778,
+      "cases": 36,
+      "fallbacks": 32,
+      "median_exact_check_ns": 305450.0,
+      "median_inference_ns": 1824300.0,
+      "median_representation_ns": 499100.0,
+      "median_total_ns": 2816450.0,
+      "proposals": 13,
+      "sensitivity": 0.5,
+      "specificity": 0.7777777777777778
+    },
+    "cut_rank_gnn/seed-1049/test": {
+      "accepted": 1,
+      "accepted_positive_recall": 0.0625,
+      "balanced_accuracy": 0.46875,
+      "canonical_partition_recall": 0.1875,
+      "cases": 32,
+      "fallbacks": 31,
+      "median_exact_check_ns": 595750.0,
+      "median_inference_ns": 1987850.0,
+      "median_representation_ns": 702850.0,
+      "median_total_ns": 3401000.0,
+      "proposals": 17,
+      "sensitivity": 0.5,
+      "specificity": 0.4375
+    },
+    "cut_rank_gnn/seed-1301/confirmatory": {
+      "accepted": 1,
+      "accepted_positive_recall": 0.05555555555555555,
+      "balanced_accuracy": 0.5833333333333333,
+      "canonical_partition_recall": 0.16666666666666666,
+      "cases": 36,
+      "fallbacks": 35,
+      "median_exact_check_ns": 232450.0,
+      "median_inference_ns": 2079650.0,
+      "median_representation_ns": 516850.0,
+      "median_total_ns": 2992300.0,
+      "proposals": 7,
+      "sensitivity": 0.2777777777777778,
+      "specificity": 0.8888888888888888
+    },
+    "cut_rank_gnn/seed-1301/test": {
+      "accepted": 1,
+      "accepted_positive_recall": 0.0625,
+      "balanced_accuracy": 0.59375,
+      "canonical_partition_recall": 0.0625,
+      "cases": 32,
+      "fallbacks": 31,
+      "median_exact_check_ns": 321000.0,
+      "median_inference_ns": 1896800.0,
+      "median_representation_ns": 569300.0,
+      "median_total_ns": 3136750.0,
+      "proposals": 13,
+      "sensitivity": 0.5,
+      "specificity": 0.6875
+    },
+    "direct_cut_gnn/seed-1049/confirmatory": {
+      "accepted": 2,
+      "accepted_positive_recall": 0.1111111111111111,
+      "balanced_accuracy": 0.6388888888888888,
+      "canonical_partition_recall": 0.05555555555555555,
+      "cases": 36,
+      "fallbacks": 34,
+      "median_exact_check_ns": 307250.0,
+      "median_inference_ns": 1785150.0,
+      "median_representation_ns": 456700.0,
+      "median_total_ns": 2813500.0,
+      "proposals": 13,
+      "sensitivity": 0.5,
+      "specificity": 0.7777777777777778
+    },
+    "direct_cut_gnn/seed-1049/test": {
+      "accepted": 0,
+      "accepted_positive_recall": 0.0,
+      "balanced_accuracy": 0.5,
+      "canonical_partition_recall": 0.0625,
+      "cases": 32,
+      "fallbacks": 32,
+      "median_exact_check_ns": 706150.0,
+      "median_inference_ns": 1920250.0,
+      "median_representation_ns": 628100.0,
+      "median_total_ns": 3522650.0,
+      "proposals": 18,
+      "sensitivity": 0.5625,
+      "specificity": 0.4375
+    },
+    "direct_cut_gnn/seed-1301/confirmatory": {
+      "accepted": 2,
+      "accepted_positive_recall": 0.1111111111111111,
+      "balanced_accuracy": 0.6666666666666666,
+      "canonical_partition_recall": 0.05555555555555555,
+      "cases": 36,
+      "fallbacks": 34,
+      "median_exact_check_ns": 299850.0,
+      "median_inference_ns": 1763850.0,
+      "median_representation_ns": 497500.0,
+      "median_total_ns": 2759250.0,
+      "proposals": 10,
+      "sensitivity": 0.4444444444444444,
+      "specificity": 0.8888888888888888
+    },
+    "direct_cut_gnn/seed-1301/test": {
+      "accepted": 0,
+      "accepted_positive_recall": 0.0,
+      "balanced_accuracy": 0.53125,
+      "canonical_partition_recall": 0.0625,
+      "cases": 32,
+      "fallbacks": 32,
+      "median_exact_check_ns": 460150.0,
+      "median_inference_ns": 2026300.0,
+      "median_representation_ns": 713350.0,
+      "median_total_ns": 3502500.0,
+      "proposals": 13,
+      "sensitivity": 0.4375,
+      "specificity": 0.625
+    },
+    "structural_pair_ranker/seed-1049/confirmatory": {
+      "accepted": 6,
+      "accepted_positive_recall": 0.3333333333333333,
+      "balanced_accuracy": 0.5,
+      "canonical_partition_recall": null,
+      "cases": 36,
+      "fallbacks": 30,
+      "median_exact_check_ns": 500.0,
+      "median_inference_ns": 69100.0,
+      "median_representation_ns": 683800.0,
+      "median_total_ns": 848950.0,
+      "proposals": 12,
+      "sensitivity": 0.3333333333333333,
+      "specificity": 0.6666666666666666
+    },
+    "structural_pair_ranker/seed-1049/test": {
+      "accepted": 6,
+      "accepted_positive_recall": 0.375,
+      "balanced_accuracy": 0.65625,
+      "canonical_partition_recall": null,
+      "cases": 32,
+      "fallbacks": 26,
+      "median_exact_check_ns": 450.0,
+      "median_inference_ns": 69700.0,
+      "median_representation_ns": 851950.0,
+      "median_total_ns": 1083650.0,
+      "proposals": 7,
+      "sensitivity": 0.375,
+      "specificity": 0.9375
+    },
+    "structural_pair_ranker/seed-1301/confirmatory": {
+      "accepted": 15,
+      "accepted_positive_recall": 0.8333333333333334,
+      "balanced_accuracy": 0.6388888888888888,
+      "canonical_partition_recall": null,
+      "cases": 36,
+      "fallbacks": 21,
+      "median_exact_check_ns": 404700.0,
+      "median_inference_ns": 67900.0,
+      "median_representation_ns": 553400.0,
+      "median_total_ns": 1039200.0,
+      "proposals": 25,
+      "sensitivity": 0.8333333333333334,
+      "specificity": 0.4444444444444444
+    },
+    "structural_pair_ranker/seed-1301/test": {
+      "accepted": 11,
+      "accepted_positive_recall": 0.6875,
+      "balanced_accuracy": 0.59375,
+      "canonical_partition_recall": null,
+      "cases": 32,
+      "fallbacks": 21,
+      "median_exact_check_ns": 629350.0,
+      "median_inference_ns": 68400.0,
+      "median_representation_ns": 720350.0,
+      "median_total_ns": 1533350.0,
+      "proposals": 19,
+      "sensitivity": 0.6875,
+      "specificity": 0.5
+    }
+  },
+  "pair_ranking": {
+    "cut_rank_gnn/seed-1049/confirmatory": {
+      "median_score_margin": 0.006598773499007393,
+      "pairs": 18,
+      "ranking_accuracy": 0.8888888888888888
+    },
+    "cut_rank_gnn/seed-1049/test": {
+      "median_score_margin": -0.03127167373895645,
+      "pairs": 16,
+      "ranking_accuracy": 0.375
+    },
+    "cut_rank_gnn/seed-1301/confirmatory": {
+      "median_score_margin": 0.054020158941617546,
+      "pairs": 18,
+      "ranking_accuracy": 0.8333333333333334
+    },
+    "cut_rank_gnn/seed-1301/test": {
+      "median_score_margin": -0.0051357312321929915,
+      "pairs": 16,
+      "ranking_accuracy": 0.5
+    },
+    "direct_cut_gnn/seed-1049/confirmatory": {
+      "median_score_margin": 0.00864848595377854,
+      "pairs": 18,
+      "ranking_accuracy": 0.7777777777777778
+    },
+    "direct_cut_gnn/seed-1049/test": {
+      "median_score_margin": -0.001992464065551758,
+      "pairs": 16,
+      "ranking_accuracy": 0.3125
+    },
+    "direct_cut_gnn/seed-1301/confirmatory": {
+      "median_score_margin": 0.2410072120014135,
+      "pairs": 18,
+      "ranking_accuracy": 0.8333333333333334
+    },
+    "direct_cut_gnn/seed-1301/test": {
+      "median_score_margin": -0.014428406953811646,
+      "pairs": 16,
+      "ranking_accuracy": 0.4375
+    },
+    "structural_pair_ranker/seed-1049/confirmatory": {
+      "median_score_margin": 0.005369976162910461,
+      "pairs": 18,
+      "ranking_accuracy": 1.0
+    },
+    "structural_pair_ranker/seed-1049/test": {
+      "median_score_margin": 0.0009249448776245117,
+      "pairs": 16,
+      "ranking_accuracy": 0.5625
+    },
+    "structural_pair_ranker/seed-1301/confirmatory": {
+      "median_score_margin": 0.007068455219268799,
+      "pairs": 18,
+      "ranking_accuracy": 1.0
+    },
+    "structural_pair_ranker/seed-1301/test": {
+      "median_score_margin": 0.0017677843570709229,
+      "pairs": 16,
+      "ranking_accuracy": 0.5625
+    }
+  },
+  "controls": {
+    "confirmatory": {
+      "always_abstain_accuracy": 0.5,
+      "cases": 36,
+      "exact_anf_accuracy": 1.0,
+      "median_exact_anf_ns": 594300.0
+    },
+    "test": {
+      "always_abstain_accuracy": 0.5,
+      "cases": 32,
+      "exact_anf_accuracy": 1.0,
+      "median_exact_anf_ns": 591050.0
+    }
+  },
+  "cost_ratios": {
+    "cut_rank_gnn/seed-1049/confirmatory": {
+      "exact_anf_over_safe_learned": 0.21101031440288306,
+      "safe_learned_over_exact_anf": 4.739104829210836
+    },
+    "cut_rank_gnn/seed-1049/test": {
+      "exact_anf_over_safe_learned": 0.1737871214348721,
+      "safe_learned_over_exact_anf": 5.754166314186617
+    },
+    "cut_rank_gnn/seed-1301/confirmatory": {
+      "exact_anf_over_safe_learned": 0.1986097650636634,
+      "safe_learned_over_exact_anf": 5.03499915867407
+    },
+    "cut_rank_gnn/seed-1301/test": {
+      "exact_anf_over_safe_learned": 0.18842751255280146,
+      "safe_learned_over_exact_anf": 5.3070806192369515
+    },
+    "direct_cut_gnn/seed-1049/confirmatory": {
+      "exact_anf_over_safe_learned": 0.21123156211124933,
+      "safe_learned_over_exact_anf": 4.734141006225812
+    },
+    "direct_cut_gnn/seed-1049/test": {
+      "exact_anf_over_safe_learned": 0.16778561594254326,
+      "safe_learned_over_exact_anf": 5.959986464766094
+    },
+    "direct_cut_gnn/seed-1301/confirmatory": {
+      "exact_anf_over_safe_learned": 0.2153846153846154,
+      "safe_learned_over_exact_anf": 4.642857142857143
+    },
+    "direct_cut_gnn/seed-1301/test": {
+      "exact_anf_over_safe_learned": 0.16875089221984296,
+      "safe_learned_over_exact_anf": 5.925894594365959
+    },
+    "structural_pair_ranker/seed-1049/confirmatory": {
+      "exact_anf_over_safe_learned": 0.7000412273985511,
+      "safe_learned_over_exact_anf": 1.428487295978462
+    },
+    "structural_pair_ranker/seed-1049/test": {
+      "exact_anf_over_safe_learned": 0.5454251834079269,
+      "safe_learned_over_exact_anf": 1.8334320277472296
+    },
+    "structural_pair_ranker/seed-1301/confirmatory": {
+      "exact_anf_over_safe_learned": 0.5718822170900693,
+      "safe_learned_over_exact_anf": 1.7486118122160526
+    },
+    "structural_pair_ranker/seed-1301/test": {
+      "exact_anf_over_safe_learned": 0.38546320148694035,
+      "safe_learned_over_exact_anf": 2.594281363674816
+    }
+  },
+  "criteria": {
+    "accepted_partition": false,
+    "classification": false,
+    "cost": false,
+    "pair_ranking": false,
+    "production_promotion": false,
+    "ranking_improvement": false,
+    "safety": true
+  },
+  "accepted_semantic_mismatches": 0,
+  "interpretation": "Direct cut supervision and same-pair ranking did not transfer consistently to the held-out square circuit and remained slower than exact ANF. Node-level variable scoring is required before independent-family evaluation."
+}

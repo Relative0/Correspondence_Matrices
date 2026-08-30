@@ -6,7 +6,7 @@ import json
 import random
 import statistics
 import time
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import numpy as np
 
@@ -91,6 +91,92 @@ def expr_vars_first_occurrence(expr) -> List[str]:
     rec(expr)
     return order
 
+
+def robdd_interaction_profile(expr, n: int) -> Tuple[List[int], List[List[int]]]:
+    """Return bounded occurrence counts and cross-subtree interaction weights."""
+    if type(n) is not int or not 1 <= n <= 64:
+        raise ValueError("ROBDD interaction order requires 1..64 variables")
+    occurrences = [0 for _ in range(n)]
+    weights = [[0 for _ in range(n)] for _ in range(n)]
+    supports: Dict[int, int] = {}
+    active: set[int] = set()
+    completed: set[int] = set()
+    stack = [(expr, False)]
+    while stack:
+        node, done = stack.pop()
+        key = id(node)
+        if done:
+            active.discard(key)
+            completed.add(key)
+            if isinstance(node, Var):
+                if type(node.i) is not int or not 0 <= node.i < n:
+                    raise ValueError("expression variable outside ROBDD universe")
+                occurrences[node.i] += 1
+                supports[key] = 1 << node.i
+            elif isinstance(node, Not):
+                supports[key] = supports[id(node.a)]
+            elif isinstance(node, (And, Or, Xor, Imp, Eqv)):
+                left, right = supports[id(node.a)], supports[id(node.b)]
+                left_only, right_only = left & ~right, right & ~left
+                # Interactions introduced in a small local support are more
+                # informative than broad root-level co-occurrence.
+                local_weight = 1 + n - (left | right).bit_count()
+                while left_only:
+                    low_bit = left_only & -left_only
+                    i = low_bit.bit_length() - 1
+                    remaining = right_only
+                    while remaining:
+                        high_bit = remaining & -remaining
+                        j = high_bit.bit_length() - 1
+                        weights[i][j] += local_weight
+                        weights[j][i] += local_weight
+                        remaining ^= high_bit
+                    left_only ^= low_bit
+                supports[key] = left | right
+            else:
+                raise TypeError(node)
+            continue
+        if key in completed:
+            continue
+        if key in active:
+            raise ValueError("cyclic expression")
+        active.add(key)
+        stack.append((node, True))
+        if isinstance(node, Var):
+            continue
+        if isinstance(node, Not):
+            stack.append((node.a, False))
+            continue
+        if isinstance(node, (And, Or, Xor, Imp, Eqv)):
+            stack.append((node.b, False))
+            stack.append((node.a, False))
+            continue
+        raise TypeError(node)
+    return occurrences, weights
+
+
+def robdd_interaction_order(expr, n: int) -> List[str]:
+    """Greedily keep variables with strong source interactions adjacent."""
+    occurrences, weights = robdd_interaction_profile(expr, n)
+    degrees = [sum(row) for row in weights]
+    remaining = set(range(n))
+    order: List[int] = []
+    while remaining:
+        if not order:
+            selected = max(remaining, key=lambda i: (degrees[i], occurrences[i], -i))
+        else:
+            selected = max(
+                remaining,
+                key=lambda i: (
+                    sum(weights[i][chosen] for chosen in order),
+                    degrees[i], occurrences[i], -i,
+                ),
+            )
+        order.append(selected)
+        remaining.remove(selected)
+    return [f"x{i}" for i in order]
+
+
 def robdd_variable_order(expr, n: int, policy: str, seed: Optional[int]) -> List[str]:
     names = [f"x{i}" for i in range(n)]
     if policy == "fixed":
@@ -99,6 +185,8 @@ def robdd_variable_order(expr, n: int, policy: str, seed: Optional[int]) -> List
         expr_order = expr_vars_first_occurrence(expr)
         present = set(expr_order)
         return expr_order + [name for name in names if name not in present]
+    if policy == "interaction":
+        return robdd_interaction_order(expr, n)
     if policy == "random":
         order = list(names)
         random.Random(0 if seed is None else int(seed)).shuffle(order)
@@ -322,6 +410,8 @@ def _empty_robdd_dd_result(
         "robdd_fastest_build_time_s": None,
         "robdd_smallest_node_build_time_s": None,
         "robdd_selected_build_time_s": None,
+        "robdd_selected_query_time_s": None,
+        "robdd_selected_build_plus_query_time_s": None,
         "robdd_selected_trial_index": None,
         "robdd_selection_objective": selection_objective,
         "robdd_selection_tiebreak": "nodes,build_time,trial_index",
@@ -364,6 +454,7 @@ def run_robdd_dd_backend(
     order_seed: Optional[int] = None,
     order_sweeps: int = 1,
     selection_objective: str = "composite",
+    query_assignments: Optional[Sequence[Mapping[str, int]]] = None,
     tt_ref: Optional[np.ndarray] = None,
     correctness_rng: Optional[np.random.Generator] = None,
     correctness_samples: int = 0,
@@ -371,11 +462,17 @@ def run_robdd_dd_backend(
     tt_extract_method: str = "all-assignments",
     tt_extract_max_n: int = 16,
 ) -> Dict[str, Any]:
-    if order_policy not in ("fixed", "expr", "random", "best-of-k"):
+    if order_policy not in ("fixed", "expr", "interaction", "random", "best-of-k"):
         raise ValueError(f"unknown ROBDD order policy: {order_policy!r}")
     sweeps = max(1, int(order_sweeps)) if order_policy == "best-of-k" else 1
-    if selection_objective not in ("composite", "min_nodes", "min_build_time"):
+    if selection_objective not in (
+            "composite", "min_nodes", "min_build_time", "build_plus_query"):
         raise ValueError(f"unknown ROBDD selection objective: {selection_objective!r}")
+    if query_assignments is None:
+        query_assignments = ()
+    if (not isinstance(query_assignments, Sequence) or len(query_assignments) > 256
+            or any(not isinstance(assignment, Mapping) for assignment in query_assignments)):
+        raise ValueError("ROBDD query assignments must be a bounded sequence")
     dd_module, error = select_dd_module(backend_preference)
     if dd_module is None:
         return _empty_robdd_dd_result(
@@ -426,6 +523,20 @@ def run_robdd_dd_backend(
                 rng,
                 correctness_samples,
             )
+            query_started = time.perf_counter()
+            query_digest = 0
+            for assignment in query_assignments:
+                normalized = {}
+                for name, value in assignment.items():
+                    if name not in var_name_map or type(value) not in (int, bool) or int(value) not in (0, 1):
+                        raise ValueError("invalid bounded ROBDD query assignment")
+                    normalized[name] = bool(value)
+                restricted = manager.let(normalized, root)
+                count = safe_bdd_node_count(manager, restricted)
+                query_digest ^= int(count or 0)
+                query_digest ^= int(restricted == manager.true) << 1
+                query_digest ^= int(restricted == manager.false) << 2
+            query_time = time.perf_counter() - query_started
             ident = bdd_backend_identity(manager)
             trials.append(
                 {
@@ -436,6 +547,9 @@ def run_robdd_dd_backend(
                     "node_count": final_nodes,
                     "nodes_before_reorder": reorder_result.get("robdd_nodes_before_reorder"),
                     "total_time": total_time,
+                    "query_time": query_time,
+                    "build_plus_query_time": total_time + query_time,
+                    "query_digest": query_digest,
                     "reorder": reorder_result,
                     "identity": ident,
                     "check": check,
@@ -457,6 +571,9 @@ def run_robdd_dd_backend(
                     "node_count": None,
                     "nodes_before_reorder": None,
                     "total_time": None,
+                    "query_time": None,
+                    "build_plus_query_time": None,
+                    "query_digest": None,
                     "reorder": maybe_reorder_dd(None, None, False, reorder_method) if False else {},
                     "identity": None,
                     "check": {"robdd_ok": False, "robdd_correctness_mode": "build_failed"},
@@ -484,7 +601,11 @@ def run_robdd_dd_backend(
             error=first_error,
             selection_objective=selection_objective,
         )
-    if selection_objective == "min_build_time":
+    if selection_objective == "build_plus_query":
+        selection_key = lambda t: (
+            float(t["build_plus_query_time"]), int(t["trial_index"]))
+        tiebreak = "build_plus_query_time,trial_index"
+    elif selection_objective == "min_build_time":
         selection_key = lambda t: (float(t["build_time"]), int(t["trial_index"]))
         tiebreak = "build_time,trial_index"
     elif selection_objective == "min_nodes":
@@ -545,6 +666,8 @@ def run_robdd_dd_backend(
         "robdd_fastest_build_time_s": fastest["build_time"],
         "robdd_smallest_node_build_time_s": smallest_nodes["build_time"],
         "robdd_selected_build_time_s": best["build_time"],
+        "robdd_selected_query_time_s": best["query_time"],
+        "robdd_selected_build_plus_query_time_s": best["build_plus_query_time"],
         "robdd_selected_trial_index": best["trial_index"],
         "robdd_selection_objective": selection_objective,
         "robdd_selection_tiebreak": tiebreak,
@@ -559,6 +682,9 @@ def run_robdd_dd_backend(
                     "order": compact_order_repr(t["order"]),
                     "order_generation_time_s": t["order_generation_time"],
                     "build_time_s": t["build_time"],
+                    "query_time_s": t["query_time"],
+                    "build_plus_query_time_s": t["build_plus_query_time"],
+                    "query_digest": t["query_digest"],
                     "reorder_time_s": t.get("reorder", {}).get("robdd_reorder_time_s"),
                     "trial_total_time_s": t["trial_total_time"],
                     "node_count": t["node_count"],
@@ -645,7 +771,7 @@ def robdd_equivalence_check(
     compare_repeat: int = 1000,
     expected: Optional[bool] = None,
 ) -> Dict[str, Any]:
-    if order_policy not in ("fixed", "expr", "random", "best-of-k"):
+    if order_policy not in ("fixed", "expr", "interaction", "random", "best-of-k"):
         raise ValueError(f"unknown ROBDD order policy: {order_policy!r}")
     repeat = max(1, int(compare_repeat))
     sweeps = max(1, int(order_sweeps)) if order_policy == "best-of-k" else 1

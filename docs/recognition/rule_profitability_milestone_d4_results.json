@@ -1,0 +1,178 @@
+{
+  "schema": "crse-rule-profitability-milestone-d4-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/rule-profitability-20260829-002",
+  "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/rule-profitability-20260829-002.json",
+    "artifacts_verified": 7,
+    "cache_hardening_checks": 5,
+    "cones_per_version": 32,
+    "measurement_rows_verified": 48,
+    "proof_rows_reproduced": 16,
+    "schema": "crse-rule-profitability-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass",
+    "versions_verified": 4
+  },
+  "pack": {
+    "artifact_is_inert": true,
+    "artifact_sha256": "f5aff35bb7f742670a1d13b6a1b1c6d382db84d2bd64b1c1a2ca5d64f22c5dca",
+    "compile_ns": 346200,
+    "pack_id": "boolean-aig-factor-core/v2",
+    "proof_ns": 968000,
+    "proof_rows": 16,
+    "rule_ids": [
+      "aig-xor-dnf/v1",
+      "aig-demorgan-or/v1",
+      "boolean-common-factor/v1"
+    ]
+  },
+  "data": {
+    "versions": 4,
+    "cones_per_version": 32,
+    "reuse_schedule": [
+      1,
+      8,
+      32,
+      128
+    ],
+    "changes": {
+      "v1": 0,
+      "v2": 4,
+      "v3": 6,
+      "v4": 4
+    },
+    "source": "generated related DAGs with modifications, additions, removals, and reverts"
+  },
+  "timing": {
+    "by_expected_reuses": {
+      "1": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.41846039431814097,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.2554189230274642,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.9812374691093964
+      },
+      "128": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.9590718040468137,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.8738798553883492,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.9552349437912769
+      },
+      "32": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.7611203709272941,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.5946857009740619,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.7483121436507365
+      },
+      "8": {
+        "cached_pack_speedup_over_no_rewrite_geomean": 0.5445378063702272,
+        "fresh_pack_speedup_over_no_rewrite_geomean": 0.3715003848789356,
+        "gated_cached_speedup_over_no_rewrite_geomean": 0.9839817497311706
+      }
+    },
+    "gated_sequence_speedup_over_cached_pack": 1.1449755274261604,
+    "gated_sequence_speedup_over_fresh_pack": 1.3661080168776372,
+    "gated_sequence_speedup_over_no_rewrite": 0.8913940928270042,
+    "median_sequence_total_ns": {
+      "cached_pack": 67839800,
+      "fresh_pack": 80941900,
+      "gated_cached": 59250000,
+      "no_rewrite": 52815100
+    },
+    "optimistic_free_oracle": {
+      "basis": "sum of per-cone measured minima; excludes selector and cross-arm orchestration overhead",
+      "cached_pack_oracle_ns": 51916900,
+      "cached_pack_oracle_speedup": 1.0173007248121517,
+      "fresh_pack_oracle_ns": 52758100,
+      "fresh_pack_oracle_speedup": 1.0010804028196618,
+      "no_rewrite_cone_total_ns": 52815100
+    },
+    "timing_is_machine_specific": true,
+    "versions": {
+      "v1": {
+        "declared_changed_cones": 0,
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 0,
+        "gated_cache_misses": 16,
+        "gated_invalidations": 0,
+        "gated_speedup_over_fresh_pack": 1.1572166133891406,
+        "gated_speedup_over_no_rewrite": 0.7561748269438631,
+        "median_total_ns": {
+          "cached_pack": 22125700,
+          "fresh_pack": 20127700,
+          "gated_cached": 17393200,
+          "no_rewrite": 13152300
+        }
+      },
+      "v2": {
+        "declared_changed_cones": 4,
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 14,
+        "gated_cache_misses": 2,
+        "gated_invalidations": 2,
+        "gated_speedup_over_fresh_pack": 1.454101071094817,
+        "gated_speedup_over_no_rewrite": 0.9470922291711595,
+        "median_total_ns": {
+          "cached_pack": 15134000,
+          "fresh_pack": 20228000,
+          "gated_cached": 13911000,
+          "no_rewrite": 13175000
+        }
+      },
+      "v3": {
+        "declared_changed_cones": 6,
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 14,
+        "gated_cache_misses": 2,
+        "gated_invalidations": 2,
+        "gated_speedup_over_fresh_pack": 1.4485887530281962,
+        "gated_speedup_over_no_rewrite": 0.9503734178122447,
+        "median_total_ns": {
+          "cached_pack": 15478000,
+          "fresh_pack": 20211000,
+          "gated_cached": 13952200,
+          "no_rewrite": 13259800
+        }
+      },
+      "v4": {
+        "declared_changed_cones": 4,
+        "gate_applies": 16,
+        "gate_skips": 16,
+        "gated_cache_hits": 14,
+        "gated_cache_misses": 2,
+        "gated_invalidations": 2,
+        "gated_speedup_over_fresh_pack": 1.4619019492025989,
+        "gated_speedup_over_no_rewrite": 0.9640557244320228,
+        "median_total_ns": {
+          "cached_pack": 15121500,
+          "fresh_pack": 20295000,
+          "gated_cached": 13882600,
+          "no_rewrite": 13383600
+        }
+      }
+    }
+  },
+  "hardening": {
+    "cache_reload_entries": 3,
+    "cache_reload_hits": 3,
+    "capacity_refused": true,
+    "collision_invalidated": true,
+    "collision_reason": "source_changed",
+    "duplicate_rule_ids": false,
+    "pack_change_invalidated": true,
+    "pack_change_reason": "pack_changed",
+    "snapshot_sha256": "6936c2c724f67dae5a1ea36aff0fc163d8432b2c5571579edb2877b978c8facf",
+    "strict_rule_decrease": true
+  },
+  "criteria": {
+    "gated_beats_fresh_pack": true,
+    "gated_beats_no_rewrite": false,
+    "hardening_met": true,
+    "production_promotion": false,
+    "safety_met": true
+  },
+  "semantic_mismatches": 0,
+  "interpretation": "The gate removed much of fresh-matcher overhead but remained slower than no rewrite; the free cached oracle exposed only 1.7% generated headroom."
+}

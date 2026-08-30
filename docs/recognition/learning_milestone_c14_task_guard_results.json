@@ -1,0 +1,126 @@
+{
+  "criteria": {
+    "exact": true,
+    "global_advice_disable_exact": true,
+    "latency_dense_tail_guard": true,
+    "local_task_guard_gate": true,
+    "platform_identity_bound": true,
+    "policy_frozen_before_input_load": true,
+    "production_promotion": false,
+    "shadow_exact": true,
+    "throughput_no_material_regret_3pct": true
+  },
+  "date": "2026-08-30",
+  "evaluation_cases": 76,
+  "frozen_policy": "docs/recognition/runs/task-guard-shadow-20260830-001/frozen_task_policy.json",
+  "frozen_policy_sha256": "31dd388d6755fd602ef65694e949b542fdbe3fc6e94b480990e56b38f906439d",
+  "interpretation": "A frozen pre-execution task contract kept throughput inside 3% regret, retained dense-tail protection for latency tasks, and preserved exact production/shadow partitions. It remains platform-bound and disabled for production.",
+  "measurement_rows": 4104,
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+  "run": "docs/recognition/runs/task-guard-shadow-20260830-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "C14 was a bounded local task-policy and shadow study",
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c14-task-guard-summary/v1",
+  "semantic_mismatches": 0,
+  "split_summary": {
+    "c12_sealed_a": {
+      "latency_p95_speedup_over_advice_disabled": 0.8017083587553386,
+      "latency_selection_counts": {
+        "set_source_anf": 20
+      },
+      "latency_speedup_over_advice_disabled": 0.8892395077311455,
+      "shadow_sequence_ns": 1678400,
+      "throughput_selection_counts": {
+        "set_source_anf": 20
+      },
+      "throughput_speedup_over_advice_disabled": 0.9998817267888823
+    },
+    "c12_sealed_b": {
+      "latency_p95_speedup_over_advice_disabled": 0.7375657096643753,
+      "latency_selection_counts": {
+        "set_source_anf": 20
+      },
+      "latency_speedup_over_advice_disabled": 0.7387012135126271,
+      "shadow_sequence_ns": 2727900,
+      "throughput_selection_counts": {
+        "set_source_anf": 20
+      },
+      "throughput_speedup_over_advice_disabled": 0.9729157667386609
+    },
+    "c6_confirmatory_dev": {
+      "latency_p95_speedup_over_advice_disabled": 27.87554473211997,
+      "latency_selection_counts": {
+        "adaptive_set_to_packed": 13,
+        "set_source_anf": 23
+      },
+      "latency_speedup_over_advice_disabled": 18.91838934599588,
+      "shadow_sequence_ns": 22763800,
+      "throughput_selection_counts": {
+        "set_source_anf": 36
+      },
+      "throughput_speedup_over_advice_disabled": 1.0067500450196634
+    }
+  },
+  "status": "complete",
+  "verification": {
+    "evaluation_cases": 76,
+    "files_verified": 5,
+    "latency_dense_tail_guard": true,
+    "local_task_guard_gate": true,
+    "manifest_sha256": "081bfb044e692ea0416e193d30d85472a416d0da72c1f25d7b069b26a75b38bc",
+    "path": "docs/recognition/verification/task-guard-shadow-20260830-001.json",
+    "production_promotion": false,
+    "run": "docs/recognition/runs/task-guard-shadow-20260830-001",
+    "schema": "crse-task-guard-shadow-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "semantic_rows_replayed": 456,
+    "shadow_exact": true,
+    "source_files_verified": 5,
+    "split_summary": {
+      "c12_sealed_a": {
+        "latency_p95_speedup_over_advice_disabled": 0.8017083587553386,
+        "latency_selection_counts": {
+          "set_source_anf": 20
+        },
+        "latency_speedup_over_advice_disabled": 0.8892395077311455,
+        "shadow_sequence_ns": 1678400,
+        "throughput_selection_counts": {
+          "set_source_anf": 20
+        },
+        "throughput_speedup_over_advice_disabled": 0.9998817267888823
+      },
+      "c12_sealed_b": {
+        "latency_p95_speedup_over_advice_disabled": 0.7375657096643753,
+        "latency_selection_counts": {
+          "set_source_anf": 20
+        },
+        "latency_speedup_over_advice_disabled": 0.7387012135126271,
+        "shadow_sequence_ns": 2727900,
+        "throughput_selection_counts": {
+          "set_source_anf": 20
+        },
+        "throughput_speedup_over_advice_disabled": 0.9729157667386609
+      },
+      "c6_confirmatory_dev": {
+        "latency_p95_speedup_over_advice_disabled": 27.87554473211997,
+        "latency_selection_counts": {
+          "adaptive_set_to_packed": 13,
+          "set_source_anf": 23
+        },
+        "latency_speedup_over_advice_disabled": 18.91838934599588,
+        "shadow_sequence_ns": 22763800,
+        "throughput_selection_counts": {
+          "set_source_anf": 36
+        },
+        "throughput_speedup_over_advice_disabled": 1.0067500450196634
+      }
+    },
+    "status": "pass",
+    "throughput_no_material_regret_3pct": true,
+    "timing_samples_checked": 4104
+  }
+}

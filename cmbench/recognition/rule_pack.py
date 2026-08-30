@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import hashlib
+import itertools
 import json
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from cm_expr_serde import expr_to_json_dag
+from cm_expr_serde import expr_from_json, expr_to_json_dag
 from cm_exprlib import And, Eqv, Expr, Imp, Not, Or, Var, Xor
 from cmbench.expr.eval import eval_expr_assignment
 
@@ -21,7 +22,10 @@ from .proved_rules import aig_xor_expr, canonical
 
 PACK_SCHEMA = "crse-proved-rule-pack/v1"
 PACK_ID = "boolean-aig-core/v1"
+PACK_SCHEMA_V2 = "crse-proved-rule-pack/v2"
+PACK_ID_V2 = "boolean-aig-factor-core/v2"
 OR_RULE_ID = "aig-demorgan-or/v1"
+FACTOR_RULE_ID = "boolean-common-factor/v1"
 OR_PATTERN = {
     "op": "not",
     "a": {"op": "and", "a": {"op": "not", "a": "$A"},
@@ -29,9 +33,15 @@ OR_PATTERN = {
 }
 OR_REPLACEMENT = {"op": "or", "a": "$A", "b": "$B"}
 RULE_PRIORITY = (XOR_RULE_ID, OR_RULE_ID)
+RULE_PRIORITY_V2 = (XOR_RULE_ID, OR_RULE_ID, FACTOR_RULE_ID)
 SIDE_CONDITIONS = [
     "A and B bind to structurally identical pure Boolean subexpressions at every repeated occurrence",
     "the source AST contains only admitted Boolean operators",
+]
+SIDE_CONDITIONS_V2 = [
+    "every repeated metavariable binds to a structurally identical pure Boolean subexpression",
+    "the source AST contains only admitted Boolean operators",
+    "the selected rewrite strictly decreases AST operator count",
 ]
 
 
@@ -39,38 +49,71 @@ def aig_or_expr(a: Expr, b: Expr) -> Expr:
     return Not(And(Not(a), Not(b)))
 
 
-def _proof_rows(rule_id: str) -> list[dict[str, Any]]:
-    a, b = Var(0), Var(1)
+def factored_or_expr(a: Expr, b: Expr, c: Expr) -> Expr:
+    return Or(And(a, b), And(a, c))
+
+
+def _rule_expressions(rule_id: str) -> tuple[Expr, Expr, tuple[str, ...]]:
+    a, b, c = Var(0), Var(1), Var(2)
     if rule_id == XOR_RULE_ID:
-        lhs, rhs = aig_xor_expr(a, b), Xor(a, b)
+        return aig_xor_expr(a, b), Xor(a, b), ("A", "B")
     elif rule_id == OR_RULE_ID:
-        lhs, rhs = aig_or_expr(a, b), Or(a, b)
+        return aig_or_expr(a, b), Or(a, b), ("A", "B")
+    elif rule_id == FACTOR_RULE_ID:
+        return factored_or_expr(a, b, c), And(a, Or(b, c)), ("A", "B", "C")
     else:
         raise ValueError("unknown proved pack rule")
+
+
+def _proof_rows(rule_id: str) -> list[dict[str, Any]]:
+    lhs, rhs, metavariables = _rule_expressions(rule_id)
     rows = []
-    for av in (0, 1):
-        for bv in (0, 1):
-            assignment = {"x0": av, "x1": bv}
-            left = eval_expr_assignment(lhs, assignment)
-            right = eval_expr_assignment(rhs, assignment)
-            if left != right:
-                raise RuntimeError("proved pack rule disagreement")
-            rows.append({"assignment": {"A": av, "B": bv}, "lhs": left, "rhs": right})
+    for values in itertools.product((0, 1), repeat=len(metavariables)):
+        expression_assignment = {f"x{index}": value for index, value in enumerate(values)}
+        assignment = dict(zip(metavariables, values))
+        left = eval_expr_assignment(lhs, expression_assignment)
+        right = eval_expr_assignment(rhs, expression_assignment)
+        if left != right:
+            raise RuntimeError("proved pack rule disagreement")
+        rows.append({"assignment": assignment, "lhs": left, "rhs": right})
     return rows
 
 
-def _metadata(rule_id: str) -> dict[str, Any]:
+def _metadata(rule_id: str, *, version: int = 1) -> dict[str, Any]:
     if rule_id == XOR_RULE_ID:
         pattern, replacement, label = XOR_PATTERN, XOR_REPLACEMENT, "exclusive-or AIG macro"
     elif rule_id == OR_RULE_ID:
         pattern, replacement, label = OR_PATTERN, OR_REPLACEMENT, "De Morgan AIG-or macro"
+    elif rule_id == FACTOR_RULE_ID:
+        pattern = {"op": "or", "a": {"op": "and", "a": "$A", "b": "$B"},
+                   "b": {"op": "and", "a": "$A", "b": "$C"}}
+        replacement = {"op": "and", "a": "$A",
+                       "b": {"op": "or", "a": "$B", "b": "$C"}}
+        label = "common-factor contraction"
     else:
         raise ValueError("unknown proved pack rule")
-    return {"rule_id": rule_id, "label": label, "metavariables": ["A", "B"],
+    metavariables = list(_rule_expressions(rule_id)[2])
+    result = {"rule_id": rule_id, "label": label, "metavariables": metavariables,
             "domain": "pure total Boolean values {0,1}", "pattern": pattern,
             "replacement": replacement, "commutative_operators": ["and", "or", "xor"],
-            "side_conditions": SIDE_CONDITIONS,
+            "side_conditions": SIDE_CONDITIONS if version == 1 else SIDE_CONDITIONS_V2,
             "proof_method": "exhaustive truth evaluation over both Boolean metavariables"}
+    if version >= 2:
+        result["termination_measure"] = "strict_ast_operator_count_decrease"
+        result["overlap_policy"] = ("priority-resolved-with-aig-xor" if rule_id == OR_RULE_ID
+                                    else "wins-over-demorgan-or" if rule_id == XOR_RULE_ID
+                                    else "root-shape-disjoint")
+        result["proof_method"] = "exhaustive truth evaluation over all Boolean metavariables"
+    return result
+
+
+def _variant(data: dict[str, Any]) -> tuple[int, tuple[str, ...]]:
+    identity = (data.get("schema"), data.get("pack_id"))
+    if identity == (PACK_SCHEMA, PACK_ID):
+        return 1, RULE_PRIORITY
+    if identity == (PACK_SCHEMA_V2, PACK_ID_V2):
+        return 2, RULE_PRIORITY_V2
+    raise ValueError("invalid proved-rule-pack version")
 
 
 @dataclass(frozen=True)
@@ -89,31 +132,34 @@ class ProvedRulePack:
         keys = {"schema", "pack_id", "priority", "rules", "payload_sha256"}
         if type(data) is not dict or set(data) != keys:
             raise ValueError("invalid proved-rule-pack fields")
+        version, priority = _variant(data)
         payload = {key: data[key] for key in keys - {"payload_sha256"}}
-        if (data["schema"] != PACK_SCHEMA or data["pack_id"] != PACK_ID
-                or data["priority"] != list(RULE_PRIORITY)
-                or type(data["rules"]) is not list or len(data["rules"]) != 2
+        if (data["priority"] != list(priority)
+                or type(data["rules"]) is not list or len(data["rules"]) != len(priority)
                 or hashlib.sha256(canonical(payload)).hexdigest() != data["payload_sha256"]):
             raise ValueError("invalid proved-rule-pack identity")
-        for rule, rule_id in zip(data["rules"], RULE_PRIORITY):
-            expected_keys = set(_metadata(rule_id)) | {"proof_rows", "proof_rows_sha256"}
+        patterns = []
+        for rule, rule_id in zip(data["rules"], priority):
+            metadata_template = _metadata(rule_id, version=version)
+            expected_keys = set(metadata_template) | {"proof_rows", "proof_rows_sha256"}
             if type(rule) is not dict or set(rule) != expected_keys:
                 raise ValueError("invalid proved-rule entry fields")
-            metadata = {key: rule[key] for key in _metadata(rule_id)}
+            metadata = {key: rule[key] for key in metadata_template}
             rows = rule["proof_rows"]
-            if (metadata != _metadata(rule_id) or type(rows) is not list or len(rows) != 4
+            expected_rows = _proof_rows(rule_id)
+            if (metadata != metadata_template or type(rows) is not list
+                    or len(rows) != len(expected_rows)
                     or hashlib.sha256(canonical(rows)).hexdigest() != rule["proof_rows_sha256"]):
                 raise ValueError("invalid proved-rule entry identity")
-            operator = (lambda a, b: a ^ b) if rule_id == XOR_RULE_ID else (lambda a, b: a | b)
-            for row, (a, b) in zip(rows, ((0, 0), (0, 1), (1, 0), (1, 1))):
-                expected = operator(a, b)
+            for row, expected in zip(rows, expected_rows):
                 if (type(row) is not dict or type(row.get("assignment")) is not dict
-                        or any(type(value) is not int for value in
-                               (row["assignment"].get("A"), row["assignment"].get("B"),
-                                row.get("lhs"), row.get("rhs")))
-                        or row != {"assignment": {"A": a, "B": b},
-                                   "lhs": expected, "rhs": expected}):
+                        or row != expected or any(type(value) is not int for value in
+                        (*row.get("assignment", {}).values(), row.get("lhs"), row.get("rhs")))):
                     raise ValueError("proved-rule-pack truth row disagreement")
+            encoded_pattern = canonical(rule["pattern"])
+            if encoded_pattern in patterns:
+                raise ValueError("duplicate proved-rule pattern")
+            patterns.append(encoded_pattern)
         return cls(json.loads(json.dumps(data, allow_nan=False)))
 
     def save(self, path: Path) -> None:
@@ -138,13 +184,22 @@ class ProvedRulePack:
 
 
 def prove_rule_pack() -> ProvedRulePack:
+    return _prove_rule_pack(1, RULE_PRIORITY)
+
+
+def prove_rule_pack_v2() -> ProvedRulePack:
+    return _prove_rule_pack(2, RULE_PRIORITY_V2)
+
+
+def _prove_rule_pack(version: int, priority: tuple[str, ...]) -> ProvedRulePack:
     rules = []
-    for rule_id in RULE_PRIORITY:
+    for rule_id in priority:
         rows = _proof_rows(rule_id)
-        rules.append({**_metadata(rule_id), "proof_rows": rows,
+        rules.append({**_metadata(rule_id, version=version), "proof_rows": rows,
                       "proof_rows_sha256": hashlib.sha256(canonical(rows)).hexdigest()})
-    payload = {"schema": PACK_SCHEMA, "pack_id": PACK_ID,
-               "priority": list(RULE_PRIORITY), "rules": rules}
+    payload = {"schema": PACK_SCHEMA if version == 1 else PACK_SCHEMA_V2,
+               "pack_id": PACK_ID if version == 1 else PACK_ID_V2,
+               "priority": list(priority), "rules": rules}
     return ProvedRulePack.from_dict({**payload,
         "payload_sha256": hashlib.sha256(canonical(payload)).hexdigest()})
 
@@ -200,9 +255,9 @@ class PackRewrite:
 
 
 class CompiledRulePack:
-    """Fixed two-rule matcher; the proof artifact cannot supply executable behavior."""
+    """Fixed bounded matcher; the inert proof artifact cannot supply executable behavior."""
 
-    def __init__(self, pack_sha256: str):
+    def __init__(self, pack_sha256: str, rule_ids: tuple[str, ...] = RULE_PRIORITY):
         if type(pack_sha256) is not str or len(pack_sha256) != 64:
             raise ValueError("invalid compiled pack identity")
         try:
@@ -211,7 +266,10 @@ class CompiledRulePack:
             raise ValueError("invalid compiled pack identity") from exc
         if len(decoded) != 32:
             raise ValueError("invalid compiled pack identity")
+        if rule_ids not in (RULE_PRIORITY, RULE_PRIORITY_V2):
+            raise ValueError("unsupported compiled pack rules")
         self.pack_sha256 = pack_sha256
+        self.rule_ids = rule_ids
 
     @staticmethod
     def _signed_pairs(product: Expr) -> list[tuple[Expr, Expr]]:
@@ -243,14 +301,32 @@ class CompiledRulePack:
             return node.a.a.a, node.a.b.a
         return None
 
-    def matches(self, node: Expr, uid_by_id: dict[int, int]) -> list[tuple[str, tuple[Expr, Expr]]]:
+    @staticmethod
+    def _factor_match(node: Expr, uid_by_id: dict[int, int]) -> tuple[Expr, Expr, Expr] | None:
+        if not isinstance(node, Or) or not isinstance(node.a, And) or not isinstance(node.b, And):
+            return None
+        left = (node.a.a, node.a.b)
+        right = (node.b.a, node.b.b)
+        for left_index, left_term in enumerate(left):
+            for right_index, right_term in enumerate(right):
+                if uid_by_id[id(left_term)] == uid_by_id[id(right_term)]:
+                    return left_term, left[1 - left_index], right[1 - right_index]
+        return None
+
+    def matches(self, node: Expr, uid_by_id: dict[int, int]) -> list[tuple[str, tuple[Expr, ...]]]:
         matches = []
-        xor = self._xor_match(node, uid_by_id)
-        if xor is not None:
-            matches.append((XOR_RULE_ID, xor))
-        aig_or = self._or_match(node)
-        if aig_or is not None:
-            matches.append((OR_RULE_ID, aig_or))
+        if XOR_RULE_ID in self.rule_ids:
+            xor = self._xor_match(node, uid_by_id)
+            if xor is not None:
+                matches.append((XOR_RULE_ID, xor))
+        if OR_RULE_ID in self.rule_ids:
+            aig_or = self._or_match(node)
+            if aig_or is not None:
+                matches.append((OR_RULE_ID, aig_or))
+        if FACTOR_RULE_ID in self.rule_ids:
+            factor = self._factor_match(node, uid_by_id)
+            if factor is not None:
+                matches.append((FACTOR_RULE_ID, factor))
         return matches
 
     def rewrite(self, expr: Expr, n_vars: int, *, max_nodes: int = 4096,
@@ -266,7 +342,7 @@ class CompiledRulePack:
         intern: dict[tuple[Any, ...], int] = {}
         proposals = selected_sites = conflicts = applications = rejected = 0
         match_ns = candidate_ns = 0
-        counts = {rule_id: 0 for rule_id in RULE_PRIORITY}
+        counts = {rule_id: 0 for rule_id in self.rule_ids}
         source_sha = structural_digest(expr)
         for original in nodes:
             children = tuple(memo[id(child)] for child in _children(original))
@@ -281,7 +357,14 @@ class CompiledRulePack:
                 conflicts += int(len(matches) > 1)
                 rule_id, bindings = matches[0]
                 started = time.perf_counter_ns()
-                candidate = Xor(*bindings) if rule_id == XOR_RULE_ID else Or(*bindings)
+                if rule_id == XOR_RULE_ID:
+                    candidate = Xor(*bindings)
+                elif rule_id == OR_RULE_ID:
+                    candidate = Or(*bindings)
+                else:
+                    combined = Or(bindings[1], bindings[2])
+                    _uid(combined, uid_by_id, intern)
+                    candidate = And(bindings[0], combined)
                 _uid(candidate, uid_by_id, intern)
                 candidate_ns += time.perf_counter_ns() - started
                 accepted = verify(rule_id, rebuilt, candidate) if verify is not None else True
@@ -302,7 +385,7 @@ class CompiledRulePack:
 
 def compile_rule_pack(pack: ProvedRulePack) -> CompiledRulePack:
     validated = ProvedRulePack.from_dict(pack.to_dict())
-    return CompiledRulePack(validated.digest)
+    return CompiledRulePack(validated.digest, tuple(validated.document["priority"]))
 
 
 def _identity_bytes(expr: Expr) -> bytes:
@@ -333,10 +416,12 @@ class CachedConeRewrite:
 class StructuralConeCache:
     """Exact per-cone cache with canonical source equality and explicit invalidation."""
 
-    def __init__(self, max_entries: int = 256):
+    def __init__(self, max_entries: int = 256,
+                 identity_hasher: Callable[[bytes], str] | None = None):
         if type(max_entries) is not int or not 1 <= max_entries <= 256:
             raise ValueError("invalid structural cone cache bound")
         self.max_entries = max_entries
+        self._identity_hasher = identity_hasher or (lambda value: hashlib.sha256(value).hexdigest())
         self._entries: dict[str, ConeCacheEntry] = {}
 
     @property
@@ -349,7 +434,9 @@ class StructuralConeCache:
             raise ValueError("invalid cone cache identity")
         started = time.perf_counter_ns()
         source_bytes = _identity_bytes(expr)
-        source_sha = hashlib.sha256(source_bytes).hexdigest()
+        source_sha = self._identity_hasher(source_bytes)
+        if type(source_sha) is not str or len(source_sha) != 64:
+            raise ValueError("invalid structural identity digest")
         identity_ns = max(1, time.perf_counter_ns() - started)
         prior = self._entries.get(cone_id)
         if (prior is not None and prior.pack_sha256 == matcher.pack_sha256
@@ -376,3 +463,95 @@ class StructuralConeCache:
         for cone_id in missing:
             del self._entries[cone_id]
         return len(missing)
+
+    def to_document(self) -> dict[str, Any]:
+        entries = []
+        for cone_id in sorted(self._entries):
+            entry = self._entries[cone_id]
+            rewrite = entry.rewrite
+            entries.append({
+                "cone_id": cone_id,
+                "source": json.loads(entry.source_bytes),
+                "source_sha256": entry.source_sha256,
+                "pack_sha256": entry.pack_sha256,
+                "result": expr_to_json_dag(rewrite.result),
+                "rewrite": {
+                    "source_sha256": rewrite.source_sha256,
+                    "result_sha256": rewrite.result_sha256,
+                    "visited_nodes": rewrite.visited_nodes,
+                    "proposals": rewrite.proposals,
+                    "selected_sites": rewrite.selected_sites,
+                    "conflicts": rewrite.conflicts,
+                    "applications": rewrite.applications,
+                    "rejected": rewrite.rejected,
+                    "applications_by_rule": rewrite.applications_by_rule,
+                },
+            })
+        payload = {"schema": "crse-structural-cone-cache/v1",
+                   "max_entries": self.max_entries, "entries": entries}
+        return {**payload, "payload_sha256": hashlib.sha256(canonical(payload)).hexdigest()}
+
+    def save(self, path: Path) -> None:
+        document = self.to_document()
+        with path.open("x", encoding="utf-8", newline="\n") as handle:
+            json.dump(document, handle, indent=2, sort_keys=True, allow_nan=False)
+            handle.write("\n")
+
+    @classmethod
+    def load(cls, path: Path, matcher: CompiledRulePack, *, max_bytes: int = 2_000_000,
+             identity_hasher: Callable[[bytes], str] | None = None) -> "StructuralConeCache":
+        raw = path.read_bytes()
+        if len(raw) > max_bytes:
+            raise ValueError("structural cone cache artifact exceeds size bound")
+        def pairs(items):
+            result = {}
+            for key, value in items:
+                if key in result:
+                    raise ValueError("duplicate structural cone cache JSON key")
+                result[key] = value
+            return result
+        document = json.loads(raw, object_pairs_hook=pairs,
+            parse_constant=lambda value: (_ for _ in ()).throw(ValueError("nonfinite cache value")))
+        if type(document) is not dict or set(document) != {
+                "schema", "max_entries", "entries", "payload_sha256"}:
+            raise ValueError("invalid structural cone cache fields")
+        payload = {key: document[key] for key in document if key != "payload_sha256"}
+        if (document["schema"] != "crse-structural-cone-cache/v1"
+                or hashlib.sha256(canonical(payload)).hexdigest() != document["payload_sha256"]
+                or type(document["entries"]) is not list):
+            raise ValueError("invalid structural cone cache identity")
+        cache = cls(document["max_entries"], identity_hasher=identity_hasher)
+        if len(document["entries"]) > cache.max_entries:
+            raise ValueError("serialized structural cone cache exceeds entry bound")
+        for item in document["entries"]:
+            if type(item) is not dict or set(item) != {
+                    "cone_id", "source", "source_sha256", "pack_sha256", "result", "rewrite"}:
+                raise ValueError("invalid serialized cone cache entry")
+            cone_id = item["cone_id"]
+            if type(cone_id) is not str or not cone_id or cone_id in cache._entries:
+                raise ValueError("invalid or duplicate serialized cone identity")
+            source_bytes = canonical(item["source"])
+            source_sha = cache._identity_hasher(source_bytes)
+            if (source_sha != item["source_sha256"]
+                    or item["pack_sha256"] != matcher.pack_sha256):
+                raise ValueError("serialized cone source or pack identity disagreement")
+            source = expr_from_json(item["source"])
+            reproduced = matcher.rewrite(source, 8)
+            recorded = item["rewrite"]
+            expected = {
+                "source_sha256": reproduced.source_sha256,
+                "result_sha256": reproduced.result_sha256,
+                "visited_nodes": reproduced.visited_nodes,
+                "proposals": reproduced.proposals,
+                "selected_sites": reproduced.selected_sites,
+                "conflicts": reproduced.conflicts,
+                "applications": reproduced.applications,
+                "rejected": reproduced.rejected,
+                "applications_by_rule": reproduced.applications_by_rule,
+            }
+            result = expr_from_json(item["result"])
+            if recorded != expected or structural_digest(result) != reproduced.result_sha256:
+                raise ValueError("serialized cone rewrite does not reproduce")
+            cache._entries[cone_id] = ConeCacheEntry(
+                source_bytes, source_sha, matcher.pack_sha256, reproduced)
+        return cache

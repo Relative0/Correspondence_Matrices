@@ -12,6 +12,7 @@ except ImportError:
 class ROBDDOrderPolicy(StrEnum):
     FIXED = "fixed"
     EXPR = "expr"
+    INTERACTION = "interaction"
     RANDOM = "random"
     BEST_OF_K = "best-of-k"
 

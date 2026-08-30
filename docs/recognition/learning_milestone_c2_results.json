@@ -1,0 +1,325 @@
+{
+  "schema": "crse-learning-milestone-c2-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/variable-decomposition-20260829-001",
+  "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/variable-decomposition-20260829-001.json",
+    "classification_rows_recomputed": 768,
+    "exact_control_rows_checked": 96,
+    "generated_functions_regenerated": 160,
+    "limits": {
+      "max_parameters": 99953,
+      "max_variables": 10,
+      "threads": 2,
+      "wall_seconds": 10.105023000010988
+    },
+    "manifest_sha256": "392a30807bd503ae553b318b53e2067becfabff143539ba5fc93090ad100dcd1",
+    "models_loaded": 8,
+    "natural_functions_reloaded": 32,
+    "run": "C:\\Users\\brian\\Documents\\CM_Computation\\docs\\recognition\\runs\\variable-decomposition-20260829-001",
+    "scalar_truth_tables_recomputed": 192,
+    "schema": "crse-variable-decomposition-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass",
+    "witness_mismatches": 0
+  },
+  "data": {
+    "generated_functions": 160,
+    "generated_parent_pairs": 80,
+    "training": 96,
+    "validation": 24,
+    "test": 24,
+    "confirmatory_n10": 16,
+    "natural_epfl_n8": 32,
+    "training_sizes": [
+      4,
+      6,
+      8
+    ],
+    "confirmatory_sizes": [
+      10
+    ],
+    "natural_positive_count": 0
+  },
+  "models": [
+    {
+      "architecture": "variable_matrix_mlp",
+      "artifact_sha256": "de9c3804f1755165d84ff0551bf7ddc6129ba006dd1c4cd6a314b51ba96b34f7",
+      "file": "model-variable_matrix_mlp-seed-317.json",
+      "final_loss": 0.6930742065111796,
+      "fit_ns": 159153500,
+      "parameters": 99953,
+      "seed": 317
+    },
+    {
+      "architecture": "variable_matrix_mlp",
+      "artifact_sha256": "4d9081ff2d3b22ab1c411870a518c609d9fb8105a84c6887db3ea6d1ca3aa4b7",
+      "file": "model-variable_matrix_mlp-seed-571.json",
+      "final_loss": 0.6908671855926514,
+      "fit_ns": 156551700,
+      "parameters": 99953,
+      "seed": 571
+    },
+    {
+      "architecture": "multiscale_cm",
+      "artifact_sha256": "83f1122adff6e7a72bd4ddf5525fe767c13e49c9d2601dc2673e7e1d759a1eb5",
+      "file": "model-multiscale_cm-seed-317.json",
+      "final_loss": 0.6935980121294657,
+      "fit_ns": 157813600,
+      "parameters": 60289,
+      "seed": 317
+    },
+    {
+      "architecture": "multiscale_cm",
+      "artifact_sha256": "3ac4d512d6a0c478beb3daa24e1799c26066a750b4e12c9f8483c7abb1d6c78f",
+      "file": "model-multiscale_cm-seed-571.json",
+      "final_loss": 0.6932885646820068,
+      "fit_ns": 157180300,
+      "parameters": 60289,
+      "seed": 571
+    },
+    {
+      "architecture": "variable_graph_gnn",
+      "artifact_sha256": "7e13b4b1abf447fb240c938b2e0cb66a66c637c3abcaeeab19f6bbac3a530f2c",
+      "file": "model-variable_graph_gnn-seed-317.json",
+      "final_loss": 0.0,
+      "fit_ns": 1541473400,
+      "parameters": 80001,
+      "seed": 317
+    },
+    {
+      "architecture": "variable_graph_gnn",
+      "artifact_sha256": "027711d5daf2f59a2e031672c493fa327df846740f23f59ebfd44a660e386374",
+      "file": "model-variable_graph_gnn-seed-571.json",
+      "final_loss": 1.0321399372272965e-33,
+      "fit_ns": 1487460300,
+      "parameters": 80001,
+      "seed": 571
+    },
+    {
+      "architecture": "variable_fused",
+      "artifact_sha256": "2a1b7a968e754c6405d8ef51a11ab92be787d4e7ee458f6a1c0f106a5cce5c68",
+      "file": "model-variable_fused-seed-317.json",
+      "final_loss": 6.141471362058227e-33,
+      "fit_ns": 1584063500,
+      "parameters": 64017,
+      "seed": 317
+    },
+    {
+      "architecture": "variable_fused",
+      "artifact_sha256": "8410cd3de84a0cb4b4e8c581e457d4ffe090fbe598177e98e2174b038a427aac",
+      "file": "model-variable_fused-seed-571.json",
+      "final_loss": 1.0254348199821772e-18,
+      "fit_ns": 1456808100,
+      "parameters": 64017,
+      "seed": 571
+    }
+  ],
+  "classification": {
+    "multiscale_cm/seed-317/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 1.0,
+      "brier_score": 0.250017990539572,
+      "median_total_ns": 652250.0
+    },
+    "multiscale_cm/seed-317/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.28125,
+      "brier_score": 0.258149537055791,
+      "median_total_ns": 649550.0
+    },
+    "multiscale_cm/seed-317/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.6666666666666667,
+      "specificity": 0.5,
+      "brier_score": 0.25007029579676593,
+      "median_total_ns": 596500.0
+    },
+    "multiscale_cm/seed-571/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 1.0,
+      "brier_score": 0.2501119416427626,
+      "median_total_ns": 668800.0
+    },
+    "multiscale_cm/seed-571/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.65625,
+      "brier_score": 0.24943379541323313,
+      "median_total_ns": 623000.0
+    },
+    "multiscale_cm/seed-571/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.75,
+      "brier_score": 0.2500138637906827,
+      "median_total_ns": 434350.0
+    },
+    "variable_fused/seed-317/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.49999974668035296,
+      "median_total_ns": 2917650.0
+    },
+    "variable_fused/seed-317/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.0,
+      "brier_score": 0.9999999850988397,
+      "median_total_ns": 2564600.0
+    },
+    "variable_fused/seed-317/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.5000000174597168,
+      "median_total_ns": 2274700.0
+    },
+    "variable_fused/seed-571/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.5000272576739295,
+      "median_total_ns": 2760650.0
+    },
+    "variable_fused/seed-571/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.0,
+      "brier_score": 0.09333458686386156,
+      "median_total_ns": 2377100.0
+    },
+    "variable_fused/seed-571/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.49999999999967365,
+      "median_total_ns": 2512150.0
+    },
+    "variable_graph_gnn/seed-317/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.6194428918548393,
+      "median_total_ns": 2352400.0
+    },
+    "variable_graph_gnn/seed-317/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.0,
+      "brier_score": 0.7408772262068454,
+      "median_total_ns": 2447050.0
+    },
+    "variable_graph_gnn/seed-317/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.0,
+      "brier_score": 0.4449876485032076,
+      "median_total_ns": 2153400.0
+    },
+    "variable_graph_gnn/seed-571/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.4375,
+      "specificity": 0.875,
+      "brier_score": 0.7499995202057669,
+      "median_total_ns": 1995550.0
+    },
+    "variable_graph_gnn/seed-571/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.84375,
+      "brier_score": 0.2812223278983417,
+      "median_total_ns": 2356250.0
+    },
+    "variable_graph_gnn/seed-571/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 1.0,
+      "brier_score": 0.5,
+      "median_total_ns": 1917150.0
+    },
+    "variable_matrix_mlp/seed-317/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.5,
+      "brier_score": 0.2503261052971668,
+      "median_total_ns": 777850.0
+    },
+    "variable_matrix_mlp/seed-317/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.6875,
+      "brier_score": 0.26248594786120405,
+      "median_total_ns": 400750.0
+    },
+    "variable_matrix_mlp/seed-317/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.4166666666666667,
+      "brier_score": 0.25022543901963834,
+      "median_total_ns": 507550.0
+    },
+    "variable_matrix_mlp/seed-571/confirmatory": {
+      "cases": 16,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.75,
+      "brier_score": 0.25014248641597375,
+      "median_total_ns": 613100.0
+    },
+    "variable_matrix_mlp/seed-571/epfl": {
+      "cases": 32,
+      "balanced_accuracy": null,
+      "specificity": 0.21875,
+      "brier_score": 0.24366019999968558,
+      "median_total_ns": 630950.0
+    },
+    "variable_matrix_mlp/seed-571/test": {
+      "cases": 24,
+      "balanced_accuracy": 0.5,
+      "specificity": 0.25,
+      "brier_score": 0.25001264795560735,
+      "median_total_ns": 531600.0
+    }
+  },
+  "controls": {
+    "confirmatory": {
+      "always_abstain_accuracy": 0.5,
+      "cases": 16,
+      "exact_detector_accuracy": 1.0,
+      "median_exact_detector_ns": 404000.0
+    },
+    "epfl": {
+      "always_abstain_accuracy": 1.0,
+      "cases": 32,
+      "exact_detector_accuracy": 1.0,
+      "median_exact_detector_ns": 221250.0
+    },
+    "test": {
+      "always_abstain_accuracy": 0.5,
+      "cases": 24,
+      "exact_detector_accuracy": 1.0,
+      "median_exact_detector_ns": 211000.0
+    },
+    "validation": {
+      "always_abstain_accuracy": 0.5,
+      "cases": 24,
+      "exact_detector_accuracy": 1.0,
+      "median_exact_detector_ns": 218700.0
+    }
+  },
+  "accepted_semantic_mismatches": 0,
+  "witness_mismatches": 0,
+  "criteria": {
+    "natural_positive_evidence": false,
+    "representation_signal": false,
+    "safety": true,
+    "size_transfer": false
+  },
+  "interpretation": "The exact variable-size decomposition teacher and safety boundary passed. Learned representations failed the sealed representation and n=10 transfer criteria; the natural slice supports specificity only."
+}

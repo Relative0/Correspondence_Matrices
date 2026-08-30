@@ -1,0 +1,99 @@
+{
+  "schema": "crse-natural-normalization-milestone-d7-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/natural-normalization-20260829-001",
+  "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/natural-normalization-20260829-001.json",
+    "artifacts_verified": 6,
+    "fixpoint_applications_verified": 469,
+    "measurement_rows_verified": 9,
+    "natural_cases_verified": 32,
+    "proof_rows_reproduced": 16,
+    "schema": "crse-natural-normalization-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "pass"
+  },
+  "pack": {
+    "artifact_is_inert": true,
+    "pack_id": "boolean-aig-factor-core/v2",
+    "pack_sha256": "f5aff35bb7f742670a1d13b6a1b1c6d382db84d2bd64b1c1a2ca5d64f22c5dca",
+    "proof_rows": 16,
+    "rules": [
+      "aig-xor-dnf/v1",
+      "aig-demorgan-or/v1",
+      "boolean-common-factor/v1"
+    ]
+  },
+  "data": {
+    "cases": 32,
+    "kernel_repeats": 128,
+    "max_passes": 8,
+    "training_use": false,
+    "independent_confirmation": false
+  },
+  "timing": {
+    "fixpoint_speedup_over_no_rewrite": 0.805069329892087,
+    "fixpoint_speedup_over_one_pass": 0.7664685705736034,
+    "incidence": {
+      "fixpoint": {
+        "applications_by_rule": {
+          "aig-demorgan-or/v1": 433,
+          "aig-xor-dnf/v1": 18,
+          "boolean-common-factor/v1": 18
+        },
+        "total_conflicts": 18
+      },
+      "one_pass": {
+        "applications_by_rule": {
+          "aig-demorgan-or/v1": 433,
+          "aig-xor-dnf/v1": 18,
+          "boolean-common-factor/v1": 0
+        },
+        "total_conflicts": 18
+      }
+    },
+    "median_ns": {
+      "fixpoint": {
+        "cse_build_ns": 27537300,
+        "kernel_ns": 895160700,
+        "normalization_ns": 413886400,
+        "total_ns": 1336725000
+      },
+      "no_rewrite": {
+        "cse_build_ns": 33969500,
+        "kernel_ns": 1044823300,
+        "normalization_ns": 0,
+        "total_ns": 1076156300
+      },
+      "one_pass": {
+        "cse_build_ns": 24889300,
+        "kernel_ns": 875689400,
+        "normalization_ns": 123979000,
+        "total_ns": 1024557700
+      }
+    },
+    "one_pass_speedup_over_no_rewrite": 1.0503618293044892,
+    "productive_pass_distribution": {
+      "fixpoint": {
+        "0": 1,
+        "1": 26,
+        "2": 5
+      },
+      "one_pass": {
+        "0": 1,
+        "1": 31
+      }
+    },
+    "timing_is_machine_specific": true
+  },
+  "criteria": {
+    "fixpoint_met": true,
+    "independent_confirmation": false,
+    "production_promotion": false,
+    "safety_met": true
+  },
+  "semantic_mismatches": 0,
+  "interpretation": "Fixpoint exposed 18 factoring applications and was exact, but achieved only 0.805x versus no rewrite and 0.766x versus one pass. The one-pass 128-use arm achieved 1.050x on the reused D5 slice."
+}

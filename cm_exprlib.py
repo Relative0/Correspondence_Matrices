@@ -103,12 +103,12 @@ def eval_expr_tt(expr: Expr, n_vars: int) -> np.ndarray:
 # Tseitin CNF encoding
 # --------------------------
 
-def tseitin_cnf(expr: Expr, n_vars: int) -> Tuple[int, List[List[int]]]:
+def _tseitin_cnf(expr: Expr, n_vars: int, start_id: int) -> Tuple[int, List[List[int]], int]:
     """Return (out_var, clauses) where out_var is the variable id for expr's output.
        Variable numbering: 1..n for x0..x{n-1}; fresh ids start at n+1.
        Clauses are lists of ints (positive = var, negative = negation).
     """
-    next_id = [n_vars]
+    next_id = [start_id]
     clauses: List[List[int]] = []
 
     def fresh() -> int:
@@ -161,19 +161,24 @@ def tseitin_cnf(expr: Expr, n_vars: int) -> Tuple[int, List[List[int]]]:
             z = fresh()
             # z <-> ¬(a XOR b)
             # (¬z ∨ a ∨ b) (¬z ∨ ¬a ∨ ¬b) (z ∨ a ∨ ¬b) (z ∨ ¬a ∨ b)
-            clauses += [[-z, a, b], [-z, -a, -b], [z, a, -b], [z, -a, b]]
+            clauses += [[z, a, b], [z, -a, -b], [-z, a, -b], [-z, -a, b]]
             return z
         raise TypeError(e)
     out = enc(expr)
+    return out, clauses, next_id[0]
+
+def tseitin_cnf(expr: Expr, n_vars: int) -> Tuple[int, List[List[int]]]:
+    """Return a Tseitin encoding whose fresh IDs begin after the universe."""
+    out, clauses, _ = _tseitin_cnf(expr, n_vars, n_vars)
     return out, clauses
 
 def miter_equiv(expr1: Expr, expr2: Expr, n_vars: int):
     """Return CNF for (expr1 XOR expr2) == 1 (unsat means equivalent)."""
-    out1, c1 = tseitin_cnf(expr1, n_vars)
-    out2, c2 = tseitin_cnf(expr2, n_vars)
+    out1, c1, next_id = _tseitin_cnf(expr1, n_vars, n_vars)
+    out2, c2, next_id = _tseitin_cnf(expr2, n_vars, next_id)
     # miter: m = XOR(out1, out2) == 1
     # XOR encoding:
-    m = max(out1, out2) + 1
+    m = next_id + 1
     clauses = c1 + c2
     clauses += [[-m, -out1, -out2], [-m, out1, out2], [m, -out1, out2], [m, out1, -out2]]
     # force m = 1

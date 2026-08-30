@@ -1,0 +1,230 @@
+{
+  "criteria": {
+    "advice_disabled_exact": true,
+    "dense_tail_guard": true,
+    "detailed_counters_measurement_only": true,
+    "exact": true,
+    "frozen_budget_4096": true,
+    "local_engineering_gate": false,
+    "production_promotion": false,
+    "sparse_no_material_regret": false,
+    "sparse_regret_improved_over_c12": false
+  },
+  "date": "2026-08-30",
+  "evaluation_cases": 188,
+  "interpretation": "The in-kernel sentinel remained exact and improved the dense C6 tail, but sparse no-switch overhead failed the no-material-regret gate.",
+  "measurement_rows": 11280,
+  "product_pair_budget": 4096,
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+  "run": "docs/recognition/runs/in-kernel-tail-sentinel-20260830-003",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "Windows-first local engineering gate failed",
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c13-in-kernel-sentinel-summary/v1",
+  "semantic_mismatches": 0,
+  "split_summary": {
+    "c11_a_dev": {
+      "advice_disabled_speedup_over_set": 1.003936499741869,
+      "sentinel_fast_p95_speedup_over_set": 0.8753462603878116,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 1706800,
+      "sentinel_fast_speedup_over_set": 0.9114717600187485,
+      "sentinel_measured_speedup_over_fast": 0.8290266174470565,
+      "set_sequence_solve_ns": 1555700
+    },
+    "c11_b_dev": {
+      "advice_disabled_speedup_over_set": 1.015798712697484,
+      "sentinel_fast_p95_speedup_over_set": 0.8076165462902167,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 1498200,
+      "sentinel_fast_speedup_over_set": 0.9269790415164865,
+      "sentinel_measured_speedup_over_fast": 0.8100129757785467,
+      "set_sequence_solve_ns": 1388800
+    },
+    "c12_sealed_a": {
+      "advice_disabled_speedup_over_set": 1.011375982616476,
+      "sentinel_fast_p95_speedup_over_set": 0.8006153846153846,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 1777500,
+      "sentinel_fast_speedup_over_set": 0.890295358649789,
+      "sentinel_measured_speedup_over_fast": 0.8390370545197073,
+      "set_sequence_solve_ns": 1582500
+    },
+    "c12_sealed_b": {
+      "advice_disabled_speedup_over_set": 1.0185280494081317,
+      "sentinel_fast_p95_speedup_over_set": 0.7664683851068518,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 2659700,
+      "sentinel_fast_speedup_over_set": 0.7440688799488664,
+      "sentinel_measured_speedup_over_fast": 0.8786587380244466,
+      "set_sequence_solve_ns": 1979000
+    },
+    "c6_confirmatory_dev": {
+      "advice_disabled_speedup_over_set": 1.0187184853615463,
+      "sentinel_fast_p95_speedup_over_set": 28.03839597715844,
+      "sentinel_fast_selection_counts": {
+        "adaptive_set_to_packed": 13,
+        "set_source_anf": 23
+      },
+      "sentinel_fast_sequence_solve_ns": 21694000,
+      "sentinel_fast_speedup_over_set": 19.30924679634922,
+      "sentinel_measured_speedup_over_fast": 0.9393212501190713,
+      "set_sequence_solve_ns": 418894800
+    },
+    "c6_test_dev": {
+      "advice_disabled_speedup_over_set": 1.0130352675724728,
+      "sentinel_fast_p95_speedup_over_set": 1.0076826871538325,
+      "sentinel_fast_selection_counts": {
+        "adaptive_set_to_packed": 1,
+        "set_source_anf": 31
+      },
+      "sentinel_fast_sequence_solve_ns": 7094100,
+      "sentinel_fast_speedup_over_set": 1.164502896773375,
+      "sentinel_measured_speedup_over_fast": 0.8738944048880238,
+      "set_sequence_solve_ns": 8261100
+    },
+    "c7_a_dev": {
+      "advice_disabled_speedup_over_set": 1.0058905058905059,
+      "sentinel_fast_p95_speedup_over_set": 0.770671834625323,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 1740900,
+      "sentinel_fast_speedup_over_set": 0.8337641449824803,
+      "sentinel_measured_speedup_over_fast": 0.8520041109969168,
+      "set_sequence_solve_ns": 1451500
+    },
+    "c7_b_dev": {
+      "advice_disabled_speedup_over_set": 1.0016050008447372,
+      "sentinel_fast_p95_speedup_over_set": 1.003280839895013,
+      "sentinel_fast_selection_counts": {
+        "set_source_anf": 20
+      },
+      "sentinel_fast_sequence_solve_ns": 1315100,
+      "sentinel_fast_speedup_over_set": 0.9016044407269409,
+      "sentinel_measured_speedup_over_fast": 0.8058210784313725,
+      "set_sequence_solve_ns": 1185700
+    }
+  },
+  "status": "complete",
+  "verification": {
+    "advice_disabled_exact": true,
+    "dense_tail_guard": true,
+    "evaluation_cases": 188,
+    "files_verified": 4,
+    "local_engineering_gate": false,
+    "manifest_sha256": "98cccfd167f24686d8f5234739d8a92c64f3ec682e4b4ac6f90fe55de373e83d",
+    "path": "docs/recognition/verification/in-kernel-tail-sentinel-20260830-003.json",
+    "production_promotion": false,
+    "run": "docs/recognition/runs/in-kernel-tail-sentinel-20260830-003",
+    "schema": "crse-in-kernel-tail-sentinel-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "semantic_rows_replayed": 752,
+    "sparse_no_material_regret": false,
+    "split_summary": {
+      "c11_a_dev": {
+        "advice_disabled_speedup_over_set": 1.003936499741869,
+        "sentinel_fast_p95_speedup_over_set": 0.8753462603878116,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 1706800,
+        "sentinel_fast_speedup_over_set": 0.9114717600187485,
+        "sentinel_measured_speedup_over_fast": 0.8290266174470565,
+        "set_sequence_solve_ns": 1555700
+      },
+      "c11_b_dev": {
+        "advice_disabled_speedup_over_set": 1.015798712697484,
+        "sentinel_fast_p95_speedup_over_set": 0.8076165462902167,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 1498200,
+        "sentinel_fast_speedup_over_set": 0.9269790415164865,
+        "sentinel_measured_speedup_over_fast": 0.8100129757785467,
+        "set_sequence_solve_ns": 1388800
+      },
+      "c12_sealed_a": {
+        "advice_disabled_speedup_over_set": 1.011375982616476,
+        "sentinel_fast_p95_speedup_over_set": 0.8006153846153846,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 1777500,
+        "sentinel_fast_speedup_over_set": 0.890295358649789,
+        "sentinel_measured_speedup_over_fast": 0.8390370545197073,
+        "set_sequence_solve_ns": 1582500
+      },
+      "c12_sealed_b": {
+        "advice_disabled_speedup_over_set": 1.0185280494081317,
+        "sentinel_fast_p95_speedup_over_set": 0.7664683851068518,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 2659700,
+        "sentinel_fast_speedup_over_set": 0.7440688799488664,
+        "sentinel_measured_speedup_over_fast": 0.8786587380244466,
+        "set_sequence_solve_ns": 1979000
+      },
+      "c6_confirmatory_dev": {
+        "advice_disabled_speedup_over_set": 1.0187184853615463,
+        "sentinel_fast_p95_speedup_over_set": 28.03839597715844,
+        "sentinel_fast_selection_counts": {
+          "adaptive_set_to_packed": 13,
+          "set_source_anf": 23
+        },
+        "sentinel_fast_sequence_solve_ns": 21694000,
+        "sentinel_fast_speedup_over_set": 19.30924679634922,
+        "sentinel_measured_speedup_over_fast": 0.9393212501190713,
+        "set_sequence_solve_ns": 418894800
+      },
+      "c6_test_dev": {
+        "advice_disabled_speedup_over_set": 1.0130352675724728,
+        "sentinel_fast_p95_speedup_over_set": 1.0076826871538325,
+        "sentinel_fast_selection_counts": {
+          "adaptive_set_to_packed": 1,
+          "set_source_anf": 31
+        },
+        "sentinel_fast_sequence_solve_ns": 7094100,
+        "sentinel_fast_speedup_over_set": 1.164502896773375,
+        "sentinel_measured_speedup_over_fast": 0.8738944048880238,
+        "set_sequence_solve_ns": 8261100
+      },
+      "c7_a_dev": {
+        "advice_disabled_speedup_over_set": 1.0058905058905059,
+        "sentinel_fast_p95_speedup_over_set": 0.770671834625323,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 1740900,
+        "sentinel_fast_speedup_over_set": 0.8337641449824803,
+        "sentinel_measured_speedup_over_fast": 0.8520041109969168,
+        "set_sequence_solve_ns": 1451500
+      },
+      "c7_b_dev": {
+        "advice_disabled_speedup_over_set": 1.0016050008447372,
+        "sentinel_fast_p95_speedup_over_set": 1.003280839895013,
+        "sentinel_fast_selection_counts": {
+          "set_source_anf": 20
+        },
+        "sentinel_fast_sequence_solve_ns": 1315100,
+        "sentinel_fast_speedup_over_set": 0.9016044407269409,
+        "sentinel_measured_speedup_over_fast": 0.8058210784313725,
+        "set_sequence_solve_ns": 1185700
+      }
+    },
+    "status": "pass",
+    "timing_samples_checked": 11280
+  }
+}

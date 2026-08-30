@@ -1,0 +1,111 @@
+{
+  "schema": "crse-natural-revision-cache-milestone-d6-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/runs/natural-revision-20260829-001",
+  "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/verification/natural-revision-20260829-001.json",
+    "artifacts_verified": 7,
+    "exact_cache_hits_verified": 41,
+    "measurement_rows_verified": 9,
+    "required_invalidations_verified": 79,
+    "schema": "crse-natural-revision-cache-verification/v1",
+    "semantic_mismatches": 0,
+    "source_cases_verified": 120,
+    "status": "pass",
+    "transition_ids_verified": 20
+  },
+  "data": {
+    "cases": 120,
+    "histories": 7,
+    "transitions": 20,
+    "widths": [
+      8,
+      12,
+      16
+    ],
+    "source_commit": "afa60ee2c836e7bdc4068e0f4f128ea31158d2ad",
+    "claim_boundary": "exact bounded differences under a joint satisfying context and shared named features; not whole-model semantic equivalence"
+  },
+  "timing": {
+    "by_stratum": {
+      "hash-k12": {
+        "cases": 20,
+        "exact_source_hits": 8,
+        "semantic_relation_equal": 20
+      },
+      "hash-k16": {
+        "cases": 20,
+        "exact_source_hits": 7,
+        "semantic_relation_equal": 20
+      },
+      "hash-k8": {
+        "cases": 20,
+        "exact_source_hits": 8,
+        "semantic_relation_equal": 20
+      },
+      "incidence-k12": {
+        "cases": 20,
+        "exact_source_hits": 6,
+        "semantic_relation_equal": 19
+      },
+      "incidence-k16": {
+        "cases": 20,
+        "exact_source_hits": 6,
+        "semantic_relation_equal": 19
+      },
+      "incidence-k8": {
+        "cases": 20,
+        "exact_source_hits": 6,
+        "semantic_relation_equal": 19
+      }
+    },
+    "exact_cache_speedup_over_direct_cnf": 0.09144304979456842,
+    "exact_cache_speedup_over_fresh_cm": 1.0148366186642124,
+    "fresh_cm_speedup_over_direct_cnf": 0.0901061787807097,
+    "median_ns": {
+      "direct_cnf": {
+        "compile_ns": 0,
+        "direct_ns": 696077800,
+        "extract_ns": 0,
+        "identity_ns": 0,
+        "lower_ns": 0,
+        "total_ns": 696077800
+      },
+      "exact_revision_cache": {
+        "compile_ns": 6568431200,
+        "direct_ns": 0,
+        "extract_ns": 274444100,
+        "identity_ns": 3088700,
+        "lower_ns": 765491700,
+        "total_ns": 7612145500
+      },
+      "fresh_cm": {
+        "compile_ns": 6689421100,
+        "direct_ns": 0,
+        "extract_ns": 283911200,
+        "identity_ns": 0,
+        "lower_ns": 756974400,
+        "total_ns": 7725084000
+      }
+    },
+    "source_identity": {
+      "cases": 120,
+      "exact_source_hits": 41,
+      "required_invalidations": 79,
+      "semantic_relation_changed": 3,
+      "semantic_relation_equal": 117,
+      "unsafe_semantic_only_equal": 76
+    },
+    "timing_is_machine_specific": true
+  },
+  "criteria": {
+    "actual_related_revisions_met": true,
+    "exact_invalidation_met": true,
+    "production_promotion": false,
+    "safety_met": true
+  },
+  "semantic_mismatches": 0,
+  "interpretation": "Exact source reuse produced 41 hits and 79 invalidations on actual adjacent feature-model revisions. It was 1.015x over fresh CM but only 0.091x versus direct conditioned-CNF evaluation."
+}

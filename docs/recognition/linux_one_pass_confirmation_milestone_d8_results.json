@@ -1,0 +1,170 @@
+{
+  "schema": "crse-linux-one-pass-confirmation-milestone-d8-summary/v1",
+  "date": "2026-08-29",
+  "status": "complete",
+  "run": "docs/recognition/linux_confirmation/runpod-linux-one-pass-execute-002",
+  "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+  "verification": {
+    "path": "docs/recognition/linux_confirmation/RUNPOD_LINUX_ONE_PASS_FINAL_VERIFICATION_20260829-092727-102016.json",
+    "artifact_hashes_match": true,
+    "automatic_replacement_queued": false,
+    "checked_utc": "2026-08-29T09:27:27.101996+00:00",
+    "cleanup_limit_seconds": 600,
+    "complete": true,
+    "confirmation_passed": false,
+    "create_requests_this_authorization": 1,
+    "details_http_status": {
+      "v1": 404,
+      "v2": 404
+    },
+    "elapsed_since_create_seconds": 65.70774221420288,
+    "estimated_compute_cost_usd": 0.0010951290369033814,
+    "frozen_hashes_match": true,
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "lifecycle_valid": true,
+    "one_pass_speedup_over_no_rewrite": 0.9294183853102789,
+    "owned_pod_absent_verified": true,
+    "pod_id": "ek7697wrnxuawo",
+    "projected_10_minute_cost_usd": 0.011666666666666665,
+    "rate_usd_per_hour": 0.06,
+    "reconciliation_limit_seconds": 720,
+    "resources_valid": true,
+    "schema": "crse-runpod-linux-confirmation-final-verification/v1",
+    "scientific_evidence_valid": true,
+    "semantic_mismatches": 0,
+    "total_cost_cap_usd": 0.05
+  },
+  "data": {
+    "cases": 32,
+    "kernel_repeats": 128,
+    "rounds": 5,
+    "training_use": false,
+    "independent_machine_confirmation": true,
+    "independent_source_confirmation": false
+  },
+  "environment": {
+    "machine": "x86_64",
+    "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.36",
+    "processor": "",
+    "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    }
+  },
+  "input": {
+    "cases_sha256": "ebe582d2b0e3b006dbde48e4314f7aba469e731478fdf8dbe0a5dc1aa95e9a98",
+    "pack_file_sha256": "63393b9a7691710d4730b404bac85a9f377e5f9cd2c09047217353b9a8629915",
+    "training_use": false,
+    "upstream_commit": "0060e156826e733d69bf5b3322d1bdd0d03a1f9a"
+  },
+  "timing": {
+    "applications_by_rule": {
+      "aig-demorgan-or/v1": 433,
+      "aig-xor-dnf/v1": 18,
+      "boolean-common-factor/v1": 0
+    },
+    "case_speedup_geomean": 0.9308882513090788,
+    "case_speedup_p05": 0.830614333027517,
+    "case_speedup_p95": 1.0651339005842912,
+    "circuits": {
+      "adder.aig": {
+        "median_speedup": 1.0859605982152292,
+        "samples": 10
+      },
+      "arbiter.aig": {
+        "median_speedup": 0.8481342361792005,
+        "samples": 5
+      },
+      "bar.aig": {
+        "median_speedup": 0.8121827870749369,
+        "samples": 5
+      },
+      "cavlc.aig": {
+        "median_speedup": 0.9686756967097709,
+        "samples": 30
+      },
+      "div.aig": {
+        "median_speedup": 0.8558139184750032,
+        "samples": 5
+      },
+      "hyp.aig": {
+        "median_speedup": 0.9431119617467516,
+        "samples": 30
+      },
+      "i2c.aig": {
+        "median_speedup": 0.9625121951745572,
+        "samples": 15
+      },
+      "int2float.aig": {
+        "median_speedup": 0.9733742252995624,
+        "samples": 5
+      },
+      "max.aig": {
+        "median_speedup": 0.9279897804922752,
+        "samples": 5
+      },
+      "multiplier.aig": {
+        "median_speedup": 0.8534903563227769,
+        "samples": 5
+      },
+      "priority.aig": {
+        "median_speedup": 0.8318133898573826,
+        "samples": 5
+      },
+      "router.aig": {
+        "median_speedup": 0.9230232919396548,
+        "samples": 5
+      },
+      "sin.aig": {
+        "median_speedup": 0.8354544352175983,
+        "samples": 10
+      },
+      "square.aig": {
+        "median_speedup": 0.9166533871184639,
+        "samples": 20
+      },
+      "voter.aig": {
+        "median_speedup": 0.8640082373325054,
+        "samples": 5
+      }
+    },
+    "confirmation_criterion": "exact outputs and median five-round sequence speedup > 1.0",
+    "confirmation_passed": false,
+    "median_ns": {
+      "no_rewrite": {
+        "cse_build_ns": 10308596,
+        "kernel_ns": 301165932,
+        "rewrite_ns": 0,
+        "total_ns": 314893282
+      },
+      "one_pass": {
+        "cse_build_ns": 8490373,
+        "kernel_ns": 266490186,
+        "rewrite_ns": 63396145,
+        "total_ns": 338806814
+      }
+    },
+    "one_pass_speedup_over_no_rewrite": 0.9294183853102789
+  },
+  "semantic_mismatches": 0,
+  "criteria": {
+    "safety_met": true,
+    "independent_machine_confirmation": true,
+    "profitability_met": false,
+    "production_promotion": false
+  },
+  "lifecycle": {
+    "create_requests_this_authorization": 1,
+    "automatic_replacement_queued": false,
+    "owned_pod_absent_verified": true,
+    "elapsed_since_create_seconds": 65.70774221420288,
+    "estimated_compute_cost_usd": 0.0010951290369033814,
+    "total_cost_cap_usd": 0.05
+  },
+  "interpretation": "Linux preserved exactness but measured 0.929x for one pass versus no rewrite, so the small Windows gain did not independently confirm."
+}

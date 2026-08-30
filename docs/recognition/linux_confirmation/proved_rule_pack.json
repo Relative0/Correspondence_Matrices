@@ -1,0 +1,298 @@
+{
+  "pack_id": "boolean-aig-factor-core/v2",
+  "payload_sha256": "f5aff35bb7f742670a1d13b6a1b1c6d382db84d2bd64b1c1a2ca5d64f22c5dca",
+  "priority": [
+    "aig-xor-dnf/v1",
+    "aig-demorgan-or/v1",
+    "boolean-common-factor/v1"
+  ],
+  "rules": [
+    {
+      "commutative_operators": [
+        "and",
+        "or",
+        "xor"
+      ],
+      "domain": "pure total Boolean values {0,1}",
+      "label": "exclusive-or AIG macro",
+      "metavariables": [
+        "A",
+        "B"
+      ],
+      "overlap_policy": "wins-over-demorgan-or",
+      "pattern": {
+        "a": {
+          "a": {
+            "a": {
+              "a": "$A",
+              "b": {
+                "a": "$B",
+                "op": "not"
+              },
+              "op": "and"
+            },
+            "op": "not"
+          },
+          "b": {
+            "a": {
+              "a": {
+                "a": "$A",
+                "op": "not"
+              },
+              "b": "$B",
+              "op": "and"
+            },
+            "op": "not"
+          },
+          "op": "and"
+        },
+        "op": "not"
+      },
+      "proof_method": "exhaustive truth evaluation over all Boolean metavariables",
+      "proof_rows": [
+        {
+          "assignment": {
+            "A": 0,
+            "B": 0
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 0,
+            "B": 1
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 0
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 1
+          },
+          "lhs": 0,
+          "rhs": 0
+        }
+      ],
+      "proof_rows_sha256": "f1f14803c45ef38da04d79937c0098ae47ec34867508fe59384e1a4127577b0d",
+      "replacement": {
+        "a": "$A",
+        "b": "$B",
+        "op": "xor"
+      },
+      "rule_id": "aig-xor-dnf/v1",
+      "side_conditions": [
+        "every repeated metavariable binds to a structurally identical pure Boolean subexpression",
+        "the source AST contains only admitted Boolean operators",
+        "the selected rewrite strictly decreases AST operator count"
+      ],
+      "termination_measure": "strict_ast_operator_count_decrease"
+    },
+    {
+      "commutative_operators": [
+        "and",
+        "or",
+        "xor"
+      ],
+      "domain": "pure total Boolean values {0,1}",
+      "label": "De Morgan AIG-or macro",
+      "metavariables": [
+        "A",
+        "B"
+      ],
+      "overlap_policy": "priority-resolved-with-aig-xor",
+      "pattern": {
+        "a": {
+          "a": {
+            "a": "$A",
+            "op": "not"
+          },
+          "b": {
+            "a": "$B",
+            "op": "not"
+          },
+          "op": "and"
+        },
+        "op": "not"
+      },
+      "proof_method": "exhaustive truth evaluation over all Boolean metavariables",
+      "proof_rows": [
+        {
+          "assignment": {
+            "A": 0,
+            "B": 0
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 0,
+            "B": 1
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 0
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 1
+          },
+          "lhs": 1,
+          "rhs": 1
+        }
+      ],
+      "proof_rows_sha256": "174a61179db680a369d94ead6ddb8cca2a868d047cce6f2f58f3cba88c6b309a",
+      "replacement": {
+        "a": "$A",
+        "b": "$B",
+        "op": "or"
+      },
+      "rule_id": "aig-demorgan-or/v1",
+      "side_conditions": [
+        "every repeated metavariable binds to a structurally identical pure Boolean subexpression",
+        "the source AST contains only admitted Boolean operators",
+        "the selected rewrite strictly decreases AST operator count"
+      ],
+      "termination_measure": "strict_ast_operator_count_decrease"
+    },
+    {
+      "commutative_operators": [
+        "and",
+        "or",
+        "xor"
+      ],
+      "domain": "pure total Boolean values {0,1}",
+      "label": "common-factor contraction",
+      "metavariables": [
+        "A",
+        "B",
+        "C"
+      ],
+      "overlap_policy": "root-shape-disjoint",
+      "pattern": {
+        "a": {
+          "a": "$A",
+          "b": "$B",
+          "op": "and"
+        },
+        "b": {
+          "a": "$A",
+          "b": "$C",
+          "op": "and"
+        },
+        "op": "or"
+      },
+      "proof_method": "exhaustive truth evaluation over all Boolean metavariables",
+      "proof_rows": [
+        {
+          "assignment": {
+            "A": 0,
+            "B": 0,
+            "C": 0
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 0,
+            "B": 0,
+            "C": 1
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 0,
+            "B": 1,
+            "C": 0
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 0,
+            "B": 1,
+            "C": 1
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 0,
+            "C": 0
+          },
+          "lhs": 0,
+          "rhs": 0
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 0,
+            "C": 1
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 1,
+            "C": 0
+          },
+          "lhs": 1,
+          "rhs": 1
+        },
+        {
+          "assignment": {
+            "A": 1,
+            "B": 1,
+            "C": 1
+          },
+          "lhs": 1,
+          "rhs": 1
+        }
+      ],
+      "proof_rows_sha256": "dce615677e1e0d13fc06eebb060ceb35decf03ad6c7e223048515ac60804f29d",
+      "replacement": {
+        "a": "$A",
+        "b": {
+          "a": "$B",
+          "b": "$C",
+          "op": "or"
+        },
+        "op": "and"
+      },
+      "rule_id": "boolean-common-factor/v1",
+      "side_conditions": [
+        "every repeated metavariable binds to a structurally identical pure Boolean subexpression",
+        "the source AST contains only admitted Boolean operators",
+        "the selected rewrite strictly decreases AST operator count"
+      ],
+      "termination_measure": "strict_ast_operator_count_decrease"
+    }
+  ],
+  "schema": "crse-proved-rule-pack/v2"
+}

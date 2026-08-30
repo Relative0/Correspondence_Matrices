@@ -1,0 +1,325 @@
+{
+  "c12_audit": {
+    "alpha_structural_duplicates": 0,
+    "family_counts": {
+      "arith_add": 5,
+      "arith_mul": 7,
+      "bin2onehot": 7,
+      "popcount": 1,
+      "xor_arith_add_arith_add": 2,
+      "xor_arith_add_arith_mul": 2,
+      "xor_arith_add_bin2onehot": 5,
+      "xor_arith_add_popcount": 3,
+      "xor_arith_mul_bin2onehot": 2,
+      "xor_arith_mul_mux_index": 1,
+      "xor_bin2onehot_bin2onehot": 2,
+      "xor_mux_index_mux_index": 1,
+      "xor_popcount_bin2onehot": 2
+    },
+    "prior_alpha_overlap": 0,
+    "prior_semantic_overlap": 0,
+    "rows": 40,
+    "semantic_duplicates": 0,
+    "size_counts": {
+      "10": 4,
+      "4": 1,
+      "5": 4,
+      "6": 9,
+      "7": 6,
+      "8": 9,
+      "9": 7
+    },
+    "source_kind_counts": {
+      "disjoint_xor_of_generator_outputs": 20,
+      "unused_raw_generator_output": 20
+    },
+    "split_label_counts": {
+      "sealed_a/0": 10,
+      "sealed_a/1": 10,
+      "sealed_b/0": 10,
+      "sealed_b/1": 10
+    }
+  },
+  "criteria": {
+    "development_tail_guard": true,
+    "exact": true,
+    "fresh_holdout_disjoint": true,
+    "leakage_safe_freeze": true,
+    "production_promotion": false,
+    "safety": true,
+    "sealed_no_material_regret": false
+  },
+  "date": "2026-08-30",
+  "interpretation": "The Linux second-machine gate passed with exact results and less than 5% regret on both C12 splits. The original Windows B split remained outside the band, so use guarded opt-in or task-level enablement rather than an unconditional default.",
+  "policy": {
+    "architecture": "optimized one-pass set-to-packed conversion",
+    "budget_source": "docs/recognition/runs/staged-exact-dispatcher-20260830-001/budget_candidates.json",
+    "budget_source_sha256": "f042c286126e9e9d9738a1ff03537d6722203595b6bd66d1bb39861e105795bb",
+    "chosen_validation_sequence_total_ns": 12376300,
+    "eligible_budgets": [
+      0,
+      64,
+      1024,
+      4096
+    ],
+    "frozen_before_c12_generation": true,
+    "product_pair_budget": 4096,
+    "schema": "crse-adaptive-exact-dispatcher-robust/v1",
+    "selection": "largest product-pair budget within 1% of the minimum C6-validation sequence time",
+    "status": "frozen",
+    "tie_tolerance": 0.01,
+    "training_use": {
+      "c11": false,
+      "c12": false,
+      "c6_heldout": false,
+      "c6_validation": true,
+      "c7": false
+    },
+    "validation_minimum_sequence_total_ns": 12308100
+  },
+  "prior_runs": [
+    "docs/recognition/runs/exact-representation-dispatcher-20260830-002",
+    "docs/recognition/runs/staged-exact-dispatcher-20260830-001",
+    "docs/recognition/runs/adaptive-exact-dispatcher-20260830-001"
+  ],
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+  "run": "docs/recognition/runs/adaptive-exact-dispatcher-robust-20260830-002",
+  "runpod": {
+    "attempts": [
+      {
+        "cost_usd": 0.0005535943428675333,
+        "uploaded_files": 0,
+        "verification": "docs/recognition/c12_linux_confirmation/RUNPOD_C12_LINUX_ATTEMPT_FINAL_VERIFICATION_20260830.json"
+      },
+      {
+        "cost_usd": 0.0006584138433138528,
+        "uploaded_files": 14,
+        "verification": "docs/recognition/c12_linux_confirmation/RUNPOD_C12_LINUX_RETRY_FINAL_VERIFICATION_20260830.json"
+      },
+      {
+        "cost_usd": 0.0007359881560007731,
+        "uploaded_files": 16,
+        "verification": "docs/recognition/c12_linux_confirmation/RUNPOD_C12_LINUX_PACKAGE_V2_FINAL_VERIFICATION_20260830.json"
+      }
+    ],
+    "authorization_record_present": true,
+    "combined_cost_usd": 0.0019479963421821594,
+    "corrected_controller": "docs/recognition/c12_linux_confirmation/runpod_c12_linux_controller_v6.py",
+    "corrected_manifest": "docs/recognition/c12_linux_confirmation/c12_linux_upload_manifest_v2.json",
+    "corrected_package_local_validation": "docs/recognition/c12_linux_confirmation/C12_PACKAGE_V2_LOCAL_VALIDATION_20260830.json",
+    "criteria": {
+      "exact": true,
+      "no_material_regret": true,
+      "second_machine_promotion": true
+    },
+    "owned_pod_absent_verified": true,
+    "pod_created": true,
+    "scientific_confirmation_complete": true,
+    "second_machine_promotion": true,
+    "split_summary": {
+      "sealed_a": {
+        "adaptive_p95_speedup_over_set": 0.993113769328568,
+        "adaptive_selection_counts": {
+          "set_source_anf": 20
+        },
+        "adaptive_speedup_over_best_fixed": 0.9882473040499072,
+        "adaptive_speedup_over_restart": 0.9975237450448662,
+        "adaptive_total_ns": 9432389,
+        "best_fixed_arm": "set_source_anf",
+        "best_fixed_total_ns": 9321533
+      },
+      "sealed_b": {
+        "adaptive_p95_speedup_over_set": 0.9750446730401435,
+        "adaptive_selection_counts": {
+          "set_source_anf": 20
+        },
+        "adaptive_speedup_over_best_fixed": 0.9686731832036451,
+        "adaptive_speedup_over_restart": 0.9772648934081584,
+        "adaptive_total_ns": 9005192,
+        "best_fixed_arm": "set_source_anf",
+        "best_fixed_total_ns": 8723088
+      }
+    },
+    "status": "second_machine_confirmation_complete",
+    "upload_performed": true
+  },
+  "schema": "crse-learning-milestone-c12-adaptive-dispatcher-summary/v1",
+  "semantic_mismatches": 0,
+  "split_summary": {
+    "c11_a_dev": {
+      "adaptive_p95_speedup_over_set": 0.99196661857037,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.9785034615749376,
+      "adaptive_speedup_over_restart": 0.9987908197135902,
+      "adaptive_total_ns": 12653200,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 12381200,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 31195600,
+        "cached_packed_source_anf": 14390200,
+        "set_source_anf": 12381200
+      },
+      "staged_total_ns": 12637900
+    },
+    "c11_b_dev": {
+      "adaptive_p95_speedup_over_set": 1.003365817384838,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.9856766513806225,
+      "adaptive_speedup_over_restart": 1.0001431033922008,
+      "adaptive_total_ns": 15373500,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 15153300,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 38284200,
+        "cached_packed_source_anf": 17218000,
+        "set_source_anf": 15153300
+      },
+      "staged_total_ns": 15375700
+    },
+    "c12_sealed_a": {
+      "adaptive_p95_speedup_over_set": 0.9931324230427405,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.9682069733296762,
+      "adaptive_speedup_over_restart": 0.9902789654560415,
+      "adaptive_total_ns": 12395800,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 12001700,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 29633900,
+        "cached_packed_source_anf": 14201400,
+        "set_source_anf": 12001700
+      },
+      "staged_total_ns": 12275300
+    },
+    "c12_sealed_b": {
+      "adaptive_p95_speedup_over_set": 0.9358059914407989,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.9252477568763957,
+      "adaptive_speedup_over_restart": 0.9276557868217978,
+      "adaptive_total_ns": 12582900,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 11642300,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 27934600,
+        "cached_packed_source_anf": 14377800,
+        "set_source_anf": 11642300
+      },
+      "staged_total_ns": 11672600
+    },
+    "c6_confirmatory_dev": {
+      "adaptive_p95_speedup_over_set": 15.582412398921832,
+      "adaptive_selection_counts": {
+        "adaptive_set_to_packed": 13,
+        "set_source_anf": 23
+      },
+      "adaptive_speedup_over_best_fixed": 0.926266358245949,
+      "adaptive_speedup_over_restart": 0.9621043038621279,
+      "adaptive_total_ns": 34455100,
+      "best_fixed_arm": "cached_packed_source_anf",
+      "best_fixed_total_ns": 31914600,
+      "cases": 36,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 48727600,
+        "cached_packed_source_anf": 31914600,
+        "set_source_anf": 449863400
+      },
+      "staged_total_ns": 33149400
+    },
+    "c6_test_dev": {
+      "adaptive_p95_speedup_over_set": 0.99183656725602,
+      "adaptive_selection_counts": {
+        "adaptive_set_to_packed": 1,
+        "set_source_anf": 31
+      },
+      "adaptive_speedup_over_best_fixed": 1.0414397678498795,
+      "adaptive_speedup_over_restart": 1.1013167719962846,
+      "adaptive_total_ns": 16472100,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 17154700,
+      "cases": 32,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 31952500,
+        "cached_packed_source_anf": 21799900,
+        "set_source_anf": 17154700
+      },
+      "staged_total_ns": 18141000
+    },
+    "c7_a_dev": {
+      "adaptive_p95_speedup_over_set": 0.959423902506578,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.8637992831541219,
+      "adaptive_speedup_over_restart": 0.9347326851672998,
+      "adaptive_total_ns": 4659300,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 4024700,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 8264200,
+        "cached_packed_source_anf": 5825400,
+        "set_source_anf": 4024700
+      },
+      "staged_total_ns": 4355200
+    },
+    "c7_b_dev": {
+      "adaptive_p95_speedup_over_set": 0.9833589912762994,
+      "adaptive_selection_counts": {
+        "set_source_anf": 20
+      },
+      "adaptive_speedup_over_best_fixed": 0.9528164306981831,
+      "adaptive_speedup_over_restart": 0.9823783192562435,
+      "adaptive_total_ns": 6582800,
+      "best_fixed_arm": "set_source_anf",
+      "best_fixed_total_ns": 6272200,
+      "cases": 20,
+      "fixed_sequence_total_ns": {
+        "bitset_truth_vector_anf": 14630800,
+        "cached_packed_source_anf": 7895900,
+        "set_source_anf": 6272200
+      },
+      "staged_total_ns": 6466800
+    }
+  },
+  "status": "complete",
+  "verification": {
+    "c12_prior_alpha_overlap": 0,
+    "c12_prior_semantic_overlap": 0,
+    "c12_rows_regenerated": 40,
+    "criteria": {
+      "development_tail_guard": true,
+      "exact": true,
+      "fresh_holdout_disjoint": true,
+      "leakage_safe_freeze": true,
+      "production_promotion": false,
+      "safety": true,
+      "sealed_no_material_regret": false
+    },
+    "evaluation_cases": 188,
+    "files_verified": 9,
+    "manifest_sha256": "f3b6b4dbc8f305b0551fa675e27c6deae1ada50db0a0d5cf76ffa513e3b3b877",
+    "method_case_rows": 940,
+    "path": "docs/recognition/verification/adaptive-exact-dispatcher-robust-20260830-002.json",
+    "production_promotion": false,
+    "run": "docs/recognition/runs/adaptive-exact-dispatcher-robust-20260830-002",
+    "schema": "crse-adaptive-robust-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "semantic_rows_replayed": 940,
+    "source_files_verified": 7,
+    "status": "pass",
+    "timing_samples_checked": 14100
+  }
+}

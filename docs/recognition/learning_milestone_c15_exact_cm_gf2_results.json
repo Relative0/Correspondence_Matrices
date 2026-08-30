@@ -1,0 +1,71 @@
+{
+  "artifact_rows": 46,
+  "dataset": {
+    "composed": 20,
+    "raw": 20,
+    "rows": 40,
+    "source": "YosysHQ/yosys-bench generator semantics",
+    "upstream_commit": "52ff6fa991f2ab509618d8aaad02f307aac78848"
+  },
+  "date": "2026-08-30",
+  "interpretation": "Exact XOR, rank, cofactor/complement, and Kronecker artifacts passed reconstruction on Yosys and hard controls; explicit CM was marginally fastest, so no timing replication followed.",
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+  "run": "docs/recognition/runs/c15-exact-cm-gf2-windows-20260830-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "second_machine_timing_gate_failed",
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c15-exact-cm-gf2-summary/v1",
+  "semantic_mismatches": 0,
+  "status": "complete",
+  "summary": {
+    "control_kind_coverage": [
+      "cofactor_blocks",
+      "gf2_rank",
+      "kronecker",
+      "xor_components"
+    ],
+    "criteria": {
+      "all_structured_control_kinds_recovered": true,
+      "dense_incompressible_controls_rejected": true,
+      "exact_artifact_reconstruction": true,
+      "exact_method_outputs": true,
+      "yosys_raw_xor_false_positives_zero": true,
+      "yosys_xor_positive_recall_20_of_20": true
+    },
+    "dense_negative_cases": 8,
+    "functional_gate": true,
+    "median_case_sum_ns": {
+      "explicit_cm": 24815225600,
+      "packed_source_anf": 25218225600,
+      "robdd": 25550099300
+    },
+    "second_machine_timing_gate": false,
+    "speedup": {
+      "explicit_cm_over_robdd": 1.0296138230554712,
+      "packed_source_anf_over_explicit_cm": 0.9840194942184989,
+      "packed_source_anf_over_robdd": 1.0131600734034198
+    },
+    "timing_is_machine_specific": true,
+    "yosys_xor": {
+      "false_positives": 0,
+      "positive_cases": 20,
+      "raw_negative_cases": 20,
+      "true_positives": 20
+    }
+  },
+  "verification": {
+    "artifacts_replayed": 46,
+    "exact_method_replays": 120,
+    "measurement_rows_checked": 600,
+    "path": "docs/recognition/runs/c15-exact-cm-gf2-windows-20260830-001/independent_verification.json",
+    "run_schema": "crse-c15-exact-cm-gf2-experiment/v1",
+    "schema": "crse-c15-exact-cm-gf2-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "source_cases_replayed": 40,
+    "status": "verified",
+    "timings_recomputed": false
+  }
+}

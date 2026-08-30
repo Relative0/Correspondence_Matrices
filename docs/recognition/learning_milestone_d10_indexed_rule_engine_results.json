@@ -1,0 +1,272 @@
+{
+  "cache_version_probe": {
+    "artifact": "changed_cone_cache.json",
+    "exact": true,
+    "schema": "crse-d10-cache-version-probe/v1",
+    "serialized_reload_hits": 8,
+    "v1_cold_misses": 8,
+    "v1_warm_hits": 8,
+    "v2_hits": 6,
+    "v2_removed_invalidations": 1,
+    "v2_source_invalidations": 1,
+    "v3_revert_invalidations": 1
+  },
+  "dataset": {
+    "base_source": {
+      "audit": {
+        "alpha_structural_duplicates": 0,
+        "c7_alpha_overlap": 0,
+        "c7_semantic_overlap": 0,
+        "family_counts": {
+          "arith_add": 5,
+          "arith_mul": 5,
+          "bin2onehot": 5,
+          "popcount": 5,
+          "xor_arith_add_arith_add": 1,
+          "xor_arith_add_arith_mul": 2,
+          "xor_arith_add_bin2onehot": 3,
+          "xor_arith_add_mux_index": 1,
+          "xor_arith_mul_bin2onehot": 1,
+          "xor_arith_mul_popcount": 4,
+          "xor_bin2onehot_bin2onehot": 1,
+          "xor_popcount_bin2onehot": 4,
+          "xor_popcount_mux_index": 1,
+          "xor_popcount_popcount": 2
+        },
+        "rows": 40,
+        "semantic_duplicates": 0,
+        "size_counts": {
+          "10": 8,
+          "2": 1,
+          "3": 4,
+          "4": 2,
+          "5": 4,
+          "6": 4,
+          "7": 7,
+          "8": 5,
+          "9": 5
+        },
+        "source_kind_counts": {
+          "disjoint_xor_of_generator_outputs": 20,
+          "unused_raw_generator_output": 20
+        },
+        "split_label_counts": {
+          "sealed_a/0": 10,
+          "sealed_a/1": 10,
+          "sealed_b/0": 10,
+          "sealed_b/1": 10
+        }
+      },
+      "c7_excluded": true,
+      "c7_provenance_schema": "crse-yosys-human-decomposition-provenance/v1",
+      "license": "ISC",
+      "network_access_performed": false,
+      "positive_construction": "XOR of two source functions over disjoint variables; scalar-oracle checked",
+      "schema": "crse-yosys-composed-holdout-provenance/v1",
+      "selection": "deterministic source-family round robin for unused raw negatives and hash order for disjoint-XOR positives",
+      "source": "YosysHQ/yosys-bench generator semantics",
+      "source_checkout_modified": false,
+      "timing_used_for_selection": false,
+      "upstream_commit": "52ff6fa991f2ab509618d8aaad02f307aac78848",
+      "upstream_url": "https://github.com/YosysHQ/yosys-bench.git"
+    },
+    "motif_rows": 16,
+    "network_access_performed": false,
+    "no_op_rows": 14,
+    "rows": 30,
+    "schema": "crse-d10-dataset-provenance/v1",
+    "scope": "Motifs are deliberately inserted around independently authored Yosys-bench generator expressions; this is source-backed composition, not a claim of naturally occurring motif frequency.",
+    "selection_uses_timing": false
+  },
+  "date": "2026-08-30",
+  "interpretation": "Four exact rules, indexed bypass, provenance, and changed-cone persistence pass; no-rewrite CSE remained faster on every case, so runtime promotion is refused.",
+  "production_promotion": false,
+  "proof": {
+    "artifact_is_inert": true,
+    "compile_ns": 2577500,
+    "pack_sha256": "bcbcaff387873d726bc1d0b59d8d44cff4ccdb67f7d996c125faa3f83a3776aa",
+    "proof_ns": 4570900,
+    "proof_rows": 56,
+    "rule_ids": [
+      "arithmetic-xor-cancel/v1",
+      "adder-carry-majority/v1",
+      "comparator-shared-enable/v1",
+      "mux-shannon-xor/v1"
+    ]
+  },
+  "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+  "run": "docs/recognition/runs/d10-rule-engine-windows-20260830-002",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "local_promotion_gate_failed",
+    "used": false
+  },
+  "schema": "crse-learning-milestone-d10-indexed-rule-engine-summary/v1",
+  "semantic_mismatches": 0,
+  "status": "complete",
+  "summary": {
+    "all": {
+      "cases": 30,
+      "median_case_sum_ns": {
+        "cached": 7815200,
+        "full_scan": 22427600,
+        "indexed": 22018700,
+        "instance_cm_proof": 45994200,
+        "no_rewrite": 6049100
+      },
+      "speedup_over_no_rewrite": {
+        "cached": 0.7740172996212509,
+        "full_scan": 0.2697167775419572,
+        "indexed": 0.27472557417104554,
+        "instance_cm_proof": 0.13151875671280291
+      }
+    },
+    "by_reuse": {
+      "1": {
+        "cases": 4,
+        "median_case_sum_ns": {
+          "cached": 789200,
+          "full_scan": 4628300,
+          "indexed": 4820200,
+          "instance_cm_proof": 12699400,
+          "no_rewrite": 454300
+        },
+        "speedup_over_no_rewrite": {
+          "cached": 0.5756462240243284,
+          "full_scan": 0.09815699068772551,
+          "indexed": 0.09424920127795527,
+          "instance_cm_proof": 0.03577334362253335
+        }
+      },
+      "128": {
+        "cases": 4,
+        "median_case_sum_ns": {
+          "cached": 2456900,
+          "full_scan": 5149300,
+          "indexed": 5220700,
+          "instance_cm_proof": 11195700,
+          "no_rewrite": 2395500
+        },
+        "speedup_over_no_rewrite": {
+          "cached": 0.9750091578818837,
+          "full_scan": 0.46520886334064826,
+          "indexed": 0.45884651483517536,
+          "instance_cm_proof": 0.2139660762614218
+        }
+      },
+      "32": {
+        "cases": 4,
+        "median_case_sum_ns": {
+          "cached": 1668100,
+          "full_scan": 6212500,
+          "indexed": 6639900,
+          "instance_cm_proof": 14892000,
+          "no_rewrite": 1299900
+        },
+        "speedup_over_no_rewrite": {
+          "cached": 0.7792698279479647,
+          "full_scan": 0.2092394366197183,
+          "indexed": 0.19577102064790133,
+          "instance_cm_proof": 0.08728847703464948
+        }
+      },
+      "8": {
+        "cases": 4,
+        "median_case_sum_ns": {
+          "cached": 492500,
+          "full_scan": 2064100,
+          "indexed": 1769300,
+          "instance_cm_proof": 3645200,
+          "no_rewrite": 309600
+        },
+        "speedup_over_no_rewrite": {
+          "cached": 0.6286294416243655,
+          "full_scan": 0.14999273291022722,
+          "indexed": 0.1749844571299384,
+          "instance_cm_proof": 0.0849336113244815
+        }
+      }
+    },
+    "case_metadata_sha256": "c20d6344cb7ca9b1fd6fa2039fd301a62274ca33fdbddaead048f342677bf674",
+    "criteria": {
+      "exact_outputs": true,
+      "high_reuse_motif_speedup_at_least_1_03": false,
+      "indexed_noop_overhead_at_most_3_percent": false,
+      "no_op_false_matches_zero": true,
+      "optimistic_oracle_headroom_at_least_1_05": false
+    },
+    "false_matches": 0,
+    "high_reuse_motif": {
+      "cases": 8,
+      "median_case_sum_ns": {
+        "cached": 4125000,
+        "full_scan": 11361800,
+        "indexed": 11860600,
+        "instance_cm_proof": 26087700,
+        "no_rewrite": 3695400
+      },
+      "speedup_over_no_rewrite": {
+        "cached": 0.8958545454545455,
+        "full_scan": 0.32524776003802214,
+        "indexed": 0.3115693978382207,
+        "instance_cm_proof": 0.14165296289055762
+      }
+    },
+    "instance_cm_proof_calls": 217,
+    "local_promotion_gate": false,
+    "motif": {
+      "cases": 16,
+      "median_case_sum_ns": {
+        "cached": 5406700,
+        "full_scan": 18054200,
+        "indexed": 18450100,
+        "instance_cm_proof": 42432300,
+        "no_rewrite": 4459300
+      },
+      "speedup_over_no_rewrite": {
+        "cached": 0.8247729668744336,
+        "full_scan": 0.24699515902116959,
+        "indexed": 0.2416951669638647,
+        "instance_cm_proof": 0.10509211143397836
+      }
+    },
+    "no_op": {
+      "cases": 14,
+      "median_case_sum_ns": {
+        "cached": 2408500,
+        "full_scan": 4373400,
+        "indexed": 3568600,
+        "instance_cm_proof": 3561900,
+        "no_rewrite": 1589800
+      },
+      "speedup_over_no_rewrite": {
+        "cached": 0.660078887274237,
+        "full_scan": 0.3635158000640234,
+        "indexed": 0.44549683349212577,
+        "instance_cm_proof": 0.44633482130323704
+      }
+    },
+    "optimistic_free_oracle": {
+      "no_rewrite_ns": 6049100,
+      "oracle_ns": 6049100,
+      "speedup": 1.0
+    },
+    "timing_is_machine_specific": true
+  },
+  "superseded_run": {
+    "path": "docs/recognition/runs/d10-rule-engine-windows-20260830-001",
+    "reason": "raw controls included naturally matched carry motifs; corrected before decision"
+  },
+  "verification": {
+    "cases_replayed": 30,
+    "measurement_rows_replayed": 1050,
+    "pack_sha256": "bcbcaff387873d726bc1d0b59d8d44cff4ccdb67f7d996c125faa3f83a3776aa",
+    "path": "docs/recognition/runs/d10-rule-engine-windows-20260830-002/independent_verification.json",
+    "run_schema": "crse-d10-rule-engine-experiment/v1",
+    "schema": "crse-d10-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "verified",
+    "timings_recomputed": false,
+    "verifier_independent_of_timing_selection": true
+  }
+}

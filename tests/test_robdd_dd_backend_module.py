@@ -4,10 +4,12 @@ import json
 import numpy as np
 import pytest
 
-from cm_exprlib import And, Or, Var, eval_expr_tt
+from cm_exprlib import And, Or, Var, Xor, eval_expr_tt
 from cmbench.backends.robdd_dd import (
     _empty_robdd_dd_result,
     compact_order_repr,
+    robdd_interaction_order,
+    robdd_interaction_profile,
     robdd_variable_order,
     run_robdd_dd_backend,
     select_dd_module,
@@ -21,6 +23,20 @@ def test_robdd_variable_order_fixed_policy() -> None:
 def test_robdd_variable_order_expr_policy_uses_first_occurrence() -> None:
     expr = And(Or(Var(2), Var(0)), Var(1))
     assert robdd_variable_order(expr, 4, "expr", None) == ["x2", "x0", "x1", "x3"]
+
+
+def test_interaction_order_is_deterministic_and_keeps_connected_variables_together() -> None:
+    pair = Xor(Var(3), Var(1))
+    expr = And(Or(pair, Var(2)), Xor(pair, Var(0)))
+    occurrences, weights = robdd_interaction_profile(expr, 5)
+    order = robdd_interaction_order(expr, 5)
+    assert occurrences == [1, 1, 1, 1, 0]
+    assert weights[1][3] >= 1
+    assert order == robdd_interaction_order(expr, 5)
+    assert set(order) == {f"x{i}" for i in range(5)}
+    assert abs(order.index("x1") - order.index("x3")) == 1
+    assert order[-1] == "x4"
+    assert robdd_variable_order(expr, 5, "interaction", None) == order
 
 
 def test_compact_order_repr_short_and_long() -> None:
@@ -124,6 +140,33 @@ def test_best_of_k_persists_trials_and_selection_objective(objective: str) -> No
     assert row["robdd_fastest_build_time_s"] == min(t["build_time_s"] for t in trials)
     assert row["robdd_order_generation_time_s"] >= 0.0
     assert row["robdd_order_search_time_s"] >= sum(t["build_time_s"] for t in trials)
+
+
+def test_build_plus_query_objective_charges_bounded_partial_restrictions() -> None:
+    if importlib.util.find_spec("dd.autoref") is None:
+        pytest.skip("dd.autoref unavailable")
+    expr = Or(And(Var(0), Var(1)), And(Var(2), Var(3)))
+    tt_ref = eval_expr_tt(expr, 4).astype(np.uint8).reshape(-1)
+    row = run_robdd_dd_backend(
+        expr,
+        4,
+        backend_preference="autoref",
+        order_policy="best-of-k",
+        order_sweeps=4,
+        order_seed=91,
+        selection_objective="build_plus_query",
+        query_assignments=({"x0": 0}, {"x0": 1, "x3": 0}, {"x2": 1}),
+        tt_ref=tt_ref,
+    )
+    trials = json.loads(row["robdd_order_trials_json"])
+    assert row["robdd_status"] == "ok"
+    assert row["robdd_ok"] is True
+    assert row["robdd_selection_objective"] == "build_plus_query"
+    assert row["robdd_selected_query_time_s"] >= 0
+    assert row["robdd_selected_build_plus_query_time_s"] == min(
+        trial["build_plus_query_time_s"] for trial in trials)
+    assert row["robdd_order_search_time_s"] >= sum(
+        trial["build_plus_query_time_s"] for trial in trials)
 
 
 def test_unknown_selection_objective_is_rejected() -> None:

@@ -1,7 +1,4 @@
 {
-  "schema": "crse-experiment-register/v1",
-  "updated": "2026-08-29",
-  "checkpoint": "db952fb6772231ff8193811511afa49ab499d729",
   "allowed_statuses": [
     "planned",
     "implemented",
@@ -11,98 +8,194 @@
     "negative-result",
     "blocked-with-reason"
   ],
-  "completion_rule": "A status describes only the explicit measured slice; minimum_scope remains outstanding unless separately evidenced.",
-  "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",
   "applications": [
     {
-      "priority": "First",
-      "name": "Configuration/product families",
       "boundary": "Partial selections, dead-feature/validity queries, version deltas and reuse; compare incremental SAT/BDD/exact CM, not whole-product enumeration against a yes/no solver",
-      "status": "planned",
-      "results": []
-    },
-    {
+      "name": "Configuration/product families",
       "priority": "First",
-      "name": "Hardware verification/design",
-      "boundary": "Bounded EPFL-style cones, repeated revisions, hidden motifs, restriction, equivalent rewrites and localized changes; compare ABC/AIG/CUDD/SAT/exact packed paths",
-      "status": "measured",
       "results": [
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "natural_revision_cache_milestone_d6_results.json",
+          "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+          "scope": "Twenty actual adjacent feature-model transitions yielded 120 exact bounded revision cases, with 41 safe source hits, 79 invalidations and zero mismatches; direct CNF remained about 10.94x faster than cached CM."
+        }
+      ],
+      "status": "measured"
+    },
+    {
+      "boundary": "Bounded EPFL-style cones, repeated revisions, hidden motifs, restriction, equivalent rewrites and localized changes; compare ABC/AIG/CUDD/SAT/exact packed paths",
+      "name": "Hardware verification/design",
+      "priority": "First",
+      "results": [
+        {
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Evaluation-only transfer smoke on 16 provenance-reviewed eight-variable EPFL cones from 15 circuits; all were non-affine, so only specificity and exact rejection were measured."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "Four exact task contracts measured on 12 evaluation-only EPFL cones selected after excluding every Milestone-C record ID; all outputs verified, no natural root motif found, and no backend promoted."
         },
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "The proved matcher found five internal AIG-XOR sites in two of 12 evaluation-only EPFL cones with zero output errors; matching still lost to the no-rewrite CSE control."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "Generated hardware-style related DAG cones demonstrated exact two-rule overlap priority, structural cache hits and changed-cone invalidation; natural version histories remain pending."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "A sealed 32-cone, 15-circuit EPFL slice at support 9-12 measured exact cold and warm proved-rule reuse. The gated three-session sequence achieved 1.030x over no rewrite; no production promotion follows from one machine."
+        },
+        {
+          "machine_summary": "natural_normalization_milestone_d7_results.json",
+          "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+          "scope": "Bounded fixpoint normalization exposed 18 later factoring applications on the reused D5 EPFL slice but was slower than one pass and no rewrite; this is exploratory, not confirmation."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "Frozen Linux confirmation preserved all exact outputs but measured one pass at 0.929x versus no rewrite; unconditional promotion was refused."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "A calibrated frozen policy was exact on circuit-disjoint optimized BLIF cones but abstained everywhere; unconditional one pass measured 0.429x and promotion was refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "A frozen 32-function EPFL n=8 slice was checked for balanced XOR decomposition. All were negative, so only specificity and exact rejection were measured; no natural-positive transfer claim is made."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "A 9,060-cone EPFL scout yielded 894 exact arbitrary-partition positives. Balanced circuit-disjoint and structure-matched learning studies failed promotion safely; exact ANF controls were perfect."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Direct variable-cut and same-circuit pair-ranking GNNs were exact-check safe but failed held-out transfer and cost criteria; no rewrite or learned recognizer was promoted."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Variable-conditioned GNNs remained unprofitable, while exact source symbolic ANF achieved perfect natural decomposition recognition and median gains with an unresolved p95 tail."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "Packed and cached exact source ANF removed the EPFL p95 product tail; the validation gate failed narrowly."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "Exact source decomposition transferred to independent Yosys generator families; sparse set ANF retained the best latency."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "Exact Yosys-family decomposition and representation timing transferred to a separately provisioned Linux CPU."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "Exact adaptive source-ANF routing controlled dense tails and passed the Linux second-machine 5% gate; the Windows/Linux difference keeps production enablement guarded."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "An exact in-kernel ANF sentinel improved dense tails but failed sparse no-regret, so universal enablement was refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "A frozen task guard and exact shadow mode separated throughput from latency-tail policy while preserving all outputs."
+        },
+        {
+          "machine_summary": "learning_milestone_e1_bdd_order_results.json",
+          "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+          "scope": "Exact BDD order, reuse, and persistence were measured on bounded generated mux, carry, comparator, and hidden-component formulas; first occurrence led and learned routing was negative."
+        },
+        {
+          "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
+          "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+          "scope": "Generated mux, carry, comparator, and component formulas now have exact SAT, incremental-assumption, and equivalence-miter adapters; the learned execution policy was not profitable on the bounded slice."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
+        },
+        {
+          "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+          "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
         }
-      ]
+      ],
+      "status": "measured"
     },
     {
-      "priority": "Next",
-      "name": "Security/access-control policy audit",
       "boundary": "Exact bounded change-impact and context restriction; native Cedar/OPA semantics remain authoritative for a verified Boolean subset",
-      "status": "planned",
-      "results": []
-    },
-    {
+      "name": "Security/access-control policy audit",
       "priority": "Next",
-      "name": "Compiler/program-analysis predicates",
+      "results": [],
+      "status": "planned"
+    },
+    {
       "boundary": "Pure Boolean i1/guard families and known-fact rewrites; do not silently model integer overflow, memory, poison, or undefined behavior as ordinary Booleans",
-      "status": "planned",
-      "results": []
+      "name": "Compiler/program-analysis predicates",
+      "priority": "Next",
+      "results": [],
+      "status": "planned"
     },
     {
-      "priority": "Later",
-      "name": "AI-agent hard guardrails",
       "boundary": "Deterministic authorization logic, delegation/tool-policy versions and provenance; not open-ended reasoning or neural confidence as permission",
-      "status": "planned",
-      "results": []
+      "name": "AI-agent hard guardrails",
+      "priority": "Later",
+      "results": [],
+      "status": "planned"
     },
     {
-      "priority": "Later",
-      "name": "Boolean biological networks",
       "boundary": "Update-rule/intervention families with preserved update semantics; update speed is not an attractor-analysis result",
-      "status": "planned",
-      "results": []
-    },
-    {
+      "name": "Boolean biological networks",
       "priority": "Later",
-      "name": "Regulated rules/decision tables",
-      "boundary": "Boolean eligibility, coverage, overlaps and version regressions; preserve priority/hit-policy and refuse unsupported numeric/date/null semantics",
-      "status": "planned",
-      "results": []
+      "results": [],
+      "status": "planned"
     },
     {
-      "priority": "Narrow",
-      "name": "Classical reversible/control logic",
+      "boundary": "Boolean eligibility, coverage, overlaps and version regressions; preserve priority/hit-policy and refuse unsupported numeric/date/null semantics",
+      "name": "Regulated rules/decision tables",
+      "priority": "Later",
+      "results": [],
+      "status": "planned"
+    },
+    {
       "boundary": "Boolean output functions with explicit constants, ancilla and garbage conventions; no claims about quantum amplitudes, phase, entanglement or unitary simulation",
-      "status": "planned",
-      "results": []
+      "name": "Classical reversible/control logic",
+      "priority": "Narrow",
+      "results": [],
+      "status": "planned"
     }
   ],
+  "checkpoint": "db952fb6772231ff8193811511afa49ab499d729",
+  "completion_rule": "A status describes only the explicit measured slice; minimum_scope remains outstanding unless separately evidenced.",
+  "dependency_request": "NEURAL_DEPENDENCY_REQUEST.md",
+  "milestones": {
+    "A": "implemented and measured within foundation slice",
+    "B": "first actual NumPy MLP comparison measured; negative result",
+    "C": "C14 task guard and exact shadow complete; C13 dense-tail improvement retained, sparse sentinel overhead remains negative, production promotion stays disabled",
+    "D": "D10 indexed four-rule engine and C15 exact CM/GF(2) decomposition measured; exact infrastructure passes, both timing promotion gates fail, and production remains disabled",
+    "E": "E1 bounded BDD order selection and E2 exact SAT/equivalence guidance measured; both exact infrastructures pass, both learned timing policies remain negative, native/large-source follow-ups pending"
+  },
+  "schema": "crse-experiment-register/v1",
   "tracks": [
     {
-      "id": "R01",
-      "name": "Task-aware routing and cost prediction",
-      "minimum_scope": "Direct/CSE/CM, bigint/words, later task-eligible BDD/SAT/counting; cheap features, query-count rules, learned feature acquisition, feasibility and tail-risk prediction",
-      "hypothesis": "Choose an exact backend from pre-execution features and measured costs.",
-      "input_output_contract": "AST plus query contract -> exact packed result",
-      "representation": "AST features",
-      "models_and_deterministic_controls": "fixed direct/CSE/CM, query-count rule, cost tree",
-      "exact_checker": "Independent NumPy interpreter",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -114,34 +207,89 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add one bounded expression-size/tail-risk feature, freeze before evaluation, and replicate on a new natural source family.",
+      "exact_checker": "Independent NumPy interpreter",
+      "hypothesis": "Choose an exact backend from pre-execution features and measured costs.",
+      "id": "R01",
+      "input_output_contract": "AST plus query contract -> exact packed result",
+      "minimum_scope": "Direct/CSE/CM, bigint/words, later task-eligible BDD/SAT/counting; cheap features, query-count rules, learned feature acquisition, feasibility and tail-risk prediction",
+      "models_and_deterministic_controls": "fixed direct/CSE/CM, query-count rule, cost tree",
+      "name": "Task-aware routing and cost prediction",
+      "next_experiment": "Retain the fixed resident SAT fallback; route only after an independently sourced larger-task study establishes headroom.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "AST features",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Query-only cost tree measured; faster than CSE but slower than equally cheap query rule. Other portfolio/tasks remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "A fitted task/query cost policy selected only exact backends. It improved partial restrictions by 1.654x on generated test and 1.530x on the nonoverlapping EPFL D slice, but slowed complete-vector requests; no policy is promoted."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "A deterministic task/reuse/size gate was evaluated on a sealed natural hardware source. It produced a small 1.030x total gain across three sessions, with cold-session loss and warm-session gains."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "A frozen calibrated structural policy was evaluated on 33 circuit-disjoint BLIF workloads; it safely selected no rewrite for every workload."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "An exact bounded symbolic-ANF source-DAG control now avoids initial truth-vector construction and retains proof-compatible partitions."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "Packed exact source-DAG ANF now removes the retained set-product tail while preserving proof-compatible partitions."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "The frozen exact source recognizers transferred with zero errors to 40 independent Yosys-derived cases."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "All six exact representations reproduced every canonical partition across Windows and a separately provisioned Linux CPU."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "The frozen robust dispatcher remained exact. C12 measured 0.968x/0.925x locally and 0.988x/0.969x on Linux; the second-machine 5% gate passed, but profitability remains platform-sensitive."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "The exact in-kernel sentinel improved C6 dense sequence and p95 latency by 19.309x and 28.038x, but failed sparse no-regret on C12 A/B at 0.890x/0.744x."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "A frozen task contract selected exact set or sentinel arms before execution; throughput stayed within 3% regret and latency retained 27.876x C6 p95 protection."
+        },
+        {
+          "machine_summary": "learning_milestone_e1_bdd_order_results.json",
+          "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+          "scope": "A task-specific BDD study separated minimum nodes, cold build, and build-plus-restriction objectives; exact advice selected only variable-order strategies."
+        },
+        {
+          "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
+          "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+          "scope": "Task-aware routing now includes bounded single-SAT, assumption-session, and equivalence-miter lifecycles with exact advice-off fallback."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "A fitted task/query cost policy selected only exact backends. It improved partial restrictions by 1.654x on generated test and 1.530x on the nonoverlapping EPFL D slice, but slowed complete-vector requests; no policy is promoted.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Task-aware routing now includes bounded single-SAT, assumption-session, and equivalence-miter lifecycles with exact advice-off fallback."
     },
     {
-      "id": "R02",
-      "name": "Computational-subclass recognition",
-      "minimum_scope": "Hidden affine/XOR, Horn, dual-Horn, 2-CNF, low-width/separator structure, independent components, cardinality/threshold constraints, mux/ITE, arithmetic blocks and adders",
-      "hypothesis": "Recognizing a hidden subclass can reduce exact execution work.",
-      "input_output_contract": "bounded AST -> subclass proposal with exact evidence",
-      "representation": "AST, local CM, later graph",
-      "models_and_deterministic_controls": "exact affine detector, CM simplifier, MLP, later GNN",
-      "exact_checker": "Complete local truth-vector equivalence",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -153,34 +301,54 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add natural positive and negative examples for another subclass without tuning on the retained EPFL slice.",
+      "exact_checker": "Complete local truth-vector equivalence",
+      "hypothesis": "Recognizing a hidden subclass can reduce exact execution work.",
+      "id": "R02",
+      "input_output_contract": "bounded AST -> subclass proposal with exact evidence",
+      "minimum_scope": "Hidden affine/XOR, Horn, dual-Horn, 2-CNF, low-width/separator structure, independent components, cardinality/threshold constraints, mux/ITE, arithmetic blocks and adders",
+      "models_and_deterministic_controls": "exact affine detector, CM simplifier, MLP, later GNN",
+      "name": "Computational-subclass recognition",
+      "next_experiment": "Pause neural tuning until a representation change or more training circuits are available.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "AST, local CM, later graph",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Only hidden affine recognition measured; NN overhead and near-match classification were poor. Other subclasses remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Hidden-affine classification now compares matched matrix, CNN, GNN and fused inputs. Graph/fused learned generated held-out structure, but all models transferred poorly to the all-negative EPFL slice; other subclasses remain planned."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "Balanced GF(2) row/column decomposition is now an exact recognized subclass over variable-size CMs. Learned classification did not transfer beyond chance on n=10."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "EPFL now supplies exact positive and negative arbitrary-partition XOR decompositions over 4-10 live variables; 188 balanced circuit-disjoint examples are retained."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Direct canonical variable-cut supervision was measured on 94 exact same-circuit EPFL pairs; held-out cut recovery remained unstable."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Bidirectional per-variable cut scoring improved confirmatory recovery but held-out square recall remained only 0.125-0.188."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Hidden-affine classification now compares matched matrix, CNN, GNN and fused inputs. Graph/fused learned generated held-out structure, but all models transferred poorly to the all-negative EPFL slice; other subclasses remain planned.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Bidirectional per-variable cut scoring improved confirmatory recovery but held-out square recall remained only 0.125-0.188."
     },
     {
-      "id": "R03",
-      "name": "Verified motifs and semantic macros",
-      "minimum_scope": "Obscured/redundantly written XOR, mux, comparators, half/full adders, repeated cones, and generalized functions; verified boundary and replacement",
-      "hypothesis": "Verified functional motifs can replace obscured source regions.",
-      "input_output_contract": "source region -> candidate AST and acceptance evidence",
-      "representation": "boundary variables, AST, local CM",
-      "models_and_deterministic_controls": "no rewrite, exact detector, deterministic rewrite, learned proposal",
-      "exact_checker": "Independent original/candidate truth evaluation",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -192,49 +360,129 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add a nonoverlapping factoring or mux rule and test multi-step normalization and loop refusal.",
+      "exact_checker": "Independent original/candidate truth evaluation",
+      "hypothesis": "Verified functional motifs can replace obscured source regions.",
+      "id": "R03",
+      "input_output_contract": "source region -> candidate AST and acceptance evidence",
+      "minimum_scope": "Obscured/redundantly written XOR, mux, comparators, half/full adders, repeated cones, and generalized functions; verified boundary and replacement",
+      "models_and_deterministic_controls": "no rewrite, exact detector, deterministic rewrite, learned proposal",
+      "name": "Verified motifs and semantic macros",
+      "next_experiment": "Seek larger natural contractions with positive downstream oracle headroom before enabling the indexed runtime path.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "boundary variables, AST, local CM",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Only root affine replacement measured with independent acceptance. No generalized macro/rule discovery."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Neural motif gates produced exact-checked affine replacements: 630 accepted, 552 semantic rejections and zero final mismatches across repeated cells. Generalized macro/rule discovery remains pending."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "The bounded exact candidate path now covers canonical affine, three-input mux and three-input majority roots. The retained run found and safely accepted only ten generated affine functions; no natural EPFL D candidate was found."
         },
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "A fixed compiled matcher now recognizes an exhaustively proved AIG-XOR macro at structurally equal metavariable bindings. It applied exactly at 128 generated sites and five internal sites in two evaluation-only EPFL cones."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "The fixed proved macro boundary now contains two rules: the specific AIG-XOR macro and a general De Morgan OR macro. Deterministic priority resolves their intentional overlap, with eight proof rows and zero output errors."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "A third common-factor contraction is proved over three metavariables. The fixed pack now has 16 exhaustive rows, exact sharing-aware matching, and strictly decreasing rewrites."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "The proved pack found 18 XOR and 433 De Morgan applications in 32 natural EPFL cones; the common-factor rule had zero incidence in the raw AND/INV language."
+        },
+        {
+          "machine_summary": "natural_normalization_milestone_d7_results.json",
+          "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+          "scope": "Bounded fixpoint normalization exposed 18 common-factor contractions after De Morgan lowering while preserving all exact outputs."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "The frozen three-rule pack produced the same 451 one-pass applications on Linux with zero semantic mismatches."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "The proved pack transferred exactly to optimized BLIF/SOP cones: 43 common-factor applications reduced evaluation CSE operations from 478 to 437 with zero semantic mismatches."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "Positive proposals now carry canonical exact row/column factor witnesses; every accepted proposal was recomposed and checked with zero mismatches."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Natural positive proposals now carry discovered variable partitions and exact factor witnesses; all acceptance paths preserve the original function on rejection."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Graph proposals now name a complete variable partition and pay a fresh exact witness; all unsafe or incorrect partitions fall back unchanged."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Exact source symbolic ANF provides canonical partitions before CM construction and still passes the same exact witness boundary."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "A validation-frozen cached hybrid preserved exact source-level decomposition on 11 fallbacks but missed confirmatory p95 by 1.4%."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "Packed source ANF beat both truth-vector controls, while sparse set ANF remained faster on the external low-complexity family."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "Cross-machine results support a set/packed/bitset portfolio: set led sparse medians, packed controlled tails, and bitset remained competitive."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "Exact source partitions remained stable through set, packed, bitset, restart, and in-place representation changes on fresh Yosys-derived functions."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "Set-prefix reuse and exact packed continuation preserved every canonical source partition across 188 C6/C7/C11/C12 cases."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "Exact bounded shadow execution compared the alternate representation on 684 rows without changing any returned partition."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "The fixed proved macro boundary now contains two rules: the specific AIG-XOR macro and a general De Morgan OR macro. Deterministic priority resolves their intentional overlap, with eight proof rows and zero output errors.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
     },
     {
-      "id": "R04",
-      "name": "Rewrite profitability and scheduling",
-      "minimum_scope": "Region/rule/direction selection, sequences, stopping, cost-aware factoring versus expansion, and preservation of sharing",
-      "hypothesis": "Ranking region/rule/direction can save more work than selection costs.",
-      "input_output_contract": "AST plus cost contract -> finite rewrite schedule",
-      "representation": "shared AST/CM IR",
-      "models_and_deterministic_controls": "fixed rule order, greedy measured costs, learned ranker",
-      "exact_checker": "Admitted identities and per-instance exact checks",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -246,38 +494,73 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Freeze a cheap skip/apply profitability rule and confirm it on unseen version histories with no-rewrite retained.",
+      "exact_checker": "Admitted identities and per-instance exact checks",
+      "hypothesis": "Ranking region/rule/direction can save more work than selection costs.",
+      "id": "R04",
+      "input_output_contract": "AST plus cost contract -> finite rewrite schedule",
+      "minimum_scope": "Region/rule/direction selection, sequences, stopping, cost-aware factoring versus expansion, and preservation of sharing",
+      "models_and_deterministic_controls": "fixed rule order, greedy measured costs, learned ranker",
+      "name": "Rewrite profitability and scheduling",
+      "next_experiment": "Use no-rewrite as the default; schedule only after a natural candidate beats it end to end under advice-off control.",
+      "representation": "shared AST/CM IR",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "A stop-versus-one-rewrite experiment accepted 100 exact workload instances with zero errors, but full CM detection and per-instance proof dominated every downstream saving (aggregate speedups about 0.03-0.24 versus the task rule)."
         },
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "One universal Boolean proof replaced per-instance explicit-CM proof. Warm compiled reuse was 2.09-2.91x faster end to end than per-site CM proof on generated batches, but remained slower than no rewrite, so no scheduler is promoted."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "Persistent exact structural caching was 2.08-2.11x faster than fresh rematching on sparse changed versions and 1.382x faster over the cold-plus-two-change sequence. It still lost to no rewrite, so no scheduler is promoted."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "A fixed reuse-and-size gate was 1.366x faster than fresh matching and 1.145x faster than ungated caching on generated versions, but remained 0.891x versus no rewrite."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "The frozen D4 gate achieved 1.030x over no rewrite on three natural sessions. Cold session was 0.834x, warm sessions were 1.156-1.168x, and the 128-use stratum was 1.167x."
+        },
+        {
+          "machine_summary": "natural_revision_cache_milestone_d6_results.json",
+          "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+          "scope": "On 120 bounded cases from actual adjacent feature-model revisions, exact source caching was 1.015x over fresh CM but only 0.091x versus direct conditioned-CNF evaluation."
+        },
+        {
+          "machine_summary": "natural_normalization_milestone_d7_results.json",
+          "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+          "scope": "At the frozen 128-execution policy one pass achieved 1.050x over no rewrite on the reused D5 slice, while fixpoint achieved only 0.805x."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "Frozen Linux confirmation measured 0.929x for one pass versus no rewrite, reversing the small Windows gain and refusing production promotion."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "The separately trained frozen policy abstained on all 33 evaluation workloads; unconditional one pass measured 0.429x and the charged gate measured 0.982x versus no rewrite."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Persistent exact structural caching was 2.08-2.11x faster than fresh rematching on sparse changed versions and 1.382x faster over the cold-plus-two-change sequence. It still lost to no rewrite, so no scheduler is promoted."
+      "status_reason": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
     },
     {
-      "id": "R05",
-      "name": "Generalized rule discovery",
-      "minimum_scope": "Infer identities over metavariables, synthesize macros, prove before admission, compile cheap matchers, prevent rewrite cycles",
-      "hypothesis": "Proved discoveries can become inexpensive reusable deterministic rules.",
-      "input_output_contract": "bounded metavariable DSL -> proved rule and compiled matcher",
-      "representation": "Boolean DSL and proof provenance",
-      "models_and_deterministic_controls": "grammar enumeration, existing rules, neural/LLM proposal",
-      "exact_checker": "Exhaustive metavariable proof plus use-site conditions",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -289,33 +572,48 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add bounded normalization-loop, duplicate-rule and semantic-overlap refusal tests before any proposed-rule ingestion.",
+      "exact_checker": "Exhaustive metavariable proof plus use-site conditions",
+      "hypothesis": "Proved discoveries can become inexpensive reusable deterministic rules.",
+      "id": "R05",
+      "input_output_contract": "bounded metavariable DSL -> proved rule and compiled matcher",
+      "minimum_scope": "Infer identities over metavariables, synthesize macros, prove before admission, compile cheap matchers, prevent rewrite cycles",
+      "models_and_deterministic_controls": "grammar enumeration, existing rules, neural/LLM proposal",
+      "name": "Generalized rule discovery",
+      "next_experiment": "Extend the inert pack only with independently proved rules whose natural occurrences and downstream savings are measured.",
+      "representation": "Boolean DSL and proof provenance",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "The first generalized rule boundary is implemented: exhaustive Boolean metavariable evidence, strict hashed inert artifact, repeated-binding side conditions, and a fixed non-executable matcher. Rule discovery itself remains planned."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "A strict two-rule pack now records proof rows, hashes, fixed priority and overlap accounting. It selects only built-in matchers; learned rule discovery, duplicate semantic detection and larger conflict graphs remain pending."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "The v2 pack fixes priority, rejects malformed or duplicate identities, and requires a strict operator-count decrease. General semantic-overlap admission remains pending."
+        },
+        {
+          "machine_summary": "natural_normalization_milestone_d7_results.json",
+          "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+          "scope": "Multi-pass execution now requires strict expanded-AST decrease, exact cycle detection, finite pass/application caps, and supports overlap refusal."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "A strict two-rule pack now records proof rows, hashes, fixed priority and overlap accounting. It selects only built-in matchers; learned rule discovery, duplicate semantic detection and larger conflict graphs remain pending."
+      "status_reason": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
     },
     {
-      "id": "R06",
-      "name": "CM decomposition and layout",
-      "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
-      "hypothesis": "Exact block structure can justify a cheaper CM partition.",
-      "input_output_contract": "aligned CM -> verified decomposition and reconstruction",
-      "representation": "cofactors, blocks, GF(2) factors",
-      "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
-      "exact_checker": "Exact reconstruction under explicit order and masks",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -327,94 +625,145 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Measure exact cofactor/block reuse when a CM is already present, then add one GF(2) or repeated-block decomposition control.",
+      "exact_checker": "Exact reconstruction under explicit order and masks",
+      "hypothesis": "Exact block structure can justify a cheaper CM partition.",
+      "id": "R06",
+      "input_output_contract": "aligned CM -> verified decomposition and reconstruction",
+      "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
+      "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
+      "name": "CM decomposition and layout",
+      "next_experiment": "Rank bounded candidate partitions on larger source cones, reconstruct every proposal exactly, and retain exhaustive-budget and advice-off controls.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "cofactors, blocks, GF(2) factors",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Exact layout/transposition/negation/cofactor teacher tested. Partition ranking and GF(2) decomposition experiments remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "Explicit dense CM construction, lookup and cofactoring were measured from the original expression. On EPFL D they achieved only 0.093-0.472x the task-rule speed across the four tasks; decomposition and already-materialized-CM contracts remain pending."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "An executable cofactor/decomposition teacher now detects M[r,c]=g[r] XOR h[c], retains exact factors, and checks distance-one controls across n=4,6,8,10."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "The exact teacher now proves f(X)=g(A) XOR h(B) for arbitrary nontrivial partitions using disconnected ANF interaction components."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Source-DAG GF(2) polynomial propagation exactly reproduced all 188 scalar truth tables and arbitrary partitions."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "Exact GF(2) OR-convolution over a 1,024-bit coefficient vector matched all 188 set ANFs and scalar truth tables."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "Packed, set, NumPy, and direct-bitset paths returned identical canonical partitions across five external generator families."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "Independent Linux replay verified 2,160 method/case/repetition outputs with zero semantic mismatches."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "Two new balanced 40-case source sets preserved exact independent-component partitions with zero overlap against prior source cases."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "All 11,280 sentinel, no-sentinel, advice-off, and measured executions retained exact independent-component partitions."
+        },
+        {
+          "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+          "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
-      "status": "negative-result",
-      "status_reason": "Explicit dense CM construction, lookup and cofactoring were measured from the original expression. On EPFL D they achieved only 0.093-0.472x the task-rule speed across the four tasks; decomposition and already-materialized-CM contracts remain pending.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "status": "measured",
+      "status_reason": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
     },
     {
-      "id": "R07",
-      "name": "Order and compilation selection",
-      "minimum_scope": "BDD variable order including native reordering controls, AIG cuts/balancing/refactoring/resubstitution, compact representations, low-width decomposition, and query-appropriate targets",
-      "hypothesis": "Task-specific order/compilation advice can amortize preparation.",
-      "input_output_contract": "AST and task -> bounded order/compilation proposal",
-      "representation": "BDD, AIG, CM IR",
-      "models_and_deterministic_controls": "native order controls, fixed orders, learned ranking",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
       "exact_checker": "Bounded exact equivalence with manager/order identity",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
-      "dependencies": {
-        "available": [
-          "Python",
-          "NumPy",
-          "existing CM/CRSE code",
-          "PyTorch 2.10.0+cpu (isolated optional environment)"
-        ],
-        "optional_not_installed": [
-          "live LLM model/provider"
-        ]
-      },
-      "next_experiment": "Inspect existing adapters before an equal-budget order experiment.",
-      "results": [],
+      "hypothesis": "Task-specific order/compilation advice can amortize preparation.",
+      "id": "R07",
+      "input_output_contract": "AST and task -> bounded order/compilation proposal",
+      "minimum_scope": "BDD variable order including native reordering controls, AIG cuts/balancing/refactoring/resubstitution, compact representations, low-width decomposition, and query-appropriate targets",
+      "models_and_deterministic_controls": "native order controls, fixed orders, learned ranking",
+      "name": "Order and compilation selection",
+      "next_experiment": "Add a natural held-out source and optional identified native CUDD control before any broader order claim.",
+      "representation": "BDD, AIG, CM IR",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
-      "status": "planned",
-      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
-    },
-    {
-      "id": "R08",
-      "name": "Functional similarity and retrieval",
-      "minimum_scope": "Rank equivalent/complementary/related functions, semantic embeddings, nearest-candidate lookup, and exact follow-up verification; compare hashing and deterministic signatures",
-      "hypothesis": "Functional embeddings may reduce verified candidate lookup costs.",
-      "input_output_contract": "query function and library -> ranked candidate IDs",
-      "representation": "local CM, graph embeddings",
-      "models_and_deterministic_controls": "hashing, deterministic signatures, contrastive retrieval",
-      "exact_checker": "Exact equivalence/complement check after retrieval",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
-      "dependencies": {
-        "available": [
-          "Python",
-          "NumPy",
-          "existing CM/CRSE code",
-          "PyTorch 2.10.0+cpu (isolated optional environment)"
-        ],
-        "optional_not_installed": [
-          "live LLM model/provider"
-        ]
-      },
-      "next_experiment": "Compare deterministic truth/signature retrieval and train on more independent functional groups before another sealed evaluation.",
       "results": [
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
+          "machine_summary": "learning_milestone_e1_bdd_order_results.json",
+          "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+          "scope": "Fixed, first-occurrence, interaction, random best-of-four, and a bounded cost tree were measured on 20 alpha-distinct mux/arithmetic/comparator/component formulas with exact reloadable artifacts."
+        }
+      ],
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "status": "measured",
+      "status_reason": "Fixed, first-occurrence, interaction, random best-of-four, and a bounded cost tree were measured on 20 alpha-distinct mux/arithmetic/comparator/component formulas with exact reloadable artifacts."
+    },
+    {
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "exact_checker": "Exact equivalence/complement check after retrieval",
+      "hypothesis": "Functional embeddings may reduce verified candidate lookup costs.",
+      "id": "R08",
+      "input_output_contract": "query function and library -> ranked candidate IDs",
+      "minimum_scope": "Rank equivalent/complementary/related functions, semantic embeddings, nearest-candidate lookup, and exact follow-up verification; compare hashing and deterministic signatures",
+      "models_and_deterministic_controls": "hashing, deterministic signatures, contrastive retrieval",
+      "name": "Functional similarity and retrieval",
+      "next_experiment": "Compare deterministic truth/signature retrieval and train on more independent functional groups before another sealed evaluation.",
+      "representation": "local CM, graph embeddings",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "results": [
+        {
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "An actual contrastive GNN was trained on exact-equivalent graph pairs. Top-1 exact retrieval was 0.469 on both test seeds, missing the predeclared 0.80 threshold; exact checks safely rejected misses."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "negative-result",
       "status_reason": "An actual contrastive GNN was trained on exact-equivalent graph pairs. Top-1 exact retrieval was 0.469 on both test seeds, missing the predeclared 0.80 threshold; exact checks safely rejected misses."
     },
     {
-      "id": "R09",
-      "name": "Partial contexts, sessions, and versions",
-      "minimum_scope": "Choose specialization, incremental updates, reusable compiled regions, cache policies, and change-impact strategy; correct invalidation, context identity, provenance, serialize/reload",
-      "hypothesis": "Related contexts/versions may repay selective compilation and reuse.",
-      "input_output_contract": "AST history plus context identity -> exact query/update result",
-      "representation": "DAG, context keys, compiled regions",
-      "models_and_deterministic_controls": "result cache, compiled cache, incremental exact, learned policy",
-      "exact_checker": "Context-aware invalidation and independent output checks",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -426,99 +775,140 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Repeat on actual related revisions with additions, deletions, reverts and serialized cache provenance.",
+      "exact_checker": "Context-aware invalidation and independent output checks",
+      "hypothesis": "Related contexts/versions may repay selective compilation and reuse.",
+      "id": "R09",
+      "input_output_contract": "AST history plus context identity -> exact query/update result",
+      "minimum_scope": "Choose specialization, incremental updates, reusable compiled regions, cache policies, and change-impact strategy; correct invalidation, context identity, provenance, serialize/reload",
+      "models_and_deterministic_controls": "result cache, compiled cache, incremental exact, learned policy",
+      "name": "Partial contexts, sessions, and versions",
+      "next_experiment": "Add a continuous revision sequence with additions, deletions and reverts under one stable feature-domain selection policy.",
+      "representation": "DAG, context keys, compiled regions",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "An exact per-request answer cache improved repeated-vector work by 1.435-1.452x across validation, test, confirmatory and EPFL D splits. Version identity, invalidation and cross-request sessions remain pending."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "Three related DAG versions now use stable cone IDs, exact canonical source identity and changed-cone invalidation. Each sparse transition produced 28 hits, four invalidations, 56 reused applications and zero stale results."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "Generated versions now include additions, removals, exact reverts, and serialized cache reload with exact pack/source provenance."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "Natural repeated sessions produced exact warm cache hits for the eligible half of 32 cones. These are repeated identical sessions, not changed circuit revisions."
+        },
+        {
+          "machine_summary": "natural_revision_cache_milestone_d6_results.json",
+          "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+          "scope": "Actual related configuration revisions produced 41 exact source hits and 79 required invalidations across 20 transitions and seven histories, with zero result errors."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Three related DAG versions now use stable cone IDs, exact canonical source identity and changed-cone invalidation. Each sparse transition produced 28 hits, four invalidations, 56 reused applications and zero stale results."
+      "status_reason": "Actual related configuration revisions produced 41 exact source hits and 79 required invalidations across 20 transitions and seven histories, with zero result errors."
     },
     {
-      "id": "R10",
-      "name": "SAT/equivalence/counting guidance",
-      "minimum_scope": "Bounded initial variable/polarity hints, portfolio choice and component/order advice; maintain exact solver completeness and independent checking",
-      "hypothesis": "Bounded advice may improve exact solver portfolios without changing completeness.",
-      "input_output_contract": "SAT/equivalence/count task -> hint or adapter choice",
-      "representation": "CNF/miter, components, variable order",
-      "models_and_deterministic_controls": "unhinted solver, fixed order, learned hints",
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
       "exact_checker": "Witness or independent UNSAT/count certificate as required",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
-      "dependencies": {
-        "available": [
-          "Python",
-          "NumPy",
-          "existing CM/CRSE code",
-          "PyTorch 2.10.0+cpu (isolated optional environment)"
-        ],
-        "optional_not_installed": [
-          "live LLM model/provider"
-        ]
-      },
-      "next_experiment": "Find a verified bounded adapter; do not invoke an unbounded native solver.",
-      "results": [],
+      "hypothesis": "Bounded advice may improve exact solver portfolios without changing completeness.",
+      "id": "R10",
+      "input_output_contract": "SAT/equivalence/count task -> hint or adapter choice",
+      "minimum_scope": "Bounded initial variable/polarity hints, portfolio choice and component/order advice; maintain exact solver completeness and independent checking",
+      "models_and_deterministic_controls": "unhinted solver, fixed order, learned hints",
+      "name": "SAT/equivalence/counting guidance",
+      "next_experiment": "Evaluate independently sourced larger CNF and hardware-miter sessions where solver work dominates adapter and policy overhead.",
+      "representation": "CNF/miter, components, variable order",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
-      "status": "planned",
-      "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
-    },
-    {
-      "id": "R11",
-      "name": "CMs as exact training teachers",
-      "minimum_scope": "Supervise graph models from local truth functions, cofactor relations, functional distances, and verified transformation costs; no full CM required at inference",
-      "hypothesis": "Exact local semantics can supervise models that need no full CM at inference.",
-      "input_output_contract": "bounded expression -> CM/cofactor training labels",
-      "representation": "local CM teacher and source graph",
-      "models_and_deterministic_controls": "supervised teacher, unsupervised/structural controls",
-      "exact_checker": "Independent Boolean semantics and layout tests",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
-      "dependencies": {
-        "available": [
-          "Python",
-          "NumPy",
-          "existing CM/CRSE code",
-          "PyTorch 2.10.0+cpu (isolated optional environment)"
-        ],
-        "optional_not_installed": [
-          "live LLM model/provider"
-        ]
-      },
-      "next_experiment": "Add explicit cofactor-relation and functional-distance targets with matched deterministic controls.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
+          "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
+          "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+          "scope": "A complete expression-to-CNF adapter, trusted CaDiCaL SAT/UNSAT contract, verified witnesses/cores, resident sessions, deterministic phase/order controls, and a bounded cost tree were measured on 80 tasks."
+        }
+      ],
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
+      "status": "measured",
+      "status_reason": "A complete expression-to-CNF adapter, trusted CaDiCaL SAT/UNSAT contract, verified witnesses/cores, resident sessions, deterministic phase/order controls, and a bounded cost tree were measured on 80 tasks."
+    },
+    {
+      "dependencies": {
+        "available": [
+          "Python",
+          "NumPy",
+          "existing CM/CRSE code",
+          "PyTorch 2.10.0+cpu (isolated optional environment)"
+        ],
+        "optional_not_installed": [
+          "live LLM model/provider"
+        ]
+      },
+      "exact_checker": "Independent Boolean semantics and layout tests",
+      "hypothesis": "Exact local semantics can supervise models that need no full CM at inference.",
+      "id": "R11",
+      "input_output_contract": "bounded expression -> CM/cofactor training labels",
+      "minimum_scope": "Supervise graph models from local truth functions, cofactor relations, functional distances, and verified transformation costs; no full CM required at inference",
+      "models_and_deterministic_controls": "supervised teacher, unsupervised/structural controls",
+      "name": "CMs as exact training teachers",
+      "next_experiment": "Retain this architecture as the neural control; do not add capacity without more independent training circuits.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "local CM teacher and source graph",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "results": [
+        {
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Exact CM labels train the matrix MLP. CM-supervised graph training remains pending."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Exact CM labels now supervise a source-DAG GNN that does not require the full CM for classification inference. Rich cofactor/distance targets and larger independent sources remain pending."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "CM supervision now includes exact cofactor relations, canonical factor witnesses, and functional distance one rather than affine membership alone."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Supervision now includes the exact class, canonical components, partition witnesses, and all 45 padded ANF interaction-edge targets."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "The auxiliary target is now the complete canonical row-membership vector rather than 45 independently thresholded interaction edges."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Cut supervision now attaches to context-rich variable nodes through one shared head with exact fixed-anchor permutation equivariance."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Exact CM labels now supervise a source-DAG GNN that does not require the full CM for classification inference. Rich cofactor/distance targets and larger independent sources remain pending.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Cut supervision now attaches to context-rich variable nodes through one shared head with exact fixed-anchor permutation equivariance."
     },
     {
-      "id": "R12",
-      "name": "Neural representation comparisons",
-      "minimum_scope": "Dense CM/block MLP or CNN; recursive/shared-block model; source AST/AIG/CM-IR GNN; hierarchical/transformer and fused graph+CM variants",
-      "hypothesis": "Representation choice affects usefulness beyond parameter count.",
-      "input_output_contract": "expression or CM -> motif/profitability score",
-      "representation": "dense/block MLP/CNN, recursive, AST/AIG/CM-IR GNN, transformer, fused",
-      "models_and_deterministic_controls": "matched task/data/budget models and exact controls",
-      "exact_checker": "All accepted proposals independently verified",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -530,34 +920,54 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add recursive/shared-block and hierarchical controls plus natural positive examples; retain the current run as sealed evidence.",
+      "exact_checker": "All accepted proposals independently verified",
+      "hypothesis": "Representation choice affects usefulness beyond parameter count.",
+      "id": "R12",
+      "input_output_contract": "expression or CM -> motif/profitability score",
+      "minimum_scope": "Dense CM/block MLP or CNN; recursive/shared-block model; source AST/AIG/CM-IR GNN; hierarchical/transformer and fused graph+CM variants",
+      "models_and_deterministic_controls": "matched task/data/budget models and exact controls",
+      "name": "Neural representation comparisons",
+      "next_experiment": "Prefer the no-ranking variable-conditioned arm if neural work resumes; the ranking loss reduced exact acceptance.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "dense/block MLP/CNN, recursive, AST/AIG/CM-IR GNN, transformer, fused",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Actual 65,793-parameter NumPy MLP train/save/reload/infer/evaluate measured for two seeds. CNN/GNN/fused/transformer paths remain pending."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Actual matrix MLP, matrix CNN, graph GNN and fused models were trained/reloaded under matched budgets. Graph/fused won on generated held-out structure; CNN collapsed and every representation showed weak EPFL specificity."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "Variable matrix MLP, shared multiscale CM, variable graph GNN, and fused models were matched across two seeds. None met the sealed representation or n=10 transfer criteria."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Structural, source-DAG GNN, and multitask GNN models were trained on natural circuit cones. None passed both-seed held-out-circuit criteria."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Direct-cut and cut-plus-ranking GNNs were trained under two seeds; neither met held-out classification or exact-partition criteria."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "The 136,962-parameter variable-conditioned GNN reached 0.750-0.778 confirmatory BA but only 0.562-0.594 test BA."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Actual matrix MLP, matrix CNN, graph GNN and fused models were trained/reloaded under matched budgets. Graph/fused won on generated held-out structure; CNN collapsed and every representation showed weak EPFL specificity.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "The 136,962-parameter variable-conditioned GNN reached 0.750-0.778 confirmatory BA but only 0.562-0.594 test BA."
     },
     {
-      "id": "R13",
-      "name": "Learning-method comparisons",
-      "minimum_scope": "Cost-sensitive regression/ranking, linear models, trees/rule lists, forests/boosting/quantile models; supervised, contrastive/self-supervised, multitask, imitation, transfer, and curriculum learning",
-      "hypothesis": "Learning objectives differ in cost and generalization.",
-      "input_output_contract": "allowed training data -> frozen model and policy",
-      "representation": "cost features, graph/CM representations",
-      "models_and_deterministic_controls": "linear, tree/rules, forest/boosting/quantile, supervised/contrastive/multitask/imitation/transfer/curriculum",
-      "exact_checker": "Frozen splits, exact labels, total-cost evaluation",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -569,39 +979,64 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Compare the cost table with one bounded expression-aware linear/ranking control under the same retained task rows.",
+      "exact_checker": "Frozen splits, exact labels, total-cost evaluation",
+      "hypothesis": "Learning objectives differ in cost and generalization.",
+      "id": "R13",
+      "input_output_contract": "allowed training data -> frozen model and policy",
+      "minimum_scope": "Cost-sensitive regression/ranking, linear models, trees/rule lists, forests/boosting/quantile models; supervised, contrastive/self-supervised, multitask, imitation, transfer, and curriculum learning",
+      "models_and_deterministic_controls": "linear, tree/rules, forest/boosting/quantile, supervised/contrastive/multitask/imitation/transfer/curriculum",
+      "name": "Learning-method comparisons",
+      "next_experiment": "Keep equivariance audits and separate ranking from cut optimization in any later study.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "cost features, graph/CM representations",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Only cost trees/feature ablations and supervised MLP exercised; all other listed methods remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Supervised classification and contrastive retrieval are now both exercised in addition to trees/MLPs. Forests, boosting, ranking, transfer, curriculum and other listed methods remain pending."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "The method comparison now includes a fitted task/query cost table against a predeclared task rule and four exact backends. Gains were task-specific and routing overhead remained visible."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "The bounded cost tree collapsed to a conservative leaf because normalized training cost was 1.000 for no rewrite versus 3.141 for one pass."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "The matched experiment adds validation-only calibration and size curriculum n=4/6/8 to n=10, but all learned arms failed the transfer criterion."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Validation-only calibration, circuit-disjoint splits, exact ANF auxiliary targets, and a frozen minimum-cut decoder were measured across two seeds."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Same-pair margin learning reached 0.833-0.889 ranking accuracy on confirmatory circuits but only 0.375-0.500 on the held-out square circuit."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Non-anchor variable-permutation audits had exactly zero error, while same-pair ranking still failed consistent held-out transfer."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "The method comparison now includes a fitted task/query cost table against a predeclared task rule and four exact backends. Gains were task-specific and routing overhead remained visible.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Non-anchor variable-permutation audits had exactly zero error, while same-pair ranking still failed consistent held-out transfer."
     },
     {
-      "id": "R14",
-      "name": "Adaptive/sequential learning",
-      "minimum_scope": "Active learning, hard negatives, counterexample-guided refinement, replayed contextual bandits, bounded reinforcement learning, phase changes and drift; no automatic production adaptation",
-      "hypothesis": "Finite adaptive policies can use difficult examples efficiently.",
-      "input_output_contract": "logged or generated bounded stream -> offline policy",
-      "representation": "counterexamples, replay buffer, action probabilities",
-      "models_and_deterministic_controls": "static policy, random acquisition, active/bandit/RL controls",
-      "exact_checker": "Exact feedback with no future or unchosen-label leakage",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -613,22 +1048,22 @@
           "live LLM model/provider"
         ]
       },
+      "exact_checker": "Exact feedback with no future or unchosen-label leakage",
+      "hypothesis": "Finite adaptive policies can use difficult examples efficiently.",
+      "id": "R14",
+      "input_output_contract": "logged or generated bounded stream -> offline policy",
+      "minimum_scope": "Active learning, hard negatives, counterexample-guided refinement, replayed contextual bandits, bounded reinforcement learning, phase changes and drift; no automatic production adaptation",
+      "models_and_deterministic_controls": "static policy, random acquisition, active/bandit/RL controls",
+      "name": "Adaptive/sequential learning",
       "next_experiment": "Prepare finite replay with propensities before adaptive learning.",
-      "results": [],
+      "representation": "counterexamples, replay buffer, action probabilities",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "results": [],
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "planned",
       "status_reason": "Preserved agenda; implementation or measurement not yet claimed."
     },
     {
-      "id": "R15",
-      "name": "LLM-assisted learning and discovery",
-      "minimum_scope": "Offline DSL rule/macro proposals and bounded symbolic program synthesis, strategy/cost ranking, proof candidates, explanatory reports, few-shot/retrieval controls, optional approved adapter fine-tuning and teacher-to-small-model distillation",
-      "hypothesis": "Offline LLM proposals may find useful independently provable candidates.",
-      "input_output_contract": "bounded declarative prompt -> inert Boolean DSL proposal",
-      "representation": "DSL, retrieval context, proof candidate",
-      "models_and_deterministic_controls": "fake provider tests, grammar enumeration, random order, non-LLM models",
-      "exact_checker": "Bounded parser and independent proof checker",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -640,29 +1075,29 @@
           "live LLM model/provider"
         ]
       },
+      "exact_checker": "Bounded parser and independent proof checker",
+      "hypothesis": "Offline LLM proposals may find useful independently provable candidates.",
+      "id": "R15",
+      "input_output_contract": "bounded declarative prompt -> inert Boolean DSL proposal",
+      "minimum_scope": "Offline DSL rule/macro proposals and bounded symbolic program synthesis, strategy/cost ranking, proof candidates, explanatory reports, few-shot/retrieval controls, optional approved adapter fine-tuning and teacher-to-small-model distillation",
+      "models_and_deterministic_controls": "fake provider tests, grammar enumeration, random order, non-LLM models",
+      "name": "LLM-assisted learning and discovery",
       "next_experiment": "Provider boundary and unsafe/malformed-output tests; live model requires approval.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "DSL, retrieval context, proof candidate",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Only deterministic fake offline provider and bounded inert DSL tests. No live LLM inference, fine-tuning, discovery or distillation result."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "smoke-tested",
-      "status_reason": "Only deterministic fake offline provider and bounded inert DSL tests. No live LLM inference, fine-tuning, discovery or distillation result.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Only deterministic fake offline provider and bounded inert DSL tests. No live LLM inference, fine-tuning, discovery or distillation result."
     },
     {
-      "id": "R16",
-      "name": "Inference and training efficiency",
-      "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
-      "hypothesis": "Reducing feature/model overhead may matter more than prediction quality.",
-      "input_output_contract": "frozen model and workload -> lower-cost equivalent inference",
-      "representation": "features, batches, embeddings, compiled/quantized weights",
-      "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
-      "exact_checker": "Prediction agreement where required and exact accepted outputs",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -674,49 +1109,149 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add a pre-identity skip gate and compare full canonical bytes with a bounded incremental structural-ID scheme.",
+      "exact_checker": "Prediction agreement where required and exact accepted outputs",
+      "hypothesis": "Reducing feature/model overhead may matter more than prediction quality.",
+      "id": "R16",
+      "input_output_contract": "frozen model and workload -> lower-cost equivalent inference",
+      "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
+      "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
+      "name": "Inference and training efficiency",
+      "next_experiment": "Reduce or amortize common GF(2) analysis cost before fitting any partition policy; charge screening, reconstruction, and reload.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "features, batches, embeddings, compiled/quantized weights",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Feature, warm inference and model-load overhead measured. Batching/distillation/quantization/binarization/compilation remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "Parameter bytes, graph-input memory, training time, safe load time, representation construction, inference, verification and fallback latency are retained. Quantization/distillation/compilation remain pending."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "Construction, routing, candidate, proof, kernel, cache and audit costs are separated. Cheap task routing helped restrictions/reuse, while complete-vector routing overhead and dense-CM construction remained material."
         },
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "Proof, artifact load, matcher, candidate, per-instance CM verification, CSE build and kernel costs are separated. The one-time proof-plus-compile cost was 0.469 ms and observed break-even versus repeated CM proof was one application."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "Canonical identity, cache, matching, CSE build and kernel costs are separated. Cache hits halved fresh rematching time on changed versions, but identity and rewrite overhead kept the cached sequence 3.03x slower than no rewrite."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "The pre-identity gate skips all canonicalization and matching for low-reuse cones. It reduces overhead substantially but cannot create savings where the generated oracle headroom is only 1.7%."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "On natural cones the gate was 1.517x faster than fresh matching while preserving exact outputs; its one-shot cold cost remains visible."
+        },
+        {
+          "machine_summary": "natural_revision_cache_milestone_d6_results.json",
+          "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+          "scope": "Exact canonical identity cost only 3.089 ms, but the 41 safe hits were cheap cases and removed little CM compilation time."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "The 128-use one-pass policy was 7.6% slower on Linux despite reducing kernel time; rewrite overhead did not portably amortize."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "Machine-calibrated inference remained cheap but nonzero; the all-abstain gate was 1.8% slower while unconditional rewriting was about 2.33 times slower on the new BLIF slice."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "Representation construction, inference, exact-check, training, safe-load, and exact-control costs were retained for eight trained models."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Six natural and six structure-matched models retain fit, representation, inference, decoding, exact-check, and exact-control measurements."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "End-to-end graph construction, inference and exact acceptance were charged; cut GNNs were 4.6-6.0x slower than exact ANF."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Safe learned paths were 6.3-9.2x slower than exact ANF. Symbolic source ANF was faster at the median but had a 63.7 ms confirmatory p95 tail."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "Packed source ANF achieved 1.28-1.64x held-out median speedups and 1.80-2.18x p95 speedups over truth-vector ANF."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "Cached packed ANF achieved 1.10-1.12x median and 1.89-2.04x p95 speedups over direct bitset truth-vector ANF."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_second_machine_attempt_results.json",
+          "report": "LEARNING_MILESTONE_C7_SECOND_MACHINE_ATTEMPT_2026_08_30.md",
+          "scope": "The first C7 second-machine attempt failed before upload and was safely reconciled with zero replacements."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "Second-machine timing completed: packed retained a 2.10-2.23x median advantage over NumPy and a 1.85-2.09x p95 advantage over direct bitset."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "In-place conversion removed duplicate DAG-prefix work. The Linux replay passed the 5% C12 no-regret gate, while the original Windows B split remained outside it."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "A branch-free fast sentinel separated diagnostic counters from execution, but sparse guard cost remained material despite large dense-tail savings."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "Policy, production, shadow, conversion, and exact-check costs were retained separately across 4,104 timing rows."
+        },
+        {
+          "machine_summary": "learning_milestone_e1_bdd_order_results.json",
+          "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+          "scope": "All order generation, searched builds, partial queries, features, decisions, and independent checks were separated; the learned arm failed to repay inference overhead."
+        },
+        {
+          "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
+          "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+          "scope": "CNF encoding, phase/order work, solver construction, solve calls, features, decisions, and independent witness/core checks are separated in frozen raw rows and exact artifact manifests."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
+        },
+        {
+          "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+          "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Canonical identity, cache, matching, CSE build and kernel costs are separated. Cache hits halved fresh rematching time on changed versions, but identity and rewrite overhead kept the cached sequence 3.03x slower than no rewrite.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "CNF encoding, phase/order work, solver construction, solve calls, features, decisions, and independent witness/core checks are separated in frozen raw rows and exact artifact manifests."
     },
     {
-      "id": "R17",
-      "name": "Confidence, novelty, and abstention",
-      "minimum_scope": "Calibration, out-of-distribution behavior, feasibility, uncertainty-triggered fallback, negative transfer, adversarial near-matches, and hardware transfer",
-      "hypothesis": "Abstention can limit losses under novelty and uncertainty.",
-      "input_output_contract": "request plus calibrated score -> proposal or fallback",
-      "representation": "training ranges, uncertainty, feasibility",
-      "models_and_deterministic_controls": "always fallback, fixed thresholds, calibrated policy",
-      "exact_checker": "Exact fallback and all rejection costs retained",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -728,34 +1263,89 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Fit calibration on validation only, freeze it, then test abstention on a new natural source family.",
+      "exact_checker": "Exact fallback and all rejection costs retained",
+      "hypothesis": "Abstention can limit losses under novelty and uncertainty.",
+      "id": "R17",
+      "input_output_contract": "request plus calibrated score -> proposal or fallback",
+      "minimum_scope": "Calibration, out-of-distribution behavior, feasibility, uncertainty-triggered fallback, negative transfer, adversarial near-matches, and hardware transfer",
+      "models_and_deterministic_controls": "always fallback, fixed thresholds, calibrated policy",
+      "name": "Confidence, novelty, and abstention",
+      "next_experiment": "Retain platform-bound abstention and require new-machine calibration before enabling any non-set task arm there.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "training ranges, uncertainty, feasibility",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Bypass/range guards, exact rejection, timeout tests and uncalibrated Brier diagnostics only; calibrated novelty/hardware transfer remain pending."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "The EPFL transfer check exposed severe negative transfer and uncalibrated false proposals; exact rejection and the learned-bypass switch preserved all outputs. Calibrated novelty remains pending."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "Independent hardware transfer was exact but unprofitable: the Windows 1.050x result became 0.929x on Linux."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "The frozen policy refused 23 in-range cases for insufficient gain and abstained on 10 out-of-range cases; all 33 decisions matched the faster fixed arm."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "Validation-only thresholds transferred poorly: EPFL specificity varied from 0.000 to 0.844 and the frozen source had no target positives."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Circuit-disjoint natural evaluation is now label-balanced, but structure matching reduced most learned scores toward chance and exposed dataset shortcuts."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Relative pair ordering transferred to some confirmatory circuits but absolute calibration and exact cuts did not transfer consistently to square."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "Variable-conditioned readout improved confirmatory results but did not close the held-out circuit gap; no second-family run is justified yet."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "The deterministic packed core passed the EPFL cost boundary; neural cut fitting remains paused after C5 transfer failures."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "Independent exact transfer succeeded without training; neural cut fitting remains paused after its earlier transfer failures."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "The strongest transfer result remains deterministic and exact; no additional neural fitting was needed."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "The frozen policies remained exact and leakage-safe. Linux passed the second-machine promotion gate, but cross-machine profitability variation still requires guarded enablement."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "Platform mismatch, unsupported task, insufficient reuse, and out-of-range input conservatively abstain or refuse advice; the global switch returns exact set execution."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "The EPFL transfer check exposed severe negative transfer and uncalibrated false proposals; exact rejection and the learned-bypass switch preserved all outputs. Calibrated novelty remains pending.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "Platform mismatch, unsupported task, insufficient reuse, and out-of-range input conservatively abstain or refuse advice; the global switch returns exact set execution."
     },
     {
-      "id": "R18",
-      "name": "Negative controls and hard limits",
-      "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
-      "hypothesis": "Exact packed primitives and low-headroom cases can defeat learning.",
-      "input_output_contract": "matched exact workload -> overhead-inclusive negative-control comparison",
-      "representation": "random/dense tables, packed bits, anti-reduction AST",
-      "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
-      "exact_checker": "Exact output and complete failure accounting",
-      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "dependencies": {
         "available": [
           "Python",
@@ -767,46 +1357,154 @@
           "live LLM model/provider"
         ]
       },
-      "next_experiment": "Add adversarial pack changes, removed cones, reverts, digest collisions via injected test doubles, and cache-capacity refusal.",
+      "exact_checker": "Exact output and complete failure accounting",
+      "hypothesis": "Exact packed primitives and low-headroom cases can defeat learning.",
+      "id": "R18",
+      "input_output_contract": "matched exact workload -> overhead-inclusive negative-control comparison",
+      "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
+      "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
+      "name": "Negative controls and hard limits",
+      "next_experiment": "Retain no-rewrite, advice-off, dense-incompressible, near-match, changed-version, and exact-reconstruction controls.",
+      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
+      "representation": "random/dense tables, packed bits, anti-reduction AST",
+      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
         {
-          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "machine_summary": "learning_milestones_ab_results.json",
+          "report": "LEARNING_MILESTONES_AB_2026_08_29.md",
           "scope": "Hard one-bit near-matches and overhead-dominated negative results retained. Raw primitive and dense/no-sharing controls remain planned."
         },
         {
-          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "machine_summary": "learning_milestone_c_results.json",
+          "report": "LEARNING_MILESTONE_C_2026_08_29.md",
           "scope": "One-bit near-matches, CNN collapse, failed retrieval threshold and poor all-negative EPFL transfer are retained as negative controls/results. Dense random and raw packed-operation controls remain pending."
         },
         {
-          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "machine_summary": "learning_milestone_d_results.json",
+          "report": "LEARNING_MILESTONE_D_2026_08_29.md",
           "scope": "Dense CM construction and per-instance rewrite proof serve as retained overhead controls: both lost to simpler exact paths at this bounded scale while preserving zero semantic errors."
         },
         {
-          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "machine_summary": "proved_rule_milestone_d2_results.json",
+          "report": "PROVED_RULE_MILESTONE_D2_2026_08_29.md",
           "scope": "Sixteen binding-corrupted near matches produced zero false matches. No-rewrite was 2.33-2.43x faster than warm compiled matching on generated batches and 2.75x faster on EPFL, retaining a clear profitability negative control."
         },
         {
-          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "machine_summary": "versioned_rule_cache_milestone_d3_results.json",
+          "report": "VERSIONED_RULE_CACHE_MILESTONE_D3_2026_08_29.md",
           "scope": "Cold-cache overhead and the no-rewrite arm remain explicit negative controls. Exact hashing plus byte equality prevents stale or collision-only hits; all eight declared changed cones invalidated exactly."
+        },
+        {
+          "machine_summary": "rule_profitability_milestone_d4_results.json",
+          "report": "RULE_PROFITABILITY_MILESTONE_D4_2026_08_29.md",
+          "scope": "Forced digest collisions, pack changes, cache-capacity overflow, removed cones, reverts, and low-oracle-headroom workloads are explicit checked controls."
+        },
+        {
+          "machine_summary": "natural_rule_profitability_milestone_d5_results.json",
+          "report": "NATURAL_RULE_PROFITABILITY_MILESTONE_D5_2026_08_29.md",
+          "scope": "Natural one- and eight-use strata remained overhead dominated, 32 uses also lost, and only 128 uses clearly won. No aggregate hides these negative strata."
+        },
+        {
+          "machine_summary": "natural_revision_cache_milestone_d6_results.json",
+          "report": "NATURAL_REVISION_CACHE_MILESTONE_D6_2026_08_29.md",
+          "scope": "Seventy-six equal-output cases had changed source bytes and were refused as cache hits, preventing output equality from becoming circular correctness authority."
+        },
+        {
+          "machine_summary": "natural_normalization_milestone_d7_results.json",
+          "report": "NATURAL_NORMALIZATION_MILESTONE_D7_2026_08_29.md",
+          "scope": "The exact second pass was a negative profitability result despite 18 additional reductions; partial results, cycles, pass exhaustion and refused overlap have explicit controls."
+        },
+        {
+          "machine_summary": "linux_one_pass_confirmation_milestone_d8_results.json",
+          "report": "LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md",
+          "scope": "The frozen Linux run is a retained negative control with zero mismatches, unchanged rule incidence, and a failed profitability criterion."
+        },
+        {
+          "machine_summary": "natural_profitability_policy_milestone_d9_results.json",
+          "report": "NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md",
+          "scope": "The new BLIF evaluation retained unconditional one pass as a negative control: it found exact structure but measured only 0.429x the no-rewrite speed."
+        },
+        {
+          "machine_summary": "learning_milestone_c2_results.json",
+          "report": "LEARNING_MILESTONE_C2_2026_08_29.md",
+          "scope": "One-cell near-decompositions defeated the CM learners and held-out syntax defeated graph/fused models despite zero training loss; these failures are retained."
+        },
+        {
+          "machine_summary": "learning_milestone_c3_natural_decomposition_results.json",
+          "report": "LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+          "scope": "Same-circuit matched negatives with identical variable count and median zero node/depth/edge deltas defeated the current GNNs; the failure is retained."
+        },
+        {
+          "machine_summary": "learning_milestone_c4_direct_cut_ranking_results.json",
+          "report": "LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+          "scope": "Direct cut loss corrected the C3 decoder formulation but still yielded only 0.000-0.222 accepted-positive recall across graph arms and held-out splits."
+        },
+        {
+          "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
+          "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+          "scope": "The conservative source approximation safely abstained everywhere, and symbolic ANF exposed severe polynomial-product tail cases despite perfect accuracy."
+        },
+        {
+          "machine_summary": "learning_milestone_c6_packed_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+          "scope": "C6 retained two failed development runs and showed that transform-mask construction and fallback overhead can erase a symbolic gain."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_yosys_source_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+          "scope": "The independent family exposed a real counterexample to universal packed promotion: sparse set ANF remained 1.94-2.44x faster at median."
+        },
+        {
+          "machine_summary": "learning_milestone_c7_second_machine_attempt_results.json",
+          "report": "LEARNING_MILESTONE_C7_SECOND_MACHINE_ATTEMPT_2026_08_30.md",
+          "scope": "The failed external attempt is retained as transport evidence; it contains no scientific timing and cannot confirm a ranking."
+        },
+        {
+          "machine_summary": "learning_milestone_c8_linux_source_anf_results.json",
+          "report": "LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+          "scope": "Linux reversed the small packed-versus-bitset median lead while preserving packed tail wins, exposing the required machine-sensitivity control."
+        },
+        {
+          "machine_summary": "learning_milestone_c12_adaptive_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+          "scope": "Fixed set, cached packed, direct bitset, guarded restart, and one-pass paths exposed catastrophic-tail savings, sparse overhead, and measurable platform sensitivity."
+        },
+        {
+          "machine_summary": "learning_milestone_c13_in_kernel_sentinel_results.json",
+          "report": "LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+          "scope": "The unswitched C7/C11/C12 slices are retained negative controls; six of seven sparse split comparisons were slower than ordinary set ANF."
+        },
+        {
+          "machine_summary": "learning_milestone_c14_task_guard_results.json",
+          "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+          "scope": "Forced latency routing on sparse C12 remained a visible negative control at 0.889x/0.739x rather than being hidden by the successful task gate."
+        },
+        {
+          "machine_summary": "learning_milestone_e1_bdd_order_results.json",
+          "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+          "scope": "Charged random best-of-four and the learned cost tree are retained negatives: first occurrence remained faster on the sealed slice while preserving fewer or equal nodes."
+        },
+        {
+          "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
+          "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+          "scope": "The learned SAT policy is retained as a negative timing result: it learned fresh-versus-resident structure but was 1.0420x the sealed best fixed action after advice overhead."
+        },
+        {
+          "machine_summary": "learning_milestone_d10_indexed_rule_engine_results.json",
+          "report": "LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+          "scope": "Four exhaustively proved mux, comparator, carry, and XOR-cancellation rules now have indexed screening, strict decrease, provenance, and exact versioned cache replay; whole-path profitability was negative."
+        },
+        {
+          "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+          "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
         }
       ],
-      "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
+      "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Cold-cache overhead and the no-rewrite arm remain explicit negative controls. Exact hashing plus byte equality prevents stale or collision-only hits; all eight declared changed cones invalidated exactly.",
-      "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion."
+      "status_reason": "The learned SAT policy is retained as a negative timing result: it learned fresh-versus-resident structure but was 1.0420x the sealed best fixed action after advice overhead."
     }
   ],
-  "milestones": {
-    "A": "implemented and measured within foundation slice",
-    "B": "first actual NumPy MLP comparison measured; negative result",
-    "C": "pending: framework approval and eligible natural-source contract",
-    "D": "planned; teacher/provider tests are not transformation/reuse experiments",
-    "E": "planned"
-  },
-  "dependency_request": "NEURAL_DEPENDENCY_REQUEST.md"
+  "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",
+  "updated": "2026-08-30"
 }
