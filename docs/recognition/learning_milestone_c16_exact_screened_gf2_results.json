@@ -1,0 +1,134 @@
+{
+  "artifact_rows": 37,
+  "dataset": {
+    "reused_from": "C15",
+    "rows": 40,
+    "source": "YosysHQ/yosys-bench generator semantics",
+    "upstream_commit": "52ff6fa991f2ab509618d8aaad02f307aac78848"
+  },
+  "date": "2026-08-30",
+  "interpretation": "Exact descriptor screening preserved the exhaustive best artifact while reducing whole-path time by 3.545x locally; one small case regressed and Linux execution awaits exact payload approval, so production remains disabled.",
+  "linux_package": {
+    "bytes": 423661,
+    "files": 18,
+    "manifest": "docs/recognition/c16_linux_confirmation/c16_linux_upload_manifest.json",
+    "protocol": "docs/recognition/c16_linux_confirmation/C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md"
+  },
+  "package_validation": {
+    "criteria": {
+      "exact": true,
+      "screened_analysis_speedup_at_least_1_50x": true,
+      "whole_path_p95_speedup_at_least_1_20x": true,
+      "whole_path_speedup_at_least_1_25x": true
+    },
+    "initial_file_count": 18,
+    "initial_files": [
+      "bitset_backend.py",
+      "cm_expr_serde.py",
+      "cm_exprlib.py",
+      "cm_ir.py",
+      "cmbench/__init__.py",
+      "cmbench/expr/__init__.py",
+      "cmbench/expr/eval.py",
+      "cmbench/output_budget.py",
+      "cmbench/recognition/__init__.py",
+      "cmbench/recognition/features.py",
+      "cmbench/recognition/gf2_decomposition.py",
+      "cmbench/recognition/natural_decomposition.py",
+      "cmbench/recognition/portfolio.py",
+      "cmbench/recognition/proved_rules.py",
+      "cmbench/recognition/source_anf_hybrid.py",
+      "cmbench/recognition/source_interaction.py",
+      "scripts/crse_gf2_screening_linux_confirmation.py",
+      "study/c16-dataset.json"
+    ],
+    "manifest_sha256": "f1930f95e4fa30a0eeee53d522df4bdc7ae958f2b3e164175b43281ae82e402f",
+    "measurement_rows": 360,
+    "path": "docs/recognition/c16_linux_confirmation/C16_PACKAGE_LOCAL_VALIDATION_20260830.json",
+    "returncode": 0,
+    "schema": "crse-c16-linux-package-local-validation/v1",
+    "semantic_mismatches": 0,
+    "speedup": {
+      "packed_source_anf_over_explicit_cm_screened": 0.9914610454723383,
+      "screened_analysis_over_exhaustive": 3.361315445960976,
+      "screened_whole_path_over_exhaustive": 3.356848375992956,
+      "screened_whole_path_p95": 3.3853190678664946
+    },
+    "status": "pass",
+    "stderr_bytes": 0,
+    "stdout_sha256": "a1b22dd1292e853296bb99f492ca9d2f3ef5ce1d4ae22b0028e9496f08a0e3e4",
+    "summary_sha256": "1304af0dcd8cd0043871cd72abd0234e0ef0f9bd30060e6d89ff7659e98ea31b",
+    "wall_seconds": 113.39999130000069
+  },
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+  "run": "docs/recognition/runs/c16-gf2-screened-tail-windows-20260830-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "exact_payload_approval_required": true,
+    "pod_created": false,
+    "reason": "host approval review rejected broad authorization before process creation",
+    "uploaded": false,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c16-exact-screened-gf2-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "local_complete_second_machine_pending_exact_payload_approval",
+  "summary": {
+    "criteria": {
+      "dense_controls_remain_uncompressed": true,
+      "exact_artifact_reconstruction": true,
+      "exact_control_best_identity_12_of_12": true,
+      "exact_functional_best_identity_40_of_40": true,
+      "exact_method_outputs": true,
+      "exact_timed_best_identity": true,
+      "materialization_bound_respected": true,
+      "screened_analysis_speedup_at_least_1_50x": true,
+      "whole_path_p95_speedup_at_least_1_20x": true,
+      "whole_path_speedup_at_least_1_25x": true
+    },
+    "functional_gate": true,
+    "local_timing_gate": true,
+    "median_case_sum_ns": {
+      "explicit_cm_exhaustive": {
+        "analysis_ns": 18762648100,
+        "representation_ns": 9993600,
+        "total_ns": 18772643300
+      },
+      "explicit_cm_screened": {
+        "analysis_ns": 5285152100,
+        "representation_ns": 10099100,
+        "total_ns": 5295043500
+      },
+      "packed_source_anf_screened": {
+        "analysis_ns": 5267882300,
+        "representation_ns": 47095200,
+        "total_ns": 5315514300
+      }
+    },
+    "second_machine_gate": true,
+    "speedup": {
+      "median_case_speedup": 3.504756807761429,
+      "minimum_case_speedup": 0.8927963215258855,
+      "packed_source_anf_over_explicit_cm_screened": 0.996148858070046,
+      "screened_analysis_over_exhaustive": 3.550067764369544,
+      "screened_whole_path_over_exhaustive": 3.545323716415172,
+      "screened_whole_path_p95": 3.477689904360583
+    },
+    "timing_is_machine_specific": true
+  },
+  "verification": {
+    "artifacts_replayed": 37,
+    "controls_replayed": 12,
+    "exact_best_identity_mismatches": 0,
+    "measurement_rows_checked": 360,
+    "path": "docs/recognition/runs/c16-gf2-screened-tail-windows-20260830-001/independent_verification.json",
+    "run_schema": "crse-c16-gf2-screened-tail-experiment/v1",
+    "schema": "crse-c16-gf2-screened-tail-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "source_cases_replayed": 40,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

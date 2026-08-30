@@ -26,10 +26,11 @@ and [D7 bounded multi-pass normalization](NATURAL_NORMALIZATION_MILESTONE_D7_202
 followed by [D8 frozen Linux confirmation](LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md),
 [D9 frozen calibrated profitability policy](NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md),
 [E1 bounded BDD order selection](LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md),
-and [E2 exact SAT/equivalence guidance](LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md).
-A/B, six bounded slices of C, nine bounded slices of D, and two bounded slices
-of E are implemented
-and measured. C includes actual
+and [E2 exact SAT/equivalence guidance](LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md),
+with [D10 indexed rule execution](LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md),
+[C15 exact CM/GF(2) artifacts](LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md),
+and [C16 exact-screened GF(2) tails](LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md).
+Bounded slices through C16, D10, and E2 are implemented and measured. C includes actual
 matrix MLP, CNN, GNN, fused, and contrastive retrieval training plus a frozen
 EPFL evaluation slice. Its synthetic representation signal passed, retrieval
 missed its threshold, and EPFL transfer was poor. C2 adds an exact balanced
@@ -63,6 +64,14 @@ and a validation-frozen truth-vector fallback. The packed cores achieved
 1.28-1.64x held-out median and 1.80-2.18x p95 gains with zero mismatches. The
 hybrid missed confirmatory p95 by 1.4%; independent-family and cross-machine
 confirmation now apply to the frozen packed core, while the gate remains off.
+C15 added fully reconstructible XOR-component, GF(2)-rank, cofactor-block, and
+Kronecker artifacts, but its repeated 64-partition materialization dominated
+whole-path time. C16 now screens the same exact candidates while sharing one
+matrix layout per partition and materializing only the deterministic best tail.
+It matched the exhaustive best identity on 40 source cases and 12 controls and
+measured a 3.545x local whole-path gain. One tiny case regressed, and external
+Linux execution awaits explicit approval of the frozen 18-file payload, so the
+path remains disabled by default.
 D now measures four separate
 task contracts through direct, CSE, CM-IR and explicit dense-CM paths, a fitted
 task/query router, exact caching, and stop/one-rewrite scheduling on a new EPFL

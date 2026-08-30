@@ -6,8 +6,9 @@ from pathlib import Path
 
 from cm_exprlib import And, Or, Var, Xor
 from cmbench.recognition.gf2_decomposition import (
-    ExactGF2Artifact, analyze_exact_gf2, cofactor_artifacts, gf2_rank_factor,
-    kronecker_artifacts, rank_artifact, truth_sha256, xor_component_artifact,
+    ExactGF2Artifact, analyze_exact_gf2, analyze_screened_exact_gf2,
+    cofactor_artifacts, gf2_rank_factor, kronecker_artifacts, rank_artifact,
+    screen_partition, truth_sha256, xor_component_artifact,
 )
 from cmbench.recognition.natural_decomposition import partitioned_bits
 from cmbench.recognition.portfolio import reference_bits
@@ -151,6 +152,33 @@ class ExactGF2DecompositionTests(unittest.TestCase):
                 self.assertFalse(analysis.candidates)
             else:
                 self.assertIn(control["required_kind"], analysis.kinds)
+
+    def test_screened_tail_matches_exhaustive_best(self):
+        controls = make_gf2_controls(20260830)
+        for control in controls:
+            kwargs = ({"row_partitions": control["row_partitions"]}
+                      if control["row_partitions"] else {"max_partitions": 32})
+            exhaustive = analyze_exact_gf2(control["bits"], control["n_vars"], **kwargs)
+            screened = analyze_screened_exact_gf2(
+                control["bits"], control["n_vars"], materialize_budget=4, **kwargs
+            )
+            self.assertEqual(
+                screened.best.to_dict() if screened.best else None,
+                exhaustive.best.to_dict() if exhaustive.best else None,
+            )
+            self.assertTrue(all(candidate.reconstruct() == control["bits"]
+                                for candidate in screened.candidates))
+            self.assertLessEqual(screened.artifacts_materialized, 5)  # XOR plus four descriptors.
+
+    def test_partition_screen_is_not_an_accepted_artifact(self):
+        bits = reference_bits(Xor(And(Var(0), Var(1)), Or(Var(2), Var(3))), 4)
+        descriptors = screen_partition(bits, 4, (0, 1))
+        self.assertTrue(descriptors)
+        self.assertFalse(any(isinstance(item, ExactGF2Artifact) for item in descriptors))
+        self.assertTrue(all(item.materialize(bits, 4).reconstruct() == bits
+                            for item in descriptors))
+        with self.assertRaises(ValueError):
+            analyze_screened_exact_gf2(bits, 4, materialize_budget=0)
 
 
 if __name__ == "__main__":

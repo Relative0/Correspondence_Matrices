@@ -37,7 +37,10 @@ by [Milestone D3 versioned rule caching](VERSIONED_RULE_CACHE_MILESTONE_D3_2026_
 [Milestone D8 frozen Linux confirmation](LINUX_ONE_PASS_CONFIRMATION_MILESTONE_D8_2026_08_29.md),
 [Milestone D9 frozen calibrated profitability policy](NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md),
 [Milestone E1 bounded BDD order selection](LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md),
-and [Milestone E2 exact SAT/equivalence guidance](LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md).
+and [Milestone E2 exact SAT/equivalence guidance](LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md),
+plus [Milestone D10 indexed rule execution](LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md),
+[Milestone C15 exact CM/GF(2) decomposition](LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md),
+and [Milestone C16 exact-screened GF(2) tails](LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md).
 The [complete register](experiment_register.json) preserves all 18 research tracks;
 the [roadmap](LEARNING_ROADMAP.md) distinguishes measured slices from pending work.
 There is a trained NumPy MLP path with independent exact acceptance, retained
@@ -82,6 +85,13 @@ transforms. On the frozen EPFL splits, the packed and cached cores achieved
 validation-frozen fallback gate preserved 11 exact fallbacks and zero semantic
 mismatches, but missed confirmatory p95 by 1.4%. The packed core advances; the
 gate and production path do not.
+Milestone C15 adds reconstructible XOR-component, exact GF(2)-rank,
+cofactor-block, and Kronecker artifacts. C16 keeps the same 64-partition search
+but shares one exact matrix layout per partition and materializes only the four
+best inert descriptors. It matched the exhaustive best identity on 40/40 source
+cases and 12/12 controls while measuring a 3.545x local whole-path gain. One
+small case regressed, and second-machine execution awaits exact approval of the
+frozen 18-file package, so production remains disabled.
 Milestone D now measures complete-vector, point, restriction and repeated-vector
 requests through direct, CSE, CM-IR and explicit dense-CM paths. Its fitted
 task/query router helped restrictions and repeated work but slowed complete

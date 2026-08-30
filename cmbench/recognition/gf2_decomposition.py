@@ -304,8 +304,9 @@ class ExactGF2Artifact:
             parse_constant=lambda value: (_ for _ in ()).throw(ValueError("nonfinite GF(2) value"))))
 
 
-def _artifact(kind: str, bits: int, n_vars: int, factor_bits: int, payload: dict[str, Any],
-              row_variables: Iterable[int] = ()) -> ExactGF2Artifact:
+def _artifact_document(kind: str, bits: int, n_vars: int, factor_bits: int,
+                       payload: dict[str, Any],
+                       row_variables: Iterable[int] = ()) -> dict[str, Any]:
     row = tuple(row_variables)
     column = tuple(value for value in range(n_vars) if value not in row) if row else ()
     body = {"schema": SCHEMA, "kind": kind, "n_vars": n_vars,
@@ -315,8 +316,130 @@ def _artifact(kind: str, bits: int, n_vars: int, factor_bits: int, payload: dict
             "full_truth_bits": 1 << n_vars, "factor_bits": factor_bits,
             "compression_ratio": (1 << n_vars) / factor_bits,
             "source_sha256": truth_sha256(bits, n_vars), "payload": payload}
-    return ExactGF2Artifact.from_dict({**body,
-        "payload_sha256": hashlib.sha256(canonical(body)).hexdigest()})
+    return {**body, "payload_sha256": hashlib.sha256(canonical(body)).hexdigest()}
+
+
+def _artifact(kind: str, bits: int, n_vars: int, factor_bits: int, payload: dict[str, Any],
+              row_variables: Iterable[int] = ()) -> ExactGF2Artifact:
+    return ExactGF2Artifact.from_dict(
+        _artifact_document(kind, bits, n_vars, factor_bits, payload, row_variables)
+    )
+
+
+@dataclass(frozen=True)
+class GF2CandidateDescriptor:
+    """An unmaterialized exact candidate found by a cheap partition screen.
+
+    A descriptor is never an accepted artifact.  Materialization runs the same
+    strict hash, shape, and complete truth-reconstruction checks as the original
+    exhaustive analyzer.
+    """
+
+    kind: str
+    factor_bits: int
+    payload: dict[str, Any]
+    row_variables: tuple[int, ...]
+
+    def document(self, bits: int, n_vars: int) -> dict[str, Any]:
+        return _artifact_document(
+            self.kind, bits, n_vars, self.factor_bits, self.payload, self.row_variables
+        )
+
+    def digest(self, bits: int, n_vars: int) -> str:
+        return self.document(bits, n_vars)["payload_sha256"]
+
+    def sort_key(self, bits: int, n_vars: int) -> tuple[Any, ...]:
+        return self.factor_bits, self.kind, self.row_variables, self.digest(bits, n_vars)
+
+    def materialize(self, bits: int, n_vars: int) -> ExactGF2Artifact:
+        return ExactGF2Artifact.from_dict(self.document(bits, n_vars))
+
+
+def _rank_descriptor(arranged: int, rows: int, columns: int,
+                     row: tuple[int, ...]) -> GF2CandidateDescriptor | None:
+    rank, coefficients, basis = gf2_rank_factor(_matrix_rows(arranged, rows, columns), columns)
+    if rank == 0:
+        return None
+    factor_bits = rank * (rows + columns)
+    if factor_bits >= rows * columns:
+        return None
+    return GF2CandidateDescriptor("gf2_rank", factor_bits,
+        {"rank": rank, "row_coefficients": list(coefficients),
+         "basis_rows": list(basis), "matrix_shape": [rows, columns]}, row)
+
+
+def _cofactor_descriptors(arranged: int, rows: int, columns: int,
+                          row: tuple[int, ...]) -> tuple[GF2CandidateDescriptor, ...]:
+    result = []
+    for orientation, patterns, width in (
+            ("rows", _matrix_rows(arranged, rows, columns), columns),
+            ("columns", _matrix_columns(arranged, rows, columns), rows)):
+        mask = (1 << width) - 1
+        representatives: list[int] = []
+        index_by_canonical: dict[int, int] = {}
+        references = []
+        for pattern in patterns:
+            canonical_pattern = min(pattern, pattern ^ mask)
+            index = index_by_canonical.get(canonical_pattern)
+            if index is None:
+                index = len(representatives)
+                index_by_canonical[canonical_pattern] = index
+                representatives.append(canonical_pattern)
+            references.append([index, int(pattern != canonical_pattern)])
+        index_bits = max(1, math.ceil(math.log2(max(1, len(representatives)))))
+        factor_bits = len(representatives) * width + len(patterns) * (index_bits + 1)
+        if factor_bits < rows * columns and len(representatives) < len(patterns):
+            result.append(GF2CandidateDescriptor("cofactor_blocks", factor_bits,
+                {"orientation": orientation, "representatives": representatives,
+                 "references": references, "matrix_shape": [rows, columns]}, row))
+    return tuple(result)
+
+
+def _kronecker_descriptors(arranged: int, row_count: int, column_count: int,
+                           row: tuple[int, ...]) -> tuple[GF2CandidateDescriptor, ...]:
+    rows, columns = 1 << row_count, 1 << column_count
+    result = []
+    for left_row_bits in range(1, row_count):
+        for left_column_bits in range(1, column_count):
+            left_rows, left_columns = 1 << left_row_bits, 1 << left_column_bits
+            right_rows, right_columns = rows // left_rows, columns // left_columns
+            blocks = []
+            for left_row in range(left_rows):
+                for left_column in range(left_columns):
+                    block = 0
+                    for right_row in range(right_rows):
+                        for right_column in range(right_columns):
+                            source_row = left_row * right_rows + right_row
+                            source_column = left_column * right_columns + right_column
+                            block |= ((arranged >> (source_row * columns + source_column)) & 1) << (
+                                right_row * right_columns + right_column)
+                    blocks.append(block)
+            right = next((block for block in blocks if block), 0)
+            if not right or any(block not in (0, right) for block in blocks):
+                continue
+            left = sum(int(block == right) << index for index, block in enumerate(blocks))
+            factor_bits = left_rows * left_columns + right_rows * right_columns
+            if factor_bits < rows * columns:
+                result.append(GF2CandidateDescriptor("kronecker", factor_bits,
+                    {"matrix_shape": [rows, columns],
+                     "left_shape": [left_rows, left_columns],
+                     "right_shape": [right_rows, right_columns],
+                     "left_bits": left, "right_bits": right}, row))
+    return tuple(result)
+
+
+def screen_partition(bits: int, n_vars: int,
+                     row_variables: Iterable[int]) -> tuple[GF2CandidateDescriptor, ...]:
+    """Screen one partition once without admitting or reconstructing artifacts."""
+    _validate_bits(bits, n_vars)
+    row, _column = _partition(row_variables, n_vars)
+    arranged, row_count, column_count = partitioned_bits(bits, n_vars, row)
+    rows, columns = 1 << row_count, 1 << column_count
+    rank = _rank_descriptor(arranged, rows, columns, row)
+    result = ([] if rank is None else [rank])
+    result.extend(_cofactor_descriptors(arranged, rows, columns, row))
+    result.extend(_kronecker_descriptors(arranged, row_count, column_count, row))
+    return tuple(result)
 
 
 def xor_component_artifact(bits: int, n_vars: int) -> ExactGF2Artifact | None:
@@ -346,16 +469,10 @@ def rank_artifact(bits: int, n_vars: int, row_variables: Iterable[int]) -> Exact
     _validate_bits(bits, n_vars)
     row, _column = _partition(row_variables, n_vars)
     arranged, row_count, column_count = partitioned_bits(bits, n_vars, row)
-    rows, columns = 1 << row_count, 1 << column_count
-    rank, coefficients, basis = gf2_rank_factor(_matrix_rows(arranged, rows, columns), columns)
-    if rank == 0:
-        return None
-    factor_bits = rank * (rows + columns)
-    if factor_bits >= rows * columns:
-        return None
-    return _artifact("gf2_rank", bits, n_vars, factor_bits,
-                     {"rank": rank, "row_coefficients": list(coefficients),
-                      "basis_rows": list(basis), "matrix_shape": [rows, columns]}, row)
+    descriptor = _rank_descriptor(
+        arranged, 1 << row_count, 1 << column_count, row
+    )
+    return descriptor.materialize(bits, n_vars) if descriptor is not None else None
 
 
 def cofactor_artifacts(bits: int, n_vars: int, row_variables: Iterable[int]) -> tuple[ExactGF2Artifact, ...]:
@@ -363,64 +480,16 @@ def cofactor_artifacts(bits: int, n_vars: int, row_variables: Iterable[int]) -> 
     row, _column = _partition(row_variables, n_vars)
     arranged, row_count, column_count = partitioned_bits(bits, n_vars, row)
     rows, columns = 1 << row_count, 1 << column_count
-    result = []
-    for orientation, patterns, width in (
-            ("rows", _matrix_rows(arranged, rows, columns), columns),
-            ("columns", _matrix_columns(arranged, rows, columns), rows)):
-        mask = (1 << width) - 1
-        representatives: list[int] = []
-        index_by_canonical: dict[int, int] = {}
-        references = []
-        for pattern in patterns:
-            canonical_pattern = min(pattern, pattern ^ mask)
-            index = index_by_canonical.get(canonical_pattern)
-            if index is None:
-                index = len(representatives)
-                index_by_canonical[canonical_pattern] = index
-                representatives.append(canonical_pattern)
-            references.append([index, int(pattern != canonical_pattern)])
-        index_bits = max(1, math.ceil(math.log2(max(1, len(representatives)))))
-        factor_bits = len(representatives) * width + len(patterns) * (index_bits + 1)
-        if factor_bits < rows * columns and len(representatives) < len(patterns):
-            result.append(_artifact("cofactor_blocks", bits, n_vars, factor_bits,
-                {"orientation": orientation, "representatives": representatives,
-                 "references": references, "matrix_shape": [rows, columns]}, row))
-    return tuple(result)
+    return tuple(descriptor.materialize(bits, n_vars) for descriptor in
+                 _cofactor_descriptors(arranged, rows, columns, row))
 
 
 def kronecker_artifacts(bits: int, n_vars: int, row_variables: Iterable[int]) -> tuple[ExactGF2Artifact, ...]:
     _validate_bits(bits, n_vars)
     row, _column = _partition(row_variables, n_vars)
     arranged, row_count, column_count = partitioned_bits(bits, n_vars, row)
-    rows, columns = 1 << row_count, 1 << column_count
-    result = []
-    for left_row_bits in range(1, row_count):
-        for left_column_bits in range(1, column_count):
-            left_rows, left_columns = 1 << left_row_bits, 1 << left_column_bits
-            right_rows, right_columns = rows // left_rows, columns // left_columns
-            blocks = []
-            for left_row in range(left_rows):
-                for left_column in range(left_columns):
-                    block = 0
-                    for right_row in range(right_rows):
-                        for right_column in range(right_columns):
-                            source_row = left_row * right_rows + right_row
-                            source_column = left_column * right_columns + right_column
-                            block |= ((arranged >> (source_row * columns + source_column)) & 1) << (
-                                right_row * right_columns + right_column)
-                    blocks.append(block)
-            right = next((block for block in blocks if block), 0)
-            if not right or any(block not in (0, right) for block in blocks):
-                continue
-            left = sum(int(block == right) << index for index, block in enumerate(blocks))
-            factor_bits = left_rows * left_columns + right_rows * right_columns
-            if factor_bits < rows * columns:
-                result.append(_artifact("kronecker", bits, n_vars, factor_bits,
-                    {"matrix_shape": [rows, columns],
-                     "left_shape": [left_rows, left_columns],
-                     "right_shape": [right_rows, right_columns],
-                     "left_bits": left, "right_bits": right}, row))
-    return tuple(result)
+    return tuple(descriptor.materialize(bits, n_vars) for descriptor in
+                 _kronecker_descriptors(arranged, row_count, column_count, row))
 
 
 @dataclass(frozen=True)
@@ -429,6 +498,8 @@ class ExactGF2Analysis:
     source_sha256: str
     partitions_tested: int
     candidates: tuple[ExactGF2Artifact, ...]
+    descriptors_screened: int = 0
+    artifacts_materialized: int = 0
 
     @property
     def best(self) -> ExactGF2Artifact | None:
@@ -486,4 +557,58 @@ def analyze_exact_gf2(bits: int, n_vars: int, *,
                 seen.add(candidate.digest)
     candidates.sort(key=lambda item: (item.document["factor_bits"], item.kind,
                                       item.document["row_variables"], item.digest))
-    return ExactGF2Analysis(n_vars, truth_sha256(bits, n_vars), len(partitions), tuple(candidates))
+    return ExactGF2Analysis(n_vars, truth_sha256(bits, n_vars), len(partitions), tuple(candidates),
+                            descriptors_screened=len(candidates),
+                            artifacts_materialized=len(candidates))
+
+
+def analyze_screened_exact_gf2(bits: int, n_vars: int, *,
+                               row_partitions: Iterable[Iterable[int]] | None = None,
+                               max_partitions: int = 64,
+                               materialize_budget: int = 4) -> ExactGF2Analysis:
+    """Find the exhaustive best candidate while materializing only a bounded tail.
+
+    Every partition is screened using the same exact rank, cofactor, and
+    Kronecker conditions as :func:`analyze_exact_gf2`.  Screening shares one
+    matrix layout per partition and creates no accepted artifact.  Descriptors
+    are ordered by the exhaustive analyzer's complete deterministic key, after
+    which only the best bounded set receives hashes and full reconstruction.
+    Therefore the returned best candidate is identical to the exhaustive best;
+    the reduced candidate tuple is not an enumeration of every valid artifact.
+    """
+    _validate_bits(bits, n_vars)
+    if type(materialize_budget) is not int or not 1 <= materialize_budget <= 64:
+        raise ValueError("invalid GF(2) materialization budget")
+    partitions = (candidate_partitions(bits, n_vars, max_partitions) if row_partitions is None
+                  else tuple(tuple(row) for row in row_partitions))
+    if not partitions:
+        raise ValueError("GF(2) analyzer requires at least one partition")
+
+    candidates = []
+    xor = xor_component_artifact(bits, n_vars)
+    if xor is not None:
+        candidates.append(xor)
+
+    descriptors = [descriptor for row in partitions
+                   for descriptor in screen_partition(bits, n_vars, row)]
+    unique: dict[str, GF2CandidateDescriptor] = {}
+    for descriptor in descriptors:
+        unique.setdefault(descriptor.digest(bits, n_vars), descriptor)
+    ordered = sorted(unique.values(), key=lambda item: item.sort_key(bits, n_vars))
+    candidates.extend(descriptor.materialize(bits, n_vars)
+                      for descriptor in ordered[:materialize_budget])
+
+    seen = set()
+    exact = []
+    for candidate in candidates:
+        if candidate.digest in seen:
+            continue
+        if candidate.reconstruct() != bits:
+            raise RuntimeError("screened GF(2) candidate escaped exact reconstruction")
+        seen.add(candidate.digest)
+        exact.append(candidate)
+    exact.sort(key=lambda item: (item.document["factor_bits"], item.kind,
+                                 item.document["row_variables"], item.digest))
+    return ExactGF2Analysis(n_vars, truth_sha256(bits, n_vars), len(partitions), tuple(exact),
+                            descriptors_screened=len(unique),
+                            artifacts_materialized=len(exact))

@@ -136,6 +136,11 @@
           "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
           "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
           "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
+        },
+        {
+          "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
         }
       ],
       "status": "measured"
@@ -189,7 +194,7 @@
   "milestones": {
     "A": "implemented and measured within foundation slice",
     "B": "first actual NumPy MLP comparison measured; negative result",
-    "C": "C14 task guard and exact shadow complete; C13 dense-tail improvement retained, sparse sentinel overhead remains negative, production promotion stays disabled",
+    "C": "C16 exact-screened CM/GF(2) tail preserves the exhaustive best on all retained cases and passes local timing; exact-payload Linux approval and a tiny-case bypass remain",
     "D": "D10 indexed four-rule engine and C15 exact CM/GF(2) decomposition measured; exact infrastructure passes, both timing promotion gates fail, and production remains disabled",
     "E": "E1 bounded BDD order selection and E2 exact SAT/equivalence guidance measured; both exact infrastructures pass, both learned timing policies remain negative, native/large-source follow-ups pending"
   },
@@ -632,7 +637,7 @@
       "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
       "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
       "name": "CM decomposition and layout",
-      "next_experiment": "Rank bounded candidate partitions on larger source cones, reconstruct every proposal exactly, and retain exhaustive-budget and advice-off controls.",
+      "next_experiment": "Confirm the frozen exact-screened tail on Linux, then test a fresh non-XOR-heavy family before considering any learned partition ranker.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "cofactors, blocks, GF(2) factors",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -691,11 +696,16 @@
           "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
           "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
           "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
+        },
+        {
+          "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
+      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
     },
     {
       "dependencies": {
@@ -1116,7 +1126,7 @@
       "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
       "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
       "name": "Inference and training efficiency",
-      "next_experiment": "Reduce or amortize common GF(2) analysis cost before fitting any partition policy; charge screening, reconstruction, and reload.",
+      "next_experiment": "Add a charged tiny-case bypass for the observed 0.893x worst case and retain advice-off exhaustive materialization.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "features, batches, embeddings, compiled/quantized weights",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1245,11 +1255,16 @@
           "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
           "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
           "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
+        },
+        {
+          "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "CNF encoding, phase/order work, solver construction, solve calls, features, decisions, and independent witness/core checks are separated in frozen raw rows and exact artifact manifests."
+      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
     },
     {
       "dependencies": {
@@ -1364,7 +1379,7 @@
       "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
       "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
       "name": "Negative controls and hard limits",
-      "next_experiment": "Retain no-rewrite, advice-off, dense-incompressible, near-match, changed-version, and exact-reconstruction controls.",
+      "next_experiment": "Retain dense incompressible controls, byte-identical exhaustive-best checks, per-case slowdown reporting, and second-machine timing.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "random/dense tables, packed bits, anti-reduction AST",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1498,11 +1513,16 @@
           "machine_summary": "learning_milestone_c15_exact_cm_gf2_results.json",
           "report": "LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
           "scope": "Exact bounded CM/GF(2) artifacts now cover recursive XOR components, matrix rank, complemented cofactor blocks, and Kronecker factors with full reconstruction on a 40-case Yosys source family and dense negatives."
+        },
+        {
+          "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
+          "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "The learned SAT policy is retained as a negative timing result: it learned fresh-versus-resident structure but was 1.0420x the sealed best fixed action after advice overhead."
+      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
     }
   ],
   "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",
