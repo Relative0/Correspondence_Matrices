@@ -67,6 +67,13 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
             text = (SITE / name).read_text(encoding="utf-8")
             self.assertIn("What the 2026-08-26/27 evidence added", text, name)
 
+    def test_headline_tiles_keep_synthetic_and_epfl_cohorts_separate(self):
+        text = (SITE / "index.html").read_text(encoding="utf-8")
+        self.assertIn("local synthetic kernel, {{kernel.local.pct}} faster; EPFL", text)
+        self.assertIn("Linux synthetic replications", text)
+        self.assertIn("with its clustered interval spanning parity", text)
+        self.assertNotIn("replicated on real circuits and on {{kernel.pod.count}}", text)
+
     def test_master_links_latest_fresh_process_persistence_evidence(self):
         text = (SITE / "index.html").read_text(encoding="utf-8")
         report = ROOT / "docs" / "research" / "FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md"

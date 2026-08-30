@@ -2565,9 +2565,11 @@ app.append(h("header", { class: "page" }, [
 /* headline tiles ------------------------------------------------------- */
 app.append(tiles([
   ["CM vs a plain CSE kernel", f(DATA.e1_kernel_vs_cse.rows[0].value, 3),
-    "faster, {{kernel.local.pct}} — replicated on real circuits and on {{kernel.pod.count}} independent Linux machines"],
+    "local synthetic kernel, {{kernel.local.pct}} faster; EPFL " +
+      f(DATA.e1_kernel_vs_cse.rows[1].value, 3) + "; {{kernel.pod.count}} Linux synthetic replications"],
   ["CM vs a flattened CSE kernel", f(DATA.e2_kernel_vs_cse_flat.rows[1].value, 4),
-    "external corpus — kernel-equivalent, the residual is not a win in either direction"],
+    "local synthetic kernel; EPFL " + f(DATA.e2_kernel_vs_cse_flat.rows[2].value, 4) +
+      " with its clustered interval spanning parity"],
   ["Whole-call boundary", "BitSet",
     "leads at every semantic support measured, up to live_k = {{wrap.max_k}}"],
   ["Preparation cost", T("prep.min") + "–" + T("prep.max"),
