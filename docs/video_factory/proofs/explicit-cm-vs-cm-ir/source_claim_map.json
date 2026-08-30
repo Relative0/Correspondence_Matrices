@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "video_id": "explicit-cm-vs-cm-ir",
+  "brief_hash": "68821897ef83df0b4c04dd822fbc1296a6f03ab2f29e89f5c2d32293280a31de",
+  "claims": [
+    {
+      "claim_id": "cm-explicit-definition",
+      "wording_variant": "plain",
+      "wording": "A CM lays a Boolean function's truth values out as a matrix.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm and eval_cm_boolean"
+        }
+      ]
+    },
+    {
+      "claim_id": "cm-ir-definition",
+      "wording_variant": "plain",
+      "wording": "CM-IR stores reusable computation structure, not a dense matrix.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current implementation",
+      "measurement_boundary": "representation",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CMIRBuilder and compile_expr_to_cm_ir"
+        }
+      ]
+    },
+    {
+      "claim_id": "dense-vs-ir-distinct",
+      "wording_variant": "plain",
+      "wording": "The matrix is an output layout; CM-IR is a reusable program graph.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current implementation",
+      "measurement_boundary": "representation and evaluation",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CompiledExpr, evaluate_compiled, materialize_cm, materialize_hybrid_no_reinflate"
+        },
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm"
+        }
+      ]
+    },
+    {
+      "claim_id": "variants-implemented",
+      "wording_variant": "plain",
+      "wording": "The project has several execution paths, but their names do not imply one winner.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current repository implementation",
+      "measurement_boundary": "implementation status",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "What the project does and Backend summary"
+        },
+        {
+          "source_id": "src-cm-ir",
+          "locator": "materialize modes"
+        },
+        {
+          "source_id": "src-bitset",
+          "locator": "packed evaluators"
+        }
+      ]
+    },
+    {
+      "claim_id": "no-universal-winner",
+      "wording_variant": "plain",
+      "wording": "The winner depends on workload and measurement boundary.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "cross-study synthesis",
+      "measurement_boundary": "multiple boundaries kept separate",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Bottom line"
+        },
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Scope and verdict"
+        }
+      ]
+    }
+  ]
+}

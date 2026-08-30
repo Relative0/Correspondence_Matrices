@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "generated_date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "allowed_wording": {
+            "type": "string",
+            "minLength": 1
+          },
+          "plain_wording": {
+            "type": "string",
+            "minLength": 1
+          },
+          "technical_wording": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "fact",
+              "measurement",
+              "interpretation",
+              "hypothesis",
+              "conceptual"
+            ]
+          },
+          "status": {
+            "enum": [
+              "confirmed",
+              "revised",
+              "superseded",
+              "exploratory",
+              "negative",
+              "not_promoted"
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "measurement_boundary": {
+            "type": "string"
+          },
+          "comparator": {
+            "type": "string"
+          },
+          "ratio_direction": {
+            "type": "string"
+          },
+          "uncertainty": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "locator": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_id",
+                "locator"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "allowed_wording",
+          "plain_wording",
+          "technical_wording",
+          "type",
+          "status",
+          "scope",
+          "measurement_boundary",
+          "comparator",
+          "ratio_direction",
+          "uncertainty",
+          "sources"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "generated_date",
+    "claims"
+  ]
+}

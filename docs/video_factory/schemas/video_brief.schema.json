@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "series": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "promise": {
+      "type": "string",
+      "minLength": 1
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assumed_knowledge": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "duration_tier": {
+      "enum": [
+        "visual_short",
+        "core_explainer",
+        "deep_dive"
+      ]
+    },
+    "target_formats": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "validated",
+        "proposed",
+        "approved"
+      ]
+    },
+    "hook": {
+      "type": "string",
+      "minLength": 1
+    },
+    "central_question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "answer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "closing_takeaway": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "wording": {
+            "enum": [
+              "plain",
+              "technical"
+            ]
+          }
+        },
+        "required": [
+          "claim_id",
+          "wording"
+        ]
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primitive": {
+            "type": "string",
+            "minLength": 1
+          },
+          "data_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "narration": {
+            "type": "string"
+          },
+          "duration_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "transition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "measurement_boundary": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "conceptual",
+              "confirmed",
+              "revised",
+              "mixed",
+              "negative",
+              "not_promoted",
+              "correction_history"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "purpose",
+          "primitive",
+          "data_refs",
+          "claim_ids",
+          "caption",
+          "narration",
+          "duration_s",
+          "transition",
+          "measurement_boundary",
+          "status"
+        ]
+      }
+    },
+    "display_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conceptual": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_footnotes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "scope",
+        "boundary",
+        "uncertainty",
+        "conceptual",
+        "source_footnotes"
+      ]
+    },
+    "narration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "off",
+            "on"
+          ]
+        },
+        "pronunciations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "caption_contract": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mode",
+        "pronunciations",
+        "caption_contract"
+      ]
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "local_suitability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remote_suitability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "render_class": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "local_suitability",
+        "remote_suitability",
+        "render_class"
+      ]
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "video_id",
+    "series",
+    "title",
+    "promise",
+    "audience",
+    "assumed_knowledge",
+    "prerequisites",
+    "duration_tier",
+    "target_formats",
+    "status",
+    "hook",
+    "central_question",
+    "answer",
+    "limits",
+    "closing_takeaway",
+    "claims",
+    "scenes",
+    "display_rules",
+    "narration",
+    "expected_outputs",
+    "execution",
+    "content_hash"
+  ]
+}

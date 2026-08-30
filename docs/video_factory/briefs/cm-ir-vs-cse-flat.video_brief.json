@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.0",
+  "video_id": "cm-ir-vs-cse-flat",
+  "series": "Comparators",
+  "title": "Cm Ir Vs Cse Flat",
+  "promise": "They share structural reuse and flattening; CM may add normalization, while measured outcomes remain workload- and boundary-specific.",
+  "audience": "Curious technical viewers; no prior CM implementation knowledge required",
+  "assumed_knowledge": [
+    "Boolean values 0 and 1"
+  ],
+  "prerequisites": [
+    "explicit-cm-vs-cm-ir"
+  ],
+  "duration_tier": "visual_short",
+  "target_formats": [
+    "16x9"
+  ],
+  "status": "draft",
+  "hook": "What differs between CM-IR and sharing-aware CSE-flat, and what do current timings actually measure?",
+  "central_question": "What differs between CM-IR and sharing-aware CSE-flat, and what do current timings actually measure?",
+  "answer": "They share structural reuse and flattening; CM may add normalization, while measured outcomes remain workload- and boundary-specific.",
+  "limits": [
+    "Silent local proof with complete on-screen captions",
+    "No universal performance claim",
+    "No paid or cloud service"
+  ],
+  "closing_takeaway": "Choose by workload, transformation, reuse, and boundary — not by label.",
+  "claims": [
+    {
+      "claim_id": "cse-definition",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "cse-flat-definition",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "cm-extra-transformations",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "b2b4-v3-kernel",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "public-wrapper-slower",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "epfl-preparation-cost",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "epfl-parity",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "ratio-label-rule",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "b2b4-runpod-replication",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "no-universal-winner",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "epfl-mechanism",
+      "wording": "plain"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "mechanisms",
+      "purpose": "Which transformation removed the work?",
+      "primitive": "cm_science:transform_compare",
+      "data_refs": [],
+      "claim_ids": [
+        "cse-definition",
+        "cse-flat-definition",
+        "cm-extra-transformations"
+      ],
+      "caption": "CONCEPTUAL MECHANISM · attribute a measured change only to transformations present on that workload.",
+      "narration": "",
+      "duration_s": 3.2,
+      "transition": "cut",
+      "measurement_boundary": "mechanism",
+      "status": "conceptual"
+    },
+    {
+      "id": "boundaries",
+      "purpose": "Three timing boundaries that must not be blended",
+      "primitive": "cm_science:boundary",
+      "data_refs": [],
+      "claim_ids": [
+        "b2b4-v3-kernel",
+        "public-wrapper-slower",
+        "epfl-preparation-cost"
+      ],
+      "caption": "A bare-kernel ratio is not a one-off public-API speedup.",
+      "narration": "",
+      "duration_s": 2.3,
+      "transition": "cut",
+      "measurement_boundary": "preparation / kernel / wrapper",
+      "status": "confirmed"
+    },
+    {
+      "id": "evidence",
+      "purpose": "Current corrected evidence: scoped reduction, scoped parity, slower wrapper",
+      "primitive": "cm_science:ratio",
+      "data_refs": [
+        "visual_data/b2b4_v3_kernel.json",
+        "visual_data/epfl_parity.json"
+      ],
+      "claim_ids": [
+        "b2b4-v3-kernel",
+        "epfl-parity",
+        "public-wrapper-slower",
+        "ratio-label-rule"
+      ],
+      "caption": "Below one favors CM only because each row declares CM as numerator. Workloads and boundaries are not pooled.",
+      "narration": "",
+      "duration_s": 3.6,
+      "transition": "cut",
+      "measurement_boundary": "multiple explicit boundaries",
+      "status": "mixed"
+    },
+    {
+      "id": "replication",
+      "purpose": "The requested approximately 0.909 result is a replication range",
+      "primitive": "cm_science:result",
+      "data_refs": [
+        "visual_data/runpod_replication.json"
+      ],
+      "claim_ids": [
+        "b2b4-runpod-replication",
+        "no-universal-winner"
+      ],
+      "caption": "All three pods passed exactness and source-integrity gates; the public wrapper remained slower.",
+      "narration": "",
+      "duration_s": 2.0,
+      "transition": "cut",
+      "measurement_boundary": "compiled evaluator kernel",
+      "status": "mixed"
+    },
+    {
+      "id": "honest-close",
+      "purpose": "No single fastest-method headline survives these boundaries",
+      "primitive": "cm_science:result",
+      "data_refs": [],
+      "claim_ids": [
+        "no-universal-winner",
+        "epfl-mechanism",
+        "epfl-preparation-cost"
+      ],
+      "caption": "Choose by workload, transformation, reuse, and boundary — not by label.",
+      "narration": "",
+      "duration_s": 1.8,
+      "transition": "cut",
+      "measurement_boundary": "cross-study synthesis",
+      "status": "mixed"
+    }
+  ],
+  "display_rules": {
+    "scope": "Show workload and population on every measurement scene.",
+    "boundary": "Show representation, preparation, kernel, wrapper, or end-to-end explicitly.",
+    "uncertainty": "Show interval method and never turn a point estimate into a universal ranking.",
+    "conceptual": "Use a visible CONCEPTUAL status and do not imply measured traces.",
+    "source_footnotes": "Show source and claim IDs in the safe-zone footer."
+  },
+  "narration": {
+    "mode": "off",
+    "pronunciations": {
+      "CM-IR": "C M I R",
+      "CSE": "C S E"
+    },
+    "caption_contract": "Every explanatory sentence is visible long enough to read; no audio is required."
+  },
+  "expected_outputs": [
+    "resolved.spec.json",
+    "ivc.request.json",
+    "assembly.spec.json",
+    "video.mp4",
+    "provenance.json",
+    "gap_report.json",
+    "render_observations.json",
+    "contact-sheet.png"
+  ],
+  "execution": {
+    "local_suitability": "required Level 1 proof",
+    "remote_suitability": "CPU-only after exact approval",
+    "render_class": "chromium-svg-cpu-small"
+  },
+  "content_hash": "da61b723278c215db18626346e2bd5eb25e2b5e541274d8142617772887514e7"
+}

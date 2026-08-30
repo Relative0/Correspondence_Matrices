@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "episode_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "enum": [
+        "local_windows_sapi",
+        "manual_recording",
+        "off"
+      ]
+    },
+    "voice": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dialect": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rate": {
+      "type": "integer",
+      "minimum": -10,
+      "maximum": 10
+    },
+    "volume": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "sample_rate": {
+      "enum": [
+        16000,
+        22050,
+        24000,
+        44100,
+        48000
+      ]
+    },
+    "channels": {
+      "const": 1
+    },
+    "pronunciations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "cues": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cue_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chapter_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "word_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "planned_start_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "planned_end_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "cue_id",
+          "chapter_id",
+          "scene_id",
+          "text",
+          "text_sha256",
+          "word_count",
+          "planned_start_s",
+          "planned_end_s"
+        ]
+      }
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "rendered",
+        "approved"
+      ]
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "episode_id",
+    "provider",
+    "voice",
+    "dialect",
+    "rate",
+    "volume",
+    "sample_rate",
+    "channels",
+    "pronunciations",
+    "cues",
+    "status",
+    "content_hash"
+  ]
+}

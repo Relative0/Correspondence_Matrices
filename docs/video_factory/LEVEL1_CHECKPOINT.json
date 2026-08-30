@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "checkpoint_id": "cm-video-factory-level1-20260830",
+  "created_at": "2026-08-30T19:00:00+07:00",
+  "scope": {
+    "versioned": [
+      "factory source and schemas",
+      "source, claim, glossary, visual-data, brief, catalog, series, job, result, and batch contracts",
+      "three local proof MP4s, timelines, reports, observations, preview frames, and reproduction instructions",
+      "RunPod packaging, worker, controller, watchdog, tests, authorization history, and reconciled reports"
+    ],
+    "local_reproducible_only": [
+      "docs/video_factory/tmp",
+      "docs/video_factory/runpod/dist",
+      "docs/video_factory/runpod/remote",
+      "proof IVC work directories"
+    ]
+  },
+  "local_proofs": [
+    {
+      "id": "cm-foundation",
+      "duration_seconds": 5.8,
+      "frames": 174,
+      "mp4_sha256": "1b8d4602fb205a6bfc35a9eff1c875ced4669e5e98962d7488f3941e293dd88d"
+    },
+    {
+      "id": "explicit-cm-vs-cm-ir",
+      "duration_seconds": 7.0,
+      "frames": 210,
+      "mp4_sha256": "e86e35a568e74142a9c13962209d1a4a5f94af750a007234b15873ef53194927"
+    },
+    {
+      "id": "cm-ir-vs-cse-flat",
+      "duration_seconds": 12.9,
+      "frames": 387,
+      "mp4_sha256": "43d976814b5766531513a136a396cd1e79937f4c8c50b9632f4bf6af589ce9f3"
+    }
+  ],
+  "remote_proof_run": {
+    "proposal_id": "cm-video-proof3-cpu-remote-v4",
+    "batch_id": "cm-video-level1-proof3-v1",
+    "batch_manifest_sha256": "88e986da255f82cc00b7231fb678bb6397c970eb59775c562b333821c9649f3d",
+    "archive_sha256": "c36710478f77301244ffa76cfc16de291e0cdfca31f3990504cb6250aa43b7ad",
+    "payload_sha256": "e5f87d5a2c2a9ec1f9e8cb0e0350cb81d39d70d804e67613141929b3bac4f281",
+    "result": "passed",
+    "jobs_passed": 3,
+    "sampled_frames_passed": 15,
+    "elapsed_seconds": 354.12,
+    "estimated_compute_usd": 0.013772,
+    "pod_deleted_and_absence_verified": true,
+    "credential_reference": "RUNPOD_API_KEY environment variable; value is not persisted"
+  },
+  "superseded_remote_attempt": {
+    "proposal_id": "cm-video-proof3-cpu-remote-v2",
+    "result": "failed_before_render",
+    "estimated_compute_usd": 0.008145,
+    "pod_deleted_and_absence_verified": true
+  },
+  "estimated_remote_compute_total_usd": 0.021917,
+  "authoritative_report": "LEVEL1_REPORT.md"
+}

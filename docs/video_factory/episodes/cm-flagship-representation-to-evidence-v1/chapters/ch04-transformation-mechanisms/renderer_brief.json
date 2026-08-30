@@ -1,0 +1,439 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Where the work actually disappears",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Compare raw AST, structural CSE, CSE-flat, and CM-IR mechanisms.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch04-transformation-mechanisms"
+  },
+  "scenes": [
+    {
+      "id": "four-programs",
+      "kind": "cm_science",
+      "duration": 21.0,
+      "data": {
+        "eyebrow": "CHAPTER 04 · CORRESPONDENCE MATRICES",
+        "title": "Four program shapes can compute the same exact function",
+        "caption": "CONCEPTUAL · attribute a measured change only to transformations present on that workload.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-b2b4-v3-audit"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Raw AST",
+            "tone": "ast",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 300,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "a2",
+                "label": "A",
+                "x": 510,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b2",
+                "label": "B",
+                "x": 690,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab2",
+                "label": "AND",
+                "x": 600,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 875,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 510,
+                "y": 150,
+                "tone": "ast",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "a2",
+                "target": "ab2"
+              },
+              {
+                "source": "b2",
+                "target": "ab2"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "ab2",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              }
+            ],
+            "note": "Repeated subexpression remains duplicated"
+          },
+          {
+            "label": "Structural CSE",
+            "tone": "cse",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 300,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 875,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 510,
+                "y": 150,
+                "tone": "ast",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ],
+            "note": "One reusable subtree"
+          },
+          {
+            "label": "Sharing-aware CSE-flat",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 300,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 875,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR₃",
+                "x": 510,
+                "y": 150,
+                "tone": "cse_flat",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ],
+            "note": "Reuse plus safe flattening"
+          },
+          {
+            "label": "CM-IR",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 300,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 875,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR · canonical",
+                "x": 510,
+                "y": 150,
+                "tone": "cm_ir",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ],
+            "note": "Canonical normalization and interning"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "mechanism-accounting",
+      "kind": "cm_science",
+      "duration": 21.0,
+      "data": {
+        "eyebrow": "CHAPTER 04 · CORRESPONDENCE MATRICES",
+        "title": "Name the transformation before naming the gain",
+        "caption": "A lower time does not identify its mechanism by itself.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-b2b4-v3-audit"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Sharing removes duplicated subtrees.",
+          "Flattening can shorten associative evaluation chains.",
+          "Canonical normalization may expose additional equivalence."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "shared-ground",
+      "kind": "cm_science",
+      "duration": 20.0,
+      "data": {
+        "eyebrow": "CHAPTER 04 · CORRESPONDENCE MATRICES",
+        "title": "CM-IR and CSE-flat share important ground",
+        "caption": "Shared mechanisms can predict parity on workloads with no extra reduction to expose.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cse-flat-definition",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-b2b4-v3-audit"
+        ],
+        "visual": "boundary",
+        "steps": [
+          {
+            "label": "Deduplicate",
+            "note": "reuse repeated subexpressions",
+            "boundary": "SHARING",
+            "tone": "cse"
+          },
+          {
+            "label": "Flatten safely",
+            "note": "preserve sharing while reducing chains",
+            "boundary": "CSE-FLAT",
+            "tone": "cse_flat"
+          },
+          {
+            "label": "Normalize canonically",
+            "note": "intern equivalent program structure",
+            "boundary": "CM-IR",
+            "tone": "cm_ir"
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

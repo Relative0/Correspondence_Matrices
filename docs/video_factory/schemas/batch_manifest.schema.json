@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "batch_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "proposed",
+        "approved"
+      ]
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "job_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "videos": {
+          "type": "integer"
+        },
+        "estimated_cpu_minutes": {
+          "type": "number"
+        },
+        "max_parallel": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "videos",
+        "estimated_cpu_minutes",
+        "max_parallel"
+      ]
+    },
+    "resume": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "completed_cache_identities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "continuation_token": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "completed_cache_identities",
+        "continuation_token"
+      ]
+    },
+    "approval_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "batch_id",
+    "status",
+    "jobs",
+    "job_hashes",
+    "aggregate",
+    "resume",
+    "approval_identity"
+  ]
+}

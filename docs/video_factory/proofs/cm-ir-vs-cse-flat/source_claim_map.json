@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "video_id": "cm-ir-vs-cse-flat",
+  "brief_hash": "da61b723278c215db18626346e2bd5eb25e2b5e541274d8142617772887514e7",
+  "claims": [
+    {
+      "claim_id": "cse-definition",
+      "wording_variant": "plain",
+      "wording": "CSE shares repeated work.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "comparator definition used by correction",
+      "measurement_boundary": "mechanism",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means"
+        }
+      ]
+    },
+    {
+      "claim_id": "cse-flat-definition",
+      "wording_variant": "plain",
+      "wording": "CSE-flat shares repeats and safely widens associative chains.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "corrected comparator contract",
+      "measurement_boundary": "mechanism",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means and Corrected issues 3"
+        },
+        {
+          "source_id": "src-b2b4-v3-audit",
+          "locator": "primary_comparator"
+        }
+      ]
+    },
+    {
+      "claim_id": "cm-extra-transformations",
+      "wording_variant": "plain",
+      "wording": "CM-IR and CSE-flat overlap, but CM-IR may normalize more structure.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "corrected mechanism interpretation",
+      "measurement_boundary": "mechanism",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means"
+        }
+      ]
+    },
+    {
+      "claim_id": "b2b4-v3-kernel",
+      "wording_variant": "plain",
+      "wording": "Compiled bare CM was modestly faster than CSE-flat on this one corrected workload.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "B2/B4 V3 formulas on one Windows run",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-inference",
+          "locator": "overall/all/all cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-b2b4-v3-audit",
+          "locator": "statistical_inference.headline"
+        }
+      ]
+    },
+    {
+      "claim_id": "public-wrapper-slower",
+      "wording_variant": "plain",
+      "wording": "The easy public call did not produce an end-to-end speedup.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "corrected B2/B4 comparison",
+      "measurement_boundary": "public wrapper complete truth-output call",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-inference",
+          "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-correction-report",
+          "locator": "CM versus sharing-aware CSE-flat"
+        }
+      ]
+    },
+    {
+      "claim_id": "epfl-preparation-cost",
+      "wording_variant": "plain",
+      "wording": "One-time CM preparation can erase a kernel gain unless the artifact is reused enough.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "accepted EPFL workload",
+      "measurement_boundary": "preparation and modeled reuse break-even",
+      "sources": [
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Results table"
+        }
+      ]
+    },
+    {
+      "claim_id": "epfl-parity",
+      "wording_variant": "plain",
+      "wording": "On this circuit workload, the two compiled kernels were at parity.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "EPFL AND/INV cones, semantic support 8–16, one Windows machine",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "sources": [
+        {
+          "source_id": "src-epfl-summary",
+          "locator": "all:primary_cm_cse_flat_blocked"
+        }
+      ]
+    },
+    {
+      "claim_id": "ratio-label-rule",
+      "wording_variant": "plain",
+      "wording": "A ratio has no honest direction without its labels.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "video evidence contract",
+      "measurement_boundary": "all numeric scenes",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Bottom line and scope"
+        }
+      ]
+    },
+    {
+      "claim_id": "b2b4-runpod-replication",
+      "wording_variant": "plain",
+      "wording": "Three Linux CPU replications put the overall ratio near 0.909, with a much smaller k=16 gap.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "B2/B4 corrected three-pod CPU replication",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "sources": [
+        {
+          "source_id": "src-runpod-pod1-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-pod2-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-pod3-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        }
+      ]
+    },
+    {
+      "claim_id": "no-universal-winner",
+      "wording_variant": "plain",
+      "wording": "The winner depends on workload and measurement boundary.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "cross-study synthesis",
+      "measurement_boundary": "multiple boundaries kept separate",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Bottom line"
+        },
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Scope and verdict"
+        }
+      ]
+    },
+    {
+      "claim_id": "epfl-mechanism",
+      "wording_variant": "plain",
+      "wording": "There was no extra mergeable chain left for CM on this workload.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "EPFL AND/INV cones",
+      "measurement_boundary": "compiled program structure and kernel",
+      "sources": [
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Results and mechanism check"
+        }
+      ]
+    }
+  ]
+}

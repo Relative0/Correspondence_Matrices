@@ -1,0 +1,213 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Explicit CM versus CM-IR",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Distinguish the dense truth artifact from the canonical shared program.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch03-explicit-versus-ir"
+  },
+  "scenes": [
+    {
+      "id": "two-artifacts",
+      "kind": "cm_science",
+      "duration": 20.0,
+      "data": {
+        "eyebrow": "CHAPTER 03 · CORRESPONDENCE MATRICES",
+        "title": "The same Boolean computation can have two useful artifacts",
+        "caption": "Dense truth positions and reusable program nodes are not interchangeable identities.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-explicit-definition",
+          "cm-ir-definition",
+          "dense-vs-ir-distinct"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir"
+        ],
+        "visual": "representation_compare",
+        "matrix": {
+          "rows": 4,
+          "columns": 4,
+          "bits": "0000111111110000",
+          "row_labels": [
+            "x0x1=00",
+            "x0x1=01",
+            "x0x1=10",
+            "x0x1=11"
+          ],
+          "column_labels": [
+            "x2x3=00",
+            "x2x3=01",
+            "x2x3=10",
+            "x2x3=11"
+          ]
+        },
+        "graphs": [
+          {
+            "label": "Canonical / interned CM-IR DAG",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "x0",
+                "label": "x0",
+                "x": 170,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "x1",
+                "label": "x1",
+                "x": 410,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "x2",
+                "label": "x2",
+                "x": 820,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "and",
+                "label": "AND",
+                "x": 290,
+                "y": 380,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 530,
+                "y": 150,
+                "tone": "cm_ir",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "x0",
+                "target": "and"
+              },
+              {
+                "source": "x1",
+                "target": "and"
+              },
+              {
+                "source": "and",
+                "target": "root",
+                "label": "shared",
+                "shared": true
+              },
+              {
+                "source": "x2",
+                "target": "root"
+              }
+            ],
+            "note": "Structure and reuse are explicit"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "ir-evaluation-path",
+      "kind": "cm_science",
+      "duration": 20.0,
+      "data": {
+        "eyebrow": "CHAPTER 03 · CORRESPONDENCE MATRICES",
+        "title": "CM-IR can evaluate before any dense matrix is requested",
+        "caption": "Dense materialization is an output choice, not the definition of every CM-IR execution.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cm-ir-definition",
+          "dense-vs-ir-distinct",
+          "variants-implemented"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-cm-build",
+          "src-repo-readme",
+          "src-bitset"
+        ],
+        "visual": "boundary",
+        "steps": [
+          {
+            "label": "Canonical CM-IR",
+            "note": "interned DAG and reusable keys",
+            "boundary": "COMPILED ARTIFACT",
+            "tone": "cm_ir"
+          },
+          {
+            "label": "Packed evaluation",
+            "note": "exact output from the program",
+            "boundary": "EVALUATION",
+            "tone": "confirmed"
+          },
+          {
+            "label": "Optional dense CM",
+            "note": "materialize only for that output contract",
+            "boundary": "OUTPUT",
+            "tone": "cm"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "artifact-choice",
+      "kind": "cm_science",
+      "duration": 20.0,
+      "data": {
+        "eyebrow": "CHAPTER 03 · CORRESPONDENCE MATRICES",
+        "title": "Choose the artifact that answers the actual question",
+        "caption": "The label CM never erases the output and timing boundary.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "dense-vs-ir-distinct",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-cm-build",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Need the row/column truth layout? Request the explicit CM.",
+          "Need canonical structure or reuse? Work with CM-IR.",
+          "Need performance evidence? Measure construction, extraction, and reuse separately."
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

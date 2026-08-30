@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0",
+  "video_id": "explicit-cm-vs-cm-ir",
+  "series": "Representations",
+  "title": "Explicit Cm Vs Cm Ir",
+  "promise": "No. One is a dense truth layout; the other is a canonical shared computation graph.",
+  "audience": "Curious technical viewers; no prior CM implementation knowledge required",
+  "assumed_knowledge": [
+    "Boolean values 0 and 1"
+  ],
+  "prerequisites": [
+    "cm-foundation"
+  ],
+  "duration_tier": "visual_short",
+  "target_formats": [
+    "16x9"
+  ],
+  "status": "draft",
+  "hook": "Are an explicit CM and CM-IR the same thing?",
+  "central_question": "Are an explicit CM and CM-IR the same thing?",
+  "answer": "No. One is a dense truth layout; the other is a canonical shared computation graph.",
+  "limits": [
+    "Silent local proof with complete on-screen captions",
+    "No universal performance claim",
+    "No paid or cloud service"
+  ],
+  "closing_takeaway": "The label CM never erases the boundary being measured.",
+  "claims": [
+    {
+      "claim_id": "cm-explicit-definition",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "cm-ir-definition",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "dense-vs-ir-distinct",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "variants-implemented",
+      "wording": "plain"
+    },
+    {
+      "claim_id": "no-universal-winner",
+      "wording": "plain"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "two-artifacts",
+      "purpose": "One Boolean computation, two different artifacts",
+      "primitive": "cm_science:representation_compare",
+      "data_refs": [],
+      "claim_ids": [
+        "cm-explicit-definition",
+        "cm-ir-definition",
+        "dense-vs-ir-distinct"
+      ],
+      "caption": "The matrix indexes truth positions. The DAG indexes reusable computation structure.",
+      "narration": "",
+      "duration_s": 2.8,
+      "transition": "cut",
+      "measurement_boundary": "representation",
+      "status": "conceptual"
+    },
+    {
+      "id": "ir-to-output",
+      "purpose": "CM-IR can evaluate without rebuilding a dense matrix",
+      "primitive": "cm_science:boundary",
+      "data_refs": [],
+      "claim_ids": [
+        "cm-ir-definition",
+        "dense-vs-ir-distinct",
+        "variants-implemented"
+      ],
+      "caption": "A dense CM is one output choice, not the definition of every CM-IR execution.",
+      "narration": "",
+      "duration_s": 2.4,
+      "transition": "cut",
+      "measurement_boundary": "evaluation and output",
+      "status": "confirmed"
+    },
+    {
+      "id": "different-costs",
+      "purpose": "Different artifacts answer different questions",
+      "primitive": "cm_science:result",
+      "data_refs": [],
+      "claim_ids": [
+        "dense-vs-ir-distinct",
+        "no-universal-winner"
+      ],
+      "caption": "The label CM never erases the boundary being measured.",
+      "narration": "",
+      "duration_s": 1.8,
+      "transition": "cut",
+      "measurement_boundary": "multiple boundaries",
+      "status": "confirmed"
+    }
+  ],
+  "display_rules": {
+    "scope": "Show workload and population on every measurement scene.",
+    "boundary": "Show representation, preparation, kernel, wrapper, or end-to-end explicitly.",
+    "uncertainty": "Show interval method and never turn a point estimate into a universal ranking.",
+    "conceptual": "Use a visible CONCEPTUAL status and do not imply measured traces.",
+    "source_footnotes": "Show source and claim IDs in the safe-zone footer."
+  },
+  "narration": {
+    "mode": "off",
+    "pronunciations": {
+      "CM-IR": "C M I R",
+      "CSE": "C S E"
+    },
+    "caption_contract": "Every explanatory sentence is visible long enough to read; no audio is required."
+  },
+  "expected_outputs": [
+    "resolved.spec.json",
+    "ivc.request.json",
+    "assembly.spec.json",
+    "video.mp4",
+    "provenance.json",
+    "gap_report.json",
+    "render_observations.json",
+    "contact-sheet.png"
+  ],
+  "execution": {
+    "local_suitability": "required Level 1 proof",
+    "remote_suitability": "CPU-only after exact approval",
+    "render_class": "chromium-svg-cpu-small"
+  },
+  "content_hash": "68821897ef83df0b4c04dd822fbc1296a6f03ab2f29e89f5c2d32293280a31de"
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "video_id": "explicit-cm-vs-cm-ir",
+  "status": "passed",
+  "checks": {
+    "video_sha_matches_observer": true,
+    "provenance_video_hash_matches": true,
+    "dimensions": true,
+    "fps": true,
+    "codec": true,
+    "silent": true,
+    "frame_count": true,
+    "duration": true,
+    "no_gap": true,
+    "no_technical_findings": true,
+    "five_preview_frames": true
+  },
+  "encoded_frame_review": {
+    "frames": [
+      "opening",
+      "early",
+      "middle",
+      "settled",
+      "final"
+    ],
+    "safe_zones": "passed",
+    "caption_fit": "passed",
+    "legibility": "passed",
+    "color_semantics": "passed",
+    "settling": "passed",
+    "clipping_overlap": "passed",
+    "comparison_boundary": "passed"
+  },
+  "determinism": {
+    "runs": 2,
+    "byte_identical": true,
+    "sha256": "e86e35a568e74142a9c13962209d1a4a5f94af750a007234b15873ef53194927"
+  },
+  "warnings": [
+    "IVC reports a long generated slot because it cannot see POP's internal scene timeline; encoded-frame review and measured motion confirm active reveals and complete settling."
+  ]
+}

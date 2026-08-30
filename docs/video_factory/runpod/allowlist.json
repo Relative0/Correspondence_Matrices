@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "roots": {
+    "cm": "cm",
+    "ivc": "ivc",
+    "pop": "pop",
+    "runpod": "runpod"
+  },
+  "patterns": [
+    {"root": "cm", "glob": "claim_registry.json", "category": "evidence"},
+    {"root": "cm", "glob": "source_registry.json", "category": "evidence"},
+    {"root": "cm", "glob": "glossary.json", "category": "evidence"},
+    {"root": "cm", "glob": "visual_data/*.json", "category": "evidence_extract"},
+    {"root": "cm", "glob": "briefs/*.json", "category": "brief"},
+    {"root": "cm", "glob": "schemas/*.json", "category": "schema"},
+    {"root": "cm", "glob": "batch_manifest.json", "category": "job"},
+    {"root": "cm", "glob": "proofs/*/resolved.spec.json", "category": "render_spec"},
+    {"root": "cm", "glob": "proofs/*/assembly.spec.json", "category": "assembly_spec"},
+    {"root": "cm", "glob": "proofs/*/render_job.json", "category": "job"},
+    {"root": "ivc", "glob": "src/ivc/*.py", "category": "code"},
+    {"root": "ivc", "glob": "src/ivc_assemble/*.py", "category": "code"},
+    {"root": "ivc", "glob": "src/ivc_generators/*.py", "category": "code"},
+    {"root": "ivc", "glob": "src/ivc_shotlib/__init__.py", "category": "code"},
+    {"root": "ivc", "glob": "src/ivc_shotlib/config.py", "category": "code"},
+    {"root": "ivc", "glob": "src/ivc_shotlib/db.py", "category": "code"},
+    {"root": "ivc", "glob": "schemas/*.json", "category": "schema"},
+    {"root": "pop", "glob": "pop_video/**/*.py", "category": "code"},
+    {"root": "pop", "glob": "pop_video/**/*.js", "category": "code"},
+    {"root": "pop", "glob": "pop_video/**/*.json", "category": "renderer_contract"},
+    {"root": "pop", "glob": "package.json", "category": "dependency_lock"},
+    {"root": "pop", "glob": "package-lock.json", "category": "dependency_lock"},
+    {"root": "runpod", "glob": "worker.py", "category": "worker"},
+    {"root": "runpod", "glob": "batch_runner.py", "category": "worker"},
+    {"root": "runpod", "glob": "controller.py", "category": "controller"},
+    {"root": "runpod", "glob": "bootstrap.sh", "category": "bootstrap"},
+    {"root": "runpod", "glob": "requirements.lock", "category": "dependency_lock"}
+  ],
+  "system_fonts": [
+    "fonts-dejavu-core",
+    "fonts-liberation"
+  ],
+  "deny_names": [
+    ".env", ".env.local", ".git", ".pytest_cache", "__pycache__", "node_modules",
+    "credentials", "secrets", "token", "tokens", "shotlib.db"
+  ],
+  "deny_suffixes": [".pem", ".key", ".pfx", ".sqlite", ".db", ".pyc"],
+  "max_file_bytes": 2000000
+}

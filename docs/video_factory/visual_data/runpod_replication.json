@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "id": "b2b4-runpod-replication",
+  "chart_type": "replication_range",
+  "claim_ids": [
+    "b2b4-runpod-replication"
+  ],
+  "source_ids": [
+    "src-runpod-pod1-raw",
+    "src-runpod-pod2-raw",
+    "src-runpod-pod3-raw"
+  ],
+  "values": [
+    {
+      "label": "CPU pod 1",
+      "overall": 0.9026249543547354,
+      "k16": 0.9765566433783518,
+      "numerator": "bare CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "B2/B4 corrected",
+      "rows": 264
+    },
+    {
+      "label": "CPU pod 2",
+      "overall": 0.9118159566777766,
+      "k16": 0.974638762900016,
+      "numerator": "bare CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "B2/B4 corrected",
+      "rows": 264
+    },
+    {
+      "label": "CPU pod 3",
+      "overall": 0.9125555269235389,
+      "k16": 0.9752063173808391,
+      "numerator": "bare CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "B2/B4 corrected",
+      "rows": 264
+    }
+  ],
+  "transformation": {
+    "script": "docs/video_factory/factory.py:build_visual_data",
+    "description": "Compute the geometric mean of retained per-formula CM/CSE-flat ratios for all rows and live_k=16 independently for each immutable pod CSV.",
+    "input_hashes": {
+      "src-runpod-pod1-raw": "e73eac56921459ce5f793a8a74ef71bbc94bf6737b19858191457a9a3eb0d569",
+      "src-runpod-pod2-raw": "1a8a9ad9b0d0e0c4a02878c642c2f32607dabb2269d53df7f28dee50ae191bc8",
+      "src-runpod-pod3-raw": "057edd53405a69071dd59f42b6bee0aabe98618389f4f993bd109431788ca0c2"
+    }
+  }
+}

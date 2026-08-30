@@ -1,0 +1,531 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Cm Ir Vs Cse Flat",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; no prior CM implementation knowledge required",
+  "purpose": "They share structural reuse and flattening; CM may add normalization, while measured outcomes remain workload- and boundary-specific.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "video_id": "cm-ir-vs-cse-flat",
+    "cm_brief_hash": "da61b723278c215db18626346e2bd5eb25e2b5e541274d8142617772887514e7"
+  },
+  "scenes": [
+    {
+      "id": "mechanisms",
+      "kind": "cm_science",
+      "duration": 3.2,
+      "data": {
+        "eyebrow": "CORRESPONDENCE MATRICES",
+        "title": "Which transformation removed the work?",
+        "caption": "CONCEPTUAL MECHANISM · attribute a measured change only to transformations present on that workload.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-cm-ir"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Raw AST",
+            "note": "Repeated (A AND B) appears twice",
+            "tone": "ast",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 310,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "a2",
+                "label": "A",
+                "x": 520,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b2",
+                "label": "B",
+                "x": 710,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab2",
+                "label": "AND",
+                "x": 615,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 890,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 520,
+                "y": 150,
+                "tone": "ast",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "a2",
+                "target": "ab2"
+              },
+              {
+                "source": "b2",
+                "target": "ab2"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "ab2",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              }
+            ]
+          },
+          {
+            "label": "Plain structural CSE",
+            "note": "One shared subtree; binary chain may remain",
+            "tone": "cse",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 310,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 890,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 520,
+                "y": 150,
+                "tone": "ast",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Sharing-aware CSE-flat",
+            "note": "Reuse plus safe associative flattening",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 310,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 890,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR₃",
+                "x": 520,
+                "y": 150,
+                "tone": "cse_flat",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "CM-IR",
+            "note": "Shared ground plus canonical normalization / merging",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a1",
+                "label": "A",
+                "x": 120,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "b1",
+                "label": "B",
+                "x": 310,
+                "y": 610,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "ab1",
+                "label": "AND",
+                "x": 210,
+                "y": 430,
+                "tone": "ast",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 890,
+                "y": 430,
+                "tone": "ast",
+                "shape": "circle"
+              },
+              {
+                "id": "root",
+                "label": "OR · canonical",
+                "x": 520,
+                "y": 150,
+                "tone": "cm_ir",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a1",
+                "target": "ab1"
+              },
+              {
+                "source": "b1",
+                "target": "ab1"
+              },
+              {
+                "source": "ab1",
+                "target": "root"
+              },
+              {
+                "source": "c",
+                "target": "root"
+              },
+              {
+                "source": "ab1",
+                "target": "root",
+                "label": "reuse",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "boundaries",
+      "kind": "cm_science",
+      "duration": 2.3,
+      "data": {
+        "eyebrow": "CORRESPONDENCE MATRICES",
+        "title": "Three timing boundaries that must not be blended",
+        "caption": "A bare-kernel ratio is not a one-off public-API speedup.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-v3-kernel",
+          "public-wrapper-slower",
+          "epfl-preparation-cost"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-b2b4-v3-inference",
+          "src-epfl-report"
+        ],
+        "visual": "boundary",
+        "steps": [
+          {
+            "label": "Prepare",
+            "note": "compile, canonicalize, intern",
+            "boundary": "ONE-TIME",
+            "tone": "cm_ir"
+          },
+          {
+            "label": "Evaluate bare program",
+            "note": "program and environment already built",
+            "boundary": "KERNEL",
+            "tone": "confirmed"
+          },
+          {
+            "label": "Call public wrapper",
+            "note": "surrounding work and truth-output contract",
+            "boundary": "WRAPPER",
+            "tone": "wrapper"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "evidence",
+      "kind": "cm_science",
+      "duration": 3.6,
+      "data": {
+        "eyebrow": "CORRESPONDENCE MATRICES",
+        "title": "Current corrected evidence: scoped reduction, scoped parity, slower wrapper",
+        "caption": "Below one favors CM only because each row declares CM as numerator. Workloads and boundaries are not pooled.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-v3-kernel",
+          "epfl-parity",
+          "public-wrapper-slower",
+          "ratio-label-rule"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-inference",
+          "src-epfl-summary"
+        ],
+        "visual": "ratio",
+        "ratios": [
+          {
+            "label": "Bare CM / CSE-flat · all",
+            "value": 0.8905696773306687,
+            "ci_low": 0.8740654100098479,
+            "ci_high": 0.9072717741775921,
+            "numerator": "bare CM",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "compiled evaluator kernel",
+            "workload": "B2/B4 V3",
+            "note": "formula-cluster 95% CI",
+            "tone": "confirmed"
+          },
+          {
+            "label": "CM / CSE-flat · EPFL",
+            "value": 0.9998256738822606,
+            "ci_low": 0.9746915270026072,
+            "ci_high": 1.0249051888849583,
+            "numerator": "CM",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "compiled evaluator kernel",
+            "workload": "EPFL AND/INV cones",
+            "note": "circuit-cluster 95% CI",
+            "tone": "mixed"
+          },
+          {
+            "label": "Public wrapper / CSE-flat",
+            "value": 3.094136185032722,
+            "ci_low": 2.883082692131623,
+            "ci_high": 3.310818221547949,
+            "numerator": "public CM wrapper",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "public wrapper",
+            "workload": "B2/B4 V3",
+            "note": "formula-cluster 95% CI",
+            "tone": "negative"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "replication",
+      "kind": "cm_science",
+      "duration": 2.0,
+      "data": {
+        "eyebrow": "CORRESPONDENCE MATRICES",
+        "title": "The requested approximately 0.909 result is a replication range",
+        "caption": "All three pods passed exactness and source-integrity gates; the public wrapper remained slower.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-runpod-replication",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-runpod-pod1-raw",
+          "src-runpod-pod2-raw",
+          "src-runpod-pod3-raw"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Three guarded CPU pods: overall 0.9026–0.9126 CM/CSE-flat.",
+          "At k=16: 0.9746–0.9766; the gap narrowed.",
+          "This is compiled-kernel evidence on B2/B4, not universal CM dominance."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "honest-close",
+      "kind": "cm_science",
+      "duration": 1.8,
+      "data": {
+        "eyebrow": "CORRESPONDENCE MATRICES",
+        "title": "No single fastest-method headline survives these boundaries",
+        "caption": "Choose by workload, transformation, reuse, and boundary — not by label.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "no-universal-winner",
+          "epfl-mechanism",
+          "epfl-preparation-cost"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "B2/B4 V3: a workload-specific bare-program reduction.",
+          "EPFL AND/INV: parity where CSE-flat already captured the available flattening.",
+          "Public wrapper and preparation: costs can dominate without sufficient reuse."
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

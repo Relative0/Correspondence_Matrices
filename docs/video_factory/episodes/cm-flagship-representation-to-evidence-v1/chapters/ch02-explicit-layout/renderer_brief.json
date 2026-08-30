@@ -1,0 +1,216 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "What the explicit matrix says",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Explain live support, ambient variables, and the dense truth layout.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch02-explicit-layout"
+  },
+  "scenes": [
+    {
+      "id": "expression-to-matrix",
+      "kind": "cm_science",
+      "duration": 19.0,
+      "data": {
+        "eyebrow": "CHAPTER 02 · CORRESPONDENCE MATRICES",
+        "title": "One function inside a larger assignment universe",
+        "caption": "CONCEPTUAL · x2 and x3 shape the layout but do not change this function.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-explicit-definition",
+          "live-vs-ambient"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir"
+        ],
+        "visual": "expression_matrix",
+        "expression": "x0 XOR x1",
+        "ambient_variables": [
+          "x0",
+          "x1",
+          "x2",
+          "x3"
+        ],
+        "live_variables": [
+          "x0",
+          "x1"
+        ],
+        "matrix": {
+          "rows": 4,
+          "columns": 4,
+          "bits": "0000111111110000",
+          "row_labels": [
+            "x0x1=00",
+            "x0x1=01",
+            "x0x1=10",
+            "x0x1=11"
+          ],
+          "column_labels": [
+            "x2x3=00",
+            "x2x3=01",
+            "x2x3=10",
+            "x2x3=11"
+          ]
+        }
+      },
+      "script": ""
+    },
+    {
+      "id": "support-versus-universe",
+      "kind": "cm_science",
+      "duration": 20.0,
+      "data": {
+        "eyebrow": "CHAPTER 02 · CORRESPONDENCE MATRICES",
+        "title": "Live support and ambient width are different facts",
+        "caption": "Nominal width can overstate the active computation without changing the layout contract.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "live-vs-ambient",
+          "cm-explicit-definition"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-cm-build"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Live support: variables that change the function.",
+          "Ambient universe: variables that index the declared layout.",
+          "Dense size follows the layout contract, not only live support."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "matrix-contract",
+      "kind": "cm_science",
+      "duration": 19.0,
+      "data": {
+        "eyebrow": "CHAPTER 02 · CORRESPONDENCE MATRICES",
+        "title": "The explicit CM is exact—and intentionally dense",
+        "caption": "The matrix indexes truth positions; the graph indexes reusable computation structure.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-explicit-definition",
+          "cm-ir-definition",
+          "dense-vs-ir-distinct"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir"
+        ],
+        "visual": "representation_compare",
+        "matrix": {
+          "rows": 4,
+          "columns": 4,
+          "bits": "0000111111110000",
+          "row_labels": [
+            "x0x1=00",
+            "x0x1=01",
+            "x0x1=10",
+            "x0x1=11"
+          ],
+          "column_labels": [
+            "x2x3=00",
+            "x2x3=01",
+            "x2x3=10",
+            "x2x3=11"
+          ]
+        },
+        "graphs": [
+          {
+            "label": "Canonical / interned CM-IR DAG",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "x0",
+                "label": "x0",
+                "x": 170,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "x1",
+                "label": "x1",
+                "x": 410,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "x2",
+                "label": "x2",
+                "x": 820,
+                "y": 570,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "and",
+                "label": "AND",
+                "x": 290,
+                "y": 380,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "root",
+                "label": "OR",
+                "x": 530,
+                "y": 150,
+                "tone": "cm_ir",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "x0",
+                "target": "and"
+              },
+              {
+                "source": "x1",
+                "target": "and"
+              },
+              {
+                "source": "and",
+                "target": "root",
+                "label": "shared",
+                "shared": true
+              },
+              {
+                "source": "x2",
+                "target": "root"
+              }
+            ],
+            "note": "Structure and reuse are explicit"
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

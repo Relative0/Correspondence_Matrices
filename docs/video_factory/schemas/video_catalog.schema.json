@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "status": {
+      "const": "proposed"
+    },
+    "generated_date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "track": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "audience": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "central_question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "viewer_outcome": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "visuals_and_data": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "misconceptions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "caveats": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "duration_tier": {
+            "enum": [
+              "visual_short",
+              "core_explainer",
+              "deep_dive"
+            ]
+          },
+          "reuse_opportunities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "render_complexity": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "priority": {
+            "enum": [
+              "P0",
+              "P1",
+              "P2"
+            ]
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "rendered",
+              "blocked",
+              "not_promoted"
+            ]
+          },
+          "long_form_master": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "video_id",
+          "track",
+          "title",
+          "audience",
+          "prerequisites",
+          "central_question",
+          "viewer_outcome",
+          "claim_ids",
+          "visuals_and_data",
+          "misconceptions",
+          "caveats",
+          "duration_tier",
+          "reuse_opportunities",
+          "render_complexity",
+          "priority",
+          "status",
+          "long_form_master"
+        ]
+      }
+    },
+    "first_wave": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "generated_date",
+    "candidates",
+    "first_wave"
+  ]
+}

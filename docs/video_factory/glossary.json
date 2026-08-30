@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "entries": [
+    {
+      "term": "Correspondence matrix",
+      "expansion": "CM",
+      "plain_definition": "A matrix layout of a Boolean function's truth values.",
+      "technical_definition": "A dense output indexed by assignments over declared row and column variable sets.",
+      "common_confusion": "Not every use of the label CM refers to this dense artifact.",
+      "source_ids": [
+        "src-cm-build",
+        "src-repo-readme"
+      ]
+    },
+    {
+      "term": "CM intermediate representation",
+      "expansion": "CM-IR",
+      "plain_definition": "A reusable graph program for Boolean computation.",
+      "technical_definition": "A canonicalized and interned CMNode DAG with simplification, sharing-aware flattening, and multiple evaluation/materialization paths.",
+      "common_confusion": "CM-IR is not the same object as the dense matrix returned by materialize_cm.",
+      "source_ids": [
+        "src-cm-ir"
+      ]
+    },
+    {
+      "term": "Live support",
+      "expansion": "",
+      "plain_definition": "Variables that can change the function's output.",
+      "technical_definition": "The variable set retained by an expression/IR node after simplification and fixed bindings.",
+      "common_confusion": "Live support can be smaller than the ambient or syntactic variable universe.",
+      "source_ids": [
+        "src-cm-ir"
+      ]
+    },
+    {
+      "term": "Ambient universe",
+      "expansion": "",
+      "plain_definition": "Variables included in the surrounding assignment layout.",
+      "technical_definition": "The declared row/column or corpus variable axes, including variables that may be semantically dead for one function.",
+      "common_confusion": "Ambient count is not a substitute for live support.",
+      "source_ids": [
+        "src-cm-build",
+        "src-correction-report"
+      ]
+    },
+    {
+      "term": "Common subexpression elimination",
+      "expansion": "CSE",
+      "plain_definition": "Compute a repeated subtree once and reuse it.",
+      "technical_definition": "Structural sharing/interning of repeated expression subtrees.",
+      "common_confusion": "Plain CSE does not necessarily flatten eligible associative chains.",
+      "source_ids": [
+        "src-correction-report"
+      ]
+    },
+    {
+      "term": "Sharing-aware CSE-flat",
+      "expansion": "CSE-flat",
+      "plain_definition": "CSE plus safe flattening of associative chains.",
+      "technical_definition": "The corrected strong generic comparator: structural sharing with flatten=True while preserving shared nodes.",
+      "common_confusion": "It is stronger than raw AST and plain unflattened CSE.",
+      "source_ids": [
+        "src-correction-report",
+        "src-b2b4-v3-audit"
+      ]
+    },
+    {
+      "term": "Preparation",
+      "expansion": "",
+      "plain_definition": "One-time work to build a reusable compiled artifact.",
+      "technical_definition": "Compiler/canonicalizer time measured separately from evaluation.",
+      "common_confusion": "Preparation must not be blended into a bare-kernel ratio unless explicitly declared.",
+      "source_ids": [
+        "src-epfl-report"
+      ]
+    },
+    {
+      "term": "Evaluator kernel",
+      "expansion": "",
+      "plain_definition": "Repeated execution after the program and environment already exist.",
+      "technical_definition": "The compiled-program measurement boundary used by the corrected CM/CSE-flat ratios.",
+      "common_confusion": "It is not a public-wrapper or end-to-end result.",
+      "source_ids": [
+        "src-correction-report"
+      ]
+    },
+    {
+      "term": "Public wrapper",
+      "expansion": "",
+      "plain_definition": "The convenient public call including surrounding work.",
+      "technical_definition": "The complete wrapper boundary reported separately from bare compiled evaluation.",
+      "common_confusion": "A faster kernel does not imply a faster wrapper.",
+      "source_ids": [
+        "src-correction-report"
+      ]
+    },
+    {
+      "term": "Break-even reuse",
+      "expansion": "",
+      "plain_definition": "How many evaluations are needed to repay extra preparation.",
+      "technical_definition": "The solution to accumulated preparation plus per-evaluation cost under a declared model.",
+      "common_confusion": "Some workloads never break even.",
+      "source_ids": [
+        "src-epfl-report"
+      ]
+    },
+    {
+      "term": "Packed bitset",
+      "expansion": "",
+      "plain_definition": "Many truth values stored in machine words or a big integer.",
+      "technical_definition": "An exact truth-vector execution backend with explicit ordering and width masking.",
+      "common_confusion": "Packed execution is not automatically a dense CM.",
+      "source_ids": [
+        "src-bitset"
+      ]
+    },
+    {
+      "term": "CRSE",
+      "expansion": "",
+      "plain_definition": "The repository's experimental recognition and computation-selection research program.",
+      "technical_definition": "A set of frozen milestone studies with learned proposal paths, exact controls, verification, and explicit promotion decisions.",
+      "common_confusion": "Engineering verification is not scientific generalization or deployment.",
+      "source_ids": [
+        "src-recognition-readme",
+        "src-recognition-register"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "id": "b2b4-v3-kernel-ratios",
+  "chart_type": "ratio_ci",
+  "claim_ids": [
+    "b2b4-v3-kernel",
+    "b2b4-v3-k16",
+    "public-wrapper-slower"
+  ],
+  "source_ids": [
+    "src-b2b4-v3-inference",
+    "src-b2b4-v3-audit"
+  ],
+  "values": [
+    {
+      "label": "Bare CM / CSE-flat · all",
+      "value": 0.8905696773306687,
+      "ci_low": 0.8740654100098479,
+      "ci_high": 0.9072717741775921,
+      "numerator": "bare CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "B2/B4 V3",
+      "formula_clusters": 216
+    },
+    {
+      "label": "Bare CM / CSE-flat · k=16",
+      "value": 0.9612336536584536,
+      "ci_low": 0.9289740604127864,
+      "ci_high": 0.9941768792355472,
+      "numerator": "bare CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "B2/B4 V3 · live support 16",
+      "formula_clusters": 40
+    },
+    {
+      "label": "Public wrapper / CSE-flat",
+      "value": 3.094136185032722,
+      "ci_low": 2.883082692131623,
+      "ci_high": 3.310818221547949,
+      "numerator": "public CM wrapper",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "public wrapper",
+      "workload": "B2/B4 V3",
+      "formula_clusters": 216
+    }
+  ],
+  "transformation": {
+    "script": "docs/video_factory/factory.py:build_visual_data",
+    "description": "Select exact accepted inference rows by scope/live_k/metric; convert CSV numeric fields without narrative retyping.",
+    "input_hashes": {
+      "src-b2b4-v3-inference": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50"
+    }
+  }
+}

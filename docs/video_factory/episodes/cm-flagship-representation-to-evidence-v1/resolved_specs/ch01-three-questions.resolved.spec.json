@@ -1,0 +1,465 @@
+{
+  "schema_id": "deterministic-video-spec/v2",
+  "version": "2",
+  "title": "One picture, three questions",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Establish the representation, program, and measurement separation.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "source_path": "builtin:themes/technical_reference.json",
+    "source_sha256": "db0ac801ded9158b5f6437364f613a17827f64e3581ef5f96d66d2f30b14f8dc",
+    "manifest_sha256": "a31d384b7345c338c35182e4650c7ee8403a70c6ac94d5f2c60ccd1ed24f2a13",
+    "pixel_sha256": "3cd9c1780a54971c9037dbdf790b7afa0a2b0d341cb86b44b695e2fe6ce2df3c",
+    "manifest": {
+      "schema_id": "deterministic-video-theme/v1",
+      "id": "technical_reference",
+      "display_name": "Technical Reference",
+      "theme_version": "1.0.0",
+      "provenance": {
+        "source": "CRSE neural benchmark visual vocabulary, made explicit",
+        "license": "CC0-1.0",
+        "author": "Deterministic video engine",
+        "notes": "Dense technical reference theme. Scientific meaning remains labelled independently of colour."
+      },
+      "tokens": {
+        "colors": {
+          "canvas": "#0b1016",
+          "surface": "#101923",
+          "surface_elevated": "#111a23",
+          "surface_high": "#19242e",
+          "text_primary": "#f4f7fa",
+          "text_secondary": "#dce4ea",
+          "text_muted": "#9aa8b5",
+          "rule": "#263442",
+          "focus": "#57d4e8",
+          "accent": [
+            "#f1b65c",
+            "#a990ff",
+            "#7eb8ff"
+          ],
+          "information": "#57d4e8",
+          "success": "#67d5a5",
+          "warning": "#f1b65c",
+          "error": "#ff7b72",
+          "neutral": "#253442",
+          "data_series": [
+            "#57d4e8",
+            "#a990ff",
+            "#f1b65c",
+            "#67d5a5",
+            "#7eb8ff"
+          ]
+        },
+        "typography": {
+          "sans": {
+            "family": "Segoe UI",
+            "stack": "Segoe UI, Arial, sans-serif",
+            "source": "portable_stack",
+            "asset": null
+          },
+          "display": {
+            "family": "Segoe UI",
+            "stack": "Segoe UI, Arial, sans-serif",
+            "source": "portable_stack",
+            "asset": null
+          },
+          "mono": {
+            "family": "Consolas",
+            "stack": "Consolas, ui-monospace, monospace",
+            "source": "portable_stack",
+            "asset": null
+          },
+          "weights": {
+            "regular": 500,
+            "medium": 650,
+            "bold": 700
+          },
+          "sizes": {
+            "xs": 13.0,
+            "sm": 17.0,
+            "md": 24.0,
+            "lg": 28.0,
+            "xl": 40.0,
+            "display": 52.0,
+            "hero": 78.0
+          },
+          "line_heights": {
+            "tight": 1.05,
+            "body": 1.35,
+            "relaxed": 1.45
+          },
+          "letter_spacing": {
+            "tight": -0.025,
+            "normal": 0.0,
+            "tracked": 0.12
+          },
+          "numeric_role": "mono"
+        },
+        "geometry": {
+          "safe_zone": {
+            "top": 0.044,
+            "right": 0.0375,
+            "bottom": 0.05,
+            "left": 0.0375
+          },
+          "spacing": {
+            "xxs": 4.0,
+            "xs": 8.0,
+            "sm": 12.0,
+            "md": 20.0,
+            "lg": 30.0,
+            "xl": 48.0,
+            "xxl": 72.0
+          },
+          "borders": {
+            "hairline": 1.0,
+            "standard": 3.0,
+            "emphasis": 6.0
+          },
+          "radii": {
+            "small": 2.0,
+            "medium": 8.0,
+            "large": 12.0,
+            "pill": 999.0
+          },
+          "shadows": [],
+          "grid": {
+            "columns": 16,
+            "gutter": 20.0,
+            "max_content_width": 1776.0
+          },
+          "density": 0.82
+        },
+        "motion": {
+          "default_reveal": "up",
+          "reveals": {
+            "up": {
+              "offset_x": 0.0,
+              "offset_y": 22.0,
+              "scale_from": 1.0,
+              "easing": "smoothstep",
+              "duration": 0.12
+            },
+            "left": {
+              "offset_x": -30.0,
+              "offset_y": 0.0,
+              "scale_from": 1.0,
+              "easing": "smoothstep",
+              "duration": 0.12
+            },
+            "emphasize": {
+              "offset_x": 0.0,
+              "offset_y": 0.0,
+              "scale_from": 0.82,
+              "easing": "overshoot",
+              "duration": 0.1
+            },
+            "fade": {
+              "offset_x": 0.0,
+              "offset_y": 0.0,
+              "scale_from": 1.0,
+              "easing": "linear",
+              "duration": 0.08
+            },
+            "wipe": {
+              "offset_x": 0.0,
+              "offset_y": 0.0,
+              "scale_from": 1.0,
+              "easing": "smoothstep",
+              "duration": 0.08
+            }
+          },
+          "default_duration": 0.12,
+          "max_duration": 0.3,
+          "max_stagger": 0.5,
+          "cadence": 0.07,
+          "reduced_motion": "settled"
+        },
+        "chrome": {
+          "title_alignment": "left",
+          "caption_style": "bar",
+          "source_position": "footer",
+          "status_style": "rule",
+          "counter_style": "fraction",
+          "outro_alignment": "left",
+          "uppercase_labels": true,
+          "show_scene_counter": false
+        },
+        "accessibility": {
+          "min_text_contrast": 4.5,
+          "min_large_text_contrast": 3.0,
+          "min_non_text_contrast": 3.0,
+          "color_is_never_only_carrier": true,
+          "reduced_motion_safe": true
+        },
+        "component_overrides": {
+          "canvas_effect": "radial-gradient(circle at 78% 10%, #142331 0, transparent 38%), #0b1016",
+          "crse_caption_surface": "#101923",
+          "crse_grid_surface": "#0d151d",
+          "crse_expression_text": "#e6e0ff",
+          "crse_success_surface": "#13251f",
+          "crse_content_density": 0.82,
+          "metric_value_scale": 1.0
+        }
+      }
+    }
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "source_path": "builtin:content/cm_science.json",
+      "source_sha256": "c30d4063e58b88fe973b4fd61d0460ec29c9f09a79c2a334f6f2426704cd1bd2",
+      "manifest_sha256": "f020e2df616929b1dc748383feacb1c7a94d30d353dcf3476285c9da5eb41527",
+      "contract_sha256": "b1987ca2e36eb320959cfbda89e610bbdfc84b083607711e28105cb93e9e115f",
+      "manifest": {
+        "schema_id": "deterministic-video-content-pack/v1",
+        "id": "cm_science",
+        "display_name": "Correspondence Matrices scientific scenes",
+        "pack_version": "1.0.0",
+        "provenance": {
+          "source": "CM_Computation validated video briefs and evidence extracts",
+          "license": "project-internal research provenance",
+          "author": "CM_Computation",
+          "notes": "Validates evidence-bound CM diagrams. Scientific values and wording remain owned by the selected brief and its source/claim hashes; visual tokens come only from the selected theme."
+        },
+        "asset_root": "assets",
+        "assets": [],
+        "subjects": [
+          "cm_science"
+        ],
+        "scenes": [
+          "cm_science"
+        ],
+        "validators": [
+          "cm_science_scene_data"
+        ]
+      }
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch01-three-questions",
+    "planner": "generic_brief_v1",
+    "brief_sha256": "a667b291863098a0beb9b2143a82ad2f8763661089e800fb5fbfce537501b01a",
+    "brief_source": "file:renderer_brief.json",
+    "brief_source_sha256": "ff9aee04d80efb2e1c15f31185c30031507c2ec4bd74166bd58bbc558992f6c5",
+    "theme": {
+      "id": "technical_reference",
+      "version": "1.0.0",
+      "source": "builtin:themes/technical_reference.json",
+      "source_sha256": "db0ac801ded9158b5f6437364f613a17827f64e3581ef5f96d66d2f30b14f8dc",
+      "manifest_sha256": "a31d384b7345c338c35182e4650c7ee8403a70c6ac94d5f2c60ccd1ed24f2a13",
+      "pixel_sha256": "3cd9c1780a54971c9037dbdf790b7afa0a2b0d341cb86b44b695e2fe6ce2df3c"
+    },
+    "brand": null,
+    "content_packs": [
+      {
+        "id": "cm_science",
+        "version": "1.0.0",
+        "source": "builtin:content/cm_science.json",
+        "asset_root": "assets",
+        "source_sha256": "c30d4063e58b88fe973b4fd61d0460ec29c9f09a79c2a334f6f2426704cd1bd2",
+        "manifest_sha256": "f020e2df616929b1dc748383feacb1c7a94d30d353dcf3476285c9da5eb41527",
+        "contract_sha256": "b1987ca2e36eb320959cfbda89e610bbdfc84b083607711e28105cb93e9e115f",
+        "assets": []
+      }
+    ],
+    "scene_registry": [
+      {
+        "kind": "title",
+        "owner": "core",
+        "model": "TitleData"
+      },
+      {
+        "kind": "section",
+        "owner": "core",
+        "model": "SectionData"
+      },
+      {
+        "kind": "text",
+        "owner": "core",
+        "model": "TextData"
+      },
+      {
+        "kind": "metric",
+        "owner": "core",
+        "model": "MetricData"
+      },
+      {
+        "kind": "table",
+        "owner": "core",
+        "model": "TableData"
+      },
+      {
+        "kind": "matrix",
+        "owner": "core",
+        "model": "MatrixData"
+      },
+      {
+        "kind": "graph",
+        "owner": "core",
+        "model": "GraphData"
+      },
+      {
+        "kind": "pipeline",
+        "owner": "core",
+        "model": "PipelineData"
+      },
+      {
+        "kind": "comparison",
+        "owner": "core",
+        "model": "ComparisonData"
+      },
+      {
+        "kind": "image",
+        "owner": "core",
+        "model": "ImageData"
+      },
+      {
+        "kind": "source",
+        "owner": "core",
+        "model": "SourceData"
+      },
+      {
+        "kind": "outro",
+        "owner": "core",
+        "model": "OutroData"
+      },
+      {
+        "kind": "cm_science",
+        "owner": "cm_science",
+        "model": "CmScienceSceneData"
+      }
+    ],
+    "narration": "off"
+  },
+  "scenes": [
+    {
+      "id": "grid-is-not-headline",
+      "kind": "cm_science",
+      "owner": "cm_science",
+      "duration": 17.0,
+      "data": {
+        "eyebrow": "CHAPTER 01 · CORRESPONDENCE MATRICES",
+        "title": "A grid is a representation, not a benchmark headline",
+        "caption": "A method label never identifies the measured boundary.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cm-explicit-definition",
+          "dense-vs-ir-distinct",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "result",
+        "ambient_variables": [],
+        "live_variables": [],
+        "graphs": [],
+        "steps": [],
+        "ratios": [],
+        "bullets": [
+          "What function is represented?",
+          "What program computes it?",
+          "Which boundary was timed?"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "separation-map",
+      "kind": "cm_science",
+      "owner": "cm_science",
+      "duration": 18.0,
+      "data": {
+        "eyebrow": "CHAPTER 01 · CORRESPONDENCE MATRICES",
+        "title": "Keep representation, transformation, and timing visibly separate",
+        "caption": "Representation, compilation, and execution cost answer different questions.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "dense-vs-ir-distinct",
+          "ratio-label-rule"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-cm-build",
+          "src-correction-report"
+        ],
+        "visual": "boundary",
+        "ambient_variables": [],
+        "live_variables": [],
+        "graphs": [],
+        "steps": [
+          {
+            "label": "Truth layout",
+            "note": "the exact Boolean artifact",
+            "boundary": "REPRESENTATION",
+            "tone": "cm"
+          },
+          {
+            "label": "Reusable program",
+            "note": "the compiled computation structure",
+            "boundary": "TRANSFORMATION",
+            "tone": "cm_ir"
+          },
+          {
+            "label": "Observed cost",
+            "note": "one declared timing boundary",
+            "boundary": "MEASUREMENT",
+            "tone": "confirmed"
+          }
+        ],
+        "ratios": [],
+        "bullets": []
+      },
+      "script": ""
+    },
+    {
+      "id": "episode-roadmap",
+      "kind": "cm_science",
+      "owner": "cm_science",
+      "duration": 17.0,
+      "data": {
+        "eyebrow": "CHAPTER 01 · CORRESPONDENCE MATRICES",
+        "title": "From truth layout to honest evidence",
+        "caption": "The goal is a reliable question, not a universal winner.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cm-explicit-definition",
+          "cse-flat-definition",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-correction-report",
+          "src-b2b4-v3-audit",
+          "src-epfl-report"
+        ],
+        "visual": "result",
+        "ambient_variables": [],
+        "live_variables": [],
+        "graphs": [],
+        "steps": [],
+        "ratios": [],
+        "bullets": [
+          "Build the explicit matrix.",
+          "Compare CM-IR with sharing-aware CSE.",
+          "Read corrected measurements without inventing a winner."
+        ]
+      },
+      "script": ""
+    }
+  ],
+  "render_sha256": "0a7c839c9dad827b8bf12bbe9d0ae2176e878b6280a7fbcc7c2a3a12522f1503"
+}

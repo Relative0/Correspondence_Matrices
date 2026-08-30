@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "id": "epfl-parity",
+  "chart_type": "ratio_ci",
+  "claim_ids": [
+    "epfl-parity",
+    "epfl-mechanism",
+    "epfl-preparation-cost"
+  ],
+  "source_ids": [
+    "src-epfl-summary",
+    "src-epfl-results",
+    "src-epfl-report"
+  ],
+  "values": [
+    {
+      "label": "CM / CSE-flat · EPFL",
+      "value": 0.9998256738822606,
+      "ci_low": 0.9746915270026072,
+      "ci_high": 1.0249051888849583,
+      "numerator": "CM",
+      "denominator": "sharing-aware CSE-flat",
+      "boundary": "compiled evaluator kernel",
+      "workload": "EPFL AND/INV cones",
+      "n_formulas": 129,
+      "instruction_ratio": 1.0,
+      "executed_operation_ratio": 1.0,
+      "preparation_multiple": 4.11,
+      "finite_break_even_median": 174.5,
+      "never_break_even": 55
+    }
+  ],
+  "transformation": {
+    "script": "docs/video_factory/factory.py:build_visual_data",
+    "description": "Select the accepted all:primary CM/CSE-flat blocked row from retained machine CSV; attach protocol fields whose exact values are retained in the accepted report.",
+    "input_hashes": {
+      "src-epfl-summary": "918c72389f36eca1487730114b32f80e9e31ff5c5aa0475ada4d1b8d2212121e",
+      "src-epfl-results": "ffe3abd5e36899bb9503086c830bd36da74796b69c4cba562be3f18f45a6070f"
+    }
+  }
+}

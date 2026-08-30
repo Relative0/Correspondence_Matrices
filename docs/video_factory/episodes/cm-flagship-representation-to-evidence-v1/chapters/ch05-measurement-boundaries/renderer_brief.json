@@ -1,0 +1,129 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "The boundary changes the answer",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Separate preparation, compiled kernel, public wrapper, and reuse economics.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch05-measurement-boundaries"
+  },
+  "scenes": [
+    {
+      "id": "three-timing-boundaries",
+      "kind": "cm_science",
+      "duration": 24.0,
+      "data": {
+        "eyebrow": "CHAPTER 05 · CORRESPONDENCE MATRICES",
+        "title": "Preparation, bare evaluation, and wrapper time are not interchangeable",
+        "caption": "A bare-kernel ratio is not a one-off public-API speedup.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-v3-kernel",
+          "public-wrapper-slower",
+          "epfl-preparation-cost"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-inference",
+          "src-b2b4-v3-audit",
+          "src-runpod-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "boundary",
+        "steps": [
+          {
+            "label": "Compile and intern",
+            "note": "one-time setup and canonicalization",
+            "boundary": "PREPARATION",
+            "tone": "cm_ir"
+          },
+          {
+            "label": "Evaluate program",
+            "note": "environment and program already built",
+            "boundary": "KERNEL",
+            "tone": "confirmed"
+          },
+          {
+            "label": "Call public API",
+            "note": "surrounding work and output contract",
+            "boundary": "WRAPPER",
+            "tone": "wrapper"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "reuse-economics",
+      "kind": "cm_science",
+      "duration": 24.0,
+      "data": {
+        "eyebrow": "CHAPTER 05 · CORRESPONDENCE MATRICES",
+        "title": "A one-time cost needs enough repeated work to earn itself back",
+        "caption": "Break-even depends on reuse count and workload shape; it is not automatic.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "epfl-preparation-cost",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-epfl-report",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "One-time preparation cost",
+          "Per-evaluation kernel cost",
+          "Number and shape of repeated evaluations"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "exact-comparison-guards",
+      "kind": "cm_science",
+      "duration": 24.0,
+      "data": {
+        "eyebrow": "CHAPTER 05 · CORRESPONDENCE MATRICES",
+        "title": "Exactness and inference guard the claim before timing does",
+        "caption": "A fast wrong answer, pooled dependency, or unlabeled ratio is not valid evidence.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "exactness-gates",
+          "ratio-label-rule"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Truth digests must match.",
+          "Schedules must control drift and order.",
+          "Intervals must respect formula or circuit clustering."
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

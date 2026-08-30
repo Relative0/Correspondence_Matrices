@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "brief_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "resolved_spec_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "renderer_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "orchestrator_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "evidence_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "fps": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "width",
+        "height",
+        "fps"
+      ]
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpu": {
+          "type": "integer"
+        },
+        "ram_gb": {
+          "type": "integer"
+        },
+        "gpu": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "class",
+        "cpu",
+        "ram_gb",
+        "gpu"
+      ]
+    },
+    "cache_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output_directory": {
+      "type": "string",
+      "minLength": 1
+    },
+    "retry_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retry_same_hash_only": {
+          "const": true
+        }
+      },
+      "required": [
+        "max_attempts",
+        "timeout_seconds",
+        "retry_same_hash_only"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "job_id",
+    "video_id",
+    "brief_hash",
+    "resolved_spec_hash",
+    "renderer_revision",
+    "orchestrator_revision",
+    "evidence_hashes",
+    "format",
+    "resources",
+    "cache_identity",
+    "output_directory",
+    "retry_policy"
+  ]
+}

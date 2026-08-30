@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "video_id": "cm-foundation",
+  "brief_hash": "b0f40a460a5924c4c2a816e2a7f6baab78fbd6503b1103111710136d6e842c97",
+  "claims": [
+    {
+      "claim_id": "cm-explicit-definition",
+      "wording_variant": "plain",
+      "wording": "A CM lays a Boolean function's truth values out as a matrix.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm and eval_cm_boolean"
+        }
+      ]
+    },
+    {
+      "claim_id": "live-vs-ambient",
+      "wording_variant": "plain",
+      "wording": "A function can depend on fewer variables than the table around it.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "CM IR materialization semantics",
+      "measurement_boundary": "representation",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CMNode.vars and materialize_cm"
+        },
+        {
+          "source_id": "src-cm-build",
+          "locator": "R/C/fixed output contract"
+        }
+      ]
+    },
+    {
+      "claim_id": "dense-vs-ir-distinct",
+      "wording_variant": "plain",
+      "wording": "The matrix is an output layout; CM-IR is a reusable program graph.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current implementation",
+      "measurement_boundary": "representation and evaluation",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CompiledExpr, evaluate_compiled, materialize_cm, materialize_hybrid_no_reinflate"
+        },
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm"
+        }
+      ]
+    }
+  ]
+}

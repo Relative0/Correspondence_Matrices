@@ -1,0 +1,155 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "What the corrected evidence supports",
+  "subject": "cm_science",
+  "audience": "Curious technical viewers; Boolean basics only",
+  "purpose": "Read B2/B4, EPFL, wrapper, and three-pod replication without pooling.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory",
+    "episode_id": "cm-flagship-representation-to-evidence-v1",
+    "chapter_id": "ch06-corrected-evidence"
+  },
+  "scenes": [
+    {
+      "id": "scoped-ratios",
+      "kind": "cm_science",
+      "duration": 23.0,
+      "data": {
+        "eyebrow": "CHAPTER 06 · CORRESPONDENCE MATRICES",
+        "title": "Three rows, three different empirical questions",
+        "caption": "Below one favors CM only because each row declares CM as numerator.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-v3-kernel",
+          "epfl-parity",
+          "public-wrapper-slower",
+          "ratio-label-rule"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-inference",
+          "src-b2b4-v3-audit",
+          "src-epfl-summary",
+          "src-runpod-correction-report",
+          "src-correction-report"
+        ],
+        "visual": "ratio",
+        "ratios": [
+          {
+            "label": "Bare CM / CSE-flat · all",
+            "value": 0.8905696773306687,
+            "ci_low": 0.8740654100098479,
+            "ci_high": 0.9072717741775921,
+            "numerator": "bare CM",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "compiled evaluator kernel",
+            "workload": "B2/B4 V3",
+            "note": "formula-cluster 95% CI",
+            "tone": "confirmed"
+          },
+          {
+            "label": "CM / CSE-flat · EPFL",
+            "value": 0.9998256738822606,
+            "ci_low": 0.9746915270026072,
+            "ci_high": 1.0249051888849583,
+            "numerator": "CM",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "compiled evaluator kernel",
+            "workload": "EPFL AND/INV cones",
+            "note": "circuit-cluster 95% CI",
+            "tone": "mixed"
+          },
+          {
+            "label": "Public wrapper / CSE-flat",
+            "value": 3.094136185032722,
+            "ci_low": 2.883082692131623,
+            "ci_high": 3.310818221547949,
+            "numerator": "public CM wrapper",
+            "denominator": "sharing-aware CSE-flat",
+            "boundary": "public wrapper",
+            "workload": "B2/B4 V3",
+            "note": "formula-cluster 95% CI",
+            "tone": "negative"
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "three-pod-replication",
+      "kind": "cm_science",
+      "duration": 23.0,
+      "data": {
+        "eyebrow": "CHAPTER 06 · CORRESPONDENCE MATRICES",
+        "title": "Three guarded CPU pods reproduced the scoped kernel range",
+        "caption": "Replication strengthens the scoped observation without widening its claim.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "b2b4-runpod-replication",
+          "exactness-gates"
+        ],
+        "source_ids": [
+          "src-runpod-pod1-raw",
+          "src-runpod-pod2-raw",
+          "src-runpod-pod3-raw",
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Overall CM/CSE-flat: 0.9026–0.9126.",
+          "At k=16: 0.9746–0.9766.",
+          "Exactness and source-integrity gates passed on every pod."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "audit-changed-headline",
+      "kind": "cm_science",
+      "duration": 22.0,
+      "data": {
+        "eyebrow": "CHAPTER 06 · CORRESPONDENCE MATRICES",
+        "title": "The audit narrowed the headline and strengthened the evidence",
+        "caption": "A narrower claim can be more useful because it says exactly when to expect the effect.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "no-universal-winner",
+          "epfl-mechanism",
+          "b2b4-v3-kernel"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-b2b4-v3-inference",
+          "src-b2b4-v3-audit"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Use the strongest retained comparator.",
+          "State the exact workload and timing boundary.",
+          "Keep parity, reductions, and negative results together."
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

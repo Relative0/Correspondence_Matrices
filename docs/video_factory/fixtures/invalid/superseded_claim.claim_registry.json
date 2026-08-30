@@ -1,0 +1,590 @@
+{
+  "schema_version": "1.0",
+  "generated_date": "2026-08-30",
+  "claims": [
+    {
+      "id": "cm-explicit-definition",
+      "allowed_wording": "An explicit CM is a dense truth-layout representation over a declared row/column variable split.",
+      "plain_wording": "A CM lays a Boolean function's truth values out as a matrix.",
+      "technical_wording": "The public dense output arranges assignments over row variables R and column variables C, with fixed values applied at evaluation.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm and eval_cm_boolean"
+        }
+      ]
+    },
+    {
+      "id": "live-vs-ambient",
+      "allowed_wording": "Live support and ambient variables are distinct: live variables affect the function, while ambient variables may still define the displayed assignment universe.",
+      "plain_wording": "A function can depend on fewer variables than the table around it.",
+      "technical_wording": "Materialization tracks live variables after fixed bindings; an ambient layout may include axes absent from node.vars.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "CM IR materialization semantics",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CMNode.vars and materialize_cm"
+        },
+        {
+          "source_id": "src-cm-build",
+          "locator": "R/C/fixed output contract"
+        }
+      ]
+    },
+    {
+      "id": "cm-ir-definition",
+      "allowed_wording": "CM-IR is a canonicalized, interned shared DAG intermediate representation.",
+      "plain_wording": "CM-IR stores reusable computation structure, not a dense matrix.",
+      "technical_wording": "compile_expr_to_cm_ir builds canonical CMNode structures with interning, simplification, sharing-aware associative flattening, and optional persistent caching.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current implementation",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CMIRBuilder and compile_expr_to_cm_ir"
+        }
+      ]
+    },
+    {
+      "id": "dense-vs-ir-distinct",
+      "allowed_wording": "An explicit dense CM and CM-IR are different artifacts with different construction, storage, and evaluation boundaries.",
+      "plain_wording": "The matrix is an output layout; CM-IR is a reusable program graph.",
+      "technical_wording": "materialize_cm produces a dense array, whereas evaluate_compiled/materialize_hybrid_no_reinflate can return packed or flat truth output without dense CM reinflation.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current implementation",
+      "measurement_boundary": "representation and evaluation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CompiledExpr, evaluate_compiled, materialize_cm, materialize_hybrid_no_reinflate"
+        },
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm"
+        }
+      ]
+    },
+    {
+      "id": "cse-definition",
+      "allowed_wording": "Common subexpression elimination computes repeated expression subtrees once and reuses them.",
+      "plain_wording": "CSE shares repeated work.",
+      "technical_wording": "Plain structural CSE interns repeated subtrees but may retain binary associative chains.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "comparator definition used by correction",
+      "measurement_boundary": "mechanism",
+      "comparator": "plain CSE",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means"
+        }
+      ]
+    },
+    {
+      "id": "cse-flat-definition",
+      "allowed_wording": "Sharing-aware CSE-flat additionally flattens eligible associative chains while preserving shared nodes.",
+      "plain_wording": "CSE-flat shares repeats and safely widens associative chains.",
+      "technical_wording": "The primary comparator is sharing-aware structural CSE with flatten=True; it is stronger than the raw-AST ablation and plain unflattened CSE.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "corrected comparator contract",
+      "measurement_boundary": "mechanism",
+      "comparator": "CSE-flat",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means and Corrected issues 3"
+        },
+        {
+          "source_id": "src-b2b4-v3-audit",
+          "locator": "primary_comparator"
+        }
+      ]
+    },
+    {
+      "id": "cm-extra-transformations",
+      "allowed_wording": "CM-IR can add canonical normalization and merging beyond the transformations shared with CSE-flat.",
+      "plain_wording": "CM-IR and CSE-flat overlap, but CM-IR may normalize more structure.",
+      "technical_wording": "Any observed difference must be attributed to the actual instruction/operation reductions on the scoped workload, not to the CM label alone.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "corrected mechanism interpretation",
+      "measurement_boundary": "mechanism",
+      "comparator": "CSE-flat",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "workload dependent",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means"
+        }
+      ]
+    },
+    {
+      "id": "b2b4-v3-kernel",
+      "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+      "plain_wording": "Compiled bare CM was modestly faster than CSE-flat on this one corrected workload.",
+      "technical_wording": "CM/CSE-flat=0.8905696773, paired formula-cluster percentile-bootstrap 95% CI [0.8740654100,0.9072717742], 216 formula clusters and 264 rows.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "B2/B4 V3 formulas on one Windows run",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM/CSE-flat; below one favors CM",
+      "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-inference",
+          "locator": "overall/all/all cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-b2b4-v3-audit",
+          "locator": "statistical_inference.headline"
+        }
+      ]
+    },
+    {
+      "id": "b2b4-v3-k16",
+      "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+      "plain_wording": "The measured gap got smaller at support 16.",
+      "technical_wording": "At live_k=16, CM/CSE-flat=0.9612336537 with formula-cluster 95% CI [0.9289740604,0.9941768792].",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "B2/B4 V3 live support k=16",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM/CSE-flat; below one favors CM",
+      "uncertainty": "formula-cluster bootstrap within one run",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-inference",
+          "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+        }
+      ]
+    },
+    {
+      "id": "b2b4-runpod-replication",
+      "allowed_wording": "Across three guarded CPU pods, row-weighted bare CM/CSE-flat was 0.9026–0.9126 overall and 0.9746–0.9766 at k=16.",
+      "plain_wording": "Three Linux CPU replications put the overall ratio near 0.909, with a much smaller k=16 gap.",
+      "technical_wording": "Immutable pod raw CSVs reproduce overall geomeans 0.9026, 0.9118, and 0.9126; k=16 0.9766, 0.9746, and 0.9752.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "B2/B4 corrected three-pod CPU replication",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM/CSE-flat; below one favors CM",
+      "uncertainty": "descriptive across three machines; post-hoc per-pod formula intervals are separate",
+      "sources": [
+        {
+          "source_id": "src-runpod-pod1-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-pod2-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-pod3-raw",
+          "locator": "cm_current_over_cse_flat_current"
+        }
+      ]
+    },
+    {
+      "id": "public-wrapper-slower",
+      "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+      "plain_wording": "The easy public call did not produce an end-to-end speedup.",
+      "technical_wording": "Formula-balanced local wrapper/CSE-flat was 3.0941 [2.8831,3.3108]; the earlier corrected three-pod row-weighted ratios were approximately 2.78–2.81 overall.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "corrected B2/B4 comparison",
+      "measurement_boundary": "public wrapper complete truth-output call",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+      "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-inference",
+          "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+        },
+        {
+          "source_id": "src-runpod-correction-report",
+          "locator": "CM versus sharing-aware CSE-flat"
+        }
+      ]
+    },
+    {
+      "id": "epfl-parity",
+      "allowed_wording": "On the accepted EPFL AND/INV workload, CM/CSE-flat was 0.9998 with a circuit-clustered 95% interval [0.9747, 1.0249].",
+      "plain_wording": "On this circuit workload, the two compiled kernels were at parity.",
+      "technical_wording": "Blocked CM/CSE-flat geomean=0.9998256739, circuit-clustered bootstrap CI [0.9746915270,1.0249051889], n=129.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "EPFL AND/INV cones, semantic support 8–16, one Windows machine",
+      "measurement_boundary": "compiled evaluator kernel after compilation",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM/CSE-flat; interval spans one",
+      "uncertainty": "circuit-clustered bootstrap, 4000 draws",
+      "sources": [
+        {
+          "source_id": "src-epfl-summary",
+          "locator": "all:primary_cm_cse_flat_blocked"
+        }
+      ]
+    },
+    {
+      "id": "epfl-mechanism",
+      "allowed_wording": "On the EPFL AND/INV workload, CM and CSE-flat had equal instruction and executed-operation counts, matching the parity mechanism prediction.",
+      "plain_wording": "There was no extra mergeable chain left for CM on this workload.",
+      "technical_wording": "Instruction and executed-operation ratios were both exactly 1.000; flattening already captured the available associative reduction.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "EPFL AND/INV cones",
+      "measurement_boundary": "compiled program structure and kernel",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM/CSE-flat operation ratios",
+      "uncertainty": "exact count equality on accepted corpus",
+      "sources": [
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Results and mechanism check"
+        }
+      ]
+    },
+    {
+      "id": "epfl-preparation-cost",
+      "allowed_wording": "EPFL CM preparation was 4.11x CSE-flat preparation; 55 of 129 cases never broke even under the retained calculation.",
+      "plain_wording": "One-time CM preparation can erase a kernel gain unless the artifact is reused enough.",
+      "technical_wording": "Preparation multiple geomean 4.11; finite break-even median 174.5 over 74 cases, with 55/129 never reaching break-even.",
+      "type": "measurement",
+      "status": "confirmed",
+      "scope": "accepted EPFL workload",
+      "measurement_boundary": "preparation and modeled reuse break-even",
+      "comparator": "sharing-aware CSE-flat",
+      "ratio_direction": "CM prep/CSE-flat prep; above one disfavors CM",
+      "uncertainty": "descriptive retained calculation",
+      "sources": [
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Results table"
+        }
+      ]
+    },
+    {
+      "id": "no-universal-winner",
+      "allowed_wording": "Current evidence does not support a universal claim that CM beats CSE-flat.",
+      "plain_wording": "The winner depends on workload and measurement boundary.",
+      "technical_wording": "B2/B4 V3 shows a scoped bare-kernel reduction; EPFL shows parity; the public wrapper remains slower.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "cross-study synthesis",
+      "measurement_boundary": "multiple boundaries kept separate",
+      "comparator": "CSE-flat",
+      "ratio_direction": "not a single ratio",
+      "uncertainty": "scopes are intentionally not pooled",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Bottom line"
+        },
+        {
+          "source_id": "src-epfl-report",
+          "locator": "Scope and verdict"
+        }
+      ]
+    },
+    {
+      "id": "ratio-label-rule",
+      "allowed_wording": "Every ratio must state numerator, denominator, workload, measurement boundary, and uncertainty; below one favors CM only for CM/comparator.",
+      "plain_wording": "A ratio has no honest direction without its labels.",
+      "technical_wording": "No chart may infer direction from position or color alone.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "video evidence contract",
+      "measurement_boundary": "all numeric scenes",
+      "comparator": "explicit",
+      "ratio_direction": "declared per ratio",
+      "uncertainty": "declared per ratio",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Bottom line and scope"
+        }
+      ]
+    },
+    {
+      "id": "selector-no-width-rule",
+      "allowed_wording": "The corrected focused k=13–15 study did not justify a universal width-only selector change.",
+      "plain_wording": "Width alone did not choose the best engine reliably.",
+      "technical_wording": "The predeclared gate failed on reused validation because one CM row reached catastrophic regret; no selector change was made.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "corrected selector-gap study",
+      "measurement_boundary": "selection policy",
+      "comparator": "flat versus words engine",
+      "ratio_direction": "regret; above one is worse",
+      "uncertainty": "reused validation is not untouched held-out evidence",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "Selector results after correction"
+        }
+      ]
+    },
+    {
+      "id": "variants-implemented",
+      "allowed_wording": "Eager, lazy, pair-aware, hybrid, partial-hybrid, parallel, and packed/word paths must be described only within their implemented and tested contracts.",
+      "plain_wording": "The project has several execution paths, but their names do not imply one winner.",
+      "technical_wording": "Current documentation and code distinguish dense wrappers, delayed materialization, pair-aware collapse, hybrid dispatch, partial-hybrid structure preservation, parallel materialization, and packed evaluators.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current repository implementation",
+      "measurement_boundary": "implementation status",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "performance varies by workload",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "What the project does and Backend summary"
+        },
+        {
+          "source_id": "src-cm-ir",
+          "locator": "materialize modes"
+        },
+        {
+          "source_id": "src-bitset",
+          "locator": "packed evaluators"
+        }
+      ]
+    },
+    {
+      "id": "exactness-gates",
+      "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+      "plain_wording": "Timing rows counted only after exact outputs matched.",
+      "technical_wording": "The V3 audit records 264 rows and zero packed mismatches; corrected EPFL verification similarly fails closed on truth digests.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "corrected benchmark protocols",
+      "measurement_boundary": "correctness gate outside performance claim",
+      "comparator": "all eligible arms",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "hash/equality gate",
+      "sources": [
+        {
+          "source_id": "src-b2b4-v3-audit",
+          "locator": "row_count and packed_mismatch_count"
+        },
+        {
+          "source_id": "src-correction-report",
+          "locator": "EPFL order and frozen truth verification"
+        }
+      ]
+    },
+    {
+      "id": "crse-experimental",
+      "allowed_wording": "The CRSE recognition program is experimental; no learned model is promoted.",
+      "plain_wording": "The learning work has useful engineering results and retained failures, but no production model.",
+      "technical_wording": "The register separates measured slices, exact controls, negative transfer, held or failed criteria, and no-promotion decisions.",
+      "type": "fact",
+      "status": "not_promoted",
+      "scope": "current recognition program",
+      "measurement_boundary": "scientific promotion",
+      "comparator": "exact deterministic controls",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "per-milestone frozen splits and criteria",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "What is implemented"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "research tracks and status reasons"
+        }
+      ]
+    },
+    {
+      "id": "crse-c2-negative",
+      "allowed_wording": "Milestone C2's learned representation and size-transfer criteria failed while the exact CM detector remained perfect.",
+      "plain_wording": "The learned decomposition detector did not transfer, even though the exact control worked.",
+      "technical_wording": "Independent verification recomputed retained tables and model decisions without error; learned criteria failed and no model was promoted.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "Milestone C2 frozen generated/held-out slices",
+      "measurement_boundary": "recognition evaluation",
+      "comparator": "exact CM detector",
+      "ratio_direction": "per frozen criterion",
+      "uncertainty": "limited target/domain scope",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone C2 summary"
+        }
+      ]
+    },
+    {
+      "id": "crse-c3-c5-negative",
+      "allowed_wording": "Natural decomposition, direct-cut, and variable-conditioned learned arms improved some slices but failed the required held-out transfer/promotion criteria.",
+      "plain_wording": "Better scores on some circuits did not become reliable held-out cuts.",
+      "technical_wording": "C3–C5 retain exact verification, weak accepted-positive recall, held-out square failures, and learned paths slower than exact ANF.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "Milestones C3–C5 natural circuit-disjoint studies",
+      "measurement_boundary": "recognition plus exact acceptance",
+      "comparator": "exact ANF",
+      "ratio_direction": "varies by milestone",
+      "uncertainty": "circuit-family transfer remained limited",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestones C3, C4, C5 summaries"
+        }
+      ]
+    },
+    {
+      "id": "crse-c6-advance",
+      "allowed_wording": "Milestone C6's packed exact source-ANF core advanced, but its gate and production path did not.",
+      "plain_wording": "A deterministic packed core improved, without promoting the whole system.",
+      "technical_wording": "Packed/cached cores achieved retained median and p95 gains over truth-vector ANF; the validation-frozen gate missed confirmatory p95 by 1.4%.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestone C6 frozen EPFL splits",
+      "measurement_boundary": "exact recognition core and gate",
+      "comparator": "truth-vector ANF",
+      "ratio_direction": "speedup stated as comparator/core",
+      "uncertainty": "bounded one-program slice",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone C6 summary"
+        }
+      ]
+    },
+    {
+      "id": "crse-d-mixed",
+      "allowed_wording": "Milestone D task routing helped restrictions and repeated work but slowed complete-vector requests; dense-CM construction and per-instance rewrite proof were negative.",
+      "plain_wording": "Routing helped some tasks and hurt others.",
+      "technical_wording": "Construction, routing, proof, kernel, cache, and audit costs were measured separately.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestone D generated task-computation study",
+      "measurement_boundary": "end-to-end task boundaries",
+      "comparator": "direct, CSE, CM-IR, dense CM",
+      "ratio_direction": "per task",
+      "uncertainty": "bounded generated workload",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D summary"
+        }
+      ]
+    },
+    {
+      "id": "crse-d8-negative",
+      "allowed_wording": "The frozen one-pass rewrite result changed from 1.050x on Windows to 0.929x on Linux, so unconditional one-pass rewriting was not promoted.",
+      "plain_wording": "The rewrite looked helpful on one machine and lost on Linux.",
+      "technical_wording": "Exactness and rule incidence reproduced, but profitability did not transfer; the Linux result is a retained negative control.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "Milestone D8 frozen Linux confirmation",
+      "measurement_boundary": "overhead-inclusive one-pass rewrite",
+      "comparator": "no rewrite",
+      "ratio_direction": "reported as speedup; below one loses",
+      "uncertainty": "one bounded cross-machine confirmation",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D8 summary"
+        }
+      ]
+    },
+    {
+      "id": "crse-d9-not-promoted",
+      "allowed_wording": "Milestone D9's frozen policy abstained on all evaluation workloads and preserved exactness, but the charged gate remained slower and no rewrite policy was promoted.",
+      "plain_wording": "Abstention avoided bad rewrites but still cost time.",
+      "technical_wording": "Exact factoring reduced operations, unconditional one pass lost, and the all-abstain gate measured 0.982x versus no rewrite.",
+      "type": "measurement",
+      "status": "not_promoted",
+      "scope": "Milestone D9 circuit-disjoint split",
+      "measurement_boundary": "charged policy plus task execution",
+      "comparator": "no rewrite",
+      "ratio_direction": "speedup versus no rewrite",
+      "uncertainty": "bounded evaluation split",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D9 summary"
+        }
+      ]
+    },
+    {
+      "id": "conceptual-label-rule",
+      "allowed_wording": "Teaching diagrams, proposed mechanisms, and hypotheses must be visibly labeled and may not be presented as measured traces.",
+      "plain_wording": "An animation can explain an idea without pretending it was observed.",
+      "technical_wording": "Conceptual scene metadata and visible status remain separate from measurement claims and result cards.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "video evidence contract",
+      "measurement_boundary": "editorial/visual status",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "not applicable",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "program scope and promotion boundaries"
+        },
+        {
+          "source_id": "src-correction-report",
+          "locator": "workload-specific interpretation"
+        }
+      ]
+    },
+    {
+      "id": "historical-superseded-fixture",
+      "allowed_wording": "An explicit CM is a dense truth-layout representation over a declared row/column variable split.",
+      "plain_wording": "A CM lays a Boolean function's truth values out as a matrix.",
+      "technical_wording": "The public dense output arranges assignments over row variables R and column variables C, with fixed values applied at evaluation.",
+      "type": "fact",
+      "status": "superseded",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm and eval_cm_boolean"
+        }
+      ]
+    }
+  ]
+}

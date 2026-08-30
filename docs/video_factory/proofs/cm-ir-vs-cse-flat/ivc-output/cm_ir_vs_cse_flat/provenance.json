@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "spec_id": "cm_ir_vs_cse_flat",
+  "spec_sha256": "3e772a44f549fe86ea3cc518f9e1bf2aaa02a34a02a93dbc5923445ec66de51f",
+  "spec": {
+    "schema_version": "1.0",
+    "spec_id": "cm_ir_vs_cse_flat",
+    "formats": [
+      {
+        "name": "16x9",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "audio": false,
+        "burn_captions": false,
+        "loudness_lufs": -14,
+        "true_peak_target_dbfs": -2.0,
+        "true_peak_ceiling_dbfs": -1.5,
+        "fade_out_s": 0.0
+      }
+    ],
+    "slots": [
+      {
+        "slot_id": "s01",
+        "duration_s": 12.9,
+        "fit": "fit",
+        "source": {
+          "kind": "generated",
+          "generator": "video_spec",
+          "request": {
+            "spec": "C:\\Users\\brian\\Documents\\CM_Computation\\docs\\video_factory\\proofs\\cm-ir-vs-cse-flat\\resolved.spec.json",
+            "spec_sha256": "b4bfad924aa3fb104170edd38642a0b775e49338bdc36eabb413fc061f306cb8",
+            "render_sha256": "15cb215d4b2850d35d5e3894d472b78122d567444f5977cc39d72916fbed0c91",
+            "theme": {
+              "id": "technical_reference",
+              "version": "1.0.0",
+              "pixel_sha256": "3cd9c1780a54971c9037dbdf790b7afa0a2b0d341cb86b44b695e2fe6ce2df3c"
+            },
+            "brand": null,
+            "content_packs": [
+              {
+                "id": "cm_science",
+                "version": "1.0.0",
+                "contract_sha256": "b1987ca2e36eb320959cfbda89e610bbdfc84b083607711e28105cb93e9e115f"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "audio": {}
+  },
+  "rendered_at": "2026-08-30T06:10:43+00:00",
+  "ffmpeg": "ffmpeg version 7.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg developers",
+  "library_root": "C:\\Users\\brian\\Documents\\PoP\\Video-Source-Library",
+  "render_options": {
+    "narration_tail_s": null,
+    "narration_timings": {},
+    "narration_inputs": [],
+    "sound_effect_inputs": []
+  },
+  "cadence": {
+    "schema_version": "1.0",
+    "status": "not_configured",
+    "guidance": null,
+    "summary": {
+      "narration_beats": 1,
+      "visual_segments": 1,
+      "planned_cut_count": 0,
+      "mean_visual_hold_s": 12.9,
+      "max_visual_hold_s": 12.9,
+      "unique_source_files": 0,
+      "library_narration_beats": 0,
+      "source_diversity_per_beat": null,
+      "repeated_source_files": []
+    },
+    "segments": [
+      {
+        "segment_id": "s01",
+        "parent_slot_id": "s01",
+        "duration_s": 12.9,
+        "cadence_role": null,
+        "min_visual_hold_s": null,
+        "max_visual_hold_s": null,
+        "source_file": null,
+        "shot_id": null,
+        "in_s": null
+      }
+    ],
+    "warnings": [
+      {
+        "code": "cadence_guidance_missing",
+        "severity": "warning",
+        "message": "Long visual holds have no declared treatment guidance: s01"
+      }
+    ]
+  },
+  "slots": [
+    {
+      "slot_id": "s01",
+      "kind": "generated",
+      "source_file": null,
+      "content_hash": null,
+      "in_s": null,
+      "shot_id": null,
+      "source_audio": null,
+      "speech_unit_id": null,
+      "duration_s": 12.9,
+      "note": "generator video_spec"
+    }
+  ],
+  "formats": {
+    "16x9": {
+      "output": "cm_ir_vs_cse_flat-16x9.mp4",
+      "sha256": "43d976814b5766531513a136a396cd1e79937f4c8c50b9632f4bf6af589ce9f3",
+      "otio": "cm_ir_vs_cse_flat-16x9.otio",
+      "generated_elements": {
+        "s01": "b629a64c8609f64a.manifest.json"
+      },
+      "framing": {},
+      "visual_segments": [
+        {
+          "segment_id": "s01",
+          "parent_slot_id": "s01",
+          "start_s": 0.0,
+          "end_s": 12.9,
+          "duration_s": 12.9,
+          "cadence_role": null,
+          "min_visual_hold_s": null,
+          "max_visual_hold_s": null,
+          "source_file": null,
+          "shot_id": null,
+          "in_s": null
+        }
+      ],
+      "audio_normalization": null,
+      "commands": [
+        "ffmpeg -v error -y -ss 0.000000 -i C:\\Users\\brian\\Documents\\CM_Computation\\docs\\video_factory\\tmp\\ivc-data-current\\gen-cache\\video_spec\\b629a64c8609f64a.mp4 -f lavfi -t 12.900000 -i anullsrc=r=48000:cl=stereo -filter_complex [0:v]setpts=PTS-STARTPTS,fps=30,trim=end_frame=387,setpts=PTS-STARTPTS,split[bgs][fgs];[bgs]scale=1920:1080,crop=1920:1080:0:0,gblur=sigma=28,eq=brightness=-0.20[bg];[fgs]scale=1920:1080[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[vout] -map [vout] -r 30 -frames:v 387 -map 1:a -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -flags:v +bitexact -c:a pcm_s16le -ar 48000 -ac 2 -map_metadata -1 -fflags +bitexact s00_s01.mov",
+        "ffmpeg -v error -y -f concat -safe 0 -i concat.txt -c copy -map_metadata -1 -fflags +bitexact raw.mov",
+        "ffmpeg -v error -y -i raw.mov -map 0:v -c:v copy -an -map_metadata -1 -fflags +bitexact -movflags +faststart C:\\Users\\brian\\Documents\\CM_Computation\\docs\\video_factory\\proofs\\cm-ir-vs-cse-flat\\ivc-output\\cm_ir_vs_cse_flat\\cm_ir_vs_cse_flat-16x9.mp4"
+      ]
+    }
+  }
+}

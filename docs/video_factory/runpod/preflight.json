@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "status": "executed_passed_reconciled",
+  "proposal_id": "cm-video-proof3-cpu-remote-v4",
+  "authorization_id": "cm-video-proof3-cpu-remote-v4-auth",
+  "batch": {
+    "batch_id": "cm-video-level1-proof3-v1",
+    "kind": "proof_only",
+    "videos": [
+      "cm-foundation",
+      "explicit-cm-vs-cm-ir",
+      "cm-ir-vs-cse-flat"
+    ],
+    "batch_manifest_sha256": "88e986da255f82cc00b7231fb678bb6397c970eb59775c562b333821c9649f3d"
+  },
+  "bundle": {
+    "file": "dist/cm-video-level1-proof3-linux-v1-c36710478f773012.zip",
+    "sha256": "c36710478f77301244ffa76cfc16de291e0cdfca31f3990504cb6250aa43b7ad",
+    "payload_sha256": "e5f87d5a2c2a9ec1f9e8cb0e0350cb81d39d70d804e67613141929b3bac4f281",
+    "bytes": 419939,
+    "uploaded": true
+  },
+  "resource": {
+    "compute_type": "CPU",
+    "cloud_type": "SECURE",
+    "cpu_flavor_ids": ["cpu5c"],
+    "cpu_flavor_priority": "custom",
+    "required_vcpu": 4,
+    "required_ram_gb": 8,
+    "shape_policy": "verify exact response before upload; no replacement create on mismatch",
+    "image": "python:3.10.15-slim-bookworm@sha256:97ff6fda70178dee6c144d41030fb88b6ec86d75e1c517fe96b8f62094ea7ac2",
+    "container_disk_gb": 30,
+    "volume_gb": 0,
+    "network_volume_gb": 0,
+    "ports": ["22/tcp"],
+    "region_constraint": "any RunPod Secure Cloud region; no region pin",
+    "max_pod_creates": 1,
+    "max_parallel_pods": 1
+  },
+  "transport": {
+    "method": "SFTP/SSH to the single owned ephemeral pod",
+    "remote_input": "/workspace/input/bundle.zip",
+    "remote_install": "/opt/cm-video/bundle",
+    "remote_output": "/workspace/results",
+    "bootstrap_token": "new random per-pod token; only its SHA-256 may enter logs",
+    "allowlisted_upload_only": true
+  },
+  "execution": {
+    "bootstrap": "verify bundle hash, install pinned/runtime dependencies, then run batch_runner.py",
+    "max_parallel_jobs": 1,
+    "per_job_timeout_seconds": 1800,
+    "watchdog_seconds": 1800,
+    "expected_wall_minutes": 20,
+    "post_approval_identity_gate": "verify the exact approved archive SHA-256, every manifest entry, payload identity, embedded batch bytes, required jobs, and runtime schemas; unrelated later worktree changes do not alter or invalidate the frozen archive",
+    "resume": "hash-identical unfinished jobs only",
+    "paid_non_runpod_services": []
+  },
+  "pricing": {
+    "currency": "USD",
+    "public_checked_date": "2026-08-30",
+    "official_public_source": "https://www.runpod.io/pricing",
+    "official_pod_budget_anchor_usd_per_hour": 0.27,
+    "anchor_description": "current public Secure Cloud RTX A5000 Pod rate; CPU Pod rates are not published on the public pricing page",
+    "authorized_cpu_quote_gate_usd_per_hour": 0.27,
+    "quote_policy": "after authorization, obtain the exact cpu5c quote before create; fail closed without creating if unavailable or above the gate",
+    "conservative_estimate_usd": 0.14,
+    "hard_maximum_usd": 0.25,
+    "storage_estimate_included": true
+  },
+  "authenticated_effects_if_approved": [
+    "obtain exact cpu5c quote",
+    "create at most one owned CPU pod",
+    "verify exact pod identity and shape",
+    "upload the one hash-bound bundle",
+    "bootstrap and execute the proof batch",
+    "download all results and lifecycle logs",
+    "verify result and media hashes locally",
+    "delete the owned pod on success, failure, or timeout",
+    "reconcile final owned-pod inventory"
+  ],
+  "cleanup": {
+    "policy": "delete_on_terminal",
+    "automatic_on_timeout": true,
+    "persistent_data_remaining": false,
+    "final_inventory_reconciliation": true
+  },
+  "local_checks": {
+    "allowlist_and_controller_tests": "9 passed, including watchdog pre-create acknowledgement and frozen-bundle identity fixtures",
+    "archive_rebuild_byte_identical": true,
+    "archive_extract_and_manifest_verify": "passed for all 156 files",
+    "exclusion_audit": "passed",
+    "clean_extracted_bundle_worker_smoke": "passed from the v4 archive for cm-foundation; expected media and output hashes matched",
+    "container_build": "not_run",
+    "container_build_blocker": "local Docker client is installed but the Docker engine is not running/available",
+    "unexecuted_container_test": "build with Dockerfile and recorded BUNDLE_SHA256, run worker against cm-foundation, then compare MP4 technical contract and render_result hashes"
+  },
+  "prior_remote_attempt": {
+    "proposal_id": "cm-video-proof3-cpu-remote-v2",
+    "pod_id": "qxb4pb4exeuzx5",
+    "status": "failed_before_render_due_to_omitted_ivc_schemas",
+    "estimated_compute_cost_usd": 0.0081441888584031,
+    "owned_pod_absent_verified": true,
+    "max_pod_creates_consumed": 1
+  },
+  "superseded_local_proposal": {
+    "proposal_id": "cm-video-proof3-cpu-remote-v3",
+    "status": "invalidated_before_any_cloud_call",
+    "reason": "live source gate detected post-approval drift in src-recognition-readme",
+    "max_pod_creates_consumed": 0
+  },
+  "result": {
+    "run_id": "runpod-video-v4-20260830-115315",
+    "pod_id": "q7ty5inrxx7w9r",
+    "status": "passed",
+    "jobs_passed": 3,
+    "quote_usd_per_hour": 0.14,
+    "elapsed_seconds": 354.11982822418213,
+    "estimated_compute_cost_usd": 0.013771326653162639,
+    "owned_pod_absent_verified": true,
+    "billing_status": "no_record_visible_billing_may_lag",
+    "max_pod_creates_consumed": 1
+  },
+  "cloud_activity_performed_under_this_proposal": true
+}
