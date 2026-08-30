@@ -1,0 +1,44 @@
+{
+  "schema": "cm-runpod-comparative-campaign-standing-authorization/v1",
+  "authorized": true,
+  "recorded_utc": "2026-08-30T05:43:11.8500301Z",
+  "authorization_source": "Current Codex task user message on 2026-08-30",
+  "authorization_scope": "Remaining frozen and gated Runpod work in the CM comparative execution plan, including necessary reruns of understood failures",
+  "incremental_budget_cap_usd": 5.0,
+  "incremental_budget_starts_utc": "2026-08-30T05:43:11.8500301Z",
+  "execution_constraints": {
+    "sequential_owned_runs_by_default": true,
+    "freeze_exact_workload_before_each_create": true,
+    "record_preflight_and_postflight_evidence": true,
+    "owned_cleanup_required": true,
+    "bounded_lifetime_required": true,
+    "rerun_only_understood_or_corrected_failures": true,
+    "aggregate_incremental_spend_must_not_exceed_usd": 5.0,
+    "private_source_upload_requires_exact_payload_authorization": true
+  },
+  "current_authorized_gate": {
+    "proposal": "RUNPOD-P7-FUNCTIONAL-SCOUT-V2-RETRY-PROPOSAL-20260830.md",
+    "proposal_sha256": "b10c1a84115e11af3a733440e463144d111149674e1ae76b2e7d2d5cc491c133",
+    "phase_cap_usd": 0.1,
+    "local_campaign_cap_usd": 0.2
+  },
+  "exact_external_payload_authorizations": [
+    {
+      "recorded_utc": "2026-08-30T05:54:34.9153565Z",
+      "manifest": "RUNPOD-P7-FUNCTIONAL-SCOUT-UPLOAD-MANIFEST-V2-20260830.json",
+      "manifest_sha256": "9aba74a65c695eb134c5f2e45faa54389f70ccea137a0d6fcec6dc3e3651dc74",
+      "file_count": 96,
+      "uncompressed_bytes": 19484163,
+      "bundle_sha256": "83fdde6cde6d02628ba24fd932671bc40ae2067a7fbb49187a38b580c71cc668",
+      "purpose": "One-pod P7 V2 functional scout under its existing limits"
+    }
+  ],
+  "not_authorized": [
+    "external upload of a private source payload without exact payload approval",
+    "unrelated workloads",
+    "publication or deployment",
+    "production changes",
+    "unbounded concurrency",
+    "spend above the incremental five-dollar ceiling"
+  ]
+}

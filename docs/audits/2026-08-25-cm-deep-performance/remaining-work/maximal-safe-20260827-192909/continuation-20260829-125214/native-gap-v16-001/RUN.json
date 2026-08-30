@@ -1,0 +1,152 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "wctkcbmzs8ymze",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.005954736242691676,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.029288069576025005,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "37e9db5fc9e86b015a4d923dd7d496d945ca6cd33fe5f3becaa531844ac98422",
+  "authorization_recorded_utc": "2026-08-29T16:35:00Z",
+  "bootstrap_ready_utc": "2026-08-29T16:35:10.618368+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "wctkcbmzs8ymze"
+      }
+    ],
+    "checked_utc": "2026-08-29T16:36:37.386377+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-29T16:34:40.834108+00:00",
+  "creation_response_headers": {
+    "Date": "Sat, 29 Aug 2026 16:34:40 GMT",
+    "X-Request-Id": "req_de23ad2e-9bd0-4ca5-9f11-416d1d03819d"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 116.82313251495361,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.0019470522085825602,
+  "evidence": {
+    "bytes": 140454,
+    "files": 64,
+    "partial_evidence": {
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 187
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 67
+      },
+      "remote_error": "RuntimeError: native-scout failed with exit code 1",
+      "remote_status": "failed",
+      "source_unchanged": true,
+      "validation_errors": []
+    },
+    "runtime_pod_id": "wctkcbmzs8ymze",
+    "sha256": "754dc9647aae367b67da09631b2cac9c4dfd77bb2c74da11ab54e4f2bbbb03ca",
+    "validation": {
+      "error": "RuntimeError: native-scout failed with exit code 1",
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 187
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 67
+      },
+      "machine": "x86_64",
+      "native_summary": {
+        "cadical": null,
+        "cudd": null,
+        "d4": null,
+        "dependencies": null,
+        "linux_controls": null,
+        "native_failures": null,
+        "perf": null,
+        "performance_measurement": false,
+        "performance_ranking_permitted": false,
+        "semantic_mismatches": null,
+        "status": "failed"
+      },
+      "pid": 26,
+      "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "smoke_summary": {
+        "observed_cells": 144,
+        "planned_cells": 144,
+        "status": "passed",
+        "statuses": {
+          "ok": 144
+        }
+      },
+      "source_after_sha256": "3be947e084b3eca29f06164e04cdcbea7bddf0e360617f3402d6778aa4254e43",
+      "source_before_sha256": "3be947e084b3eca29f06164e04cdcbea7bddf0e360617f3402d6778aa4254e43",
+      "source_files": 37,
+      "source_unchanged": true,
+      "status": "failed",
+      "validation_errors": []
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-29T16:36:37.426327+00:00",
+  "name": "cm-native-scout-93998ca809f7",
+  "pod_created": true,
+  "pod_id": "wctkcbmzs8ymze",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 2853654,
+    "done": true,
+    "error": null,
+    "log_bytes": 189118,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "native-scout",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-29T16:34:04.293583+00:00",
+  "status": "failed",
+  "upload_chunks": 11,
+  "upload_payload_sha256": "dcab7d6cfc11e65ea353812aa60701bcf6e9b7ddefd7899f3d1d5f0f2dfd4a10",
+  "uploaded_source_files": 37,
+  "uploaded_transport_bytes": 2853654,
+  "worker_started_utc": "2026-08-29T16:35:39.993198+00:00"
+}

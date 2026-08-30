@@ -1,0 +1,114 @@
+{
+  "cgroup": {
+    "fields": {
+      "cgroup.events": {
+        "status": "observed",
+        "value": {
+          "frozen": 0,
+          "populated": 1
+        }
+      },
+      "cpu.max": {
+        "status": "observed",
+        "value": {
+          "period_us": 100000,
+          "quota_us": null
+        }
+      },
+      "cpu.stat": {
+        "status": "observed",
+        "value": {
+          "burst_usec": 0,
+          "core_sched.force_idle_usec": 0,
+          "nr_bursts": 0,
+          "nr_periods": 0,
+          "nr_throttled": 0,
+          "system_usec": 1470391,
+          "throttled_usec": 0,
+          "usage_usec": 17222870,
+          "user_usec": 15752479
+        }
+      },
+      "cpuset.cpus.effective": {
+        "status": "observed",
+        "value": [
+          79,
+          175
+        ]
+      },
+      "memory.current": {
+        "status": "observed",
+        "value": 303489024
+      },
+      "memory.max": {
+        "status": "observed",
+        "value": 3999997952
+      },
+      "memory.peak": {
+        "status": "observed",
+        "value": 392814592
+      },
+      "pids.current": {
+        "status": "observed",
+        "value": 8
+      },
+      "pids.max": {
+        "status": "observed",
+        "value": 629145
+      }
+    },
+    "relative_path": "/",
+    "version": 2
+  },
+  "cpu": {
+    "affinity": [
+      79,
+      175
+    ],
+    "allocated_logical_from_affinity": 2,
+    "allocation_claim_source": "sched_getaffinity",
+    "host_logical_visible": 192
+  },
+  "native": {
+    "cadical": {
+      "distribution": "python-sat",
+      "fallback_used": false,
+      "module": "pysolvers",
+      "reason": "identity_unavailable",
+      "required_version": "1.8.dev20",
+      "status": "unavailable"
+    },
+    "cudd": {
+      "distribution": "dd",
+      "fallback_used": false,
+      "module": "dd.cudd",
+      "reason": "identity_unavailable",
+      "required_version": "0.6.0",
+      "status": "unavailable"
+    },
+    "d4": {
+      "reason": "no_path",
+      "status": "unconfigured"
+    },
+    "zdd": {
+      "distribution": "dd",
+      "fallback_used": false,
+      "module": "dd.cudd_zdd",
+      "reason": "identity_unavailable",
+      "required_version": "0.6.0",
+      "status": "unavailable"
+    }
+  },
+  "native_execution_performed": false,
+  "performance_ranking_permitted": false,
+  "platform": {
+    "machine": "x86_64",
+    "release": "6.8.0-85-generic",
+    "system": "Linux"
+  },
+  "python": {
+    "implementation": "CPython",
+    "version": "3.13.15"
+  },
+  "schema": "cm-comparative-readiness/v1"
+}

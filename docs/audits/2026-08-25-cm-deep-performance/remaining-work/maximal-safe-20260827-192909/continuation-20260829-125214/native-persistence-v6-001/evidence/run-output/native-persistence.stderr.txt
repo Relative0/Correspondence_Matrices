@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py", line 585, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py", line 569, in main
+    result = run(
+        args.output,
+    ...<3 lines>...
+        cloud_run=args.cloud_run,
+    )
+  File "/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py", line 388, in run
+    result, artifact_path = execute_cell(
+                            ~~~~~~~~~~~~^
+        cell=cell,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        frozen_script=frozen_script,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py", line 295, in execute_cell
+    build, build_resources, build_wall = _run_worker(frozen_script, build_request)
+                                         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py", line 259, in _run_worker
+    raise RuntimeError(f"fresh persistence worker {result.reason}: {excerpt}")
+RuntimeError: fresh persistence worker process_tree_measurement_incomplete: 

@@ -1,0 +1,149 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "dop3aggj7vsefp",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.05047897540926933,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.07381230874260267,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "d52c42185cd3f83e21ec969b3feb571e7ddba90e1707ddcf014c65bcd82b9eba",
+  "authorization_recorded_utc": "2026-08-30T07:45:00Z",
+  "bootstrap_ready_utc": "2026-08-30T07:48:01.907298+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "dop3aggj7vsefp"
+      }
+    ],
+    "checked_utc": "2026-08-30T08:02:28.013686+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-30T07:47:35.892556+00:00",
+  "creation_response_headers": {
+    "Date": "Sun, 30 Aug 2026 07:47:36 GMT",
+    "X-Request-Id": "req_e6465e87-5638-4025-8661-bd25c68a61e9"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 893.0971155166626,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.014884951925277709,
+  "evidence": {
+    "bytes": 41241,
+    "files": 22,
+    "partial_evidence": {
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 42
+      },
+      "remote_error": "RuntimeError: p7-ir timed out",
+      "remote_status": "failed",
+      "source_unchanged": true,
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-w3-shard-ir-development-b/run-output/p7-ir/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-ir"
+        }
+      ]
+    },
+    "runtime_pod_id": "dop3aggj7vsefp",
+    "sha256": "6988255d8e8632e83e329a3c5d162253457f175b40d9d6a649b584a5497057c7",
+    "validation": {
+      "error": "RuntimeError: p7-ir timed out",
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 68
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 42
+      },
+      "machine": "x86_64",
+      "offline_verification": {
+        "checksums_verified": true,
+        "dry_run_matches": true,
+        "dry_run_status": "passed",
+        "freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+        "package_verified": true,
+        "performance_measurement": false,
+        "readiness_matches": true,
+        "ready": true,
+        "schema": "cm-comparative-p7-offline-verification/v1",
+        "source_manifest_matches": true
+      },
+      "pid": 61,
+      "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "1715d17fc60fb24972e019080bd6475f87bee52274ba375e1c3b675a7c776320",
+      "source_before_sha256": "1715d17fc60fb24972e019080bd6475f87bee52274ba375e1c3b675a7c776320",
+      "source_files": 96,
+      "source_unchanged": true,
+      "status": "failed",
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-w3-shard-ir-development-b/run-output/p7-ir/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-ir"
+        }
+      ]
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-30T08:02:28.053553+00:00",
+  "name": "cm-p7-w3s5-irdb-7e79d4d745ca",
+  "pod_created": true,
+  "pod_id": "dop3aggj7vsefp",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 4313273,
+    "done": true,
+    "error": null,
+    "log_bytes": 55949,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "p7-ir",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-30T07:46:33.056955+00:00",
+  "status": "failed",
+  "upload_chunks": 17,
+  "upload_payload_sha256": "b4904bd927da97a9cb383a30908c25bf3a2496b3155de4575c5b20c9907b5d97",
+  "uploaded_source_files": 96,
+  "uploaded_transport_bytes": 4313273,
+  "worker_started_utc": "2026-08-30T07:49:06.399207+00:00"
+}

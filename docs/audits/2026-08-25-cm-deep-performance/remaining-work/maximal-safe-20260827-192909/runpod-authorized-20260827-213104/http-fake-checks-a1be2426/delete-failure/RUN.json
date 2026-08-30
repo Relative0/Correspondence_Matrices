@@ -1,0 +1,79 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "fakepod0123",
+    "pod_volume_gb": 10,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 500,
+        "pod_id": "fakepod0123"
+      },
+      {
+        "api": "https://api.runpod.io/v2",
+        "http_status": 500,
+        "pod_id": "fakepod0123"
+      }
+    ],
+    "checked_utc": "2026-08-28T08:31:37.093520+00:00",
+    "inventories": {
+      "v1": [
+        {
+          "desiredStatus": null,
+          "id": "fakepod0123",
+          "name": "cm-http-smoke-da65f370bb05",
+          "status": null
+        }
+      ],
+      "v2": [
+        {
+          "desiredStatus": null,
+          "id": "fakepod0123",
+          "name": "cm-http-smoke-da65f370bb05",
+          "status": null
+        }
+      ]
+    },
+    "owned_pod_absent": false,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-28T08:31:37.084124+00:00",
+  "creation_response_headers": {
+    "X-Request-Id": "OFFLINE_FAKE_REQUEST"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 0.019093751907348633,
+  "estimated_compute_cost_usd": 3.182291984558105e-07,
+  "evidence": {
+    "fake_evidence": true
+  },
+  "finished_utc": "2026-08-28T08:31:37.094701+00:00",
+  "name": "cm-http-smoke-da65f370bb05",
+  "pod_created": true,
+  "pod_id": "fakepod0123",
+  "quoted_rate_usd_per_hour": 0.06,
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-28T08:31:37.044385+00:00",
+  "status": "complete",
+  "uploaded_source_files": 0
+}

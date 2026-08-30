@@ -1,0 +1,647 @@
+{
+  "cases": [
+    {
+      "case_id": "development-epfl-square-36ba0c79625d",
+      "cluster_id": "epfl/square",
+      "family": "arithmetic",
+      "kind": "blif",
+      "origin": "natural",
+      "role": "development",
+      "source": {
+        "bytes": 614068,
+        "license": "MIT",
+        "member_id": null,
+        "member_sha256": null,
+        "path": "external/epfl-benchmarks/arithmetic/square.blif",
+        "provenance": "lsils/benchmarks commit 0060e156826e733d69bf5b3322d1bdd0d03a1f9a; original BLIF; primary output selected bytewise before timing",
+        "sha256": "c3250cc56a3954e427ed3e117bd5c2e3dc697d54fb8179750b01564f0a10189e"
+      },
+      "strata": {
+        "contexts": 0,
+        "dag_nodes": 149,
+        "depth": 18,
+        "fixed_axes": 0,
+        "live_k": 10,
+        "local_cubes": 1,
+        "local_fanin": 2,
+        "local_literals": 2,
+        "operator_mix": "unknown-before-translation",
+        "root": "asquared[10]",
+        "selection_max_source_nodes": 4096,
+        "selection_max_support": 16,
+        "semantic_support": null,
+        "shape": "circuit-output-cone",
+        "sharing_ppm": null,
+        "source_edges": 298,
+        "support": [
+          "a[0]",
+          "a[1]",
+          "a[2]",
+          "a[3]",
+          "a[4]",
+          "a[5]",
+          "a[6]",
+          "a[7]",
+          "a[8]",
+          "a[9]"
+        ],
+        "syntactic_support": 10,
+        "truth_density_ppm": null,
+        "versions": 0
+      },
+      "tasks": [
+        "ir_preparation",
+        "complete_relation",
+        "exact_count",
+        "sat_status",
+        "structural_reload",
+        "feasibility_frontier"
+      ]
+    }
+  ],
+  "confirmation": {
+    "minimum_independent_clusters": 30,
+    "required": true,
+    "selection_locked": true,
+    "timing_results_inspected": false
+  },
+  "created_utc": "2026-08-30T00:40:00Z",
+  "exclusions": [
+    {
+      "exclusion_id": "source-identity",
+      "frozen_before_timing": true,
+      "predicate": "source bytes or SHA-256 differ from freeze",
+      "reason": "input identity is not the frozen case",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "parse-contract",
+      "frozen_before_timing": true,
+      "predicate": "bounded parser cannot produce the declared task input",
+      "reason": "requested artifact is undefined for the unparsed source",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "semantic-duplicate",
+      "frozen_before_timing": true,
+      "predicate": "pre-timing semantic identity duplicates another case in the same cluster",
+      "reason": "dependent duplicate remains one cluster and one retained representative",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "epfl-output-cone-bound",
+      "frozen_before_timing": true,
+      "predicate": "no primary output has support 4..16 and at most 4096 source nodes",
+      "reason": "complete-relation and scalar-oracle execution would exceed the frozen bounded cone contract",
+      "scope": "development"
+    }
+  ],
+  "freeze_id": "comparative-p6-candidate-v4-2026-08-30",
+  "freeze_sha256": "62a3aecc84344ea413a9c2f17475583b8a170b0ad03f78c76d4299e1f0c51a01",
+  "gate_requirements": {
+    "development_origins": [
+      "natural",
+      "synthetic",
+      "adversarial"
+    ],
+    "minimum_independent_clusters": {
+      "confirmation": 30,
+      "development": 24,
+      "regression": 12
+    },
+    "required_tasks": [
+      "ir_preparation",
+      "complete_relation",
+      "exact_count",
+      "sat_status",
+      "witness",
+      "structural_reload",
+      "feasibility_frontier"
+    ]
+  },
+  "primary_metrics": [
+    "task_total_wall_ns",
+    "process_tree_peak_rss_bytes"
+  ],
+  "provenance": {
+    "benchmark_plan_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/CM-FAST-VARIANTS-COMPARATIVE-BENCHMARK-PLAN-20260829.md",
+    "benchmark_plan_sha256": "78f18400c3b489bc37f802f3e7145a6e970d32a87a260f35091f5eb939f20cf3",
+    "comparative_timing_seen": false,
+    "confirmation_repository": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf12.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf29.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf32.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf35.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf38.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4/benchTest/one.cnf",
+          "reason": "byte-identical to an earlier corpus case"
+        },
+        {
+          "path": "external/d4v2/3rdParty/bipe/instanceTest/cnf10.cnf",
+          "reason": "semantic comment directives: p-protected,p-show"
+        }
+      ],
+      "selected_paths": [
+        "external/d4v2/instancesTest/cnfs/cnf11.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf13.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf14.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf15.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf16.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf17.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf18.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf19.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf21.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf22.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf23.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf24.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf25.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf26.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf27.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf28.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf30.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf31.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf33.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf34.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf36.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf37.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf5.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf6.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf9.cnf",
+        "external/d4/benchTest/bug.cnf",
+        "external/d4/benchTest/littleTest.cnf",
+        "external/d4/benchTest/test1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf11.cnf"
+      ],
+      "selection_rule": "exclude the 16 regression/development files and all byte duplicates; strictly parse ordinary p cnf; reject ind/max/p-show/p-protected/p-weight comment dialects; sort filenames bytewise; select 25 d4v2 main, 3 legacy d4, and 2 bipe cases; ignore remaining c-line comments semantically",
+      "sources": [
+        {
+          "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+          "license": "LGPL-2.1-only",
+          "license_sha256": "647732d8024eb919db082934730defa97264c0e87c23c1148e412eee9c3259ef",
+          "scope": "instancesTest/cnfs",
+          "url": "https://github.com/crillab/d4v2.git"
+        },
+        {
+          "commit": "333370cc1e843dd0749c1efe88516e72b5239174",
+          "license": "LGPL-3.0-only",
+          "license_sha256": "dbbdb98414cd9f4010abfa2302a8f18ad7dc57c9c37153cd1c2ec29d14b73431",
+          "scope": "benchTest",
+          "url": "https://github.com/crillab/d4.git"
+        },
+        {
+          "commit": "bc9ba957e43327afc1c96ee2663a2c77adebbefb",
+          "license": "AGPL-3.0-only",
+          "license_sha256": "90cdbe50b855a76547c078aeb7227d656584cf8d6dd806f74505428d363dc56c",
+          "scope": "instanceTest",
+          "url": "https://github.com/crillab/bipe.git"
+        }
+      ]
+    },
+    "d4_repository": {
+      "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+      "url": "https://github.com/crillab/d4v2.git"
+    },
+    "epfl_output_selection": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/bar.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/div.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/hyp.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/log2.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/max.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sin.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/arbiter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/priority.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/router.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/voter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        }
+      ],
+      "rule": "for each circuit sorted by path, select the first bytewise-sorted primary output with exact support 4..16 and at most 4096 driven source nodes",
+      "selected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/adder.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/multiplier.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sqrt.blif",
+          "root": "asqrt[56]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/square.blif",
+          "root": "asquared[10]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/cavlc.blif",
+          "root": "coeff_token[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/ctrl.blif",
+          "root": "Cin"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/dec.blif",
+          "root": "selectp1[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/i2c.blif",
+          "root": "po038"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/int2float.blif",
+          "root": "E[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/mem_ctrl.blif",
+          "root": "po0184"
+        }
+      ]
+    },
+    "epfl_repository": {
+      "commit": "0060e156826e733d69bf5b3322d1bdd0d03a1f9a",
+      "url": "https://github.com/lsils/benchmarks.git"
+    },
+    "functional_partition": {
+      "case_limit": 1,
+      "case_offset": 33,
+      "parent_freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+      "partition_id": "ir-development-square",
+      "performance_measurement": false,
+      "policy_id": "p7-ir",
+      "role": "development",
+      "schema": "cm-comparative-p7-functional-partition/v1",
+      "selected_case_ids_in_parent_order": [
+        "development-epfl-square-36ba0c79625d"
+      ]
+    },
+    "native_readiness_completed": true,
+    "native_readiness_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/EXTERNAL-NATIVE-GAP-V20-FINAL-VERIFICATION-20260829-170627-870230.json",
+    "native_readiness_sha256": "12c191ebb00b3694a41d9280da4bfb5d0815c7a45b853a9e343c87e6087b113b",
+    "rejected_confirmation_source": {
+      "commit": "d1591805ea0e2c52dd38b7775b1cb8845cfd1131",
+      "comparative_timing_seen": false,
+      "reason": "benchmark-specific redistribution terms were not present in the BLIF files",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing.git"
+    },
+    "v4_execution_correction": {
+      "comparative_timing_seen": false,
+      "reason": "V3 did not identify an EPFL output cone and listed cm-compact-key even though compact interning is already part of cm-ir-current; it also named cm-fast-frozen before a distinct combined configuration had been frozen",
+      "supersedes": "comparative-p6-candidate-v3-2026-08-30"
+    }
+  },
+  "schedule_policies": [
+    {
+      "arms": [
+        "cm-ir-current",
+        "cm-ir-two-memo",
+        "cm-cse-flat",
+        "cm-raw-flat"
+      ],
+      "eligible_roles": [
+        "regression",
+        "development",
+        "confirmation"
+      ],
+      "locality": "round_robin",
+      "maximum_blocks": 16,
+      "minimum_blocks": 8,
+      "noise_rule": {
+        "independent_units_first": true,
+        "metric": "mad_over_median",
+        "step_blocks": 8,
+        "threshold_ppm": 50000
+      },
+      "order_ledger": [
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 0,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 0,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "71e08bad1af902989f1e870109c79eac7082187ab473ea3e17ce68a42291d043",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 1,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 1,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "18a9417d37df71fc45781982e292388c952aad8b8c49455289a395b8c0fce451",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 2,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 2,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "f9791a27d14a0f1bf2590377ba394d9d3ea0273be7ce5328daee83a2c7648059",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 3,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 3,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "4e85f2d2467bc0b4f67cd3d3a4ecd8137dbd22ec9b58ae390c788ce7fb7ba2ed",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 4,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 4,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "b1b18d46e05d063455ef1ff1d8a5280da2751bdcbae5fdfe9d0a0b109918d3a2",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 5,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 5,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "76f886b6d22d3b737f9bcc25533cb881d96114bf1b0f8aad1b6fa134237ef40f",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 6,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 6,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "996e9d36c0550a196a321270e08f68ebc91ba321511327eca5740a78b47351ee",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 7,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 7,
+          "cluster_id": "epfl/square",
+          "conditional_extension": false,
+          "order_sha256": "5a2bdcc2d087baf6da8f707e78e70507ae0d0b80711e716fa5f4def37a3b21f0",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 8,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 8,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "fe79e086f37ed8501a188be12ff01ffb35b0a71a9db91a6a5e675f3d04c55e6c",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 9,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 9,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "d9d2172b01c518d02bddfe8df31bd90747d8c216bfbcb81fcef7194bd39d36ea",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 10,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 10,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "e3654812b0596554701eafa9df9dad8c6ac96354a5f4dd484df97bb4f60337a5",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 11,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 11,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "559a770365dc60f613798754d47857085b3d15b344d71da189d4561140b4b3d0",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 12,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 12,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "8d028829b33f01ad6a1b3e91091daec2bc900e22d8591eac15680b4dc6806bbe",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 13,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 13,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "b2e5aee6a1452b91da2cc0d34c445ab9181f803d2613644801adf013e585b055",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 14,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 14,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "9472ca306d62e36cc37078d1f8cf97f02f0407c6e35ffd95335b6740cd72e7cd",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 15,
+          "case_id": "development-epfl-square-36ba0c79625d",
+          "case_position": 15,
+          "cluster_id": "epfl/square",
+          "conditional_extension": true,
+          "order_sha256": "2365373e73672616c2ade2bd98711572709f6decd3b3ad746a9eb52297dc97c7",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        }
+      ],
+      "policy_id": "p7-ir",
+      "seed": 61001,
+      "shard_cells": 250,
+      "task": "ir_preparation"
+    }
+  ],
+  "schema": "cm-comparative-corpus-freeze/v1",
+  "secondary_metrics": [
+    "construction_ns",
+    "lowering_ns",
+    "query_ns",
+    "extraction_ns",
+    "restoration_ns",
+    "artifact_bytes",
+    "page_faults",
+    "cache_hits",
+    "cache_misses",
+    "cache_evictions",
+    "instruction_count",
+    "live_buffer_count",
+    "live_support",
+    "crossover_query_count"
+  ],
+  "timing_results_inspected": false
+}

@@ -293,6 +293,31 @@ class NativeContractTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "binary changed"):
                 native.d4_count_command(binary, binary_hash, cnf, input_hash, case)
 
+    def test_d4v2_competition_count_and_command_are_strict(self):
+        sat = (b"c [D4] Competition version\nc\ntime: 4e-06/0  number: 1/0\n"
+               b"s SATISFIABLE\nc s type mc\nc s exact arb int 4\n")
+        unsat = b"c [D4] Competition version\ns UNSATISFIABLE\nc s exact quadruple int 0\n"
+        self.assertEqual(native.parse_d4_competition_count(sat, 3)["count"], 4)
+        self.assertEqual(native.parse_d4_competition_count(unsat, 1)["count"], 0)
+        for raw in (
+            b"s SATISFIABLE\nc s exact arb int 0\n",
+            b"s UNSATISFIABLE\nc s exact arb int 1\n",
+            b"s SATISFIABLE\nc s exact arb int 9\n",
+            b"s SATISFIABLE\nc s exact arb int 1\nc s exact arb int 1\n",
+        ):
+            with self.subTest(raw=raw), self.assertRaises(ValueError):
+                native.parse_d4_competition_count(raw, 3)
+        with tempfile.TemporaryDirectory() as directory:
+            binary, cnf = Path(directory) / "d4", Path(directory) / "input.cnf"
+            binary.write_bytes(b"pinned fixture")
+            cnf.write_bytes(b"p cnf 1 0\n")
+            row = native.d4_competition_count_command(
+                binary, native.file_identity(binary)["sha256"], cnf,
+                native.file_identity(cnf)["sha256"], {"k": 1, "clauses": []},
+            )
+            self.assertEqual(row["command"], [str(binary), str(cnf)])
+            self.assertEqual(row["cli_contract"], "d4v2_competition_positional_input")
+
 
 if __name__ == "__main__":
     unittest.main()

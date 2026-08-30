@@ -17,6 +17,28 @@ but not ordered user-event sessions; its non-commercial datasets are linked,
 not redistributed. These are correctness and provenance results, not a
 performance, memory, full-model or independent-replication claim.
 
+Latest recognition follow-up: [Milestone D9 frozen calibrated profitability policy](../recognition/NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md).
+The leakage-controlled policy was exact on 501 measurements from 23 optimized
+BLIF cones, but found no profitable rewrite region. It abstained on all 33 sealed
+evaluation workloads; unconditional one pass measured 0.429x and the charged
+gate measured 0.982x versus no rewrite. This is a retained negative result from
+a circuit-disjoint split within EPFL, not independent benchmark-family evidence.
+
+Latest local follow-up: [matched sessions and version-change contracts](SESSION-AND-VERSION-CONTRACT-PROGRESS-2026-08-28.md):
+208/208 comparison cells passed, plus a separate 16/16-cell known-change
+control, using CM, structural CSE, direct CNF and native CaDiCaL with fresh
+and reused representations. The final focused check passed 206 tests.
+All seven automatically selected real slices had zero version change; the
+separate Soletta control correctly identified two changed assignments.
+These are correctness results, not a performance ranking. CUDD/ZDD/d4 remain
+unexecuted in this follow-up. See also the preceding
+[process/native controls](PROCESS-AND-NATIVE-CONTRACT-PROGRESS-2026-08-28.md)
+and [v2 reproducibility work](REPRODUCIBILITY-AND-CONTRACT-PROGRESS-2026-08-28.md).
+The downloadable August 28 snapshot remains pinned to its original source
+commit and does not contain these later changes. The new results are linked
+as Markdown and raw evidence here; the interactive HTML has not been rebuilt
+for this continuation.
+
 ## Start reading
 
 | Reader | What it covers |
@@ -29,6 +51,7 @@ performance, memory, full-model or independent-replication claim.
 | [Runpod setup and handoff](readers/RUNPOD-SETUP.md) | Working configuration and distinctions between historical workflows; no credentials. |
 | [Fresh-process persistence](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md) | Frozen CM/CSE/direct-CNF/portable-ROBDD build-and-reload evidence, native admission refusals and exact measurement boundaries. |
 | [Structural persistence and trace provenance](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | Frozen CM/CSE/direct-CNF structural reload evidence, exact claim boundaries and the natural-session admission contract. |
+| [D9 frozen profitability policy](../recognition/NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md) | Exact calibrated abstention on optimized BLIF plus the retained negative timing result. |
 
 The generated Markdown readers do not require JavaScript. They are reading
 editions, not screenshots or pixel-identical copies of the interactive pages.
@@ -75,6 +98,7 @@ commit-pinned download for a reproducible version.
 | --- | --- | --- |
 | [Feature-model evidence and independence audit](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-INDEPENDENCE-AUDIT-2026-08-27.md) | Bounded real-model slices, native CUDD and other representation results, version-delta and artifact audits. | Full-model superiority, independent third-party replication, or repaired cold/warm, memory and serialization comparisons. |
 | [Measurement-repair protocol](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-MEASUREMENT-RERUN-PROTOCOL-2026-08-28.md) | A specified protocol and a separate 28-cell local functional pilot. | Execution of the complete repaired benchmark campaign. |
+| [Matched session/version correctness](SESSION-AND-VERSION-CONTRACT-PROGRESS-2026-08-28.md) | Fresh/reused CM, CSE, direct CNF and native SAT agree on bounded partial configurations and complete version deltas; 208 main cells and 16 separate positive-control cells passed. | Speed or memory superiority, representative nonzero-change coverage, unknown-version online ingestion, or complete measurement repair. |
 | [EPFL context pilot](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md) | A published hardware-expression adjacency and bounded context tests. | A deployed design workflow or whole-chip scalability. |
 | [Runpod memory smoke](readers/RUNPOD-MEMORY-SMOKE.md) | 70 passing focused tests; 312 successful rows, including 72 comparable representation calls; verified pod deletion. | Real-world workload performance, full estimator calibration, or production acceptance. |
 | [Structural persistence pilot](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | CM/CSE/direct-CNF structures reload to exact bounded relations in 144/144 cells; generated and natural trace provenance are mechanically separated. | Native-backend persistence, timing/RSS/file-size rankings, natural user traces, full models or external replication. |

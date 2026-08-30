@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/usr/local/bin/python",
+    "scripts/cm_comparative_fresh_persistence_pilot.py",
+    "run",
+    "--output",
+    "/workspace/cm-native-persistence-scout/run-output/native-persistence",
+    "--arms",
+    "cudd_zdd,d4_ddnnf",
+    "--case-limit",
+    "2",
+    "--blocks",
+    "4",
+    "--cloud-run"
+  ],
+  "name": "native-persistence",
+  "returncode": 1,
+  "stderr_sha256": "74873bca2ee4ad07dfa21fcf1fc95d6d599c174babf54e1bbfa9ec7dda0925e4",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py\", line 585, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py\", line 569, in main\n    result = run(\n        args.output,\n    ...<3 lines>...\n        cloud_run=args.cloud_run,\n    )\n  File \"/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py\", line 388, in run\n    result, artifact_path = execute_cell(\n                            ~~~~~~~~~~~~^\n        cell=cell,\n        ^^^^^^^^^^\n    ...<4 lines>...\n        frozen_script=frozen_script,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py\", line 295, in execute_cell\n    build, build_resources, build_wall = _run_worker(frozen_script, build_request)\n                                         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm-native-persistence-scout/scripts/cm_comparative_fresh_persistence_pilot.py\", line 259, in _run_worker\n    raise RuntimeError(f\"fresh persistence worker {result.reason}: {excerpt}\")\nRuntimeError: fresh persistence worker process_tree_measurement_incomplete: \n",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wall_s": 11.449550161138177
+}

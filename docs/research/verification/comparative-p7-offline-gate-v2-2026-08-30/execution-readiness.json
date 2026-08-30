@@ -1,0 +1,74 @@
+{
+  "arm_bindings": {
+    "complete_relation": {
+      "cm-cse-flat": {
+        "artifact": "packed_bigint",
+        "implementation": "cse_flat"
+      },
+      "cm-dense": {
+        "artifact": "dense_cm",
+        "implementation": "cm_dense"
+      },
+      "cm-no-reinflate": {
+        "artifact": "packed_bigint",
+        "implementation": "cm_no_reinflate"
+      },
+      "cm-packed-bigint": {
+        "artifact": "packed_bigint",
+        "implementation": "cm_flat_bigint"
+      },
+      "cm-packed-words": {
+        "artifact": "packed_words",
+        "implementation": "cm_flat_words"
+      }
+    },
+    "ir_preparation": {
+      "cm-cse-flat": "compile_expr_cse/flat",
+      "cm-ir-current": "compile_expr_to_cm_ir/current-one-memo",
+      "cm-ir-two-memo": "CMIRBuilder/historical-two-memo-control",
+      "cm-raw-flat": "compile_expr_flat/raw"
+    }
+  },
+  "freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+  "performance_measurement": false,
+  "policies": [
+    {
+      "arms": [
+        "cm-ir-current",
+        "cm-ir-two-memo",
+        "cm-cse-flat",
+        "cm-raw-flat"
+      ],
+      "eligible_cases": 58,
+      "policy_id": "p7-ir",
+      "role_counts": {
+        "confirmation": 0,
+        "development": 34,
+        "regression": 24
+      },
+      "task": "ir_preparation"
+    },
+    {
+      "arms": [
+        "cm-dense",
+        "cm-packed-bigint",
+        "cm-packed-words",
+        "cm-no-reinflate",
+        "cm-cse-flat"
+      ],
+      "eligible_cases": 58,
+      "policy_id": "p7-relation",
+      "role_counts": {
+        "confirmation": 0,
+        "development": 34,
+        "regression": 24
+      },
+      "task": "complete_relation"
+    }
+  ],
+  "prepared_unique_cases": 58,
+  "ready_for_offline_dry_run": true,
+  "reasons": [],
+  "schema": "cm-comparative-p7-execution-readiness/v1",
+  "source_verified": true
+}

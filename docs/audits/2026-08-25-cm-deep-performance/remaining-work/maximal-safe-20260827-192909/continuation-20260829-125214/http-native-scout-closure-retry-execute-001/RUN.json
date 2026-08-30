@@ -1,0 +1,153 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "pes90ta8wgi2g6",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.0025742050521903566,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.025907538385523687,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "c1879ac5899d9217227db4dacf5f12518c0754f7e878cf8d1cb86ba1420601f1",
+  "authorization_recorded_utc": "2026-08-29T11:19:36.8928126Z",
+  "bootstrap_ready_utc": "2026-08-29T11:21:57.757616+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "pes90ta8wgi2g6"
+      }
+    ],
+    "checked_utc": "2026-08-29T11:22:49.735649+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-29T11:21:22.301559+00:00",
+  "creation_response_headers": {
+    "Date": "Sat, 29 Aug 2026 11:21:20 GMT",
+    "X-Request-Id": "req_bfd55dce-310c-4a07-bf5f-f21080bf2082"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 88.20996141433716,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.001470166023572286,
+  "evidence": {
+    "bytes": 12404,
+    "files": 18,
+    "partial_evidence": {
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 180
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 60
+      },
+      "remote_error": "RuntimeError: p5-smoke failed with exit code 2",
+      "remote_status": "failed",
+      "source_unchanged": true,
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-comparative-native-scout/run-output/p5-smoke/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p5-smoke"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-comparative-native-scout/run-output/native-scout/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "native-scout"
+        }
+      ]
+    },
+    "runtime_pod_id": "pes90ta8wgi2g6",
+    "sha256": "5c80ada0cb7a5a9c0a46fb2446ab3d64c4a16bbadab5a42afe895056cd79423a",
+    "validation": {
+      "error": "RuntimeError: p5-smoke failed with exit code 2",
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 180
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 60
+      },
+      "machine": "x86_64",
+      "pid": 26,
+      "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "094c6cb6526bddf57e06700fb42906053be7aaa27c1122f491cf8ead108b67c2",
+      "source_before_sha256": "094c6cb6526bddf57e06700fb42906053be7aaa27c1122f491cf8ead108b67c2",
+      "source_files": 37,
+      "source_unchanged": true,
+      "status": "failed",
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-comparative-native-scout/run-output/p5-smoke/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p5-smoke"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-comparative-native-scout/run-output/native-scout/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "native-scout"
+        }
+      ]
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-29T11:22:49.778179+00:00",
+  "name": "cm-native-scout-986302888c94",
+  "pod_created": true,
+  "pod_id": "pes90ta8wgi2g6",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 2849933,
+    "done": true,
+    "error": null,
+    "log_bytes": 17228,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "p5-smoke",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-29T11:21:08.041728+00:00",
+  "status": "failed",
+  "upload_chunks": 11,
+  "upload_payload_sha256": "d1ba7034173b1db0b7296822fec1d6ff7f3969006737185ddb6b1942cc5e3de1",
+  "uploaded_source_files": 37,
+  "uploaded_transport_bytes": 2849933,
+  "worker_started_utc": "2026-08-29T11:22:22.941179+00:00"
+}

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="45" time="2.812" timestamp="2026-08-30T12:09:00.214821+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_comparative_p7.ComparativeP7Tests" name="test_bounded_output_metadata_detects_frozen_root_change" time="0.123" /><testcase classname="tests.test_cm_comparative_p7.ComparativeP7Tests" name="test_ir_controls_are_exact_and_memo_controls_have_identical_ir" time="0.001" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_cell_success_is_exact_and_validation_is_outside_timed_span" time="0.237"><failure message="ValueError: case source unavailable">self = &lt;test_cm_comparative_p7_runner.ComparativeP7RunnerTests testMethod=test_cell_success_is_exact_and_validation_is_outside_timed_span&gt;
+
+    def test_cell_success_is_exact_and_validation_is_outside_timed_span(self):
+        plan = self.plan()
+        cell = plan["cells"][0]
+&gt;       oracle = p7_runner.case_oracles(plan, self.freeze, ROOT)[cell["case_id"]]
+
+tests\test_cm_comparative_p7_runner.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\p7_runner.py:212: in case_oracles
+    expression, variables = p7.load_case_expression(cases[case_id], project_root)
+cmbench\comparative\p7.py:101: in load_case_expression
+    record = _jsonl_member(case, project)
+cmbench\comparative\p7.py:83: in _jsonl_member
+    for line in _source_path(case, project).read_text(encoding="utf-8").splitlines():
+cmbench\comparative\p7.py:76: in _source_path
+    _require(path.is_relative_to(project) and path.is_file(), "case source unavailable")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'case source unavailable'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: case source unavailable
+
+cmbench\comparative\p7.py:57: ValueError</failure></testcase><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle" time="0.205"><failure message="ValueError: case source unavailable">self = &lt;test_cm_comparative_p7_runner.ComparativeP7RunnerTests testMethod=test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle&gt;
+
+    def test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle(self):
+        plan = p7_runner.build_plan(
+            self.freeze,
+            policy_id="p7-relation",
+            roles=("development",),
+            blocks=1,
+            case_limit=1,
+            profile="functional",
+        )
+        cell = plan["cells"][0]
+&gt;       oracle = p7_runner.case_oracles(plan, self.freeze, ROOT)[cell["case_id"]]
+
+tests\test_cm_comparative_p7_runner.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\p7_runner.py:212: in case_oracles
+    expression, variables = p7.load_case_expression(cases[case_id], project_root)
+cmbench\comparative\p7.py:101: in load_case_expression
+    record = _jsonl_member(case, project)
+cmbench\comparative\p7.py:83: in _jsonl_member
+    for line in _source_path(case, project).read_text(encoding="utf-8").splitlines():
+cmbench\comparative\p7.py:76: in _source_path
+    _require(path.is_relative_to(project) and path.is_file(), "case source unavailable")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'case source unavailable'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: case source unavailable
+
+cmbench\comparative\p7.py:57: ValueError</failure></testcase><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_functional_plan_preserves_frozen_order_and_performance_requires_full_cycle" time="0.599" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_mismatch_timeout_and_cleanup_fail_closed" time="0.210"><failure message="ValueError: case source unavailable">self = &lt;test_cm_comparative_p7_runner.ComparativeP7RunnerTests testMethod=test_mismatch_timeout_and_cleanup_fail_closed&gt;
+
+    def test_mismatch_timeout_and_cleanup_fail_closed(self):
+        plan = self.plan()
+        cell = plan["cells"][0]
+&gt;       oracle = p7_runner.case_oracles(plan, self.freeze, ROOT)[cell["case_id"]]
+
+tests\test_cm_comparative_p7_runner.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\p7_runner.py:212: in case_oracles
+    expression, variables = p7.load_case_expression(cases[case_id], project_root)
+cmbench\comparative\p7.py:101: in load_case_expression
+    record = _jsonl_member(case, project)
+cmbench\comparative\p7.py:83: in _jsonl_member
+    for line in _source_path(case, project).read_text(encoding="utf-8").splitlines():
+cmbench\comparative\p7.py:76: in _source_path
+    _require(path.is_relative_to(project) and path.is_file(), "case source unavailable")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'case source unavailable'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: case source unavailable
+
+cmbench\comparative\p7.py:57: ValueError</failure></testcase><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_segmented_resume_preserves_interrupted_attempt_and_retries_exact_request" time="0.203" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_successful_ledger_state_requires_primary_metrics_cleanup_and_oracle_identity" time="0.209"><failure message="ValueError: case source unavailable">self = &lt;test_cm_comparative_p7_runner.ComparativeP7RunnerTests testMethod=test_successful_ledger_state_requires_primary_metrics_cleanup_and_oracle_identity&gt;
+
+    def test_successful_ledger_state_requires_primary_metrics_cleanup_and_oracle_identity(self):
+        plan = self.plan()
+        cell = plan["cells"][0]
+&gt;       oracle = p7_runner.case_oracles(plan, self.freeze, ROOT)[cell["case_id"]]
+
+tests\test_cm_comparative_p7_runner.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\p7_runner.py:212: in case_oracles
+    expression, variables = p7.load_case_expression(cases[case_id], project_root)
+cmbench\comparative\p7.py:101: in load_case_expression
+    record = _jsonl_member(case, project)
+cmbench\comparative\p7.py:83: in _jsonl_member
+    for line in _source_path(case, project).read_text(encoding="utf-8").splitlines():
+cmbench\comparative\p7.py:76: in _source_path
+    _require(path.is_relative_to(project) and path.is_file(), "case source unavailable")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'case source unavailable'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: case source unavailable
+
+cmbench\comparative\p7.py:57: ValueError</failure></testcase><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_build_is_deterministic_and_ready_when_all_roles_exist" time="0.015" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_clusters_cannot_cross_roles" time="0.007" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_dimacs_metadata_is_strict_and_does_not_solve" time="0.056" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_duplicate_json_keys_in_member_fail_closed" time="0.006" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_member_hash_and_secret_path_fail_closed" time="0.006" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_missing_confirmation_is_a_gate_failure_not_an_invalid_freeze" time="0.008" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_source_mutation_is_detected_without_changing_freeze" time="0.010" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_timing_inspection_and_order_tampering_fail_closed" time="0.008" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_unbalanced_blocks_are_rejected" time="0.006" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_bounded_metadata_refuses_before_full_cone_materialization" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_cycle_is_refused_before_cone_use" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_mixed_polarity_rows_are_refused" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_nested_luts_constants_and_dont_cares" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_off_set_table_uses_complement_default" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_xor_parser_expression_and_independent_oracle_agree" time="0.002" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_aggregates_only_live_owned_group" time="0.010" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_keeps_live_missing_rss_fail_closed" time="0.288" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_only_downgrades_proven_terminal_transition_to_race" time="0.005" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_recovers_when_live_rss_appears_on_bounded_retry" time="0.005" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_skips_all_terminal_kernel_states" time="0.005" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_uses_full_bounded_rss_appearance_window" time="0.010" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_limits_and_command_refuse_before_launch" time="0.003" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_proc_parsers_handle_spaces_and_strict_memory_units" time="0.001" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_unsupported_platform_refuses_without_launch" time="0.001" /></testsuite></testsuites>

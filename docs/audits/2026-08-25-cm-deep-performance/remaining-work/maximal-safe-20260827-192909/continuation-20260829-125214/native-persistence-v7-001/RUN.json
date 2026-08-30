@@ -1,0 +1,164 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "dgfqzk61vl7cbe",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.005954736242691676,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.029288069576025005,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "d23322e6656a4c24da6824100be8d8abdce4296fab3d3108ee8dc8d2956c9c2d",
+  "authorization_recorded_utc": "2026-08-29T19:02:00Z",
+  "bootstrap_ready_utc": "2026-08-29T19:02:46.363088+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "dgfqzk61vl7cbe"
+      }
+    ],
+    "checked_utc": "2026-08-29T19:04:38.627747+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-29T19:02:13.421675+00:00",
+  "creation_response_headers": {
+    "Date": "Sat, 29 Aug 2026 19:02:15 GMT",
+    "X-Request-Id": "req_03782bd2-2546-4975-802f-14b9b80745b8"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 145.848450422287,
+  "estimated_compute_cost_usd": 0.002430807507038116,
+  "evidence": {
+    "bytes": 718457,
+    "files": 96,
+    "persistence": {
+      "cases": 2,
+      "cells": 16,
+      "d4_binary_sha256": "ea86d879062828983695762650fbc20cd9b0b8b682757861779ccd3c79ec3aea",
+      "exact_relation_rows": 32,
+      "focused_tests": 22,
+      "fresh_build_processes": 16,
+      "fresh_reload_processes": 16,
+      "native_arms": [
+        "CUDD ZDD",
+        "d4 d-DNNF"
+      ],
+      "performance_ranking_permitted": false,
+      "source_unchanged": true
+    },
+    "runtime_pod_id": "dgfqzk61vl7cbe",
+    "sha256": "5755fb58f5a048ef3daf21b3601f511c338175921fa5d1f81536fe2904d4cead",
+    "validation": {
+      "d4_build": {
+        "binary": "external/d4/d4",
+        "binary_bytes": 5905384,
+        "binary_sha256": "ea86d879062828983695762650fbc20cd9b0b8b682757861779ccd3c79ec3aea",
+        "build_command": [
+          "/usr/bin/make",
+          "-j2",
+          "s"
+        ],
+        "performance_ranking_permitted": false,
+        "source_commit": "333370cc1e843dd0749c1efe88516e72b5239174",
+        "source_repository": "https://github.com/crillab/d4.git",
+        "status": "passed"
+      },
+      "error": null,
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 48
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 22
+      },
+      "machine": "x86_64",
+      "persistence_summary": {
+        "arm_statuses": {
+          "cudd_zdd": {
+            "ok": 8
+          },
+          "d4_ddnnf": {
+            "ok": 8
+          }
+        },
+        "blocks": 4,
+        "case_count": 2,
+        "cell_statuses": {
+          "ok": 16
+        },
+        "exact_relation_rows": 32,
+        "executed_arm_count": 2,
+        "executed_build_processes": 16,
+        "executed_reload_processes": 16,
+        "performance_claim_permitted": false,
+        "performance_measurement": false,
+        "planned_cells": 16,
+        "serialized_artifact_deterministic_across_blocks": true,
+        "status": "passed"
+      },
+      "pid": 21,
+      "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_before_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_files": 136,
+      "source_unchanged": true,
+      "status": "complete",
+      "validation_errors": []
+    },
+    "verified": true
+  },
+  "finished_utc": "2026-08-29T19:04:38.669403+00:00",
+  "name": "cm-native-persistence-9912e7276f2d",
+  "pod_created": true,
+  "pod_id": "dgfqzk61vl7cbe",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 1499826,
+    "done": true,
+    "error": null,
+    "log_bytes": 964852,
+    "remote_status": "complete",
+    "returncode": 0,
+    "stage": "native-persistence",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-29T19:01:37.683153+00:00",
+  "status": "complete",
+  "upload_chunks": 6,
+  "upload_payload_sha256": "799924da33c7d1dbd7e3c90d8a47d026e84afade1e7956388ba3a17a51e43ce3",
+  "uploaded_source_files": 136,
+  "uploaded_transport_bytes": 1499826,
+  "worker_started_utc": "2026-08-29T19:02:56.956824+00:00"
+}

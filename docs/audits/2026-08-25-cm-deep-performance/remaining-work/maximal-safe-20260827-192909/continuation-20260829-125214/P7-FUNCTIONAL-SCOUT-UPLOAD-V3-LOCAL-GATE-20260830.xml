@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="48" time="4.544" timestamp="2026-08-30T12:10:49.867182+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_comparative_p7.ComparativeP7Tests" name="test_bounded_output_metadata_detects_frozen_root_change" time="0.255" /><testcase classname="tests.test_cm_comparative_p7.ComparativeP7Tests" name="test_ir_controls_are_exact_and_memo_controls_have_identical_ir" time="0.003" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_cell_success_is_exact_and_validation_is_outside_timed_span" time="0.836" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle" time="0.528"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_p7_runner.ComparativeP7RunnerTests testMethod=test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle&gt;
+
+    def test_complete_relation_worker_uses_fresh_process_contract_and_exact_oracle(self):
+        plan = p7_runner.build_plan(
+            self.freeze,
+            policy_id="p7-relation",
+            roles=("development",),
+            blocks=1,
+            case_limit=1,
+            profile="functional",
+        )
+        cell = plan["cells"][0]
+        oracle = p7_runner.case_oracles(plan, self.freeze, ROOT)[cell["case_id"]]
+&gt;       result, _ = p7_runner.execute_cell(
+            plan=plan, cell=cell, oracle_sha256=oracle,
+            python=Path(__file__), worker_program=Path(__file__), project_root=ROOT,
+            freeze_path=FREEZE, limits=linux_supervisor.Limits(),
+            supervise=self._fake_supervisor(),
+        )
+
+tests\test_cm_comparative_p7_runner.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\p7_runner.py:342: in execute_cell
+    supervised = supervise(
+tests\test_cm_comparative_p7_runner.py:57: in supervise
+    worker = p7_runner.execute_worker(
+cmbench\comparative\p7_runner.py:269: in execute_worker
+    result_row = execute_arm(
+cmbench\comparative\arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench\comparative\arms.py:91: in _stage
+    value = function()
+cmbench\comparative\arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+node = CMNode(kind='binary', key=('AND', ('IMP', ('EQV', ('OR', ('AND', ('VAR', 'x1'), ('VAR', 'x6')), ('VAR', 'x11'), ('VAR'...'), CMNode(kind='var', key=('VAR', 'x5'), vars=('x5',), const_value=None, op='', args=(), var_name='x5')), var_name='')
+vars_all = ('x0', 'x1', 'x2', 'x3', 'x4', 'x5', ...), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_functional_plan_preserves_frozen_order_and_performance_requires_full_cycle" time="0.682" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_mismatch_timeout_and_cleanup_fail_closed" time="0.504" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_segmented_resume_preserves_interrupted_attempt_and_retries_exact_request" time="0.238" /><testcase classname="tests.test_cm_comparative_p7_runner.ComparativeP7RunnerTests" name="test_successful_ledger_state_requires_primary_metrics_cleanup_and_oracle_identity" time="0.415" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_build_is_deterministic_and_ready_when_all_roles_exist" time="0.016" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_clusters_cannot_cross_roles" time="0.007" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_dimacs_metadata_is_strict_and_does_not_solve" time="0.030" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_duplicate_json_keys_in_member_fail_closed" time="0.006" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_member_hash_and_secret_path_fail_closed" time="0.005" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_missing_confirmation_is_a_gate_failure_not_an_invalid_freeze" time="0.008" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_source_mutation_is_detected_without_changing_freeze" time="0.010" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_timing_inspection_and_order_tampering_fail_closed" time="0.008" /><testcase classname="tests.test_cm_comparative_corpus_freeze.ComparativeCorpusFreezeTests" name="test_unbalanced_blocks_are_rejected" time="0.005" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_bounded_metadata_refuses_before_full_cone_materialization" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_cycle_is_refused_before_cone_use" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_mixed_polarity_rows_are_refused" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_nested_luts_constants_and_dont_cares" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_off_set_table_uses_complement_default" time="0.002" /><testcase classname="tests.test_blif_recognition.BlifRecognitionTests" name="test_xor_parser_expression_and_independent_oracle_agree" time="0.002" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_aggregates_only_live_owned_group" time="0.015" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_keeps_live_missing_rss_fail_closed" time="0.175" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_only_downgrades_proven_terminal_transition_to_race" time="0.006" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_recovers_when_live_rss_appears_on_bounded_retry" time="0.006" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_skips_all_terminal_kernel_states" time="0.006" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_uses_full_bounded_rss_appearance_window" time="0.011" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_limits_and_command_refuse_before_launch" time="0.003" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_proc_parsers_handle_spaces_and_strict_memory_units" time="0.001" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_unsupported_platform_refuses_without_launch" time="0.001" /></testsuite></testsuites>

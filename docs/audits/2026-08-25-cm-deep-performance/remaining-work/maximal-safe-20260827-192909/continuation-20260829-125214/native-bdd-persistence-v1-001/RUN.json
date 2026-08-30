@@ -1,0 +1,218 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "8fh5st71uqe2pe",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.005954736242691676,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.029288069576025005,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "ab03c6af7d75cf1148533f4610a4f798274ceafdc642e6f0affec97e5f66efd3",
+  "authorization_recorded_utc": "2026-08-29T19:09:00Z",
+  "bootstrap_ready_utc": "2026-08-29T19:09:53.573213+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "8fh5st71uqe2pe"
+      }
+    ],
+    "checked_utc": "2026-08-29T19:10:23.015130+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-29T19:09:32.176910+00:00",
+  "creation_response_headers": {
+    "Date": "Sat, 29 Aug 2026 19:09:33 GMT",
+    "X-Request-Id": "req_e5b29fae-f797-453d-ba1e-54d96b6eeaa7"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 51.29609513282776,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.0008549349188804626,
+  "evidence": {
+    "bytes": 700147,
+    "files": 70,
+    "partial_evidence": {
+      "remote_status": "complete",
+      "validation_failure": "retrieved evidence did not satisfy frozen native-CUDD-BDD persistence gates"
+    },
+    "runtime_pod_id": "8fh5st71uqe2pe",
+    "sha256": "5db066fef0b6f748fa100245725cf134b36c6c8a2a35bd287ca1cf86f8e82004",
+    "validation": {
+      "error": null,
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 48
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 22
+      },
+      "machine": "x86_64",
+      "native_dependencies": {
+        "built": [
+          {
+            "bytes": 6620,
+            "file": "astutils-0.0.6-py3-none-any.whl",
+            "name": "astutils",
+            "sha256": "cc66547a543050957d74d348910f6ac436e819a345dd1763a12e42006a647c38",
+            "version": "0.0.6"
+          },
+          {
+            "bytes": 48469,
+            "file": "ply-3.10-py2.py3-none-any.whl",
+            "name": "ply",
+            "sha256": "4b47cb4e2863caad29dd04cd86bc45ea2e919a44092f284d375a7dd576fac2ae",
+            "version": "3.10"
+          }
+        ],
+        "commands": 7,
+        "downloaded": {
+          "astutils": {
+            "bytes": 9333,
+            "file": "astutils-0.0.6.tar.gz",
+            "sha256": "e9a6f31b243ecfc3c7c84dd2f145cf5de83e475b650d2a6b781cfa713ad15427",
+            "status": "identified"
+          },
+          "dd": {
+            "bytes": 4229721,
+            "file": "dd-0.6.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "bb46d9f633641927d266d098d507a5759644469ea416862f83781511cd6ca14d",
+            "status": "identified"
+          },
+          "networkx": {
+            "bytes": 2068504,
+            "file": "networkx-3.6.1-py3-none-any.whl",
+            "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+            "status": "identified"
+          },
+          "ply": {
+            "bytes": 150926,
+            "file": "ply-3.10.tar.gz",
+            "sha256": "96e94af7dd7031d8d6dd6e2a8e0de593b511c211a86e28a9c9621c275ac8bacb",
+            "status": "identified"
+          },
+          "python-sat": {
+            "bytes": 3943142,
+            "file": "python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+            "sha256": "fd55285f4ef679aaa62699660121423ec35b97324095ae34db4edb0356422a45",
+            "status": "identified"
+          },
+          "setuptools": {
+            "bytes": 818216,
+            "file": "setuptools-84.0.0-py3-none-any.whl",
+            "sha256": "51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670",
+            "status": "identified"
+          },
+          "six": {
+            "bytes": 11050,
+            "file": "six-1.17.0-py2.py3-none-any.whl",
+            "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+            "status": "identified"
+          },
+          "wheel": {
+            "bytes": 33320,
+            "file": "wheel-0.48.0-py3-none-any.whl",
+            "sha256": "3217dcc807155e45db462d7ef2431f5ddda0d7273b700d05a67b271ceb1287ab",
+            "status": "identified"
+          }
+        },
+        "temporary_artifacts_retained": false,
+        "versions": {
+          "astutils": "0.0.6",
+          "dd": "0.6.0",
+          "networkx": "3.6.1",
+          "ply": "3.10",
+          "python-sat": "1.9.dev15",
+          "setuptools": "84.0.0",
+          "six": "1.17.0",
+          "wheel": "0.48.0"
+        }
+      },
+      "persistence_summary": {
+        "arm_statuses": {
+          "cudd_bdd": {
+            "ok": 4
+          }
+        },
+        "blocks": 2,
+        "case_count": 2,
+        "cell_statuses": {
+          "ok": 4
+        },
+        "exact_relation_rows": 8,
+        "executed_arm_count": 1,
+        "executed_build_processes": 4,
+        "executed_reload_processes": 4,
+        "performance_claim_permitted": false,
+        "performance_measurement": false,
+        "planned_cells": 4,
+        "serialized_artifact_deterministic_across_blocks": false,
+        "status": "passed"
+      },
+      "pid": 21,
+      "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_before_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_files": 136,
+      "source_unchanged": true,
+      "status": "complete",
+      "validation_errors": []
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-29T19:10:23.019132+00:00",
+  "name": "cm-native-bdd-persistence-b0127b1f7e18",
+  "pod_created": true,
+  "pod_id": "8fh5st71uqe2pe",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 1494041,
+    "done": true,
+    "error": null,
+    "log_bytes": 940169,
+    "remote_status": "complete",
+    "returncode": 0,
+    "stage": "native-persistence",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-29T19:08:53.866403+00:00",
+  "status": "failed",
+  "upload_chunks": 6,
+  "upload_payload_sha256": "42297c8d79579a97b0ce284563cc46fb7f52ccf0f538543a6b911a896a2872bc",
+  "uploaded_source_files": 136,
+  "uploaded_transport_bytes": 1494041,
+  "worker_started_utc": "2026-08-29T19:10:00.750125+00:00"
+}

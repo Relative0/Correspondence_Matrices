@@ -1,0 +1,141 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "cgazict5szhbg5",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.005954736242691676,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.029288069576025005,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "b8c9c3a8f3406d2f4bd6c8f921d4ab1d7bd8fed1e7c38633acee17a4dbfa7129",
+  "authorization_recorded_utc": "2026-08-29T18:40:00Z",
+  "bootstrap_ready_utc": "2026-08-29T18:42:26.091636+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "cgazict5szhbg5"
+      }
+    ],
+    "checked_utc": "2026-08-29T18:43:19.796099+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-29T18:42:00.787699+00:00",
+  "creation_response_headers": {
+    "Date": "Sat, 29 Aug 2026 18:42:02 GMT",
+    "X-Request-Id": "req_7357e904-246a-4e7e-b65b-27f0ca618f7f"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 79.3888578414917,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.0013231476306915283,
+  "evidence": {
+    "bytes": 31775,
+    "files": 28,
+    "partial_evidence": {
+      "junit_metadata": null,
+      "junit_testcases": null,
+      "remote_error": "RuntimeError: PaToH header content length",
+      "remote_status": "failed",
+      "source_unchanged": true,
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/focused.xml'",
+          "error_type": "FileNotFoundError",
+          "section": "focused-junit"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/native-persistence/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "native-persistence"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/D4-BUILD.json'",
+          "error_type": "FileNotFoundError",
+          "section": "d4-build"
+        }
+      ]
+    },
+    "runtime_pod_id": "cgazict5szhbg5",
+    "sha256": "98aa4a89180e85e9243daa28af716bc0e515c0100c8ddab7b0ff08bb7c8b4560",
+    "validation": {
+      "error": "RuntimeError: PaToH header content length",
+      "machine": "x86_64",
+      "pid": 21,
+      "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_before_sha256": "aa7d681d716a5c59f708ca686ba4d26e90fbf4746559324dd8cd389f2c4c64fe",
+      "source_files": 136,
+      "source_unchanged": true,
+      "status": "failed",
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/focused.xml'",
+          "error_type": "FileNotFoundError",
+          "section": "focused-junit"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/native-persistence/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "native-persistence"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-native-persistence-scout/run-output/D4-BUILD.json'",
+          "error_type": "FileNotFoundError",
+          "section": "d4-build"
+        }
+      ]
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-29T18:43:19.800098+00:00",
+  "name": "cm-native-persistence-05c034372af3",
+  "pod_created": true,
+  "pod_id": "cgazict5szhbg5",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 1499369,
+    "done": true,
+    "error": null,
+    "log_bytes": 43284,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "build-d4-ddnnf",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-29T18:41:28.960338+00:00",
+  "status": "failed",
+  "upload_chunks": 6,
+  "upload_payload_sha256": "29119ff7edc972d9f3d9d1da45afb3808a8aba7912d87bbe86e53513b109b9fd",
+  "uploaded_source_files": 136,
+  "uploaded_transport_bytes": 1499369,
+  "worker_started_utc": "2026-08-29T18:42:36.846226+00:00"
+}

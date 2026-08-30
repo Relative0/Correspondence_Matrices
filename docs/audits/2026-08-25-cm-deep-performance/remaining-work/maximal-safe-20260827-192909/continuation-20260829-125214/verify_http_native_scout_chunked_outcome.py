@@ -1,0 +1,217 @@
+"""Read-only postflight and partial-evidence audit for the chunked scout attempt."""
+
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import json
+import math
+from pathlib import Path, PurePosixPath
+import xml.etree.ElementTree as ET
+import zipfile
+
+import http_native_scout_preflight_v3 as preflight
+import runpod_native_scout_controller_v3 as controller
+
+
+HERE = Path(__file__).resolve().parent
+RUN_DIR = HERE / "http-native-scout-chunked-retry-execute-001"
+CURRENT_POD_ID = "mljd0t0sb3h1u3"
+
+
+def load(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def evidence_check():
+    archive = RUN_DIR / "evidence.zip"
+    log = (RUN_DIR / "container.log").read_text(encoding="utf-8")
+    starts = [json.loads(line[9:]) for line in log.splitlines()
+              if line.startswith("CM_EVENT ") and '"kind": "evidence_start"' in line]
+    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+    if len(starts) != 1 or digest != starts[0]["sha256"] or archive.stat().st_size != starts[0]["bytes"]:
+        raise ValueError("retrieved failure evidence differs from remote markers")
+    extracted = RUN_DIR / "evidence"
+    with zipfile.ZipFile(archive) as bundle:
+        infos = bundle.infolist()
+        if len(infos) != len({row.filename for row in infos}):
+            raise ValueError("duplicate evidence member")
+        for info in infos:
+            pure = PurePosixPath(info.filename)
+            if pure.is_absolute() or ".." in pure.parts:
+                raise ValueError("unsafe evidence path")
+            target = (extracted / pure).resolve()
+            target.relative_to(extracted.resolve())
+            if hashlib.sha256(target.read_bytes()).digest() != hashlib.sha256(bundle.read(info)).digest():
+                raise ValueError("extracted evidence differs from archive")
+    output = extracted / "run-output"
+    validation = load(output / "REMOTE-VALIDATION.json")
+    runtime = load(output / "RUNTIME.json")
+    focused = load(output / "focused-tests.json")
+    junit_root = ET.parse(output / "focused.xml").getroot()
+    suites = list(junit_root.iter("testsuite"))
+    metadata = {key: sum(int(suite.get(key, "0")) for suite in suites)
+                for key in ("tests", "failures", "errors", "skipped")}
+    cases = list(junit_root.iter("testcase"))
+    failed_cases = [case for case in cases if case.find("failure") is not None]
+    messages = Counter(case.find("failure").get("message") for case in failed_cases)
+    expected_message = "ModuleNotFoundError: No module named 'cmbench.backends'"
+    return {
+        "archive_sha256": digest,
+        "archive_bytes": archive.stat().st_size,
+        "archive_files": len(infos),
+        "remote_status": validation.get("status"),
+        "remote_error": validation.get("error"),
+        "remote_validation_error": validation.get("validation_error"),
+        "runtime_pod_id": runtime.get("runpod_pod_id"),
+        "runtime_source_files": runtime.get("source_files"),
+        "runtime_affinity": runtime.get("affinity"),
+        "focused_returncode": focused.get("returncode"),
+        "junit_metadata": metadata,
+        "junit_testcase_elements": len(cases),
+        "junit_failed_testcase_elements": len(failed_cases),
+        "failure_messages": dict(messages),
+        "primary_failure_confirmed": (
+            validation.get("status") == "failed"
+            and validation.get("error") == "RuntimeError: focused-tests failed with exit code 1"
+            and focused.get("returncode") == 1
+            and len(cases) == 60
+            and len(failed_cases) == 7
+            and messages == {expected_message: 7}
+            and runtime.get("runpod_pod_id") == CURRENT_POD_ID
+            and runtime.get("source_files") == 30
+        ),
+        "p5_started": (output / "p5-smoke").exists(),
+        "native_scout_started": (output / "native-scout").exists(),
+        "source_after_recorded": (output / "SOURCE-AFTER.json").exists(),
+    }
+
+
+def main():
+    run = load(RUN_DIR / "RUN.json")
+    resource = load(RUN_DIR / "POD-RESOURCE-CHECK.json")
+    freeze = load(RUN_DIR / "TRANSPORT-FREEZE.json")
+    known = set(preflight.prior_attempts()["pod_ids"]) | {CURRENT_POD_ID}
+    result = {
+        "checked_utc": preflight.utc_now(),
+        "resource_writes": 0,
+        "create_requests_this_authorization": int(run.get("creation_attempted") is True),
+        "automatic_replacement_queued": False,
+        "controller_status": run.get("status"),
+        "controller_error_type": run.get("error_type"),
+        "pod_id": run.get("pod_id"),
+    }
+    with preflight.session() as client:
+        checks = {}
+        for version, endpoint in (("v1", preflight.V1), ("v2", preflight.V2)):
+            details = {}
+            for pod_id in sorted(known):
+                response = client.get(endpoint + "/pods/" + pod_id, timeout=10, allow_redirects=False)
+                details[pod_id] = response.status_code
+            checks[version] = {
+                "details_http_status": details,
+                "inventory": preflight.inventory(client, endpoint),
+            }
+        result["checks"] = checks
+        result["owned_pods_absent_verified"] = all(
+            not check["inventory"] and all(status == 404 for status in check["details_http_status"].values())
+            for check in checks.values()
+        )
+        billing = preflight.billing_check(client)
+    rows = billing["historical_account_rows"]
+    current_rows = [row for row in rows if row["podId"] == CURRENT_POD_ID]
+    unrelated_rows = [row for row in rows if row["podId"] not in known]
+    current_observed = sum(row["amount"] for row in current_rows)
+    current_bound = (
+        float(run["quoted_rate_usd_per_hour"]) + controller.STORAGE_RATE_RESERVE
+    ) * float(run["elapsed_since_create_s"]) / 3600
+    campaign_bound = float(run["actual_resources"]["prior_cost_bound_usd"]) + max(current_observed, current_bound)
+    result["billing"] = {
+        "metadata": billing["metadata"],
+        "current_pod_rows": current_rows,
+        "current_pod_observed_cost_usd": current_observed,
+        "unrelated_account_rows": unrelated_rows,
+        "account_total_usd": billing["historical_total_usd"],
+        "may_lag": True,
+        "response_reconciled": True,
+    }
+    result["estimated_attempt_cost_bound_usd"] = current_bound
+    result["attributable_campaign_cost_bound_usd"] = campaign_bound
+    result["cost_within_caps"] = max(current_observed, current_bound) <= controller.PHASE_CAP and campaign_bound <= controller.CAMPAIGN_CAP
+
+    pod = resource["pod"]
+    result["actual_resource_identity_verified"] = (
+        pod.get("id") == CURRENT_POD_ID and pod.get("name") == run.get("name")
+        and pod.get("verified_v2_cloud") == "SECURE" and pod.get("cpuFlavorId") == "cpu3c"
+        and pod.get("vcpuCount") == 2 and float(pod.get("memoryInGb")) >= 4
+        and float(pod.get("costPerHr")) == float(run["quoted_rate_usd_per_hour"])
+        and pod.get("imageName") == controller.base.IMAGE and pod.get("containerDiskInGb") == 12
+        and type(pod.get("volumeInGb")) is int and pod.get("volumeInGb") == 0
+        and pod.get("volumeMountPath") == "/workspace"
+        and sorted(pod.get("ports")) == sorted(controller.EXPECTED_PORTS)
+        and resource.get("network_volume_present") is False
+    )
+    result["chunked_transport_verified"] = (
+        run.get("uploaded_source_files") == 30
+        and run.get("uploaded_transport_bytes") == freeze.get("transport_payload_bytes")
+        and run.get("upload_chunks") == math.ceil(freeze["transport_payload_bytes"] / controller.CHUNK_BYTES)
+        and run.get("upload_payload_sha256") == freeze.get("transport_payload_sha256")
+        and run.get("remote_progress", {}).get("uploaded") is True
+        and run.get("remote_progress", {}).get("started") is True
+    )
+
+    releases = {}
+    for role in ("http-controller", "http-watchdog"):
+        release = load(RUN_DIR / ("HOST-AWAKE-RELEASED-" + role + ".json"))
+        releases[role] = {**release, "pid_still_running": controller.windows_pid_running(release["pid"])}
+    result["guard_releases"] = releases
+    result["guards_exited"] = all(row.get("released") is True and row["pid_still_running"] is False for row in releases.values())
+    result["watchdog"] = load(RUN_DIR / "WATCHDOG-RESULT.json")
+
+    frozen_paths = (
+        (Path(controller.__file__), "controller_sha256"), (Path(preflight.__file__), "preflight_sha256"),
+        (controller.BOOTSTRAP_PATH, "bootstrap_sha256"), (controller.REMOTE_CODE_PATH, "remote_program_sha256"),
+        (controller.MANIFEST_PATH, "manifest_sha256"), (controller.AUTHORIZATION_PATH, "authorization_sha256"),
+        (controller.PROPOSAL_PATH, "proposal_sha256"), (controller.base.LOCK_PATH, "wheel_lock_sha256"),
+    )
+    result["frozen_transport_preserved"] = all(
+        hashlib.sha256(path.read_bytes()).hexdigest() == freeze[field] for path, field in frozen_paths
+    )
+    controller.require_authorization()
+    manifest = load(controller.MANIFEST_PATH)
+    project = HERE.parents[5]
+    result["approved_source_manifest_verified"] = len(manifest["files"]) == 30 and all(
+        (project / row["source"]).stat().st_size == row["bytes"]
+        and hashlib.sha256((project / row["source"]).read_bytes()).hexdigest() == row["sha256"]
+        for row in manifest["files"]
+    )
+    result["evidence"] = evidence_check()
+    result["secondary_controller_failure_confirmed"] = (
+        run.get("error_type") == "FileNotFoundError"
+        and result["evidence"]["remote_validation_error"].startswith("FileNotFoundError:")
+        and not result["evidence"]["p5_started"]
+    )
+    result["attempt_safely_reconciled"] = bool(
+        result["create_requests_this_authorization"] == 1 and run.get("creation_http_status") == 201
+        and run.get("creation_uncertain") is False and run.get("cleanup", {}).get("owned_pod_absent") is True
+        and result["owned_pods_absent_verified"] and result["billing"]["response_reconciled"]
+        and result["cost_within_caps"] and result["actual_resource_identity_verified"]
+        and result["chunked_transport_verified"] and result["guards_exited"]
+        and result["watchdog"].get("status") == "controller_cleanup_verified"
+        and result["frozen_transport_preserved"] and result["approved_source_manifest_verified"]
+        and result["evidence"]["primary_failure_confirmed"] and result["secondary_controller_failure_confirmed"]
+    )
+    result["workload_completed"] = False
+    result["authorization_consumed"] = True
+    output = HERE / ("HTTP-NATIVE-SCOUT-CHUNKED-FINAL-VERIFICATION-" + datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f") + ".json")
+    controller.write(output, result)
+    print(json.dumps(result, indent=2))
+    print("evidence_file=" + str(output))
+    return int(not result["attempt_safely_reconciled"])
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except Exception as exc:
+        print(json.dumps({"error_type": type(exc).__name__}))
+        raise SystemExit(2)

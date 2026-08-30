@@ -1,0 +1,157 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "2fzt8mu6ji6nmw",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.01,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.03333333333333333,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "0d9200d8f760514f2286137aee6b71507cede7e524919ee3a5cbbe3fa3ad1fbd",
+  "authorization_recorded_utc": "2026-08-30T05:30:25.745Z",
+  "bootstrap_ready_utc": "2026-08-30T05:34:01.391231+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "2fzt8mu6ji6nmw"
+      }
+    ],
+    "checked_utc": "2026-08-30T05:36:47.191109+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-30T05:33:36.775917+00:00",
+  "creation_response_headers": {
+    "Date": "Sun, 30 Aug 2026 05:33:37 GMT",
+    "X-Request-Id": "req_752f20a9-8656-4434-9047-6bc8b7be0d9b"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 190.88873600959778,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.003181478933493296,
+  "evidence": {
+    "bytes": 24838,
+    "files": 18,
+    "partial_evidence": {
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 32
+      },
+      "remote_error": "RuntimeError: offline-gate-verify failed with exit code 2",
+      "remote_status": "failed",
+      "source_unchanged": true,
+      "validation_errors": [
+        {
+          "error": "Expecting value: line 1 column 1 (char 0)",
+          "error_type": "JSONDecodeError",
+          "section": "offline-gate"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-functional-scout/run-output/p7-ir/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-ir"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-functional-scout/run-output/p7-relation/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-relation"
+        }
+      ]
+    },
+    "runtime_pod_id": "2fzt8mu6ji6nmw",
+    "sha256": "f11e7d60d06e38f16231fd83f3f3d0fe2219433ec052de607fbe12c4ba69decb",
+    "validation": {
+      "error": "RuntimeError: offline-gate-verify failed with exit code 2",
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 48
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 32
+      },
+      "machine": "x86_64",
+      "pid": 52,
+      "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "51e5458d243935e580c7bb9812f58f361e80bb9690c18b9e176408a8586daa01",
+      "source_before_sha256": "51e5458d243935e580c7bb9812f58f361e80bb9690c18b9e176408a8586daa01",
+      "source_files": 156,
+      "source_unchanged": true,
+      "status": "failed",
+      "validation_errors": [
+        {
+          "error": "Expecting value: line 1 column 1 (char 0)",
+          "error_type": "JSONDecodeError",
+          "section": "offline-gate"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-functional-scout/run-output/p7-ir/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-ir"
+        },
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-p7-functional-scout/run-output/p7-relation/summary.json'",
+          "error_type": "FileNotFoundError",
+          "section": "p7-relation"
+        }
+      ]
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-30T05:36:47.231244+00:00",
+  "name": "cm-p7-functional-scout-9d5ddb38f105",
+  "pod_created": true,
+  "pod_id": "2fzt8mu6ji6nmw",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 2371545,
+    "done": true,
+    "error": null,
+    "log_bytes": 33924,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "offline-gate",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-30T05:32:30.288011+00:00",
+  "status": "failed",
+  "upload_chunks": 10,
+  "upload_payload_sha256": "6732a3249ef0ef54796c212ec8942cd28cadbe6c67a280696416809a5be7d5ba",
+  "uploaded_source_files": 156,
+  "uploaded_transport_bytes": 2371545,
+  "worker_started_utc": "2026-08-30T05:36:19.785385+00:00"
+}

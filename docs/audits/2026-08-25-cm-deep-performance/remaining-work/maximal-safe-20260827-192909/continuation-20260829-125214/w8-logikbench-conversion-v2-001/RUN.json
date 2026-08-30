@@ -1,0 +1,119 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "71gv8a3dttwnma",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 0.4672667080402374,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 0.4906000413735707,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "4319a48fef7ade555f69c03b55b0909b63f7f3a35ff14e280e3c7a7ad1252790",
+  "authorization_recorded_utc": "2026-08-30T11:12:26.9997789Z",
+  "bootstrap_ready_utc": "2026-08-30T11:36:29.839424+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "71gv8a3dttwnma"
+      }
+    ],
+    "checked_utc": "2026-08-30T11:36:53.232949+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-08-30T11:36:05.046632+00:00",
+  "creation_response_headers": {
+    "Date": "Sun, 30 Aug 2026 11:36:07 GMT",
+    "X-Request-Id": "req_98dbc6cd-b7b7-4e47-8cc0-e7b33d2ccae2"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 48.56928539276123,
+  "error": "remote workload reported failure",
+  "error_type": "RuntimeError",
+  "estimated_compute_cost_usd": 0.0008094880898793538,
+  "evidence": {
+    "bytes": 146810,
+    "files": 29,
+    "partial_evidence": {
+      "remote_error": "RuntimeError: conversion-worker failed with exit code 1",
+      "remote_status": "failed",
+      "source_unchanged": false,
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-w8-logikbench-conversion-v2/run-output/w8-conversion/conversions.json'",
+          "error_type": "FileNotFoundError"
+        }
+      ]
+    },
+    "runtime_pod_id": "71gv8a3dttwnma",
+    "sha256": "2ae238fef4402365cd8352ddcc88841101e397551769c3a5c78b33b104b04297",
+    "validation": {
+      "error": "RuntimeError: conversion-worker failed with exit code 1",
+      "machine": "x86_64",
+      "performance_claim_permitted": false,
+      "performance_measurement": false,
+      "pid": 17,
+      "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "7acb7444af5b5cac22ffe01640ca54d5bcc09f076b7d04306cd655d182402d53",
+      "source_before_sha256": "7acb7444af5b5cac22ffe01640ca54d5bcc09f076b7d04306cd655d182402d53",
+      "source_files": 159,
+      "source_unchanged": false,
+      "status": "failed",
+      "validation_errors": [
+        {
+          "error": "[Errno 2] No such file or directory: '/workspace/cm-w8-logikbench-conversion-v2/run-output/w8-conversion/conversions.json'",
+          "error_type": "FileNotFoundError"
+        }
+      ]
+    },
+    "verified": false
+  },
+  "finished_utc": "2026-08-30T11:36:53.285227+00:00",
+  "name": "cm-w8-logikbench-convert-v2-bf4ddf68891c",
+  "pod_created": true,
+  "pod_id": "71gv8a3dttwnma",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 352298,
+    "done": true,
+    "error": null,
+    "log_bytes": 197560,
+    "remote_status": "failed",
+    "returncode": 0,
+    "stage": "conversion",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-08-30T11:35:55.481696+00:00",
+  "status": "failed",
+  "upload_chunks": 2,
+  "upload_payload_sha256": "566021e0aa84d9fd5e11800761c628a4f9efe17d44c6f8af201ba888e72dbacd",
+  "uploaded_source_files": 159,
+  "uploaded_transport_bytes": 352298,
+  "worker_started_utc": "2026-08-30T11:36:33.659485+00:00"
+}

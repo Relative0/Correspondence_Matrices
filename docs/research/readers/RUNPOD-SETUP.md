@@ -2,6 +2,36 @@
 
 # CM Runpod setup and cross-task handoff
 
+Latest result, 06:32 UTC on 2026-08-29: **the authorized corpus/oracle/RSS
+phase worked and its single create is consumed**. Pod `4q816o02xw5lxn` used
+the established root-loader HTTPS route, passed 79 focused tests, and returned
+630 exact calls from 420 isolated child jobs over 35 frozen BX1/B2/EPFL cases.
+Every output matched the independent serialized-DAG scalar oracle; all 420
+jobs had whole-child RSS/HWM observations. The pod was deleted, both
+inventories are empty, and both host guards exited. Billing for this newest pod
+still lagged; its compute estimate is $0.002565 and conservative campaign
+bound is $0.032565. See
+[`HTTP-CORPUS-RESULT-20260829.md`](../../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/HTTP-CORPUS-RESULT-20260829.md).
+Do not rerun `http-corpus-execute-001` or create a replacement.
+
+Previous result, 05:19 UTC on 2026-08-29: **the authorized structural phase
+worked and its single create is consumed**. New controller
+`runpod_structural_controller_v4.py` used the established root-loader HTTPS
+route with 12-GB container storage and zero pod volume. One Secure 2-vCPU /
+4-GB pod completed all 70 focused tests plus the exact five-family k=6,8,12,16
+grid: 240 jobs, 360 comparable calls and 1,560 exact/`ok` rows. It was deleted;
+both inventories are empty and all three campaign pod details return 404 from
+both APIs. See
+[`HTTP-STRUCTURAL-RESULT-20260829.md`](../../audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/HTTP-STRUCTURAL-RESULT-20260829.md).
+Do not rerun `http-structural-execute-001` or create a replacement.
+
+Current billing behavior differs across API versions: v2 returned internally
+reconciled `metadata` plus `records` for the three prior billed pods
+($0.00304477 total), while the newest corpus pod had not appeared at the
+06:32 UTC check. Earlier v1 history checks returned an empty list for the same
+window. The current preflights reconcile v2 records and aggregates fail
+closed; preserve that behavior rather than comparing incompatible row counts.
+
 Current result, 09:05 UTC: **the zero-volume HTTP smoke worked**. One
 Secure CPU pod ran the approved 65-file workload, passed all 70 focused
 tests and returned 312 successful measurement rows. It was deleted, and
@@ -18,14 +48,12 @@ Jupyter. This is a fourth, explicitly amended workflow below, not the
 older campaign-specific port-free transport. All 61 local transport/setup/
 accounting tests passed; this is separate from the 70 remote focused tests.
 
-Latest authorization, 08:58 UTC: Brian has approved **one further shared
+Historical authorization, 08:58 UTC: Brian approved **one further shared
 zero-volume retry**, retaining the 12-GB container disk and frozen 65-file
-memory-smoke workload. The existing campaign task remains its sole launch
-owner. Use the stricter $0.10 aggregate HTTP/$0.20 campaign caps and reserve
-the previous allocation's possible delayed charge. See the
-[current authorization/review](../../runpod/RUNPOD-ZERO-VOLUME-AUTHORIZATION-2026-08-28.md).
-This is not evidence that the new pod or workload succeeded. Earlier
-statements below about needing that exact approval are historical.
+memory-smoke workload. That retry is the successful, consumed
+`http-ephemeral-execute-001` result above. See the
+[authorization/review](../../runpod/RUNPOD-ZERO-VOLUME-AUTHORIZATION-2026-08-28.md).
+It is not permission to run that controller again.
 
 First-attempt final update, 08:41 UTC: the one shared 65-file memory-smoke retry
 created a pod (HTTP 201), but reported zero GB of pod volume rather than
@@ -118,6 +146,7 @@ Project root: `C:\Users\brian\Documents\CM_Computation`.
 | Older existing HTTP worker | `cm_runpod_config.py`, `cm_runpod_client.py`, `cm_runpod_deploy.py`, `cm_remote_worker.py` | Worker execution needs `CM_RUNPOD_BASE_URL`; lifecycle operations need an account credential and `RUNPOD_POD_ID`. Some operations can automatically start a stopped pod. |
 | Historical port-free memory-smoke attempts | `docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/` | Reads its own campaign `.env.runpod.local`, creates a new pod, and retrieves bounded log evidence. No existing worker URL or pod ID is required. |
 | Successful amended memory-smoke HTTP retry | Same directory: `runpod_http_smoke_controller_v3.py`, `http_transport_preflight_v2.py`, `http_transport_bootstrap.py` | Uses the root loader privately, creates its own disposable pod and derives two HTTPS proxy URLs. Zero separate volume, fixed payload and at-most-once execution. The single approved create is consumed: inspect its evidence, do not rerun it. |
+| Successful structural and corpus extensions | Same directory: `runpod_structural_controller_v4.py`, `runpod_corpus_controller_v5.py`, their matching preflights, and the same bootstrap | Uses the working root-loader HTTPS/12-GB-container/zero-volume route with separate hash-bound manifests and authorizations. Both single creates are consumed. These are frozen evidence records, not reusable launch commands. |
 
 ### Root loader: campaigns and older HTTP worker
 
@@ -299,6 +328,8 @@ Identify which workflow we are actually using:
 3. Historical port-free memory smoke: campaign-specific .env.runpod.local.
 4. Successful amended 65-file HTTP smoke: root loader, new disposable pod,
    two token-gated HTTPS proxy URLs, 12-GB container and zero pod volume.
+5. Successful structural/corpus extensions: the same transport with separate
+   frozen manifests, authorization hashes, controllers, and consumed creates.
 Do not mix these configuration requirements. Do not run deploy/provision,
 start/resume, or an old campaign as a connectivity test.
 
@@ -349,6 +380,14 @@ not full memory calibration, production-estimator acceptance, or a
 CM/CUDD/SAT performance comparison. This handoff is not permission to
 duplicate its controller, replay a consumed create, or expand the workload.
 
+The later structural and corpus phases also completed and are consumed. The
+corpus result is `http-corpus-execute-001`, pod `4q816o02xw5lxn`: 79 focused
+tests, 35 cases, 420 isolated jobs, 630 exact/oracle-matching calls, complete
+RSS/HWM records, DELETE 204, empty inventories, and exited guards. Read
+HTTP-CORPUS-RESULT-20260829.md beside its controller before interpreting the
+result. No candidate fit or production acceptance occurred, and no replay or
+replacement is authorized.
+
 Inspect newer updates before acting. Preserve concurrent core and website
 changes. Do not overwrite historical run directories, ownership manifests,
 or frozen bundles. Respect previously completed authorizations without
@@ -379,3 +418,68 @@ experiment, authenticated Runpod check, or browser visual check ran here.
 .\.venv\Scripts\python.exe -B -m unittest discover -s tests -p test_cm_runpod_readiness.py -v
 .\.venv\Scripts\python.exe -B -m unittest discover -s tests -p '*website.py' -v
 ```
+
+## Comparative native-scout update (2026-08-29)
+
+The working route remains the REST v1 create plus token-gated two-port HTTP
+bootstrap, Secure `cpu3c`, pinned Python image, 12-GB container disk, integer
+zero pod volume, no network volume, and a watchdog armed before create. For
+multi-megabyte payloads, use the V2 bootstrap and 256-KiB resumable chunks; the
+third scout proved all eleven chunks and the complete payload hash can be
+acknowledged before worker start.
+
+That third attempt, pod `mljd0t0sb3h1u3`, then failed its focused tests because
+the frozen 30-file upload manifest omitted local modules. It did not run P5 or
+the native CaDiCaL/CUDD/d4 checks. DELETE returned 204, both inventories were
+empty, all seven known pod details were 404, both host guards exited, and the
+authorization is consumed. See the result audit at:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-CHUNKED-RESULT-AUDIT-20260829.md`.
+
+The dependency-closed 37-file V5 package was subsequently authorized and ran
+once on pod `pes90ta8wgi2g6`. It passed all 60 focused testcase elements with
+matching before/after source identities. P5 then exited before running because
+the wrapper supplied `--output-dir` while its parser requires `--output`. The
+native checks did not start. DELETE returned 204; both inventories were empty,
+all eight known pod details were 404, both guards exited, and the authorization
+is consumed. See:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-CLOSURE-RESULT-AUDIT-20260829.md`.
+
+The V5 controller/remote wrapper now use the declared P5 CLI, execute the P5
+read-only verifier, and validate the actual nested reconciliation schema. The
+isolated 37-file package completed all 144 P5 cells, and the combined local
+surface passed 127 tests. Its next proposal is:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-P5-CLI-RETRY-PROPOSAL-20260829.md`.
+
+That authorization file is deliberately absent. Do not launch it, replay any
+consumed attempt, or create a replacement without the proposal's separate exact
+authorization.
+
+### P5-corrected attempt and procfs follow-up
+
+Brian subsequently authorized the exact V5 P5-corrected attempt. Pod
+`pow0qre2q39m4t` passed all 60 focused testcase elements, completed and
+independently verified all 144 P5 cells, installed the locked native dependency
+closure, and passed all Linux controls. The first CaDiCaL worker then failed
+closed at the owned-process-group supervisor with
+`process_tree_measurement_incomplete`; CUDD, d4, perf, and comparative timing
+did not run. DELETE returned 204, both inventories are empty, all nine known pod
+details are 404 through both APIs, both guards exited, and the authorization is
+consumed. The conservative attributable bound is `$0.0059547362`. See:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-P5-RESULT-AUDIT-20260829.md`.
+
+The saved result does not record the exact process state that caused the
+incomplete sample. A code audit found a concrete false-refusal path for Linux
+terminal states `X`/`x` and a state transition between `stat` and `status`.
+The V6 supervisor corrects only that path and still refuses a live owned process
+without measurable RSS. Its exact 37-file manifest has only two changed source
+identities, 63 isolated focused tests pass, and the combined local surface has
+133 passes. The next proposal is:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-PROCFS-RACE-RETRY-PROPOSAL-20260829.md`.
+
+Its authorization file is absent. Do not create a pod or replay any consumed
+attempt without separate exact authorization.

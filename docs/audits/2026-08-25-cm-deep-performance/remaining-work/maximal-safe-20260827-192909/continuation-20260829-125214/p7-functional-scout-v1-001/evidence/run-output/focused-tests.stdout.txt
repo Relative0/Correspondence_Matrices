@@ -1,0 +1,50 @@
+
+==================================== ERRORS ====================================
+_______________ ERROR collecting tests/test_cm_comparative_p7.py _______________
+ImportError while importing test module '/workspace/cm-p7-functional-scout/tests/test_cm_comparative_p7.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_cm_comparative_p7.py:8: in <module>
+    from cmbench.comparative.p7 import IR_ARMS, execute_ir_functional
+cmbench/comparative/p7.py:28: in <module>
+    from cmbench.recognition.blif import parse_blif
+cmbench/recognition/blif.py:11: in <module>
+    from .features import IneligibleExpression, postorder
+E   ModuleNotFoundError: No module named 'cmbench.recognition.features'
+___________ ERROR collecting tests/test_cm_comparative_p7_runner.py ____________
+ImportError while importing test module '/workspace/cm-p7-functional-scout/tests/test_cm_comparative_p7_runner.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_cm_comparative_p7_runner.py:8: in <module>
+    from cmbench.comparative import linux_supervisor, p7_runner
+cmbench/comparative/p7_runner.py:16: in <module>
+    from . import linux_supervisor, p7
+cmbench/comparative/p7.py:28: in <module>
+    from cmbench.recognition.blif import parse_blif
+cmbench/recognition/blif.py:11: in <module>
+    from .features import IneligibleExpression, postorder
+E   ModuleNotFoundError: No module named 'cmbench.recognition.features'
+_______________ ERROR collecting tests/test_blif_recognition.py ________________
+ImportError while importing test module '/workspace/cm-p7-functional-scout/tests/test_blif_recognition.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_blif_recognition.py:8: in <module>
+    from cmbench.recognition.blif import parse_blif
+cmbench/recognition/blif.py:11: in <module>
+    from .features import IneligibleExpression, postorder
+E   ModuleNotFoundError: No module named 'cmbench.recognition.features'
+=========================== short test summary info ============================
+ERROR tests/test_cm_comparative_p7.py
+ERROR tests/test_cm_comparative_p7_runner.py
+ERROR tests/test_blif_recognition.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!!
+3 errors in 0.47s

@@ -1,0 +1,2257 @@
+{
+  "admission_contracts": {},
+  "admissions": {},
+  "capabilities": {
+    "autoref_bdd_control": {
+      "identity": {
+        "bytes": 22511,
+        "distribution": "dd",
+        "file": "autoref.py",
+        "module": "dd.autoref",
+        "native_extension": false,
+        "sha256": "095ab2dfb7fc653c64d303e014833e58e1aa85d0ec80e30ac9af55daf5da571d",
+        "status": "identified",
+        "version": "0.6.0"
+      },
+      "native_execution": false,
+      "portability_control": true,
+      "reason": "portable_python_bdd_control_only",
+      "status": "available"
+    },
+    "cm": {
+      "native_execution": false,
+      "portability_control": false,
+      "reason": "reviewed_structural_bundle_adapter",
+      "status": "available"
+    },
+    "cnf": {
+      "native_execution": false,
+      "portability_control": false,
+      "reason": "reviewed_structural_bundle_adapter",
+      "status": "available"
+    },
+    "cse": {
+      "native_execution": false,
+      "portability_control": false,
+      "reason": "reviewed_structural_bundle_adapter",
+      "status": "available"
+    },
+    "cudd_bdd": {
+      "identity": {
+        "bytes": 5088520,
+        "distribution": "dd",
+        "file": "cudd.cpython-313-x86_64-linux-gnu.so",
+        "module": "dd.cudd",
+        "native_extension": true,
+        "sha256": "495efb9d7010007be2c8fe74b8b8623c66d89e7e7af562766f2a421d27513dff",
+        "status": "identified",
+        "version": "0.6.0"
+      },
+      "native_execution": true,
+      "portability_control": false,
+      "reason": "native_cudd_dump_load_adapter",
+      "status": "available"
+    },
+    "cudd_zdd": {
+      "identity": {
+        "bytes": 7240352,
+        "distribution": "dd",
+        "file": "cudd_zdd.cpython-313-x86_64-linux-gnu.so",
+        "module": "dd.cudd_zdd",
+        "native_extension": true,
+        "sha256": "4479e31f1ceb3b6fb97609de78f5c4bcf1298354fa8cce8218cdc089ff750c9a",
+        "status": "identified",
+        "version": "0.6.0"
+      },
+      "native_execution": true,
+      "portability_control": false,
+      "reason": "native_cudd_zdd_reachable_graph_adapter",
+      "status": "available"
+    },
+    "d4_ddnnf": {
+      "identity": {
+        "reason": "d4_ddnnf_runtime_binding_unavailable",
+        "source_commit": "333370cc1e843dd0749c1efe88516e72b5239174",
+        "status": "unavailable"
+      },
+      "native_execution": false,
+      "portability_control": false,
+      "reason": "d4_ddnnf_runtime_binding_unavailable",
+      "status": "refused"
+    }
+  },
+  "cloud_run": true,
+  "excluded_arms": [
+    "cm",
+    "cse",
+    "cnf",
+    "autoref_bdd_control",
+    "cudd_zdd",
+    "d4_ddnnf"
+  ],
+  "execution_arms": [
+    "cudd_bdd"
+  ],
+  "functional_profile": {
+    "arm_filter": [
+      "cudd_bdd"
+    ],
+    "blocks": 2,
+    "case_limit": 2
+  },
+  "network_used": false,
+  "performance_claim_permitted": false,
+  "refused_arms": [],
+  "scenarios": {
+    "case-00": {
+      "feature_names": [
+        "CONFIG_FEATURE_GREP_EGREP_ALIAS",
+        "CONFIG_FEATURE_PRESERVE_HARDLINKS",
+        "CONFIG_FEATURE_INITRD",
+        "CONFIG_KILLALL",
+        "CONFIG_STATIC",
+        "CONFIG_FEATURE_FBSET_FANCY",
+        "CONFIG_ASH_ALIAS",
+        "CONFIG_HUSH"
+      ],
+      "id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k8",
+      "k": 8,
+      "source": {
+        "conditioning": "saved joint context; not existential projection or full-model equivalence",
+        "earlier_packed_sha256": "edc31ca97fcdc316af6d572e86f5e55bef9d989f53ff37903bf33286fdc66a39",
+        "history": "BusyBox",
+        "input_path": "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-version-delta-full21-2026-08-27/cases.jsonl",
+        "input_sha256": "3a4a394f458e0064994b4339858401e523f8dea836a3a697120f9db83299ef0e",
+        "kind": "cached_conditioned_real",
+        "later_packed_sha256": "edc31ca97fcdc316af6d572e86f5e55bef9d989f53ff37903bf33286fdc66a39",
+        "source_commit": "afa60ee2c836e7bdc4068e0f4f128ea31158d2ad",
+        "source_record_sha256": "f63e27ffdd00421319de9c331a43453aa0f238f6c4830d11f179c8a4546e3633"
+      },
+      "versions": [
+        {
+          "clauses": [
+            [
+              8
+            ],
+            [
+              -5
+            ]
+          ],
+          "id": "earlier"
+        },
+        {
+          "clauses": [
+            [
+              -5
+            ],
+            [
+              8
+            ]
+          ],
+          "id": "later"
+        }
+      ]
+    },
+    "case-01": {
+      "feature_names": [
+        "CONFIG_PF_REALVIEW_PB11MP",
+        "CONFIG_PF_EXYNOS_PKG_IDS",
+        "CONFIG_CPU_MIPSR6",
+        "CONFIG_PF_IMX_21",
+        "CONFIG_PF_EXYNOS5_5410",
+        "CONFIG_CPU_MIPS64",
+        "CONFIG_PF_PC",
+        "CONFIG_WARN_NONE"
+      ],
+      "id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k8",
+      "k": 8,
+      "source": {
+        "conditioning": "saved joint context; not existential projection or full-model equivalence",
+        "earlier_packed_sha256": "85bfb6e1a0aa50099696212dce8a0067f4fc8a2c4da0946b6106be1dd01d7d78",
+        "history": "Fiasco",
+        "input_path": "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-version-delta-full21-2026-08-27/cases.jsonl",
+        "input_sha256": "3a4a394f458e0064994b4339858401e523f8dea836a3a697120f9db83299ef0e",
+        "kind": "cached_conditioned_real",
+        "later_packed_sha256": "85bfb6e1a0aa50099696212dce8a0067f4fc8a2c4da0946b6106be1dd01d7d78",
+        "source_commit": "afa60ee2c836e7bdc4068e0f4f128ea31158d2ad",
+        "source_record_sha256": "7fefb50a0d41467b8167ef94df7a284fff2d9b1b5d66be765858fc8b9a6b3572"
+      },
+      "versions": [
+        {
+          "clauses": [
+            [
+              -7
+            ],
+            [
+              -1
+            ],
+            [
+              -4
+            ],
+            [
+              -1
+            ],
+            [
+              -7
+            ],
+            [
+              -1
+            ],
+            [
+              5
+            ],
+            [
+              -7
+            ],
+            [
+              -6
+            ],
+            [
+              -7
+            ],
+            [
+              5
+            ],
+            [
+              -4
+            ],
+            [
+              -3
+            ],
+            [
+              -7
+            ],
+            [
+              -8
+            ],
+            [
+              2
+            ]
+          ],
+          "id": "earlier"
+        },
+        {
+          "clauses": [
+            [
+              -7
+            ],
+            [
+              -1
+            ],
+            [
+              -7
+            ],
+            [
+              -4
+            ],
+            [
+              -3
+            ],
+            [
+              2
+            ],
+            [
+              -8
+            ],
+            [
+              -1
+            ],
+            [
+              -1
+            ],
+            [
+              -4
+            ],
+            [
+              -7
+            ],
+            [
+              -7
+            ],
+            [
+              -6
+            ],
+            [
+              5
+            ],
+            [
+              -7
+            ],
+            [
+              5
+            ]
+          ],
+          "id": "later"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "arms": [
+      "cudd_bdd"
+    ],
+    "blocks": 2,
+    "campaign_id": "fresh-process-persistence-v1",
+    "cases": [
+      {
+        "case_id": "case-00",
+        "cluster_id": "BusyBox",
+        "input_sha256": "a14ea3aabce198449a15bcff7ee86820a462902149f16563074d248df0c94361"
+      },
+      {
+        "case_id": "case-01",
+        "cluster_id": "Fiasco",
+        "input_sha256": "d2d4f5b62fd402435d02a4acb5195cd43382d66cb875582ee8ea36b610f3b929"
+      }
+    ],
+    "cells": [
+      {
+        "arm": "cudd_bdd",
+        "arm_position": 0,
+        "block": 0,
+        "campaign_id": "fresh-process-persistence-v1",
+        "case_id": "case-00",
+        "case_position": 0,
+        "cell_id": "65e761cf1d9a8ed9065af7cc60eda4361668c0b190282c60eb451ca97f3b5950",
+        "cluster_id": "BusyBox",
+        "contract_sha256": "e34079dc41bdbaad48c4b77a11d3b7b03493f702dd5a859b77b372d520536cda",
+        "input_sha256": "a14ea3aabce198449a15bcff7ee86820a462902149f16563074d248df0c94361",
+        "locality": "round_robin",
+        "seed": 2026082905
+      },
+      {
+        "arm": "cudd_bdd",
+        "arm_position": 0,
+        "block": 0,
+        "campaign_id": "fresh-process-persistence-v1",
+        "case_id": "case-01",
+        "case_position": 1,
+        "cell_id": "e7e996d68d804d4b7fac901d04a8f8b6b92ab3c473975a69f4469b94dc785a4e",
+        "cluster_id": "Fiasco",
+        "contract_sha256": "e34079dc41bdbaad48c4b77a11d3b7b03493f702dd5a859b77b372d520536cda",
+        "input_sha256": "d2d4f5b62fd402435d02a4acb5195cd43382d66cb875582ee8ea36b610f3b929",
+        "locality": "round_robin",
+        "seed": 2026082905
+      },
+      {
+        "arm": "cudd_bdd",
+        "arm_position": 0,
+        "block": 1,
+        "campaign_id": "fresh-process-persistence-v1",
+        "case_id": "case-00",
+        "case_position": 2,
+        "cell_id": "373fb8382e30ec76d9f50d5991b4642ab4bca4bd55992bccbc5cc80477606c8e",
+        "cluster_id": "BusyBox",
+        "contract_sha256": "e34079dc41bdbaad48c4b77a11d3b7b03493f702dd5a859b77b372d520536cda",
+        "input_sha256": "a14ea3aabce198449a15bcff7ee86820a462902149f16563074d248df0c94361",
+        "locality": "round_robin",
+        "seed": 2026082905
+      },
+      {
+        "arm": "cudd_bdd",
+        "arm_position": 0,
+        "block": 1,
+        "campaign_id": "fresh-process-persistence-v1",
+        "case_id": "case-01",
+        "case_position": 3,
+        "cell_id": "2ad62ee3a5191ada4c1308b1f17f70765d3af9f8fa56946f55ded2134ac3c2e3",
+        "cluster_id": "Fiasco",
+        "contract_sha256": "e34079dc41bdbaad48c4b77a11d3b7b03493f702dd5a859b77b372d520536cda",
+        "input_sha256": "d2d4f5b62fd402435d02a4acb5195cd43382d66cb875582ee8ea36b610f3b929",
+        "locality": "round_robin",
+        "seed": 2026082905
+      }
+    ],
+    "contracts": {
+      "cudd_bdd": {
+        "artifact": {
+          "fixed": [],
+          "kind": "serialized_structure",
+          "output_order": [],
+          "output_scope": "not_applicable",
+          "restoration": "none",
+          "stream": null,
+          "variable_order": [
+            "x0",
+            "x1",
+            "x2",
+            "x3",
+            "x4",
+            "x5",
+            "x6",
+            "x7"
+          ]
+        },
+        "contract_id": "fresh-persistence-cudd_bdd",
+        "lifecycle": "fresh_process",
+        "queries": 2,
+        "schema": "cm-comparative-contract/v1",
+        "task": "structural_reload",
+        "validation": {
+          "oracle": "scalar_cnf_plus_fresh_reload_plus_independent_structure_replay/v1",
+          "required_output_sha256": null,
+          "validation_in_timed_span": false
+        }
+      }
+    },
+    "locality": "round_robin",
+    "plan_sha256": "a440d326f69df24fc929179e22285f06c284420a84df5949097c5ddfad8e5e77",
+    "schema": "cm-comparative-plan/v1",
+    "seed": 2026082905,
+    "shards": [
+      {
+        "cell_ids": [
+          "65e761cf1d9a8ed9065af7cc60eda4361668c0b190282c60eb451ca97f3b5950",
+          "e7e996d68d804d4b7fac901d04a8f8b6b92ab3c473975a69f4469b94dc785a4e",
+          "373fb8382e30ec76d9f50d5991b4642ab4bca4bd55992bccbc5cc80477606c8e",
+          "2ad62ee3a5191ada4c1308b1f17f70765d3af9f8fa56946f55ded2134ac3c2e3"
+        ],
+        "index": 0,
+        "sha256": "6593f043c07f91540e1a262e1a3de92041c8e1d111050bd5f6e69ba8aa20eb49"
+      }
+    ],
+    "task": "structural_reload"
+  },
+  "schema": "cm-comparative-fresh-persistence-pilot/v1",
+  "selection": {
+    "default_candidate_ledger": [
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "first_eligible_case_id_in_history",
+        "selected": true
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "one_per_history_candidate_budget",
+        "selected": false
+      }
+    ],
+    "known_change_candidate_ledger": [
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|hash|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k12",
+        "history": "BusyBox",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k16",
+        "history": "BusyBox",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40|incidence|k8",
+        "history": "BusyBox",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|hash|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k12",
+        "history": "Fiasco",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k16",
+        "history": "Fiasco",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14|incidence|k8",
+        "history": "Fiasco",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-05-22->2017-09-28|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2017-12-22->2018-01-23|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|hash|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k12",
+        "history": "FinancialServices01",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k16",
+        "history": "FinancialServices01",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "FinancialServices01@2018-04-23->2018-05-09|incidence|k8",
+        "history": "FinancialServices01",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|hash|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00|incidence|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|hash|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k12",
+        "history": "Linux",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k16",
+        "history": "Linux",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00|incidence|k8",
+        "history": "Linux",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_1->2_2|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_2->2_3|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|hash|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k12",
+        "history": "automotive2",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k16",
+        "history": "automotive2",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "automotive2@2_3->2_4|incidence|k8",
+        "history": "automotive2",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "named_known_nonzero_positive_control_not_natural_sample",
+        "selected": true
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|hash|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k12",
+        "history": "soletta",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k16",
+        "history": "soletta",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40|incidence|k8",
+        "history": "soletta",
+        "k": 8,
+        "reason": "outside_bounded_case_contract",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|hash|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k12",
+        "history": "uClibc",
+        "k": 12,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k16",
+        "history": "uClibc",
+        "k": 16,
+        "reason": "outside_declared_k8_cohort",
+        "selected": false
+      },
+      {
+        "case_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53|incidence|k8",
+        "history": "uClibc",
+        "k": 8,
+        "reason": "outside_named_known_change_diagnostic",
+        "selected": false
+      }
+    ],
+    "known_change_control_output_selected": true,
+    "original_transition_admissions": [
+      {
+        "admitted": true,
+        "history": "automotive2",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "automotive2@2_1->2_2"
+      },
+      {
+        "admitted": true,
+        "history": "automotive2",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "automotive2@2_2->2_3"
+      },
+      {
+        "admitted": true,
+        "history": "automotive2",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "automotive2@2_3->2_4"
+      },
+      {
+        "admitted": true,
+        "history": "FinancialServices01",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "FinancialServices01@2017-05-22->2017-09-28"
+      },
+      {
+        "admitted": true,
+        "history": "FinancialServices01",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "FinancialServices01@2017-12-22->2018-01-23"
+      },
+      {
+        "admitted": true,
+        "history": "FinancialServices01",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "FinancialServices01@2018-04-23->2018-05-09"
+      },
+      {
+        "admitted": true,
+        "history": "BusyBox",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "BusyBox@2007-05-20_17-12-43->2007-05-20_21-51-38"
+      },
+      {
+        "admitted": true,
+        "history": "BusyBox",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "BusyBox@2008-07-15_22-01-49->2008-07-17_18-26-45"
+      },
+      {
+        "admitted": true,
+        "history": "BusyBox",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "BusyBox@2010-05-04_15-45-25->2010-05-09_00-13-40"
+      },
+      {
+        "admitted": true,
+        "history": "Fiasco",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Fiasco@2017-09-26_11-30-56->2018-02-09_09-07-43"
+      },
+      {
+        "admitted": true,
+        "history": "Fiasco",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Fiasco@2018-08-20_14-36-18->2018-11-01_09-46-44"
+      },
+      {
+        "admitted": true,
+        "history": "Fiasco",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Fiasco@2020-10-20_12-35-53->2020-12-01_14-09-14"
+      },
+      {
+        "admitted": false,
+        "history": "Linux",
+        "reason": "adjacent versions have no joint satisfying assignment over shared feature names",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Linux@2013-11-06T06_39_45+01_00->2013-12-11T15_52_34+01_00"
+      },
+      {
+        "admitted": true,
+        "history": "Linux",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Linux@2015-11-03T18_59_10-08_00->2016-01-07T14_11_32+01_00"
+      },
+      {
+        "admitted": true,
+        "history": "Linux",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "Linux@2017-12-17T13_57_26+01_00->2018-01-08T11_10_40+01_00"
+      },
+      {
+        "admitted": true,
+        "history": "soletta",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "soletta@2015-06-26_18-38-56->2015-06-26_23-03-00"
+      },
+      {
+        "admitted": true,
+        "history": "soletta",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "soletta@2015-11-25_17-57-13->2015-11-27_14-29-46"
+      },
+      {
+        "admitted": true,
+        "history": "soletta",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "soletta@2017-03-01_15-25-44->2017-03-09_21-02-40"
+      },
+      {
+        "admitted": true,
+        "history": "uClibc",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "uClibc@2008-06-05_13-46-47->2008-06-07_15-19-18"
+      },
+      {
+        "admitted": true,
+        "history": "uClibc",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "uClibc@2013-02-20_13-45-10->2013-03-14_22-27-19"
+      },
+      {
+        "admitted": true,
+        "history": "uClibc",
+        "reason": "",
+        "scope": "historical admission; not a new execution",
+        "transition_id": "uClibc@2020-10-02_19-10-36->2020-12-24_11-54-53"
+      }
+    ],
+    "performance_or_output_used_for_default_selection": false,
+    "schema": "cm-comparative-real-task-bridge/v1",
+    "selection": "seven first eligible k8 cases by history plus separate named known-change diagnostic"
+  },
+  "source_manifest_sha256": "89dc978727e9a3d56b3d811eb62d26da77c272c2abe2aa52f09c95e0b6b86159",
+  "timings_for_contract_diagnostics_only": true
+}

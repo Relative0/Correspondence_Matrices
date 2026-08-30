@@ -1,0 +1,1516 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="22" skipped="0" tests="180" time="7.197" timestamp="2026-08-29T10:56:27.501622+00:00" hostname="3ced0c5043c8"><testcase classname="tests.test_cm_comparative_foundation.ComparativeContractTests" name="test_canonical_json_rejects_nonfinite_and_contract_digest_is_order_stable" time="0.001" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeContractTests" name="test_contract_refuses_task_artifact_axis_restoration_and_validation_confusion" time="0.002" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeContractTests" name="test_full_reduced_scalar_and_stream_contracts_are_explicit" time="0.001" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeContractTests" name="test_result_validation_keeps_failures_and_checks_success_artifact" time="0.002" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeStructuralTests" name="test_expression_stats_distinguish_object_and_structural_sharing" time="0.001" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeStructuralTests" name="test_unfolding_cap_and_cm_signature_are_bounded_and_exact" time="0.001" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeScheduleEvidenceTests" name="test_append_resume_reconcile_partial_and_nonoverwriting_publication" time="0.006" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeScheduleEvidenceTests" name="test_arm_and_case_schedules_preserve_cardinality" time="0.001" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeScheduleEvidenceTests" name="test_plan_is_deterministic_counterbalanced_sharded_and_tamper_evident" time="0.007" /><testcase classname="tests.test_cm_comparative_foundation.ComparativeArmTests" name="test_all_core_arms_deliver_the_same_scalar_oracle_relation" time="0.084"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_core_arms_deliver_the_same_scalar_oracle_relation&gt;
+
+    def test_all_core_arms_deliver_the_same_scalar_oracle_relation(self):
+        variables = tuple(f"x{i}" for i in range(6))
+        shared = Xor(Var(0), Var(1))
+        expr = Eqv(And(shared, shared), Imp(Var(4), Or(Var(2), Var(5))))
+        expected_bits = scalar_relation(expr, variables, {})
+        expected = semantic_sha256(expected_bits, len(variables))
+        kinds = {
+            "cm_dense": "dense_cm",
+            "cm_flat_bigint": "packed_bigint",
+            "cm_flat_words": "packed_words",
+            "cm_no_reinflate": "packed_bigint",
+            "cse_flat": "packed_bigint",
+            "raw_flat": "packed_bigint",
+        }
+        hashes = set()
+        for arm, kind in kinds.items():
+            with self.subTest(arm=arm):
+                contract = relation_contract(arm, kind, variables, expected)
+&gt;               result = execute_arm(expr=expr, contract=contract, case_id="shared-k6", arm=arm, smoke_bound=8)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:302: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('EQV', ('IMP', ('VAR', 'x4'), ('OR', ('VAR', 'x2'), ('VAR', 'x5'))), ('XOR', ('VAR', 'x0'),...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1', 'x2', 'x3', 'x4', 'x5'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_comparative_foundation.ComparativeArmTests" name="test_all_sixteen_binary_truth_functions_match_scalar_oracle" time="0.878"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='const', key=('CONST', 0), vars=(), const_value=0, op='', args=(), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), vars=('x0', 'x1'), const_value=None...'var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1'),), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('AND', ('NOT', ('VAR', 'x0')), ('VAR', 'x1')), vars=('x0', 'x1'), const_value=None, op='AND...'), CMNode(kind='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x0'...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('AND', ('NOT', ('VAR', 'x1')), ('VAR', 'x0')), vars=('x0', 'x1'), const_value=None, op='AND...'), CMNode(kind='var', key=('VAR', 'x0'), vars=('x0',), const_value=None, op='', args=(), var_name='x0')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x1'...='var', key=('VAR', 'x0'), vars=('x0',), const_value=None, op='', args=(), var_name='x0')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('VAR', 'x1')), ('AND', ('NOT', ('VAR', 'x1')), ('VAR...='var', key=('VAR', 'x0'), vars=('x0',), const_value=None, op='', args=(), var_name='x0')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x0'...='var', key=('VAR', 'x0'), vars=('x0',), const_value=None, op='', args=(), var_name='x0')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('AND', ('VAR', 'x0'), ('VAR', 'x1')), vars=('x0', 'x1'), const_value=None, op='AND', args=(...'), CMNode(kind='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('VAR', 'x0'), ('VAR...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('VAR', 'x1')), ('AND', ('VAR', 'x0'), ('VAR', 'x1'))...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x0'...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x1')), ('VAR', 'x0')), ('AND', ('VAR', 'x0'), ('VAR', 'x1'))...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x1'...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('VAR', 'x1')), ('AND', ('NOT', ('VAR', 'x1')), ('VAR...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_all_sixteen_binary_truth_functions_match_scalar_oracle&gt;
+
+    def test_all_sixteen_binary_truth_functions_match_scalar_oracle(self):
+        x, y = Var(0), Var(1)
+    
+        def formula(mask):
+            terms = []
+            for assignment in range(4):
+                if mask &amp; (1 &lt;&lt; assignment):
+                    left = x if assignment &amp; 2 else Not(x)
+                    right = y if assignment &amp; 1 else Not(y)
+                    terms.append(And(left, right))
+            if not terms:
+                return And(x, Not(x))
+            result = terms[0]
+            for term in terms[1:]:
+                result = Or(result, term)
+            return result
+    
+        variables = ("x0", "x1")
+        for mask in range(16):
+            expr = formula(mask)
+            expected_bits = scalar_relation(expr, variables, {})
+            self.assertEqual(expected_bits, mask)
+            expected = semantic_sha256(mask, 2)
+            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+                with self.subTest(mask=mask, arm=arm):
+                    contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
+&gt;                   result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:356: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('NOT', ('VAR', 'x0')), ('NOT', ('VAR', 'x1'))), ('AND', ('NOT', ('VAR', 'x0'...='var', key=('VAR', 'x1'), vars=('x1',), const_value=None, op='', args=(), var_name='x1')), var_name='')), var_name='')
+vars_all = ('x0', 'x1'), fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_comparative_foundation.ComparativeArmTests" name="test_reduced_no_reinflate_has_explicit_reduced_oracle_and_axes" time="0.001"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_comparative_foundation.ComparativeArmTests testMethod=test_reduced_no_reinflate_has_explicit_reduced_oracle_and_axes&gt;
+
+    def test_reduced_no_reinflate_has_explicit_reduced_oracle_and_axes(self):
+        variables = tuple(f"x{i}" for i in range(7))
+        output = ("x0", "x6")
+        fixed = tuple((f"x{i}", i % 2) for i in range(1, 6))
+        expr = Xor(Var(0), Var(6))
+        expected_bits = scalar_relation(expr, output, dict(fixed))
+        expected = semantic_sha256(expected_bits, len(output))
+        contract = relation_contract(
+            "reduced",
+            "reduced_bigint",
+            variables,
+            expected,
+            output=output,
+            fixed=fixed,
+            scope="reduced",
+        )
+&gt;       result = execute_arm(expr=expr, contract=contract, case_id="reduced-k7", arm="cm_no_reinflate", smoke_bound=8)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_cm_comparative_foundation.py:326: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cmbench/comparative/arms.py:184: in execute_arm
+    result, timings["execute_ns"] = _stage(
+cmbench/comparative/arms.py:91: in _stage
+    value = function()
+            ^^^^^^^^^^
+cmbench/comparative/arms.py:186: in &lt;lambda&gt;
+    lambda: materialize_hybrid_no_reinflate(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('XOR', ('VAR', 'x0'), ('VAR', 'x6')), vars=('x0', 'x6'), const_value=None, op='XOR', args=(...'), CMNode(kind='var', key=('VAR', 'x6'), vars=('x6',), const_value=None, op='', args=(), var_name='x6')), var_name='')
+vars_all = ('x0', 'x1', 'x2', 'x3', 'x4', 'x5', ...)
+fixed = {'x1': 1, 'x2': 0, 'x3': 1, 'x4': 0, ...}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_comparative_foundation.ComparativeArmTests" name="test_smoke_bound_and_arm_artifact_mismatch_refuse_before_execution" time="0.001" /><testcase classname="tests.test_cm_comparative_readiness.ComparativeReadinessTests" name="test_environment_uses_affinity_for_allocation_not_host_count" time="0.002" /><testcase classname="tests.test_cm_comparative_readiness.ComparativeReadinessTests" name="test_read_cgroup_retains_observed_missing_and_malformed_fields" time="0.006" /><testcase classname="tests.test_cm_comparative_readiness.ComparativeReadinessTests" name="test_strict_cgroup_parsers" time="0.002" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_group_snapshot_aggregates_only_live_owned_group" time="0.003" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_limits_and_command_refuse_before_launch" time="0.002" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_proc_parsers_handle_spaces_and_strict_memory_units" time="0.001" /><testcase classname="tests.test_cm_comparative_linux_supervisor.ComparativeLinuxSupervisorTests" name="test_unsupported_platform_refuses_without_launch" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_built_wheel_metadata_is_checked" time="0.002" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_cudd_export_preserves_manager_and_shared_dag" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_dependency_lock_refuses_ambiguous_or_unbounded_locations" time="0.002" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_dimacs_zero_width_and_empty_clause_are_unambiguous" time="0.000" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_fetch_requires_exact_payload_identity" time="0.002" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_frozen_dependency_lock_is_exact_and_bounded" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_non_linux_refusal_writes_bounded_evidence_without_setup" time="0.003" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_zero_width_cudd_skips_meaningless_reorder" time="0.001" /><testcase classname="tests.test_cm_no_reinflate.CMNoReinflateTests" name="test_existing_materialize_cm_still_performs_dense_cm_output_contract" time="0.001" /><testcase classname="tests.test_cm_no_reinflate.CMNoReinflateTests" name="test_large_n_guard_rejects_too_many_reduced_live_vars" time="0.002"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_no_reinflate.CMNoReinflateTests testMethod=test_large_n_guard_rejects_too_many_reduced_live_vars&gt;
+
+    def test_large_n_guard_rejects_too_many_reduced_live_vars(self) -&gt; None:
+        n = 20
+        expr = Var(0)
+        for i in range(1, 17):
+            expr = Xor(expr, Var(i))
+        node = compile_expr_to_cm_ir(expr)
+    
+        with self.assertRaises(ValueError):
+&gt;           materialize_hybrid_no_reinflate(
+                node,
+                [f"x{i}" for i in range(n)],
+                fixed={},
+                hybrid_threshold=7,
+                allow_reduced_output=True,
+                max_full_output_vars=16,
+            )
+
+tests/test_cm_no_reinflate.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_no_reinflate.CMNoReinflateTests" name="test_large_n_guard_requires_reduced_output_opt_in" time="0.001"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_no_reinflate.CMNoReinflateTests testMethod=test_large_n_guard_requires_reduced_output_opt_in&gt;
+
+    def test_large_n_guard_requires_reduced_output_opt_in(self) -&gt; None:
+        n = 20
+        expr = Or(Var(0), Var(19))
+        node = compile_expr_to_cm_ir(expr)
+    
+        with self.assertRaises(ValueError):
+&gt;           materialize_hybrid_no_reinflate(
+                node,
+                [f"x{i}" for i in range(n)],
+                fixed={},
+                hybrid_threshold=7,
+                max_full_output_vars=16,
+            )
+
+tests/test_cm_no_reinflate.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_no_reinflate.CMNoReinflateTests" name="test_no_reinflate_fallback_returns_tt_vector_and_avoids_cm_matrix" time="0.007"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_no_reinflate.CMNoReinflateTests testMethod=test_no_reinflate_fallback_returns_tt_vector_and_avoids_cm_matrix&gt;
+
+    def test_no_reinflate_fallback_returns_tt_vector_and_avoids_cm_matrix(self) -&gt; None:
+        rng = np.random.default_rng(2026)
+        n = 8
+        expr = random_expr(n, rng, max_depth=5, p_unary=0.25)
+        node = compile_expr_to_cm_ir(expr)
+        diag = {}
+&gt;       res = materialize_hybrid_no_reinflate(
+            node,
+            [f"x{i}" for i in range(n)],
+            fixed={},
+            diagnostics=diag,
+            hybrid_threshold=4,
+        )
+
+tests/test_cm_no_reinflate.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='not', key=('NOT', ('OR', ('NOT', ('OR', ('AND', ('VAR', 'x1'), ('VAR', 'x3')), ('VAR', 'x5'))), ('XOR', (...R', 'x2'), vars=('x2',), const_value=None, op='', args=(), var_name='x2')), var_name='')), var_name=''),), var_name='')
+vars_all = ['x0', 'x1', 'x2', 'x3', 'x4', 'x5', ...], fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_cm_no_reinflate.CMNoReinflateTests" name="test_no_reinflate_returns_packed_bitset_and_matches_eval_expr_tt" time="0.001"><failure message="ModuleNotFoundError: No module named 'cmbench.backends'">self = &lt;test_cm_no_reinflate.CMNoReinflateTests testMethod=test_no_reinflate_returns_packed_bitset_and_matches_eval_expr_tt&gt;
+
+    def test_no_reinflate_returns_packed_bitset_and_matches_eval_expr_tt(self) -&gt; None:
+        n = 4
+        expr = Or(And(Var(0), Var(1)), Xor(Var(2), Var(3)))
+        node = compile_expr_to_cm_ir(expr)
+        diag = {}
+&gt;       res = materialize_hybrid_no_reinflate(
+            node,
+            [f"x{i}" for i in range(n)],
+            fixed={},
+            diagnostics=diag,
+            hybrid_threshold=7,
+        )
+
+tests/test_cm_no_reinflate.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = CMNode(kind='binary', key=('OR', ('AND', ('VAR', 'x0'), ('VAR', 'x1')), ('XOR', ('VAR', 'x2'), ('VAR', 'x3'))), vars=(...='var', key=('VAR', 'x3'), vars=('x3',), const_value=None, op='', args=(), var_name='x3')), var_name='')), var_name='')
+vars_all = ['x0', 'x1', 'x2', 'x3'], fixed = {}
+
+    def materialize_hybrid_no_reinflate(
+        node: CMNode,
+        vars_all: Sequence[str],
+        fixed: Optional[Dict[str, int]] = None,
+        *,
+        diagnostics: Optional[Dict[str, Any]] = None,
+        hybrid_threshold: int = 7,
+        allow_reduced_output: bool = False,
+        max_full_output_vars: Optional[int] = None,
+        output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+        flat_eval: Optional[bool] = None,
+        words_eval: Optional[bool] = None,
+        flat_fast_path: bool = True,
+    ) -&gt; FinalNoReinflateResult:
+        """Hybrid materialization that avoids dense CM reinflation.
+    
+        If the live variable count is &lt;= ``hybrid_threshold`` we return a packed bitset directly.
+        Otherwise we fall back to NumPy IR materialization and only produce a 1D TT vector
+        (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+        controlled before/after measurements; it does not change result semantics.
+        """
+        # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+        # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+        # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+        use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+        use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+&gt;       from cmbench.backends.bitset_engine import select_cm_node_engine
+E       ModuleNotFoundError: No module named 'cmbench.backends'
+
+cm_ir.py:2032: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_program_metrics" name="test_unary_not_counts" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_binary_ops_count_one_combine" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_imp_eqv_expand_to_multiple_primitives" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_nary_instruction_counts_arity_minus_one" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_one_ary_instruction_is_a_copy_in_words_executor" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_xor_chain_cm_vs_raw_executed_ops_agree" time="0.001" /><testcase classname="tests.test_program_metrics" name="test_mixed_expression_metrics_are_deterministic" time="0.000" /><testcase classname="tests.test_program_metrics" name="test_program_metrics_is_observationally_pure" time="0.000" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_all_generated_cases_match_simulated_sat_contract" time="4.500" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_binding_records_actual_file_hash_not_just_package_version" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_controller_rechecks_native_result_identity_counts_sessions_witness_and_core" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_core_must_be_subset_and_really_unsatisfiable" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_cudd_fixed_order_disables_before_construction_and_exports_same_manager" time="0.023" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_cudd_group_sifting_records_actual_reordered_graph_not_fixed_rebuild" time="0.006" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_cudd_hidden_construction_search_and_unknown_reorder_modes_refused" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_cudd_wrong_graph_order_or_answer_is_refused" time="0.006" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_d4_command_requires_exact_binary_and_declared_cnf_universe" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_d4_count_is_not_a_complete_vector_or_resident_query" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_d4_duplicate_conflicting_noninteger_and_oversized_output_refused" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_invalid_sessions_refuse_before_solver_construction" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_missing_binding_and_unreviewed_version_are_explicit_refusals" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_partial_invalid_or_duplicate_witness_is_refused" time="0.002" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_sat_complete_vector_and_undo_sessions_cover_boundaries" time="1.033" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_sat_unknown_answer_is_not_false_or_success" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_source_only_binding_is_not_native_availability" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_unused_variables_expand_output_and_witness_universe" time="0.001" /><testcase classname="tests.test_cm_native_contracts.NativeContractTests" name="test_wrong_sat_vector_is_refused" time="0.001" /></testsuite></testsuites>
