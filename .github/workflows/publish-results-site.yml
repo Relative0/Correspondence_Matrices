@@ -1,0 +1,51 @@
+name: Publish results site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Prepare current results site
+        shell: bash
+        run: |
+          mkdir -p _site
+          site_dir="deliverables_n22_24/master_explainer_2026_08_03"
+          cp "$site_dir/index.html" _site/
+          cp "$site_dir/layperson.html" _site/
+          cp "$site_dir/investor.html" _site/
+          cp "$site_dir/expert.html" _site/
+          cp "$site_dir/usecases.html" _site/
+          cp "$site_dir/feature-model-evidence.html" _site/
+          cp "$site_dir/og.png" _site/
+          touch _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
