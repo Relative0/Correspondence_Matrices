@@ -67,8 +67,6 @@ app.append(h("header", { class: "page" }, [
     ["layperson.html", "Simple One-Pager", "A plain-language introduction and decision guide."],
     ["usecases.html", "CM Use Cases", "How CM might help in hardware, AI, biology, quantum-support logic, computing, security, and other fields."],
     ["feature-model-evidence.html", "Results & audit", "Real feature-model results, independent correctness checks, measurement gaps, and reusable evidence."],
-    ["investor.html", "Investor Brief", "What is proven, what remains open, and what the next evidence would buy."],
-    ["expert.html", "Technical Summary", "Dense benchmarks, intervals, protocols, corrections, and provenance."],
   ].forEach(([href, title, description]) => nav.append(h("a", { href }, [
     h("b", { text: title }), h("span", { text: description }),
   ])));
@@ -92,13 +90,23 @@ app.append(tiles([
 app.append(projectStatePanel());
 app.append(evidenceBoundary());
 app.append(featureModelAuditUpdate());
-app.append(banner("note", "Latest verified research · 2026-08-29", [
+app.append(banner("note", "Latest public-repository evidence · 2026-08-30", [
+  P("<b>C16 exact-screened CM/GF(2) tail:</b> the screened and exhaustive paths returned the same best exact artifact for " +
+    "{{recognition.c16.source_cases}}/{{recognition.c16.source_cases}} source cases and " +
+    "{{recognition.c16.controls}}/{{recognition.c16.controls}} controls. Across " +
+    "{{recognition.c16.rows}} balanced local timing rows, the screened whole path measured " +
+    "{{recognition.c16.whole_path_speedup}} faster; the minimum individual case was " +
+    "{{recognition.c16.minimum_case_speedup}}, so production promotion remains disabled. " +
+    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md\">Read the C16 report and its exact boundary</a>."),
+  "<b>Comparative-program status:</b> the P6 corpus freeze and P7 offline/input gates advanced after the persistence work, " +
+    "but they do not support a new comparative timing claim. " +
+    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/COMPARATIVE-PLAN-EXECUTION-STATUS-20260829.md\">Read the current execution status</a>.",
   "<b>Fresh-process structural reload is now verified:</b> CM, structural CSE, direct CNF and a portable <code>dd.autoref</code> ROBDD control " +
     "reproduced both exact bounded relations in 256/256 counterbalanced cells using separate supervised build and reload/query processes. " +
     "Native CUDD BDD, CUDD ZDD and d4 d-DNNF persistence remain explicit refusals; this is not a performance, RSS, full-model or independent-replication claim.",
   "The companion provenance audit records 48 generated task controls and <b>zero observed natural sessions</b>. " +
     "Public PROFilE endpoint configurations are useful candidate inputs, but do not contain documented event order. " +
-    "<a href=\"../../docs/research/FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md\">Read the fresh-process evidence, admissions and exact claim boundary</a>.",
+    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md\">Read the fresh-process evidence, admissions and exact claim boundary</a>.",
 ]));
 app.append(currentEvidenceUpdate("master"));
 

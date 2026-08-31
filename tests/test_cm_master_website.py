@@ -74,7 +74,7 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         self.assertIn("with its clustered interval spanning parity", text)
         self.assertNotIn("replicated on real circuits and on {{kernel.pod.count}}", text)
 
-    def test_master_links_latest_fresh_process_persistence_evidence(self):
+    def test_master_links_latest_public_repository_evidence(self):
         text = (SITE / "index.html").read_text(encoding="utf-8")
         report = ROOT / "docs" / "research" / "FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md"
         summary = json.loads(
@@ -88,7 +88,14 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
         )
         self.assertTrue(report.is_file())
-        self.assertIn("Latest verified research · 2026-08-29", text)
+        c16 = json.loads(
+            (ROOT / "docs" / "recognition" / "learning_milestone_c16_exact_screened_gf2_results.json")
+            .read_text(encoding="utf-8")
+        )
+        self.assertIn("Latest public-repository evidence · 2026-08-30", text)
+        self.assertIn("C16 exact-screened CM/GF(2) tail", text)
+        self.assertIn("LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md", text)
+        self.assertIn("COMPARATIVE-PLAN-EXECUTION-STATUS-20260829.md", text)
         self.assertIn("256/256 counterbalanced cells", text)
         self.assertIn("zero observed natural sessions", text)
         self.assertIn("FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md", text)
@@ -96,6 +103,28 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         self.assertEqual(summary["exact_relation_rows"], 512)
         self.assertEqual(summary["refused_arms"], ["cudd_bdd", "cudd_zdd", "d4_ddnnf"])
         self.assertFalse(summary["performance_claim_permitted"])
+        self.assertFalse(c16["production_promotion"])
+        self.assertEqual(c16["verification"]["source_cases_replayed"], 40)
+        self.assertEqual(c16["verification"]["controls_replayed"], 12)
+        self.assertEqual(c16["verification"]["measurement_rows_checked"], 360)
+
+    def test_master_focuses_top_navigation_and_keeps_specialist_views_at_bottom(self):
+        template = (SITE / "cm_master_template.html").read_text(encoding="utf-8")
+        top = template.split("/* headline tiles", 1)[0]
+        bottom = template.split("/* ============================================================ SECTION 8 */", 1)[1]
+        self.assertIn('"Simple One-Pager"', top)
+        self.assertIn('"CM Use Cases"', top)
+        self.assertIn('"Results & audit"', top)
+        self.assertNotIn('"Investor Brief"', top)
+        self.assertNotIn('"Technical Summary"', top)
+        self.assertIn('"Investor Brief"', bottom)
+        self.assertIn('"Technical Summary"', bottom)
+
+    def test_github_pages_routes_evidence_files_to_the_repository(self):
+        shared = (SITE / "cm_master_shared.js").read_text(encoding="utf-8")
+        self.assertIn("function hostedEvidenceHref(href)", shared)
+        self.assertIn("https://github.com/Relative0/Correspondence_Matrices/blob/main/", shared)
+        self.assertIn('t === "a" && k === "href"', shared)
 
     def test_use_case_page_keeps_hypotheses_and_boundaries_visible(self):
         text = (SITE / "usecases.html").read_text(encoding="utf-8")

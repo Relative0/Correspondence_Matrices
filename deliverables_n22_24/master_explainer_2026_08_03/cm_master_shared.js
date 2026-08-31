@@ -12,6 +12,15 @@
 const S1 = "var(--series-1)", S2 = "var(--series-2)", S3 = "var(--series-3)", S4 = "var(--series-4)";
 
 /* ---------------------------------------------------------------- dom */
+const REPOSITORY_BLOB_ROOT = "https://github.com/Relative0/Correspondence_Matrices/blob/main/";
+const SITE_SOURCE_ROOT = "deliverables_n22_24/master_explainer_2026_08_03/";
+function hostedEvidenceHref(href) {
+  if (typeof href !== "string" || typeof location === "undefined") return href;
+  if (location.hostname !== "relative0.github.io" || !location.pathname.startsWith("/Correspondence_Matrices/")) return href;
+  if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(href) || /\.html(?:[?#].*)?$/i.test(href)) return href;
+  const resolved = new URL(href, "https://repository.invalid/" + SITE_SOURCE_ROOT);
+  return REPOSITORY_BLOB_ROOT + resolved.pathname.replace(/^\//, "") + resolved.search + resolved.hash;
+}
 const el = (t, a = {}, kids = []) => {
   const n = document.createElementNS("http://www.w3.org/2000/svg", t);
   for (const k in a) if (a[k] !== null && a[k] !== undefined) n.setAttribute(k, a[k]);
@@ -23,6 +32,7 @@ const h = (t, a = {}, kids = []) => {
   for (const k in a) {
     if (k === "html") n.innerHTML = a[k];
     else if (k === "text") n.textContent = a[k];
+    else if (t === "a" && k === "href") n.setAttribute(k, hostedEvidenceHref(a[k]));
     else n.setAttribute(k, a[k]);
   }
   for (const c of [].concat(kids)) if (c) n.append(c);
@@ -51,6 +61,7 @@ const FMT = {
   x0: (v) => commas(Math.round(v)) + "×",
   x1: (v) => Number(v).toFixed(1) + "×",
   x2: (v) => Number(v).toFixed(2) + "×",
+  x3: (v) => Number(v).toFixed(3) + "×",
   xcomma: (v) => commas(Math.round(v)) + "×",
   pct0: (v) => Math.round(v) + "%",
   pct1: (v) => Number(v).toFixed(1) + "%",

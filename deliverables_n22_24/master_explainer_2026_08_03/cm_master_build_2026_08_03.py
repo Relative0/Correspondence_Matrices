@@ -1,4 +1,4 @@
-"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-28).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-30).
 
 Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
 campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
@@ -162,6 +162,7 @@ P_LATE_EVIDENCE = HERE / "website_audit_2026-08-27" / "ACCEPTED-LATE-EVIDENCE.js
 
 P_CONTENT = HERE / "cm_master_content_2026_08_03.json"
 P_USE_CASE_CATALOG = HERE / "use_case_benchmarks_2026-08-27" / "CM-USE-CASE-BENCHMARK-CATALOG.json"
+P_C16_RESULTS = REPO / "docs" / "recognition" / "learning_milestone_c16_exact_screened_gf2_results.json"
 
 # ---------------------------------------------------------------- load
 
@@ -216,6 +217,7 @@ dpr3_summary = load_json(P_DPR3_SUMMARY)
 late_evidence = load_json(P_LATE_EVIDENCE)
 content = load_json(P_CONTENT)
 use_case_catalog = load_json(P_USE_CASE_CATALOG)
+c16_results = load_json(P_C16_RESULTS)
 
 D: dict = {}
 
@@ -228,6 +230,29 @@ def num(key: str, value, fmt: str, prov: str, note: str = "") -> None:
     if key in NUM:
         raise SystemExit("duplicate number token: %s" % key)
     NUM[key] = {"value": value, "fmt": fmt, "prov": prov, "note": note}
+
+
+# The public master page points readers to the latest measured recognition
+# milestone in main. Keep its headline figures on the same provenance-bearing
+# number channel as the older benchmark results.
+if c16_results["production_promotion"] is not False:
+    raise SystemExit("C16 public status unexpectedly permits production promotion")
+if c16_results["verification"]["status"] != "verified":
+    raise SystemExit("C16 public result is not independently verified")
+num("recognition.c16.source_cases", c16_results["verification"]["source_cases_replayed"], "int",
+    "%s :: verification.source_cases_replayed" % rel(P_C16_RESULTS))
+num("recognition.c16.controls", c16_results["verification"]["controls_replayed"], "int",
+    "%s :: verification.controls_replayed" % rel(P_C16_RESULTS))
+num("recognition.c16.rows", c16_results["verification"]["measurement_rows_checked"], "int",
+    "%s :: verification.measurement_rows_checked" % rel(P_C16_RESULTS))
+num("recognition.c16.whole_path_speedup",
+    c16_results["summary"]["speedup"]["screened_whole_path_over_exhaustive"], "x3",
+    "%s :: summary.speedup.screened_whole_path_over_exhaustive" % rel(P_C16_RESULTS),
+    "local, task-equivalent whole path; timing is machine-specific")
+num("recognition.c16.minimum_case_speedup",
+    c16_results["summary"]["speedup"]["minimum_case_speedup"], "x3",
+    "%s :: summary.speedup.minimum_case_speedup" % rel(P_C16_RESULTS),
+    "minimum individual local case; below parity")
 
 
 # ================================================================= E1
