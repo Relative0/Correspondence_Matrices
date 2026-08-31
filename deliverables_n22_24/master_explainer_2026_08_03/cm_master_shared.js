@@ -178,9 +178,12 @@ function card(o) {
     graphTargets.push(w); c.append(w);
   }
   if (o.visual) {
-    o.visual.classList.add("graph-click");
-    o.visual.setAttribute("title", "Click for explanation and analysis");
-    graphTargets.push(o.visual); c.append(o.visual);
+    if (!o.visualOwnInteraction) {
+      o.visual.classList.add("graph-click");
+      o.visual.setAttribute("title", "Click for explanation and analysis");
+      graphTargets.push(o.visual);
+    }
+    c.append(o.visual);
   }
   if (o.table) {
     const d = h("details");
@@ -1009,12 +1012,59 @@ function decisionFlow(nodes) {
 function decisionAtlasVisual(items) {
   const wrap = h("div", { class: "decision-atlas" });
   items.forEach(it => {
-    const c = h("div", { class: "decision-mini" });
+    const dialogId = `decision-atlas-${it.n}-dialog`;
+    const titleId = `${dialogId}-title`;
+    const c = h("button", {
+      class: "decision-mini", type: "button", "aria-haspopup": "dialog",
+      "aria-controls": dialogId, title: `Open evidence for ${it.question}`,
+    });
     c.append(h("div", { class: "decision-num", text: it.n }));
-    c.append(h("h4", { text: it.question }));
+    c.append(h("span", { class: "decision-question", text: it.question }));
     c.append(h("div", { class: "decision-answer", text: it.answer }));
     c.append(h("p", { html: it.evidence }));
+    c.append(h("span", { class: "decision-open", text: "Evidence, why, and boundary →" }));
     wrap.append(c);
+
+    const dialog = h("dialog", {
+      class: "analysis-dialog decision-dialog", id: dialogId, "aria-labelledby": titleId,
+    });
+    const shell = h("div", { class: "analysis-shell" });
+    const head = h("div", { class: "analysis-head" }, [
+      h("div", {}, [
+        h("p", { class: "scope", text: `Decision ${it.n}` }),
+        h("h2", { id: titleId, text: `${it.question}: ${it.answer}` }),
+      ]),
+    ]);
+    const close = h("button", {
+      class: "analysis-close", type: "button", "aria-label": `Close decision ${it.n}`,
+      text: "Close",
+    });
+    head.append(close); shell.append(head);
+    [
+      ["Evidence", it.evidence],
+      ["Why", it.why],
+      ["What was tested", it.tested],
+      ["Decision boundary", it.boundary],
+    ].forEach(([title, body]) => shell.append(h("div", { class: "analysis-note" }, [
+      h("h3", { text: title }), h("p", { html: P(body) }),
+    ])));
+    if (it.provenance) {
+      const provenance = h("details", { class: "analysis-data" });
+      provenance.append(h("summary", { text: "Data provenance" }));
+      const ul = h("ul");
+      it.provenance.forEach(p =>
+        ul.append(h("li", { html: `<code>${p.replace("::", "</code> :: <code>")}</code>` })));
+      provenance.append(ul); shell.append(provenance);
+    }
+    dialog.append(shell); document.body.append(dialog);
+    const open = () => {
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+    };
+    c.addEventListener("click", open);
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener("close", () => c.focus());
   });
   return wrap;
 }
@@ -1124,25 +1174,60 @@ FIG.decisionAtlas = () => {
   const wrapRows = DATA.e6_wrapper_ratio.rows;
   const be = DATA.e11_breakeven;
   const engines = DATA.e15_engines.rows;
+  const engineMeta = DATA.e15_engines.meta;
+  const cuddRows = DATA.e12_cudd.rows;
   const extract = DATA.e12_cudd.extract_vs_kernel.map(r => r.factor);
+  const cuddBuildVsCmPrep = cuddRows.map(r => r.cudd_build_us / r.cm_prep_us);
+  const cuddNodes = cuddRows.map(r => r.cudd_dag_size);
   const flatExternal = DATA.e2_kernel_vs_cse_flat.rows.find(r => r.group === "external");
   const flatWins = engines.filter(r => r.fastest === "flat_bigint").length;
   const wordsWins = engines.filter(r => r.fastest === "words").length;
   const items = [
     { n: "01", question: "One answer", answer: "Use BitSet",
       evidence: `BitSet led at all ${wrapRows.length} measured supports; even cached CM took ` +
-        `${f(Math.min(...wrapRows.map(r => r.cached_median)), 2)}–${f(Math.max(...wrapRows.map(r => r.cached_median)), 2)}× as long.` },
+        `${f(Math.min(...wrapRows.map(r => r.cached_median)), 2)}–${f(Math.max(...wrapRows.map(r => r.cached_median)), 2)}× as long.`,
+      why: "This task asks for one complete packed Boolean vector. With no reuse to repay compilation and wrapper work, BitSet's lower setup cost stayed ahead.",
+      tested: `${wrapRows.reduce((sum, r) => sum + r.n, 0)} synthetic formulas: ${wrapRows[0].n} at each of ` +
+        `${wrapRows.length} supports (live_k=${wrapRows.map(r => r.live_k).join(", ")}). The headline uses cached CM, its strongest measured whole-call case.`,
+      boundary: "Choose BitSet for one full-vector result in this measured Python wrapper. This result does not rank canonical graphs, satisfiability, partial contexts, or workloads that reuse compiled state.",
+      provenance: DATA.e6_wrapper_ratio.provenance },
     { n: "02", question: "The same answer repeatedly", answer: "Measure reuse first",
       evidence: `Against the matched plain-CSE baseline, the finite median moves from ` +
-        `${FMT.num1s(be.synthetic.median_finite)} synthetic to ${FMT.num1s(be.epfl_vs_plain_cse.median_finite)} real-circuit evaluations.` },
+        `${FMT.num1s(be.synthetic.median_finite)} synthetic to ${FMT.num1s(be.epfl_vs_plain_cse.median_finite)} real-circuit evaluations.`,
+      why: "Break-even is the extra preparation cost divided by the positive saving per evaluation. If that saving is absent, no amount of reuse repays preparation, so a single fixed threshold would be misleading.",
+      tested: `${be.synthetic.n_total} synthetic formulas and ${be.epfl_vs_plain_cse.n_total} EPFL AND/INV cones, ` +
+        "with both finite medians compared against the same plain structural-CSE baseline.",
+      boundary: `${be.epfl_vs_plain_cse.n_never} of ${be.epfl_vs_plain_cse.n_total} real cones never broke even against plain CSE. ` +
+        `Against the stronger CSE-flat baseline, ${be.epfl.n_never} of ${be.epfl.n_total} never broke even and the finite median was ${FMT.num1s(be.epfl.median_finite)}. Measure the actual workload.`,
+      provenance: DATA.e11_breakeven.provenance },
     { n: "03", question: "Choosing an internal engine", answer: "Use workload evidence",
       evidence: `Flat big-integer won ${flatWins} of ${engines.length} measured supports; word-packed won ` +
-        `${wordsWins}, at live_k=${engines.find(r => r.fastest === "words").live_k}.` },
-    { n: "04", question: "Canonical symbolic questions", answer: "Use CUDD",
-      evidence: `It builds a compact graph; producing the complete explicit answer vector cost ` +
-        `${FMT.x0(Math.min(...extract))}–${FMT.xcomma(Math.max(...extract))} the CM kernel.` },
+        `${wordsWins}, at live_k=${engines.find(r => r.fastest === "words").live_k}.`,
+      why: "A flat big integer applies each Boolean operation to one packed object. Word packing adds chunk bookkeeping, and that overhead was repaid only at the largest measured support.",
+      tested: `${engineMeta.n_formulas} synthetic formulas across ${engines.length} supports, ${engineMeta.rounds} steady-state rounds each; ` +
+        "environments and programs were already built before timing.",
+      boundary: "This selects among internal CM execution kernels for this synthetic steady-state corpus. It does not validate an automatic selector or establish the fastest cold, end-to-end wrapper.",
+      provenance: DATA.e15_engines.provenance },
+    { n: "04", question: "Canonical symbolic questions", answer: "CUDD for the canonical graph",
+      evidence: `CUDD produced exact ${Math.min(...cuddNodes)}–${Math.max(...cuddNodes)}-node ROBDDs. When both methods instead had to return the same complete vector, ` +
+        `the CM kernel was ${FMT.x0(Math.min(...extract))}–${FMT.xcomma(Math.max(...extract))} faster than CUDD enumeration.`,
+      why: "A canonical ROBDD under a fixed variable order is CUDD's native artifact; it can preserve Boolean structure without listing every assignment. CM's native result is the explicit packed vector. CUDD is the right answer for the graph, while CM beat CUDD enumeration in this pairwise full-vector kernel comparison; BitSet still led the measured one-shot wrapper.",
+      tested: `${DATA.e12_cudd.integrity.n_rows} synthetic formulas at live_k=${cuddRows.map(r => r.live_k).join(", ")}; ` +
+        `fresh CUDD manager creation and variable declarations were charged. CUDD build took ${us(Math.min(...cuddRows.map(r => r.cudd_build_us)))}–${us(Math.max(...cuddRows.map(r => r.cudd_build_us)))} ` +
+        `(${FMT.x1(Math.min(...cuddBuildVsCmPrep))}–${FMT.x1(Math.max(...cuddBuildVsCmPrep))} CM preparation), while full extraction took ` +
+        `${us(Math.min(...cuddRows.map(r => r.cudd_extract_full_us)))}–${us(Math.max(...cuddRows.map(r => r.cudd_extract_full_us)))}. All explicit outputs matched exactly.`,
+      boundary: "There is no universal CUDD-versus-CM winner: choose by required artifact and timing boundary. For one full vector, BitSet led the measured wrapper; CM's advantage here is specifically over CUDD enumeration after preparation. A later real feature-model audit passed saved-artifact correctness but labels its performance provisional because cold construction and warm first-touch windows were not matched.",
+      provenance: [
+        ...DATA.e12_cudd.provenance,
+        "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-INDEPENDENCE-AUDIT-2026-08-27.md :: performance status and measurement-gap register",
+      ] },
     { n: "05", question: "Real AND/INV circuits", answer: "Expect parity with a strong compiler",
-      evidence: `External CM ÷ CSE-flat was ${f(flatExternal.value, 4)}, with its circuit-clustered interval spanning parity.` },
+      evidence: `External CM ÷ CSE-flat was ${f(flatExternal.value, 4)} ` +
+        `[${f(flatExternal.lo, 4)}, ${f(flatExternal.hi, 4)}], so its circuit-clustered interval spans parity.`,
+      why: "A sharing-aware compiled baseline removes redundant structural work before evaluation. On these AND/INV cones, the remaining packed kernels did essentially the same work, so the apparent CM advantage disappeared.",
+      tested: `${be.epfl.n_total} EPFL AND/INV cones from ${DATA.e4_epfl_per_circuit.n_circuits} circuits, using the blocked primary schedule and ${flatExternal.basis}.`,
+      boundary: `This is external validation on one circuit suite, not a universal compiler result. CM preparation was ${FMT.x2(be.epfl.prep_multiple_geomean)} CSE-flat preparation, and ${be.epfl.n_never} of ${be.epfl.n_total} cones never broke even.`,
+      provenance: [...DATA.e2_kernel_vs_cse_flat.provenance, ...DATA.e11_breakeven.provenance] },
   ];
   return card({
     id: "fig-decision-atlas",
@@ -1151,8 +1236,9 @@ FIG.decisionAtlas = () => {
     caption: "The answer changes with the artifact you need and where you draw the timing boundary. This is the " +
       "shortest honest version of section 4; the full charts immediately below show the underlying measurements.",
     visual: decisionAtlasVisual(items),
-    table: table(["situation", "answer", "evidence signal"],
-      items.map(it => [it.question, it.answer, it.evidence])),
+    visualOwnInteraction: true,
+    table: table(["situation", "answer", "evidence signal", "why"],
+      items.map(it => [it.question, it.answer, it.evidence, it.why])),
     prov: [
       ...DATA.e6_wrapper_ratio.provenance,
       ...DATA.e11_breakeven.provenance,

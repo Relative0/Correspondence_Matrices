@@ -126,6 +126,30 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         self.assertIn("https://github.com/Relative0/Correspondence_Matrices/blob/main/", shared)
         self.assertIn('t === "a" && k === "href"', shared)
 
+    def test_decision_atlas_has_five_independent_why_dialogs(self):
+        shared = (SITE / "cm_master_shared.js").read_text(encoding="utf-8")
+        atlas = shared.split("FIG.decisionAtlas = () => {", 1)[1].split("FIG.assignmentGrowth", 1)[0]
+        self.assertIn('class: "analysis-dialog decision-dialog"', shared)
+        self.assertIn('visualOwnInteraction: true', atlas)
+        self.assertIn('["Why", it.why]', shared)
+        self.assertEqual(len(re.findall(r"\bwhy:", atlas)), 5)
+        self.assertIn('table(["situation", "answer", "evidence signal", "why"]', atlas)
+        self.assertIn('answer: "CUDD for the canonical graph"', atlas)
+        self.assertIn("the CM kernel was", atlas)
+        self.assertIn("labels its performance provisional", atlas)
+        self.assertNotIn('answer: "Use CUDD"', atlas)
+
+        canonical = next(item for item in self.content["scenarios"]["items"] if item["id"] == "sc-canonical")
+        self.assertIn("canonical ROBDD", canonical["verdict"])
+        self.assertIn("fresh-manager timing is not a CUDD speed win", canonical["technical"][0])
+        self.assertIn("CM the measured winner over CUDD for that endpoint", canonical["technical"][1])
+        self.assertIn("performance provisional", canonical["technical"][3])
+
+        for name in ("index.html", "layperson.html"):
+            text = (SITE / name).read_text(encoding="utf-8")
+            self.assertIn("Evidence, why, and boundary", text, name)
+            self.assertIn("CUDD for the canonical graph", text, name)
+
     def test_use_case_page_keeps_hypotheses_and_boundaries_visible(self):
         text = (SITE / "usecases.html").read_text(encoding="utf-8")
         self.assertIn("Quantum-computing support logic", text)

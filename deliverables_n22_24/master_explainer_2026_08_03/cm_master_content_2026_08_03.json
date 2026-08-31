@@ -707,25 +707,26 @@
         "id": "sc-canonical",
         "n": "04",
         "question": "I need a canonical form, an equivalence check, or a compact symbolic object.",
-        "verdict": "Use CUDD",
-        "verdictWhy": "and do not ask it for an explicit answer table",
+        "verdict": "Use CUDD for a canonical ROBDD; use BitSet for one full vector and measure CM reuse",
+        "verdictWhy": "the required artifact and timing boundary decide the method",
         "lay": [
           "If your real question is “are these two things the same?” or “can I keep asking questions about this rule cheaply?”, you want a standard shape. A decision diagram gives you one: build both rules the same way, testing the inputs in the same sequence, and they are the same rule exactly when the two diagrams come out identical. No need to check every case.",
-          "CUDD is excellent at this, and on the expressions measured here it is cheap to build. But asking it to hand back the complete answer table is asking it to do the one thing its whole structure exists to avoid — it has to walk the diagram once for every combination, and the number of combinations doubles with each variable you add.",
-          "So this is not a contest CUDD loses. It is two different jobs, and the numbers below are the price of converting between them."
+          "In the controlled B5 test, CUDD returned exact compact graphs, but its fresh-manager build was not a speed win over CM preparation. Asking CUDD to hand back the complete answer table then forces it to do the work its graph is designed to avoid: enumerate every combination, doubling the answer count with every added variable.",
+          "The practical answer is task-specific. Use CUDD when the canonical graph or symbolic operations are the deliverable. BitSet led the measured one-shot full-vector wrapper; if you are considering CM for repeated full vectors, measure its break-even against the actual baseline rather than assuming reuse makes it win. The later real feature-model audit passed saved-artifact correctness but keeps its performance rankings provisional because several timing boundaries were not matched."
         ],
         "technical": [
-          "Construction and evaluation are reported as separate panels and are never combined into a single ranking, because they produce different artifacts. Construction: {{cudd.build.min_us}}–{{cudd.build.max_us}} including fresh-manager creation and variable declaration, yielding graphs of {{cudd.nodes.k16}} nodes or fewer.",
-          "Full extraction of the packed vector ran {{cudd.extract.min_x}}–{{cudd.extract.max_x}} slower than the packed kernels ({{cudd.kernel.min_us}}–{{cudd.kernel.max_us}}), reaching {{cudd.extract.k16_ms}} at live_k=16. The growth is structural: extraction is linear in 2<sup>live_k</sup> assignments.",
+          "Construction and evaluation are separate jobs that produce different artifacts. In B5, fixed-natural-order CUDD construction took {{cudd.build.min_us}}–{{cudd.build.max_us}} including fresh-manager creation and variable declaration, yielding exact graphs of {{cudd.nodes.k16}} nodes or fewer. Compactness is the result here; this fresh-manager timing is not a CUDD speed win over CM preparation.",
+          "When the endpoint was changed to the same complete packed vector, CUDD enumeration ran {{cudd.extract.min_x}}–{{cudd.extract.max_x}} slower than the CM kernel ({{cudd.kernel.min_us}}–{{cudd.kernel.max_us}}), reaching {{cudd.extract.k16_ms}} at live_k=16. The growth is structural: full extraction is linear in 2<sup>live_k</sup> assignments. This makes CM the measured winner over CUDD for that endpoint; it is not a claim that CM beats every explicit-vector method, nor that CM is a canonical symbolic replacement for CUDD.",
           "The comparison is like-for-like: <code>robdd_is_cudd</code> held on all {{cudd.rows}} rows and CUDD's full extraction matched the CM packed bits exactly on every one, so both sides genuinely produced the same answer.",
+          "The later real feature-model battery independently replayed the saved bounded relations without correctness mismatches, but its audit labels performance provisional: cold construction was incomplete, some warm comparisons included asymmetric first-touch work, and the historical dirty implementation state was not reconstructable. Those results do not justify a newer blanket speed ranking.",
           "Variable ordering is a real cost centre. Trying ten seeded orders and keeping the smallest graph gave {{bx2.node_saving.min_pct}}–{{bx2.node_saving.max_pct}} fewer nodes at about {{bx2.search_x.min}}–{{bx2.search_x.max}} the single-build cost. CUDD's dynamic reordering never triggered at {{bx2.max_nodes}} nodes and below — its node ratio is exactly {{bx2.reorder_ratio}} — which says this corpus is small for CUDD, not that reordering is ineffective."
         ],
         "figs": [
           "cudd",
           "cuddOrders"
         ],
-        "lay_verdict": "Use CUDD",
-        "lay_verdictWhy": "just don't ask it for the full answer table",
+        "lay_verdict": "Use CUDD for the canonical graph; use BitSet for one full vector and measure CM reuse",
+        "lay_verdictWhy": "the requested output and timing boundary determine the right method",
         "lay_question": "I need to prove two rules are the same, or ask lots of questions about one rule."
       },
       {
