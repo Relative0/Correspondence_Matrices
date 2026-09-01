@@ -1,0 +1,83 @@
+{
+  "authorization_status": "upload_not_authorized_exact_approval_pending",
+  "c31_adjudicator_loaded_from_package": true,
+  "commands": [
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/cm_comparative_c30_prepared_policy.py",
+        "--output",
+        "run-output/c31-prepared-policy-linux-20260901-001",
+        "--blocks",
+        "16",
+        "--max-seconds",
+        "600"
+      ],
+      "returncode": 0,
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 91,
+      "stdout_sha256": "4dfc6de5b7c8c9f1dceae6c36e96a081ba9bf54db22c35dfb2d4735d70f215b9"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "scripts/crse_gf2_prepared_policy_verify.py",
+        "run-output/c31-prepared-policy-linux-20260901-001"
+      ],
+      "returncode": 0,
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 786,
+      "stdout_sha256": "c9c0f4eb4d23533a2e330c2b5c4d758c24236048b5a3e09e253ed888bab5fcae"
+    }
+  ],
+  "independent_verification": "verified",
+  "independent_verification_sha256": "ebd312d82c4c82a34aea2a1bc6330dc360b640d45ee21e55f0015e0f4b879f16",
+  "initial_file_count": 71,
+  "initial_source_bytes": 1153868,
+  "invariants": {
+    "functional_controls": true,
+    "measurement_batches": true,
+    "paired_batches": true,
+    "policy_refit": true,
+    "preparation_charge_conserved": true,
+    "promotion_refused": true,
+    "result_complete": true,
+    "result_exactness": true,
+    "timed_queries": true,
+    "training": true,
+    "verification_status": true,
+    "verified_batches": true,
+    "verified_contexts": true,
+    "verified_controls": true,
+    "verified_exactness": true,
+    "verified_pairs": true,
+    "verified_queries": true
+  },
+  "manifest_sha256": "c6d8757d5b39537c62cd17297641d1b775c771f3077d0fa2fae2f462ef7a4e63",
+  "measurement_batches": 128,
+  "measurements_sha256": "7d5826eeac976062b58055bffa21c6504252606c2202e4251e57c16f6b3d9cba",
+  "paired_batches": 64,
+  "paired_lower_bound_achieved_confidence": 0.9615936279296875,
+  "paired_lower_bound_rank": 5,
+  "prepared_no_regret_gate": true,
+  "protocol_sha256": "0befaabaa784f07a3bd9cea2eecd781a771e5411d8262d3a88e10ef6fb590e1d",
+  "pythonpath_injected": false,
+  "replication_contract_sha256": "0fc1a9fbe7e9b494ff8502e0477599de9e3488f100109ab49d6c28d6d1bf00d2",
+  "result_bytes": 629069,
+  "result_cap_bytes": 16777216,
+  "result_files": 12,
+  "results_sha256": "3478416f158574a9dc379fc390dea239f8dcf52f20edc37602082dd0424c29fc",
+  "schema": "crse-c31-linux-package-local-validation/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "pass",
+  "timed_queries": 1024,
+  "timing_gate_is_observational_not_package_validity": true,
+  "vendored_dd_loaded_from_package": true,
+  "vendored_dd_version": "0.6.0",
+  "verified_context_records": 512,
+  "wall_seconds": 6.595708799985005
+}

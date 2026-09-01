@@ -1,0 +1,97 @@
+{
+  "created_date": "2026-09-01",
+  "cross_machine_requirement": {
+    "all_execution_point_and_paired_lower_gates_required": true,
+    "execution_count_minimum": 2,
+    "physical_machine_count_minimum": 2,
+    "same_host_container_counts_as_second_machine": false
+  },
+  "decision_scope": "Passing makes the frozen candidate eligible for a separate shadow review; it does not authorize shadow or production promotion.",
+  "local_execution": {
+    "execution_id": "c30-windows-20260901-001",
+    "files": {
+      "functional_controls.json": {
+        "bytes": 810,
+        "sha256": "f1b7c874607bf14908e45d904d559cf9793fafd63c2dcad83e377db1db9ad418"
+      },
+      "independent_verification.json": {
+        "bytes": 830,
+        "sha256": "f1ea8544d47c24fbf4e4f8143d6a190895d759396617f0bbab282002d049f374"
+      },
+      "manifest.json": {
+        "bytes": 2520,
+        "sha256": "38b0cd7d4fba8d1c71f5ddfdb7fdfbd3a1fc2fdf2e14147b4933ca56063dcae0"
+      },
+      "measurements.jsonl": {
+        "bytes": 609671,
+        "sha256": "9e6f083c729d3344204d68b4c417fed03c8ad0c160e81df4ec80ba37f86d065f"
+      },
+      "prepared_context.json": {
+        "bytes": 538,
+        "sha256": "6925fb2712c5c2454b362f021a56d4ea46222d19faad34feb964d2b4e222046f"
+      },
+      "results.json": {
+        "bytes": 7957,
+        "sha256": "6ace6d5c81a1a39696b51d3173a43dc021c230967e10c8d57a0db76e24b6a5df"
+      },
+      "run_spec.json": {
+        "bytes": 2126,
+        "sha256": "295b6bad009c474453835951b7694113f802439f7e9a9f8340d106c7652c8b45"
+      }
+    },
+    "physical_machine_id": "windows-desktop-qd8tm7n-c30",
+    "run": "docs/recognition/runs/c30-prepared-policy-windows-20260901-001"
+  },
+  "paired_block_lower_bound": {
+    "achieved_confidence_level": 0.9615936279296875,
+    "method": "exact_distribution_free_one_sided_binomial_order_statistic",
+    "order_statistic_rank_one_based": 5,
+    "requested_confidence_level": 0.95,
+    "sample_count": 16,
+    "sampling_unit": "prespecified_counterbalanced_block",
+    "undercoverage_denominator": 65536,
+    "undercoverage_numerator": 2517
+  },
+  "requirements": {
+    "automatic_shadow_promotion": false,
+    "functional_controls_replayed": 6,
+    "method_substitution": false,
+    "policy_refit": false,
+    "preparation_charge_conserved": true,
+    "production_promotion": false,
+    "production_write": false,
+    "semantic_or_artifact_mismatches": 0,
+    "training": false,
+    "verified_context_records_replayed": 512
+  },
+  "schedule": {
+    "blocks": 16,
+    "materialize_budget": 4,
+    "max_partitions": 64,
+    "measurement_batches": 128,
+    "methods": [
+      "resident_direct_screened",
+      "support_aware_c30_prepared"
+    ],
+    "paired_batches": 64,
+    "query_count": 8,
+    "seed": 20260901,
+    "timed_queries": 1024,
+    "unchanged_from_c30": true,
+    "widths": [
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "schema": "crse-c31-prepared-policy-replication-contract/v1",
+  "source_milestone": "C30",
+  "source_milestone_summary_sha256": "1e59ccb25b3d6fd385a13acf8aa68ad5d989536fc99d6c56ba23bbd026c7c6cb",
+  "thresholds": {
+    "aggregate_paired_median_lower_minimum": 1.0,
+    "aggregate_point_minimum": 1.0,
+    "minimum_width_paired_median_lower_minimum": 0.9,
+    "minimum_width_point_minimum": 0.9
+  }
+}
