@@ -1,0 +1,277 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:07.865
+If the same Boolean subproblem appears twice, why store and compute it twice?
+
+q0002
+00:00:07.865 --> 00:00:18.446
+This episode has one job: CM-IR stores unique computation nodes in a DAG so repeated structure and multiple roots can reuse the same descendants.
+
+q0003
+00:00:18.446 --> 00:00:29.027
+We build on Explicit dense CM versus CM-IR; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:29.027 --> 00:00:39.150
+A CM-IR DAG stores unique nodes and lets several parents or roots point to the same descendant.
+
+q0005
+00:00:39.150 --> 00:00:47.580
+Watch for the label node; it stays attached to the artifact this episode means.
+
+q0006
+00:00:47.580 --> 00:00:56.574
+When we say directed acyclic graph, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:56.574 --> 00:01:06.697
+The term shared descendant receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:06.697 --> 00:01:13.434
+We will keep root visible whenever its definition controls the inference.
+
+q0009
+00:01:13.434 --> 00:01:23.557
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0010
+00:01:23.557 --> 00:01:28.036
+Our stable example is Shared Boolean expression.
+
+q0011
+00:01:28.036 --> 00:01:38.617
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0012
+00:01:38.617 --> 00:01:45.354
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0013
+00:01:45.354 --> 00:01:53.784
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0014
+00:01:53.784 --> 00:01:58.828
+Now isolate CMNode structure inside Shared Boolean expression.
+
+q0015
+00:01:58.828 --> 00:02:08.387
+The example definition and output meaning stay fixed while only the state for CMNode structure changes.
+
+q0016
+00:02:08.387 --> 00:02:17.946
+That matched before-and-after view assigns the visible consequence to CMNode structure, not to a substituted workload.
+
+q0017
+00:02:17.946 --> 00:02:23.554
+Two duplicate syntax branches bend toward one interned CMNode.
+
+q0018
+00:02:23.554 --> 00:02:34.135
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0019
+00:02:34.135 --> 00:02:40.307
+Holding that element fixed lets this episode isolate CMNode structure.
+
+q0020
+00:02:40.307 --> 00:02:50.888
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0021
+00:02:50.888 --> 00:03:01.469
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0022
+00:03:01.469 --> 00:03:11.028
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0023
+00:03:11.028 --> 00:03:21.609
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0024
+00:03:21.609 --> 00:03:32.190
+After the change, the composition makes CMNode structure inspectable: Two duplicate syntax branches bend toward one interned CMNode.
+
+q0025
+00:03:32.190 --> 00:03:38.927
+The invariant is the example's meaning; the variable is CMNode structure.
+
+q0026
+00:03:38.927 --> 00:03:49.508
+If the same output is reached through a different path, the diagram must still identify whether CMNode structure changed.
+
+q0027
+00:03:49.508 --> 00:03:59.067
+The accompanying view makes this step concrete: Two duplicate syntax branches bend toward one interned CMNode.
+
+q0028
+00:03:59.067 --> 00:04:09.648
+Read CMNode structure from input to consequence through one matched view: Two duplicate syntax branches bend toward one interned CMNode; every surrounding entity keeps its prior meaning.
+
+q0029
+00:04:09.648 --> 00:04:20.229
+The diagram treats CMNode structure as a located state, artifact, or boundary rather than as an unexplained method label.
+
+q0030
+00:04:20.229 --> 00:04:30.352
+Watch us build the repeated subtree twice as syntax, assign its structural identity, and intern it once.
+
+q0031
+00:04:30.352 --> 00:04:39.346
+Attach two roots to shared descendants and trace one evaluation without recomputing the shared node.
+
+q0032
+00:04:39.346 --> 00:04:44.390
+Now isolate DAG sharing inside Shared Boolean expression.
+
+q0033
+00:04:44.390 --> 00:04:53.949
+The example definition and output meaning stay fixed while only the state for DAG sharing changes.
+
+q0034
+00:04:53.949 --> 00:05:03.508
+That matched before-and-after view assigns the visible consequence to DAG sharing, not to a substituted workload.
+
+q0035
+00:05:03.508 --> 00:05:11.938
+Reference-count and root badges appear while shared edges remain visibly distinct from tree edges.
+
+q0036
+00:05:11.938 --> 00:05:16.982
+Now isolate multiple roots inside Shared Boolean expression.
+
+q0037
+00:05:16.982 --> 00:05:26.541
+The example definition and output meaning stay fixed while only the state for multiple roots changes.
+
+q0038
+00:05:26.541 --> 00:05:36.100
+That matched before-and-after view assigns the visible consequence to multiple roots, not to a substituted workload.
+
+q0039
+00:05:36.100 --> 00:05:45.094
+An evaluation pulse visits each unique node once and fans the result to both consumers.
+
+q0040
+00:05:45.094 --> 00:05:50.702
+CM-IR is a canonicalized, interned shared DAG intermediate representation.
+
+q0041
+00:05:50.702 --> 00:05:56.310
+Read that statement only within this scope: current implementation.
+
+q0042
+00:05:56.310 --> 00:06:00.225
+Its declared measurement boundary is representation.
+
+q0043
+00:06:00.225 --> 00:06:03.576
+The uncertainty field says none.
+
+q0044
+00:06:03.576 --> 00:06:12.006
+CM-IR interns reusable nodes in a DAG and can retain roots that share descendants.
+
+q0045
+00:06:12.006 --> 00:06:18.178
+Read that statement only within this scope: current CM-IR implementation.
+
+q0046
+00:06:18.178 --> 00:06:28.759
+The nearest confusing lesson is Canonicalization, interning, and normalization; it owns normalization, while this episode owns CMNode structure.
+
+q0047
+00:06:28.759 --> 00:06:39.340
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0048
+00:06:39.340 --> 00:06:45.512
+Holding that element fixed lets this episode isolate DAG sharing.
+
+q0049
+00:06:45.512 --> 00:06:56.093
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0050
+00:06:56.093 --> 00:07:02.265
+Holding that element fixed lets this episode isolate multiple roots.
+
+q0051
+00:07:02.265 --> 00:07:10.695
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0052
+00:07:10.695 --> 00:07:19.125
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0053
+00:07:19.125 --> 00:07:29.248
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0054
+00:07:29.248 --> 00:07:39.371
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0055
+00:07:39.371 --> 00:07:49.952
+After the change, the composition makes DAG sharing inspectable: Reference-count and root badges appear while shared edges remain visibly distinct from tree edges.
+
+q0056
+00:07:49.952 --> 00:07:56.689
+The invariant is the example's meaning; the variable is DAG sharing.
+
+q0057
+00:07:56.689 --> 00:08:07.270
+If the same output is reached through a different path, the diagram must still identify whether DAG sharing changed.
+
+q0058
+00:08:07.270 --> 00:08:17.851
+After the change, the composition makes multiple roots inspectable: An evaluation pulse visits each unique node once and fans the result to both consumers.
+
+q0059
+00:08:17.851 --> 00:08:24.588
+The invariant is the example's meaning; the variable is multiple roots.
+
+q0060
+00:08:24.588 --> 00:08:35.169
+If the same output is reached through a different path, the diagram must still identify whether multiple roots changed.
+
+q0061
+00:08:35.169 --> 00:08:45.750
+The accompanying view makes this step concrete: An evaluation pulse visits each unique node once and fans the result to both consumers.
+
+q0062
+00:08:45.750 --> 00:08:56.331
+The accompanying view makes this step concrete: Reference-count and root badges appear while shared edges remain visibly distinct from tree edges.
+
+q0063
+00:08:56.331 --> 00:09:05.890
+Sharing reduces repeated structure, but the amount of reduction depends on the expression and canonicalization rules.
+
+q0064
+00:09:05.890 --> 00:09:15.449
+Point to the node that would be duplicated in a tree but shared in the DAG.
+
+q0065
+00:09:15.449 --> 00:09:21.621
+One node can serve several consumers without changing the function.
+
+q0066
+00:09:21.621 --> 00:09:31.744
+A common mistake is this: A CM-IR DAG must contain one independent copy of every syntactic subtree.
+
+q0067
+00:09:31.744 --> 00:09:37.916
+Repair it by returning to the owned distinction: CMNode structure.
+
+q0069
+00:09:41.443 --> 00:09:51.566
+Use the episode's central distinction to answer: One node can serve several consumers without changing the function.
+
+q0070
+00:09:51.566 --> 00:09:59.996
+Read CM-IR as a graph of reusable computations, not as a filled truth matrix.

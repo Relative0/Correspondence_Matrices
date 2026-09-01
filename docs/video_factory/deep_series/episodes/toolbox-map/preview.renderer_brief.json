@@ -1,0 +1,946 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy: different questions storyboard preview",
+  "subject": "cm_science",
+  "audience": "Practitioners and technical decision makers",
+  "purpose": "The toolbox should be organized by requested output and task lifecycle, not by one winner ranking or seven compressed tutorials.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "toolbox-map",
+    "episode_content_hash": "d3d6f1be14bb9356251951e9671bf01e7f3aae07690029e10ba62ca26807d0cd",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy: different questions",
+        "caption": "The toolbox should be organized by requested output and task lifecycle, not by one winner ranking or seven compressed tutorials.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "tool output-contract map",
+            "note": "A task question enters a radial router whose exits are labeled by returned…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "Versioned feature model",
+        "caption": "A conceptual product family with Core, Cloud, Local, Analytics, and Export features plus requires/excludes constraints and three adjacent revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "tool output-contract map",
+            "note": "A task question enters a radial router whose exits are labeled by returned…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "Input → transformation → consequence",
+        "caption": "A task question enters a radial router whose exits are labeled by returned artifact, not method prestige.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "tool output-contract map",
+            "note": "A task question enters a radial router whose exits are labeled by returned…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "result",
+        "bullets": [
+          "CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy expose different representation, evaluation, decision, minimization,…",
+          "CM, CM-IR, SAT, BDD, minimization, and symbolic algebra answer different questions and must be compared under matched…",
+          "Current evidence does not support a universal claim that CM beats CSE-flat."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Configuration and feature-model workloads",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "tool output-contract map",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Configuration and feature-model workloads",
+            "note": "This map explains interfaces and retained evidence; it is not a full tutorial or…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 32",
+        "title": "Pause, predict, then reveal",
+        "caption": "Route five requested outputs to eligible tool families and reject one output-mismatched comparison.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "toolbox-output-contracts",
+          "cm-output-contract-boundary",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Tools become comparable only after they are asked to do the same job.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

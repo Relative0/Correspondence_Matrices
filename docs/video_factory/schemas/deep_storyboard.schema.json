@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "episode_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "frame_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fps": {
+          "const": 30
+        },
+        "width": {
+          "const": 1920
+        },
+        "height": {
+          "const": 1080
+        },
+        "interval": {
+          "const": "half-open"
+        },
+        "clock": {
+          "const": "frame-derived"
+        }
+      },
+      "required": [
+        "fps",
+        "width",
+        "height",
+        "interval",
+        "clock"
+      ]
+    },
+    "duration_s": {
+      "type": "number",
+      "minimum": 1
+    },
+    "composition_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "meaningful_state_change_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chapter_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "composition_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "start_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "end_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "beats": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "beat_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "cue_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "start_s": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "end_s": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "primitive": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "visual_system": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "entities": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "state_change": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "claim_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "evidence_status": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "beat_id",
+                "cue_id",
+                "start_s",
+                "end_s",
+                "primitive",
+                "visual_system",
+                "entities",
+                "state_change",
+                "claim_ids",
+                "evidence_status"
+              ]
+            }
+          }
+        },
+        "required": [
+          "scene_id",
+          "chapter_id",
+          "composition_id",
+          "purpose",
+          "start_s",
+          "end_s",
+          "beats"
+        ]
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "video_id",
+    "episode_content_hash",
+    "frame_contract",
+    "duration_s",
+    "composition_count",
+    "meaningful_state_change_count",
+    "scenes",
+    "content_hash"
+  ]
+}

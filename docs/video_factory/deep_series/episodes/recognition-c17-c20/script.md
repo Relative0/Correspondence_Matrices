@@ -1,0 +1,69 @@
+# C17-C20 exact policies: dispatch, transfer, fitting, and compilation
+
+Video ID: `recognition-c17-c20`  
+Episode content identity: `bf534f70083efa2d6acfafbb73395373991514530319e82e1a303506d19bb2d1`  
+Status: **complete narration draft; production candidate pending content approval**
+
+## c01 — C17 exact task dispatch and the charged tiny-case tail
+
+How can the same exact policy look strong in aggregate and still fail the rule needed for safe deployment? This episode has one job: C17-C20 preserve one exact CM/GF(2) artifact while successively exposing dispatcher overhead, independent-source transfer, phase-separated policy fitting, and constant-folded execution; stronger aggregate evidence never erased the declared per-case, freshness, or machine limits. We build on C12-C16 exact dispatch, tail guards, and GF(2) artifacts, Preparation, kernel, wrapper, and end-to-end time; their definitions stay fixed while this lesson adds a new layer. C17-C20 change the selection and evidence boundary around two exact arms; they never let policy advice define the Boolean answer.
+
+Watch for the label exact-arm dispatcher; it stays attached to the artifact this episode means. When we say advice-off fallback, the highlight identifies its layer before we interpret it. The term source-cluster split receives its own visual state so it cannot drift into a neighboring concept. We will keep sealed confirmation visible whenever its definition controls the inference.
+
+A persistent constant-folded policy label marks exactly where that object enters the example. Watch for the label retrospective evidence; it stays attached to the artifact this episode means.
+
+## c02 — C18 independent VTR transfer and the single-round minimum
+
+The next sequence uses Conceptual recognition/decomposition graph as a conceptual teaching example, not as measured benchmark evidence. Our stable example is Conceptual recognition/decomposition graph. A tiny labeled expression graph with a proposed partition, an exact witness path, a rejection/fallback path, and a promotion gate; it is never presented as a measured trace. Keep proposal, exact verification, fallback, and promotion visually stable across CRSE episodes.
+
+We now construct the Conceptual recognition/decomposition graph and name every part before interpreting it. Now isolate C17 charged exact-task dispatcher inside Conceptual recognition/decomposition graph. The example definition and output meaning stay fixed while only the state for C17 charged exact-task dispatcher changes. That matched before-and-after view assigns the visible consequence to C17 charged exact-task dispatcher, not to a substituted workload.
+
+Two exact CM/GF(2) arm lanes feed one artifact-identity checker while a separately metered C17 wrapper exposes aggregate, slow-tail, and minimum gates. Now isolate C18 unchanged-policy VTR transfer inside Conceptual recognition/decomposition graph. The example definition and output meaning stay fixed while only the state for C18 unchanged-policy VTR transfer changes. That matched before-and-after view assigns the visible consequence to C18 unchanged-policy VTR transfer, not to a substituted workload.
+
+A frozen-policy seal crosses from the Yosys-derived lane to a 73-cone VTR source map; exact matches settle before the one-round timing distribution appears. A labeled input graph enters a proposal stage whose job is to suggest a partition or route, not to certify it. Holding that element fixed lets this episode isolate C17 charged exact-task dispatcher. The candidate partition remains visibly provisional until the exact verifier checks its witness conditions.
+
+Holding that element fixed lets this episode isolate C18 unchanged-policy VTR transfer. Proposal, verifier, witness, rejection, fallback, and promotion keep stable shapes across every CRSE episode. A conceptual badge stays on the graph even when a later panel introduces separately sourced measurements. Task routing may select a different exact path while the admitted result and verification gate remain fixed.
+
+Every measured promotion panel names its workload, boundary, uncertainty, and source independently of this teaching graph. The starting state preserves the stable definition: A tiny labeled expression graph with a proposed partition, an exact witness path, a rejection/fallback path, and a promotion gate; it is never presented as a measured trace. After the change, the composition makes C17 charged exact-task dispatcher inspectable: Two exact CM/GF(2) arm lanes feed one artifact-identity checker while a separately metered C17 wrapper exposes aggregate, slow-tail, and minimum gates. The invariant is the example's meaning; the variable is C17 charged exact-task dispatcher.
+
+If the same output is reached through a different path, the diagram must still identify whether C17 charged exact-task dispatcher changed. After the change, the composition makes C18 unchanged-policy VTR transfer inspectable: A frozen-policy seal crosses from the Yosys-derived lane to a 73-cone VTR source map; exact matches settle before the one-round timing distribution appears. The invariant is the example's meaning; the variable is C18 unchanged-policy VTR transfer. If the same output is reached through a different path, the diagram must still identify whether C18 unchanged-policy VTR transfer changed.
+
+The accompanying view makes this step concrete: Two exact CM/GF(2) arm lanes feed one artifact-identity checker while a separately metered C17 wrapper exposes aggregate, slow-tail, and minimum gates. Read C17 charged exact-task dispatcher from input to consequence through one matched view: Two exact CM/GF(2) arm lanes feed one artifact-identity checker while a separately metered C17 wrapper exposes aggregate, slow-tail, and minimum gates; every surrounding entity keeps its prior meaning. The diagram treats C17 charged exact-task dispatcher as a located state, artifact, or boundary rather than as an unexplained method label. Before the consequence appears, predict what C17 charged exact-task dispatcher can change and what the stable example requires it to leave untouched.
+
+When evidence enters, its status badge binds the statement about C17 charged exact-task dispatcher to a source and scope, not to the conceptual drawing alone. The nearest neighboring lesson stays out of focus because its owned question is not needed to explain C17 charged exact-task dispatcher in this sequence. The transfer rule carries C17 charged exact-task dispatcher forward only with the same input definition, exactness gate, and declared output contract. Read C18 unchanged-policy VTR transfer from input to consequence through one matched view: A frozen-policy seal crosses from the Yosys-derived lane to a 73-cone VTR source map; exact matches settle before the one-round timing distribution appears; every surrounding entity keeps its prior meaning.
+
+The diagram treats C18 unchanged-policy VTR transfer as a located state, artifact, or boundary rather than as an unexplained method label. Before the consequence appears, predict what C18 unchanged-policy VTR transfer can change and what the stable example requires it to leave untouched. When evidence enters, its status badge binds the statement about C18 unchanged-policy VTR transfer to a source and scope, not to the conceptual drawing alone. The nearest neighboring lesson stays out of focus because its owned question is not needed to explain C18 unchanged-policy VTR transfer in this sequence.
+
+## c03 — C19 phase-separated work-policy fitting and sealed confirmation
+
+Wrap exhaustive and screened CM/GF(2) behind the C17 task contract, then charge the wrapper separately from the selected exact arm and expose the tiny-case tail failure. Freeze that policy before moving to 73 independently sourced VTR cones, preserving exact artifact identity while keeping the single-round minimum distinct from aggregate transfer. Now isolate C19 phase-separated exact-arm policy inside Conceptual recognition/decomposition graph. The example definition and output meaning stay fixed while only the state for C19 phase-separated exact-arm policy changes.
+
+That matched before-and-after view assigns the visible consequence to C19 phase-separated exact-arm policy, not to a substituted workload. C17-C20 kept exhaustive and screened CM/GF(2) artifacts exact while moving from a guarded dispatcher through independent VTR transfer and a frozen LogikBench work policy to a constant-folded screened selector; aggregate results improved, but per-case, freshness, and machine-scope limits kept production disabled. Read that statement only within this scope: Milestones C17-C20 exact-arm routing and transfer studies. Its declared measurement boundary is whole-task exact arm selection and policy overhead.
+
+The uncertainty field says bounded Windows studies; C18 cross-family, C19 cluster-separated confirmation, C20 retrospective same-machine tail replay. The current CRSE program spans learned proposals, exact subclass recognition, task routing, proved rules, representation dispatch, BDD/SAT guidance, exact verification, negative controls, and explicit promotion decisions. Read that statement only within this scope: current recognition register. Its declared measurement boundary is research-program structure.
+
+The uncertainty field says track completion varies. An accepted path produces an exact witness; a rejected path moves to the safe fallback without changing correctness. Holding that element fixed lets this episode isolate C19 phase-separated exact-arm policy. Changing the proposal mechanism never removes the exact verifier or the fallback path from the contract.
+
+After the change, the composition makes C19 phase-separated exact-arm policy inspectable: A frozen-policy seal crosses from the Yosys-derived lane to a 73-cone VTR source map; exact matches settle before the one-round timing distribution appears. The invariant is the example's meaning; the variable is C19 phase-separated exact-arm policy. If the same output is reached through a different path, the diagram must still identify whether C19 phase-separated exact-arm policy changed. The accompanying view makes this step concrete: A source-cluster wall partitions 96 LogikBench cones into development, validation, and confirmation without any cluster crossing the boundaries.
+
+The accompanying view makes this step concrete: A frozen-policy seal crosses from the Yosys-derived lane to a 73-cone VTR source map; exact matches settle before the one-round timing distribution appears.
+
+## c04 — C20 constant-folded policy and retrospective repeated-tail evidence
+
+Partition 96 LogikBench cones by source cluster into development, validation, and untouched confirmation; fit only exact-arm cost choices and reveal that the selected tree collapses to an always-screened leaf. Now isolate C20 constant-folded retrospective tail replay inside Conceptual recognition/decomposition graph. The example definition and output meaning stay fixed while only the state for C20 constant-folded retrospective tail replay changes. That matched before-and-after view assigns the visible consequence to C20 constant-folded retrospective tail replay, not to a substituted workload.
+
+A compiler folds that leaf into a direct selector, then nine retrospective timing rings replace the earlier one-round outlier without changing the production lock. The nearest confusing lesson is C21-C22 task-matched GF(2): seven methods and a frozen source-packed portfolio; it owns C21 exhaustive-best task contract, while this episode owns C17 charged exact-task dispatcher. The promotion gate is separate from exact verification because a correct result need not satisfy a performance promotion rule. Holding that element fixed lets this episode isolate C20 constant-folded retrospective tail replay.
+
+Negative and not-promoted outcomes remain first-class states rather than disappearing from the research timeline. After the change, the composition makes C20 constant-folded retrospective tail replay inspectable: A compiler folds that leaf into a direct selector, then nine retrospective timing rings replace the earlier one-round outlier without changing the production lock. The invariant is the example's meaning; the variable is C20 constant-folded retrospective tail replay. If the same output is reached through a different path, the diagram must still identify whether C20 constant-folded retrospective tail replay changed.
+
+The accompanying view makes this step concrete: A compiler folds that leaf into a direct selector, then nine retrospective timing rings replace the earlier one-round outlier without changing the production lock.
+
+## c05 — What advanced, what changed, and why production stayed disabled
+
+Compile the frozen leaf into a direct screened call, replay nine balanced rounds over the 11 retrospective C18 small-support controls, and keep the non-fresh same-machine label attached to the improved tail. C19 supplies fresh source-cluster confirmation on one machine, while C20 is a retrospective same-machine replay, so neither licenses a universal production rule. Place wrapper overhead, independent transfer, sealed phase separation, constant folding, and retrospective replay on C17, C18, C19, or C20. C17-C20 turn a promising exact arm into a better-understood policy boundary, not a promoted universal dispatcher.
+
+A common mistake is this: The C20 repeated-tail pass retroactively makes the C18 single-round scout fresh confirmation or promotes the policy. Repair it by returning to the owned distinction: C17 charged exact-task dispatcher.
+
+*[Three-second retrieval pause.]*
+
+Use the episode's central distinction to answer: C17-C20 turn a promising exact arm into a better-understood policy boundary, not a promoted universal dispatcher. Exactness, aggregate speed, per-case regret, source freshness, and machine transfer are five separate gates.

@@ -1,0 +1,193 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:07.808
+If rows can be computed independently, why not always send every row to another worker?
+
+q0002
+00:00:07.808 --> 00:00:16.994
+This episode has one job: Parallel CM partitions eligible materialization work into deterministic chunks, then reassembles the same exact output while charging scheduling and data-movement overhead.
+
+q0003
+00:00:16.994 --> 00:00:26.180
+We build on Hybrid versus partial-hybrid materialization; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:26.180 --> 00:00:33.498
+Parallel materialization divides eligible output work into chunks and deterministically reconstructs the same result.
+
+q0005
+00:00:33.498 --> 00:00:41.306
+Watch for the label parallel materialization; it stays attached to the artifact this episode means.
+
+q0006
+00:00:41.306 --> 00:00:48.624
+When we say work chunk, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:48.624 --> 00:00:57.412
+The term shared memory receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:00:57.412 --> 00:01:03.750
+We will keep deterministic assembly visible whenever its definition controls the inference.
+
+q0009
+00:01:03.750 --> 00:01:12.538
+The next sequence uses Four-variable truth layout as a conceptual teaching example, not as measured benchmark evidence.
+
+q0010
+00:01:12.538 --> 00:01:16.427
+Our stable example is Four-variable truth layout.
+
+q0011
+00:01:16.427 --> 00:01:25.613
+F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.
+
+q0012
+00:01:25.613 --> 00:01:32.931
+Carry assignments, live support, explicit CM, packed truth vectors, and exact output across episodes.
+
+q0013
+00:01:32.931 --> 00:01:40.249
+We now construct the Four-variable truth layout and name every part before interpreting it.
+
+q0014
+00:01:40.249 --> 00:01:48.547
+Partition matrix rows into ordered chunks, send them through worker lanes, and keep global indices attached.
+
+q0015
+00:01:48.547 --> 00:01:56.355
+Reassemble chunks in deterministic order while an overhead band shows scheduling, transfer, and merge work.
+
+q0016
+00:01:56.355 --> 00:02:01.224
+Now isolate parallel work eligibility inside Four-variable truth layout.
+
+q0017
+00:02:01.224 --> 00:02:10.012
+The example definition and output meaning stay fixed while only the state for parallel work eligibility changes.
+
+q0018
+00:02:10.012 --> 00:02:18.800
+That matched before-and-after view assigns the visible consequence to parallel work eligibility, not to a substituted workload.
+
+q0019
+00:02:18.800 --> 00:02:24.159
+A matrix gains chunk boundaries only after minimum-work guards pass.
+
+q0020
+00:02:24.159 --> 00:02:29.028
+Now isolate chunk/worker partition inside Four-variable truth layout.
+
+q0021
+00:02:29.028 --> 00:02:37.816
+The example definition and output meaning stay fixed while only the state for chunk/worker partition changes.
+
+q0022
+00:02:37.816 --> 00:02:46.604
+That matched before-and-after view assigns the visible consequence to chunk/worker partition, not to a substituted workload.
+
+q0023
+00:02:46.604 --> 00:02:51.963
+Ordered tiles enter worker swim lanes with stable row-index tags.
+
+q0024
+00:02:51.963 --> 00:03:01.149
+Parallel CM partitions eligible materialization work and deterministically assembles the result; parallel availability does not imply a speedup after scheduling and transport overhead.
+
+q0025
+00:03:01.149 --> 00:03:06.997
+Read that statement only within this scope: current parallel CM implementation.
+
+q0026
+00:03:06.997 --> 00:03:10.886
+Its declared measurement boundary is materialization strategy.
+
+q0027
+00:03:10.886 --> 00:03:15.265
+The uncertainty field says no universal performance claim.
+
+q0028
+00:03:15.265 --> 00:03:24.451
+The nearest confusing lesson is Pair-aware CM collapse; it owns pair eligibility, while this episode owns parallel work eligibility.
+
+q0029
+00:03:24.451 --> 00:03:33.637
+The example fixes F of A, B, C, and D as A AND B, exclusive-or C OR D.
+
+q0030
+00:03:33.637 --> 00:03:39.485
+Holding that element fixed lets this episode isolate parallel work eligibility.
+
+q0031
+00:03:39.485 --> 00:03:48.671
+A and B select the row, C and D select the column, and MSB-first order fixes both index conventions.
+
+q0032
+00:03:48.671 --> 00:03:54.519
+Holding that element fixed lets this episode isolate chunk/worker partition.
+
+q0033
+00:03:54.519 --> 00:04:02.327
+Folding the truth-table output column into a four-by-four grid changes the layout, not the function.
+
+q0034
+00:04:02.327 --> 00:04:11.513
+Reading a cell forward evaluates an assignment; reading it backward recovers the row and column bits that selected it.
+
+q0035
+00:04:11.513 --> 00:04:18.831
+Parallelism adds scheduling and data-movement cost, so availability is not evidence of a speedup.
+
+q0036
+00:04:18.831 --> 00:04:26.149
+Choose whether a small, large, or dependency-coupled case should cross the parallel work guard.
+
+q0037
+00:04:26.149 --> 00:04:32.977
+Parallelism redistributes work; it does not remove the need to count the work.
+
+q0038
+00:04:32.977 --> 00:04:38.336
+Now isolate deterministic assembly and overhead inside Four-variable truth layout.
+
+q0039
+00:04:38.336 --> 00:04:47.522
+The example definition and output meaning stay fixed while only the state for deterministic assembly and overhead changes.
+
+q0040
+00:04:47.522 --> 00:04:56.708
+That matched before-and-after view assigns the visible consequence to deterministic assembly and overhead, not to a substituted workload.
+
+q0041
+00:04:56.708 --> 00:05:03.536
+Tiles return to one exact matrix while overhead remains a separate visible band.
+
+q0042
+00:05:03.536 --> 00:05:12.722
+Every four-bit assignment names exactly one of the sixteen cells, and every cell returns one exact output bit.
+
+q0043
+00:05:12.722 --> 00:05:19.060
+Holding that element fixed lets this episode isolate deterministic assembly and overhead.
+
+q0044
+00:05:19.060 --> 00:05:28.246
+Live support can remove an input from active computation even when the ambient layout still reserves its axis.
+
+q0045
+00:05:28.246 --> 00:05:34.584
+A common mistake is this: More workers necessarily make every materialization faster.
+
+q0046
+00:05:34.584 --> 00:05:40.432
+Repair it by returning to the owned distinction: parallel work eligibility.
+
+q0048
+00:05:43.494 --> 00:05:52.680
+Use the episode's central distinction to answer: Parallelism redistributes work; it does not remove the need to count the work.
+
+q0049
+00:05:52.680 --> 00:05:59.998
+Parallel work is useful only after its independent work and overhead are both visible.

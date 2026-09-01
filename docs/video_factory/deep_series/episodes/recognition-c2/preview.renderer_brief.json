@@ -1,0 +1,1288 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "C2 variable-size decomposition: exact control, learned failure storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical and research viewers",
+  "purpose": "C2 produced an exact balanced-cofactor decomposition detector and witnesses, while the learned representation and size-transfer criteria failed and no model was promoted.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "recognition-c2",
+    "episode_content_hash": "dc67a1e05a8b2076a9d3d9d011f186817aa949fe1cc826c78fa51797ee0a76af",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "C2 variable-size decomposition: exact control, learned failure",
+        "caption": "C2 produced an exact balanced-cofactor decomposition detector and witnesses, while the learned representation and size-transfer criteria failed and no model was promoted.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Conceptual recognition/decomposition graph",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "C2 frozen question and split",
+            "note": "A small truth layout splits into row and column factors and recomposes through…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "Conceptual recognition/decomposition graph",
+        "caption": "A tiny labeled expression graph with a proposed partition, an exact witness path, a rejection/fallback path, and a promotion gate; it is never presented as a measured…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Conceptual recognition/decomposition graph",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "C2 frozen question and split",
+            "note": "A small truth layout splits into row and column factors and recomposes through…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "Input → transformation → consequence",
+        "caption": "A small truth layout splits into row and column factors and recomposes through an exact witness gate.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "C2 frozen question and split",
+            "note": "A small truth layout splits into row and column factors and recomposes through…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Milestone C2's learned representation and size-transfer criteria failed while the exact CM detector remained perfect.",
+          "The CRSE recognition program is experimental; no learned model is promoted."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: C3-C5 natural cuts: improvements without held-out promotion",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "C2 frozen question and split",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "C3-C5 natural cuts: improvements without…",
+            "note": "The exact detector's success does not rescue the failed learned size-transfer…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 38",
+        "title": "Pause, predict, then reveal",
+        "caption": "Predict which result can advance—the exact control, learned model, both, or neither—after the frozen criteria appear.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-c2-negative",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Exact recognition advanced; learned transfer did not.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

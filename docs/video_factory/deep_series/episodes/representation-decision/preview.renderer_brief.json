@@ -1,0 +1,958 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Which representation should I try? storyboard preview",
+  "subject": "cm_science",
+  "audience": "Practitioners and technical decision makers",
+  "purpose": "Representation choice should follow the required output, live support, reuse, update pattern, exact operation, preparation budget, and evidence status.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "representation-decision",
+    "episode_content_hash": "7f76b9abb51d49ee81009904a462ffdd29e5e037bd7a53a274fc4adcddd03bd1",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Which representation should I try?",
+        "caption": "Representation choice should follow the required output, live support, reuse, update pattern, exact operation, preparation budget, and evidence status.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "representation decision flow",
+            "note": "An animated decision tree asks one concrete question per branch and shows why…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Versioned feature model",
+        "caption": "A conceptual product family with Core, Cloud, Local, Analytics, and Export features plus requires/excludes constraints and three adjacent revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "representation decision flow",
+            "note": "An animated decision tree asks one concrete question per branch and shows why…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Input → transformation → consequence",
+        "caption": "An animated decision tree asks one concrete question per branch and shows why each answer matters.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "representation decision flow",
+            "note": "An animated decision tree asks one concrete question per branch and shows why…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Representation choice should begin with required output, live support, reuse, update pattern, exact operations,…",
+          "An explicit dense CM and CM-IR are different artifacts with different construction, storage, and evaluation boundaries.",
+          "The corrected focused k=13–15 study did not justify a universal width-only selector change."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: What the CRSE research program asks",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "representation decision flow",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "What the CRSE research program asks",
+            "note": "The decision flow narrows eligible approaches; it does not replace measurement…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 36",
+        "title": "Pause, predict, then reveal",
+        "caption": "Route two new workloads through the tree and explain the first branch where their choices diverge.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "representation-decision-factors",
+          "dense-vs-ir-distinct",
+          "selector-no-width-rule",
+          "no-universal-winner"
+        ],
+        "source_ids": [
+          "src-cm-build",
+          "src-cm-ir",
+          "src-correction-report",
+          "src-epfl-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "The right representation is conditional on the task you actually need to complete.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

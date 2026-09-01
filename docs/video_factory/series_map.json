@@ -2,42 +2,112 @@
   "schema_version": "1.0",
   "paths": [
     {
-      "id": "nontechnical",
-      "audience": "Curious nontechnical viewers",
+      "id": "general",
+      "audience": "Curious nontechnical and technical viewers",
       "video_ids": [
+        "conceptual-vs-measured",
         "why-boolean-computation",
         "expression-truth-function",
         "live-support-ambient",
         "what-is-explicit-cm",
         "what-cm-does-not-claim",
         "explicit-cm-vs-cm-ir",
+        "cse-plain-language",
+        "cse-vs-cse-flat",
+        "measurement-boundaries",
         "read-a-ratio",
         "scope-boundaries",
-        "correction-story"
+        "toolbox-map",
+        "representation-decision",
+        "source-hash-reproduction"
       ],
-      "outcome": "Explain what CM is, what it is not, and how to read scoped evidence."
+      "outcome": "Explain Boolean functions, CM artifacts, comparator fairness, and scoped evidence before choosing a representation."
     },
     {
       "id": "technical-research",
       "audience": "Implementers and research reviewers",
       "video_ids": [
+        "conceptual-vs-measured",
+        "why-boolean-computation",
         "expression-truth-function",
+        "live-support-ambient",
+        "what-is-explicit-cm",
+        "what-cm-does-not-claim",
         "explicit-cm-vs-cm-ir",
         "cm-ir-nodes-sharing",
         "canonicalization-interning",
+        "cm-ir-persistence",
+        "packed-words-selection",
+        "eager-lazy",
+        "pair-aware",
+        "hybrid-partial",
+        "parallel-cm",
+        "raw-ast",
+        "cse-plain-language",
         "cse-vs-cse-flat",
         "cm-ir-vs-cse-flat-mechanism",
+        "instruction-operations-memory",
         "measurement-boundaries",
+        "read-a-ratio",
+        "scope-boundaries",
+        "reuse-break-even",
         "b2b4-corrected",
+        "b2b4-runpod",
         "epfl-parity",
+        "selector-width-limit",
         "exact-comparison-protocol",
+        "no-fastest-chart",
+        "correction-story",
+        "toolbox-map",
+        "configuration-models",
+        "circuits",
+        "policy-rule-systems",
+        "representation-decision",
         "recognition-question",
-        "recognition-d8"
+        "recognition-c2",
+        "recognition-c3-c5",
+        "recognition-c6",
+        "recognition-c9-c11",
+        "recognition-c12-c16",
+        "recognition-c17-c20",
+        "recognition-c21-c22",
+        "recognition-c23",
+        "recognition-d-tasks",
+        "recognition-d8",
+        "recognition-d9",
+        "recognition-d10",
+        "recognition-e1-e2",
+        "source-hash-reproduction"
       ],
-      "outcome": "Trace representation, compiler transformations, measurement boundaries, inference, and negative promotion results."
+      "outcome": "Trace every v2 lesson from evidence grammar through representation, execution, comparison, applications, CRSE, and provenance."
+    },
+    {
+      "id": "recognition-research",
+      "audience": "Research reviewers",
+      "video_ids": [
+        "recognition-question",
+        "recognition-c2",
+        "recognition-c3-c5",
+        "recognition-c6",
+        "recognition-c9-c11",
+        "recognition-c12-c16",
+        "recognition-c17-c20",
+        "recognition-c21-c22",
+        "recognition-c23",
+        "recognition-d-tasks",
+        "recognition-d8",
+        "recognition-d9",
+        "recognition-d10",
+        "recognition-e1-e2"
+      ],
+      "outcome": "Follow the current CRSE arc from proposal learning through exact guarded systems and retained negative results."
     }
   ],
   "edges": [
+    {
+      "from": "conceptual-vs-measured",
+      "to": "why-boolean-computation"
+    },
     {
       "from": "why-boolean-computation",
       "to": "expression-truth-function"
@@ -47,7 +117,7 @@
       "to": "live-support-ambient"
     },
     {
-      "from": "live-support-ambient",
+      "from": "expression-truth-function",
       "to": "what-is-explicit-cm"
     },
     {
@@ -55,23 +125,11 @@
       "to": "what-cm-does-not-claim"
     },
     {
-      "from": "what-cm-does-not-claim",
+      "from": "what-is-explicit-cm",
       "to": "explicit-cm-vs-cm-ir"
     },
     {
-      "from": "explicit-cm-vs-cm-ir",
-      "to": "read-a-ratio"
-    },
-    {
-      "from": "read-a-ratio",
-      "to": "scope-boundaries"
-    },
-    {
-      "from": "scope-boundaries",
-      "to": "correction-story"
-    },
-    {
-      "from": "expression-truth-function",
+      "from": "what-cm-does-not-claim",
       "to": "explicit-cm-vs-cm-ir"
     },
     {
@@ -84,6 +142,54 @@
     },
     {
       "from": "canonicalization-interning",
+      "to": "cm-ir-persistence"
+    },
+    {
+      "from": "live-support-ambient",
+      "to": "packed-words-selection"
+    },
+    {
+      "from": "explicit-cm-vs-cm-ir",
+      "to": "packed-words-selection"
+    },
+    {
+      "from": "explicit-cm-vs-cm-ir",
+      "to": "eager-lazy"
+    },
+    {
+      "from": "cm-ir-nodes-sharing",
+      "to": "eager-lazy"
+    },
+    {
+      "from": "cm-ir-nodes-sharing",
+      "to": "pair-aware"
+    },
+    {
+      "from": "live-support-ambient",
+      "to": "pair-aware"
+    },
+    {
+      "from": "cm-ir-nodes-sharing",
+      "to": "hybrid-partial"
+    },
+    {
+      "from": "packed-words-selection",
+      "to": "hybrid-partial"
+    },
+    {
+      "from": "hybrid-partial",
+      "to": "parallel-cm"
+    },
+    {
+      "from": "expression-truth-function",
+      "to": "raw-ast"
+    },
+    {
+      "from": "raw-ast",
+      "to": "cse-plain-language"
+    },
+    {
+      "from": "cse-plain-language",
       "to": "cse-vs-cse-flat"
     },
     {
@@ -91,20 +197,164 @@
       "to": "cm-ir-vs-cse-flat-mechanism"
     },
     {
+      "from": "canonicalization-interning",
+      "to": "cm-ir-vs-cse-flat-mechanism"
+    },
+    {
       "from": "cm-ir-vs-cse-flat-mechanism",
+      "to": "instruction-operations-memory"
+    },
+    {
+      "from": "packed-words-selection",
+      "to": "instruction-operations-memory"
+    },
+    {
+      "from": "instruction-operations-memory",
       "to": "measurement-boundaries"
     },
     {
       "from": "measurement-boundaries",
+      "to": "read-a-ratio"
+    },
+    {
+      "from": "read-a-ratio",
+      "to": "scope-boundaries"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "reuse-break-even"
+    },
+    {
+      "from": "read-a-ratio",
+      "to": "reuse-break-even"
+    },
+    {
+      "from": "scope-boundaries",
+      "to": "b2b4-corrected"
+    },
+    {
+      "from": "cse-vs-cse-flat",
       "to": "b2b4-corrected"
     },
     {
       "from": "b2b4-corrected",
+      "to": "b2b4-runpod"
+    },
+    {
+      "from": "scope-boundaries",
       "to": "epfl-parity"
     },
     {
-      "from": "epfl-parity",
+      "from": "cse-vs-cse-flat",
+      "to": "epfl-parity"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "epfl-parity"
+    },
+    {
+      "from": "packed-words-selection",
+      "to": "selector-width-limit"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "selector-width-limit"
+    },
+    {
+      "from": "b2b4-corrected",
       "to": "exact-comparison-protocol"
+    },
+    {
+      "from": "read-a-ratio",
+      "to": "exact-comparison-protocol"
+    },
+    {
+      "from": "scope-boundaries",
+      "to": "no-fastest-chart"
+    },
+    {
+      "from": "b2b4-corrected",
+      "to": "no-fastest-chart"
+    },
+    {
+      "from": "epfl-parity",
+      "to": "no-fastest-chart"
+    },
+    {
+      "from": "exact-comparison-protocol",
+      "to": "correction-story"
+    },
+    {
+      "from": "no-fastest-chart",
+      "to": "correction-story"
+    },
+    {
+      "from": "what-cm-does-not-claim",
+      "to": "toolbox-map"
+    },
+    {
+      "from": "cse-vs-cse-flat",
+      "to": "toolbox-map"
+    },
+    {
+      "from": "packed-words-selection",
+      "to": "toolbox-map"
+    },
+    {
+      "from": "toolbox-map",
+      "to": "configuration-models"
+    },
+    {
+      "from": "cm-ir-persistence",
+      "to": "configuration-models"
+    },
+    {
+      "from": "toolbox-map",
+      "to": "circuits"
+    },
+    {
+      "from": "live-support-ambient",
+      "to": "circuits"
+    },
+    {
+      "from": "cse-vs-cse-flat",
+      "to": "circuits"
+    },
+    {
+      "from": "toolbox-map",
+      "to": "policy-rule-systems"
+    },
+    {
+      "from": "cm-ir-persistence",
+      "to": "policy-rule-systems"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "policy-rule-systems"
+    },
+    {
+      "from": "configuration-models",
+      "to": "representation-decision"
+    },
+    {
+      "from": "circuits",
+      "to": "representation-decision"
+    },
+    {
+      "from": "policy-rule-systems",
+      "to": "representation-decision"
+    },
+    {
+      "from": "no-fastest-chart",
+      "to": "representation-decision"
+    },
+    {
+      "from": "conceptual-vs-measured",
+      "to": "recognition-question"
+    },
+    {
+      "from": "cm-ir-nodes-sharing",
+      "to": "recognition-question"
     },
     {
       "from": "exact-comparison-protocol",
@@ -112,7 +362,103 @@
     },
     {
       "from": "recognition-question",
+      "to": "recognition-c2"
+    },
+    {
+      "from": "recognition-c2",
+      "to": "recognition-c3-c5"
+    },
+    {
+      "from": "recognition-c3-c5",
+      "to": "recognition-c6"
+    },
+    {
+      "from": "packed-words-selection",
+      "to": "recognition-c6"
+    },
+    {
+      "from": "recognition-c6",
+      "to": "recognition-c9-c11"
+    },
+    {
+      "from": "recognition-c9-c11",
+      "to": "recognition-c12-c16"
+    },
+    {
+      "from": "recognition-c12-c16",
+      "to": "recognition-c17-c20"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "recognition-c17-c20"
+    },
+    {
+      "from": "recognition-c17-c20",
+      "to": "recognition-c21-c22"
+    },
+    {
+      "from": "exact-comparison-protocol",
+      "to": "recognition-c21-c22"
+    },
+    {
+      "from": "instruction-operations-memory",
+      "to": "recognition-c21-c22"
+    },
+    {
+      "from": "recognition-c21-c22",
+      "to": "recognition-c23"
+    },
+    {
+      "from": "exact-comparison-protocol",
+      "to": "recognition-c23"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "recognition-c23"
+    },
+    {
+      "from": "recognition-question",
+      "to": "recognition-d-tasks"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "recognition-d-tasks"
+    },
+    {
+      "from": "cm-ir-persistence",
+      "to": "recognition-d-tasks"
+    },
+    {
+      "from": "recognition-d-tasks",
       "to": "recognition-d8"
+    },
+    {
+      "from": "recognition-d8",
+      "to": "recognition-d9"
+    },
+    {
+      "from": "recognition-d9",
+      "to": "recognition-d10"
+    },
+    {
+      "from": "recognition-question",
+      "to": "recognition-e1-e2"
+    },
+    {
+      "from": "toolbox-map",
+      "to": "recognition-e1-e2"
+    },
+    {
+      "from": "measurement-boundaries",
+      "to": "recognition-e1-e2"
+    },
+    {
+      "from": "conceptual-vs-measured",
+      "to": "source-hash-reproduction"
+    },
+    {
+      "from": "exact-comparison-protocol",
+      "to": "source-hash-reproduction"
     }
   ]
 }

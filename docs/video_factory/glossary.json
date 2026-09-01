@@ -2,6 +2,37 @@
   "schema_version": "1.0",
   "entries": [
     {
+      "term": "Boolean expression",
+      "expansion": "",
+      "plain_definition": "A written Boolean rule built from variables and operators.",
+      "technical_definition": "A syntax tree whose evaluation maps a complete variable assignment to one Boolean value.",
+      "common_confusion": "The expression is syntax; it is not the same object as the function it denotes.",
+      "source_ids": [
+        "src-cm-exprlib"
+      ]
+    },
+    {
+      "term": "Boolean function",
+      "expansion": "",
+      "plain_definition": "The true-or-false output produced for every assignment.",
+      "technical_definition": "The assignment-to-output mapping denoted by one or more equivalent Boolean expressions.",
+      "common_confusion": "Different expression trees can denote the same Boolean function.",
+      "source_ids": [
+        "src-cm-exprlib"
+      ]
+    },
+    {
+      "term": "Abstract syntax tree",
+      "expansion": "AST",
+      "plain_definition": "A tree representation of the written expression.",
+      "technical_definition": "A syntax node graph before structural sharing; the raw-AST ablation may recompute repeated subtrees.",
+      "common_confusion": "Raw AST is not the strongest generic comparator.",
+      "source_ids": [
+        "src-cm-exprlib",
+        "src-correction-report"
+      ]
+    },
+    {
       "term": "Correspondence matrix",
       "expansion": "CM",
       "plain_definition": "A matrix layout of a Boolean function's truth values.",
@@ -65,6 +96,16 @@
       ]
     },
     {
+      "term": "Flat instruction program",
+      "expansion": "FlatProgram",
+      "plain_definition": "An ordered list of loads and operations lowered from a shared graph.",
+      "technical_definition": "A linear postorder execution representation with one instruction per unique DAG node and explicit slot dependencies.",
+      "common_confusion": "FlatProgram is not CSE-flat and is not the same thing as packed word storage.",
+      "source_ids": [
+        "src-bitset"
+      ]
+    },
+    {
       "term": "Preparation",
       "expansion": "",
       "plain_definition": "One-time work to build a reusable compiled artifact.",
@@ -118,8 +159,8 @@
       "term": "CRSE",
       "expansion": "",
       "plain_definition": "The repository's experimental recognition and computation-selection research program.",
-      "technical_definition": "A set of frozen milestone studies with learned proposal paths, exact controls, verification, and explicit promotion decisions.",
-      "common_confusion": "Engineering verification is not scientific generalization or deployment.",
+      "technical_definition": "A project label for frozen milestone studies with learned proposal paths, exact controls, verification, and explicit promotion decisions.",
+      "common_confusion": "The current authoritative sources do not supply an expansion; scripts must not invent one, and engineering verification is not scientific generalization or deployment.",
       "source_ids": [
         "src-recognition-readme",
         "src-recognition-register"

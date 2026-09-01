@@ -1,0 +1,104 @@
+{
+  "created_date": "2026-08-31",
+  "production_promotion": false,
+  "recommended_first_phase": "C17",
+  "schema": "crse-post-c16-implementation-plan/v1",
+  "status": "active",
+  "phases": [
+    {
+      "id": "C17",
+      "status": "locally measured exact; independent C18 minimum-case gate failed",
+      "priority": 1,
+      "title": "Production-safe exact-screened GF(2) dispatcher",
+      "tracks": ["R01", "R06", "R16", "R17", "R18"],
+      "requires_training": false,
+      "requires_external_data": false,
+      "requires_cloud": false,
+      "promotion_blocked_until": ["C18 transfer", "second-machine task-policy confirmation"]
+    },
+    {
+      "id": "C18",
+      "status": "73-case VTR freeze and single-round exact transfer scout verified",
+      "priority": 2,
+      "title": "Independent non-XOR-heavy transfer corpus",
+      "tracks": ["R02", "R06", "R11", "R17", "R18"],
+      "requires_training": false,
+      "requires_external_data": false,
+      "local_sources": ["external/logikbench-confirmation-20260830", "external/vtr-confirmation-20260830"],
+      "requires_cloud": false
+    },
+    {
+      "id": "F1",
+      "status": "implementation started; exact GF(2) decomposition artifact added to comparative contracts",
+      "priority": 3,
+      "title": "Task-matched exact method comparison harness",
+      "tracks": ["R01", "R06", "R07", "R09", "R10", "R13", "R16", "R18"],
+      "requires_training": false,
+      "requires_external_data": false,
+      "requires_cloud": false
+    },
+    {
+      "id": "N1",
+      "priority": 4,
+      "title": "Exact-teacher neural and classical model rerun",
+      "tracks": ["R02", "R08", "R11", "R12", "R13", "R16", "R17", "R18"],
+      "requires_training": true,
+      "training_seeds": 3,
+      "cpu_threads": 2,
+      "neural_parameter_range": [50000, 250000],
+      "depends_on": ["C18", "F1"]
+    },
+    {
+      "id": "E3",
+      "priority": 5,
+      "title": "Larger BDD, SAT, equivalence, and counting workloads",
+      "tracks": ["R01", "R07", "R09", "R10", "R13", "R17", "R18"],
+      "requires_training": "only after measured oracle headroom",
+      "requires_cloud": false
+    },
+    {
+      "id": "D11",
+      "priority": 6,
+      "title": "Natural proved rewrites with positive oracle headroom",
+      "tracks": ["R03", "R04", "R05", "R09", "R13", "R16", "R18"],
+      "requires_training": "only with mixed profitable and unprofitable natural regions",
+      "depends_on": ["C18"]
+    },
+    {
+      "id": "A1",
+      "priority": 7,
+      "title": "Retrieval, uncertainty, and offline adaptation",
+      "tracks": ["R08", "R09", "R14", "R17", "R18"],
+      "requires_training": true,
+      "production_adaptation": false
+    },
+    {
+      "id": "L1",
+      "priority": 8,
+      "title": "Bounded LLM-assisted rule and strategy proposals",
+      "tracks": ["R05", "R13", "R15", "R16", "R17", "R18"],
+      "live_provider_requires_separate_approval": true,
+      "model_output_is_proof": false
+    }
+  ],
+  "track_coverage": {
+    "R01": ["C17", "F1", "E3"],
+    "R02": ["C18", "N1"],
+    "R03": ["D11"],
+    "R04": ["D11"],
+    "R05": ["D11", "L1"],
+    "R06": ["C17", "C18", "F1"],
+    "R07": ["F1", "E3"],
+    "R08": ["N1", "A1"],
+    "R09": ["F1", "E3", "D11", "A1"],
+    "R10": ["F1", "E3"],
+    "R11": ["C18", "N1"],
+    "R12": ["N1"],
+    "R13": ["F1", "N1", "E3", "D11", "L1"],
+    "R14": ["A1"],
+    "R15": ["L1"],
+    "R16": ["C17", "F1", "N1", "D11", "L1"],
+    "R17": ["C17", "C18", "N1", "E3", "A1", "L1"],
+    "R18": ["C17", "C18", "F1", "N1", "E3", "D11", "A1", "L1"]
+  }
+}

@@ -1,0 +1,273 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:08.482
+Can we widen an AND chain without tearing apart the sharing we just created?
+
+q0002
+00:00:08.482 --> 00:00:19.128
+This episode has one job: CSE-flat keeps structural sharing and also widens eligible associative chains, but it must not splice through a shared child and destroy reuse.
+
+q0003
+00:00:19.128 --> 00:00:29.774
+We build on Common subexpression elimination in plain language; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:29.774 --> 00:00:39.391
+CSE-flat is structural CSE plus safe flattening of eligible associative chains while shared nodes remain shared.
+
+q0005
+00:00:39.391 --> 00:00:48.441
+Watch for the label associative chain; it stays attached to the artifact this episode means.
+
+q0006
+00:00:48.441 --> 00:00:56.923
+When we say n-ary instruction, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:56.923 --> 00:01:07.108
+The term single-consumer child receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:07.108 --> 00:01:14.454
+We will keep sharing-aware flattening visible whenever its definition controls the inference.
+
+q0009
+00:01:14.454 --> 00:01:24.639
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0010
+00:01:24.639 --> 00:01:29.146
+Our stable example is Shared Boolean expression.
+
+q0011
+00:01:29.146 --> 00:01:39.792
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0012
+00:01:39.792 --> 00:01:46.570
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0013
+00:01:46.570 --> 00:01:55.052
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0014
+00:01:55.052 --> 00:02:05.698
+The accompanying view makes this step concrete: Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.
+
+q0015
+00:02:05.698 --> 00:02:14.748
+Start from the shared CSE DAG and mark which AND chains are eligible for widening.
+
+q0016
+00:02:14.748 --> 00:02:24.365
+Flatten only through single-consumer associative children while protecting the shared S node, then compare instruction structure.
+
+q0017
+00:02:24.365 --> 00:02:30.575
+Now isolate plain CSE versus CSE-flat inside Shared Boolean expression.
+
+q0018
+00:02:30.575 --> 00:02:41.221
+The example definition and output meaning stay fixed while only the state for plain CSE versus CSE-flat changes.
+
+q0019
+00:02:41.221 --> 00:02:51.867
+That matched before-and-after view assigns the visible consequence to plain CSE versus CSE-flat, not to a substituted workload.
+
+q0020
+00:02:51.867 --> 00:02:59.213
+Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.
+
+q0021
+00:02:59.213 --> 00:03:04.856
+Now isolate safe associative flattening inside Shared Boolean expression.
+
+q0022
+00:03:04.856 --> 00:03:15.041
+The example definition and output meaning stay fixed while only the state for safe associative flattening changes.
+
+q0023
+00:03:15.041 --> 00:03:25.226
+That matched before-and-after view assigns the visible consequence to safe associative flattening, not to a substituted workload.
+
+q0024
+00:03:25.226 --> 00:03:32.572
+A before/after instruction ledger attributes reductions to sharing or flattening separately.
+
+q0025
+00:03:32.572 --> 00:03:37.647
+Now isolate shared-child preservation inside Shared Boolean expression.
+
+q0026
+00:03:37.647 --> 00:03:47.264
+The example definition and output meaning stay fixed while only the state for shared-child preservation changes.
+
+q0027
+00:03:47.264 --> 00:03:56.881
+That matched before-and-after view assigns the visible consequence to shared-child preservation, not to a substituted workload.
+
+q0028
+00:03:56.881 --> 00:04:04.795
+Shared nodes carry lock icons; eligible single-consumer chains unfold into one n-ary operation.
+
+q0029
+00:04:04.795 --> 00:04:11.573
+Common subexpression elimination computes repeated expression subtrees once and reuses them.
+
+q0030
+00:04:11.573 --> 00:04:18.919
+Read that statement only within this scope: comparator definition used by correction.
+
+q0031
+00:04:18.919 --> 00:04:22.858
+Its declared measurement boundary is mechanism.
+
+q0032
+00:04:22.858 --> 00:04:26.229
+The uncertainty field says none.
+
+q0033
+00:04:26.229 --> 00:04:33.007
+Sharing-aware CSE-flat additionally flattens eligible associative chains while preserving shared nodes.
+
+q0034
+00:04:33.007 --> 00:04:39.217
+Read that statement only within this scope: corrected comparator contract.
+
+q0035
+00:04:39.217 --> 00:04:49.863
+The nearest confusing lesson is CM-IR versus CSE-flat: shared mechanisms and extra transformations; it owns mechanism overlap, while this episode owns plain CSE versus CSE-flat.
+
+q0036
+00:04:49.863 --> 00:05:00.509
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0037
+00:05:00.509 --> 00:05:07.855
+Holding that element fixed lets this episode isolate plain CSE versus CSE-flat.
+
+q0038
+00:05:07.855 --> 00:05:18.501
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0039
+00:05:18.501 --> 00:05:25.279
+Holding that element fixed lets this episode isolate safe associative flattening.
+
+q0040
+00:05:25.279 --> 00:05:35.925
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0041
+00:05:35.925 --> 00:05:42.135
+Holding that element fixed lets this episode isolate shared-child preservation.
+
+q0042
+00:05:42.135 --> 00:05:52.781
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0043
+00:05:52.781 --> 00:06:01.263
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0044
+00:06:01.263 --> 00:06:09.745
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0045
+00:06:09.745 --> 00:06:20.391
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0046
+00:06:20.391 --> 00:06:30.576
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0047
+00:06:30.576 --> 00:06:40.761
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0048
+00:06:40.761 --> 00:06:50.378
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0049
+00:06:50.378 --> 00:07:01.024
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0050
+00:07:01.024 --> 00:07:11.670
+After the change, the composition makes plain CSE versus CSE-flat inspectable: Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.
+
+q0051
+00:07:11.670 --> 00:07:19.584
+The invariant is the example's meaning; the variable is plain CSE versus CSE-flat.
+
+q0052
+00:07:19.584 --> 00:07:30.230
+If the same output is reached through a different path, the diagram must still identify whether plain CSE versus CSE-flat changed.
+
+q0053
+00:07:30.230 --> 00:07:40.876
+After the change, the composition makes safe associative flattening inspectable: A before/after instruction ledger attributes reductions to sharing or flattening separately.
+
+q0054
+00:07:40.876 --> 00:07:48.222
+The invariant is the example's meaning; the variable is safe associative flattening.
+
+q0055
+00:07:48.222 --> 00:07:58.868
+If the same output is reached through a different path, the diagram must still identify whether safe associative flattening changed.
+
+q0056
+00:07:58.868 --> 00:08:09.514
+After the change, the composition makes shared-child preservation inspectable: Shared nodes carry lock icons; eligible single-consumer chains unfold into one n-ary operation.
+
+q0057
+00:08:09.514 --> 00:08:16.292
+The invariant is the example's meaning; the variable is shared-child preservation.
+
+q0058
+00:08:16.292 --> 00:08:26.938
+If the same output is reached through a different path, the diagram must still identify whether shared-child preservation changed.
+
+q0059
+00:08:26.938 --> 00:08:37.584
+The accompanying view makes this step concrete: A before/after instruction ledger attributes reductions to sharing or flattening separately.
+
+q0060
+00:08:37.584 --> 00:08:48.230
+The accompanying view makes this step concrete: Shared nodes carry lock icons; eligible single-consumer chains unfold into one n-ary operation.
+
+q0061
+00:08:48.230 --> 00:08:58.876
+Read plain CSE versus CSE-flat from input to consequence through one matched view: Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels; every surrounding entity keeps its prior meaning.
+
+q0062
+00:08:58.876 --> 00:09:06.222
+Always-splice flattening is not the comparator contract; shared children must be preserved.
+
+q0063
+00:09:06.222 --> 00:09:14.704
+Select which associative child may be flattened and which must remain a shared node.
+
+q0064
+00:09:14.704 --> 00:09:22.050
+CSE-flat strengthens plain CSE without sacrificing the sharing that made CSE useful.
+
+q0065
+00:09:22.050 --> 00:09:31.100
+A common mistake is this: CSE-flat means flatten every matching operator regardless of shared consumers.
+
+q0066
+00:09:31.100 --> 00:09:38.446
+Repair it by returning to the owned distinction: plain CSE versus CSE-flat.
+
+q0068
+00:09:41.995 --> 00:09:52.641
+Use the episode's central distinction to answer: CSE-flat strengthens plain CSE without sacrificing the sharing that made CSE useful.
+
+q0069
+00:09:52.641 --> 00:09:59.987
+The strongest generic comparator used here includes both reuse and safe flattening.

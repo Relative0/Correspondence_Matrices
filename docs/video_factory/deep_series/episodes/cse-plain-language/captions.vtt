@@ -1,0 +1,189 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:06.486
+What is the simplest way to stop computing the same subtree twice?
+
+q0002
+00:00:06.486 --> 00:00:15.886
+This episode has one job: Plain structural CSE identifies repeated expression subtrees, computes each once, and reuses the result while preserving exact semantics.
+
+q0003
+00:00:15.886 --> 00:00:25.286
+We build on Why a raw expression tree repeats work; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:25.286 --> 00:00:32.274
+Common subexpression elimination computes a repeated structural subtree once and reuses its result.
+
+q0005
+00:00:32.274 --> 00:00:40.264
+Watch for the label common subexpression; it stays attached to the artifact this episode means.
+
+q0006
+00:00:40.264 --> 00:00:47.753
+When we say structural identity, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:47.753 --> 00:00:56.245
+The term reuse receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:00:56.245 --> 00:01:05.238
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0009
+00:01:05.238 --> 00:01:09.217
+Our stable example is Shared Boolean expression.
+
+q0010
+00:01:09.217 --> 00:01:18.617
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0011
+00:01:18.617 --> 00:01:24.602
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0012
+00:01:24.602 --> 00:01:32.091
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0013
+00:01:32.091 --> 00:01:40.081
+Assign structural keys to both S subtrees and show their equality before any merge occurs.
+
+q0014
+00:01:40.081 --> 00:01:48.573
+Replace the second computation with a reference to the first result and replay the evaluation counter.
+
+q0015
+00:01:48.573 --> 00:01:53.555
+Now isolate plain structural CSE inside Shared Boolean expression.
+
+q0016
+00:01:53.555 --> 00:02:02.548
+The example definition and output meaning stay fixed while only the state for plain structural CSE changes.
+
+q0017
+00:02:02.548 --> 00:02:11.541
+That matched before-and-after view assigns the visible consequence to plain structural CSE, not to a substituted workload.
+
+q0018
+00:02:11.541 --> 00:02:15.019
+Duplicate subtrees receive matching structural-key tags.
+
+q0019
+00:02:15.019 --> 00:02:21.004
+Now isolate structural key and shared result inside Shared Boolean expression.
+
+q0020
+00:02:21.004 --> 00:02:30.404
+The example definition and output meaning stay fixed while only the state for structural key and shared result changes.
+
+q0021
+00:02:30.404 --> 00:02:39.804
+That matched before-and-after view assigns the visible consequence to structural key and shared result, not to a substituted workload.
+
+q0022
+00:02:39.804 --> 00:02:45.789
+Common subexpression elimination computes repeated expression subtrees once and reuses them.
+
+q0023
+00:02:45.789 --> 00:02:52.275
+Read that statement only within this scope: comparator definition used by correction.
+
+q0024
+00:02:52.275 --> 00:02:55.753
+Its declared measurement boundary is mechanism.
+
+q0025
+00:02:55.753 --> 00:02:58.730
+The uncertainty field says none.
+
+q0026
+00:02:58.730 --> 00:03:08.130
+The nearest confusing lesson is Plain CSE versus sharing-aware CSE-flat; it owns plain CSE versus CSE-flat, while this episode owns plain structural CSE.
+
+q0027
+00:03:08.130 --> 00:03:17.530
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0028
+00:03:17.530 --> 00:03:23.515
+Holding that element fixed lets this episode isolate plain structural CSE.
+
+q0029
+00:03:23.515 --> 00:03:32.915
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0030
+00:03:32.915 --> 00:03:39.903
+Holding that element fixed lets this episode isolate structural key and shared result.
+
+q0031
+00:03:39.903 --> 00:03:49.303
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0032
+00:03:49.303 --> 00:03:58.703
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0033
+00:03:58.703 --> 00:04:06.192
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0034
+00:04:06.192 --> 00:04:13.681
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0035
+00:04:13.681 --> 00:04:23.081
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0036
+00:04:23.081 --> 00:04:32.074
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0037
+00:04:32.074 --> 00:04:41.067
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0038
+00:04:41.067 --> 00:04:49.559
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0039
+00:04:49.559 --> 00:04:58.959
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0040
+00:04:58.959 --> 00:05:07.451
+After the change, the composition makes plain structural CSE inspectable: Duplicate subtrees receive matching structural-key tags.
+
+q0041
+00:05:07.451 --> 00:05:15.943
+Plain CSE shares repeats; it does not necessarily flatten an associative chain into a wider instruction.
+
+q0042
+00:05:15.943 --> 00:05:24.936
+Choose which two subtrees have a matching structural key and which merely happen to share one operator.
+
+q0043
+00:05:24.936 --> 00:05:29.417
+Share identical work first; ask about flattening next.
+
+q0044
+00:05:29.417 --> 00:05:37.909
+A common mistake is this: CSE automatically performs every normalization or associative flattening available to CM-IR.
+
+q0045
+00:05:37.909 --> 00:05:43.894
+Repair it by returning to the owned distinction: plain structural CSE.
+
+q0047
+00:05:47.027 --> 00:05:55.017
+Use the episode's central distinction to answer: Share identical work first; ask about flattening next.
+
+q0048
+00:05:55.017 --> 00:05:59.999
+CSE removes repeated computation by making structural reuse explicit.

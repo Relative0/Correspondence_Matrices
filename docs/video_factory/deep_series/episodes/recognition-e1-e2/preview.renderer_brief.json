@@ -1,0 +1,940 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "E1-E2 exact BDD and SAT guidance: task-aware advice with fallback storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical and research viewers",
+  "purpose": "E1-E2 extend task-aware guidance to BDD order and SAT/equivalence lifecycles, keeping exact artifacts and advice-off fallback authoritative while learned advice remains unpromoted.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "recognition-e1-e2",
+    "episode_content_hash": "035ec5234c8121385e5fc18b9c6dbf306fde50f7b5a051ab604f1d1e83eb5ece",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "E1-E2 exact BDD and SAT guidance: task-aware advice with fallback",
+        "caption": "E1-E2 extend task-aware guidance to BDD order and SAT/equivalence lifecycles, keeping exact artifacts and advice-off fallback authoritative while learned advice remains…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "E1 BDD-order objectives",
+            "note": "One function produces differently shaped BDDs as the variable order ribbon…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "Versioned feature model",
+        "caption": "A conceptual product family with Core, Cloud, Local, Analytics, and Export features plus requires/excludes constraints and three adjacent revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "E1 BDD-order objectives",
+            "note": "One function produces differently shaped BDDs as the variable order ribbon…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "Input → transformation → consequence",
+        "caption": "One function produces differently shaped BDDs as the variable order ribbon changes.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "E1 BDD-order objectives",
+            "note": "One function produces differently shaped BDDs as the variable order ribbon…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "result",
+        "bullets": [
+          "E1 and E2 added exact BDD-order and SAT/equivalence guidance with advice-off fallback; learned advice did not…",
+          "CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy expose different representation, evaluation, decision, minimization,…",
+          "The CRSE recognition program is experimental; no learned model is promoted."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Which representation should I try?",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "E1 BDD-order objectives",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Which representation should I try?",
+            "note": "The retained learned advice did not establish a general timing win, and…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 50",
+        "title": "Pause, predict, then reveal",
+        "caption": "Route node minimization, repeated restriction, one SAT query, assumption session, and equivalence check to their correct objective/lifecycle.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-e1-e2-guidance",
+          "toolbox-output-contracts",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register",
+          "src-repo-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Task-aware advice is useful only while exact construction, checking, and…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

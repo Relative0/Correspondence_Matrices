@@ -1,0 +1,1388 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Canonicalization, interning, and normalization storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical viewers and implementers",
+  "purpose": "Normalization chooses a stable structure, structural keys identify it, and interning reuses the matching node; these stages cooperate but are not synonyms.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "canonicalization-interning",
+    "episode_content_hash": "3836465af089eda1663baf518ecc61cd0c706ecbbc8ceacb8d02ec4c3df7f3f6",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Canonicalization, interning, and normalization",
+        "caption": "Normalization chooses a stable structure, structural keys identify it, and interning reuses the matching node; these stages cooperate but are not synonyms.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "normalization",
+            "note": "Messy equivalent syntax enters three labeled stations: NORMALIZE, KEY, INTERN.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Shared Boolean expression",
+        "caption": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "normalization",
+            "note": "Messy equivalent syntax enters three labeled stations: NORMALIZE, KEY, INTERN.",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Input → transformation → consequence",
+        "caption": "Messy equivalent syntax enters three labeled stations: NORMALIZE, KEY, INTERN.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "normalization",
+            "note": "Messy equivalent syntax enters three labeled stations: NORMALIZE, KEY, INTERN.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Normalization, canonical structural keys, and interning are distinct stages: rewrites choose a canonical form, keys…",
+          "CM-IR can add canonical normalization and merging beyond the transformations shared with CSE-flat."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: CM-IR persistence and version identity",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "normalization",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR persistence and version identity",
+            "note": "Canonicalization is implementation scoped; it does not prove a globally minimal…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 09",
+        "title": "Pause, predict, then reveal",
+        "caption": "Place normalization, key construction, and intern-table lookup in the correct order.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-normalization-interning",
+          "cm-extra-transformations"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Equivalent structure becomes reusable only after its identity is made explicit.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

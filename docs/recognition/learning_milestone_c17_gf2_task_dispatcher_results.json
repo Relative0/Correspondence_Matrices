@@ -1,0 +1,93 @@
+{
+  "dataset": {
+    "independent_transfer": false,
+    "reused_from": "C16",
+    "rows": 40
+  },
+  "date": "2026-08-31",
+  "decision_counts": {
+    "advice_globally_disabled": 40,
+    "c16_screened_tail": 35,
+    "tiny_case_bypass": 5
+  },
+  "failed_attempt": "docs/recognition/runs/c17-gf2-task-dispatcher-windows-20260831-attempt1-timeout",
+  "interpretation": "The exact dispatcher preserved all artifacts and achieved 3.831x aggregate speedup, while advice-off matched direct exhaustive cost. Its 0.769x slow-tail and 0.597x minimum small case failed the no-regret gate; C18 independent transfer and a lower-level tiny-task bypass are required.",
+  "measurement_rows": 320,
+  "policy_sha256": "b7198c5ee2da64d0b26017d1ccd9d0ed2897322b7436d9ea1cebf50aee0ba32d",
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+  "run": "docs/recognition/runs/c17-gf2-task-dispatcher-windows-20260831-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reason": "local policy engineering run",
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c17-gf2-task-dispatcher-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "locally_measured_research_gate_failed",
+  "summary": {
+    "criteria": {
+      "advice_off_within_3_percent": true,
+      "aggregate_speedup_at_least_1_25x": true,
+      "functional_exactness": true,
+      "minimum_case_at_least_0_97x": false,
+      "slow_tail_at_least_1_20x": false,
+      "timed_exactness": true
+    },
+    "exactness_gate": true,
+    "local_research_gate": false,
+    "median_case_sum_ns": {
+      "c17_advice_off": {
+        "analysis_ns": 34767818050,
+        "exact_check_ns": 8360770750,
+        "policy_ns": 249100,
+        "representation_ns": 21551250,
+        "total_ns": 43150389150
+      },
+      "c17_dispatch": {
+        "analysis_ns": 10783811100,
+        "exact_check_ns": 442027850,
+        "policy_ns": 421050,
+        "representation_ns": 21375300,
+        "total_ns": 11247635300
+      },
+      "direct_exhaustive": {
+        "analysis_ns": 34683097750,
+        "exact_check_ns": 8384170550,
+        "policy_ns": 0,
+        "representation_ns": 22163000,
+        "total_ns": 43089431300
+      },
+      "direct_screened": {
+        "analysis_ns": 10715658650,
+        "exact_check_ns": 416556850,
+        "policy_ns": 0,
+        "representation_ns": 20907100,
+        "total_ns": 11153122600
+      }
+    },
+    "speedup": {
+      "advice_off_over_direct_exhaustive": 0.9985873163324647,
+      "c17_case_median": 3.653610723317631,
+      "c17_case_minimum": 0.597286012526096,
+      "c17_case_p95_slow_tail": 0.7693454902891231,
+      "c17_over_direct_exhaustive": 3.8309769254342734,
+      "direct_screened_over_exhaustive": 3.863441015164668,
+      "screened_case_minimum": 0.7122376865940723
+    },
+    "timing_is_machine_specific": true
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 7,
+    "functional_cases_replayed": 40,
+    "measurement_rows_checked": 320,
+    "path": "docs/recognition/runs/c17-gf2-task-dispatcher-windows-20260831-001/independent_verification.json",
+    "production_promotion": false,
+    "schema": "crse-c17-gf2-task-dispatcher-independent-verification/v1",
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 5,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

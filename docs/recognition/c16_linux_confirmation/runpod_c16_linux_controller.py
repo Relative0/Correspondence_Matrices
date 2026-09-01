@@ -25,7 +25,7 @@ preflight, base = transport.preflight, transport.base
 
 OUT = HERE / "runpod-c16-linux-execute-001"
 MANIFEST = HERE / "c16_linux_upload_manifest.json"
-AUTHORIZATION = HERE / "RUNPOD_C16_LINUX_AUTHORIZED_2026_08_30.json"
+AUTHORIZATION = HERE / "RUNPOD_C16_EXACT_PAYLOAD_AUTHORIZED_2026_08_31.json"
 PROTOCOL = HERE / "C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md"
 LOCAL_VALIDATION = HERE / "C16_PACKAGE_LOCAL_VALIDATION_20260830.json"
 DATASET = HERE / "c16_dataset.json"
@@ -81,7 +81,7 @@ def sha(path: Path) -> str:
 def require_authorization() -> dict:
     authorization = load(AUTHORIZATION)
     manifest = load(MANIFEST)
-    expected = {"schema": "crse-runpod-c16-linux-authorization/v1", "authorized": True,
+    expected = {"schema": "crse-runpod-c16-exact-payload-authorization/v2", "authorized": True,
         "user_total_ceiling_usd": 5.0, "controller_total_ceiling_usd": 0.05,
         "one_create": True, "no_replacement": True, "source_files": 18,
         "source_bytes": manifest["bytes"], "cases": 40, "repetitions": 3, "methods": 3,

@@ -1,0 +1,70 @@
+{
+  "schema_version": "2.0",
+  "planner_version": "1.0.0",
+  "status": "blocked_until_executable_chapter_render_contracts",
+  "purpose": "Measure actual full-resolution chapter throughput and determinism; do not use preview-frame timing as a production cost estimate.",
+  "remote_or_paid_work_authorized": false,
+  "sample_contract": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "frame_interval": "half-open",
+    "clock": "frame-derived",
+    "worker_counts": [
+      1,
+      4
+    ],
+    "repeat_identical_frame_for_determinism": true,
+    "retain": [
+      "timing JSON",
+      "input and output hashes",
+      "representative contact sheet",
+      "encoded chapter master",
+      "decoded-frame QA report"
+    ]
+  },
+  "samples": [
+    {
+      "video_id": "what-is-explicit-cm",
+      "archetype": "truth-layout-and-matrix",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    },
+    {
+      "video_id": "instruction-operations-memory",
+      "archetype": "repeated-dag-and-lowering",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    },
+    {
+      "video_id": "configuration-models",
+      "archetype": "feature-model",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    },
+    {
+      "video_id": "circuits",
+      "archetype": "circuit-cone",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    },
+    {
+      "video_id": "policy-rule-systems",
+      "archetype": "policy-and-rule-revision",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    },
+    {
+      "video_id": "recognition-c12-c16",
+      "archetype": "recognition-evidence-graph",
+      "chapter_id": "select_after_compiler_by_visual_coverage"
+    }
+  ],
+  "required_metrics": [
+    "render wall seconds",
+    "frames and pixels rendered",
+    "frames per second by worker count",
+    "worker-equivalent CPU hours",
+    "peak memory",
+    "encoded bytes and encode wall seconds",
+    "repeated-frame hash equality",
+    "decoded first/middle/last frame hashes"
+  ],
+  "cost_model_rule": "Only project series cost from these full-chapter samples and a current quoted resource rate collected immediately before proposal.",
+  "content_hash": "0867218f98461556effc507c37ef858774d8475b636131cf5ee15bf2f22400aa"
+}

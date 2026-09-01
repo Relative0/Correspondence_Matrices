@@ -1,0 +1,1088 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "D9 abstention policy: safe, charged, not promoted storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical and research viewers",
+  "purpose": "D9's frozen policy safely abstained on all evaluation workloads, but the charged decision path still cost time, so correct abstention did not become a promoted rewrite policy.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "recognition-d9",
+    "episode_content_hash": "395c51155af10fd5a7dc670952e61002475864a17f7f74b2e3b9549596e9f80d",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "D9 abstention policy: safe, charged, not promoted",
+        "caption": "D9's frozen policy safely abstained on all evaluation workloads, but the charged decision path still cost time, so correct abstention did not become a promoted rewrite…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned policy rules",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "D9 calibrated policy",
+            "note": "A two-gate policy separates applicability from expected gain.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "Versioned policy rules",
+        "caption": "A conceptual access policy over role, region, resource, and risk, shown across three source revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned policy rules",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "D9 calibrated policy",
+            "note": "A two-gate policy separates applicability from expected gain.",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "Input → transformation → consequence",
+        "caption": "A two-gate policy separates applicability from expected gain.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "D9 calibrated policy",
+            "note": "A two-gate policy separates applicability from expected gain.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "not_promoted",
+        "conceptual": false,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Milestone D9's frozen policy abstained on all evaluation workloads and preserved exactness, but the charged gate…",
+          "The CRSE recognition program is experimental; no learned model is promoted."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: D10 indexed rule execution: richer exact rules, negative whole-path economics",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "D9 calibrated policy",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "D10 indexed rule execution: richer exact…",
+            "note": "D9 selected the faster fixed arm correctly but remained slower after advice…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 48",
+        "title": "Pause, predict, then reveal",
+        "caption": "Distinguish refusal, novelty abstention, accepted advice, and unconditional fallback in four policy cases.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "crse-d9-not-promoted",
+          "crse-experimental"
+        ],
+        "source_ids": [
+          "src-recognition-readme",
+          "src-recognition-register"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "A safe no-op is not free, and its cost belongs in the deployment decision.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

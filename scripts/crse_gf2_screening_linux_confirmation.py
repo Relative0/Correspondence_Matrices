@@ -11,6 +11,9 @@ import sys
 import time
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 from cm_expr_serde import expr_from_json
 from cmbench.recognition.gf2_decomposition import (
     analyze_exact_gf2,

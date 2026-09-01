@@ -1,0 +1,1381 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Why a raw expression tree repeats work storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical viewers and research reviewers",
+  "purpose": "Raw AST evaluation follows every syntactic occurrence, making repeated work visible as an ablation but not providing the strongest generic comparator.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "raw-ast",
+    "episode_content_hash": "00399cd40a52a1121a264e04f5dec6e34f6bcc1bd2d5d74f69d619abed014212",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Why a raw expression tree repeats work",
+        "caption": "Raw AST evaluation follows every syntactic occurrence, making repeated work visible as an ablation but not providing the strongest generic comparator.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "raw AST evaluation",
+            "note": "The repeated subtree is outlined in two positions of the syntax tree.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Shared Boolean expression",
+        "caption": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "raw AST evaluation",
+            "note": "The repeated subtree is outlined in two positions of the syntax tree.",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Input → transformation → consequence",
+        "caption": "The repeated subtree is outlined in two positions of the syntax tree.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "raw AST evaluation",
+            "note": "The repeated subtree is outlined in two positions of the syntax tree.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Raw AST evaluation follows the expression tree without structural sharing or sharing-aware associative flattening, so…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Common subexpression elimination in plain language",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "raw AST evaluation",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Common subexpression elimination in…",
+            "note": "Raw AST is an informative ablation, not the strongest comparator for a system…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 16",
+        "title": "Pause, predict, then reveal",
+        "caption": "Count how many times the repeated subtree is evaluated before the counter reveals the answer.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "raw-ast-ablation-definition"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "The raw tree shows the duplication that later comparators are designed to remove.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

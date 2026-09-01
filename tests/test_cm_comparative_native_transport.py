@@ -78,6 +78,7 @@ class ComparativeNativeTransportTests(unittest.TestCase):
             mismatches,
             [
                 "cm_exprlib.py",
+                "cmbench/comparative/contracts.py",
                 "cmbench/comparative/linux_supervisor.py",
                 "scripts/cm_comparative_native_scout.py",
                 "scripts/cm_native_contracts.py",

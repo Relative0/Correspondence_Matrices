@@ -7,6 +7,14 @@ No model is promoted; Windows launcher, containment, deployment and general
 cloud product work remain deferred. D8 is one bounded authorized Linux
 confirmation. Existing historical evidence remains unchanged.
 
+The active post-C16 sequence is maintained in the
+[implementation, training, and comparison plan](POST_C16_IMPLEMENTATION_TRAINING_TEST_PLAN_2026_08_31.md)
+and its [machine-readable queue](post_c16_implementation_plan.json).
+
+Current evidence: [C17 exact task dispatch](LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md),
+[C18 independent VTR transfer](LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md),
+and the [F1 comparison-harness implementation](F1_TASK_MATCHED_COMPARISON_HARNESS_IMPLEMENTATION_2026_08_31.md).
+
 ## Working sequence
 
 Current checkpoints: [A/B implementation and results](LEARNING_MILESTONES_AB_2026_08_29.md),
@@ -72,6 +80,18 @@ It matched the exhaustive best identity on 40 source cases and 12 controls and
 measured a 3.545x local whole-path gain. One tiny case regressed, and external
 Linux execution awaits explicit approval of the frozen 18-file payload, so the
 path remains disabled by default.
+C17 wrapped both exact arms in a versioned, platform-bound dispatcher with
+advice-off and shadow contracts. C18 then transferred the frozen policy without
+refitting to 73 independently sourced VTR cones: exactness and aggregate speed
+passed, but a single-round small-case tail initially failed. C19 froze 96
+LogikBench cones by source cluster, fit only exact-arm cost choices on
+development data, selected on validation, and sealed the policy before its 24
+case confirmation. The selected candidate collapsed to an always-screened leaf
+and passed at 2.769x aggregate / 0.972x minimum. C20 constant-folded that leaf
+and repeated all 11 C18 `n=3-4` controls for nine balanced rounds; the compiled
+path reached 1.760x aggregate / 1.463x minimum and did not reproduce the earlier
+one-round regression. C19 is fresh same-machine evidence and C20 is
+retrospective same-machine evidence, so production remains disabled.
 D now measures four separate
 task contracts through direct, CSE, CM-IR and explicit dense-CM paths, a fitted
 task/query router, exact caching, and stop/one-rewrite scheduling on a new EPFL
@@ -123,6 +143,86 @@ BDD, and CaDiCaL on task-equivalent status vectors. The tree learned the useful
 fresh-versus-resident distinction but cost 1.0420x the sealed best fixed action
 after advice overhead. Its local second-machine gate failed; no cloud run or
 production promotion followed.
+
+F1 established the versioned exact decomposition task contract. C21/F2 now
+executes its first complete task-matched table on 96 frozen LogikBench cones.
+Seven methods delivered the same exhaustive-best artifact. Packed source ANF
+was narrowly the fastest fixed path at 3.007x over exhaustive, screened CM was
+2.988x, fresh single-query BDD was negative, and structural/ANF priority
+proposals did not remove exact completion work. The per-case oracle is only
+1.059x faster than the best fixed arm before router cost. This is retrospective
+one-machine evidence; add the packed source arm and seek fresh-source headroom
+before another learned router.
+
+C22 implements that packed source-ANF arm behind an opt-in exact boundary. The
+frozen policy binds the C21 evidence, advice-off restores exhaustive CM, source
+refusal falls back exactly, and shadow mode requires identical best-artifact
+identity. This is implementation readiness only; it has no fresh timing or
+promotion claim.
+
+C23 transfers the unchanged seven-method exact table to 48 previously unused
+Yosys generator-family functions at task-complete supports 3-6. All 1,680 timed
+executions delivered the exhaustive-best artifact. Packed source ANF led at
+3.306x over exhaustive and 1.006x over screened CM; screened CM reached 3.286x
+over exhaustive. The per-case oracle has only 1.047x headroom before routing
+cost, fresh BDD remains negative, and the compiled path still has individual
+regressions. The sealed 52-file Linux package passes isolated local validation;
+the first exactly authorized create request returned HTTP 500 before any pod or
+upload. Controller and twelve-minute watchdog reconciliation found both RunPod
+inventories empty. A separately authorized retry then reproduced all exact
+outputs and measured screened CM at 3.337x over exhaustive on Linux. The narrow
+winner changed from packed source ANF to compiled screened CM, and Linux oracle
+headroom was only 1.005x. The pod was deleted with empty final inventories. A
+local controller metadata check incorrectly treated vendored `dd` as an installed
+distribution; independent source-bound verification adjudicated the scientific
+run complete while preserving that false-negative record.
+
+C24-C26 then charged the C22 boundary, resident reuse, and a single-evaluation
+hash-bound fused context. Exactness and fail-closed controls passed throughout, but
+fixed packed-context overhead at n=3 and n=4 prevented the C26 support-width no-regret
+gate. C27 froze a transparent n<=4 truth-screened / n>=5 packed-screened rule before
+constructing a 48-case corpus from previously unused Yosys-bench generator groups.
+The independent verifier found zero mismatches across 7,560 timed exact queries. The
+fresh local gate passed at 8 queries (1.024x aggregate, 0.980x worst width) and at 16
+queries (1.005x, 0.922x), but not at 32 queries. The frozen 63-file Linux package
+passed all isolated exactness and verification gates, while its isolated same-machine
+timing rerun failed the profitability gate. An unchanged Linux run remains informative,
+but the current speed claim is timing-sensitive and production promotion remains false.
+After earlier capacity-only waits, one compliant Secure `cpu3c` pod was created under
+the exact authorization. A transient HTTPS proxy 404 occurred before payload acceptance;
+the pod was deleted and independently reconciled. Retry-002 then received HTTP 500 from
+its one create request, and no owned pod appeared through the full reconciliation horizon.
+The unchanged frozen package subsequently ran three times in the pinned same-host Docker
+Linux/amd64 runtime with networking disabled. All 22,680 timed queries remained exact,
+and the timing gate passed 3/3 at the same eight-query break-even.
+
+Exactly authorized retry-003 then ran the unchanged 63-file package on Secure `cpu5c`
+hardware backed by an AMD EPYC 4564P. The on-pod verifier and a byte-identical
+post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and
+2,520 semantic contexts with zero mismatches. The physical second-machine gate passed
+first at eight queries: **1.0352x** aggregate and **0.9608x** minimum-width speedup over
+direct screened execution. It also passed at 16 and 32 queries. The pod was deleted and
+verified absent after 79.86 seconds at an estimated $0.001553. A controller metadata gate
+misclassified vendored `dd` as an installed distribution; independent adjudication
+preserved the original false-negative record and verified the scientific run complete.
+Production remains disabled because the margins are narrow and machine-specific.
+
+C28 now applies that no-refit adjudicator to the frozen Windows, three same-host Docker,
+and RunPod timing surfaces. It rechecks 3,600 batches and 37,800 exact timed queries, then
+enumerates all 3,125 paired five-round resamples for each execution/query-count pair.
+Only q8 passes the point gate everywhere, with a 1.0240x aggregate and 0.9498x
+minimum-width cross-execution floor. Its worst paired-round lower bounds are only 0.9279x
+and 0.5972x. No query count passes the uncertainty gate and no measured monotonic suffix
+supports a general q>=k rule, so C28 refuses shadow and production promotion.
+
+C29 now localizes all 100 frozen q8 width/round cells and adds 64 adjacent,
+counterbalanced local pairs with component timings. The 0.5972x C28 floor is a Windows
+n=4 query-path outlier, while n=3 supplies 16 of 25 frozen total regressions. In the new
+run, n=3 is 0.846x total/0.978x query-only and n=4 is 0.969x total/1.042x query-only.
+Policy loading and validation consume 92.38% of median candidate setup, enough to erase
+the n=4 query gain but not all query variance. C30 should add a hash-bound immutable
+prepared-policy context, charge preparation once at the resident lifecycle boundary,
+and repeat the exact counterbalanced diagnostic before another two-machine confirmation.
 
 1. **A: reusable foundation.** Retain feature ablations with the original
    direct/CSE/CM harness, add the equally cheap query-count rule, bind feature

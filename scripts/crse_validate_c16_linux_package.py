@@ -38,8 +38,8 @@ def main() -> None:
     if before != sorted(row["target"] for row in manifest["files"]):
         raise SystemExit("C16 isolated directory contains files outside manifest")
     environment = {key: value for key, value in os.environ.items() if key != "PYTHONPATH"}
-    environment.update({"PYTHONPATH": str(ISOLATED), "PYTHONDONTWRITEBYTECODE": "1",
-                        "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1",
+    environment.update({"PYTHONDONTWRITEBYTECODE": "1", "OPENBLAS_NUM_THREADS": "1",
+                        "OMP_NUM_THREADS": "1",
                         "MKL_NUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1"})
     command = [sys.executable, "-B", "scripts/crse_gf2_screening_linux_confirmation.py",
                "--dataset", "study/c16-dataset.json", "--output",

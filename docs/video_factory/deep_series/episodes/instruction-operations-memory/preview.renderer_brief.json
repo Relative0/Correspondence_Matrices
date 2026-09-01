@@ -1,0 +1,1407 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "From DAGs to flat instructions: operations, storage, and execution storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical viewers and research reviewers",
+  "purpose": "A shared DAG, CSE-flat transformation, lowered FlatProgram, instruction count, executed operations, live buffers, and packed storage are distinct layers that must be named separately.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "instruction-operations-memory",
+    "episode_content_hash": "71a3fb75756d728fe5b87c2c475acaf3657ac17298e8df8a0ed57e7aae1748aa",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "From DAGs to flat instructions: operations, storage, and execution",
+        "caption": "A shared DAG, CSE-flat transformation, lowered FlatProgram, instruction count, executed operations, live buffers, and packed storage are distinct layers that must be…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "DAG-to-FlatProgram lowering",
+            "note": "DAG nodes descend into a linear postorder instruction tape with matching…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "Shared Boolean expression",
+        "caption": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "DAG-to-FlatProgram lowering",
+            "note": "DAG nodes descend into a linear postorder instruction tape with matching…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "Input → transformation → consequence",
+        "caption": "DAG nodes descend into a linear postorder instruction tape with matching identity colors.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "DAG-to-FlatProgram lowering",
+            "note": "DAG nodes descend into a linear postorder instruction tape with matching…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "mixed",
+        "conceptual": false,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "A shared DAG can be lowered once into a linear postorder FlatProgram with one instruction per unique DAG node; this…",
+          "Flat instruction count, argument edges, executed primitive operations, and peak live buffers are different metrics and…",
+          "A graph or instruction reduction may change allocation or memory traffic, but memory traffic is a proposed mechanism…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Plain CSE versus sharing-aware CSE-flat",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "DAG-to-FlatProgram lowering",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Plain CSE versus sharing-aware CSE-flat",
+            "note": "Instruction and operation counts are measured structural metrics, but hardware…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 20",
+        "title": "Pause, predict, then reveal",
+        "caption": "Match CSE-flat, FlatProgram, instruction count, primitive operation count, and packed word storage to five displayed artifacts.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "flat-program-lowering",
+          "operation-metrics-distinct",
+          "memory-traffic-hypothesis",
+          "epfl-mechanism"
+        ],
+        "source_ids": [
+          "src-bitset",
+          "src-correction-report",
+          "src-epfl-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Flat syntax, flat instructions, and packed storage are different stages of one…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "episode_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "language": {
+      "const": "en-US"
+    },
+    "pace_wpm": {
+      "type": "number",
+      "minimum": 115,
+      "maximum": 135
+    },
+    "word_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "duration_target_s": {
+      "type": "number",
+      "minimum": 1
+    },
+    "cues": {
+      "type": "array",
+      "minItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "cue_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chapter_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "hook",
+              "definition",
+              "example",
+              "mechanism",
+              "evidence",
+              "contrast",
+              "boundary",
+              "retrieval",
+              "misconception",
+              "recap",
+              "pause"
+            ]
+          },
+          "spoken": {
+            "type": "boolean"
+          },
+          "text": {
+            "type": "string"
+          },
+          "pronunciation": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidence_status": {
+            "enum": [
+              "conceptual",
+              "confirmed",
+              "revised",
+              "negative",
+              "not_promoted",
+              "exploratory",
+              "mixed"
+            ]
+          },
+          "timing_target_s": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 12
+          },
+          "text_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "cue_id",
+          "chapter_id",
+          "scene_id",
+          "role",
+          "spoken",
+          "text",
+          "pronunciation",
+          "claim_ids",
+          "source_ids",
+          "evidence_status",
+          "timing_target_s",
+          "text_sha256"
+        ]
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "video_id",
+    "episode_content_hash",
+    "language",
+    "pace_wpm",
+    "word_count",
+    "duration_target_s",
+    "cues",
+    "content_hash"
+  ]
+}

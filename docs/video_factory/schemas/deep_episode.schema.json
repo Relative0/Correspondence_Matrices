@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "status": {
+      "const": "review_candidate"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bible_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "episode_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "duration_tier": {
+      "enum": [
+        "focused_explainer",
+        "core_episode",
+        "deep_episode"
+      ]
+    },
+    "duration_minutes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "type": "number",
+          "minimum": 1
+        },
+        "maximum": {
+          "type": "number",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ]
+    },
+    "worked_example_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prerequisite_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "chapter_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "contract_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "video_id",
+    "order",
+    "title",
+    "bible_content_hash",
+    "episode_content_hash",
+    "duration_tier",
+    "duration_minutes",
+    "worked_example_id",
+    "prerequisite_ids",
+    "chapter_ids",
+    "artifact_hashes",
+    "contract_hash"
+  ]
+}

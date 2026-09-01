@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_not_applied",
+  "video_id": "what-is-explicit-cm",
+  "revision_id": "v2",
+  "base_claim_ids_retained": [
+    "cm-explicit-definition"
+  ],
+  "base_claim_ids_removed_from_episode": [
+    "live-vs-ambient"
+  ],
+  "proposed_claims": [
+    {
+      "id": "cm-ordered-basis-indexing",
+      "allowed_wording": "An explicit CM is interpreted relative to declared ordered row and column axes; for binary axes R and C it has 2^|R| rows and 2^|C| columns, and changing the split or order can change shape and cell positions without changing the Boolean function.",
+      "plain_wording": "The row and column choices determine the matrix's shape and addresses, not the function's answers.",
+      "technical_wording": "The ordered R and C lists are accumulated MSB-first into row and column indices; materialization reshapes the dense output to (1 << len(R), 1 << len(C)).",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "path": "cm_build.py",
+          "sha256": "325987a6778feb09f2ff2e3a6a1f21e672ea1696c294f063261b2f5fbfabb33e",
+          "locator": "eval_cm_boolean"
+        },
+        {
+          "source_id": "src-cm-ir",
+          "path": "cm_ir.py",
+          "sha256": "3e0958785ec6e34cefa2a55093c0cc8b7787a6923549d05d90b45730776bb365",
+          "locator": "materialize_cm final reshape"
+        }
+      ]
+    }
+  ]
+}

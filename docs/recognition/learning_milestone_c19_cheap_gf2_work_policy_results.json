@@ -1,0 +1,166 @@
+{
+  "confirmation": {
+    "gate": true,
+    "methods": {
+      "c17_wrapper": {
+        "aggregate_speedup_over_exhaustive": 2.7346266521146547,
+        "maximum_regret_over_best_direct_arm": 1.784564131038312,
+        "median_case_speedup_over_exhaustive": 1.808818271661762,
+        "minimum_case_speedup_over_exhaustive": 0.9198970840480274,
+        "screened_cases": 20
+      },
+      "c19_selected": {
+        "aggregate_speedup_over_exhaustive": 2.7686402558045597,
+        "maximum_regret_over_best_direct_arm": 1.1386424592531463,
+        "median_case_speedup_over_exhaustive": 1.8219200306012715,
+        "minimum_case_speedup_over_exhaustive": 0.9717340097843812,
+        "screened_cases": 24
+      },
+      "direct_exhaustive": {
+        "aggregate_speedup_over_exhaustive": 1.0,
+        "maximum_regret_over_best_direct_arm": 3.768383707179,
+        "median_case_speedup_over_exhaustive": 1.0,
+        "minimum_case_speedup_over_exhaustive": 1.0,
+        "screened_cases": 0
+      },
+      "direct_n3": {
+        "aggregate_speedup_over_exhaustive": 2.7462312743657433,
+        "maximum_regret_over_best_direct_arm": 1.6329816768461967,
+        "median_case_speedup_over_exhaustive": 1.894519957798488,
+        "minimum_case_speedup_over_exhaustive": 0.9663063063063063,
+        "screened_cases": 20
+      },
+      "direct_n4": {
+        "aggregate_speedup_over_exhaustive": 2.674908899220625,
+        "maximum_regret_over_best_direct_arm": 1.943911890679176,
+        "median_case_speedup_over_exhaustive": 1.4664814710599368,
+        "minimum_case_speedup_over_exhaustive": 0.9387262616724373,
+        "screened_cases": 12
+      },
+      "direct_screened": {
+        "aggregate_speedup_over_exhaustive": 2.793124194608249,
+        "maximum_regret_over_best_direct_arm": 1.0,
+        "median_case_speedup_over_exhaustive": 1.9029416082252206,
+        "minimum_case_speedup_over_exhaustive": 1.1064576026408088,
+        "screened_cases": 24
+      }
+    },
+    "single_machine": true
+  },
+  "corpus": {
+    "cases": 96,
+    "confirmation": 24,
+    "dataset": "docs/recognition/c19_logikbench_small_cone_dataset.json",
+    "development": 48,
+    "family": "LogikBench",
+    "prior_truth_overlaps": 0,
+    "source_inventory": "docs/recognition/c19_logikbench_small_cone_inventory.json",
+    "source_verification": "docs/recognition/c19_logikbench_small_cone_verification.json",
+    "split_cluster_overlap": 0,
+    "validation": 24
+  },
+  "date": "2026-08-31",
+  "interpretation": "A pre-confirmation fitted candidate collapsed to an always-screened exact leaf and passed the fresh LogikBench confirmation gate at 2.769x aggregate and 0.972x minimum. Direct screened reached 2.793x, exposing removable generic policy overhead. One-machine scope and the prior VTR slow tail prevent promotion.",
+  "measurement_rows": {
+    "confirmation": 720,
+    "development": 480,
+    "validation": 840
+  },
+  "policy": {
+    "confirmation_policy_refit": false,
+    "exact_arm_selection_only": true,
+    "learned_truth_values": false,
+    "path": "docs/recognition/runs/c19-logikbench-cheap-work-policy-windows-20260831-001/policy.json",
+    "policy_sha256": "6d3e58f12deef7c96c21f4362316b059ed577a85f0a486b79278d13f6933d39e",
+    "selected_candidate": "learned_stump",
+    "tree": {
+      "arm": "explicit_cm_screened",
+      "kind": "leaf"
+    }
+  },
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+  "run": "docs/recognition/runs/c19-logikbench-cheap-work-policy-windows-20260831-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "reused_prior_verified_conversion_artifacts": true,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c19-cheap-gf2-work-policy-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "phase_separated_exact_policy_confirmation_passed",
+  "validation": {
+    "eligible_candidates": [
+      "fixed_n3",
+      "learned_stump",
+      "learned_depth2"
+    ],
+    "methods": {
+      "always_exhaustive": {
+        "aggregate_speedup_over_exhaustive": 1.0434407327335704,
+        "cases": 24,
+        "maximum_regret_over_best_exact_arm": 4.917679522186759,
+        "median_case_speedup_over_exhaustive": 1.01400821099933,
+        "minimum_case_speedup_over_exhaustive": 0.9425431571453995,
+        "screened_cases": 0
+      },
+      "fixed_n3": {
+        "aggregate_speedup_over_exhaustive": 3.405632390074538,
+        "cases": 24,
+        "maximum_regret_over_best_exact_arm": 1.772231784279977,
+        "median_case_speedup_over_exhaustive": 2.243979871676366,
+        "minimum_case_speedup_over_exhaustive": 1.0501780511492393,
+        "screened_cases": 23
+      },
+      "fixed_n4": {
+        "aggregate_speedup_over_exhaustive": 3.334144727214923,
+        "cases": 24,
+        "maximum_regret_over_best_exact_arm": 2.052586575459598,
+        "median_case_speedup_over_exhaustive": 2.290604069637068,
+        "minimum_case_speedup_over_exhaustive": 0.919287648406582,
+        "screened_cases": 15
+      },
+      "learned_depth2": {
+        "aggregate_speedup_over_exhaustive": 3.384544215183879,
+        "cases": 24,
+        "maximum_regret_over_best_exact_arm": 1.2002294893861158,
+        "median_case_speedup_over_exhaustive": 2.1899827149850957,
+        "minimum_case_speedup_over_exhaustive": 1.2698479286837965,
+        "screened_cases": 24
+      },
+      "learned_stump": {
+        "aggregate_speedup_over_exhaustive": 3.4279219559283773,
+        "cases": 24,
+        "maximum_regret_over_best_exact_arm": 1.1580483249679001,
+        "median_case_speedup_over_exhaustive": 2.287939643629741,
+        "minimum_case_speedup_over_exhaustive": 1.3378535773710483,
+        "screened_cases": 24
+      }
+    }
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 9,
+    "confirmation_policy_refit": false,
+    "confirmation_rows_checked": 720,
+    "confirmation_summary_recomputed": true,
+    "corpus_source_replay_required_and_present": true,
+    "development_rows_checked": 480,
+    "functional_cases_replayed": 96,
+    "path": "docs/recognition/runs/c19-logikbench-cheap-work-policy-windows-20260831-001/independent_verification.json",
+    "policy_rebuilt_from_development_and_validation": true,
+    "production_promotion": false,
+    "schema": "crse-c19-gf2-cheap-work-policy-verification/v1",
+    "selected_candidate": "learned_stump",
+    "selected_tree": {
+      "arm": "explicit_cm_screened",
+      "kind": "leaf"
+    },
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 3,
+    "split_cluster_overlap": 0,
+    "status": "verified",
+    "timings_rerun": false,
+    "validation_rows_checked": 840,
+    "validation_summary_recomputed": true
+  }
+}

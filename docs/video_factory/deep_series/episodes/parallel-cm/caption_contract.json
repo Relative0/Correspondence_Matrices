@@ -1,0 +1,346 @@
+{
+  "schema_version": "2.0",
+  "video_id": "parallel-cm",
+  "narration_content_hash": "3b05c67984c538af393b32bb6a9562d66920f1c2029cbb27002ad2e132af4cc1",
+  "language": "en-US",
+  "cues": [
+    {
+      "cue_id": "q0001",
+      "start_s": 0.0,
+      "end_s": 7.808,
+      "text": "If rows can be computed independently, why not always send every row to another worker?",
+      "text_sha256": "688c34cdb0709e399fa6eab6dfb52c4cc7f00b675401a5a0f45c5435b2cb9f31"
+    },
+    {
+      "cue_id": "q0002",
+      "start_s": 7.808,
+      "end_s": 16.994,
+      "text": "This episode has one job: Parallel CM partitions eligible materialization work into deterministic chunks, then reassembles the same exact output while charging scheduling and data-movement overhead.",
+      "text_sha256": "4d3a34e57115326cbeb7d76565d2df07d40538a04a7f0be39ebaca5596a31baa"
+    },
+    {
+      "cue_id": "q0003",
+      "start_s": 16.994,
+      "end_s": 26.18,
+      "text": "We build on Hybrid versus partial-hybrid materialization; their definitions stay fixed while this lesson adds a new layer.",
+      "text_sha256": "b80458b74f15e0ed9a72f3141f8772668e3366135f6bd8a1cbcee0d369b5e30d"
+    },
+    {
+      "cue_id": "q0004",
+      "start_s": 26.18,
+      "end_s": 33.498,
+      "text": "Parallel materialization divides eligible output work into chunks and deterministically reconstructs the same result.",
+      "text_sha256": "e4fcd1e7921cdc2108fd96a07a40d0841a29db43bf65a7f5c2651c5d283cd5fa"
+    },
+    {
+      "cue_id": "q0005",
+      "start_s": 33.498,
+      "end_s": 41.306,
+      "text": "Watch for the label parallel materialization; it stays attached to the artifact this episode means.",
+      "text_sha256": "f2a02c6b044385d07bd9b5841884d3971a33e8403db66eefd6dba1c98dc44ccb"
+    },
+    {
+      "cue_id": "q0006",
+      "start_s": 41.306,
+      "end_s": 48.624,
+      "text": "When we say work chunk, the highlight identifies its layer before we interpret it.",
+      "text_sha256": "123d6e8b0dc4d38f82b576a6940205b253702cbc9c5675187abf959a44ff69c0"
+    },
+    {
+      "cue_id": "q0007",
+      "start_s": 48.624,
+      "end_s": 57.412,
+      "text": "The term shared memory receives its own visual state so it cannot drift into a neighboring concept.",
+      "text_sha256": "8ebb1e4810a039e6230fe23ca06266e0c08124c3f50a6b02f6442fc017427723"
+    },
+    {
+      "cue_id": "q0008",
+      "start_s": 57.412,
+      "end_s": 63.75,
+      "text": "We will keep deterministic assembly visible whenever its definition controls the inference.",
+      "text_sha256": "87f3b76b6cd6a181b102add42af3ad7b7710e6e8cc8bed13883ff7f5aad81d7e"
+    },
+    {
+      "cue_id": "q0009",
+      "start_s": 63.75,
+      "end_s": 72.538,
+      "text": "The next sequence uses Four-variable truth layout as a conceptual teaching example, not as measured benchmark evidence.",
+      "text_sha256": "309373504b08cb7078570d21bd9e19a5a9aaebee1abb21f9842d1b1c4f96d040"
+    },
+    {
+      "cue_id": "q0010",
+      "start_s": 72.538,
+      "end_s": 76.427,
+      "text": "Our stable example is Four-variable truth layout.",
+      "text_sha256": "08df333df91a2a26ccecf88addeec32efd613bfa0c2145170cf2d82d2ff583ba"
+    },
+    {
+      "cue_id": "q0011",
+      "start_s": 76.427,
+      "end_s": 85.613,
+      "text": "F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.",
+      "text_sha256": "24b94cd2aa009c3d09895df1d5115802d1c6b5326b481c01a11d874885d9680c"
+    },
+    {
+      "cue_id": "q0012",
+      "start_s": 85.613,
+      "end_s": 92.931,
+      "text": "Carry assignments, live support, explicit CM, packed truth vectors, and exact output across episodes.",
+      "text_sha256": "2d3d20437475b92abb2ad2963d082e6b3c19af8190a4292aa91895f975268705"
+    },
+    {
+      "cue_id": "q0013",
+      "start_s": 92.931,
+      "end_s": 100.249,
+      "text": "We now construct the Four-variable truth layout and name every part before interpreting it.",
+      "text_sha256": "a421c7590fdd61c3869e9f91ff4507029f6b7502da12678341f104c4a1b0129e"
+    },
+    {
+      "cue_id": "q0014",
+      "start_s": 100.249,
+      "end_s": 108.547,
+      "text": "Partition matrix rows into ordered chunks, send them through worker lanes, and keep global indices attached.",
+      "text_sha256": "f600395a9879547f0da83b0fce32a41cd64c2437194299c194bf0afaf0333021"
+    },
+    {
+      "cue_id": "q0015",
+      "start_s": 108.547,
+      "end_s": 116.355,
+      "text": "Reassemble chunks in deterministic order while an overhead band shows scheduling, transfer, and merge work.",
+      "text_sha256": "29517d3f8f15d2b5584163549800930ce9999e5dc79f09bbe0cc07705d929668"
+    },
+    {
+      "cue_id": "q0016",
+      "start_s": 116.355,
+      "end_s": 121.224,
+      "text": "Now isolate parallel work eligibility inside Four-variable truth layout.",
+      "text_sha256": "3fc018fb65abf3204ac0fccb1b852cb303680b2476ac82de8408abe3dd814322"
+    },
+    {
+      "cue_id": "q0017",
+      "start_s": 121.224,
+      "end_s": 130.012,
+      "text": "The example definition and output meaning stay fixed while only the state for parallel work eligibility changes.",
+      "text_sha256": "fd8345b2803fd3c5e16339215222cf288808c9d79fcb3c5113c84c25b084710d"
+    },
+    {
+      "cue_id": "q0018",
+      "start_s": 130.012,
+      "end_s": 138.8,
+      "text": "That matched before-and-after view assigns the visible consequence to parallel work eligibility, not to a substituted workload.",
+      "text_sha256": "d23feaa4784f7738dbad08aadeacb04e504fa8bf72c7485cf4cfe4fbf9896fd7"
+    },
+    {
+      "cue_id": "q0019",
+      "start_s": 138.8,
+      "end_s": 144.159,
+      "text": "A matrix gains chunk boundaries only after minimum-work guards pass.",
+      "text_sha256": "303ce5b50505cefad6e57c4cb0c80e13d03e837e04d96776463c8979e57a3463"
+    },
+    {
+      "cue_id": "q0020",
+      "start_s": 144.159,
+      "end_s": 149.028,
+      "text": "Now isolate chunk/worker partition inside Four-variable truth layout.",
+      "text_sha256": "232eba1748166624a56f0529ed1c332356eddf1dd177e81da900b80a0666a45b"
+    },
+    {
+      "cue_id": "q0021",
+      "start_s": 149.028,
+      "end_s": 157.816,
+      "text": "The example definition and output meaning stay fixed while only the state for chunk/worker partition changes.",
+      "text_sha256": "d0ea501a6e1ac190a2a75c37796f9f1e4b34e80ca805e7c3ec26a011aa85ad39"
+    },
+    {
+      "cue_id": "q0022",
+      "start_s": 157.816,
+      "end_s": 166.604,
+      "text": "That matched before-and-after view assigns the visible consequence to chunk/worker partition, not to a substituted workload.",
+      "text_sha256": "1682788c44fcc0b513df30764fb56a0da1c3bddcf6042d1639b4f9f5ff3eb643"
+    },
+    {
+      "cue_id": "q0023",
+      "start_s": 166.604,
+      "end_s": 171.963,
+      "text": "Ordered tiles enter worker swim lanes with stable row-index tags.",
+      "text_sha256": "8991e6be9234abbbb4cab13fbb0deb6bf18eae08bfefb6f0d9425f5a1ac04216"
+    },
+    {
+      "cue_id": "q0024",
+      "start_s": 171.963,
+      "end_s": 181.149,
+      "text": "Parallel CM partitions eligible materialization work and deterministically assembles the result; parallel availability does not imply a speedup after scheduling and transport overhead.",
+      "text_sha256": "e5fcdb5c70bfc9afbb80cfbae58cf2b2630bcbd4d710468c459911b61c116402"
+    },
+    {
+      "cue_id": "q0025",
+      "start_s": 181.149,
+      "end_s": 186.997,
+      "text": "Read that statement only within this scope: current parallel CM implementation.",
+      "text_sha256": "0f632d591395de6e335710065572007ad418fb728e116686f64db6960babafeb"
+    },
+    {
+      "cue_id": "q0026",
+      "start_s": 186.997,
+      "end_s": 190.886,
+      "text": "Its declared measurement boundary is materialization strategy.",
+      "text_sha256": "375cf5f77454547b41982b094b31a0dde59d985a3991c7cca15b84f88446178f"
+    },
+    {
+      "cue_id": "q0027",
+      "start_s": 190.886,
+      "end_s": 195.265,
+      "text": "The uncertainty field says no universal performance claim.",
+      "text_sha256": "e7f652feca2a0af1291a369415524235722b8d3edf886bf446252401f3ea40d1"
+    },
+    {
+      "cue_id": "q0028",
+      "start_s": 195.265,
+      "end_s": 204.451,
+      "text": "The nearest confusing lesson is Pair-aware CM collapse; it owns pair eligibility, while this episode owns parallel work eligibility.",
+      "text_sha256": "39af56b97ee4bf0e981c30a406e506f0fa12c04930c9a4d90a64b051f43ec115"
+    },
+    {
+      "cue_id": "q0029",
+      "start_s": 204.451,
+      "end_s": 213.637,
+      "text": "The example fixes F of A, B, C, and D as A AND B, exclusive-or C OR D.",
+      "text_sha256": "a8feeb4a53b3e86a7ff731164027f2b4401180d835fa3acb4797c2633dbe0bea"
+    },
+    {
+      "cue_id": "q0030",
+      "start_s": 213.637,
+      "end_s": 219.485,
+      "text": "Holding that element fixed lets this episode isolate parallel work eligibility.",
+      "text_sha256": "5ebfc13826add92aa2ed812c43f046166429b06412bd25161307643770028280"
+    },
+    {
+      "cue_id": "q0031",
+      "start_s": 219.485,
+      "end_s": 228.671,
+      "text": "A and B select the row, C and D select the column, and MSB-first order fixes both index conventions.",
+      "text_sha256": "6d3b95b6b8756a25455cccf8b93606f2208b4519ce2e33c3e5d88ab4b73db687"
+    },
+    {
+      "cue_id": "q0032",
+      "start_s": 228.671,
+      "end_s": 234.519,
+      "text": "Holding that element fixed lets this episode isolate chunk/worker partition.",
+      "text_sha256": "c97025c58a769ef4089aba7a93365ea3faf1668c2a6ccad361ce32a86f52832c"
+    },
+    {
+      "cue_id": "q0033",
+      "start_s": 234.519,
+      "end_s": 242.327,
+      "text": "Folding the truth-table output column into a four-by-four grid changes the layout, not the function.",
+      "text_sha256": "887b6fc3c417dadf6a1e60243ade848e92db54dd52e422645b373b23a1d7408e"
+    },
+    {
+      "cue_id": "q0034",
+      "start_s": 242.327,
+      "end_s": 251.513,
+      "text": "Reading a cell forward evaluates an assignment; reading it backward recovers the row and column bits that selected it.",
+      "text_sha256": "85f089e29ffba3fe9a40f10e7b56826f304691099a46beda6e6464df7d16b79c"
+    },
+    {
+      "cue_id": "q0035",
+      "start_s": 251.513,
+      "end_s": 258.831,
+      "text": "Parallelism adds scheduling and data-movement cost, so availability is not evidence of a speedup.",
+      "text_sha256": "8a638886300df3fd2cb651fd600dade761eb2a7b8e7d745bb7dbc5cab2064649"
+    },
+    {
+      "cue_id": "q0036",
+      "start_s": 258.831,
+      "end_s": 266.149,
+      "text": "Choose whether a small, large, or dependency-coupled case should cross the parallel work guard.",
+      "text_sha256": "e1e7e218c78230e9f0ed19d338580ebba3e93880a448128c93a4920f7dea159f"
+    },
+    {
+      "cue_id": "q0037",
+      "start_s": 266.149,
+      "end_s": 272.977,
+      "text": "Parallelism redistributes work; it does not remove the need to count the work.",
+      "text_sha256": "3a901799d6312d418347d669fb6c0a6ed80cb769ab63d0b1e1c1f9bb91c69fbd"
+    },
+    {
+      "cue_id": "q0038",
+      "start_s": 272.977,
+      "end_s": 278.336,
+      "text": "Now isolate deterministic assembly and overhead inside Four-variable truth layout.",
+      "text_sha256": "d215209dd6fbfc61821ee02dcefacba8d837da3d71d334b0e4ad646271c5ce53"
+    },
+    {
+      "cue_id": "q0039",
+      "start_s": 278.336,
+      "end_s": 287.522,
+      "text": "The example definition and output meaning stay fixed while only the state for deterministic assembly and overhead changes.",
+      "text_sha256": "c708b255dc3da8c0e8f663ee7a5d4a004412bd398a46802ced2496306d7312a3"
+    },
+    {
+      "cue_id": "q0040",
+      "start_s": 287.522,
+      "end_s": 296.708,
+      "text": "That matched before-and-after view assigns the visible consequence to deterministic assembly and overhead, not to a substituted workload.",
+      "text_sha256": "5bf4585398caa31f5da936b8b9a7d8f9ae6a532de48c1468bb5282ec905324d2"
+    },
+    {
+      "cue_id": "q0041",
+      "start_s": 296.708,
+      "end_s": 303.536,
+      "text": "Tiles return to one exact matrix while overhead remains a separate visible band.",
+      "text_sha256": "a0d13e134319bb98cb9bf1cf4cb886d3d89943b2709e77a3af19a565eaee50d5"
+    },
+    {
+      "cue_id": "q0042",
+      "start_s": 303.536,
+      "end_s": 312.722,
+      "text": "Every four-bit assignment names exactly one of the sixteen cells, and every cell returns one exact output bit.",
+      "text_sha256": "b4b6431c5e4bf73b590a435844cee96bdb0312010e225f270731956561817c04"
+    },
+    {
+      "cue_id": "q0043",
+      "start_s": 312.722,
+      "end_s": 319.06,
+      "text": "Holding that element fixed lets this episode isolate deterministic assembly and overhead.",
+      "text_sha256": "469e6a5abd8dd8b78482efa337a2f3e720f9fcbd01c91f47bdd10340cd7733e3"
+    },
+    {
+      "cue_id": "q0044",
+      "start_s": 319.06,
+      "end_s": 328.246,
+      "text": "Live support can remove an input from active computation even when the ambient layout still reserves its axis.",
+      "text_sha256": "ef6d13979cbf20c329d96f89d64582fc7cd4bdc97375cdaefbe54897b8b9d104"
+    },
+    {
+      "cue_id": "q0045",
+      "start_s": 328.246,
+      "end_s": 334.584,
+      "text": "A common mistake is this: More workers necessarily make every materialization faster.",
+      "text_sha256": "d5aa73df4d24ce4f4534390d41e57aaa75c1ed62a876d93da61b8a74055bf49d"
+    },
+    {
+      "cue_id": "q0046",
+      "start_s": 334.584,
+      "end_s": 340.432,
+      "text": "Repair it by returning to the owned distinction: parallel work eligibility.",
+      "text_sha256": "4a9e92e0b800728302059dab7e9d6215cb2dbea5341e59f1663dcc7aff1c0ff5"
+    },
+    {
+      "cue_id": "q0048",
+      "start_s": 343.494,
+      "end_s": 352.68,
+      "text": "Use the episode's central distinction to answer: Parallelism redistributes work; it does not remove the need to count the work.",
+      "text_sha256": "ed87b5eb73597cee4db791c1249003af5bef3fcbf4e6c89953a337a1eb5abadd"
+    },
+    {
+      "cue_id": "q0049",
+      "start_s": 352.68,
+      "end_s": 359.998,
+      "text": "Parallel work is useful only after its independent work and overhead are both visible.",
+      "text_sha256": "7cbe031fc15f2f15cd967294ee9319369799b6e58eefad39c4776707432637a6"
+    }
+  ],
+  "vtt_path": "docs/video_factory/deep_series/episodes/parallel-cm/captions.vtt",
+  "content_hash": "23ce95b5ccf1889fa5303970e95e1042408417fc23873184200f7be69cf3fb80"
+}

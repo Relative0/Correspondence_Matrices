@@ -6,13 +6,62 @@
     "source": "YosysHQ/yosys-bench generator semantics",
     "upstream_commit": "52ff6fa991f2ab509618d8aaad02f307aac78848"
   },
-  "date": "2026-08-30",
-  "interpretation": "Exact descriptor screening preserved the exhaustive best artifact while reducing whole-path time by 3.545x locally; one small case regressed and Linux execution awaits exact payload approval, so production remains disabled.",
+  "date": "2026-08-31",
+  "interpretation": "Exact descriptor screening preserved the exhaustive best artifact while reducing whole-path time by 3.545x locally and 3.178x on Linux. The first Linux attempt failed safely at import bootstrap; corrected v2 passed all exactness and timing gates. One small local case regressed, so production remains disabled.",
   "linux_package": {
-    "bytes": 423661,
-    "files": 18,
-    "manifest": "docs/recognition/c16_linux_confirmation/c16_linux_upload_manifest.json",
-    "protocol": "docs/recognition/c16_linux_confirmation/C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md"
+    "first_manifest": "docs/recognition/c16_linux_confirmation/c16_linux_upload_manifest.json",
+    "first_protocol": "docs/recognition/c16_linux_confirmation/C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md",
+    "v2_bytes": 423735,
+    "v2_files": 18,
+    "v2_manifest": "docs/recognition/c16_linux_confirmation/c16_linux_upload_manifest_v2.json",
+    "v2_protocol": "docs/recognition/c16_linux_confirmation/C16_SECOND_MACHINE_TIMING_PACKAGE_V2_PROTOCOL_2026_08_31.md"
+  },
+  "package_v2_validation": {
+    "criteria": {
+      "exact": true,
+      "screened_analysis_speedup_at_least_1_50x": true,
+      "whole_path_p95_speedup_at_least_1_20x": true,
+      "whole_path_speedup_at_least_1_25x": true
+    },
+    "initial_file_count": 18,
+    "initial_files": [
+      "bitset_backend.py",
+      "cm_expr_serde.py",
+      "cm_exprlib.py",
+      "cm_ir.py",
+      "cmbench/__init__.py",
+      "cmbench/expr/__init__.py",
+      "cmbench/expr/eval.py",
+      "cmbench/output_budget.py",
+      "cmbench/recognition/__init__.py",
+      "cmbench/recognition/features.py",
+      "cmbench/recognition/gf2_decomposition.py",
+      "cmbench/recognition/natural_decomposition.py",
+      "cmbench/recognition/portfolio.py",
+      "cmbench/recognition/proved_rules.py",
+      "cmbench/recognition/source_anf_hybrid.py",
+      "cmbench/recognition/source_interaction.py",
+      "scripts/crse_gf2_screening_linux_confirmation.py",
+      "study/c16-dataset.json"
+    ],
+    "manifest_sha256": "1862c638174b9ee81effe494b768a4f63eeb8a0662de1278e091edb9973dedf2",
+    "measurement_rows": 360,
+    "path": "docs/recognition/c16_linux_confirmation/C16_PACKAGE_V2_LOCAL_VALIDATION_20260831.json",
+    "pythonpath_injected": false,
+    "returncode": 0,
+    "schema": "crse-c16-linux-package-v2-local-validation/v1",
+    "semantic_mismatches": 0,
+    "speedup": {
+      "packed_source_anf_over_explicit_cm_screened": 0.9738446928631057,
+      "screened_analysis_over_exhaustive": 3.441743751337981,
+      "screened_whole_path_over_exhaustive": 3.437093191609767,
+      "screened_whole_path_p95": 3.448004816390313
+    },
+    "status": "pass",
+    "stderr_bytes": 0,
+    "stdout_sha256": "541820a0039068a31ff30b128df9315606a2da58ea3cd46b40f923f689a227bd",
+    "summary_sha256": "cf15c1fcb5e3550db7b0609b1879ffaf4413a1978e12359f8d7f5e9db458b0e2",
+    "wall_seconds": 120.25040690000242
   },
   "package_validation": {
     "criteria": {
@@ -64,16 +113,32 @@
   "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
   "run": "docs/recognition/runs/c16-gf2-screened-tail-windows-20260830-001",
   "runpod": {
-    "cost_usd": 0.0,
-    "exact_payload_approval_required": true,
-    "pod_created": false,
-    "reason": "host approval review rejected broad authorization before process creation",
-    "uploaded": false,
-    "used": false
+    "combined_cost_usd": 0.0034780043164889017,
+    "first_attempt": {
+      "failure_type": "ModuleNotFoundError",
+      "safe_failure_reconciled": true,
+      "verification": "docs/recognition/c16_linux_confirmation/RUNPOD_C16_LINUX_FINAL_VERIFICATION_20260831.json"
+    },
+    "pod_created": true,
+    "scientific_confirmation_complete": true,
+    "second_machine_gate": true,
+    "uploaded": true,
+    "used": true,
+    "v2_attempt": {
+      "cost_usd": 0.002779309364159902,
+      "speedup": {
+        "packed_source_anf_over_explicit_cm_screened": 0.9960461635284303,
+        "screened_analysis_over_exhaustive": 3.1819175853278225,
+        "screened_whole_path_over_exhaustive": 3.177887162605386,
+        "screened_whole_path_p95": 3.1179775644849723
+      },
+      "status": "pass",
+      "verification": "docs/recognition/c16_linux_confirmation/RUNPOD_C16_PACKAGE_V2_FINAL_VERIFICATION_20260831.json"
+    }
   },
-  "schema": "crse-learning-milestone-c16-exact-screened-gf2-summary/v1",
+  "schema": "crse-learning-milestone-c16-exact-screened-gf2-summary/v3",
   "semantic_or_artifact_mismatches": 0,
-  "status": "local_complete_second_machine_pending_exact_payload_approval",
+  "status": "local_and_second_machine_complete",
   "summary": {
     "criteria": {
       "dense_controls_remain_uncompressed": true,

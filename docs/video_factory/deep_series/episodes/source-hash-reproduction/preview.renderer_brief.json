@@ -1,0 +1,1400 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "How a video is bound to source hashes storyboard preview",
+  "subject": "cm_science",
+  "audience": "Implementers, reviewers, and production maintainers",
+  "purpose": "Reproducible video production links source locator and hash to claim, content bible, script cue, storyboard, render job, output, and separate content and RunPod approval identities.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "source-hash-reproduction",
+    "episode_content_hash": "b96bd649556fe94ddc5c5adfcf33607370b4ef066d3cf8cdcd69f883a985b463",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "How a video is bound to source hashes",
+        "caption": "Reproducible video production links source locator and hash to claim, content bible, script cue, storyboard, render job, output, and separate content and RunPod…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "source-to-release provenance chain",
+            "note": "A provenance graph grows source -> locator -> claim -> bible -> script ->…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "Shared Boolean expression",
+        "caption": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "source-to-release provenance chain",
+            "note": "A provenance graph grows source -> locator -> claim -> bible -> script ->…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "Input → transformation → consequence",
+        "caption": "A provenance graph grows source -> locator -> claim -> bible -> script -> storyboard -> render job -> output -> release.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "source-to-release provenance chain",
+            "note": "A provenance graph grows source -> locator -> claim -> bible -> script ->…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "result",
+        "bullets": [
+          "A video production artifact is reproducible only when source locators, source hashes, claim IDs, script/storyboard…",
+          "Teaching diagrams, proposed mechanisms, and hypotheses must be visibly labeled and may not be presented as measured…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: How an audit changed the headline",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "source-to-release provenance chain",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "How an audit changed the headline",
+            "note": "Hash identity supports reproducibility and invalidation, but it does not…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 51",
+        "title": "Pause, predict, then reveal",
+        "caption": "Identify which episodes invalidate after one shared source changes and which cached episodes remain valid.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "source-provenance-contract",
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Reproducibility is a connected chain of identities, evidence, and approvals.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

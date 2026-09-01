@@ -1,0 +1,1388 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Plain CSE versus sharing-aware CSE-flat storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical viewers and research reviewers",
+  "purpose": "CSE-flat keeps structural sharing and also widens eligible associative chains, but it must not splice through a shared child and destroy reuse.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "cse-vs-cse-flat",
+    "episode_content_hash": "3f9899257359521c8c22d41f54f024c7c30d44e46339bce3f0d6b1fd74503a6b",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Plain CSE versus sharing-aware CSE-flat",
+        "caption": "CSE-flat keeps structural sharing and also widens eligible associative chains, but it must not splice through a shared child and destroy reuse.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "plain CSE versus CSE-flat",
+            "note": "Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Shared Boolean expression",
+        "caption": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Shared Boolean expression",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "plain CSE versus CSE-flat",
+            "note": "Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Input → transformation → consequence",
+        "caption": "Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "plain CSE versus CSE-flat",
+            "note": "Raw AST, plain CSE, and CSE-flat remain synchronized in three narrow panels.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Common subexpression elimination computes repeated expression subtrees once and reuses them.",
+          "Sharing-aware CSE-flat additionally flattens eligible associative chains while preserving shared nodes."
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: CM-IR versus CSE-flat: shared mechanisms and extra transformations",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "plain CSE versus CSE-flat",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR versus CSE-flat: shared mechanisms…",
+            "note": "Always-splice flattening is not the comparator contract; shared children must be…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 18",
+        "title": "Pause, predict, then reveal",
+        "caption": "Select which associative child may be flattened and which must remain a shared node.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cse-definition",
+          "cse-flat-definition"
+        ],
+        "source_ids": [
+          "src-b2b4-v3-audit",
+          "src-correction-report"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "CSE-flat strengthens plain CSE without sacrificing the sharing that made CSE…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "a",
+                "label": "A",
+                "x": 90,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "b",
+                "label": "B",
+                "x": 250,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "s",
+                "label": "S=A∧B",
+                "x": 170,
+                "y": 430,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "c",
+                "label": "C",
+                "x": 410,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "d",
+                "label": "D",
+                "x": 560,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "e",
+                "label": "E",
+                "x": 850,
+                "y": 620,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "left",
+                "label": "S∧C∧D",
+                "x": 430,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "right",
+                "label": "S∧E",
+                "x": 735,
+                "y": 330,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "f",
+                "label": "F=left∨right",
+                "x": 585,
+                "y": 105,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "a",
+                "target": "s"
+              },
+              {
+                "source": "b",
+                "target": "s"
+              },
+              {
+                "source": "s",
+                "target": "left",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "s",
+                "target": "right",
+                "label": "reuse",
+                "shared": true
+              },
+              {
+                "source": "c",
+                "target": "left"
+              },
+              {
+                "source": "d",
+                "target": "left"
+              },
+              {
+                "source": "e",
+                "target": "right"
+              },
+              {
+                "source": "left",
+                "target": "f"
+              },
+              {
+                "source": "right",
+                "target": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

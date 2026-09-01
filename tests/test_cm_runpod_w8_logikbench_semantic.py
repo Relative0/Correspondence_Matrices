@@ -243,3 +243,16 @@ def test_retry_controller_uses_same_payload_and_smaller_bounded_chunks():
     assert "142f6d5e6ad4fe68ef3f64e6a74a0236fa786ae9e990c27ea1ed8c533faa24aa" in source
     assert '"event": "chunk-acknowledged"' in source
     assert '"event": "payload-validated"' in source
+
+
+def test_v3_retry_preserves_payload_and_adds_compatible_cpu_fallbacks():
+    controller = (BASE / "runpod_w8_logikbench_semantic_controller_v3.py").read_text(encoding="utf-8")
+    preflight = (BASE / "http_w8_logikbench_semantic_preflight_v2.py").read_text(encoding="utf-8")
+    assert 'OUT = HERE / "w8-logikbench-semantic-v3-001"' in controller
+    assert '"prior_no_create_run": "w8-logikbench-semantic-v2-001"' in controller
+    assert '"prior_no_create_verified": True' in controller
+    assert "CHUNK_BYTES = 64 << 10" in controller
+    assert "142f6d5e6ad4fe68ef3f64e6a74a0236fa786ae9e990c27ea1ed8c533faa24aa" in controller
+    assert 'FLAVORS = ("cpu3c", "cpu3g", "cpu3m", "cpu5c", "cpu5g", "cpu5m")' in preflight
+    assert "ThreadPoolExecutor(max_workers=6)" in preflight
+    assert "RATE_CAP = 0.25" in preflight

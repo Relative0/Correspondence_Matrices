@@ -20,6 +20,29 @@ extracts the accepted chart rows, writes three CM briefs plus POP renderer
 briefs, validates strict schemas and semantic guards, and refuses to replace an
 artifact marked approved/production/published.
 
+## Deep-series v2 editorial layer
+
+`deep_series/episode_content_bible.json` is the authoritative proposed
+51-episode curriculum. Its generated Markdown twin is the review surface. The
+bible fixes lesson ownership, exclusions, prerequisites, stable examples,
+claims, chapter partitions, teaching beats, episode-specific visual spines,
+duration-scaled visual contracts, dialogue anchors, misconceptions, and
+caveats. The catalog and learning paths are generated from the bible and
+validation rejects drift between them.
+
+`deep_series/content_readiness_audit.json` records the audited partition,
+chapter coverage, claim/source coverage, and duration-scaled visual budgets. A
+`pass` means ready for script/storyboard authoring, not render-ready: complete
+scripts, shot-level storyboards, assets/previews, and human content approval
+remain separate gates.
+
+`RUNPOD_DEEP_SERIES_MASTER_PROMPT_V2.md` is the audited one-shot authoring and
+production prompt. It preserves v1 as history, adds the current CRSE C9-C23,
+D10, and E1-E2 lessons, includes the initial learned baseline through the
+task-matched and source-packed C22 result, and requires a hash-bound content-review approval before any
+separate RunPod execution proposal. Neither the proposed bible nor approval of
+its content authorizes a paid or remote action.
+
 Renderer planning and IVC integration are separate deterministic steps:
 
 ```powershell

@@ -1,0 +1,940 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Configuration and feature-model workloads storyboard preview",
+  "subject": "cm_science",
+  "audience": "Practitioners and technical decision makers",
+  "purpose": "Configuration workloads combine constraints, repeated questions, adjacent revisions, and invalidation, making task contract and version identity more important than a method label.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "configuration-models",
+    "episode_content_hash": "e2e9ba6ecfc908f84539159b5cadbb251a8c4c2110645936c3a4d0ce246c184f",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Configuration and feature-model workloads",
+        "caption": "Configuration workloads combine constraints, repeated questions, adjacent revisions, and invalidation, making task contract and version identity more important than a…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "feature constraints",
+            "note": "Feature tree and constraint graph respond to interactive-looking toggles with…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Versioned feature model",
+        "caption": "A conceptual product family with Core, Cloud, Local, Analytics, and Export features plus requires/excludes constraints and three adjacent revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned feature model",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "feature constraints",
+            "note": "Feature tree and constraint graph respond to interactive-looking toggles with…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Input → transformation → consequence",
+        "caption": "Feature tree and constraint graph respond to interactive-looking toggles with exact conflict paths.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "feature constraints",
+            "note": "Feature tree and constraint graph respond to interactive-looking toggles with…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Configuration workloads combine constraints, related revisions, and repeated queries; identical-output cache hits are…",
+          "Persistent CM-IR reuse is keyed by canonical identity and must verify version/input identity before accepting a cached…",
+          "Representation choice should begin with required output, live support, reuse, update pattern, exact operations,…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Circuit workloads: structure, truth, and exact controls",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "feature constraints",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Circuit workloads: structure, truth, and…",
+            "note": "The retained studies are bounded revision and task cases; they do not establish…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 33",
+        "title": "Pause, predict, then reveal",
+        "caption": "Classify three revision cases as safe reuse, invalidation, or fresh construction.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "configuration-revision-workload",
+          "cm-ir-persistence-contract",
+          "representation-decision-factors"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "cse",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Configuration performance lives in the sequence of related questions, not one…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "core",
+                "label": "Core",
+                "x": 500,
+                "y": 105,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "cloud",
+                "label": "Cloud",
+                "x": 175,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "local",
+                "label": "Local",
+                "x": 470,
+                "y": 340,
+                "tone": "cm_ir",
+                "shape": "box"
+              },
+              {
+                "id": "analytics",
+                "label": "Analytics",
+                "x": 770,
+                "y": 340,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "export",
+                "label": "Export",
+                "x": 770,
+                "y": 590,
+                "tone": "confirmed",
+                "shape": "circle"
+              }
+            ],
+            "edges": [
+              {
+                "source": "cloud",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "local",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "analytics",
+                "target": "core",
+                "label": "requires"
+              },
+              {
+                "source": "export",
+                "target": "analytics",
+                "label": "requires"
+              },
+              {
+                "source": "cloud",
+                "target": "local",
+                "label": "excludes",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

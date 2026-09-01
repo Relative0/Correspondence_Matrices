@@ -1,0 +1,102 @@
+{
+  "corpus": {
+    "c16_truth_overlaps": 0,
+    "cases": 73,
+    "dataset": "docs/recognition/c18_independent_cone_dataset.json",
+    "source_files": 10,
+    "source_inventory": "docs/recognition/c18_independent_corpus_source_inventory.json",
+    "source_verification": "docs/recognition/c18_independent_corpus_verification.json"
+  },
+  "dataset": {
+    "cases": 73,
+    "family": "VTR BLIF",
+    "independent_transfer": true,
+    "policy_refit": false,
+    "source_files": 10
+  },
+  "date": "2026-08-31",
+  "decision_counts": {
+    "advice_globally_disabled": 73,
+    "c16_screened_tail": 72,
+    "tiny_case_bypass": 1
+  },
+  "interpretation": "The unchanged exact dispatcher transferred to 73 VTR cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail gate passed, but an n=4 DES case measured 0.621x; single-round timing and failed minimum no-regret prevent promotion.",
+  "measurement_rows": 292,
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+  "run": "docs/recognition/runs/c18-independent-gf2-transfer-windows-20260831-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c18-independent-gf2-transfer-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "independent_exact_transfer_timing_scout_complete",
+  "summary": {
+    "criteria": {
+      "advice_off_within_3_percent": true,
+      "aggregate_speedup_at_least_1_25x": true,
+      "functional_exactness": true,
+      "minimum_case_at_least_0_97x": false,
+      "slow_tail_at_least_1_20x": true,
+      "timed_exactness": true
+    },
+    "exactness_gate": true,
+    "local_research_gate": false,
+    "median_case_sum_ns": {
+      "c17_advice_off": {
+        "analysis_ns": 146911495100,
+        "exact_check_ns": 51701399000,
+        "policy_ns": 568800,
+        "representation_ns": 18259500,
+        "total_ns": 198741153300
+      },
+      "c17_dispatch": {
+        "analysis_ns": 23279666700,
+        "exact_check_ns": 453883700,
+        "policy_ns": 860400,
+        "representation_ns": 16674600,
+        "total_ns": 23755565900
+      },
+      "direct_exhaustive": {
+        "analysis_ns": 146227913500,
+        "exact_check_ns": 52787097800,
+        "policy_ns": 0,
+        "representation_ns": 14358800,
+        "total_ns": 199029370100
+      },
+      "direct_screened": {
+        "analysis_ns": 24053106600,
+        "exact_check_ns": 477304100,
+        "policy_ns": 0,
+        "representation_ns": 15345900,
+        "total_ns": 24545756600
+      }
+    },
+    "speedup": {
+      "advice_off_over_direct_exhaustive": 1.0014502119727813,
+      "c17_case_median": 5.377686551808491,
+      "c17_case_minimum": 0.6207405358048601,
+      "c17_case_p95_slow_tail": 1.3236214784493137,
+      "c17_over_direct_exhaustive": 8.378220537360468,
+      "direct_screened_over_exhaustive": 8.108504184385174,
+      "screened_case_minimum": 0.7156451012705332
+    },
+    "timing_is_machine_specific": true
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 4,
+    "corpus_source_replay_required_and_present": true,
+    "functional_cases_replayed": 73,
+    "measurement_rows_checked": 292,
+    "path": "docs/recognition/runs/c18-independent-gf2-transfer-windows-20260831-001/independent_verification.json",
+    "policy_refit": false,
+    "production_promotion": false,
+    "schema": "crse-c18-independent-gf2-dispatch-transfer-verification/v1",
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 2,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

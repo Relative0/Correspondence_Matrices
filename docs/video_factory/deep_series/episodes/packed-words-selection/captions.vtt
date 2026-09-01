@@ -1,0 +1,265 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:07.378
+How can one machine operation evaluate many assignments at the same time?
+
+q0002
+00:00:07.378 --> 00:00:18.071
+This episode has one job: Bigint and word-packed evaluators carry the same ordered truth vector in different exact storage/execution layouts; selector performance belongs to a later episode.
+
+q0003
+00:00:18.071 --> 00:00:28.764
+We build on Live support versus ambient variables, Explicit dense CM versus CM-IR; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:28.764 --> 00:00:37.283
+Packed evaluation stores many ordered truth values in one integer or several machine words.
+
+q0005
+00:00:37.283 --> 00:00:46.372
+Watch for the label packed bitset; it stays attached to the artifact this episode means.
+
+q0006
+00:00:46.372 --> 00:00:54.891
+When we say machine word, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:54.891 --> 00:01:05.121
+The term full mask receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:05.121 --> 00:01:12.499
+We will keep tail mask visible whenever its definition controls the inference.
+
+q0009
+00:01:12.499 --> 00:01:22.729
+The next sequence uses Four-variable truth layout as a conceptual teaching example, not as measured benchmark evidence.
+
+q0010
+00:01:22.729 --> 00:01:27.256
+Our stable example is Four-variable truth layout.
+
+q0011
+00:01:27.256 --> 00:01:37.949
+F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.
+
+q0012
+00:01:37.949 --> 00:01:46.468
+Carry assignments, live support, explicit CM, packed truth vectors, and exact output across episodes.
+
+q0013
+00:01:46.468 --> 00:01:54.987
+We now construct the Four-variable truth layout and name every part before interpreting it.
+
+q0014
+00:01:54.987 --> 00:02:00.654
+Now isolate packed truth-vector ordering inside Four-variable truth layout.
+
+q0015
+00:02:00.654 --> 00:02:10.884
+The example definition and output meaning stay fixed while only the state for packed truth-vector ordering changes.
+
+q0016
+00:02:10.884 --> 00:02:21.114
+That matched before-and-after view assigns the visible consequence to packed truth-vector ordering, not to a substituted workload.
+
+q0017
+00:02:21.114 --> 00:02:27.352
+Truth-table outputs slide into bit positions with MSB-first ordering labeled.
+
+q0018
+00:02:27.352 --> 00:02:38.045
+The example fixes F of A, B, C, and D as A AND B, exclusive-or C OR D.
+
+q0019
+00:02:38.045 --> 00:02:44.853
+Holding that element fixed lets this episode isolate packed truth-vector ordering.
+
+q0020
+00:02:44.853 --> 00:02:53.942
+Folding the truth-table output column into a four-by-four grid changes the layout, not the function.
+
+q0021
+00:02:53.942 --> 00:03:04.635
+A packed truth vector stores the same exact outputs in a different physical arrangement from the displayed matrix.
+
+q0022
+00:03:04.635 --> 00:03:15.328
+An exact equality check across the views is the gate before any timing ratio is allowed to matter.
+
+q0023
+00:03:15.328 --> 00:03:26.021
+The starting state preserves the stable definition: F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.
+
+q0024
+00:03:26.021 --> 00:03:36.714
+After the change, the composition makes packed truth-vector ordering inspectable: Truth-table outputs slide into bit positions with MSB-first ordering labeled.
+
+q0025
+00:03:36.714 --> 00:03:44.092
+The invariant is the example's meaning; the variable is packed truth-vector ordering.
+
+q0026
+00:03:44.092 --> 00:03:54.785
+If the same output is reached through a different path, the diagram must still identify whether packed truth-vector ordering changed.
+
+q0027
+00:03:54.785 --> 00:04:05.015
+The accompanying view makes this step concrete: Truth-table outputs slide into bit positions with MSB-first ordering labeled.
+
+q0028
+00:04:05.015 --> 00:04:15.708
+Read packed truth-vector ordering from input to consequence through one matched view: Truth-table outputs slide into bit positions with MSB-first ordering labeled; every surrounding entity keeps its prior meaning.
+
+q0029
+00:04:15.708 --> 00:04:25.368
+Pack sixteen ordered truth bits into an integer, then re-express the same ordering as machine-word lanes.
+
+q0030
+00:04:25.368 --> 00:04:34.457
+Apply one Boolean operation in parallel and demonstrate why unused tail bits must be masked.
+
+q0031
+00:04:34.457 --> 00:04:40.695
+Now isolate bigint versus word arrays inside Four-variable truth layout.
+
+q0032
+00:04:40.695 --> 00:04:51.388
+The example definition and output meaning stay fixed while only the state for bigint versus word arrays changes.
+
+q0033
+00:04:51.388 --> 00:05:02.081
+That matched before-and-after view assigns the visible consequence to bigint versus word arrays, not to a substituted workload.
+
+q0034
+00:05:02.081 --> 00:05:10.030
+One long bigint bar splits into fixed-width word lanes without changing bit identities.
+
+q0035
+00:05:10.030 --> 00:05:15.127
+Now isolate tail masking inside Four-variable truth layout.
+
+q0036
+00:05:15.127 --> 00:05:24.787
+The example definition and output meaning stay fixed while only the state for tail masking changes.
+
+q0037
+00:05:24.787 --> 00:05:34.447
+That matched before-and-after view assigns the visible consequence to tail masking, not to a substituted workload.
+
+q0038
+00:05:34.447 --> 00:05:42.396
+A gate operates across all bits; a tail mask removes invalid high positions.
+
+q0039
+00:05:42.396 --> 00:05:53.089
+Packed bigint and machine-word evaluators store the same ordered truth vector in different exact execution layouts with explicit masks and tail handling.
+
+q0040
+00:05:53.089 --> 00:05:59.897
+Read that statement only within this scope: current packed evaluator implementations.
+
+q0041
+00:05:59.897 --> 00:06:04.424
+Its declared measurement boundary is execution representation.
+
+q0042
+00:06:04.424 --> 00:06:10.091
+The uncertainty field says backend choice remains workload dependent.
+
+q0043
+00:06:10.091 --> 00:06:20.784
+The nearest confusing lesson is Eager and lazy CM paths; it owns eager construction timing, while this episode owns packed truth-vector ordering.
+
+q0044
+00:06:20.784 --> 00:06:31.477
+A and B select the row, C and D select the column, and MSB-first order fixes both index conventions.
+
+q0045
+00:06:31.477 --> 00:06:38.855
+Holding that element fixed lets this episode isolate bigint versus word arrays.
+
+q0046
+00:06:38.855 --> 00:06:49.548
+Every four-bit assignment names exactly one of the sixteen cells, and every cell returns one exact output bit.
+
+q0047
+00:06:49.548 --> 00:06:55.786
+Holding that element fixed lets this episode isolate tail masking.
+
+q0048
+00:06:55.786 --> 00:07:06.479
+Reading a cell forward evaluates an assignment; reading it backward recovers the row and column bits that selected it.
+
+q0049
+00:07:06.479 --> 00:07:17.172
+Live support can remove an input from active computation even when the ambient layout still reserves its axis.
+
+q0050
+00:07:17.172 --> 00:07:27.865
+The explicit matrix is dense by contract, so compactness and speed require separate evidence rather than definition alone.
+
+q0051
+00:07:27.865 --> 00:07:36.954
+Holding variable order fixed makes matrix, packed-vector, and program views comparable without an indexing ambiguity.
+
+q0052
+00:07:36.954 --> 00:07:47.647
+After the change, the composition makes bigint versus word arrays inspectable: One long bigint bar splits into fixed-width word lanes without changing bit identities.
+
+q0053
+00:07:47.647 --> 00:07:55.596
+The invariant is the example's meaning; the variable is bigint versus word arrays.
+
+q0054
+00:07:55.596 --> 00:08:06.289
+If the same output is reached through a different path, the diagram must still identify whether bigint versus word arrays changed.
+
+q0055
+00:08:06.289 --> 00:08:16.982
+After the change, the composition makes tail masking inspectable: A gate operates across all bits; a tail mask removes invalid high positions.
+
+q0056
+00:08:16.982 --> 00:08:23.790
+The invariant is the example's meaning; the variable is tail masking.
+
+q0057
+00:08:23.790 --> 00:08:34.483
+If the same output is reached through a different path, the diagram must still identify whether tail masking changed.
+
+q0058
+00:08:34.483 --> 00:08:45.176
+The accompanying view makes this step concrete: A gate operates across all bits; a tail mask removes invalid high positions.
+
+q0059
+00:08:45.176 --> 00:08:55.869
+The accompanying view makes this step concrete: One long bigint bar splits into fixed-width word lanes without changing bit identities.
+
+q0060
+00:08:55.869 --> 00:09:06.562
+Packing is an exact execution layout, not a dense CM and not evidence that words are always faster than bigint.
+
+q0061
+00:09:06.562 --> 00:09:13.940
+Locate the bit representing one assignment and predict the correct tail mask.
+
+q0062
+00:09:13.940 --> 00:09:21.889
+Packed storage changes how outputs travel through the machine, not what outputs mean.
+
+q0063
+00:09:21.889 --> 00:09:31.549
+A common mistake is this: Packed words, CSE-flat, and a dense correspondence matrix are interchangeable representations.
+
+q0064
+00:09:31.549 --> 00:09:38.357
+Repair it by returning to the owned distinction: packed truth-vector ordering.
+
+q0066
+00:09:41.921 --> 00:09:52.614
+Use the episode's central distinction to answer: Packed storage changes how outputs travel through the machine, not what outputs mean.
+
+q0067
+00:09:52.614 --> 00:09:59.992
+Keep truth ordering, storage layout, and backend selection as three separate ideas.

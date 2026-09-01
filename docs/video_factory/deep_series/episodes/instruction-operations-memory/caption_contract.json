@@ -1,0 +1,724 @@
+{
+  "schema_version": "2.0",
+  "video_id": "instruction-operations-memory",
+  "narration_content_hash": "ec44fb879d44ff24c7fe6a1ae4cc8243f713e72af10b2b1c8c5d37ae5b016b1d",
+  "language": "en-US",
+  "cues": [
+    {
+      "cue_id": "q0001",
+      "start_s": 0.0,
+      "end_s": 11.046,
+      "text": "When someone says flat, do they mean a flattened expression, a linear instruction program, or packed bits?",
+      "text_sha256": "17ad95bed5c49ae7658b5166d6ed9149a99f1f8eb4a8132a5470408cc09ae1e3"
+    },
+    {
+      "cue_id": "q0002",
+      "start_s": 11.046,
+      "end_s": 22.592,
+      "text": "This episode has one job: A shared DAG, CSE-flat transformation, lowered FlatProgram, instruction count, executed operations, live buffers, and packed storage are distinct layers that must be named separately.",
+      "text_sha256": "4a463855307444997f8a62c3a18195bedb941ddee42d85aab3a9a7336aba8ce6"
+    },
+    {
+      "cue_id": "q0003",
+      "start_s": 22.592,
+      "end_s": 34.138,
+      "text": "We build on CM-IR versus CSE-flat: shared mechanisms and extra transformations, Packed truth vectors: big integers, machine words, and masks; their definitions stay fixed while this lesson adds a new layer.",
+      "text_sha256": "44c0ae053ae3fff66e00763ee0ba32c0d877b473409cecae187c83a91e7de94e"
+    },
+    {
+      "cue_id": "q0004",
+      "start_s": 34.138,
+      "end_s": 45.684,
+      "text": "CSE-flat is a sharing-aware source transformation; FlatProgram is a lowered instruction list; bigint and words are execution storage layouts.",
+      "text_sha256": "b6b946169f581b8f4f9407fa7c526e47fe0bd7914303e86758cd8fdbe5e817fe"
+    },
+    {
+      "cue_id": "q0005",
+      "start_s": 45.684,
+      "end_s": 54.883,
+      "text": "Watch for the label FlatProgram; it stays attached to the artifact this episode means.",
+      "text_sha256": "2ace64903a3fd997a3a69d78a3a2b9853ac46f787e706d3295df3900263b9e73"
+    },
+    {
+      "cue_id": "q0006",
+      "start_s": 54.883,
+      "end_s": 64.082,
+      "text": "When we say flat instruction, the highlight identifies its layer before we interpret it.",
+      "text_sha256": "67f91314f7ba2ffcf954b9904d898e02e0ca0ca8121c90fb1696bd90ad30fc39"
+    },
+    {
+      "cue_id": "q0007",
+      "start_s": 64.082,
+      "end_s": 75.628,
+      "text": "The term executed primitive operation receives its own visual state so it cannot drift into a neighboring concept.",
+      "text_sha256": "a22bae2a6e72f8462a39629d1ab2971f5910ff8bf77068279d0cadc210028f80"
+    },
+    {
+      "cue_id": "q0008",
+      "start_s": 75.628,
+      "end_s": 83.595,
+      "text": "We will keep argument edge visible whenever its definition controls the inference.",
+      "text_sha256": "31f3bab92fa43e12efc67ecd66a993a2f325cd144dc5379b5e7ac6f5b0143ea3"
+    },
+    {
+      "cue_id": "q0009",
+      "start_s": 83.595,
+      "end_s": 92.794,
+      "text": "A persistent peak live buffer label marks exactly where that object enters the example.",
+      "text_sha256": "c919da358d91245265a66e81cf04078630662fafd4892c5fb5b226e5ec99c26b"
+    },
+    {
+      "cue_id": "q0010",
+      "start_s": 92.794,
+      "end_s": 103.84,
+      "text": "The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.",
+      "text_sha256": "39adabcae3dd3fe0db24b7b98bd3f7c2ad7f3ef4e1780a9f8e7e51e5b5d8a720"
+    },
+    {
+      "cue_id": "q0011",
+      "start_s": 103.84,
+      "end_s": 108.728,
+      "text": "Our stable example is Shared Boolean expression.",
+      "text_sha256": "06056a6f0df0dcd045d01b7cf006584edcbe8a72439205d534b8073bd381e0e3"
+    },
+    {
+      "cue_id": "q0012",
+      "start_s": 108.728,
+      "end_s": 120.274,
+      "text": "S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+      "text_sha256": "83515dabb3aa1d6b6d4fa54b75f12c42a812bba3e2db0eb05fec1c8f60b543c5"
+    },
+    {
+      "cue_id": "q0013",
+      "start_s": 120.274,
+      "end_s": 127.625,
+      "text": "Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.",
+      "text_sha256": "83729225dac1e5f1d3fb638c6c74bf4f68db6230f5d73584636c688cdbb43544"
+    },
+    {
+      "cue_id": "q0014",
+      "start_s": 127.625,
+      "end_s": 136.824,
+      "text": "We now construct the Shared Boolean expression and name every part before interpreting it.",
+      "text_sha256": "a722c553a50791052b18e82678624ed23e34426fead5d8c4595575401f4dfb08"
+    },
+    {
+      "cue_id": "q0015",
+      "start_s": 136.824,
+      "end_s": 142.328,
+      "text": "Now isolate DAG-to-FlatProgram lowering inside Shared Boolean expression.",
+      "text_sha256": "6ecc876af97b4c5ee7abaa9d8ab5d59a39292cd9fd3188760d2fe4932281e8f0"
+    },
+    {
+      "cue_id": "q0016",
+      "start_s": 142.328,
+      "end_s": 152.758,
+      "text": "The example definition and output meaning stay fixed while only the state for DAG-to-FlatProgram lowering changes.",
+      "text_sha256": "f50da59dbe40501110e0116c46ea568a28a6159dbff9e21ee7a85dae7e4cd738"
+    },
+    {
+      "cue_id": "q0017",
+      "start_s": 152.758,
+      "end_s": 163.188,
+      "text": "That matched before-and-after view assigns the visible consequence to DAG-to-FlatProgram lowering, not to a substituted workload.",
+      "text_sha256": "0f9613a5e82f0a6bf09aafc710060b759d5d4da6d30d3ec083efa42647faa9fa"
+    },
+    {
+      "cue_id": "q0018",
+      "start_s": 163.188,
+      "end_s": 171.771,
+      "text": "DAG nodes descend into a linear postorder instruction tape with matching identity colors.",
+      "text_sha256": "823a665d9d97297c29b2c2ae7666e127a2e54048775e057cffb7074aa1e705f2"
+    },
+    {
+      "cue_id": "q0019",
+      "start_s": 171.771,
+      "end_s": 183.317,
+      "text": "Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.",
+      "text_sha256": "eb274b7279761fff2f655f78d7cbf3b4e200358e97dfe7ae8ba97695ce608abd"
+    },
+    {
+      "cue_id": "q0020",
+      "start_s": 183.317,
+      "end_s": 190.052,
+      "text": "Holding that element fixed lets this episode isolate DAG-to-FlatProgram lowering.",
+      "text_sha256": "eaad602cf78a4e74bb117c9219212d7a573556111075f1631979144600da0793"
+    },
+    {
+      "cue_id": "q0021",
+      "start_s": 190.052,
+      "end_s": 201.598,
+      "text": "A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.",
+      "text_sha256": "43e3cfd07a10178ce439ff4b083b1188e30f8b9a90663c77c55e63ccd3a3f88f"
+    },
+    {
+      "cue_id": "q0022",
+      "start_s": 201.598,
+      "end_s": 213.144,
+      "text": "Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.",
+      "text_sha256": "49b3e98b2a48548b30c0e4cc2d476a3530f54f8c7e99710f8040fdbb95e8376b"
+    },
+    {
+      "cue_id": "q0023",
+      "start_s": 213.144,
+      "end_s": 223.574,
+      "text": "The output check closes both paths against the same exact truth behavior before performance is interpreted.",
+      "text_sha256": "7d91046b768389934b47968fc5278120fb9122e4b0b6a93bf08b1044ce0bb3d1"
+    },
+    {
+      "cue_id": "q0024",
+      "start_s": 223.574,
+      "end_s": 235.12,
+      "text": "The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.",
+      "text_sha256": "c6d97d2c655b47895b94d7f6470a0c6237ba41e8c76d6f700450977016d44648"
+    },
+    {
+      "cue_id": "q0025",
+      "start_s": 235.12,
+      "end_s": 246.666,
+      "text": "After the change, the composition makes DAG-to-FlatProgram lowering inspectable: DAG nodes descend into a linear postorder instruction tape with matching identity colors.",
+      "text_sha256": "5a1d60737fd7513c71bbd65ff5ae88fab0c36cdca593a3f2a1cf21486d5f9ef6"
+    },
+    {
+      "cue_id": "q0026",
+      "start_s": 246.666,
+      "end_s": 254.017,
+      "text": "The invariant is the example's meaning; the variable is DAG-to-FlatProgram lowering.",
+      "text_sha256": "8dc833587e58bcd28746899c303addf9237762cf1f9d197d0ea423d6e13a22f2"
+    },
+    {
+      "cue_id": "q0027",
+      "start_s": 254.017,
+      "end_s": 265.563,
+      "text": "If the same output is reached through a different path, the diagram must still identify whether DAG-to-FlatProgram lowering changed.",
+      "text_sha256": "9cb7793bad0e67603c409e7f095262d5d1ae0c955afb0de42d74a6b572905bb7"
+    },
+    {
+      "cue_id": "q0028",
+      "start_s": 265.563,
+      "end_s": 277.109,
+      "text": "The accompanying view makes this step concrete: DAG nodes descend into a linear postorder instruction tape with matching identity colors.",
+      "text_sha256": "90ad19d11560b4fa5aaa3a5a8e85f6980b316fc94ce0864d9d5d1ecd12c610bf"
+    },
+    {
+      "cue_id": "q0029",
+      "start_s": 277.109,
+      "end_s": 288.655,
+      "text": "Read DAG-to-FlatProgram lowering from input to consequence through one matched view: DAG nodes descend into a linear postorder instruction tape with matching identity colors; every surrounding entity keeps its prior meaning.",
+      "text_sha256": "173c22dc64de00d27b585e26472f35532b92befca1ffea6de98a88766c0d22b4"
+    },
+    {
+      "cue_id": "q0030",
+      "start_s": 288.655,
+      "end_s": 300.201,
+      "text": "The diagram treats DAG-to-FlatProgram lowering as a located state, artifact, or boundary rather than as an unexplained method label.",
+      "text_sha256": "89a709b6b915724a07de3bdf10c0f454779051124afac4d6e6773af6d9f3292c"
+    },
+    {
+      "cue_id": "q0031",
+      "start_s": 300.201,
+      "end_s": 311.747,
+      "text": "Before the consequence appears, predict what DAG-to-FlatProgram lowering can change and what the stable example requires it to leave untouched.",
+      "text_sha256": "e1c4f9281dfc78ecc670a9bc9666755950d4b904dca1e862eff18cb99354ae33"
+    },
+    {
+      "cue_id": "q0032",
+      "start_s": 311.747,
+      "end_s": 323.293,
+      "text": "When evidence enters, its status badge binds the statement about DAG-to-FlatProgram lowering to a source and scope, not to the conceptual drawing alone.",
+      "text_sha256": "ba1da93fbbcdd161d4b7a0492fd2a1ea17c97926d49ed99a241b9000b135dfaa"
+    },
+    {
+      "cue_id": "q0033",
+      "start_s": 323.293,
+      "end_s": 334.839,
+      "text": "The nearest neighboring lesson stays out of focus because its owned question is not needed to explain DAG-to-FlatProgram lowering in this sequence.",
+      "text_sha256": "d7093cb97e400c2f6277341ba048c8a2af414a0470b90840173ce058ed003ea6"
+    },
+    {
+      "cue_id": "q0034",
+      "start_s": 334.839,
+      "end_s": 346.385,
+      "text": "The transfer rule carries DAG-to-FlatProgram lowering forward only with the same input definition, exactness gate, and declared output contract.",
+      "text_sha256": "7c5408a385401ed40c3f30238a002b763b8488973fb3b84173fc9f82d5119251"
+    },
+    {
+      "cue_id": "q0035",
+      "start_s": 346.385,
+      "end_s": 357.931,
+      "text": "Use the FlatProgram label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.",
+      "text_sha256": "8bf20125b773ab9391ebf72b9fcfd784659b601d96ff6553d01055bfd4a65e86"
+    },
+    {
+      "cue_id": "q0036",
+      "start_s": 357.931,
+      "end_s": 369.477,
+      "text": "Use the flat instruction label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.",
+      "text_sha256": "56f4dc6fdaef862133b616d3316bd5da3377c6f29d0019124213cf7f561b5448"
+    },
+    {
+      "cue_id": "q0037",
+      "start_s": 369.477,
+      "end_s": 381.023,
+      "text": "Use the executed primitive operation label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.",
+      "text_sha256": "3142092f5d729e5376ed103a14683501e2b23036a81bd0a73b52a8f9cd9c36e0"
+    },
+    {
+      "cue_id": "q0038",
+      "start_s": 381.023,
+      "end_s": 392.569,
+      "text": "Use the argument edge label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.",
+      "text_sha256": "7e1cd145bd375a95927c1b35d959ee3197ff1a98cc28c33aaee301a3d3885665"
+    },
+    {
+      "cue_id": "q0039",
+      "start_s": 392.569,
+      "end_s": 403.615,
+      "text": "Lower each unique DAG node into a dependency-ordered slot and instruction while preserving the shared S node.",
+      "text_sha256": "8a338cd14b757ad6d21f17de95a4c788eec718360ace9b570943af692871b98f"
+    },
+    {
+      "cue_id": "q0040",
+      "start_s": 403.615,
+      "end_s": 411.582,
+      "text": "Expand one n-ary instruction into backend-specific primitive operations and update separate counters.",
+      "text_sha256": "cbe593c6999f1db1e0cfb64566e4da8aad011a697e560f6f2c370bbb4d85f603"
+    },
+    {
+      "cue_id": "q0041",
+      "start_s": 411.582,
+      "end_s": 418.317,
+      "text": "Now isolate instruction versus executed-operation metrics inside Shared Boolean expression.",
+      "text_sha256": "fbd0e9159078beec15b8d8d5b782c3234cdec46656ba485343cc5a535ea2f820"
+    },
+    {
+      "cue_id": "q0042",
+      "start_s": 418.317,
+      "end_s": 429.863,
+      "text": "The example definition and output meaning stay fixed while only the state for instruction versus executed-operation metrics changes.",
+      "text_sha256": "873bd54d84ffa91baaaf4de2052e8da8e93ba21d1eb65753c370e35feed56508"
+    },
+    {
+      "cue_id": "q0043",
+      "start_s": 429.863,
+      "end_s": 441.409,
+      "text": "That matched before-and-after view assigns the visible consequence to instruction versus executed-operation metrics, not to a substituted workload.",
+      "text_sha256": "e8fcffe118171b1c43d4351aa745858cdb8199e41377df59794e532a65fd2d07"
+    },
+    {
+      "cue_id": "q0044",
+      "start_s": 441.409,
+      "end_s": 448.76,
+      "text": "One instruction expands into several primitive-operation pulses while counters remain separate.",
+      "text_sha256": "b0fee3a7a16ac5b7517af0818fd217195e4e7a5cd8308e5ec0279b4053c1d933"
+    },
+    {
+      "cue_id": "q0045",
+      "start_s": 448.76,
+      "end_s": 460.306,
+      "text": "A shared DAG can be lowered once into a linear postorder FlatProgram with one instruction per unique DAG node; this flat program is distinct from CSE-flat's source transformation and from packed storage.",
+      "text_sha256": "1420d892660efe03b5778dead8be639117dae413fe22fe763d4a4bae95d49cde"
+    },
+    {
+      "cue_id": "q0046",
+      "start_s": 460.306,
+      "end_s": 467.657,
+      "text": "Read that statement only within this scope: current flat evaluator implementation.",
+      "text_sha256": "459167f8b35334fb74d795203a0f826c42ff0b8641c708e129a92c67b1001c48"
+    },
+    {
+      "cue_id": "q0047",
+      "start_s": 467.657,
+      "end_s": 473.777,
+      "text": "Its declared measurement boundary is lowering and execution representation.",
+      "text_sha256": "9cdcec94c5ff982c662ed83baeedbfe8910e51c23d22f09be958d9e5725fb81b"
+    },
+    {
+      "cue_id": "q0048",
+      "start_s": 473.777,
+      "end_s": 477.433,
+      "text": "The uncertainty field says none.",
+      "text_sha256": "c36f607b7e14cc6313f2b83d5468c7600b19e1dc204abe0ef72be04cf4513b89"
+    },
+    {
+      "cue_id": "q0049",
+      "start_s": 477.433,
+      "end_s": 488.979,
+      "text": "Flat instruction count, argument edges, executed primitive operations, and peak live buffers are different metrics and may not be substituted for one another or for elapsed time.",
+      "text_sha256": "51d49821767c371ff545df8eb4b4963897393038cbd76b7f0de40944bc7aa5c3"
+    },
+    {
+      "cue_id": "q0050",
+      "start_s": 488.979,
+      "end_s": 496.33,
+      "text": "Read that statement only within this scope: current deterministic program metrics.",
+      "text_sha256": "b82b09cde84a25ea19569ce1b479fc65ec1a33a88f4c571679097f611020bbff"
+    },
+    {
+      "cue_id": "q0051",
+      "start_s": 496.33,
+      "end_s": 501.218,
+      "text": "Its declared measurement boundary is mechanism accounting.",
+      "text_sha256": "f57c302c136ae864ac7dc8d8c094a6001bed39a5f552e959f6c59ae431e59392"
+    },
+    {
+      "cue_id": "q0052",
+      "start_s": 501.218,
+      "end_s": 506.106,
+      "text": "The uncertainty field says not elapsed-time evidence.",
+      "text_sha256": "5538b363d017bdb295082e7547b09257bf935e2538dcc1e4f851ea296c4e3b04"
+    },
+    {
+      "cue_id": "q0053",
+      "start_s": 506.106,
+      "end_s": 517.652,
+      "text": "A graph or instruction reduction may change allocation or memory traffic, but memory traffic is a proposed mechanism unless it is measured directly on the declared workload.",
+      "text_sha256": "4b0113ba72ade480d0d92784bdd77a697f2633211855b6dd8b32bc5520be5f95"
+    },
+    {
+      "cue_id": "q0054",
+      "start_s": 517.652,
+      "end_s": 524.387,
+      "text": "Read that statement only within this scope: mechanism explanation only.",
+      "text_sha256": "a8c5bf172fd3921879eebf91ed4cbba3acef3d841340422100d24765ecdab9a5"
+    },
+    {
+      "cue_id": "q0055",
+      "start_s": 524.387,
+      "end_s": 529.275,
+      "text": "Its declared measurement boundary is conceptual mechanism.",
+      "text_sha256": "4f1bb513230345dfa4c05d32b8ca7dd270bfab49ae49ca9af2e623ea75a92911"
+    },
+    {
+      "cue_id": "q0056",
+      "start_s": 529.275,
+      "end_s": 534.163,
+      "text": "The uncertainty field says not directly measured.",
+      "text_sha256": "919a9b0026aade6731a55665b7a2846eb6cc3625ec2d8cf598540636fc2a4b68"
+    },
+    {
+      "cue_id": "q0057",
+      "start_s": 534.163,
+      "end_s": 545.709,
+      "text": "On the EPFL AND/INV workload, CM and CSE-flat had equal instruction and executed-operation counts, matching the parity mechanism prediction.",
+      "text_sha256": "026912df3cc517b30890d4df98126218e69eff3d74d2a6526a20713704182a92"
+    },
+    {
+      "cue_id": "q0058",
+      "start_s": 545.709,
+      "end_s": 553.06,
+      "text": "Read that statement only within this scope: EPFL AND/INV cones.",
+      "text_sha256": "678932cd997f58b618298dc69bed0fa5e0ca18a872f3106815689898d60471ae"
+    },
+    {
+      "cue_id": "q0059",
+      "start_s": 553.06,
+      "end_s": 559.795,
+      "text": "Its declared measurement boundary is compiled program structure and kernel.",
+      "text_sha256": "cb76e00ea036721206aa9712cb4de857b54a84c10ce01a8d9363f21342421078"
+    },
+    {
+      "cue_id": "q0060",
+      "start_s": 559.795,
+      "end_s": 566.53,
+      "text": "The uncertainty field says exact count equality on accepted corpus.",
+      "text_sha256": "f3ff1586ddaa9b4d1094d755547b494749aa511cb3db9c591d3f32c2d63a2f84"
+    },
+    {
+      "cue_id": "q0061",
+      "start_s": 566.53,
+      "end_s": 578.076,
+      "text": "The left branch combines S with C and D, while the right branch combines the same S with E.",
+      "text_sha256": "1fcb02b16788d67b3fc915e0a9ff37b62087701051c063769f03785982e1468e"
+    },
+    {
+      "cue_id": "q0062",
+      "start_s": 578.076,
+      "end_s": 586.043,
+      "text": "Holding that element fixed lets this episode isolate instruction versus executed-operation metrics.",
+      "text_sha256": "3925b35d777d9d558e4670cb5efcdc69afbff619a67d92ed29f48bab16e8c2ce"
+    },
+    {
+      "cue_id": "q0063",
+      "start_s": 586.043,
+      "end_s": 595.242,
+      "text": "Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.",
+      "text_sha256": "8f3f950a9651591ac75f892d01a6d3119fa0a1d4dd3b831b3ea86e36ca9d18ef"
+    },
+    {
+      "cue_id": "q0064",
+      "start_s": 595.242,
+      "end_s": 606.288,
+      "text": "The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.",
+      "text_sha256": "727e5f4a2ee07e9f65cd2d9ccfd7b618400638dbb4f29ef03663a9f58e571cb3"
+    },
+    {
+      "cue_id": "q0065",
+      "start_s": 606.288,
+      "end_s": 617.834,
+      "text": "After the change, the composition makes instruction versus executed-operation metrics inspectable: One instruction expands into several primitive-operation pulses while counters remain separate.",
+      "text_sha256": "1aecb2d7ee69205173c8339a77f86d1e2c39f32b45825c39bdc1f4f02b06d9ef"
+    },
+    {
+      "cue_id": "q0066",
+      "start_s": 617.834,
+      "end_s": 626.417,
+      "text": "The invariant is the example's meaning; the variable is instruction versus executed-operation metrics.",
+      "text_sha256": "cec57d27b933d468269c4ebb0745ff9136ed967e30ce7949626cdcc144f534ab"
+    },
+    {
+      "cue_id": "q0067",
+      "start_s": 626.417,
+      "end_s": 637.963,
+      "text": "If the same output is reached through a different path, the diagram must still identify whether instruction versus executed-operation metrics changed.",
+      "text_sha256": "eb802f788b0a0e41baa2604dfd5dcd8de0c1984ef7ef1932eedb518b6a62f788"
+    },
+    {
+      "cue_id": "q0068",
+      "start_s": 637.963,
+      "end_s": 649.509,
+      "text": "The accompanying view makes this step concrete: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.",
+      "text_sha256": "a01a7472f0d0b73f5403a26fe376394b87ee2154da5571a0255f5ece39314cac"
+    },
+    {
+      "cue_id": "q0069",
+      "start_s": 649.509,
+      "end_s": 661.055,
+      "text": "The accompanying view makes this step concrete: One instruction expands into several primitive-operation pulses while counters remain separate.",
+      "text_sha256": "ac649c29787b341c4a295b0ddcddbb8e1ce4c63c3a277c155af8c415a7af08bf"
+    },
+    {
+      "cue_id": "q0070",
+      "start_s": 661.055,
+      "end_s": 672.601,
+      "text": "Read instruction versus executed-operation metrics from input to consequence through one matched view: One instruction expands into several primitive-operation pulses while counters remain separate; every surrounding entity keeps its prior meaning.",
+      "text_sha256": "ab59b9a5317710b9e610f04cc2389fbeee07b4de7ebd4c83fddcad85e14e5aa7"
+    },
+    {
+      "cue_id": "q0071",
+      "start_s": 672.601,
+      "end_s": 684.147,
+      "text": "The diagram treats instruction versus executed-operation metrics as a located state, artifact, or boundary rather than as an unexplained method label.",
+      "text_sha256": "2755fecb9c57b7c56bbf5fecf8e351a8b26ff2d62a960d5bbfd0e027e0c31ed7"
+    },
+    {
+      "cue_id": "q0072",
+      "start_s": 684.147,
+      "end_s": 695.693,
+      "text": "Before the consequence appears, predict what instruction versus executed-operation metrics can change and what the stable example requires it to leave untouched.",
+      "text_sha256": "6d9ff5da4cf80c923127b6b4ad7f47fc75e5659fece003b7a3b850b5a7dcf431"
+    },
+    {
+      "cue_id": "q0073",
+      "start_s": 695.693,
+      "end_s": 707.239,
+      "text": "When evidence enters, its status badge binds the statement about instruction versus executed-operation metrics to a source and scope, not to the conceptual drawing alone.",
+      "text_sha256": "93ea8f154beaa96249922a27307b2312e137e59c8659cf9c4dcf4c8f2ab7745f"
+    },
+    {
+      "cue_id": "q0074",
+      "start_s": 707.239,
+      "end_s": 718.785,
+      "text": "The nearest neighboring lesson stays out of focus because its owned question is not needed to explain instruction versus executed-operation metrics in this sequence.",
+      "text_sha256": "16dfa7f963814d3cc4c9f7ea866c4bb3391846aa0173dde776ff2562a23f67f5"
+    },
+    {
+      "cue_id": "q0075",
+      "start_s": 718.785,
+      "end_s": 730.331,
+      "text": "The transfer rule carries instruction versus executed-operation metrics forward only with the same input definition, exactness gate, and declared output contract.",
+      "text_sha256": "d73f6378876f6ca179cca6576b40d2b4b519c3240fc0708037b7f6d8e2e17ed4"
+    },
+    {
+      "cue_id": "q0076",
+      "start_s": 730.331,
+      "end_s": 741.877,
+      "text": "Animate slot lifetimes and buffer release, then label hardware memory traffic as a hypothesis unless a retained measurement is present.",
+      "text_sha256": "30fb192421fe8c48349f52706eee580f99dc44dab2ca049cfc53cbb1baa505c2"
+    },
+    {
+      "cue_id": "q0077",
+      "start_s": 741.877,
+      "end_s": 749.844,
+      "text": "Now isolate structural memory metrics versus hardware-memory hypothesis inside Shared Boolean expression.",
+      "text_sha256": "600bc2a19d519732499c10c5bb1e40f32ff4b2226cb7f3d57c48ddb5221dbf63"
+    },
+    {
+      "cue_id": "q0078",
+      "start_s": 749.844,
+      "end_s": 761.39,
+      "text": "The example definition and output meaning stay fixed while only the state for structural memory metrics versus hardware-memory hypothesis changes.",
+      "text_sha256": "13ea2f999784f24eb8d246e0446645d4fbb597bc5e5ee9e69b96596d79f86044"
+    },
+    {
+      "cue_id": "q0079",
+      "start_s": 761.39,
+      "end_s": 772.936,
+      "text": "That matched before-and-after view assigns the visible consequence to structural memory metrics versus hardware-memory hypothesis, not to a substituted workload.",
+      "text_sha256": "33d65a2f70885a80aad9d7e08159f26320b9fd5fdbb3512f062b3a9d12b3d6d3"
+    },
+    {
+      "cue_id": "q0080",
+      "start_s": 772.936,
+      "end_s": 784.482,
+      "text": "Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.",
+      "text_sha256": "97d5fcc919aa1ceec4b4f1785c4e12963aac101763fd32c124fb1b25e7c6a3b2"
+    },
+    {
+      "cue_id": "q0081",
+      "start_s": 784.482,
+      "end_s": 796.028,
+      "text": "The nearest confusing lesson is Plain CSE versus sharing-aware CSE-flat; it owns plain CSE versus CSE-flat, while this episode owns DAG-to-FlatProgram lowering.",
+      "text_sha256": "1d95d002181fd0b2a1524945138a4b258df9842f48a73fa5a789c1434b9e4195"
+    },
+    {
+      "cue_id": "q0082",
+      "start_s": 796.028,
+      "end_s": 807.574,
+      "text": "Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.",
+      "text_sha256": "c668feb7e09d5e3a49e3eeb6264b535435b949f80749df9bb96a8464a0cbc468"
+    },
+    {
+      "cue_id": "q0083",
+      "start_s": 807.574,
+      "end_s": 816.773,
+      "text": "Holding that element fixed lets this episode isolate structural memory metrics versus hardware-memory hypothesis.",
+      "text_sha256": "92389063255b5a0113409a84afb730a97df2ce565af85ccfea9fbd0ecef10f3e"
+    },
+    {
+      "cue_id": "q0084",
+      "start_s": 816.773,
+      "end_s": 825.972,
+      "text": "Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.",
+      "text_sha256": "054b7f2ccd69534e9889c1bd02ff6599009d87133dbfa712729c6c90d29c0305"
+    },
+    {
+      "cue_id": "q0085",
+      "start_s": 825.972,
+      "end_s": 837.018,
+      "text": "Any claimed reduction must point to the repeated S path or another named transformation actually present here.",
+      "text_sha256": "d391216ada10fdf0367d42d717f1fbfe2b82455e905f1cb96076695c352cfea0"
+    },
+    {
+      "cue_id": "q0086",
+      "start_s": 837.018,
+      "end_s": 848.564,
+      "text": "After the change, the composition makes structural memory metrics versus hardware-memory hypothesis inspectable: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.",
+      "text_sha256": "f07a8f4573d07e01b64d72986f325d1f0f5516d7bd768fd6f575be891a0f7799"
+    },
+    {
+      "cue_id": "q0087",
+      "start_s": 848.564,
+      "end_s": 858.378,
+      "text": "The invariant is the example's meaning; the variable is structural memory metrics versus hardware-memory hypothesis.",
+      "text_sha256": "a9fef02c20debbbdf4c8a38e86ad4e9f6cd1d4160e33350a2909b53eec008980"
+    },
+    {
+      "cue_id": "q0088",
+      "start_s": 858.378,
+      "end_s": 869.924,
+      "text": "If the same output is reached through a different path, the diagram must still identify whether structural memory metrics versus hardware-memory hypothesis changed.",
+      "text_sha256": "eddc0dc4ef6ae1f508c5ba3cfea00a57b0b85c31636dea2214659527b73c8c81"
+    },
+    {
+      "cue_id": "q0089",
+      "start_s": 869.924,
+      "end_s": 881.47,
+      "text": "The accompanying view makes this step concrete: CSE-flat transformation, FlatProgram, bigint bits, and word lanes settle as four noninterchangeable layers.",
+      "text_sha256": "8a76a3a4cff044b8a193a90202f082a7ef74234e357cff4ecc0df40d3b839309"
+    },
+    {
+      "cue_id": "q0090",
+      "start_s": 881.47,
+      "end_s": 893.016,
+      "text": "Read structural memory metrics versus hardware-memory hypothesis from input to consequence through one matched view: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows; every surrounding entity keeps its prior meaning.",
+      "text_sha256": "c7a00364fd52403ef0dff131f90277e2da78e619261446095d49e298178d6724"
+    },
+    {
+      "cue_id": "q0091",
+      "start_s": 893.016,
+      "end_s": 904.562,
+      "text": "The diagram treats structural memory metrics versus hardware-memory hypothesis as a located state, artifact, or boundary rather than as an unexplained method label.",
+      "text_sha256": "1e58e7617763cf48b5c0d400ede76bdbed25cec9bdfb3fc7eff9db08d5175875"
+    },
+    {
+      "cue_id": "q0092",
+      "start_s": 904.562,
+      "end_s": 916.108,
+      "text": "Before the consequence appears, predict what structural memory metrics versus hardware-memory hypothesis can change and what the stable example requires it to leave untouched.",
+      "text_sha256": "03f01af1393345b08d238711343a3165af7494d21b1aa9611e5b527b9ff3eca9"
+    },
+    {
+      "cue_id": "q0093",
+      "start_s": 916.108,
+      "end_s": 927.654,
+      "text": "When evidence enters, its status badge binds the statement about structural memory metrics versus hardware-memory hypothesis to a source and scope, not to the conceptual drawing alone.",
+      "text_sha256": "f7d0517281d120dd6c90b14e3c602b39c6ebe99be2b92464f90365fe3adadc30"
+    },
+    {
+      "cue_id": "q0094",
+      "start_s": 927.654,
+      "end_s": 939.2,
+      "text": "The nearest neighboring lesson stays out of focus because its owned question is not needed to explain structural memory metrics versus hardware-memory hypothesis in this sequence.",
+      "text_sha256": "614352ae7ad3203f7a6f7109a4de601486e4113a43aa7e93c85c0a3f916723e0"
+    },
+    {
+      "cue_id": "q0095",
+      "start_s": 939.2,
+      "end_s": 950.746,
+      "text": "The transfer rule carries structural memory metrics versus hardware-memory hypothesis forward only with the same input definition, exactness gate, and declared output contract.",
+      "text_sha256": "1266991b68e30bc1c44ad7af02ff8fcfa8e5913a680a79af84bf24940f3072fe"
+    },
+    {
+      "cue_id": "q0096",
+      "start_s": 950.746,
+      "end_s": 962.292,
+      "text": "Instruction and operation counts are measured structural metrics, but hardware memory traffic remains a hypothesis unless measured directly.",
+      "text_sha256": "0c6456eb443e1b58e12f3431314bbd9bc95a274b744f3fd3bac9e63a70714fcf"
+    },
+    {
+      "cue_id": "q0097",
+      "start_s": 962.292,
+      "end_s": 972.722,
+      "text": "Match CSE-flat, FlatProgram, instruction count, primitive operation count, and packed word storage to five displayed artifacts.",
+      "text_sha256": "8bb3c52354cfc3c1f21e49db6a8b2c982835da7c091b617b4106c2ac8f2f0ca5"
+    },
+    {
+      "cue_id": "q0098",
+      "start_s": 972.722,
+      "end_s": 981.921,
+      "text": "Flat syntax, flat instructions, and packed storage are different stages of one execution pipeline.",
+      "text_sha256": "f6efaa671a31f13f3c9bda0bee71c07f2c6049f2c4bfe0c2402deae4c722bfc4"
+    },
+    {
+      "cue_id": "q0099",
+      "start_s": 981.921,
+      "end_s": 992.967,
+      "text": "A common mistake is this: CSE-flat, FlatProgram, and word-packed execution are three names for the same artifact.",
+      "text_sha256": "507e4e8a5e05c55cd5682bd3c6f8ffae33c84492db1d45d93cd2b3e6b500bee6"
+    },
+    {
+      "cue_id": "q0100",
+      "start_s": 992.967,
+      "end_s": 999.702,
+      "text": "Repair it by returning to the owned distinction: DAG-to-FlatProgram lowering.",
+      "text_sha256": "e53e69e9954e5877c2961f772ed418c93de14503e53597be62126d6f21daa2d9"
+    },
+    {
+      "cue_id": "q0102",
+      "start_s": 1003.551,
+      "end_s": 1015.097,
+      "text": "Use the episode's central distinction to answer: Flat syntax, flat instructions, and packed storage are different stages of one execution pipeline.",
+      "text_sha256": "7acd3923806112942f67205859b40242e6d1341b2fb7d4a85e22e56049d08e08"
+    },
+    {
+      "cue_id": "q0103",
+      "start_s": 1015.097,
+      "end_s": 1019.985,
+      "text": "Name the layer before interpreting its count.",
+      "text_sha256": "06bcd411a9ecab108db8f6300ce009f6e83734cf789abab833f163d069d4fed1"
+    }
+  ],
+  "vtt_path": "docs/video_factory/deep_series/episodes/instruction-operations-memory/captions.vtt",
+  "content_hash": "d9d5f283e9e4bd81f352e59452d29131576ba48fdad991fbf6c0adf14f5ee1de"
+}

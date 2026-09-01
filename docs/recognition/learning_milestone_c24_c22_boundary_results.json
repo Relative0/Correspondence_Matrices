@@ -1,0 +1,207 @@
+{
+  "dataset": {
+    "cases": 48,
+    "families": 8,
+    "family": "YosysHQ/yosys-bench unused generator families",
+    "n_vars": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "policy_refit": false,
+    "retrospective_boundary_evaluation": true
+  },
+  "date": "2026-08-31",
+  "fallback_controls": 48,
+  "fresh_confirmation": false,
+  "interpretation": "The frozen C22 boundary remained exact and fail-closed, including 48 forced fallbacks and five refusal controls. Its advice-on path reached 0.833x direct screened overall and 0.332x on the slowest case. The boundary retained only 0.833x of direct source-packed throughput, so fresh single-query promotion failed.",
+  "linux_replication": {
+    "cost_usd": 0.0,
+    "status": "not_warranted_local_gate_failed",
+    "used": false
+  },
+  "measurement_rows": 3456,
+  "memory_measurement_rows": 64,
+  "methods": [
+    "c22_advice_off",
+    "c22_advice_off_shadow",
+    "c22_advice_on",
+    "c22_advice_on_shadow",
+    "direct_compiled_screened",
+    "direct_exhaustive",
+    "direct_screened",
+    "direct_source_packed"
+  ],
+  "policy_refit": false,
+  "production_promotion": false,
+  "refusal_controls": 5,
+  "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+  "run": "docs/recognition/runs/c24-c22-boundary-windows-20260831-001",
+  "schema": "crse-learning-milestone-c24-c22-boundary-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "retrospective_boundary_exact_verified_local_promotion_gate_failed",
+  "summary": {
+    "best_deployable_fixed_method": "direct_compiled_screened",
+    "best_deployable_fixed_total_ns": 400524600,
+    "deployable_per_case_oracle_total_ns": 393858000,
+    "exactness_gate": true,
+    "functional_control_gate": true,
+    "local_promotion_gate": false,
+    "local_promotion_gate_contract": {
+      "all_functional_controls_pass": true,
+      "c22_advice_on_aggregate_vs_direct_screened_minimum": 1.0,
+      "c22_advice_on_minimum_case_vs_direct_screened_minimum": 0.9
+    },
+    "methods": {
+      "c22_advice_off": {
+        "aggregate_speedup_over_direct_exhaustive": 0.9406335650151616,
+        "aggregate_speedup_over_direct_screened": 0.29104606357840557,
+        "median_case_speedup_over_direct_exhaustive": 0.9341337073906248,
+        "median_case_sum_ns": {
+          "request_ns": 1365304400,
+          "response_serialization_verify_ns": 13420700,
+          "task_total_ns": 1378974500,
+          "wrapper_ns": 46500
+        },
+        "memory_peak_bytes_maximum": 255856,
+        "memory_peak_bytes_median": 31965,
+        "minimum_case_speedup_over_direct_exhaustive": 0.35904557505365486,
+        "minimum_case_speedup_over_direct_screened": 0.2580204320884274
+      },
+      "c22_advice_off_shadow": {
+        "aggregate_speedup_over_direct_exhaustive": 0.7377914235843837,
+        "aggregate_speedup_over_direct_screened": 0.2282836776855626,
+        "median_case_speedup_over_direct_exhaustive": 0.727356314338574,
+        "median_case_sum_ns": {
+          "request_ns": 1744702100,
+          "response_serialization_verify_ns": 13412300,
+          "task_total_ns": 1758098100,
+          "wrapper_ns": 46600
+        },
+        "memory_peak_bytes_maximum": 361861,
+        "memory_peak_bytes_median": 42883,
+        "minimum_case_speedup_over_direct_exhaustive": 0.3249171712555695,
+        "minimum_case_speedup_over_direct_screened": 0.20626513395212473
+      },
+      "c22_advice_on": {
+        "aggregate_speedup_over_direct_exhaustive": 2.6910141008001407,
+        "aggregate_speedup_over_direct_screened": 0.8326399250480068,
+        "median_case_speedup_over_direct_exhaustive": 2.5855224455869834,
+        "median_case_sum_ns": {
+          "request_ns": 468675600,
+          "response_serialization_verify_ns": 13141300,
+          "task_total_ns": 482015200,
+          "wrapper_ns": 45400
+        },
+        "memory_peak_bytes_maximum": 108031,
+        "memory_peak_bytes_median": 28235,
+        "minimum_case_speedup_over_direct_exhaustive": 0.4094148132152883,
+        "minimum_case_speedup_over_direct_screened": 0.3323256316130425
+      },
+      "c22_advice_on_shadow": {
+        "aggregate_speedup_over_direct_exhaustive": 0.7417922793560484,
+        "aggregate_speedup_over_direct_screened": 0.22952160217241546,
+        "median_case_speedup_over_direct_exhaustive": 0.7247529584789449,
+        "median_case_sum_ns": {
+          "request_ns": 1734869700,
+          "response_serialization_verify_ns": 13477000,
+          "task_total_ns": 1748615800,
+          "wrapper_ns": 47300
+        },
+        "memory_peak_bytes_maximum": 285952,
+        "memory_peak_bytes_median": 40211,
+        "minimum_case_speedup_over_direct_exhaustive": 0.31264772165118454,
+        "minimum_case_speedup_over_direct_screened": 0.20464599654783405
+      },
+      "direct_compiled_screened": {
+        "aggregate_speedup_over_direct_exhaustive": 3.2385269219418733,
+        "aggregate_speedup_over_direct_screened": 1.00204856330922,
+        "median_case_speedup_over_direct_exhaustive": 2.9377155609857732,
+        "median_case_sum_ns": {
+          "request_ns": 387560800,
+          "response_serialization_verify_ns": 12859000,
+          "task_total_ns": 400524600,
+          "wrapper_ns": 35300
+        },
+        "memory_peak_bytes_maximum": 104446,
+        "memory_peak_bytes_median": 20439,
+        "minimum_case_speedup_over_direct_exhaustive": 1.131402029091798,
+        "minimum_case_speedup_over_direct_screened": 0.9097506512839598
+      },
+      "direct_exhaustive": {
+        "aggregate_speedup_over_direct_exhaustive": 1.0,
+        "aggregate_speedup_over_direct_screened": 0.3094149245819378,
+        "median_case_speedup_over_direct_exhaustive": 1.0,
+        "median_case_sum_ns": {
+          "request_ns": 1283386300,
+          "response_serialization_verify_ns": 13483700,
+          "task_total_ns": 1297109700,
+          "wrapper_ns": 40400
+        },
+        "memory_peak_bytes_maximum": 250008,
+        "memory_peak_bytes_median": 24472,
+        "minimum_case_speedup_over_direct_exhaustive": 1.0,
+        "minimum_case_speedup_over_direct_screened": 0.2680163201684902
+      },
+      "direct_screened": {
+        "aggregate_speedup_over_direct_exhaustive": 3.231906157568636,
+        "aggregate_speedup_over_direct_screened": 1.0,
+        "median_case_speedup_over_direct_exhaustive": 2.9772490722465186,
+        "median_case_sum_ns": {
+          "request_ns": 387964700,
+          "response_serialization_verify_ns": 12910300,
+          "task_total_ns": 401345100,
+          "wrapper_ns": 35400
+        },
+        "memory_peak_bytes_maximum": 104418,
+        "memory_peak_bytes_median": 20411,
+        "minimum_case_speedup_over_direct_exhaustive": 1.0974626511738204,
+        "minimum_case_speedup_over_direct_screened": 1.0
+      },
+      "direct_source_packed": {
+        "aggregate_speedup_over_direct_exhaustive": 3.230541803461194,
+        "aggregate_speedup_over_direct_screened": 0.9995778484767428,
+        "median_case_speedup_over_direct_exhaustive": 2.9664409875594764,
+        "median_case_sum_ns": {
+          "request_ns": 388349100,
+          "response_serialization_verify_ns": 12842200,
+          "task_total_ns": 401514600,
+          "wrapper_ns": 35500
+        },
+        "memory_peak_bytes_maximum": 103342,
+        "memory_peak_bytes_median": 19533,
+        "minimum_case_speedup_over_direct_exhaustive": 1.2352862671827038,
+        "minimum_case_speedup_over_direct_screened": 0.9406719402719759
+      }
+    },
+    "oracle_headroom_over_best_deployable_fixed": 1.0169264049479763,
+    "timing_is_retrospective_and_machine_specific": true,
+    "wrapper_comparisons": {
+      "advice_off_shadow_cost_ratio": 1.274931552396364,
+      "advice_on_shadow_cost_ratio": 3.6277192088548245,
+      "c22_advice_off_speedup_over_direct_exhaustive": 0.9406335650151616,
+      "c22_advice_on_speedup_over_direct_source_packed": 0.8329915737097088
+    }
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 11,
+    "contracts_checked": 48,
+    "fallback_controls_replayed": 48,
+    "fresh_confirmation": false,
+    "functional_cases_replayed": 48,
+    "local_promotion_gate": false,
+    "measurement_rows_checked": 3456,
+    "memory_rows_checked": 64,
+    "path": "docs/recognition/runs/c24-c22-boundary-windows-20260831-001/independent_verification.json",
+    "policy_refit": false,
+    "production_promotion": false,
+    "refusal_controls_checked": 5,
+    "schema": "crse-c24-c22-boundary-verification/v1",
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 5,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

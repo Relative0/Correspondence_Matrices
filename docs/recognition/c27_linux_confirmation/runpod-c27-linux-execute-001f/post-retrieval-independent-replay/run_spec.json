@@ -1,0 +1,54 @@
+{
+  "c19_policy_file_sha256": "2c17e81774f888263dfebfea8fa420827fd905b5bc3dbdbf16dc628ba7b23229",
+  "c19_policy_path": "docs/recognition/runs/c19-logikbench-cheap-work-policy-windows-20260831-001/policy.json",
+  "c19_policy_sha256": "6d3e58f12deef7c96c21f4362316b059ed577a85f0a486b79278d13f6933d39e",
+  "c22_policy_file_sha256": "a57ee62a2edc1f96ab410ae45e03f9c8560c3100e84a62b7b4409864b3d0a05b",
+  "c22_policy_path": "docs/recognition/c22_source_portfolio_policy.json",
+  "c22_policy_sha256": "95f966e4c3789212cc184c4700e1c89da2c88e80be396687a435c68eabd788d9",
+  "c27_policy_file_sha256": "81af243245383abfc8ea5e519c34652350ba09d6b1eb23c6210b020e539f4cdc",
+  "c27_policy_path": "docs/recognition/c27_support_aware_policy.json",
+  "c27_policy_sha256": "20fb866fdcb0b83c3cdb6483718deeff067b741d9070279585266638185c7317",
+  "config": {
+    "materialize_budget": 4,
+    "max_partitions": 64,
+    "max_seconds": 1200.0,
+    "memory_query_count": 8,
+    "query_counts": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "rounds": 5,
+    "run_id": "c27-support-aware-fresh-linux-20260831-001",
+    "seed": 20260831
+  },
+  "context_digest_binds_expression_width_truth_and_source": true,
+  "dataset_path": "docs/recognition/c27_yosys_fresh_gf2_dataset.json",
+  "dataset_sha256": "a1fa56e939ea8a222997f38775ebd00acc4ed1799eaeb340f935ef22056a6189",
+  "dataset_verification_path": "docs/recognition/c27_yosys_fresh_gf2_dataset_verification.json",
+  "dataset_verification_sha256": "963d0610b109597435254b4ce329100be01f3b431d7d41c72a5aaf77645bceea",
+  "final_artifact_reconstruction_charged": true,
+  "fresh_confirmation": true,
+  "lifecycle": "support_aware_verified_context_resident",
+  "methods": [
+    "resident_direct_exhaustive",
+    "resident_direct_screened",
+    "resident_direct_compiled_screened",
+    "resident_direct_source_packed",
+    "support_aware_c27_advice_on",
+    "support_aware_c27_advice_off"
+  ],
+  "policy_frozen_before_fresh_corpus": true,
+  "policy_refit": false,
+  "production_promotion": false,
+  "schema": "crse-c27-support-aware-fresh-confirmation-experiment/v1",
+  "single_expression_evaluation_per_fused_query": true,
+  "support_rule": {
+    "n_vars_gte_5": "source_packed_anf_screened",
+    "n_vars_lte_4": "verified_truth_screened"
+  },
+  "unchanged_c25_direct_controls": true
+}

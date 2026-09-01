@@ -18,6 +18,12 @@ try {
         [System.Speech.AudioFormat.AudioChannel]::Mono
     )
     foreach ($cue in $contract.cues) {
+        if ($null -ne $cue.rate) {
+            $synth.Rate = [int]$cue.rate
+        }
+        else {
+            $synth.Rate = [int]$contract.rate
+        }
         $target = [System.IO.Path]::GetFullPath([string]$cue.output)
         $parent = [System.IO.Path]::GetDirectoryName($target)
         [System.IO.Directory]::CreateDirectory($parent) | Out-Null

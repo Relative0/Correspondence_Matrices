@@ -1,0 +1,185 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:08.509
+If both paths return the same output, what exactly makes one eager and the other lazy?
+
+q0002
+00:00:08.509 --> 00:00:17.929
+This episode has one job: Eager and lazy paths preserve exact semantics while placing aligned materialization work at different points in the construction timeline.
+
+q0003
+00:00:17.929 --> 00:00:27.349
+We build on Explicit dense CM versus CM-IR, CM-IR nodes, sharing, and roots; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:27.349 --> 00:00:35.858
+Eager work happens during construction; lazy work is deferred until the requested result must be materialized.
+
+q0005
+00:00:35.858 --> 00:00:43.865
+Watch for the label eager materialization; it stays attached to the artifact this episode means.
+
+q0006
+00:00:43.865 --> 00:00:51.370
+When we say lazy materialization, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:51.370 --> 00:01:00.382
+The term deferred work receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:00.382 --> 00:01:09.394
+The next sequence uses Four-variable truth layout as a conceptual teaching example, not as measured benchmark evidence.
+
+q0009
+00:01:09.394 --> 00:01:13.382
+Our stable example is Four-variable truth layout.
+
+q0010
+00:01:13.382 --> 00:01:22.802
+F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.
+
+q0011
+00:01:22.802 --> 00:01:30.307
+Carry assignments, live support, explicit CM, packed truth vectors, and exact output across episodes.
+
+q0012
+00:01:30.307 --> 00:01:37.812
+We now construct the Four-variable truth layout and name every part before interpreting it.
+
+q0013
+00:01:37.812 --> 00:01:47.232
+Run matched timelines: the eager path constructs aligned arrays during compilation while the lazy path retains deferred structure.
+
+q0014
+00:01:47.232 --> 00:01:55.239
+Request the final output and show the lazy materialization occurring once before exact outputs meet.
+
+q0015
+00:01:55.239 --> 00:02:00.232
+Now isolate eager construction timing inside Four-variable truth layout.
+
+q0016
+00:02:00.232 --> 00:02:09.244
+The example definition and output meaning stay fixed while only the state for eager construction timing changes.
+
+q0017
+00:02:09.244 --> 00:02:18.256
+That matched before-and-after view assigns the visible consequence to eager construction timing, not to a substituted workload.
+
+q0018
+00:02:18.256 --> 00:02:24.756
+Eager fills aligned regions early; lazy carries outlined placeholders until output demand.
+
+q0019
+00:02:24.756 --> 00:02:29.749
+Now isolate lazy deferred materialization inside Four-variable truth layout.
+
+q0020
+00:02:29.749 --> 00:02:38.761
+The example definition and output meaning stay fixed while only the state for lazy deferred materialization changes.
+
+q0021
+00:02:38.761 --> 00:02:47.773
+That matched before-and-after view assigns the visible consequence to lazy deferred materialization, not to a substituted workload.
+
+q0022
+00:02:47.773 --> 00:02:57.193
+The eager and lazy CM paths differ in when aligned dense work is materialized, not in the Boolean function returned.
+
+q0023
+00:02:57.193 --> 00:03:03.190
+Read that statement only within this scope: current eager/lazy implementations.
+
+q0024
+00:03:03.190 --> 00:03:07.178
+Its declared measurement boundary is construction timing.
+
+q0025
+00:03:07.178 --> 00:03:11.166
+The uncertainty field says no performance ranking.
+
+q0026
+00:03:11.166 --> 00:03:20.586
+The nearest confusing lesson is Packed truth vectors: big integers, machine words, and masks; it owns packed truth-vector ordering, while this episode owns eager construction timing.
+
+q0027
+00:03:20.586 --> 00:03:30.006
+The example fixes F of A, B, C, and D as A AND B, exclusive-or C OR D.
+
+q0028
+00:03:30.006 --> 00:03:36.003
+Holding that element fixed lets this episode isolate eager construction timing.
+
+q0029
+00:03:36.003 --> 00:03:45.423
+A and B select the row, C and D select the column, and MSB-first order fixes both index conventions.
+
+q0030
+00:03:45.423 --> 00:03:51.420
+Holding that element fixed lets this episode isolate lazy deferred materialization.
+
+q0031
+00:03:51.420 --> 00:04:00.840
+Every four-bit assignment names exactly one of the sixteen cells, and every cell returns one exact output bit.
+
+q0032
+00:04:00.840 --> 00:04:08.847
+Folding the truth-table output column into a four-by-four grid changes the layout, not the function.
+
+q0033
+00:04:08.847 --> 00:04:18.267
+Reading a cell forward evaluates an assignment; reading it backward recovers the row and column bits that selected it.
+
+q0034
+00:04:18.267 --> 00:04:27.687
+Live support can remove an input from active computation even when the ambient layout still reserves its axis.
+
+q0035
+00:04:27.687 --> 00:04:37.107
+A packed truth vector stores the same exact outputs in a different physical arrangement from the displayed matrix.
+
+q0036
+00:04:37.107 --> 00:04:46.527
+The explicit matrix is dense by contract, so compactness and speed require separate evidence rather than definition alone.
+
+q0037
+00:04:46.527 --> 00:04:54.534
+Holding variable order fixed makes matrix, packed-vector, and program views comparable without an indexing ambiguity.
+
+q0038
+00:04:54.534 --> 00:05:03.954
+An exact equality check across the views is the gate before any timing ratio is allowed to matter.
+
+q0039
+00:05:03.954 --> 00:05:13.374
+The starting state preserves the stable definition: F(A,B,C,D)=(A AND B) XOR (C OR D), row variables A,B, column variables C,D, MSB-first ordering.
+
+q0040
+00:05:13.374 --> 00:05:18.869
+The implementation distinction does not establish a universal performance ranking.
+
+q0041
+00:05:18.869 --> 00:05:25.369
+Place three construction and materialization steps on the eager or lazy timeline.
+
+q0042
+00:05:25.369 --> 00:05:29.357
+Eager and lazy change scheduling, not semantics.
+
+q0043
+00:05:29.357 --> 00:05:36.359
+A common mistake is this: Lazy means no materialization work is ever performed.
+
+q0044
+00:05:36.359 --> 00:05:42.356
+Repair it by returning to the owned distinction: eager construction timing.
+
+q0046
+00:05:45.496 --> 00:05:53.001
+Use the episode's central distinction to answer: Eager and lazy change scheduling, not semantics.
+
+q0047
+00:05:53.001 --> 00:06:00.003
+Ask when the work occurs before asking how long the whole task takes.

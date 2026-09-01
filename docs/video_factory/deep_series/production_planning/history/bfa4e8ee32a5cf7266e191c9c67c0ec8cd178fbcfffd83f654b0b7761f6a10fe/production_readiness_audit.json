@@ -1,0 +1,113 @@
+{
+  "schema_version": "2.0",
+  "planner_version": "1.0.0",
+  "status": "blocked_before_executable_remote_proposal",
+  "bible_content_hash": "51a05667bcafdb1012883b35c04387a8148cd277c18a9cdec7fdd886e2f3d3f4",
+  "review_manifest_sha256": "d9be639408d03e121cbcac4155cab86d0ff62123ef349a5a50366c9098c78d93",
+  "content_approval_identity": "bfa4e8ee32a5cf7266e191c9c67c0ec8cd178fbcfffd83f654b0b7761f6a10fe",
+  "remote_or_paid_work_authorized": false,
+  "verified_counts": {
+    "episodes": 48,
+    "chapters": 188,
+    "storyboard_compositions": 1206,
+    "executable_chapter_payloads": 0
+  },
+  "live_source_drift": [
+    {
+      "source_id": "src-recognition-roadmap",
+      "path": "docs/recognition/LEARNING_ROADMAP.md",
+      "registered_sha256": "c61965bbab4e5b7cc73d3cb8815236c82b9b3d93a310ddd563f90a5b1e27e541",
+      "current_sha256": "39abafa4ae85db30ec9e46c777383119c82fa731d441edacf4cf68a47f1ed697",
+      "effect": "The approved review packet remains frozen to the registered identity; refresh or reconcile this live source before compiling new render claims."
+    },
+    {
+      "source_id": "src-recognition-register",
+      "path": "docs/recognition/experiment_register.json",
+      "registered_sha256": "148de1b18ffa39f7c98db4cfb99768bac19dff6ca0c7185d6522f85662dc33af",
+      "current_sha256": "0e752316c90efa5488954d6400a18dda8aa524d586fe70d917694ccc2e5e1afb",
+      "effect": "The approved review packet remains frozen to the registered identity; refresh or reconcile this live source before compiling new render claims."
+    }
+  ],
+  "blocking_findings": [
+    "188 of 188 chapter renderer briefs are descriptors rather than executable resolved render payloads.",
+    "No representative full-resolution chapter master exists yet; current contact sheets, GIFs, and archetype PNGs are editorial previews.",
+    "Narration text/timing contracts exist, but no local voice identity, license decision, or cue-audio realization is bound.",
+    "The episode contracts are not yet integrated with chapter encode, audio/caption mux, decoded-frame QA, and final release manifests.",
+    "2 live source-registry entries are currently hash-drifted from the frozen registry.",
+    "A current RunPod resource quote was intentionally not collected under this local-only approval."
+  ],
+  "work_packages": [
+    {
+      "order": 1,
+      "work_package_id": "WP1",
+      "title": "Executable chapter render contract",
+      "outcome": "Add a strict schema and compiler that resolves all storyboard scenes, beats, claims, assets, durations, and frame spans into deterministic POP payloads.",
+      "acceptance": [
+        "188/188 chapter payloads schema-valid",
+        "1,206/1,206 storyboard compositions resolved",
+        "every narration cue maps to an explicit timed visual state",
+        "no unsupported primitive silently falls back to generic boxes"
+      ]
+    },
+    {
+      "order": 2,
+      "work_package_id": "WP2",
+      "title": "Visual primitive completion and preflight",
+      "outcome": "Implement any missing matrix, DAG, circuit, feature-model, policy, evidence, and recognition primitives plus text-fit/safe-zone checks.",
+      "acceptance": [
+        "all required asset kinds have an executable primitive",
+        "no clipping, placeholder, passive three-box opening, or unexplained empty field",
+        "evidence status remains visible without relying only on color"
+      ]
+    },
+    {
+      "order": 3,
+      "work_package_id": "WP3",
+      "title": "Six full-resolution archetype chapter smokes",
+      "outcome": "Render and encode one local 1080p chapter for each representative visual archetype, then measure throughput and determinism.",
+      "acceptance": [
+        "six encoded chapter masters",
+        "deterministic repeated-frame hashes",
+        "timing and decoded-frame QA reports",
+        "human contact-sheet review"
+      ]
+    },
+    {
+      "order": 4,
+      "work_package_id": "WP4",
+      "title": "Narration and audio realization",
+      "outcome": "Select an explicitly licensed local/offline voice or human recording route and bind cue audio to the existing narration contracts.",
+      "acceptance": [
+        "voice and license decision recorded",
+        "cue-aligned WAV stems with hashes",
+        "no paid voice call without separate approval",
+        "loudness, silence, and duration checks pass"
+      ]
+    },
+    {
+      "order": 5,
+      "work_package_id": "WP5",
+      "title": "Assembly, captions, and encoded-media QA",
+      "outcome": "Add resumable chapter assembly, audio/caption mux, stream inspection, decoded-frame sampling, and final provenance manifests.",
+      "acceptance": [
+        "chapter joins are frame-exact",
+        "caption identity and timing match the approved contracts",
+        "audio/video durations agree within the declared tolerance",
+        "final masters remain production candidates, never auto-published"
+      ]
+    },
+    {
+      "order": 6,
+      "work_package_id": "WP6",
+      "title": "Immutable bundle and exact remote proposal",
+      "outcome": "After the local smokes pass, construct the normalized allowlisted bundle, exact ordered chapter jobs, cost model, and approval request.",
+      "acceptance": [
+        "bundle and batch hashes reproduce",
+        "current resource quote and quote time recorded",
+        "cost/create/retry/timeout/cleanup ceilings explicit",
+        "no credential value enters any artifact"
+      ]
+    }
+  ],
+  "content_hash": "ab7ec223841ae0474f76bf23ab4b2124a9f88c0feb65bdd0f25b9cae94bfa8d2"
+}

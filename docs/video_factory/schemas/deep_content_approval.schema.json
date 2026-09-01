@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "status": {
+      "const": "approved"
+    },
+    "scope": {
+      "const": "production_planning_only"
+    },
+    "approved_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bible_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approval_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval_text_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approval_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "content_approval_authorizes_remote_or_paid_work": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "scope",
+    "approved_by",
+    "approved_at",
+    "bible_content_hash",
+    "review_manifest_sha256",
+    "approval_text",
+    "approval_text_sha256",
+    "approval_identity",
+    "content_approval_authorizes_remote_or_paid_work"
+  ]
+}

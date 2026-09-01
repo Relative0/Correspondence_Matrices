@@ -1,7 +1,49 @@
 {
   "schema_version": "1.0",
-  "generated_date": "2026-08-30",
+  "generated_date": "2026-08-31",
   "claims": [
+    {
+      "id": "boolean-decision-semantics",
+      "allowed_wording": "A Boolean expression maps each complete assignment of its variables to one Boolean output.",
+      "plain_wording": "A Boolean rule turns each assignment into true or false.",
+      "technical_wording": "The expression classes evaluate a declared variable assignment to one Boolean value; enumerating assignments exposes the denoted Boolean function.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current Boolean expression implementation",
+      "measurement_boundary": "semantics",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "source-does-not-exist",
+          "locator": "Expr hierarchy and eval methods"
+        }
+      ]
+    },
+    {
+      "id": "expression-function-distinction",
+      "allowed_wording": "An expression is syntax; its Boolean function is the assignment-to-output mapping it denotes, so different expressions may denote the same function.",
+      "plain_wording": "The written rule and the function it computes are not the same object.",
+      "technical_wording": "Structural form is an expression property, while exact equality is established by matching outputs over the declared assignment universe.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "Boolean expression and exact-output contracts",
+      "measurement_boundary": "semantics",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-exprlib",
+          "locator": "expression node definitions and evaluation"
+        },
+        {
+          "source_id": "src-repo-readme",
+          "locator": "correctness checks and backend outputs"
+        }
+      ]
+    },
     {
       "id": "cm-explicit-definition",
       "allowed_wording": "An explicit CM is a dense truth-layout representation over a declared row/column variable split.",
@@ -16,7 +58,7 @@
       "uncertainty": "none",
       "sources": [
         {
-          "source_id": "source-does-not-exist",
+          "source_id": "src-cm-build",
           "locator": "compile_expr_to_cm and eval_cm_boolean"
         }
       ]
@@ -87,6 +129,113 @@
       ]
     },
     {
+      "id": "cm-output-contract-boundary",
+      "allowed_wording": "CM, CM-IR, SAT, BDD, minimization, and symbolic algebra answer different questions and must be compared under matched output contracts.",
+      "plain_wording": "A truth layout, a reusable program, and a satisfying assignment are different outputs.",
+      "technical_wording": "Complete-vector extraction, point queries, restrictions, satisfiability, equivalence, minimization, and symbolic rewriting charge different work and cannot be ranked as one task.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "implemented backend and task contracts",
+      "measurement_boundary": "output contract",
+      "comparator": "task-matched backends",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "scope dependent",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "Backend summary and output columns"
+        },
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D and E task summaries"
+        }
+      ]
+    },
+    {
+      "id": "cm-ir-sharing-roots",
+      "allowed_wording": "CM-IR interns reusable nodes in a DAG and can retain roots that share descendants.",
+      "plain_wording": "Several outputs can point into one shared computation graph.",
+      "technical_wording": "CMNode identity and interning permit repeated structure to be stored once while compiled roots retain the requested outputs.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current CM-IR implementation",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "CMNode, CMIRBuilder, interning and compiled roots"
+        }
+      ]
+    },
+    {
+      "id": "cm-ir-normalization-interning",
+      "allowed_wording": "Normalization, canonical structural keys, and interning are distinct stages: rewrites choose a canonical form, keys identify it, and interning reuses an existing node.",
+      "plain_wording": "First make equivalent structure look alike; then reuse the matching node.",
+      "technical_wording": "Associative/commutative normalization and simplification affect canonical structure; structural digests identify it; intern tables reuse the resulting CMNode.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current CM-IR compiler",
+      "measurement_boundary": "representation construction",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "implementation-defined",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "_structural_digest, CMIRBuilder normalization and interning"
+        }
+      ]
+    },
+    {
+      "id": "cm-ir-persistence-contract",
+      "allowed_wording": "Persistent CM-IR reuse is keyed by canonical identity and must verify version/input identity before accepting a cached artifact.",
+      "plain_wording": "A saved graph is reusable only while its identity still matches.",
+      "technical_wording": "The persistent IR cache records deterministic structural identity; changed structure or versioned inputs must miss or invalidate rather than reuse stale state.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current process-local persistent cache and versioned research contracts",
+      "measurement_boundary": "persistence and invalidation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "cache scope is implementation-specific",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "persistent cache and structural hash"
+        },
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D3 and D6 summaries"
+        }
+      ]
+    },
+    {
+      "id": "raw-ast-ablation-definition",
+      "allowed_wording": "Raw AST evaluation follows the expression tree without structural sharing or sharing-aware associative flattening, so it is an ablation rather than the strongest generic comparator.",
+      "plain_wording": "A raw tree may repeat the same work each time the subtree appears.",
+      "technical_wording": "The corrected comparator ladder separates raw AST, plain structural CSE, sharing-aware CSE-flat, and CM-IR.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "corrected comparator ladder",
+      "measurement_boundary": "mechanism",
+      "comparator": "raw AST",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "What CSE means and comparator correction"
+        },
+        {
+          "source_id": "src-bitset",
+          "locator": "compile_expr_cse"
+        }
+      ]
+    },
+    {
       "id": "cse-definition",
       "allowed_wording": "Common subexpression elimination computes repeated expression subtrees once and reuses them.",
       "plain_wording": "CSE shares repeated work.",
@@ -144,6 +293,67 @@
         {
           "source_id": "src-correction-report",
           "locator": "What CSE means"
+        }
+      ]
+    },
+    {
+      "id": "flat-program-lowering",
+      "allowed_wording": "A shared DAG can be lowered once into a linear postorder FlatProgram with one instruction per unique DAG node; this flat program is distinct from CSE-flat's source transformation and from packed storage.",
+      "plain_wording": "A shared graph can become an ordered instruction list without becoming a matrix.",
+      "technical_wording": "compile_flat lowers unique CMNode DAG nodes into dependency-ordered slots and operations; CSE-flat describes sharing-aware associative flattening before or during comparator compilation, while bigint/words describe execution storage.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current flat evaluator implementation",
+      "measurement_boundary": "lowering and execution representation",
+      "comparator": "CSE-flat and packed evaluators",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-bitset",
+          "locator": "FlatProgram and compile_flat"
+        }
+      ]
+    },
+    {
+      "id": "operation-metrics-distinct",
+      "allowed_wording": "Flat instruction count, argument edges, executed primitive operations, and peak live buffers are different metrics and may not be substituted for one another or for elapsed time.",
+      "plain_wording": "One instruction can perform more than one primitive operation.",
+      "technical_wording": "program_metrics defines flat_instructions, argument_edges, executed_word_ops, executed_bigint_ops, and peak_live_word_buffers separately.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current deterministic program metrics",
+      "measurement_boundary": "mechanism accounting",
+      "comparator": "flat execution backends",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "not elapsed-time evidence",
+      "sources": [
+        {
+          "source_id": "src-bitset",
+          "locator": "FlatProgram and program_metrics"
+        }
+      ]
+    },
+    {
+      "id": "memory-traffic-hypothesis",
+      "allowed_wording": "A graph or instruction reduction may change allocation or memory traffic, but memory traffic is a proposed mechanism unless it is measured directly on the declared workload.",
+      "plain_wording": "Fewer operations may help memory behavior, but the diagram is not a measurement.",
+      "technical_wording": "Peak live buffers and release schedules are deterministic structural metrics; claims about hardware memory traffic require separate measurement and must remain visibly hypothetical here.",
+      "type": "hypothesis",
+      "status": "exploratory",
+      "scope": "mechanism explanation only",
+      "measurement_boundary": "conceptual mechanism",
+      "comparator": "flat execution backends",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "not directly measured",
+      "sources": [
+        {
+          "source_id": "src-bitset",
+          "locator": "release_after, word plan and program_metrics"
+        },
+        {
+          "source_id": "src-correction-report",
+          "locator": "mechanism wording boundary"
         }
       ]
     },
@@ -385,6 +595,117 @@
       ]
     },
     {
+      "id": "eager-lazy-contract",
+      "allowed_wording": "The eager and lazy CM paths differ in when aligned dense work is materialized, not in the Boolean function returned.",
+      "plain_wording": "Eager performs layout work earlier; lazy defers it until the result is needed.",
+      "technical_wording": "The eager builder constructs through the standard path, while the lazy builder aligns subexpressions and materializes once at the end; both remain subject to exact-output checks.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current eager/lazy implementations",
+      "measurement_boundary": "construction timing",
+      "comparator": "eager versus lazy CM",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "no performance ranking",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "eager and lazy paths and technical notes"
+        },
+        {
+          "source_id": "src-cm-build-lazy",
+          "locator": "lazy compilation and materialization"
+        }
+      ]
+    },
+    {
+      "id": "pair-aware-contract",
+      "allowed_wording": "Pair-aware collapse applies only after fixed assignments leave one live row variable and one live column variable; otherwise it forwards to the standard path.",
+      "plain_wording": "The pair shortcut needs exactly one live variable on each matrix axis.",
+      "technical_wording": "The experimental pair compiler honors fixed assignments, records eligibility/collapse diagnostics, and falls back without changing semantics when the token-pair boundary is not met.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current experimental pair-aware implementation",
+      "measurement_boundary": "construction eligibility",
+      "comparator": "standard CM path",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "experimental implementation status",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "CM pair backend summary and technical notes"
+        },
+        {
+          "source_id": "src-cm-build-pair",
+          "locator": "pair eligibility and fallback"
+        }
+      ]
+    },
+    {
+      "id": "hybrid-partial-contract",
+      "allowed_wording": "Hybrid and partial-hybrid materialization are distinct dispatch modes: whole-subtree collapse and child-level structure-preserving dispatch must not be conflated.",
+      "plain_wording": "One mode can collapse a whole result; the other can keep structure and choose per child.",
+      "technical_wording": "CM-IR materialization diagnostics distinguish full collapse, bitset/numpy node decisions, child dispatch, and no-reinflation output paths.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current CM-IR materialization modes",
+      "measurement_boundary": "materialization strategy",
+      "comparator": "hybrid versus partial-hybrid",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "workload dependent",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "materialize modes and diagnostics"
+        },
+        {
+          "source_id": "src-repo-readme",
+          "locator": "Backend summary"
+        }
+      ]
+    },
+    {
+      "id": "parallel-materialization-contract",
+      "allowed_wording": "Parallel CM partitions eligible materialization work and deterministically assembles the result; parallel availability does not imply a speedup after scheduling and transport overhead.",
+      "plain_wording": "Independent matrix regions can run in worker lanes and still return in one fixed order.",
+      "technical_wording": "The parallel path applies minimum-work guards, row/chunk partitioning, optional shared memory, and deterministic output reconstruction around the same exact materialization contract.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current parallel CM implementation",
+      "measurement_boundary": "materialization strategy",
+      "comparator": "serial CM materialization",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "no universal performance claim",
+      "sources": [
+        {
+          "source_id": "src-cm-parallel",
+          "locator": "compile_expr_to_cm_parallel and work guards"
+        },
+        {
+          "source_id": "src-repo-readme",
+          "locator": "CM parallel backend summary"
+        }
+      ]
+    },
+    {
+      "id": "packed-truth-vector-contract",
+      "allowed_wording": "Packed bigint and machine-word evaluators store the same ordered truth vector in different exact execution layouts with explicit masks and tail handling.",
+      "plain_wording": "Many truth values can travel together in one integer or several machine words.",
+      "technical_wording": "The packed backends define variable ordering, full masks, word plans, tail masking, and exact conversion independently of dense CM layout.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current packed evaluator implementations",
+      "measurement_boundary": "execution representation",
+      "comparator": "bigint and word-packed truth vectors",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "backend choice remains workload dependent",
+      "sources": [
+        {
+          "source_id": "src-bitset",
+          "locator": "bitset environments, word plans and evaluators"
+        }
+      ]
+    },
+    {
       "id": "exactness-gates",
       "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
       "plain_wording": "Timing rows counted only after exact outputs matched.",
@@ -404,6 +725,132 @@
         {
           "source_id": "src-correction-report",
           "locator": "EPFL order and frozen truth verification"
+        }
+      ]
+    },
+    {
+      "id": "toolbox-output-contracts",
+      "allowed_wording": "CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy expose different representation, evaluation, decision, minimization, and symbolic-manipulation contracts.",
+      "plain_wording": "These tools answer different questions, so the first choice is the required output.",
+      "technical_wording": "The repository's backend summary separates CM materialization, structural CSE, packed evaluation, ROBDD/BDD construction, SAT-style decision tasks, Espresso minimization, and SymPy symbolic simplification with exact validation outside timing.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "implemented and documented repository interfaces",
+      "measurement_boundary": "tool output contract",
+      "comparator": "task-matched tools",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "optional dependencies and bounded interfaces vary",
+      "sources": [
+        {
+          "source_id": "src-repo-readme",
+          "locator": "Backend summary, toggles and output columns"
+        },
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone E1 and E2 summaries"
+        }
+      ]
+    },
+    {
+      "id": "configuration-revision-workload",
+      "allowed_wording": "Configuration workloads combine constraints, related revisions, and repeated queries; identical-output cache hits are insufficient without source/version identity.",
+      "plain_wording": "Feature models change over time, so reuse must know what changed, not only what output happened to match.",
+      "technical_wording": "Milestone D6 evaluates adjacent feature-model revisions with exact invalidation and refuses equal-output but changed-source cases as cache hits.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "bounded natural configuration revisions",
+      "measurement_boundary": "versioned task and cache boundary",
+      "comparator": "cold and version-aware exact paths",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "bounded retained workload",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D6 summary"
+        }
+      ]
+    },
+    {
+      "id": "circuit-cone-support",
+      "allowed_wording": "A circuit cone's semantic support and gate structure determine the exact function under study; nominal circuit size is not a substitute for cone support.",
+      "plain_wording": "A large circuit can contain a smaller cone whose output depends on only part of it.",
+      "technical_wording": "The accepted EPFL workload uses AND/INV cones selected and checked under declared semantic-support and exact-output contracts.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "accepted EPFL AND/INV cone workload",
+      "measurement_boundary": "workload definition",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "corpus and support range scoped",
+      "sources": [
+        {
+          "source_id": "src-epfl-report",
+          "locator": "cone selection, semantic support and exact verification"
+        }
+      ]
+    },
+    {
+      "id": "policy-rule-revision-workload",
+      "allowed_wording": "Policy/rule systems with related revisions can reuse proved structure only when matching, proof, invalidation, and overhead are charged at the declared task boundary.",
+      "plain_wording": "A reusable rule is useful only if proving, finding, and applying it costs less than the work it saves.",
+      "technical_wording": "Milestones D2-D7 separate proved rules, versioned caches, profitability gates, natural incidence, adjacent revisions, and bounded normalization with exact fallback.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "bounded CRSE rule and revision studies",
+      "measurement_boundary": "overhead-inclusive task boundary",
+      "comparator": "no rewrite and direct exact paths",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "no general deployment claim",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestones D2 through D7 summaries"
+        }
+      ]
+    },
+    {
+      "id": "representation-decision-factors",
+      "allowed_wording": "Representation choice should begin with required output, live support, reuse, update pattern, exact operations, preparation cost, and evidence scope rather than a method label.",
+      "plain_wording": "Choose from the question and workload, not from a universal ranking.",
+      "technical_wording": "Complete vectors, points, restrictions, satisfiability, equivalence, revisions, and repeated execution imply different eligible backends and charged boundaries.",
+      "type": "interpretation",
+      "status": "confirmed",
+      "scope": "cross-contract decision guidance",
+      "measurement_boundary": "decision policy",
+      "comparator": "task-matched backends",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "must remain evidence scoped",
+      "sources": [
+        {
+          "source_id": "src-correction-report",
+          "locator": "scope and boundary conclusions"
+        },
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D and E task routing summaries"
+        }
+      ]
+    },
+    {
+      "id": "source-provenance-contract",
+      "allowed_wording": "A video production artifact is reproducible only when source locators, source hashes, claim IDs, script/storyboard identities, render jobs, outputs, and approval identities remain linked.",
+      "plain_wording": "Changing an evidence source must invalidate every downstream video artifact that depended on it.",
+      "technical_wording": "The factory recomputes source hashes and content identities, while the RunPod package binds allowlisted inputs, jobs, results, and cleanup authorization to immutable hashes.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "CM video factory and RunPod safety contract",
+      "measurement_boundary": "production provenance",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "hash identity does not itself establish scientific truth",
+      "sources": [
+        {
+          "source_id": "src-video-factory",
+          "locator": "source registry, brief_content_hash and validation"
+        },
+        {
+          "source_id": "src-runpod-handoff",
+          "locator": "hash-bound authorization and verification"
         }
       ]
     },
@@ -431,6 +878,48 @@
       ]
     },
     {
+      "id": "crse-initial-learning-slice",
+      "allowed_wording": "The initial Milestone C compared matched matrix MLP, matrix CNN, source-DAG GNN, fused, and contrastive-retrieval models: graph/fused arms learned the generated representation signal, retrieval missed its gate, real EPFL transfer was poor, exact rejection preserved outputs, and no model was promoted.",
+      "plain_wording": "The first learned comparison found a generated-data signal but failed retrieval and real-source transfer, so exact verification and fallback stayed in charge.",
+      "technical_wording": "Ten bounded model artifacts were saved and reloaded under matched budgets. Generated classification, contrastive retrieval, and the all-negative EPFL transfer slice retained separate criteria; independent truth-vector checks admitted or rejected proposals with zero final semantic mismatches.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "initial CRSE Milestone C generated and EPFL transfer slices",
+      "measurement_boundary": "learned proposal plus exact acceptance",
+      "comparator": "matched matrix/graph/fused arms and advice-off exact fallback",
+      "ratio_direction": "per frozen criterion",
+      "uncertainty": "bounded generated functions and all-negative EPFL slice",
+      "sources": [
+        {
+          "source_id": "src-crse-milestone-c",
+          "locator": "Result, classification evidence, contrastive retrieval, and remaining work"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "initial C classifier/retrieval and negative-transfer results"
+        }
+      ]
+    },
+    {
+      "id": "crse-current-program-map",
+      "allowed_wording": "The current CRSE program spans learned proposals, exact subclass recognition, task routing, proved rules, representation dispatch, BDD/SAT guidance, exact verification, negative controls, and explicit promotion decisions.",
+      "plain_wording": "CRSE is a research program with several exact and learned branches, not one model.",
+      "technical_wording": "The current register retains 18 research tracks and milestone evidence through C16, D10, E1, and E2; each track remains scoped to its measured slices and pending work.",
+      "type": "fact",
+      "status": "confirmed",
+      "scope": "current recognition register",
+      "measurement_boundary": "research-program structure",
+      "comparator": "exact controls and learned proposal paths",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "track completion varies",
+      "sources": [
+        {
+          "source_id": "src-recognition-register",
+          "locator": "tracks R01-R18, status reasons, and retained milestone results"
+        }
+      ]
+    },
+    {
       "id": "crse-c2-negative",
       "allowed_wording": "Milestone C2's learned representation and size-transfer criteria failed while the exact CM detector remained perfect.",
       "plain_wording": "The learned decomposition detector did not transfer, even though the exact control worked.",
@@ -446,6 +935,10 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestone C2 summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained C2 exact-control and negative learned results"
         }
       ]
     },
@@ -465,6 +958,10 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestones C3, C4, C5 summaries"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained C3-C5 natural-cut and promotion results"
         }
       ]
     },
@@ -484,6 +981,180 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestone C6 summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained C6 core/gate results"
+        }
+      ]
+    },
+    {
+      "id": "crse-c7-c8-transfer",
+      "allowed_wording": "C7 and C8 retained exact source-ANF identities across an independent Yosys-derived family and Linux, while backend profitability remained representation- and machine-sensitive.",
+      "plain_wording": "The exact result transferred, but the fastest exact backend did not stay the same everywhere.",
+      "technical_wording": "Independent source cases and a separately provisioned Linux CPU reproduced canonical partitions; sparse set, packed, and bitset paths retained different median and tail behavior.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestones C7-C8 exact transfer studies",
+      "measurement_boundary": "exact recognition and cross-machine execution",
+      "comparator": "set, packed and bitset exact controls",
+      "ratio_direction": "per reported speedup",
+      "uncertainty": "bounded source families and machines",
+      "sources": [
+        {
+          "source_id": "src-recognition-register",
+          "locator": "R06/R03 retained C7-C8 exact-transfer results"
+        }
+      ]
+    },
+    {
+      "id": "crse-c9-c11-negative",
+      "allowed_wording": "C9 static routing, C10 guarded restart, and C11 one-pass conversion preserved exact labels and partitions but remained slower than the best fixed arm on their retained evaluation splits; C10 nevertheless protected the catastrophic p95 tail.",
+      "plain_wording": "Three exact routing designs improved tail safety and avoided duplicate prefix work, but none became a profitable default.",
+      "technical_wording": "C9's frozen static tree failed transfer, C10 restarted exactly after a frozen product budget, and C11 converted the set prefix in place so the DAG prefix was not evaluated twice. Independent replay retained zero semantic mismatches.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "Milestones C9-C11 exact representation-routing progression",
+      "measurement_boundary": "exact recognition and overhead-inclusive routing",
+      "comparator": "best fixed exact set/packed/bitset arm",
+      "ratio_direction": "speedup over best fixed; below one loses",
+      "uncertainty": "bounded C6/C7 and fresh Yosys-derived splits",
+      "sources": [
+        {
+          "source_id": "src-c12-report",
+          "locator": "What was implemented and Results table for C9-C11"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "R03 and R18 C9-C12 exact-path and negative-control results"
+        }
+      ]
+    },
+    {
+      "id": "crse-c12-c16-exact",
+      "allowed_wording": "C12-C16 advanced exact dispatch, tail protection, task guards, and reconstructible GF(2) artifacts; C16 preserved exact artifact identity and measured about 3.545x local and 3.178x Linux whole-path screening gains while retaining a tiny-case regression and fresh-family limits.",
+      "plain_wording": "Exact dispatch and screened GF(2) artifacts passed locally and on Linux, but guarded fallback and broader-family testing remain necessary.",
+      "technical_wording": "C12-C14 cover adaptive exact dispatch, an in-kernel tail sentinel, and task-aware guarding. C15-C16 add reconstructible CM/GF(2) artifacts and screen 64 partitions before bounded materialization. The corrected 18-file Linux v2 package produced 360 timing rows with zero semantic or artifact mismatches.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestones C12-C16 bounded exact studies",
+      "measurement_boundary": "exact recognition, dispatch and whole-path cost",
+      "comparator": "frozen exhaustive materializer and advice-off exact paths",
+      "ratio_direction": "local and Linux screened/exhaustive whole-path ratios",
+      "uncertainty": "bounded 40-case Yosys family plus structured/dense controls",
+      "sources": [
+        {
+          "source_id": "src-recognition-register",
+          "locator": "R06 retained C12-C16 results"
+        },
+        {
+          "source_id": "src-c16-report",
+          "locator": "Exact results, local timing, corrected v2 package, and interpretation"
+        },
+        {
+          "source_id": "src-c16-linux-v2-final",
+          "locator": "criteria, speedup, semantic_mismatches, artifact_mismatches, and second_machine_gate"
+        }
+      ]
+    },
+    {
+      "id": "crse-c17-c20-exact-policy",
+      "allowed_wording": "C17-C20 kept exhaustive and screened CM/GF(2) artifacts exact while moving from a guarded dispatcher through independent VTR transfer and a frozen LogikBench work policy to a constant-folded screened selector; aggregate results improved, but per-case, freshness, and machine-scope limits kept production disabled.",
+      "plain_wording": "The exact arms agreed, while successive milestones isolated wrapper overhead, source transfer, a trivial frozen policy, and a retrospective small-support timing outlier.",
+      "technical_wording": "C17 failed its slow-tail and minimum gates despite a 3.831x aggregate result. C18 transferred exactly to 73 independent VTR cones at 8.378x aggregate but retained a single-round 0.621x minimum. C19 selected an always-screened leaf before confirmation and passed its 24-case LogikBench gate at 2.769x aggregate and 0.972x minimum. C20 constant-folded that leaf and reached 1.760x aggregate and 1.463x minimum on nine retrospective rounds over the 11 small C18 controls; no production call site changed.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestones C17-C20 exact-arm routing and transfer studies",
+      "measurement_boundary": "whole-task exact arm selection and policy overhead",
+      "comparator": "direct exhaustive and direct screened exact CM/GF(2)",
+      "ratio_direction": "speedup over exhaustive; below one loses",
+      "uncertainty": "bounded Windows studies; C18 cross-family, C19 cluster-separated confirmation, C20 retrospective same-machine tail replay",
+      "sources": [
+        {
+          "source_id": "src-c17-report",
+          "locator": "Local results and Decision"
+        },
+        {
+          "source_id": "src-c17-results",
+          "locator": "summary, gates, verification, and production_promotion"
+        },
+        {
+          "source_id": "src-c18-report",
+          "locator": "Exact transfer and timing; Verification and decision"
+        },
+        {
+          "source_id": "src-c18-results",
+          "locator": "summary, verification, and production_promotion"
+        },
+        {
+          "source_id": "src-c19-report",
+          "locator": "Sealed confirmation; Independent verification and decision"
+        },
+        {
+          "source_id": "src-c19-results",
+          "locator": "confirmation, policy, verification, and production_promotion"
+        },
+        {
+          "source_id": "src-c20-report",
+          "locator": "Retrospective VTR control; Verification and decision"
+        },
+        {
+          "source_id": "src-c20-results",
+          "locator": "summary, verification, retrospective, and production_promotion"
+        }
+      ]
+    },
+    {
+      "id": "crse-c21-c22-task-matched",
+      "allowed_wording": "C21 compared seven methods under one exhaustive-best GF(2) artifact contract: packed source ANF was narrowly fastest at 3.007x over exhaustive and 1.006x over screened CM, while the per-case oracle left only 1.059x headroom before routing cost; C22 froze that arm behind exact fallback and shadow checks but added no fresh timing or promotion evidence.",
+      "plain_wording": "Task matching showed a small source-packed representation advantage, not broad evidence that proposal methods avoid exact completion or that a learned router is worthwhile.",
+      "technical_wording": "All 3,360 C21 executions returned the exhaustive-best artifact. Packed source ANF proposed a component on 10 of 96 cases and abstained on 86; fresh BDD was negative for this single-query lifecycle. The C22 policy selects the source-packed screened arm, restores exhaustive CM when advice is off or input is refused, and remains implementation-only pending fresh evaluation.",
+      "type": "measurement",
+      "status": "not_promoted",
+      "scope": "C21 retrospective task-matched table and C22 implementation boundary",
+      "measurement_boundary": "best-exact-artifact whole-task comparison",
+      "comparator": "exhaustive CM and direct screened CM",
+      "ratio_direction": "aggregate and per-case speedup over exhaustive/screened",
+      "uncertainty": "96 retrospective LogikBench cones on one Windows machine; C22 has no fresh timing",
+      "sources": [
+        {
+          "source_id": "src-c21-report",
+          "locator": "Exact task-matched results; Support-width and routing headroom; Decision"
+        },
+        {
+          "source_id": "src-c21-results",
+          "locator": "summary, methods, verification, and production_promotion"
+        },
+        {
+          "source_id": "src-c22-report",
+          "locator": "Exact boundary, Frozen policy, and Status"
+        },
+        {
+          "source_id": "src-c22-policy",
+          "locator": "selected_arm, advice_off_arm, exact_fallback_arm, status, and production_promotion"
+        }
+      ]
+    },
+    {
+      "id": "crse-c23-fresh-yosys-transfer",
+      "allowed_wording": "C23 transferred the unchanged seven-method exhaustive-best GF(2) task to 48 previously unused Yosys generator-family functions: all 1,680 timed executions returned the same exact artifact, packed source ANF led at 3.306x over exhaustive and only 1.006x over screened CM, and the per-case oracle left 1.047x headroom before routing cost.",
+      "plain_wording": "Fresh-source transfer confirmed the screened-CM and packed-source fixed paths, while leaving too little routing headroom and too much per-case variation for production promotion.",
+      "technical_wording": "The first freeze was preserved as incomplete after exposing a task-contract error above support six. The task-complete v2 set restricts supports to 3-6, excludes prior truth overlaps, covers eight unused generator families, and independently replays every source and scalar oracle. Compiled screened CM still regressed on individual cases, fresh single-query BDD remained negative, and the unchanged Linux package had not been uploaded when this source was frozen.",
+      "type": "measurement",
+      "status": "not_promoted",
+      "scope": "C23 fresh Yosys-family exact seven-method transfer",
+      "measurement_boundary": "exhaustive-best GF(2) artifact on task-complete supports",
+      "comparator": "exhaustive CM and direct screened CM",
+      "ratio_direction": "aggregate and per-case speedup over exhaustive/screened",
+      "uncertainty": "48 fresh same-machine Yosys-family functions at supports 3-6; second-machine replication pending",
+      "sources": [
+        {
+          "source_id": "src-c23-report",
+          "locator": "Fresh corpus and task contract; Fresh local results; Decision and next work"
+        },
+        {
+          "source_id": "src-c23-results",
+          "locator": "dataset, verification, summary, production_promotion, and linux_replication"
         }
       ]
     },
@@ -503,6 +1174,33 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestone D summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained D task-routing results"
+        }
+      ]
+    },
+    {
+      "id": "crse-d2-d7-evolution",
+      "allowed_wording": "D2-D7 moved from one proved macro through versioned rule packs, profitability gates, natural incidence, real revisions, and bounded normalization; exactness advanced more consistently than profitability.",
+      "plain_wording": "The rule system became safer and more complete, but extra exact rewrites did not always save time.",
+      "technical_wording": "The milestones separately charge matching, proof, cache identity, rule incidence, reuse count, revision invalidation, overlap, termination, and second-pass overhead.",
+      "type": "measurement",
+      "status": "revised",
+      "scope": "Milestones D2-D7 bounded rule studies",
+      "measurement_boundary": "overhead-inclusive rule task",
+      "comparator": "no rewrite and exact direct controls",
+      "ratio_direction": "per milestone",
+      "uncertainty": "no universal rewrite policy",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestones D2-D7 summaries"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained D2-D7 rule, cache, revision, and normalization results"
         }
       ]
     },
@@ -522,6 +1220,10 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestone D8 summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained D8 Linux exactness and profitability result"
         }
       ]
     },
@@ -541,6 +1243,56 @@
         {
           "source_id": "src-recognition-readme",
           "locator": "Milestone D9 summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "retained D9 abstention and charged no-promotion result"
+        }
+      ]
+    },
+    {
+      "id": "crse-d10-negative",
+      "allowed_wording": "D10 added indexed screening, exact versioned replay, and four proved rule families, but whole-path profitability remained negative.",
+      "plain_wording": "The indexed rule engine found and verified more structure without beating the no-rewrite path overall.",
+      "technical_wording": "Mux, comparator, carry, and XOR-cancellation rules use strict decrease, provenance, cache replay, and exact fallback; the retained whole-path criterion did not promote the engine.",
+      "type": "measurement",
+      "status": "negative",
+      "scope": "Milestone D10 indexed rule engine",
+      "measurement_boundary": "overhead-inclusive rule execution",
+      "comparator": "no rewrite",
+      "ratio_direction": "per retained result",
+      "uncertainty": "bounded rule pack and workloads",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestone D10 summary"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "D10 retained result"
+        }
+      ]
+    },
+    {
+      "id": "crse-e1-e2-guidance",
+      "allowed_wording": "E1 and E2 added exact BDD-order and SAT/equivalence guidance with advice-off fallback; learned advice did not establish a general timing win.",
+      "plain_wording": "The system can recommend exact BDD or SAT strategies, but safe fallback remains the authority.",
+      "technical_wording": "E1 separates BDD node, build, restriction, and equivalence objectives; E2 separates CNF construction, solver lifecycle, assumptions, and equivalence miters with independent witness/core checks.",
+      "type": "measurement",
+      "status": "not_promoted",
+      "scope": "Milestones E1-E2 bounded guidance studies",
+      "measurement_boundary": "task-aware exact guidance",
+      "comparator": "fixed exact strategies and advice-off fallback",
+      "ratio_direction": "per task",
+      "uncertainty": "bounded solver and BDD studies",
+      "sources": [
+        {
+          "source_id": "src-recognition-readme",
+          "locator": "Milestones E1 and E2 summaries"
+        },
+        {
+          "source_id": "src-recognition-register",
+          "locator": "E1-E2 retained results"
         }
       ]
     },

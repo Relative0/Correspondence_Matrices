@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "audit_date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "const": "ready_for_script_and_storyboard_authoring"
+    },
+    "bible_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "episodes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sections": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stable_examples": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "glossary_terms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "used_claims": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "used_sources": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minimum_runtime_minutes": {
+          "type": "number",
+          "minimum": 1
+        },
+        "maximum_runtime_minutes": {
+          "type": "number",
+          "minimum": 1
+        },
+        "planned_chapters": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "visual_systems": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minimum_distinct_compositions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minimum_meaningful_state_changes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "episodes",
+        "sections",
+        "stable_examples",
+        "glossary_terms",
+        "used_claims",
+        "used_sources",
+        "minimum_runtime_minutes",
+        "maximum_runtime_minutes",
+        "planned_chapters",
+        "visual_systems",
+        "minimum_distinct_compositions",
+        "minimum_meaningful_state_changes"
+      ]
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gate_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "pending"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "gate_id",
+          "status",
+          "detail"
+        ]
+      }
+    },
+    "partition_decisions": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "scope",
+          "decision",
+          "rationale"
+        ]
+      }
+    },
+    "corrections_applied": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "open_gates": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 51,
+      "maxItems": 51,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "ready_for_authoring"
+          },
+          "chapter_count": {
+            "type": "integer",
+            "minimum": 3
+          },
+          "visual_system_count": {
+            "type": "integer",
+            "minimum": 3
+          },
+          "minimum_distinct_compositions": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "minimum_meaningful_state_changes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "claim_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "source_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cross_reference_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "video_id",
+          "status",
+          "chapter_count",
+          "visual_system_count",
+          "minimum_distinct_compositions",
+          "minimum_meaningful_state_changes",
+          "claim_count",
+          "source_count",
+          "cross_reference_count"
+        ]
+      }
+    },
+    "audit_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "audit_date",
+    "status",
+    "bible_content_hash",
+    "summary",
+    "gates",
+    "partition_decisions",
+    "corrections_applied",
+    "open_gates",
+    "episodes",
+    "audit_sha256"
+  ]
+}

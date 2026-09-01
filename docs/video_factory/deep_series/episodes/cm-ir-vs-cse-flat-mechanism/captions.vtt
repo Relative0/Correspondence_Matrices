@@ -1,0 +1,281 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:09.056
+After CSE-flat already shares and flattens, what work is actually left for CM-IR to remove?
+
+q0002
+00:00:09.056 --> 00:00:19.710
+This episode has one job: CM-IR and CSE-flat overlap in sharing and flattening; any remaining difference must be attributed to actual normalization, merging, or lowered-program changes on the scoped workload.
+
+q0003
+00:00:19.710 --> 00:00:30.364
+We build on Plain CSE versus sharing-aware CSE-flat, Canonicalization, interning, and normalization; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:30.364 --> 00:00:39.420
+The two compilers share mechanisms; only the remaining observed transformations can explain a scoped difference.
+
+q0005
+00:00:39.420 --> 00:00:48.476
+Watch for the label shared transformation; it stays attached to the artifact this episode means.
+
+q0006
+00:00:48.476 --> 00:00:56.964
+When we say additional normalization, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:56.964 --> 00:01:07.156
+The term mechanism attribution receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:07.156 --> 00:01:17.348
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0009
+00:01:17.348 --> 00:01:21.858
+Our stable example is Shared Boolean expression.
+
+q0010
+00:01:21.858 --> 00:01:32.512
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0011
+00:01:32.512 --> 00:01:39.295
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0012
+00:01:39.295 --> 00:01:47.783
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0013
+00:01:47.783 --> 00:01:57.975
+The accompanying view makes this step concrete: A common transformation stack feeds both arms before they diverge.
+
+q0014
+00:01:57.975 --> 00:02:08.167
+Apply sharing and safe flattening to both arms, then remove those common steps from the comparison ledger.
+
+q0015
+00:02:08.167 --> 00:02:17.791
+Add only observed CM-IR normalization or merging deltas and trace them into the lowered instruction structure.
+
+q0016
+00:02:17.791 --> 00:02:22.869
+Now isolate mechanism overlap inside Shared Boolean expression.
+
+q0017
+00:02:22.869 --> 00:02:32.493
+The example definition and output meaning stay fixed while only the state for mechanism overlap changes.
+
+q0018
+00:02:32.493 --> 00:02:42.117
+That matched before-and-after view assigns the visible consequence to mechanism overlap, not to a substituted workload.
+
+q0019
+00:02:42.117 --> 00:02:48.332
+A common transformation stack feeds both arms before they diverge.
+
+q0020
+00:02:48.332 --> 00:02:53.410
+Now isolate transformation attribution inside Shared Boolean expression.
+
+q0021
+00:02:53.410 --> 00:03:03.034
+The example definition and output meaning stay fixed while only the state for transformation attribution changes.
+
+q0022
+00:03:03.034 --> 00:03:12.658
+That matched before-and-after view assigns the visible consequence to transformation attribution, not to a substituted workload.
+
+q0023
+00:03:12.658 --> 00:03:18.305
+Now isolate CM-label overclaim prevention inside Shared Boolean expression.
+
+q0024
+00:03:18.305 --> 00:03:28.497
+The example definition and output meaning stay fixed while only the state for CM-label overclaim prevention changes.
+
+q0025
+00:03:28.497 --> 00:03:38.689
+That matched before-and-after view assigns the visible consequence to CM-label overclaim prevention, not to a substituted workload.
+
+q0026
+00:03:38.689 --> 00:03:46.609
+A delta ledger labels each changed node as sharing, flattening, normalization, or merging.
+
+q0027
+00:03:46.609 --> 00:03:53.392
+Sharing-aware CSE-flat additionally flattens eligible associative chains while preserving shared nodes.
+
+q0028
+00:03:53.392 --> 00:03:59.607
+Read that statement only within this scope: corrected comparator contract.
+
+q0029
+00:03:59.607 --> 00:04:03.549
+Its declared measurement boundary is mechanism.
+
+q0030
+00:04:03.549 --> 00:04:06.923
+The uncertainty field says none.
+
+q0031
+00:04:06.923 --> 00:04:14.843
+CM-IR can add canonical normalization and merging beyond the transformations shared with CSE-flat.
+
+q0032
+00:04:14.843 --> 00:04:21.058
+Read that statement only within this scope: corrected mechanism interpretation.
+
+q0033
+00:04:21.058 --> 00:04:25.000
+The uncertainty field says workload dependent.
+
+q0034
+00:04:25.000 --> 00:04:35.654
+Normalization, canonical structural keys, and interning are distinct stages: rewrites choose a canonical form, keys identify it, and interning reuses an existing node.
+
+q0035
+00:04:35.654 --> 00:04:41.869
+Read that statement only within this scope: current CM-IR compiler.
+
+q0036
+00:04:41.869 --> 00:04:46.379
+Its declared measurement boundary is representation construction.
+
+q0037
+00:04:46.379 --> 00:04:49.753
+The uncertainty field says implementation-defined.
+
+q0038
+00:04:49.753 --> 00:05:00.407
+The nearest confusing lesson is From DAGs to flat instructions: operations, storage, and execution; it owns DAG-to-FlatProgram lowering, while this episode owns mechanism overlap.
+
+q0039
+00:05:00.407 --> 00:05:11.061
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0040
+00:05:11.061 --> 00:05:17.276
+Holding that element fixed lets this episode isolate mechanism overlap.
+
+q0041
+00:05:17.276 --> 00:05:27.930
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0042
+00:05:27.930 --> 00:05:34.145
+Holding that element fixed lets this episode isolate transformation attribution.
+
+q0043
+00:05:34.145 --> 00:05:44.799
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0044
+00:05:44.799 --> 00:05:51.582
+Holding that element fixed lets this episode isolate CM-label overclaim prevention.
+
+q0045
+00:05:51.582 --> 00:06:02.236
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0046
+00:06:02.236 --> 00:06:10.724
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0047
+00:06:10.724 --> 00:06:19.212
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0048
+00:06:19.212 --> 00:06:29.866
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0049
+00:06:29.866 --> 00:06:40.058
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0050
+00:06:40.058 --> 00:06:50.250
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0051
+00:06:50.250 --> 00:06:59.874
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0052
+00:06:59.874 --> 00:07:10.528
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0053
+00:07:10.528 --> 00:07:21.182
+After the change, the composition makes mechanism overlap inspectable: A common transformation stack feeds both arms before they diverge.
+
+q0054
+00:07:21.182 --> 00:07:27.965
+The invariant is the example's meaning; the variable is mechanism overlap.
+
+q0055
+00:07:27.965 --> 00:07:38.619
+If the same output is reached through a different path, the diagram must still identify whether mechanism overlap changed.
+
+q0056
+00:07:38.619 --> 00:07:49.273
+After the change, the composition makes transformation attribution inspectable: A common transformation stack feeds both arms before they diverge.
+
+q0057
+00:07:49.273 --> 00:07:56.056
+The invariant is the example's meaning; the variable is transformation attribution.
+
+q0058
+00:07:56.056 --> 00:08:06.710
+If the same output is reached through a different path, the diagram must still identify whether transformation attribution changed.
+
+q0059
+00:08:06.710 --> 00:08:17.364
+After the change, the composition makes CM-label overclaim prevention inspectable: A delta ledger labels each changed node as sharing, flattening, normalization, or merging.
+
+q0060
+00:08:17.364 --> 00:08:24.715
+The invariant is the example's meaning; the variable is CM-label overclaim prevention.
+
+q0061
+00:08:24.715 --> 00:08:35.369
+If the same output is reached through a different path, the diagram must still identify whether CM-label overclaim prevention changed.
+
+q0062
+00:08:35.369 --> 00:08:46.023
+The accompanying view makes this step concrete: The final graphs align by semantic node and lowered instruction rather than by method logo.
+
+q0063
+00:08:46.023 --> 00:08:56.677
+The accompanying view makes this step concrete: A delta ledger labels each changed node as sharing, flattening, normalization, or merging.
+
+q0064
+00:08:56.677 --> 00:09:05.733
+A method label is not a mechanism, and one workload's residual reduction is not universal.
+
+q0065
+00:09:05.733 --> 00:09:13.653
+Classify four graph changes as shared CSE-flat work or an additional CM-IR transformation.
+
+q0066
+00:09:13.653 --> 00:09:21.573
+Common mechanisms belong to both arms; only measured deltas belong to the comparison.
+
+q0067
+00:09:21.573 --> 00:09:32.227
+A common mistake is this: Every difference between CM-IR and raw AST is an advantage unique to CM-IR over CSE-flat.
+
+q0068
+00:09:32.227 --> 00:09:38.442
+Repair it by returning to the owned distinction: mechanism overlap.
+
+q0070
+00:09:41.993 --> 00:09:52.647
+Use the episode's central distinction to answer: Common mechanisms belong to both arms; only measured deltas belong to the comparison.
+
+q0071
+00:09:52.647 --> 00:09:59.998
+Attribute every reduction to a visible transformation, not to the letters CM.

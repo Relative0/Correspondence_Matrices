@@ -1,0 +1,409 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:11.046
+When someone says flat, do they mean a flattened expression, a linear instruction program, or packed bits?
+
+q0002
+00:00:11.046 --> 00:00:22.592
+This episode has one job: A shared DAG, CSE-flat transformation, lowered FlatProgram, instruction count, executed operations, live buffers, and packed storage are distinct layers that must be named separately.
+
+q0003
+00:00:22.592 --> 00:00:34.138
+We build on CM-IR versus CSE-flat: shared mechanisms and extra transformations, Packed truth vectors: big integers, machine words, and masks; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:34.138 --> 00:00:45.684
+CSE-flat is a sharing-aware source transformation; FlatProgram is a lowered instruction list; bigint and words are execution storage layouts.
+
+q0005
+00:00:45.684 --> 00:00:54.883
+Watch for the label FlatProgram; it stays attached to the artifact this episode means.
+
+q0006
+00:00:54.883 --> 00:01:04.082
+When we say flat instruction, the highlight identifies its layer before we interpret it.
+
+q0007
+00:01:04.082 --> 00:01:15.628
+The term executed primitive operation receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:15.628 --> 00:01:23.595
+We will keep argument edge visible whenever its definition controls the inference.
+
+q0009
+00:01:23.595 --> 00:01:32.794
+A persistent peak live buffer label marks exactly where that object enters the example.
+
+q0010
+00:01:32.794 --> 00:01:43.840
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0011
+00:01:43.840 --> 00:01:48.728
+Our stable example is Shared Boolean expression.
+
+q0012
+00:01:48.728 --> 00:02:00.274
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0013
+00:02:00.274 --> 00:02:07.625
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0014
+00:02:07.625 --> 00:02:16.824
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0015
+00:02:16.824 --> 00:02:22.328
+Now isolate DAG-to-FlatProgram lowering inside Shared Boolean expression.
+
+q0016
+00:02:22.328 --> 00:02:32.758
+The example definition and output meaning stay fixed while only the state for DAG-to-FlatProgram lowering changes.
+
+q0017
+00:02:32.758 --> 00:02:43.188
+That matched before-and-after view assigns the visible consequence to DAG-to-FlatProgram lowering, not to a substituted workload.
+
+q0018
+00:02:43.188 --> 00:02:51.771
+DAG nodes descend into a linear postorder instruction tape with matching identity colors.
+
+q0019
+00:02:51.771 --> 00:03:03.317
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0020
+00:03:03.317 --> 00:03:10.052
+Holding that element fixed lets this episode isolate DAG-to-FlatProgram lowering.
+
+q0021
+00:03:10.052 --> 00:03:21.598
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0022
+00:03:21.598 --> 00:03:33.144
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0023
+00:03:33.144 --> 00:03:43.574
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0024
+00:03:43.574 --> 00:03:55.120
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0025
+00:03:55.120 --> 00:04:06.666
+After the change, the composition makes DAG-to-FlatProgram lowering inspectable: DAG nodes descend into a linear postorder instruction tape with matching identity colors.
+
+q0026
+00:04:06.666 --> 00:04:14.017
+The invariant is the example's meaning; the variable is DAG-to-FlatProgram lowering.
+
+q0027
+00:04:14.017 --> 00:04:25.563
+If the same output is reached through a different path, the diagram must still identify whether DAG-to-FlatProgram lowering changed.
+
+q0028
+00:04:25.563 --> 00:04:37.109
+The accompanying view makes this step concrete: DAG nodes descend into a linear postorder instruction tape with matching identity colors.
+
+q0029
+00:04:37.109 --> 00:04:48.655
+Read DAG-to-FlatProgram lowering from input to consequence through one matched view: DAG nodes descend into a linear postorder instruction tape with matching identity colors; every surrounding entity keeps its prior meaning.
+
+q0030
+00:04:48.655 --> 00:05:00.201
+The diagram treats DAG-to-FlatProgram lowering as a located state, artifact, or boundary rather than as an unexplained method label.
+
+q0031
+00:05:00.201 --> 00:05:11.747
+Before the consequence appears, predict what DAG-to-FlatProgram lowering can change and what the stable example requires it to leave untouched.
+
+q0032
+00:05:11.747 --> 00:05:23.293
+When evidence enters, its status badge binds the statement about DAG-to-FlatProgram lowering to a source and scope, not to the conceptual drawing alone.
+
+q0033
+00:05:23.293 --> 00:05:34.839
+The nearest neighboring lesson stays out of focus because its owned question is not needed to explain DAG-to-FlatProgram lowering in this sequence.
+
+q0034
+00:05:34.839 --> 00:05:46.385
+The transfer rule carries DAG-to-FlatProgram lowering forward only with the same input definition, exactness gate, and declared output contract.
+
+q0035
+00:05:46.385 --> 00:05:57.931
+Use the FlatProgram label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.
+
+q0036
+00:05:57.931 --> 00:06:09.477
+Use the flat instruction label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.
+
+q0037
+00:06:09.477 --> 00:06:21.023
+Use the executed primitive operation label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.
+
+q0038
+00:06:21.023 --> 00:06:32.569
+Use the argument edge label as a checkpoint for DAG-to-FlatProgram lowering: if the label moves to another layer, the narration has changed the question rather than explained the mechanism.
+
+q0039
+00:06:32.569 --> 00:06:43.615
+Lower each unique DAG node into a dependency-ordered slot and instruction while preserving the shared S node.
+
+q0040
+00:06:43.615 --> 00:06:51.582
+Expand one n-ary instruction into backend-specific primitive operations and update separate counters.
+
+q0041
+00:06:51.582 --> 00:06:58.317
+Now isolate instruction versus executed-operation metrics inside Shared Boolean expression.
+
+q0042
+00:06:58.317 --> 00:07:09.863
+The example definition and output meaning stay fixed while only the state for instruction versus executed-operation metrics changes.
+
+q0043
+00:07:09.863 --> 00:07:21.409
+That matched before-and-after view assigns the visible consequence to instruction versus executed-operation metrics, not to a substituted workload.
+
+q0044
+00:07:21.409 --> 00:07:28.760
+One instruction expands into several primitive-operation pulses while counters remain separate.
+
+q0045
+00:07:28.760 --> 00:07:40.306
+A shared DAG can be lowered once into a linear postorder FlatProgram with one instruction per unique DAG node; this flat program is distinct from CSE-flat's source transformation and from packed storage.
+
+q0046
+00:07:40.306 --> 00:07:47.657
+Read that statement only within this scope: current flat evaluator implementation.
+
+q0047
+00:07:47.657 --> 00:07:53.777
+Its declared measurement boundary is lowering and execution representation.
+
+q0048
+00:07:53.777 --> 00:07:57.433
+The uncertainty field says none.
+
+q0049
+00:07:57.433 --> 00:08:08.979
+Flat instruction count, argument edges, executed primitive operations, and peak live buffers are different metrics and may not be substituted for one another or for elapsed time.
+
+q0050
+00:08:08.979 --> 00:08:16.330
+Read that statement only within this scope: current deterministic program metrics.
+
+q0051
+00:08:16.330 --> 00:08:21.218
+Its declared measurement boundary is mechanism accounting.
+
+q0052
+00:08:21.218 --> 00:08:26.106
+The uncertainty field says not elapsed-time evidence.
+
+q0053
+00:08:26.106 --> 00:08:37.652
+A graph or instruction reduction may change allocation or memory traffic, but memory traffic is a proposed mechanism unless it is measured directly on the declared workload.
+
+q0054
+00:08:37.652 --> 00:08:44.387
+Read that statement only within this scope: mechanism explanation only.
+
+q0055
+00:08:44.387 --> 00:08:49.275
+Its declared measurement boundary is conceptual mechanism.
+
+q0056
+00:08:49.275 --> 00:08:54.163
+The uncertainty field says not directly measured.
+
+q0057
+00:08:54.163 --> 00:09:05.709
+On the EPFL AND/INV workload, CM and CSE-flat had equal instruction and executed-operation counts, matching the parity mechanism prediction.
+
+q0058
+00:09:05.709 --> 00:09:13.060
+Read that statement only within this scope: EPFL AND/INV cones.
+
+q0059
+00:09:13.060 --> 00:09:19.795
+Its declared measurement boundary is compiled program structure and kernel.
+
+q0060
+00:09:19.795 --> 00:09:26.530
+The uncertainty field says exact count equality on accepted corpus.
+
+q0061
+00:09:26.530 --> 00:09:38.076
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0062
+00:09:38.076 --> 00:09:46.043
+Holding that element fixed lets this episode isolate instruction versus executed-operation metrics.
+
+q0063
+00:09:46.043 --> 00:09:55.242
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0064
+00:09:55.242 --> 00:10:06.288
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0065
+00:10:06.288 --> 00:10:17.834
+After the change, the composition makes instruction versus executed-operation metrics inspectable: One instruction expands into several primitive-operation pulses while counters remain separate.
+
+q0066
+00:10:17.834 --> 00:10:26.417
+The invariant is the example's meaning; the variable is instruction versus executed-operation metrics.
+
+q0067
+00:10:26.417 --> 00:10:37.963
+If the same output is reached through a different path, the diagram must still identify whether instruction versus executed-operation metrics changed.
+
+q0068
+00:10:37.963 --> 00:10:49.509
+The accompanying view makes this step concrete: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.
+
+q0069
+00:10:49.509 --> 00:11:01.055
+The accompanying view makes this step concrete: One instruction expands into several primitive-operation pulses while counters remain separate.
+
+q0070
+00:11:01.055 --> 00:11:12.601
+Read instruction versus executed-operation metrics from input to consequence through one matched view: One instruction expands into several primitive-operation pulses while counters remain separate; every surrounding entity keeps its prior meaning.
+
+q0071
+00:11:12.601 --> 00:11:24.147
+The diagram treats instruction versus executed-operation metrics as a located state, artifact, or boundary rather than as an unexplained method label.
+
+q0072
+00:11:24.147 --> 00:11:35.693
+Before the consequence appears, predict what instruction versus executed-operation metrics can change and what the stable example requires it to leave untouched.
+
+q0073
+00:11:35.693 --> 00:11:47.239
+When evidence enters, its status badge binds the statement about instruction versus executed-operation metrics to a source and scope, not to the conceptual drawing alone.
+
+q0074
+00:11:47.239 --> 00:11:58.785
+The nearest neighboring lesson stays out of focus because its owned question is not needed to explain instruction versus executed-operation metrics in this sequence.
+
+q0075
+00:11:58.785 --> 00:12:10.331
+The transfer rule carries instruction versus executed-operation metrics forward only with the same input definition, exactness gate, and declared output contract.
+
+q0076
+00:12:10.331 --> 00:12:21.877
+Animate slot lifetimes and buffer release, then label hardware memory traffic as a hypothesis unless a retained measurement is present.
+
+q0077
+00:12:21.877 --> 00:12:29.844
+Now isolate structural memory metrics versus hardware-memory hypothesis inside Shared Boolean expression.
+
+q0078
+00:12:29.844 --> 00:12:41.390
+The example definition and output meaning stay fixed while only the state for structural memory metrics versus hardware-memory hypothesis changes.
+
+q0079
+00:12:41.390 --> 00:12:52.936
+That matched before-and-after view assigns the visible consequence to structural memory metrics versus hardware-memory hypothesis, not to a substituted workload.
+
+q0080
+00:12:52.936 --> 00:13:04.482
+Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.
+
+q0081
+00:13:04.482 --> 00:13:16.028
+The nearest confusing lesson is Plain CSE versus sharing-aware CSE-flat; it owns plain CSE versus CSE-flat, while this episode owns DAG-to-FlatProgram lowering.
+
+q0082
+00:13:16.028 --> 00:13:27.574
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0083
+00:13:27.574 --> 00:13:36.773
+Holding that element fixed lets this episode isolate structural memory metrics versus hardware-memory hypothesis.
+
+q0084
+00:13:36.773 --> 00:13:45.972
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0085
+00:13:45.972 --> 00:13:57.018
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0086
+00:13:57.018 --> 00:14:08.564
+After the change, the composition makes structural memory metrics versus hardware-memory hypothesis inspectable: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows.
+
+q0087
+00:14:08.564 --> 00:14:18.378
+The invariant is the example's meaning; the variable is structural memory metrics versus hardware-memory hypothesis.
+
+q0088
+00:14:18.378 --> 00:14:29.924
+If the same output is reached through a different path, the diagram must still identify whether structural memory metrics versus hardware-memory hypothesis changed.
+
+q0089
+00:14:29.924 --> 00:14:41.470
+The accompanying view makes this step concrete: CSE-flat transformation, FlatProgram, bigint bits, and word lanes settle as four noninterchangeable layers.
+
+q0090
+00:14:41.470 --> 00:14:53.016
+Read structural memory metrics versus hardware-memory hypothesis from input to consequence through one matched view: Slot lifetime bars end at last use and release buffers; a HYPOTHESIS badge appears over hardware traffic arrows; every surrounding entity keeps its prior meaning.
+
+q0091
+00:14:53.016 --> 00:15:04.562
+The diagram treats structural memory metrics versus hardware-memory hypothesis as a located state, artifact, or boundary rather than as an unexplained method label.
+
+q0092
+00:15:04.562 --> 00:15:16.108
+Before the consequence appears, predict what structural memory metrics versus hardware-memory hypothesis can change and what the stable example requires it to leave untouched.
+
+q0093
+00:15:16.108 --> 00:15:27.654
+When evidence enters, its status badge binds the statement about structural memory metrics versus hardware-memory hypothesis to a source and scope, not to the conceptual drawing alone.
+
+q0094
+00:15:27.654 --> 00:15:39.200
+The nearest neighboring lesson stays out of focus because its owned question is not needed to explain structural memory metrics versus hardware-memory hypothesis in this sequence.
+
+q0095
+00:15:39.200 --> 00:15:50.746
+The transfer rule carries structural memory metrics versus hardware-memory hypothesis forward only with the same input definition, exactness gate, and declared output contract.
+
+q0096
+00:15:50.746 --> 00:16:02.292
+Instruction and operation counts are measured structural metrics, but hardware memory traffic remains a hypothesis unless measured directly.
+
+q0097
+00:16:02.292 --> 00:16:12.722
+Match CSE-flat, FlatProgram, instruction count, primitive operation count, and packed word storage to five displayed artifacts.
+
+q0098
+00:16:12.722 --> 00:16:21.921
+Flat syntax, flat instructions, and packed storage are different stages of one execution pipeline.
+
+q0099
+00:16:21.921 --> 00:16:32.967
+A common mistake is this: CSE-flat, FlatProgram, and word-packed execution are three names for the same artifact.
+
+q0100
+00:16:32.967 --> 00:16:39.702
+Repair it by returning to the owned distinction: DAG-to-FlatProgram lowering.
+
+q0102
+00:16:43.551 --> 00:16:55.097
+Use the episode's central distinction to answer: Flat syntax, flat instructions, and packed storage are different stages of one execution pipeline.
+
+q0103
+00:16:55.097 --> 00:16:59.985
+Name the layer before interpreting its count.

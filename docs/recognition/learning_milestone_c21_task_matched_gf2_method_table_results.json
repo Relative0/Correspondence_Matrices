@@ -1,0 +1,238 @@
+{
+  "dataset": {
+    "cases": 96,
+    "family": "LogikBench",
+    "n_vars": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "policy_refit": false,
+    "retrospective": true,
+    "source_files": 51
+  },
+  "dataset_verification": {
+    "blif_files_replayed": 51,
+    "cases_replayed": 96,
+    "expression_mismatches": 0,
+    "fresh_confirmation": false,
+    "network_used": false,
+    "path": "docs/recognition/c21_decomposition_table_dataset_verification.json",
+    "production_promotion": false,
+    "schema": "crse-c21-task-matched-gf2-dataset-verification/v1",
+    "source_record_mismatches": 0,
+    "split_cluster_overlap": 0,
+    "status": "verified",
+    "timing_based_selection": false,
+    "truth_mismatches": 0
+  },
+  "date": "2026-08-31",
+  "fresh_confirmation": false,
+  "interpretation": "All seven methods delivered the same exhaustive-best artifact. Packed source ANF was the fastest fixed path at 3.007x over exhaustive and 1.006x over screened CM; screened CM itself reached 2.988x. Only 1.059x per-case oracle headroom remains before routing cost. The table is retrospective and one-machine.",
+  "measurement_rows": 3360,
+  "memory_measurement_rows": 84,
+  "methods": [
+    "bdd_level_cut",
+    "cm_compiled_screened",
+    "cm_exhaustive",
+    "cm_screened",
+    "source_interaction_cut",
+    "source_packed_anf",
+    "truth_anf_min_cut"
+  ],
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+  "run": "docs/recognition/runs/c21-task-matched-gf2-table-windows-20260831-001",
+  "runpod": {
+    "cost_usd": 0.0,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c21-task-matched-gf2-method-table-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "retrospective_task_matched_exact_table_verified",
+  "summary": {
+    "best_fixed_method": "source_packed_anf",
+    "best_fixed_total_ns": 500485000,
+    "compiled_no_regret_gate": false,
+    "exactness_gate": true,
+    "methods": {
+      "bdd_level_cut": {
+        "abstentions": 0,
+        "aggregate_speedup_over_exhaustive": 0.7116261370330745,
+        "aggregate_speedup_over_screened": 0.23815179820938198,
+        "median_case_speedup_over_exhaustive": 0.28155115074494474,
+        "median_case_sum_ns": {
+          "cleanup_ns": 1541988300,
+          "completion_ns": 432662700,
+          "exact_check_ns": 37640500,
+          "input_decode_ns": 5384900,
+          "policy_ns": 0,
+          "proposal_ns": 10755500,
+          "representation_ns": 63429600,
+          "task_total_ns": 2114901100,
+          "wrapper_ns": 10016900
+        },
+        "memory_peak_bytes_maximum": 209056,
+        "memory_peak_bytes_median": 47233,
+        "minimum_case_speedup_over_exhaustive": 0.0315747478009765,
+        "minimum_case_speedup_over_screened": 0.025770513675783854,
+        "proposals": 96
+      },
+      "cm_compiled_screened": {
+        "abstentions": 0,
+        "aggregate_speedup_over_exhaustive": 3.000566212693013,
+        "aggregate_speedup_over_screened": 1.0041652519656452,
+        "median_case_speedup_over_exhaustive": 1.8915520076361587,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 431174400,
+          "exact_check_ns": 37165500,
+          "input_decode_ns": 5382500,
+          "policy_ns": 214500,
+          "proposal_ns": 0,
+          "representation_ns": 17518700,
+          "task_total_ns": 501578300,
+          "wrapper_ns": 8309600
+        },
+        "memory_peak_bytes_maximum": 201194,
+        "memory_peak_bytes_median": 35910,
+        "minimum_case_speedup_over_exhaustive": 0.9553067923575457,
+        "minimum_case_speedup_over_screened": 0.7855875831485588,
+        "proposals": 0
+      },
+      "cm_exhaustive": {
+        "abstentions": 0,
+        "aggregate_speedup_over_exhaustive": 1.0,
+        "aggregate_speedup_over_screened": 0.3346585880084297,
+        "median_case_speedup_over_exhaustive": 1.0,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 1228833400,
+          "exact_check_ns": 242080300,
+          "input_decode_ns": 5427700,
+          "policy_ns": 0,
+          "proposal_ns": 0,
+          "representation_ns": 17387100,
+          "task_total_ns": 1505018900,
+          "wrapper_ns": 9879000
+        },
+        "memory_peak_bytes_maximum": 576791,
+        "memory_peak_bytes_median": 66829,
+        "minimum_case_speedup_over_exhaustive": 1.0,
+        "minimum_case_speedup_over_screened": 0.179860529986053,
+        "proposals": 0
+      },
+      "cm_screened": {
+        "abstentions": 0,
+        "aggregate_speedup_over_exhaustive": 2.988119940238352,
+        "aggregate_speedup_over_screened": 1.0,
+        "median_case_speedup_over_exhaustive": 1.7821205347147435,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 434071100,
+          "exact_check_ns": 37280600,
+          "input_decode_ns": 5452100,
+          "policy_ns": 0,
+          "proposal_ns": 0,
+          "representation_ns": 17686600,
+          "task_total_ns": 503667500,
+          "wrapper_ns": 8315100
+        },
+        "memory_peak_bytes_maximum": 201166,
+        "memory_peak_bytes_median": 36190,
+        "minimum_case_speedup_over_exhaustive": 0.9820539321619844,
+        "minimum_case_speedup_over_screened": 1.0,
+        "proposals": 0
+      },
+      "source_interaction_cut": {
+        "abstentions": 96,
+        "aggregate_speedup_over_exhaustive": 2.90729571384997,
+        "aggregate_speedup_over_screened": 0.9729514785199906,
+        "median_case_speedup_over_exhaustive": 1.8120845173762954,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 441163600,
+          "exact_check_ns": 37171400,
+          "input_decode_ns": 5142300,
+          "policy_ns": 0,
+          "proposal_ns": 7802400,
+          "representation_ns": 17605700,
+          "task_total_ns": 517669700,
+          "wrapper_ns": 8455800
+        },
+        "memory_peak_bytes_maximum": 223226,
+        "memory_peak_bytes_median": 40850,
+        "minimum_case_speedup_over_exhaustive": 0.9058880308880309,
+        "minimum_case_speedup_over_screened": 0.5311268847445899,
+        "proposals": 0
+      },
+      "source_packed_anf": {
+        "abstentions": 86,
+        "aggregate_speedup_over_exhaustive": 3.007120892734048,
+        "aggregate_speedup_over_screened": 1.006358831933025,
+        "median_case_speedup_over_exhaustive": 2.03486887055577,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 435752000,
+          "exact_check_ns": 37071700,
+          "input_decode_ns": 0,
+          "policy_ns": 0,
+          "proposal_ns": 2773700,
+          "representation_ns": 16038300,
+          "task_total_ns": 500485000,
+          "wrapper_ns": 8031900
+        },
+        "memory_peak_bytes_maximum": 199522,
+        "memory_peak_bytes_median": 34411,
+        "minimum_case_speedup_over_exhaustive": 1.0437875628602968,
+        "minimum_case_speedup_over_screened": 0.7797949867862577,
+        "proposals": 10
+      },
+      "truth_anf_min_cut": {
+        "abstentions": 0,
+        "aggregate_speedup_over_exhaustive": 2.9507663465501173,
+        "aggregate_speedup_over_screened": 0.9874992990792548,
+        "median_case_speedup_over_exhaustive": 1.956371787647592,
+        "median_case_sum_ns": {
+          "cleanup_ns": 0,
+          "completion_ns": 432129800,
+          "exact_check_ns": 37047700,
+          "input_decode_ns": 5504200,
+          "policy_ns": 0,
+          "proposal_ns": 8496000,
+          "representation_ns": 17549000,
+          "task_total_ns": 510043400,
+          "wrapper_ns": 8691900
+        },
+        "memory_peak_bytes_maximum": 201426,
+        "memory_peak_bytes_median": 36138,
+        "minimum_case_speedup_over_exhaustive": 0.8412392528906019,
+        "minimum_case_speedup_over_screened": 0.741698784464868,
+        "proposals": 96
+      }
+    },
+    "oracle_headroom_over_best_fixed": 1.0588375920824924,
+    "per_case_oracle_total_ns": 472674000,
+    "screened_control_gate": true,
+    "timing_is_retrospective_and_machine_specific": true
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 8,
+    "contracts_checked": 96,
+    "dataset_source_replay_required_and_present": true,
+    "fresh_confirmation": false,
+    "functional_cases_replayed": 96,
+    "measurement_rows_checked": 3360,
+    "memory_rows_checked": 84,
+    "path": "docs/recognition/runs/c21-task-matched-gf2-table-windows-20260831-001/independent_verification.json",
+    "policy_refit": false,
+    "production_promotion": false,
+    "schema": "crse-c21-task-matched-gf2-method-table-verification/v1",
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 4,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

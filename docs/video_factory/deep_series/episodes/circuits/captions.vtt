@@ -1,0 +1,281 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:10.515
+When a circuit has thousands of gates, what exact function is one output cone asking us to compute?
+
+q0002
+00:00:10.515 --> 00:00:21.030
+This episode has one job: Circuit evaluation starts from gates and cones but must define semantic support, exact output, comparator structure, and task boundary before interpreting performance.
+
+q0003
+00:00:21.030 --> 00:00:31.545
+We build on CM, CSE, BitSet, BDD, SAT, Espresso, and SymPy: different questions, Live support versus ambient variables, Plain CSE versus sharing-aware CSE-flat; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:31.545 --> 00:00:42.060
+A cone is the gate region that can influence one output; its semantic support is the subset of inputs that can change that output.
+
+q0005
+00:00:42.060 --> 00:00:50.997
+Watch for the label logic circuit; it stays attached to the artifact this episode means.
+
+q0006
+00:00:50.997 --> 00:00:58.813
+When we say cone, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:58.813 --> 00:01:08.311
+The term fanout receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:08.311 --> 00:01:15.566
+We will keep semantic support visible whenever its definition controls the inference.
+
+q0009
+00:01:15.566 --> 00:01:23.382
+A persistent AND/INV label marks exactly where that object enters the example.
+
+q0010
+00:01:23.382 --> 00:01:33.897
+The next sequence uses Small AND/INV cone as a conceptual teaching example, not as measured benchmark evidence.
+
+q0011
+00:01:33.897 --> 00:01:38.909
+Our stable example is Small AND/INV cone.
+
+q0012
+00:01:38.909 --> 00:01:49.424
+A conceptual five-input AND/INV cone whose output has four-variable semantic support, paired later with separately labeled retained EPFL evidence.
+
+q0013
+00:01:49.424 --> 00:01:56.679
+Teach cone support, fanout, lowering, exact digests, and the accepted EPFL mechanism.
+
+q0014
+00:01:56.679 --> 00:02:05.616
+We now construct the Small AND/INV cone and name every part before interpreting it.
+
+q0015
+00:02:05.616 --> 00:02:11.189
+Now isolate circuit cone inside Small AND/INV cone.
+
+q0016
+00:02:11.189 --> 00:02:20.687
+The example definition and output meaning stay fixed while only the state for circuit cone changes.
+
+q0017
+00:02:20.687 --> 00:02:30.185
+That matched before-and-after view assigns the visible consequence to circuit cone, not to a substituted workload.
+
+q0018
+00:02:30.185 --> 00:02:38.001
+A full circuit fades while one output cone and its fan-in remain bright.
+
+q0019
+00:02:38.001 --> 00:02:46.938
+The cone starts from five named inputs, but the displayed output has four-variable semantic support.
+
+q0020
+00:02:46.938 --> 00:02:53.072
+Holding that element fixed lets this episode isolate circuit cone.
+
+q0021
+00:02:53.072 --> 00:03:02.009
+Structural counts describe nodes, edges, and operations; they do not directly measure hardware memory traffic.
+
+q0022
+00:03:02.009 --> 00:03:12.524
+Any mechanism claim points to a visible change in the cone rather than to a benchmark ratio by itself.
+
+q0023
+00:03:12.524 --> 00:03:23.039
+The starting state preserves the stable definition: A conceptual five-input AND/INV cone whose output has four-variable semantic support, paired later with separately labeled retained EPFL evidence.
+
+q0024
+00:03:23.039 --> 00:03:33.098
+Zoom from a larger circuit into one output cone and trace which input variables can affect it.
+
+q0025
+00:03:33.098 --> 00:03:43.613
+Lower the cone through CSE-flat and CM-IR, verify one truth digest, and connect its binary shape to the retained EPFL mechanism.
+
+q0026
+00:03:43.613 --> 00:03:49.747
+Now isolate fanout and support inside Small AND/INV cone.
+
+q0027
+00:03:49.747 --> 00:03:59.806
+The example definition and output meaning stay fixed while only the state for fanout and support changes.
+
+q0028
+00:03:59.806 --> 00:04:09.865
+That matched before-and-after view assigns the visible consequence to fanout and support, not to a substituted workload.
+
+q0029
+00:04:09.865 --> 00:04:17.120
+Semantic-support testing removes an ambient input that cannot influence the cone output.
+
+q0030
+00:04:17.120 --> 00:04:23.814
+Now isolate AND/INV workload shape inside Small AND/INV cone.
+
+q0031
+00:04:23.814 --> 00:04:34.329
+The example definition and output meaning stay fixed while only the state for AND/INV workload shape changes.
+
+q0032
+00:04:34.329 --> 00:04:44.844
+That matched before-and-after view assigns the visible consequence to AND/INV workload shape, not to a substituted workload.
+
+q0033
+00:04:44.844 --> 00:04:50.978
+Matched gate graph, lowered instructions, and exact digest remain synchronized.
+
+q0034
+00:04:50.978 --> 00:04:57.112
+Now isolate exact circuit controls inside Small AND/INV cone.
+
+q0035
+00:04:57.112 --> 00:05:07.171
+The example definition and output meaning stay fixed while only the state for exact circuit controls changes.
+
+q0036
+00:05:07.171 --> 00:05:17.230
+That matched before-and-after view assigns the visible consequence to exact circuit controls, not to a substituted workload.
+
+q0037
+00:05:17.230 --> 00:05:27.745
+A circuit cone's semantic support and gate structure determine the exact function under study; nominal circuit size is not a substitute for cone support.
+
+q0038
+00:05:27.745 --> 00:05:35.561
+Read that statement only within this scope: accepted EPFL AND/INV cone workload.
+
+q0039
+00:05:35.561 --> 00:05:40.012
+Its declared measurement boundary is workload definition.
+
+q0040
+00:05:40.012 --> 00:05:45.585
+The uncertainty field says corpus and support range scoped.
+
+q0041
+00:05:45.585 --> 00:05:56.100
+On the accepted EPFL AND/INV workload, CM/CSE-flat was 0.9998 with a circuit-clustered 95% interval [0.9747, 1.0249].
+
+q0042
+00:05:56.100 --> 00:06:06.615
+Read that statement only within this scope: EPFL AND/INV cones, semantic support 8–16, one Windows machine.
+
+q0043
+00:06:06.615 --> 00:06:12.749
+Its declared measurement boundary is compiled evaluator kernel after compilation.
+
+q0044
+00:06:12.749 --> 00:06:17.761
+The uncertainty field says circuit-clustered bootstrap, 4000 draws.
+
+q0045
+00:06:17.761 --> 00:06:28.276
+On the EPFL AND/INV workload, CM and CSE-flat had equal instruction and executed-operation counts, matching the parity mechanism prediction.
+
+q0046
+00:06:28.276 --> 00:06:34.970
+Read that statement only within this scope: EPFL AND/INV cones.
+
+q0047
+00:06:34.970 --> 00:06:41.104
+Its declared measurement boundary is compiled program structure and kernel.
+
+q0048
+00:06:41.104 --> 00:06:47.238
+The uncertainty field says exact count equality on accepted corpus.
+
+q0049
+00:06:47.238 --> 00:06:57.753
+Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.
+
+q0050
+00:06:57.753 --> 00:07:03.887
+Read that statement only within this scope: corrected benchmark protocols.
+
+q0051
+00:07:03.887 --> 00:07:10.021
+Its declared measurement boundary is correctness gate outside performance claim.
+
+q0052
+00:07:10.021 --> 00:07:14.472
+The uncertainty field says hash/equality gate.
+
+q0053
+00:07:14.472 --> 00:07:24.987
+The nearest confusing lesson is Configuration and feature-model workloads; it owns feature constraints, while this episode owns circuit cone.
+
+q0054
+00:07:24.987 --> 00:07:35.046
+AND and inversion nodes form a small exact dependency cone whose fanout remains visible throughout the lesson.
+
+q0055
+00:07:35.046 --> 00:07:41.740
+Holding that element fixed lets this episode isolate fanout and support.
+
+q0056
+00:07:41.740 --> 00:07:50.117
+The inert input stays outlined so nominal width cannot be mistaken for active support.
+
+q0057
+00:07:50.117 --> 00:07:57.372
+Holding that element fixed lets this episode isolate AND/INV workload shape.
+
+q0058
+00:07:57.372 --> 00:08:05.749
+A topological trace orders the gates without changing their connectivity or the output function.
+
+q0059
+00:08:05.749 --> 00:08:12.443
+Holding that element fixed lets this episode isolate exact circuit controls.
+
+q0060
+00:08:12.443 --> 00:08:21.380
+An exact output digest binds the conceptual cone to any separately labeled retained measurement panel.
+
+q0061
+00:08:21.380 --> 00:08:31.439
+The conceptual mechanism and EPFL evidence use matched colors but retain distinct status badges and source footers.
+
+q0062
+00:08:31.439 --> 00:08:40.937
+Lowering or packing may change the execution artifact while the cone's admitted Boolean result remains fixed.
+
+q0063
+00:08:40.937 --> 00:08:49.874
+The comparison closes with the same inputs, output contract, and exactness gate on every path.
+
+q0064
+00:08:49.874 --> 00:09:00.389
+The accepted parity result belongs to selected EPFL AND/INV cones, not to all circuits or all tasks.
+
+q0065
+00:09:00.389 --> 00:09:10.904
+Identify the gates and variables outside one selected cone and predict whether removing them changes its output function.
+
+q0066
+00:09:10.904 --> 00:09:20.963
+Measure the function of the cone you actually selected, not the size of the circuit around it.
+
+q0067
+00:09:20.963 --> 00:09:31.478
+A common mistake is this: Nominal circuit size directly determines the semantic support and strongest evaluation method for every cone.
+
+q0068
+00:09:31.478 --> 00:09:37.612
+Repair it by returning to the owned distinction: circuit cone.
+
+q0070
+00:09:41.117 --> 00:09:51.632
+Use the episode's central distinction to answer: Measure the function of the cone you actually selected, not the size of the circuit around it.
+
+q0071
+00:09:51.632 --> 00:10:00.009
+Circuit structure becomes evidence only after the cone, support, output, and comparator are fixed.

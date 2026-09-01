@@ -7,10 +7,29 @@
 # from the checked-in manifests, controller, and source tree.
 /runpod/dist/
 /runpod/remote/
+/runpod/**/remote/
+
+# Encoded videos, preview frames, contact sheets, and transport archives are
+# reproducible production outputs. Keep source contracts and bounded JSON/text
+# evidence in Git while retaining generated media only in the local workspace.
+**/*.mp4
+**/*.mov
+**/*.avi
+**/*.mkv
+**/*.webm
+**/*.mp3
+**/*.wav
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.zip
+**/*.tar.gz
 
 # Long-form masters and chapter caches stay local; their release manifest and
 # content hashes are versioned beside the episode contracts.
 /episodes/*/output/
+/deep_series/episodes/*/output/
 
 # IVC keeps raw and per-shot intermediates below work/. The encoded proof,
 # timeline, reports, observations, and preview frames remain versioned.

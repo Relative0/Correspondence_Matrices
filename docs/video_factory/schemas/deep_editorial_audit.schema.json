@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "video_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "episode_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pass_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "pass"
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "pass_id",
+          "status",
+          "checks"
+        ]
+      }
+    },
+    "word_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "chapter_count": {
+      "type": "integer",
+      "minimum": 3
+    },
+    "scene_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "beat_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "duplicate_spoken_cues": {
+      "const": 0
+    },
+    "generic_filler_cues": {
+      "const": 0
+    },
+    "duplicate_state_changes": {
+      "const": 0
+    },
+    "maximum_visual_beat_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 8
+    },
+    "unresolved_claim_ids": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "placeholders": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "video_id",
+    "episode_content_hash",
+    "passes",
+    "word_count",
+    "chapter_count",
+    "scene_count",
+    "beat_count",
+    "duplicate_spoken_cues",
+    "generic_filler_cues",
+    "duplicate_state_changes",
+    "maximum_visual_beat_seconds",
+    "unresolved_claim_ids",
+    "placeholders",
+    "content_hash"
+  ]
+}

@@ -1,0 +1,1100 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "CM-IR persistence and version identity storyboard preview",
+  "subject": "cm_science",
+  "audience": "Technical viewers and implementers",
+  "purpose": "Persistent reuse is safe only when canonical artifact identity, source/version identity, invalidation, reload, and exact-output checks remain connected.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "cm-ir-persistence",
+    "episode_content_hash": "ef5e8fadddb1949797896bddc94cf74e3f48d3df490eed0542960f57cfe17dbc",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "CM-IR persistence and version identity",
+        "caption": "Persistent reuse is safe only when canonical artifact identity, source/version identity, invalidation, reload, and exact-output checks remain connected.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned policy rules",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR persistent identity",
+            "note": "Canonical DAG becomes bytes, identity, and a versioned cache entry in one…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "Versioned policy rules",
+        "caption": "A conceptual access policy over role, region, resource, and risk, shown across three source revisions.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Versioned policy rules",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR persistent identity",
+            "note": "Canonical DAG becomes bytes, identity, and a versioned cache entry in one…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "Input → transformation → consequence",
+        "caption": "Canonical DAG becomes bytes, identity, and a versioned cache entry in one continuous chain.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR persistent identity",
+            "note": "Canonical DAG becomes bytes, identity, and a versioned cache entry in one…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Persistent CM-IR reuse is keyed by canonical identity and must verify version/input identity before accepting a cached…",
+          "A video production artifact is reproducible only when source locators, source hashes, claim IDs, script/storyboard…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: CM-IR nodes, sharing, and roots",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "CM-IR persistent identity",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "CM-IR nodes, sharing, and roots",
+            "note": "A hash match supports identity checking; it does not by itself establish…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 10",
+        "title": "Pause, predict, then reveal",
+        "caption": "Choose whether three changed-source scenarios are a cache hit, miss, or explicit invalidation.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "cm-ir-persistence-contract",
+          "source-provenance-contract"
+        ],
+        "source_ids": [
+          "src-cm-ir",
+          "src-recognition-readme",
+          "src-runpod-handoff",
+          "src-video-factory"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "cm",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Persistence is an identity and invalidation contract, not merely saving bytes.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "role",
+                "label": "Role",
+                "x": 90,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "region",
+                "label": "Region",
+                "x": 290,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "resource",
+                "label": "Resource",
+                "x": 520,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "risk",
+                "label": "Risk",
+                "x": 750,
+                "y": 610,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "rule1",
+                "label": "Rule A",
+                "x": 250,
+                "y": 365,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "rule2",
+                "label": "Rule B",
+                "x": 620,
+                "y": 365,
+                "tone": "cse",
+                "shape": "box"
+              },
+              {
+                "id": "decision",
+                "label": "Allow / deny",
+                "x": 440,
+                "y": 115,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "role",
+                "target": "rule1"
+              },
+              {
+                "source": "region",
+                "target": "rule1"
+              },
+              {
+                "source": "resource",
+                "target": "rule2"
+              },
+              {
+                "source": "risk",
+                "target": "rule2"
+              },
+              {
+                "source": "rule1",
+                "target": "decision",
+                "label": "revision 1"
+              },
+              {
+                "source": "rule2",
+                "target": "decision",
+                "label": "revision 2"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

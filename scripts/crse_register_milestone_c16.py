@@ -41,7 +41,11 @@ def main() -> None:
     result = load(RUN / "results.json")
     verification = load(RUN / "independent_verification.json")
     validation = load(LINUX / "C16_PACKAGE_LOCAL_VALIDATION_20260830.json")
+    validation_v2 = load(LINUX / "C16_PACKAGE_V2_LOCAL_VALIDATION_20260831.json")
     manifest = load(LINUX / "c16_linux_upload_manifest.json")
+    manifest_v2 = load(LINUX / "c16_linux_upload_manifest_v2.json")
+    runpod = load(LINUX / "RUNPOD_C16_LINUX_FINAL_VERIFICATION_20260831.json")
+    runpod_v2 = load(LINUX / "RUNPOD_C16_PACKAGE_V2_FINAL_VERIFICATION_20260831.json")
     if (not (DOCS / REPORT).is_file() or result.get("status") != "complete"
             or result.get("semantic_or_artifact_mismatches") != 0
             or result["summary"].get("functional_gate") is not True
@@ -50,12 +54,33 @@ def main() -> None:
             or verification.get("source_cases_replayed") != 40
             or verification.get("controls_replayed") != 12
             or validation.get("status") != "pass" or validation.get("measurement_rows") != 360
-            or manifest.get("file_count") != 18 or manifest.get("bytes") != 423661):
+            or manifest.get("file_count") != 18 or manifest.get("bytes") != 423661
+            or validation_v2.get("status") != "pass"
+            or validation_v2.get("pythonpath_injected") is not False
+            or validation_v2.get("measurement_rows") != 360
+            or validation_v2.get("semantic_mismatches") != 0
+            or manifest_v2.get("file_count") != 18 or manifest_v2.get("bytes") != 423735
+            or runpod.get("status") != "safe_failure_reconciled"
+            or runpod.get("scientific_confirmation_complete") is not False
+            or runpod.get("create_requests_this_authorization") != 1
+            or runpod.get("automatic_replacement_queued") is not False
+            or runpod.get("owned_pod_absent_verified") is not True
+            or runpod.get("final_inventories") != {"v1": [], "v2": []}
+            or runpod_v2.get("status") != "pass"
+            or runpod_v2.get("scientific_confirmation_complete") is not True
+            or runpod_v2.get("second_machine_gate") is not True
+            or runpod_v2.get("measurement_rows") != 360
+            or runpod_v2.get("semantic_mismatches") != 0
+            or runpod_v2.get("artifact_mismatches") != 0
+            or runpod_v2.get("create_requests_this_authorization") != 1
+            or runpod_v2.get("automatic_replacement_queued") is not False
+            or runpod_v2.get("owned_pod_absent_verified") is not True
+            or runpod_v2.get("final_inventories") != {"v1": [], "v2": []}):
         raise SystemExit("refusing C16 registration: evidence incomplete")
     machine = {
-        "schema": "crse-learning-milestone-c16-exact-screened-gf2-summary/v1",
-        "date": "2026-08-30",
-        "status": "local_complete_second_machine_pending_exact_payload_approval",
+        "schema": "crse-learning-milestone-c16-exact-screened-gf2-summary/v3",
+        "date": "2026-08-31",
+        "status": "local_and_second_machine_complete",
         "report": REPORT,
         "run": rel(RUN),
         "verification": {"path": rel(RUN / "independent_verification.json"), **verification},
@@ -64,18 +89,44 @@ def main() -> None:
         "summary": result["summary"],
         "package_validation": {"path": rel(LINUX / "C16_PACKAGE_LOCAL_VALIDATION_20260830.json"),
                                **validation},
-        "linux_package": {"manifest": rel(LINUX / "c16_linux_upload_manifest.json"),
-                          "protocol": rel(LINUX / "C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md"),
-                          "files": manifest["file_count"], "bytes": manifest["bytes"]},
-        "runpod": {"used": False, "pod_created": False, "uploaded": False,
-                   "cost_usd": 0.0, "exact_payload_approval_required": True,
-                   "reason": "host approval review rejected broad authorization before process creation"},
+        "package_v2_validation": {
+            "path": rel(LINUX / "C16_PACKAGE_V2_LOCAL_VALIDATION_20260831.json"),
+            **validation_v2,
+        },
+        "linux_package": {
+            "first_manifest": rel(LINUX / "c16_linux_upload_manifest.json"),
+            "first_protocol": rel(LINUX / "C16_SECOND_MACHINE_TIMING_PROTOCOL_2026_08_30.md"),
+            "v2_manifest": rel(LINUX / "c16_linux_upload_manifest_v2.json"),
+            "v2_protocol": rel(LINUX / "C16_SECOND_MACHINE_TIMING_PACKAGE_V2_PROTOCOL_2026_08_31.md"),
+            "v2_files": manifest_v2["file_count"],
+            "v2_bytes": manifest_v2["bytes"],
+        },
+        "runpod": {
+            "used": True,
+            "pod_created": True,
+            "uploaded": True,
+            "combined_cost_usd": runpod_v2["combined_c16_cloud_cost_usd"],
+            "scientific_confirmation_complete": True,
+            "second_machine_gate": True,
+            "first_attempt": {
+                "safe_failure_reconciled": True,
+                "failure_type": runpod["failure_type"],
+                "verification": rel(LINUX / "RUNPOD_C16_LINUX_FINAL_VERIFICATION_20260831.json"),
+            },
+            "v2_attempt": {
+                "status": "pass",
+                "cost_usd": runpod_v2["estimated_compute_cost_usd"],
+                "speedup": runpod_v2["speedup"],
+                "verification": rel(LINUX / "RUNPOD_C16_PACKAGE_V2_FINAL_VERIFICATION_20260831.json"),
+            },
+        },
         "semantic_or_artifact_mismatches": 0,
         "production_promotion": False,
         "interpretation": (
             "Exact descriptor screening preserved the exhaustive best artifact while reducing "
-            "whole-path time by 3.545x locally; one small case regressed and Linux execution "
-            "awaits exact payload approval, so production remains disabled."
+            "whole-path time by 3.545x locally and 3.178x on Linux. The first Linux attempt "
+            "failed safely at import bootstrap; corrected v2 passed all exactness and timing "
+            "gates. One small local case regressed, so production remains disabled."
         ),
     }
     write(DOCS / MACHINE, machine)
@@ -89,15 +140,17 @@ def main() -> None:
     scope = (
         "All 64 bounded partitions now share one exact matrix layout and only the best four "
         "inert descriptors are materialized. The best artifact matched exhaustive identity on "
-        "40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+        "40 Yosys cases and 12 controls; whole-path speedup was 3.545x locally and "
+        "3.178x on Linux. The first Linux attempt was safely reconciled and corrected v2 "
+        "passed all second-machine gates."
     )
     for track_id in ("R06", "R16", "R18"):
         upsert(tracks[track_id], scope)
         tracks[track_id]["status"] = "measured"
         tracks[track_id]["status_reason"] = scope
     tracks["R06"]["next_experiment"] = (
-        "Confirm the frozen exact-screened tail on Linux, then test a fresh non-XOR-heavy family "
-        "before considering any learned partition ranker."
+        "Test the exact-screened tail on a fresh non-XOR-heavy family before considering any "
+        "learned partition ranker."
     )
     tracks["R16"]["next_experiment"] = (
         "Add a charged tiny-case bypass for the observed 0.893x worst case and retain advice-off "
@@ -111,14 +164,15 @@ def main() -> None:
                     if item["name"] == "Hardware verification/design")
     upsert(hardware, scope)
     data["milestones"]["C"] = (
-        "C16 exact-screened CM/GF(2) tail preserves the exhaustive best on all retained cases "
-        "and passes local timing; exact-payload Linux approval and a tiny-case bypass remain"
+        "C16 exact-screened CM/GF(2) tail preserves the exhaustive best and passes local and "
+        "second-machine timing; a tiny-case bypass and fresh non-XOR-heavy evaluation remain"
     )
-    data["updated"] = "2026-08-30"
+    data["updated"] = "2026-08-31"
     write(REGISTER, data)
     print(json.dumps({"tracks": len(data["tracks"]), "applications": len(data["applications"]),
                       "updated_tracks": ["R06", "R16", "R18"], "milestone": "C16",
-                      "runpod_used": False, "runpod_cost_usd": 0.0}, sort_keys=True))
+                      "runpod_used": True,
+                      "runpod_cost_usd": runpod_v2["combined_c16_cloud_cost_usd"]}, sort_keys=True))
 
 
 if __name__ == "__main__":

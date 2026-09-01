@@ -1,0 +1,1281 @@
+{
+  "schema_id": "deterministic-video-brief/v1",
+  "version": "1",
+  "title": "Conceptual animation versus measured result storyboard preview",
+  "subject": "cm_science",
+  "audience": "All viewers",
+  "purpose": "The series uses an explicit visual grammar so an explanatory mechanism can never masquerade as an observed result.",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": {
+    "id": "technical_reference",
+    "version": "1.0.0"
+  },
+  "brand": null,
+  "content_packs": [
+    {
+      "id": "cm_science",
+      "version": "1.0.0"
+    }
+  ],
+  "narration": "off",
+  "provenance": {
+    "authority": "CM_Computation/docs/video_factory/deep_series",
+    "video_id": "conceptual-vs-measured",
+    "episode_content_hash": "d64724b7f8a77bbc097596428e17c33e1e212a73a32bed8f85802970b0912e01",
+    "preview_only": true
+  },
+  "scenes": [
+    {
+      "id": "preview-01",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Conceptual animation versus measured result",
+        "caption": "The series uses an explicit visual grammar so an explanatory mechanism can never masquerade as an observed result.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Conceptual recognition/decomposition graph",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "conceptual, measured, revised, negative,…",
+            "note": "Split screen: unlabeled-looking mechanism is corrected into a visibly CONCEPTUAL…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-02",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Conceptual recognition/decomposition graph",
+        "caption": "A tiny labeled expression graph with a proposed partition, an exact witness path, a rejection/fallback path, and a promotion gate; it is never presented as a measured…",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Conceptual recognition/decomposition graph",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "conceptual, measured, revised, negative,…",
+            "note": "Split screen: unlabeled-looking mechanism is corrected into a visibly CONCEPTUAL…",
+            "tone": "cse_flat",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-03",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Input → transformation → consequence",
+        "caption": "Split screen: unlabeled-looking mechanism is corrected into a visibly CONCEPTUAL diagram.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Before · stable example",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "conceptual, measured, revised, negative,…",
+            "note": "Split screen: unlabeled-looking mechanism is corrected into a visibly CONCEPTUAL…",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review",
+                "shared": true
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-04",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Evidence panel",
+        "caption": "Scope and boundary appear before interpretation.",
+        "status": "confirmed",
+        "conceptual": false,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "result",
+        "bullets": [
+          "Teaching diagrams, proposed mechanisms, and hypotheses must be visibly labeled and may not be presented as measured…"
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-05",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Nearest contrast and boundary",
+        "caption": "Neighbor: Preparation, kernel, wrapper, and end-to-end time",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "conceptual, measured, revised, negative,…",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "Preparation, kernel, wrapper, and…",
+            "note": "A clear diagram is not evidence until its source, scope, boundary, and…",
+            "tone": "wrapper",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    },
+    {
+      "id": "preview-06",
+      "kind": "cm_science",
+      "duration": 0.1,
+      "data": {
+        "eyebrow": "CM DEEP SERIES · EPISODE 01",
+        "title": "Pause, predict, then reveal",
+        "caption": "Classify three matched panels as conceptual, measured, or revised before their badges appear.",
+        "status": "conceptual",
+        "conceptual": true,
+        "claim_ids": [
+          "conceptual-label-rule"
+        ],
+        "source_ids": [
+          "src-correction-report",
+          "src-recognition-readme"
+        ],
+        "visual": "transform_compare",
+        "graphs": [
+          {
+            "label": "Prediction · answer hidden",
+            "note": "conceptual worked-example state",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          },
+          {
+            "label": "Reveal · transfer rule",
+            "note": "Read the status before reading the result.",
+            "tone": "cm_ir",
+            "nodes": [
+              {
+                "id": "input",
+                "label": "Input graph",
+                "x": 90,
+                "y": 360,
+                "tone": "cm_ir",
+                "shape": "circle"
+              },
+              {
+                "id": "proposal",
+                "label": "Proposal",
+                "x": 280,
+                "y": 360,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "partition",
+                "label": "Partition",
+                "x": 470,
+                "y": 540,
+                "tone": "cse",
+                "shape": "circle"
+              },
+              {
+                "id": "verify",
+                "label": "Exact verify",
+                "x": 500,
+                "y": 270,
+                "tone": "cse_flat",
+                "shape": "box"
+              },
+              {
+                "id": "witness",
+                "label": "Witness",
+                "x": 725,
+                "y": 125,
+                "tone": "cm",
+                "shape": "double"
+              },
+              {
+                "id": "reject",
+                "label": "Reject",
+                "x": 725,
+                "y": 390,
+                "tone": "wrapper",
+                "shape": "box"
+              },
+              {
+                "id": "fallback",
+                "label": "Fallback",
+                "x": 900,
+                "y": 540,
+                "tone": "wrapper",
+                "shape": "double"
+              },
+              {
+                "id": "promote",
+                "label": "Promotion gate",
+                "x": 900,
+                "y": 125,
+                "tone": "confirmed",
+                "shape": "double"
+              }
+            ],
+            "edges": [
+              {
+                "source": "input",
+                "target": "proposal"
+              },
+              {
+                "source": "proposal",
+                "target": "partition"
+              },
+              {
+                "source": "proposal",
+                "target": "verify"
+              },
+              {
+                "source": "partition",
+                "target": "verify",
+                "label": "candidate"
+              },
+              {
+                "source": "verify",
+                "target": "witness",
+                "label": "exact"
+              },
+              {
+                "source": "verify",
+                "target": "reject",
+                "label": "fails"
+              },
+              {
+                "source": "reject",
+                "target": "fallback",
+                "label": "safe",
+                "shared": true
+              },
+              {
+                "source": "witness",
+                "target": "promote",
+                "label": "review"
+              }
+            ]
+          }
+        ]
+      },
+      "script": ""
+    }
+  ]
+}

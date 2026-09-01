@@ -1,0 +1,90 @@
+{
+  "dataset": {
+    "cases": 11,
+    "family": "VTR BLIF",
+    "n_vars": [
+      3,
+      4
+    ],
+    "policy_refit": false,
+    "retrospective": true
+  },
+  "date": "2026-08-31",
+  "failed_attempt": "docs/recognition/runs/c20-compiled-policy-vtr-tail-windows-20260831-001/failure.json",
+  "fresh_confirmation": false,
+  "interpretation": "Nine balanced rounds on all 11 C18 n=3-4 controls gave the compiled frozen policy 1.760x aggregate and 1.463x minimum speedup. Direct screened reached a 1.471x minimum, so the prior single-round 0.716x outlier was not reproduced. The evidence is retrospective and same-machine, so production remains disabled.",
+  "measurement_rows": 396,
+  "policy": {
+    "compiled_mode": "constant_leaf",
+    "policy_sha256": "6d3e58f12deef7c96c21f4362316b059ed577a85f0a486b79278d13f6933d39e",
+    "requires_features": false,
+    "selected_candidate": "learned_stump",
+    "tree": {
+      "arm": "explicit_cm_screened",
+      "kind": "leaf"
+    }
+  },
+  "production_promotion": false,
+  "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+  "run": "docs/recognition/runs/c20-compiled-policy-vtr-tail-windows-20260831-002",
+  "runpod": {
+    "cost_usd": 0.0,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c20-compiled-gf2-policy-vtr-tail-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "status": "retrospective_repeated_tail_gate_passed",
+  "summary": {
+    "functional_exactness": true,
+    "methods": {
+      "compiled_c19": {
+        "aggregate_overhead_over_direct_screened": 1.0112605292975785,
+        "aggregate_speedup_over_exhaustive": 1.7599603929436902,
+        "maximum_regret_over_best_direct_arm": 1.0360180090045024,
+        "median_case_speedup_over_exhaustive": 1.8101689976689976,
+        "minimum_case_speedup_over_exhaustive": 1.4631417994527602
+      },
+      "direct_exhaustive": {
+        "aggregate_overhead_over_direct_screened": 1.7797784785110102,
+        "aggregate_speedup_over_exhaustive": 1.0,
+        "maximum_regret_over_best_direct_arm": 1.8749739094134836,
+        "median_case_speedup_over_exhaustive": 1.0,
+        "minimum_case_speedup_over_exhaustive": 1.0
+      },
+      "direct_screened": {
+        "aggregate_overhead_over_direct_screened": 1.0,
+        "aggregate_speedup_over_exhaustive": 1.7797784785110102,
+        "maximum_regret_over_best_direct_arm": 1.0,
+        "median_case_speedup_over_exhaustive": 1.8569505720481567,
+        "minimum_case_speedup_over_exhaustive": 1.4710794547464079
+      },
+      "generic_c19": {
+        "aggregate_overhead_over_direct_screened": 1.018928580839533,
+        "aggregate_speedup_over_exhaustive": 1.7467156304955,
+        "maximum_regret_over_best_direct_arm": 1.071468453378001,
+        "median_case_speedup_over_exhaustive": 1.8095376987020564,
+        "minimum_case_speedup_over_exhaustive": 1.4434269189058924
+      }
+    },
+    "research_gate": true,
+    "timing_is_retrospective_and_machine_specific": true
+  },
+  "verification": {
+    "artifact_fingerprints_checked": 5,
+    "c18_source_replay_required_and_present": true,
+    "compiled_policy_mode": "constant_leaf",
+    "compiled_policy_requires_features": false,
+    "functional_cases_replayed": 11,
+    "measurement_rows_checked": 396,
+    "path": "docs/recognition/runs/c20-compiled-policy-vtr-tail-windows-20260831-002/independent_verification.json",
+    "policy_refit": false,
+    "production_promotion": false,
+    "retrospective": true,
+    "schema": "crse-c20-compiled-gf2-policy-vtr-tail-verification/v1",
+    "semantic_or_artifact_mismatches": 0,
+    "source_fingerprints_checked": 3,
+    "status": "verified",
+    "summary_recomputed": true,
+    "timings_rerun": false
+  }
+}

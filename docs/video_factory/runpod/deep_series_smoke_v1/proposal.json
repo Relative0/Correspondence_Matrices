@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "proposal_id": "cm-video-deep-series-first5-smoke-remote-v1",
+  "status": "exact_authorization_requested",
+  "remote_or_paid_work_authorized": false,
+  "purpose": "Render and QA two silent full-resolution chapter smokes before producing the first five narrated videos.",
+  "content_identity": {
+    "bible_content_hash": "6a02c82190f3d0771d830ac50052505b6c9407c607e9657d079ee0c4c8cd0f7e",
+    "review_manifest_sha256": "071d6aeecf378c8957f0beb114e561c6242942bd87406a5d7980ce7b2d9ae2fe"
+  },
+  "immutable_inputs": {
+    "bundle_file": "cm-video-deep-series-first5-smoke-v1-cd148f790d1bfc69.zip",
+    "bundle_sha256": "cd148f790d1bfc6945830172ff9c01fea1a916332e44bb104db37e7f8d3a6686",
+    "bundle_bytes": 9487469,
+    "payload_sha256": "d1f6a99c09000d8e5906053e7a2453c1b741fbdfdc324c6b84cacc00a03b82b1",
+    "batch_manifest_sha256": "50674a3b753074cc41070089af1813799af8376bd11a57ffe2ad84b78834be82"
+  },
+  "ordered_jobs": [
+    {
+      "job_id": "conceptual-vs-measured-c01-smoke",
+      "video_id": "conceptual-vs-measured",
+      "chapter_id": "c01",
+      "duration_frames": 2252,
+      "duration_seconds": 75.0667,
+      "primitive_coverage": ["boundary", "result", "transform_compare"]
+    },
+    {
+      "job_id": "what-is-explicit-cm-c01-smoke",
+      "video_id": "what-is-explicit-cm",
+      "chapter_id": "c01",
+      "duration_frames": 2240,
+      "duration_seconds": 74.6667,
+      "primitive_coverage": ["boundary", "expression_matrix", "representation_compare"]
+    }
+  ],
+  "render_contract": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "total_frames": 4492,
+    "audio": false,
+    "render_workers": 4,
+    "required_qa": [
+      "exact input and output hashes",
+      "frame count, dimensions, frame rate, duration, codec, and audio absence",
+      "opening, middle, and final decoded frames",
+      "identical-input repeated PNG equality",
+      "render and encode throughput",
+      "child-process peak memory"
+    ]
+  },
+  "resource": {
+    "provider": "RunPod",
+    "product": "Pod",
+    "cloud": "SECURE",
+    "compute_type": "GPU",
+    "gpu_id": "NVIDIA RTX A5000",
+    "gpu_count": 1,
+    "published_shape": {
+      "vcpus": 9,
+      "ram_gb": 25,
+      "vram_gb": 24
+    },
+    "base_image": "python:3.10.15-slim-bookworm@sha256:97ff6fda70178dee6c144d41030fb88b6ec86d75e1c517fe96b8f62094ea7ac2",
+    "container_disk_gb": 30,
+    "volume_gb": 0,
+    "network_volume": null,
+    "ports": ["22/tcp"],
+    "actual_shape_policy": "After creation, verify the owned pod identity, exact GPU, Secure Cloud, image digest, compute rate at or below the cap, at least 4 vCPUs and 8 GB RAM, no persistent volume, and only SSH. Delete immediately on mismatch."
+  },
+  "quote": {
+    "checked_utc": "2026-08-31T12:36:56.9739481Z",
+    "catalog_endpoint": "RunPod v2 Secure Pod catalog",
+    "gpu_id": "NVIDIA RTX A5000",
+    "availability": "LOW",
+    "data_centers": ["EU-SE-1"],
+    "rate_usd_per_hour": 0.27,
+    "rate_cap_usd_per_hour": 0.27,
+    "official_public_pricing_url": "https://www.runpod.io/pricing",
+    "official_pod_billing_url": "https://docs.runpod.io/pods/pricing",
+    "cpu_catalog_observation": "All six documented 4-vCPU CPU flavors reported NONE at quote time; their current rates ranged from $0.12 to $0.26 per hour. No CPU Pod is authorized by this proposal."
+  },
+  "authorization_ceiling": {
+    "maximum_total_runpod_spend_usd": 2.0,
+    "maximum_pod_creates": 2,
+    "maximum_parallel_pods": 1,
+    "maximum_runtime_seconds_per_pod": 10800,
+    "maximum_ordered_job_attempts_per_create": 1,
+    "retry_policy": "A second create is permitted only after the first owned pod is terminal or unavailable and its absence is reconciled. Never run two pods concurrently.",
+    "no_other_paid_services": true
+  },
+  "transport_and_cleanup": {
+    "credential_reference": "existing RUNPOD_API_KEY environment variable; never print, copy, persist, bundle, or transmit its value except as the RunPod API authorization header",
+    "upload": "SFTP the one hash-bound bundle to the one owned ephemeral pod and verify SHA-256 before extraction",
+    "download": "Download only the bounded result archive; verify paths, hashes, media contracts, and QA records locally",
+    "publish": false,
+    "commit_or_push": false,
+    "delete_on_terminal": true,
+    "final_owned_inventory_reconciliation": true
+  },
+  "authorization_effect": "Approval authorizes only the exact two-job smoke described here. It does not authorize the remaining chapters, narration, the five complete videos, the 51-video series, publication, commit, or push."
+}

@@ -140,7 +140,67 @@
         {
           "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
           "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
-          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; whole-path speedup was 3.545x locally and 3.178x on Linux. The first Linux attempt was safely reconciled and corrected v2 passed all second-machine gates."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "status": "measured"
@@ -194,9 +254,10 @@
   "milestones": {
     "A": "implemented and measured within foundation slice",
     "B": "first actual NumPy MLP comparison measured; negative result",
-    "C": "C16 exact-screened CM/GF(2) tail preserves the exhaustive best on all retained cases and passes local timing; exact-payload Linux approval and a tiny-case bypass remain",
+    "C": "C20 compiles the frozen exact screened leaf and clears the repeated retrospective VTR small-support tail; fresh-source and second-machine confirmation remain",
     "D": "D10 indexed four-rule engine and C15 exact CM/GF(2) decomposition measured; exact infrastructure passes, both timing promotion gates fail, and production remains disabled",
-    "E": "E1 bounded BDD order selection and E2 exact SAT/equivalence guidance measured; both exact infrastructures pass, both learned timing policies remain negative, native/large-source follow-ups pending"
+    "E": "E1 bounded BDD order selection and E2 exact SAT/equivalence guidance measured; both exact infrastructures pass, both learned timing policies remain negative, native/large-source follow-ups pending",
+    "F": "C29 localizes q8 variance with frozen C27 evidence plus a counterbalanced exact diagnostic; repeated policy validation dominates setup, n=3 remains negative, query-path outliers remain, and promotion is refused"
   },
   "schema": "crse-experiment-register/v1",
   "tracks": [
@@ -219,7 +280,7 @@
       "minimum_scope": "Direct/CSE/CM, bigint/words, later task-eligible BDD/SAT/counting; cheap features, query-count rules, learned feature acquisition, feasibility and tail-risk prediction",
       "models_and_deterministic_controls": "fixed direct/CSE/CM, query-count rule, cost tree",
       "name": "Task-aware routing and cost prediction",
-      "next_experiment": "Retain the fixed resident SAT fallback; route only after an independently sourced larger-task study establishes headroom.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "AST features",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -288,11 +349,71 @@
           "machine_summary": "learning_milestone_e2_sat_guidance_results.json",
           "report": "LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
           "scope": "Task-aware routing now includes bounded single-SAT, assumption-session, and equivalence-miter lifecycles with exact advice-off fallback."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Task-aware routing now includes bounded single-SAT, assumption-session, and equivalence-miter lifecycles with exact advice-off fallback."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -313,7 +434,7 @@
       "minimum_scope": "Hidden affine/XOR, Horn, dual-Horn, 2-CNF, low-width/separator structure, independent components, cardinality/threshold constraints, mux/ITE, arithmetic blocks and adders",
       "models_and_deterministic_controls": "exact affine detector, CM simplifier, MLP, later GNN",
       "name": "Computational-subclass recognition",
-      "next_experiment": "Pause neural tuning until a representation change or more training circuits are available.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "AST, local CM, later graph",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -347,11 +468,41 @@
           "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
           "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
           "scope": "Bidirectional per-variable cut scoring improved confirmatory recovery but held-out square recall remained only 0.125-0.188."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Bidirectional per-variable cut scoring improved confirmatory recovery but held-out square recall remained only 0.125-0.188."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -637,7 +788,7 @@
       "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
       "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
       "name": "CM decomposition and layout",
-      "next_experiment": "Confirm the frozen exact-screened tail on Linux, then test a fresh non-XOR-heavy family before considering any learned partition ranker.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "cofactors, blocks, GF(2) factors",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -700,12 +851,72 @@
         {
           "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
           "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
-          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; whole-path speedup was 3.545x locally and 3.178x on Linux. The first Linux attempt was safely reconciled and corrected v2 passed all second-machine gates."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -726,7 +937,7 @@
       "minimum_scope": "BDD variable order including native reordering controls, AIG cuts/balancing/refactoring/resubstitution, compact representations, low-width decomposition, and query-appropriate targets",
       "models_and_deterministic_controls": "native order controls, fixed orders, learned ranking",
       "name": "Order and compilation selection",
-      "next_experiment": "Add a natural held-out source and optional identified native CUDD control before any broader order claim.",
+      "next_experiment": "Keep fresh BDD as a negative control; evaluate resident BDD only for repeated-query contracts.",
       "representation": "BDD, AIG, CM IR",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
       "results": [
@@ -734,11 +945,21 @@
           "machine_summary": "learning_milestone_e1_bdd_order_results.json",
           "report": "LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
           "scope": "Fixed, first-occurrence, interaction, random best-of-four, and a bounded cost tree were measured on 20 alpha-distinct mux/arithmetic/comparator/component formulas with exact reloadable artifacts."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Fixed, first-occurrence, interaction, random best-of-four, and a bounded cost tree were measured on 20 alpha-distinct mux/arithmetic/comparator/component formulas with exact reloadable artifacts."
+      "status_reason": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
     },
     {
       "dependencies": {
@@ -878,7 +1099,7 @@
       "minimum_scope": "Supervise graph models from local truth functions, cofactor relations, functional distances, and verified transformation costs; no full CM required at inference",
       "models_and_deterministic_controls": "supervised teacher, unsupervised/structural controls",
       "name": "CMs as exact training teachers",
-      "next_experiment": "Retain this architecture as the neural control; do not add capacity without more independent training circuits.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "local CM teacher and source graph",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -912,11 +1133,51 @@
           "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
           "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
           "scope": "Cut supervision now attaches to context-rich variable nodes through one shared head with exact fixed-anchor permutation equivariance."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Cut supervision now attaches to context-rich variable nodes through one shared head with exact fixed-anchor permutation equivariance."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -996,7 +1257,7 @@
       "minimum_scope": "Cost-sensitive regression/ranking, linear models, trees/rule lists, forests/boosting/quantile models; supervised, contrastive/self-supervised, multitask, imitation, transfer, and curriculum learning",
       "models_and_deterministic_controls": "linear, tree/rules, forest/boosting/quantile, supervised/contrastive/multitask/imitation/transfer/curriculum",
       "name": "Learning-method comparisons",
-      "next_experiment": "Keep equivariance audits and separate ranking from cut optimization in any later study.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "cost features, graph/CM representations",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1040,11 +1301,51 @@
           "machine_summary": "learning_milestone_c5_variable_conditioned_cut_results.json",
           "report": "LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
           "scope": "Non-anchor variable-permutation audits had exactly zero error, while same-pair ranking still failed consistent held-out transfer."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Non-anchor variable-permutation audits had exactly zero error, while same-pair ranking still failed consistent held-out transfer."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -1126,7 +1427,7 @@
       "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
       "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
       "name": "Inference and training efficiency",
-      "next_experiment": "Add a charged tiny-case bypass for the observed 0.893x worst case and retain advice-off exhaustive materialization.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "features, batches, embeddings, compiled/quantized weights",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1259,12 +1560,72 @@
         {
           "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
           "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
-          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; whole-path speedup was 3.545x locally and 3.178x on Linux. The first Linux attempt was safely reconciled and corrected v2 passed all second-machine gates."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -1285,7 +1646,7 @@
       "minimum_scope": "Calibration, out-of-distribution behavior, feasibility, uncertainty-triggered fallback, negative transfer, adversarial near-matches, and hardware transfer",
       "models_and_deterministic_controls": "always fallback, fixed thresholds, calibrated policy",
       "name": "Confidence, novelty, and abstention",
-      "next_experiment": "Retain platform-bound abstention and require new-machine calibration before enabling any non-set task arm there.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "training ranges, uncertainty, feasibility",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1354,11 +1715,66 @@
           "machine_summary": "learning_milestone_c14_task_guard_results.json",
           "report": "LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
           "scope": "Platform mismatch, unsupported task, insufficient reuse, and out-of-range input conservatively abstain or refuse advice; the global switch returns exact set execution."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "Platform mismatch, unsupported task, insufficient reuse, and out-of-range input conservatively abstain or refuse advice; the global switch returns exact set execution."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     },
     {
       "dependencies": {
@@ -1379,7 +1795,7 @@
       "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
       "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
       "name": "Negative controls and hard limits",
-      "next_experiment": "Retain dense incompressible controls, byte-identical exhaustive-best checks, per-case slowdown reporting, and second-machine timing.",
+      "next_experiment": "C30 should hash-bind C27/C22 policies in an immutable prepared context, charge preparation once at the resident lifecycle boundary, retain fail-closed controls, and repeat the unchanged C29 counterbalanced exact diagnostic before any two-machine confirmation or learned selector.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "random/dense tables, packed bits, anti-reduction AST",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1517,14 +1933,74 @@
         {
           "machine_summary": "learning_milestone_c16_exact_screened_gf2_results.json",
           "report": "LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
-          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+          "scope": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; whole-path speedup was 3.545x locally and 3.178x on Linux. The first Linux attempt was safely reconciled and corrected v2 passed all second-machine gates."
+        },
+        {
+          "machine_summary": "learning_milestone_c17_gf2_task_dispatcher_results.json",
+          "report": "LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+          "scope": "A frozen platform-bound dispatcher selected only exact exhaustive or screened CM/GF(2) arms. All 40 functional and 320 measured rows were exact; aggregate speedup was 3.831x, but 0.769x slow-tail and 0.597x minimum-case results refused production promotion."
+        },
+        {
+          "machine_summary": "learning_milestone_c18_independent_gf2_transfer_results.json",
+          "report": "LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+          "scope": "The unchanged exact C17 dispatcher transferred to 73 evaluation-only VTR BLIF cones with zero mismatches and 8.378x aggregate speedup. The 1.324x slow-tail passed, but a 0.621x n=4 minimum and single-round timing keep production disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c19_cheap_gf2_work_policy_results.json",
+          "report": "LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+          "scope": "C19 fit exact-arm cost policies on 48 LogikBench cones, selected on 24 source-cluster-disjoint validation cones, froze an always-screened leaf, and confirmed exact 2.769x aggregate / 0.972x minimum performance on 24 untouched cones. Production remains disabled."
+        },
+        {
+          "machine_summary": "learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+          "report": "LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+          "scope": "C20 constant-folded the frozen screened leaf and repeated all 11 C18 n=3-4 VTR controls for nine balanced rounds. Exact compiled selection reached 1.760x aggregate / 1.463x minimum; the prior one-round regression was not reproduced. Evidence is retrospective."
+        },
+        {
+          "machine_summary": "learning_milestone_c21_task_matched_gf2_method_table_results.json",
+          "report": "LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+          "scope": "C21 compared seven exact methods under one exhaustive-best GF(2) artifact contract on 96 LogikBench cones. Packed source ANF was narrowly best at 3.007x over exhaustive; screened CM reached 2.988x, fresh BDD was negative, and only 1.059x oracle routing headroom remains."
+        },
+        {
+          "machine_summary": "learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+          "report": "LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+          "scope": "C23 exactly transferred the unchanged seven-method GF(2) table across Windows and Linux. Screened CM reached 3.286x and 3.337x over exhaustive; the narrow winner changed from packed source ANF to compiled screened CM, and Linux oracle headroom was 1.005x."
+        },
+        {
+          "machine_summary": "learning_milestone_c24_c22_boundary_results.json",
+          "report": "LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+          "scope": "C24 charged the frozen C22 dispatcher end to end on all 48 sealed C23 cases. Exactness, 48 forced fallbacks, and five fail-closed controls passed; advice-on reached 0.833x direct screened overall and the local promotion gate failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c25_resident_c22_session_results.json",
+          "report": "LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+          "scope": "C25 executed 720 resident batches and 7,560 timed exact queries through 32 queries per session. All exactness, cache, fallback, and refusal controls passed, but C22 advice-on never reached direct screened parity and resident promotion failed."
+        },
+        {
+          "machine_summary": "learning_milestone_c26_fused_verified_context_results.json",
+          "report": "LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+          "scope": "C26 executed 7,560 timed exact queries with one evaluation and hash-bound context per fused query. Fused advice-on won aggregate timing at four query counts and was the fastest fixed method at 1, 2, and 4, but the support-width no-regret floor remained below 0.90x."
+        },
+        {
+          "machine_summary": "learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+          "report": "LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+          "scope": "C27 froze an n<=4 truth-screened / n>=5 packed-screened rule before a new 48-case unused-generator corpus. Retry-003 ran the unchanged 63-file package on a Secure cpu5c RunPod backed by an AMD EPYC 4564P. Its independent verifier and a byte-identical post-retrieval replay checked 720 batches, 7,560 timed queries, 24 memory batches, and 2,520 semantic contexts with zero mismatches. The second-machine gate passed first at 8 queries (1.035x aggregate, 0.961x minimum width). The pod was deleted after 79.86 seconds at an estimated $0.001553. Production remains disabled because timing margins are narrow and machine-specific."
+        },
+        {
+          "machine_summary": "learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+          "report": "LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+          "scope": "C28 evaluated five frozen C27 executions across two physical machines without training, refitting, or rerunning timings. All 37,800 queries remained exact. Only q8 passed every point gate (1.024x aggregate / 0.950x minimum-width floor), but its paired-round lower floors were 0.928x / 0.597x. No uncertainty-safe query count or monotonic suffix remained, so shadow and production promotion were refused."
+        },
+        {
+          "machine_summary": "learning_milestone_c29_variance_localization_results.json",
+          "report": "LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+          "scope": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "All 64 bounded partitions now share one exact matrix layout and only the best four inert descriptors are materialized. The best artifact matched exhaustive identity on 40 Yosys cases and 12 controls; local whole-path speedup was 3.545x."
+      "status_reason": "C29 localizes the frozen C27 q8 variance and adds 64 adjacent, fully counterbalanced exact pairs. Policy load/validation accounts for 92.38% of candidate setup. n=3 remains 0.846x total and n=4 is 0.969x despite a 1.042x query-only gain; query-path outliers also remain. This is diagnostic evidence, and shadow/production promotion stays refused."
     }
   ],
   "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",
-  "updated": "2026-08-30"
+  "updated": "2026-09-01"
 }

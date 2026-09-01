@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "status": {
+      "const": "review_requested"
+    },
+    "requested_at": {
+      "const": "2026-08-31T00:00:00+07:00"
+    },
+    "bible_content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "content_approval_authorizes_remote_or_paid_work": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "requested_at",
+    "bible_content_hash",
+    "review_manifest_sha256",
+    "content_approval_authorizes_remote_or_paid_work"
+  ]
+}

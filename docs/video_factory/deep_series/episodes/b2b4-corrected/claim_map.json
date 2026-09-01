@@ -1,0 +1,1692 @@
+{
+  "schema_version": "2.0",
+  "video_id": "b2b4-corrected",
+  "episode_content_hash": "228a673f19debe0b59566c967e6f7b47520c9b11ec57d6dd2e23db6f821512ea",
+  "bindings": [
+    {
+      "cue_id": "q0001",
+      "scene_id": "s001",
+      "text_sha256": "13a66021558cda3a3f35f8fe768eaac71b46f28f74e604da299181f4e9635e88",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0002",
+      "scene_id": "s001",
+      "text_sha256": "9c3865d7f66371d21e14457a89c31f2cc4ea64617e7caa2c92f249b6558146b5",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0003",
+      "scene_id": "s001",
+      "text_sha256": "7e5fe0f0950977567b2e492c3230559760afb39c9e9ebefd359575f05d287e0c",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0004",
+      "scene_id": "s002",
+      "text_sha256": "d7492081d2a164f1968a16d1211309c2e901bffa5cf2a81b8c6d24104320d8bf",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0005",
+      "scene_id": "s002",
+      "text_sha256": "1246c79fea82411e1b7df08463266b0669e446cdbcb9ffcea57342422aa24219",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0006",
+      "scene_id": "s002",
+      "text_sha256": "ca1a1c2672cd85599ea1eeef88423d9c2089f25a14a6c3cb48d56e547e68bdaf",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0007",
+      "scene_id": "s003",
+      "text_sha256": "5560d447a10cad19f81d9ff28dafdc34d5f471c257344888c585f32c677af410",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0008",
+      "scene_id": "s003",
+      "text_sha256": "39adabcae3dd3fe0db24b7b98bd3f7c2ad7f3ef4e1780a9f8e7e51e5b5d8a720",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0009",
+      "scene_id": "s003",
+      "text_sha256": "06056a6f0df0dcd045d01b7cf006584edcbe8a72439205d534b8073bd381e0e3",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0010",
+      "scene_id": "s004",
+      "text_sha256": "83515dabb3aa1d6b6d4fa54b75f12c42a812bba3e2db0eb05fec1c8f60b543c5",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0011",
+      "scene_id": "s004",
+      "text_sha256": "83729225dac1e5f1d3fb638c6c74bf4f68db6230f5d73584636c688cdbb43544",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0012",
+      "scene_id": "s004",
+      "text_sha256": "a722c553a50791052b18e82678624ed23e34426fead5d8c4595575401f4dfb08",
+      "evidence_status": "conceptual",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0013",
+      "scene_id": "s005",
+      "text_sha256": "d4f5bbd5b809b2b0968fc14bf148c695e33fc295f81feb7f9a5e176a504bcc9d",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0014",
+      "scene_id": "s005",
+      "text_sha256": "21886d058b0276b63268a2a4380e386a1c0d8d0c2cbe346bc89f0ef7095b0a56",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0015",
+      "scene_id": "s006",
+      "text_sha256": "42624f492da75e6ad9a1ce0f7941b9805e2ad3e36a56ef5a76354a2a16d2047a",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0016",
+      "scene_id": "s006",
+      "text_sha256": "662336743723af1aef7a0c3c82aaa5a3b50a5e9b2c312b274ccafc1308405b0d",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0017",
+      "scene_id": "s006",
+      "text_sha256": "eb274b7279761fff2f655f78d7cbf3b4e200358e97dfe7ae8ba97695ce608abd",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0018",
+      "scene_id": "s007",
+      "text_sha256": "d26dee1ba696af43f27899a1ee665bfe7618dd56649585f7016de0a3fcf37b7f",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0019",
+      "scene_id": "s007",
+      "text_sha256": "43e3cfd07a10178ce439ff4b083b1188e30f8b9a90663c77c55e63ccd3a3f88f",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0020",
+      "scene_id": "s007",
+      "text_sha256": "49b3e98b2a48548b30c0e4cc2d476a3530f54f8c7e99710f8040fdbb95e8376b",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0021",
+      "scene_id": "s008",
+      "text_sha256": "7d91046b768389934b47968fc5278120fb9122e4b0b6a93bf08b1044ce0bb3d1",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0022",
+      "scene_id": "s008",
+      "text_sha256": "c6d97d2c655b47895b94d7f6470a0c6237ba41e8c76d6f700450977016d44648",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0023",
+      "scene_id": "s008",
+      "text_sha256": "7025b80cf6a8d16f3ff5128fac8c10c5d0ba92dce6b9425d2e1268ecb04653d1",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0024",
+      "scene_id": "s009",
+      "text_sha256": "ea684ae48a69fd15f606cfe7c15dc62b76f633fb63a563b3a3e1372ccd68eb71",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0025",
+      "scene_id": "s009",
+      "text_sha256": "107deaf5a9051828b58102500cdd74c49eb12f9d35daeeea185e03de0919edda",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0026",
+      "scene_id": "s009",
+      "text_sha256": "07dd1006aa24643d84efadddc651a19b3b1fcea0e8652f5a872b5e1a81e010c6",
+      "evidence_status": "conceptual",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0027",
+      "scene_id": "s010",
+      "text_sha256": "62e73e5ea245eb6454ab0b68f2b1895f259d540c970ca8dbe8bc628d05a8620d",
+      "evidence_status": "conceptual",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0028",
+      "scene_id": "s010",
+      "text_sha256": "2aff610b52e24b9845c6c0845944861469bddd452ad5e1fc66e4a60586074f96",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0029",
+      "scene_id": "s010",
+      "text_sha256": "68f438bcf20a13b7f75ab47cfb39c9ce0d967c3cb447bb968829df247daecd0f",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0030",
+      "scene_id": "s011",
+      "text_sha256": "e958d41ceea888e1b29e1118bf85589024e98dc78184462517a716d200a584e8",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0031",
+      "scene_id": "s011",
+      "text_sha256": "4accb0d872d617c485208ad0c789d070d8e2be7726595bdae318ecf53e03ae9e",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0032",
+      "scene_id": "s011",
+      "text_sha256": "44fa0b9a4f353dbef09fc1f30ddd1e8537b4c744e8bfc732fb38d49104994eb6",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0033",
+      "scene_id": "s012",
+      "text_sha256": "ed164bc8950fa647585549e96f5ad2293bed36b0d36ab21e4f58302c0c5d6bb8",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0034",
+      "scene_id": "s012",
+      "text_sha256": "d74b455601d8af92ca0ae596953493c9f060a77e7edf96cc53ef7f854321aa7e",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0035",
+      "scene_id": "s013",
+      "text_sha256": "8953193698c938da3ee9f42c75daa25a21806c2f391a69ed463287608aea6316",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0036",
+      "scene_id": "s013",
+      "text_sha256": "e1cfe09208a2e190b298c146e4eb64503a1eaab98f003c7de4ca3bbcd06f8d59",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0037",
+      "scene_id": "s013",
+      "text_sha256": "fd663d281ea4cd8be781d1a2a20c093eeb69709a14bd06fbc14fd3aa36e23f41",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0038",
+      "scene_id": "s014",
+      "text_sha256": "1123c11172a26f6c75ca30d343271aa6636deb29d23ab20068807e08cc9567e0",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0039",
+      "scene_id": "s014",
+      "text_sha256": "81bea200610aa8ae01fd959a0f447f0ce0afbb062a3c192b81bfba8b7fbd03b1",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0040",
+      "scene_id": "s014",
+      "text_sha256": "f85318347bd6a8b772bd35857e700709961096666ebbc55913a563a7d4e6b57f",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0041",
+      "scene_id": "s015",
+      "text_sha256": "e3447cf523257a0ddf7c12ffd5de5fc6336342616a385149289434d4be321179",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0042",
+      "scene_id": "s015",
+      "text_sha256": "fadffed25d6adb1ddb4de1f4616ea700e5610821666cd81927d2660b2d80fdb0",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0043",
+      "scene_id": "s015",
+      "text_sha256": "456777d16e508d439db56b5a56f7ec2662224ed6e5ae31a2a1f422c15e76b425",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0044",
+      "scene_id": "s016",
+      "text_sha256": "f3ecea78bd2b66135f1cd28f1b906c89f917053c9e98afe8e457eb6446698f2f",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0045",
+      "scene_id": "s016",
+      "text_sha256": "bc26babf1f206a72fce09bf918b092699c40773706d6e44e8bced9d1dedcfb3a",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0046",
+      "scene_id": "s016",
+      "text_sha256": "c4f9d93d3bbaa60ec8acce0266cbaa9cd27712e8e09b7f13ad8f7064e7bc74b4",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0047",
+      "scene_id": "s017",
+      "text_sha256": "2156fcbd70309936227f5ea2368e17ba09c9d3df044b736ca09134a0f89c6f52",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0048",
+      "scene_id": "s017",
+      "text_sha256": "2fa786140fe4bfecff5312fe87da0d6592453d3f08f881393e4b419033244698",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0049",
+      "scene_id": "s017",
+      "text_sha256": "a11fb18066a887d38cf3b38c0156c63fd9d1897be9838fc2ce943c0585957919",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0050",
+      "scene_id": "s018",
+      "text_sha256": "f128a18cc8d81378f706b138aabd40b753c174bb64bc2e099d0e735c6464aafb",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0051",
+      "scene_id": "s018",
+      "text_sha256": "1fcb02b16788d67b3fc915e0a9ff37b62087701051c063769f03785982e1468e",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0052",
+      "scene_id": "s018",
+      "text_sha256": "c652d6cd7b31a70183a511d13e5a330ce1a7c6b672bfe613fc5758943b61d79c",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0053",
+      "scene_id": "s019",
+      "text_sha256": "c668feb7e09d5e3a49e3eeb6264b535435b949f80749df9bb96a8464a0cbc468",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0054",
+      "scene_id": "s019",
+      "text_sha256": "e639f0f14bddd4f4ae5b0944df755a1edf62ad8c9ce3a7c9074d8f8f790e23f2",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0055",
+      "scene_id": "s019",
+      "text_sha256": "8f3f950a9651591ac75f892d01a6d3119fa0a1d4dd3b831b3ea86e36ca9d18ef",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0056",
+      "scene_id": "s020",
+      "text_sha256": "054b7f2ccd69534e9889c1bd02ff6599009d87133dbfa712729c6c90d29c0305",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0057",
+      "scene_id": "s020",
+      "text_sha256": "727e5f4a2ee07e9f65cd2d9ccfd7b618400638dbb4f29ef03663a9f58e571cb3",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0058",
+      "scene_id": "s020",
+      "text_sha256": "d391216ada10fdf0367d42d717f1fbfe2b82455e905f1cb96076695c352cfea0",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0059",
+      "scene_id": "s021",
+      "text_sha256": "555c6cc5c9a421fd26e6fa24ad316a3ffa47ba8f6418b8585dccc9e31bcdcbd7",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0060",
+      "scene_id": "s021",
+      "text_sha256": "6652db17e73432f78ed79e286cb4b1616c785fc3b307599ae3310f1d5302347d",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0061",
+      "scene_id": "s022",
+      "text_sha256": "671981bebf02ac23d55097022537d2f2b2927ee29068aec8dbbaace5e8697964",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0062",
+      "scene_id": "s022",
+      "text_sha256": "b7daaa349fd214702db6c7d97c916a60821149010f63c5053bce0b3f00b24ad3",
+      "evidence_status": "conceptual",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0063",
+      "scene_id": "s022",
+      "text_sha256": "8f57c8f9facbff8422c97b27b2e47d01d0d2bb84ceeef71051294344ceafdcc9",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0064",
+      "scene_id": "s023",
+      "text_sha256": "82389a80a812c77fc88276947bf0bead9f5df83b1b4e9200ec9515592c6245d6",
+      "evidence_status": "conceptual",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cue_id": "q0065",
+      "scene_id": "s023",
+      "text_sha256": "0f2c6001a1642609a8f0671a3aac5415fb0da86a6a3c17bbddd42580242d2952",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0066",
+      "scene_id": "s023",
+      "text_sha256": "6fddbbd05ee6b16257c62a7ac8f3f4118f85979121e7da2165764a1dcdca2c37",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0067",
+      "scene_id": "s024",
+      "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0068",
+      "scene_id": "s024",
+      "text_sha256": "9f37175c0f08167ce468fe86efd24e9b1d62ca1726700f3596a7d17a49197152",
+      "evidence_status": "conceptual",
+      "conceptual": true,
+      "claims": []
+    },
+    {
+      "cue_id": "q0069",
+      "scene_id": "s024",
+      "text_sha256": "6562898ea90a74a7388b74f73670f3f9fbb1de03e1caf2b6447ba6c989967e7e",
+      "evidence_status": "confirmed",
+      "conceptual": false,
+      "claims": [
+        {
+          "claim_id": "b2b4-v3-k16",
+          "allowed_wording": "The B2/B4 V3 bare CM/CSE-flat advantage narrowed toward k=16: formula-balanced ratio 0.9612 [0.9290, 0.9942].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 live support k=16",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap within one run",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "live_k/all/16 cm_current_over_cse_flat_current"
+            }
+          ]
+        },
+        {
+          "claim_id": "b2b4-v3-kernel",
+          "allowed_wording": "On the exactly counterbalanced B2/B4 V3 workload, formula-balanced bare CM/CSE-flat was 0.8906 with a formula-cluster 95% interval [0.8741, 0.9073].",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "B2/B4 V3 formulas on one Windows run",
+          "measurement_boundary": "compiled evaluator kernel after compilation",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM/CSE-flat; below one favors CM",
+          "uncertainty": "formula-cluster bootstrap; does not model between-run or between-machine variation",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_current_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "statistical_inference.headline"
+            }
+          ]
+        },
+        {
+          "claim_id": "exactness-gates",
+          "allowed_wording": "Corrected benchmark rows required frozen truth verification and equality across eligible timed arms before performance evidence was accepted.",
+          "type": "fact",
+          "status": "confirmed",
+          "scope": "corrected benchmark protocols",
+          "measurement_boundary": "correctness gate outside performance claim",
+          "comparator": "all eligible arms",
+          "ratio_direction": "not a ratio",
+          "uncertainty": "hash/equality gate",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-audit",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_audit.json",
+              "sha256": "bcd59a56887b0dd80198981ae1de1921b557b56a2c87cc1a0db33a1c49941a66",
+              "locator": "row_count and packed_mismatch_count"
+            },
+            {
+              "source_id": "src-correction-report",
+              "path": "deliverables_n22_24/corrections_2026_08_25/CM_BENCHMARK_AUDIT_CORRECTION_REPORT_2026-08-25.md",
+              "sha256": "878336141ef1fc5a6a6fc78db7ca57cc18468076df18378bc05bb3a4a7e1c046",
+              "locator": "EPFL order and frozen truth verification"
+            }
+          ]
+        },
+        {
+          "claim_id": "public-wrapper-slower",
+          "allowed_wording": "The public CM wrapper was slower than CSE-flat in the corrected comparison.",
+          "type": "measurement",
+          "status": "confirmed",
+          "scope": "corrected B2/B4 comparison",
+          "measurement_boundary": "public wrapper complete truth-output call",
+          "comparator": "sharing-aware CSE-flat",
+          "ratio_direction": "CM wrapper/CSE-flat; above one disfavors CM",
+          "uncertainty": "local formula-cluster interval plus descriptive pod replication",
+          "sources": [
+            {
+              "source_id": "src-b2b4-v3-inference",
+              "path": "deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv",
+              "sha256": "63e7c80123d5487275c3b92575d9e3ca4161017f412ca7eb6e010d6b3d8b5f50",
+              "locator": "overall/all/all cm_wrapper_over_cse_flat_current"
+            },
+            {
+              "source_id": "src-runpod-correction-report",
+              "path": "deliverables_n22_24/correction_runpod_2026_08_25/CM_CORRECTED_RUNPOD_PASS_2026-08-25.md",
+              "sha256": "ec2242a2e28069b163b5d4ab06936fd536d3a0ba6d0ed30377c9979618187d0d",
+              "locator": "CM versus sharing-aware CSE-flat"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "content_hash": "46b08dbbddf35351b5dcf744dd3810a19f702de387129017759bfb5eea9a6fd7"
+}

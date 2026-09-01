@@ -1,0 +1,273 @@
+WEBVTT
+
+q0001
+00:00:00.000 --> 00:00:10.259
+Does hybrid execution collapse the whole graph, or can it preserve structure and choose child by child?
+
+q0002
+00:00:10.259 --> 00:00:20.983
+This episode has one job: Hybrid and partial-hybrid modes differ in whether they collapse a whole subtree or preserve upper structure while dispatching selected children to packed or dense materialization.
+
+q0003
+00:00:20.983 --> 00:00:31.707
+We build on CM-IR nodes, sharing, and roots, Packed truth vectors: big integers, machine words, and masks; their definitions stay fixed while this lesson adds a new layer.
+
+q0004
+00:00:31.707 --> 00:00:40.822
+Hybrid can collapse an eligible region; partial-hybrid preserves more graph structure and dispatches selected children.
+
+q0005
+00:00:40.822 --> 00:00:49.937
+Watch for the label hybrid materialization; it stays attached to the artifact this episode means.
+
+q0006
+00:00:49.937 --> 00:00:58.480
+When we say partial-hybrid materialization, the highlight identifies its layer before we interpret it.
+
+q0007
+00:00:58.480 --> 00:01:08.739
+The term full collapse receives its own visual state so it cannot drift into a neighboring concept.
+
+q0008
+00:01:08.739 --> 00:01:16.138
+We will keep no reinflation visible whenever its definition controls the inference.
+
+q0009
+00:01:16.138 --> 00:01:26.397
+The next sequence uses Shared Boolean expression as a conceptual teaching example, not as measured benchmark evidence.
+
+q0010
+00:01:26.397 --> 00:01:30.937
+Our stable example is Shared Boolean expression.
+
+q0011
+00:01:30.937 --> 00:01:41.661
+S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0012
+00:01:41.661 --> 00:01:48.489
+Carry AST, CSE, CSE-flat, CM-IR, lowering, and operation accounting across episodes.
+
+q0013
+00:01:48.489 --> 00:01:57.032
+We now construct the Shared Boolean expression and name every part before interpreting it.
+
+q0014
+00:01:57.032 --> 00:02:07.756
+The accompanying view makes this step concrete: A shared DAG carries a live-support heat map and explicit dispatch decisions.
+
+q0015
+00:02:07.756 --> 00:02:16.299
+Color nodes by live support and show whole-subtree hybrid collapse under one declared mode.
+
+q0016
+00:02:16.299 --> 00:02:26.558
+Restore the DAG, dispatch only eligible children in partial-hybrid mode, and preserve the parent structure through output.
+
+q0017
+00:02:26.558 --> 00:02:32.242
+Now isolate whole-subtree hybrid collapse inside Shared Boolean expression.
+
+q0018
+00:02:32.242 --> 00:02:42.501
+The example definition and output meaning stay fixed while only the state for whole-subtree hybrid collapse changes.
+
+q0019
+00:02:42.501 --> 00:02:52.760
+That matched before-and-after view assigns the visible consequence to whole-subtree hybrid collapse, not to a substituted workload.
+
+q0020
+00:02:52.760 --> 00:02:59.588
+Hybrid view collapses the selected whole region into one packed block.
+
+q0021
+00:02:59.588 --> 00:03:05.272
+Now isolate child-level partial-hybrid dispatch inside Shared Boolean expression.
+
+q0022
+00:03:05.272 --> 00:03:15.531
+The example definition and output meaning stay fixed while only the state for child-level partial-hybrid dispatch changes.
+
+q0023
+00:03:15.531 --> 00:03:25.790
+That matched before-and-after view assigns the visible consequence to child-level partial-hybrid dispatch, not to a substituted workload.
+
+q0024
+00:03:25.790 --> 00:03:34.333
+Partial-hybrid view collapses children while the upper graph remains and feeds a no-reinflation output.
+
+q0025
+00:03:34.333 --> 00:03:39.445
+Now isolate no-reinflation output inside Shared Boolean expression.
+
+q0026
+00:03:39.445 --> 00:03:49.132
+The example definition and output meaning stay fixed while only the state for no-reinflation output changes.
+
+q0027
+00:03:49.132 --> 00:03:58.819
+That matched before-and-after view assigns the visible consequence to no-reinflation output, not to a substituted workload.
+
+q0028
+00:03:58.819 --> 00:04:09.543
+Hybrid and partial-hybrid materialization are distinct dispatch modes: whole-subtree collapse and child-level structure-preserving dispatch must not be conflated.
+
+q0029
+00:04:09.543 --> 00:04:16.371
+Read that statement only within this scope: current CM-IR materialization modes.
+
+q0030
+00:04:16.371 --> 00:04:20.911
+Its declared measurement boundary is materialization strategy.
+
+q0031
+00:04:20.911 --> 00:04:24.879
+The uncertainty field says workload dependent.
+
+q0032
+00:04:24.879 --> 00:04:35.603
+Packed bigint and machine-word evaluators store the same ordered truth vector in different exact execution layouts with explicit masks and tail handling.
+
+q0033
+00:04:35.603 --> 00:04:42.431
+Read that statement only within this scope: current packed evaluator implementations.
+
+q0034
+00:04:42.431 --> 00:04:46.971
+Its declared measurement boundary is execution representation.
+
+q0035
+00:04:46.971 --> 00:04:52.655
+The uncertainty field says backend choice remains workload dependent.
+
+q0036
+00:04:52.655 --> 00:05:03.379
+The nearest confusing lesson is Pair-aware CM collapse; it owns pair eligibility, while this episode owns whole-subtree hybrid collapse.
+
+q0037
+00:05:03.379 --> 00:05:14.103
+Begin with A and B, compute the shared subexpression S once, and keep that identity color on every outgoing use.
+
+q0038
+00:05:14.103 --> 00:05:20.931
+Holding that element fixed lets this episode isolate whole-subtree hybrid collapse.
+
+q0039
+00:05:20.931 --> 00:05:31.655
+The left branch combines S with C and D, while the right branch combines the same S with E.
+
+q0040
+00:05:31.655 --> 00:05:38.483
+Holding that element fixed lets this episode isolate child-level partial-hybrid dispatch.
+
+q0041
+00:05:38.483 --> 00:05:49.207
+Both branches meet at the final OR, so the shared node changes program structure without changing the Boolean output.
+
+q0042
+00:05:49.207 --> 00:05:55.463
+Holding that element fixed lets this episode isolate no-reinflation output.
+
+q0043
+00:05:55.463 --> 00:06:06.187
+A raw syntax view may draw S twice; a shared graph draws one node with two outgoing edges.
+
+q0044
+00:06:06.187 --> 00:06:14.730
+Lowering the graph assigns dependency-ordered slots, but slot numbers are not new Boolean operations.
+
+q0045
+00:06:14.730 --> 00:06:23.273
+Instruction count, primitive execution count, live buffers, and packed storage therefore remain separate ledgers.
+
+q0046
+00:06:23.273 --> 00:06:33.997
+Changing from bigint bits to word lanes changes storage and execution layout, not the meaning of S or F.
+
+q0047
+00:06:33.997 --> 00:06:44.256
+The stable variable order A through E prevents a convenient reordering from hiding inside a method comparison.
+
+q0048
+00:06:44.256 --> 00:06:54.515
+Any claimed reduction must point to the repeated S path or another named transformation actually present here.
+
+q0049
+00:06:54.515 --> 00:07:04.202
+The output check closes both paths against the same exact truth behavior before performance is interpreted.
+
+q0050
+00:07:04.202 --> 00:07:14.926
+The starting state preserves the stable definition: S=A AND B; F=(S AND C AND D) OR (S AND E), with binary source syntax and stable variable order A,B,C,D,E.
+
+q0051
+00:07:14.926 --> 00:07:25.650
+After the change, the composition makes whole-subtree hybrid collapse inspectable: Hybrid view collapses the selected whole region into one packed block.
+
+q0052
+00:07:25.650 --> 00:07:33.049
+The invariant is the example's meaning; the variable is whole-subtree hybrid collapse.
+
+q0053
+00:07:33.049 --> 00:07:43.773
+If the same output is reached through a different path, the diagram must still identify whether whole-subtree hybrid collapse changed.
+
+q0054
+00:07:43.773 --> 00:07:54.497
+After the change, the composition makes child-level partial-hybrid dispatch inspectable: Partial-hybrid view collapses children while the upper graph remains and feeds a no-reinflation output.
+
+q0055
+00:07:54.497 --> 00:08:01.896
+The invariant is the example's meaning; the variable is child-level partial-hybrid dispatch.
+
+q0056
+00:08:01.896 --> 00:08:12.620
+If the same output is reached through a different path, the diagram must still identify whether child-level partial-hybrid dispatch changed.
+
+q0057
+00:08:12.620 --> 00:08:23.344
+After the change, the composition makes no-reinflation output inspectable: Partial-hybrid view collapses children while the upper graph remains and feeds a no-reinflation output.
+
+q0058
+00:08:23.344 --> 00:08:30.172
+The invariant is the example's meaning; the variable is no-reinflation output.
+
+q0059
+00:08:30.172 --> 00:08:40.896
+If the same output is reached through a different path, the diagram must still identify whether no-reinflation output changed.
+
+q0060
+00:08:40.896 --> 00:08:51.620
+The accompanying view makes this step concrete: Partial-hybrid view collapses children while the upper graph remains and feeds a no-reinflation output.
+
+q0061
+00:08:51.620 --> 00:09:02.344
+The accompanying view makes this step concrete: Hybrid view collapses the selected whole region into one packed block.
+
+q0062
+00:09:02.344 --> 00:09:10.887
+These are implemented strategies, not guarantees that one wins every support size or workload.
+
+q0063
+00:09:10.887 --> 00:09:20.002
+Identify which of two resulting artifacts came from whole collapse and which from child-level dispatch.
+
+q0064
+00:09:20.002 --> 00:09:25.686
+Hybrid changes the materialization boundary; partial-hybrid changes it selectively.
+
+q0065
+00:09:25.686 --> 00:09:35.373
+A common mistake is this: Hybrid and partial-hybrid are two labels for the same full-collapse behavior.
+
+q0066
+00:09:35.373 --> 00:09:42.201
+Repair it by returning to the owned distinction: whole-subtree hybrid collapse.
+
+q0068
+00:09:45.776 --> 00:09:55.463
+Use the episode's central distinction to answer: Hybrid changes the materialization boundary; partial-hybrid changes it selectively.
+
+q0069
+00:09:55.463 --> 00:10:00.003
+Watch which structure survives the dispatch decision.
