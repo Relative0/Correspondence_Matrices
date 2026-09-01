@@ -1,0 +1,235 @@
+{
+  "actual_resources": {
+    "cloud_evidence": [
+      "SECURE"
+    ],
+    "container_disk_gb": 12,
+    "cpu_evidence": "matching assigned CPU flavor, vCPU/RAM, no GPU, any explicit computeType agrees",
+    "cpu_flavor": "cpu3c",
+    "image": "python:3.13.15-slim-bookworm@sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "machine_secure_cloud": null,
+    "pod_id": "slea8nwxb9u9qw",
+    "pod_volume_gb": 0,
+    "ports": [
+      "8080/http",
+      "8081/http"
+    ],
+    "prior_cost_bound_usd": 2.6740515511119156,
+    "projected_20_min_cost_usd": 0.02333333333333333,
+    "projected_aggregate_http_cost_usd": 2.697384884445249,
+    "ram_gb": 4.0,
+    "rate_usd_per_hour": 0.06,
+    "vcpu_count": 2
+  },
+  "authorization_record_sha256": "090e4e174c40c58713ec0bf2975409d9bbd0a421fd592d83ad6e9c849d241185",
+  "authorization_recorded_utc": "2026-09-01T15:00:14.269579+00:00",
+  "bootstrap_ready_utc": "2026-09-01T15:02:25.433026+00:00",
+  "cleanup": {
+    "attempts": [
+      {
+        "api": "https://rest.runpod.io/v1",
+        "http_status": 204,
+        "pod_id": "slea8nwxb9u9qw"
+      }
+    ],
+    "checked_utc": "2026-09-01T15:07:50.086267+00:00",
+    "inventories": {
+      "v1": [],
+      "v2": []
+    },
+    "owned_pod_absent": true,
+    "role": "controller"
+  },
+  "creation_attempted": true,
+  "creation_endpoint": "https://rest.runpod.io/v1/pods",
+  "creation_http_status": 201,
+  "creation_request_utc": "2026-09-01T15:01:58.231674+00:00",
+  "creation_response_headers": {
+    "Date": "Tue, 01 Sep 2026 15:02:02 GMT",
+    "X-Request-Id": "req_491f8664-28d4-49fe-9cb5-399db6ad8cf8"
+  },
+  "creation_uncertain": false,
+  "elapsed_since_create_s": 352.53052139282227,
+  "estimated_compute_cost_usd": 0.005875508689880371,
+  "evidence": {
+    "bytes": 406805,
+    "files": 48,
+    "p7_w5_shard": {
+      "anchor_freeze_sha256": "48fcbafc857703fa0c5f928d386970ca1162848f33b550bb17d8fad3ceb239e4",
+      "performance_measurement": true,
+      "planned_diagnostic_cells": 64,
+      "planned_primary_cells": 928,
+      "policy_id": "p7-ir",
+      "primary_cases": 29,
+      "primary_freeze_sha256": "69fe338f447db3ae99229801873e374fd340425cdbab20bdb0c00ffd364582cf",
+      "principal_p7_result": true,
+      "runs": {
+        "diagnostic-anchor": {
+          "arms": 4,
+          "blocks": 8,
+          "cases": 2,
+          "cells": 64,
+          "freeze_sha256": "48fcbafc857703fa0c5f928d386970ca1162848f33b550bb17d8fad3ceb239e4",
+          "fresh_worker_identities": 64,
+          "kind": "diagnostic_anchor",
+          "max_process_tree_peak_rss_bytes": 41402368,
+          "max_task_total_wall_ns": 8911090,
+          "min_process_tree_peak_rss_bytes": 40194048,
+          "min_task_total_wall_ns": 1247768,
+          "terminal_ok": 64
+        },
+        "primary": {
+          "arms": 4,
+          "blocks": 8,
+          "cases": 29,
+          "cells": 928,
+          "freeze_sha256": "69fe338f447db3ae99229801873e374fd340425cdbab20bdb0c00ffd364582cf",
+          "fresh_worker_identities": 928,
+          "kind": "primary",
+          "max_process_tree_peak_rss_bytes": 56791040,
+          "max_task_total_wall_ns": 124866538,
+          "min_process_tree_peak_rss_bytes": 40509440,
+          "min_task_total_wall_ns": 1052744,
+          "terminal_ok": 928
+        }
+      },
+      "shard_id": "p7-ir-a",
+      "source_unchanged": true,
+      "terminal_ok_cells": 992
+    },
+    "runtime_pod_id": "slea8nwxb9u9qw",
+    "sha256": "6d9d23414037178d55a95a7ca5162443b33ab32ca0e60e08d0c1802f2335cc94",
+    "validation": {
+      "diagnostic_anchor_summary": {
+        "freeze_sha256": "48fcbafc857703fa0c5f928d386970ca1162848f33b550bb17d8fad3ceb239e4",
+        "performance_claim_permitted": true,
+        "performance_measurement": true,
+        "plan_sha256": "c90d57210bc186bf1857038aebaec1b3c7adc38d288382a94028dc48a0c13992",
+        "policy_id": "p7-ir",
+        "profile": "performance",
+        "reconciliation": {
+          "complete": true,
+          "missing_cells": [],
+          "observed_cells": 64,
+          "partial_tail_segments": [],
+          "planned_cells": 64,
+          "running_cells": [],
+          "statuses": {
+            "ok": 64
+          },
+          "unexpected_cells": []
+        },
+        "schema": "cm-comparative-p7-isolated-summary/v2",
+        "source_unchanged": true,
+        "status": "passed"
+      },
+      "diagnostic_anchor_verification": {
+        "checksums_verified": true,
+        "current_source_matches": true,
+        "performance_claim_permitted": true,
+        "schema": "cm-comparative-p7-isolated-verification/v1",
+        "source_before_after_match": true,
+        "status": "passed",
+        "summary_matches": true,
+        "verified": true
+      },
+      "error": null,
+      "junit_metadata": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 68
+      },
+      "junit_testcases": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 42
+      },
+      "machine": "x86_64",
+      "offline_verification": {
+        "checksums_verified": true,
+        "dry_run_matches": true,
+        "dry_run_status": "passed",
+        "freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+        "package_verified": true,
+        "performance_measurement": false,
+        "readiness_matches": true,
+        "ready": true,
+        "schema": "cm-comparative-p7-offline-verification/v1",
+        "source_manifest_matches": true
+      },
+      "performance_measurement": true,
+      "pid": 32,
+      "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.36",
+      "primary_summary": {
+        "freeze_sha256": "69fe338f447db3ae99229801873e374fd340425cdbab20bdb0c00ffd364582cf",
+        "performance_claim_permitted": true,
+        "performance_measurement": true,
+        "plan_sha256": "2123190311bd1b586d6578fb57344676f75c0622dd9b9e9c75d59acdea6b5ede",
+        "policy_id": "p7-ir",
+        "profile": "performance",
+        "reconciliation": {
+          "complete": true,
+          "missing_cells": [],
+          "observed_cells": 928,
+          "partial_tail_segments": [],
+          "planned_cells": 928,
+          "running_cells": [],
+          "statuses": {
+            "ok": 928
+          },
+          "unexpected_cells": []
+        },
+        "schema": "cm-comparative-p7-isolated-summary/v2",
+        "source_unchanged": true,
+        "status": "passed"
+      },
+      "primary_verification": {
+        "checksums_verified": true,
+        "current_source_matches": true,
+        "performance_claim_permitted": true,
+        "schema": "cm-comparative-p7-isolated-verification/v1",
+        "source_before_after_match": true,
+        "status": "passed",
+        "summary_matches": true,
+        "verified": true
+      },
+      "principal_p7_result": true,
+      "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+      "source_after_sha256": "1715d17fc60fb24972e019080bd6475f87bee52274ba375e1c3b675a7c776320",
+      "source_before_sha256": "1715d17fc60fb24972e019080bd6475f87bee52274ba375e1c3b675a7c776320",
+      "source_files": 96,
+      "source_unchanged": true,
+      "status": "complete",
+      "validation_errors": [],
+      "w5_primary_freeze_sha256": "69fe338f447db3ae99229801873e374fd340425cdbab20bdb0c00ffd364582cf"
+    },
+    "verified": true
+  },
+  "finished_utc": "2026-09-01T15:07:50.097774+00:00",
+  "name": "cm-p7-w5-p7-ir-a-v2-battery-76b44fbc1189",
+  "pod_created": true,
+  "pod_id": "slea8nwxb9u9qw",
+  "quoted_rate_usd_per_hour": 0.06,
+  "remote_progress": {
+    "accepted_bytes": 4317287,
+    "done": true,
+    "error": null,
+    "log_bytes": 546541,
+    "remote_status": "complete",
+    "returncode": 0,
+    "stage": "diagnostic-anchor",
+    "started": true,
+    "uploaded": true,
+    "validating": false
+  },
+  "selected_cpu": "cpu3c",
+  "started_utc": "2026-09-01T15:01:39.915779+00:00",
+  "status": "complete",
+  "upload_chunks": 17,
+  "upload_payload_sha256": "be05801e8ffb8519714ebc2198f2a5158a4a1449a87d2a654032efe5785756d4",
+  "uploaded_source_files": 96,
+  "uploaded_transport_bytes": 4317287,
+  "worker_started_utc": "2026-09-01T15:03:17.782415+00:00"
+}

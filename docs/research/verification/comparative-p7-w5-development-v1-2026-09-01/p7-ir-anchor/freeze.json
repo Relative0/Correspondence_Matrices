@@ -1,0 +1,946 @@
+{
+  "cases": [
+    {
+      "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+      "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+      "family": "xor_dom",
+      "kind": "expression_jsonl_member",
+      "origin": "synthetic",
+      "role": "development",
+      "source": {
+        "bytes": 357984,
+        "license": "project-internal",
+        "member_id": "e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+        "member_sha256": "41249cb45a0c14368f6eb40122331a0b7843dcc10a3a0f7ee25f8a1ae46a0f7a",
+        "path": "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+        "provenance": "E3 corrected corpus generator e3-corrected-2026-08-02.1; previously inspected",
+        "sha256": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+      },
+      "strata": {
+        "contexts": 0,
+        "dag_nodes": 32,
+        "depth": 13,
+        "fixed_axes": 0,
+        "live_k": 12,
+        "operator_mix": [
+          "Imp",
+          "Or",
+          "Xor"
+        ],
+        "semantic_support": 12,
+        "shape": "shared",
+        "sharing_ppm": 2031250,
+        "syntactic_support": 12,
+        "truth_density_ppm": null,
+        "versions": 0
+      },
+      "tasks": [
+        "ir_preparation",
+        "complete_relation",
+        "exact_count",
+        "sat_status",
+        "structural_reload",
+        "feasibility_frontier"
+      ]
+    },
+    {
+      "case_id": "development-epfl-dec-ac01ccb8dc43",
+      "cluster_id": "epfl/dec",
+      "family": "control",
+      "kind": "blif",
+      "origin": "natural",
+      "role": "development",
+      "source": {
+        "bytes": 14705,
+        "license": "MIT",
+        "member_id": null,
+        "member_sha256": null,
+        "path": "external/epfl-benchmarks/random_control/dec.blif",
+        "provenance": "lsils/benchmarks commit 0060e156826e733d69bf5b3322d1bdd0d03a1f9a; original BLIF; primary output selected bytewise before timing",
+        "sha256": "ea7fedafe589da4610f47be575bbbf9febdd172daedbd98ba9ef454023e1d8a7"
+      },
+      "strata": {
+        "contexts": 0,
+        "dag_nodes": 7,
+        "depth": 3,
+        "fixed_axes": 0,
+        "live_k": 8,
+        "local_cubes": 1,
+        "local_fanin": 2,
+        "local_literals": 2,
+        "operator_mix": "unknown-before-translation",
+        "root": "selectp1[0]",
+        "selection_max_source_nodes": 4096,
+        "selection_max_support": 16,
+        "semantic_support": null,
+        "shape": "circuit-output-cone",
+        "sharing_ppm": null,
+        "source_edges": 14,
+        "support": [
+          "count[0]",
+          "count[1]",
+          "count[2]",
+          "count[3]",
+          "count[4]",
+          "count[5]",
+          "count[6]",
+          "count[7]"
+        ],
+        "syntactic_support": 8,
+        "truth_density_ppm": null,
+        "versions": 0
+      },
+      "tasks": [
+        "ir_preparation",
+        "complete_relation",
+        "exact_count",
+        "sat_status",
+        "structural_reload",
+        "feasibility_frontier"
+      ]
+    }
+  ],
+  "confirmation": {
+    "minimum_independent_clusters": 30,
+    "required": true,
+    "selection_locked": true,
+    "timing_results_inspected": false
+  },
+  "created_utc": "2026-08-30T00:40:00Z",
+  "exclusions": [
+    {
+      "exclusion_id": "source-identity",
+      "frozen_before_timing": true,
+      "predicate": "source bytes or SHA-256 differ from freeze",
+      "reason": "input identity is not the frozen case",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "parse-contract",
+      "frozen_before_timing": true,
+      "predicate": "bounded parser cannot produce the declared task input",
+      "reason": "requested artifact is undefined for the unparsed source",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "semantic-duplicate",
+      "frozen_before_timing": true,
+      "predicate": "pre-timing semantic identity duplicates another case in the same cluster",
+      "reason": "dependent duplicate remains one cluster and one retained representative",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "epfl-output-cone-bound",
+      "frozen_before_timing": true,
+      "predicate": "no primary output has support 4..16 and at most 4096 source nodes",
+      "reason": "complete-relation and scalar-oracle execution would exceed the frozen bounded cone contract",
+      "scope": "development"
+    }
+  ],
+  "freeze_id": "comparative-p6-candidate-v4-2026-08-30",
+  "freeze_sha256": "48fcbafc857703fa0c5f928d386970ca1162848f33b550bb17d8fad3ceb239e4",
+  "gate_requirements": {
+    "development_origins": [
+      "natural",
+      "synthetic",
+      "adversarial"
+    ],
+    "minimum_independent_clusters": {
+      "confirmation": 30,
+      "development": 24,
+      "regression": 12
+    },
+    "required_tasks": [
+      "ir_preparation",
+      "complete_relation",
+      "exact_count",
+      "sat_status",
+      "witness",
+      "structural_reload",
+      "feasibility_frontier"
+    ]
+  },
+  "primary_metrics": [
+    "task_total_wall_ns",
+    "process_tree_peak_rss_bytes"
+  ],
+  "provenance": {
+    "benchmark_plan_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/CM-FAST-VARIANTS-COMPARATIVE-BENCHMARK-PLAN-20260829.md",
+    "benchmark_plan_sha256": "78f18400c3b489bc37f802f3e7145a6e970d32a87a260f35091f5eb939f20cf3",
+    "comparative_timing_seen": false,
+    "confirmation_repository": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf12.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf29.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf32.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf35.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf38.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4/benchTest/one.cnf",
+          "reason": "byte-identical to an earlier corpus case"
+        },
+        {
+          "path": "external/d4v2/3rdParty/bipe/instanceTest/cnf10.cnf",
+          "reason": "semantic comment directives: p-protected,p-show"
+        }
+      ],
+      "selected_paths": [
+        "external/d4v2/instancesTest/cnfs/cnf11.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf13.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf14.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf15.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf16.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf17.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf18.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf19.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf21.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf22.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf23.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf24.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf25.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf26.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf27.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf28.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf30.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf31.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf33.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf34.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf36.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf37.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf5.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf6.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf9.cnf",
+        "external/d4/benchTest/bug.cnf",
+        "external/d4/benchTest/littleTest.cnf",
+        "external/d4/benchTest/test1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf11.cnf"
+      ],
+      "selection_rule": "exclude the 16 regression/development files and all byte duplicates; strictly parse ordinary p cnf; reject ind/max/p-show/p-protected/p-weight comment dialects; sort filenames bytewise; select 25 d4v2 main, 3 legacy d4, and 2 bipe cases; ignore remaining c-line comments semantically",
+      "sources": [
+        {
+          "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+          "license": "LGPL-2.1-only",
+          "license_sha256": "647732d8024eb919db082934730defa97264c0e87c23c1148e412eee9c3259ef",
+          "scope": "instancesTest/cnfs",
+          "url": "https://github.com/crillab/d4v2.git"
+        },
+        {
+          "commit": "333370cc1e843dd0749c1efe88516e72b5239174",
+          "license": "LGPL-3.0-only",
+          "license_sha256": "dbbdb98414cd9f4010abfa2302a8f18ad7dc57c9c37153cd1c2ec29d14b73431",
+          "scope": "benchTest",
+          "url": "https://github.com/crillab/d4.git"
+        },
+        {
+          "commit": "bc9ba957e43327afc1c96ee2663a2c77adebbefb",
+          "license": "AGPL-3.0-only",
+          "license_sha256": "90cdbe50b855a76547c078aeb7227d656584cf8d6dd806f74505428d363dc56c",
+          "scope": "instanceTest",
+          "url": "https://github.com/crillab/bipe.git"
+        }
+      ]
+    },
+    "d4_repository": {
+      "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+      "url": "https://github.com/crillab/d4v2.git"
+    },
+    "epfl_output_selection": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/bar.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/div.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/hyp.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/log2.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/max.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sin.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/arbiter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/priority.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/router.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/voter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        }
+      ],
+      "rule": "for each circuit sorted by path, select the first bytewise-sorted primary output with exact support 4..16 and at most 4096 driven source nodes",
+      "selected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/adder.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/multiplier.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sqrt.blif",
+          "root": "asqrt[56]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/square.blif",
+          "root": "asquared[10]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/cavlc.blif",
+          "root": "coeff_token[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/ctrl.blif",
+          "root": "Cin"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/dec.blif",
+          "root": "selectp1[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/i2c.blif",
+          "root": "po038"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/int2float.blif",
+          "root": "E[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/mem_ctrl.blif",
+          "root": "po0184"
+        }
+      ]
+    },
+    "epfl_repository": {
+      "commit": "0060e156826e733d69bf5b3322d1bdd0d03a1f9a",
+      "url": "https://github.com/lsils/benchmarks.git"
+    },
+    "native_readiness_completed": true,
+    "native_readiness_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/EXTERNAL-NATIVE-GAP-V20-FINAL-VERIFICATION-20260829-170627-870230.json",
+    "native_readiness_sha256": "12c191ebb00b3694a41d9280da4bfb5d0815c7a45b853a9e343c87e6087b113b",
+    "rejected_confirmation_source": {
+      "commit": "d1591805ea0e2c52dd38b7775b1cb8845cfd1131",
+      "comparative_timing_seen": false,
+      "reason": "benchmark-specific redistribution terms were not present in the BLIF files",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing.git"
+    },
+    "v4_execution_correction": {
+      "comparative_timing_seen": false,
+      "reason": "V3 did not identify an EPFL output cone and listed cm-compact-key even though compact interning is already part of cm-ir-current; it also named cm-fast-frozen before a distinct combined configuration had been frozen",
+      "supersedes": "comparative-p6-candidate-v3-2026-08-30"
+    },
+    "w5_development_partition": {
+      "case_count": 2,
+      "case_selection_uses_comparative_timing": false,
+      "parent_freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+      "partition_id": "p7-ir-anchor",
+      "policy_id": "p7-ir",
+      "schema": "cm-comparative-p7-w5-development-partition/v1",
+      "selected_case_ids_in_parent_order": [
+        "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+        "development-epfl-dec-ac01ccb8dc43"
+      ],
+      "selected_case_ids_sha256": "c49e26c168f03bc4262e23e70379ad5d4ec8b96117656d6b53f95e950e270540",
+      "shard_size_uses_w4_resource_timing": true,
+      "typed_feasibility_exclusion": "development-epfl-sqrt-31cdaf5d0213"
+    }
+  },
+  "schedule_policies": [
+    {
+      "arms": [
+        "cm-ir-current",
+        "cm-ir-two-memo",
+        "cm-cse-flat",
+        "cm-raw-flat"
+      ],
+      "eligible_roles": [
+        "regression",
+        "development",
+        "confirmation"
+      ],
+      "locality": "round_robin",
+      "maximum_blocks": 16,
+      "minimum_blocks": 8,
+      "noise_rule": {
+        "independent_units_first": true,
+        "metric": "mad_over_median",
+        "step_blocks": 8,
+        "threshold_ppm": 50000
+      },
+      "order_ledger": [
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 0,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 0,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "f366adbed3153e1588962509d445cb3ded32e31cbe019b3f3aa3434c86ec0611",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 0,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 1,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "d9638492ed1b2fa45e4558c25dba202d80c5a61a1a720b8cc308932f3cd0fb59",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 1,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 2,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "1cfbcf8dd69d9d7ecdc9d124640db9aa1cf2aaa94a5107834bce9a934e2ec311",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 1,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 3,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "aadfd9db005c8ee7119831568366baa5c2f8209627e8720fa685ab68e108dd69",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 2,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 4,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "f45069bf4fff6da3efb0fdc486fa67631a84434289f06e6e2b3a1aa5a86f8620",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 2,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 5,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "10c66554e180e99a732ef7f147f2c144d9e247ea3701c0aa1ec888da92b69957",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 3,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 6,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "14f9e0b20fb4879863209bc623695beea13ed91b480b5469296848acbeb9de66",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 3,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 7,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "d18950e936a973509678ed15a6177560665d2607a417776abec1458bcb821863",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 4,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 8,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "a769f7186816d2dd56ffda3abe140371728c08d0cbd779ba86cfdb6c43067162",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 4,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 9,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "9334b667937543d70d910326118d5202d41732345e34fa6618037f5aea8911f5",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 5,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 10,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "9f41491be6d1ff23562dd350917d4440b294ad40a422cbfb2c71e1cc1c1d0d2b",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 5,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 11,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "5e87d32f52475b147c6f31af53c59caee66f43cf2b2757619c0c095d39118fcd",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 6,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 12,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "26a157386daae6af34372b480b70bfd86919997b54bcc840acde5f5a0b49475a",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 6,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 13,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "01d9e3d425c284d37d65d3715145a4f0dae257c4e5d149a4ecd50a22ac68fc2b",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 7,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 14,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "33989c4cf6470af6b8ee13999c22e62728b225aa8108f974c8f29a9790ef8f38",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 7,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 15,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "02f5fd389990da89e8a6a7eafc413ef5de9d540748de345a5a98f22671788087",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 8,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 16,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "ff4b6bb0b7f61fe98adda2937a91e5c702bea2fb15dc716d1633130bd841c32e",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current"
+          ],
+          "block": 8,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 17,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "d8c3987fbb42d5bff3003877de673e317dd320f289e401079320beb2f2c66aa5",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 9,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 18,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "6b032085129262f60814b4413daa56546aef7751dbc523ed2a26f635803f75a5",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo"
+          ],
+          "block": 9,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 19,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "f84f2c392551f10c9dcce32504fee0ecdf127496ad972de86dd4832f393d5d57",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 10,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 20,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "7e3150f3e72602dcd009e2399ac28f472ec681aa9991035ebaa105dcad6e61b7",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat"
+          ],
+          "block": 10,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 21,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "de9e90f8c075ac905ec8abb1799dea1298ecfbe95e273a74ac1d889575f0028e",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 11,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 22,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "60cd6d9a45e97630b64448b756bc1c5877a1af2831eaa4d7f5ca5715f970ef20",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current"
+          ],
+          "block": 11,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 23,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "2df3fe6292fe386ad0f3dd6e7b3fa257e83399b3bb5da8204888910282615529",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 12,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 24,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "3505d37f5a976a7b2bcd0c67d09971ac601f66bc29c9adb9e2e35d4728641b28",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat",
+            "cm-ir-two-memo"
+          ],
+          "block": 12,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 25,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "290a260bf217cbc3e48c3a96f64240c00b6fe4a5df6957c5ca8a67e72af28f74",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 13,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 26,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "5dc4abddf53f957edeacdc5604ebbc6535690ccecc777aa5b888dbdad069ce1a",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat",
+            "cm-cse-flat"
+          ],
+          "block": 13,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 27,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "baaeadd29eb8f0a34494353407d7854b6b45f11518fd89a91aa260d6c8aa3431",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 14,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 28,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "770113b230c9d306d49e0b30eb3c0b39013fd0e2addcce834f740f4e932de10c",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-ir-two-memo",
+            "cm-ir-current",
+            "cm-raw-flat"
+          ],
+          "block": 14,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 29,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "996345cc3eb89d4ed69a31d3880b12fe89884adb60068b8b4f1a53ddbe6ba39d",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 15,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 30,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "3404192af1fd5ed123cd0975d5c95629c24fb7b2ccfa7f8e2a2ada1a85817bb7",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        },
+        {
+          "arm_order": [
+            "cm-ir-current",
+            "cm-ir-two-memo",
+            "cm-cse-flat",
+            "cm-raw-flat"
+          ],
+          "block": 15,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 31,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "e850e65c954ec8624b9123ecd0eb50ee809c80488f12228ce3ba7983e786aaa3",
+          "policy_id": "p7-ir",
+          "task": "ir_preparation"
+        }
+      ],
+      "policy_id": "p7-ir",
+      "seed": 61001,
+      "shard_cells": 250,
+      "task": "ir_preparation"
+    }
+  ],
+  "schema": "cm-comparative-corpus-freeze/v1",
+  "secondary_metrics": [
+    "construction_ns",
+    "lowering_ns",
+    "query_ns",
+    "extraction_ns",
+    "restoration_ns",
+    "artifact_bytes",
+    "page_faults",
+    "cache_hits",
+    "cache_misses",
+    "cache_evictions",
+    "instruction_count",
+    "live_buffer_count",
+    "live_support",
+    "crossover_query_count"
+  ],
+  "timing_results_inspected": false
+}

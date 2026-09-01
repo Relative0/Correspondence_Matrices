@@ -1,0 +1,1115 @@
+{
+  "cases": [
+    {
+      "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+      "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+      "family": "xor_dom",
+      "kind": "expression_jsonl_member",
+      "origin": "synthetic",
+      "role": "development",
+      "source": {
+        "bytes": 357984,
+        "license": "project-internal",
+        "member_id": "e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+        "member_sha256": "41249cb45a0c14368f6eb40122331a0b7843dcc10a3a0f7ee25f8a1ae46a0f7a",
+        "path": "deliverables_n22_24/CM_gap_e3_corrected_corpus_2026_08_02.jsonl",
+        "provenance": "E3 corrected corpus generator e3-corrected-2026-08-02.1; previously inspected",
+        "sha256": "8a6da87cc8b13f6123cb11adfa77b5d69bcd0a086666abea7df633ef92f6e68a"
+      },
+      "strata": {
+        "contexts": 0,
+        "dag_nodes": 32,
+        "depth": 13,
+        "fixed_axes": 0,
+        "live_k": 12,
+        "operator_mix": [
+          "Imp",
+          "Or",
+          "Xor"
+        ],
+        "semantic_support": 12,
+        "shape": "shared",
+        "sharing_ppm": 2031250,
+        "syntactic_support": 12,
+        "truth_density_ppm": null,
+        "versions": 0
+      },
+      "tasks": [
+        "ir_preparation",
+        "complete_relation",
+        "exact_count",
+        "sat_status",
+        "structural_reload",
+        "feasibility_frontier"
+      ]
+    },
+    {
+      "case_id": "development-epfl-dec-ac01ccb8dc43",
+      "cluster_id": "epfl/dec",
+      "family": "control",
+      "kind": "blif",
+      "origin": "natural",
+      "role": "development",
+      "source": {
+        "bytes": 14705,
+        "license": "MIT",
+        "member_id": null,
+        "member_sha256": null,
+        "path": "external/epfl-benchmarks/random_control/dec.blif",
+        "provenance": "lsils/benchmarks commit 0060e156826e733d69bf5b3322d1bdd0d03a1f9a; original BLIF; primary output selected bytewise before timing",
+        "sha256": "ea7fedafe589da4610f47be575bbbf9febdd172daedbd98ba9ef454023e1d8a7"
+      },
+      "strata": {
+        "contexts": 0,
+        "dag_nodes": 7,
+        "depth": 3,
+        "fixed_axes": 0,
+        "live_k": 8,
+        "local_cubes": 1,
+        "local_fanin": 2,
+        "local_literals": 2,
+        "operator_mix": "unknown-before-translation",
+        "root": "selectp1[0]",
+        "selection_max_source_nodes": 4096,
+        "selection_max_support": 16,
+        "semantic_support": null,
+        "shape": "circuit-output-cone",
+        "sharing_ppm": null,
+        "source_edges": 14,
+        "support": [
+          "count[0]",
+          "count[1]",
+          "count[2]",
+          "count[3]",
+          "count[4]",
+          "count[5]",
+          "count[6]",
+          "count[7]"
+        ],
+        "syntactic_support": 8,
+        "truth_density_ppm": null,
+        "versions": 0
+      },
+      "tasks": [
+        "ir_preparation",
+        "complete_relation",
+        "exact_count",
+        "sat_status",
+        "structural_reload",
+        "feasibility_frontier"
+      ]
+    }
+  ],
+  "confirmation": {
+    "minimum_independent_clusters": 30,
+    "required": true,
+    "selection_locked": true,
+    "timing_results_inspected": false
+  },
+  "created_utc": "2026-08-30T00:40:00Z",
+  "exclusions": [
+    {
+      "exclusion_id": "source-identity",
+      "frozen_before_timing": true,
+      "predicate": "source bytes or SHA-256 differ from freeze",
+      "reason": "input identity is not the frozen case",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "parse-contract",
+      "frozen_before_timing": true,
+      "predicate": "bounded parser cannot produce the declared task input",
+      "reason": "requested artifact is undefined for the unparsed source",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "semantic-duplicate",
+      "frozen_before_timing": true,
+      "predicate": "pre-timing semantic identity duplicates another case in the same cluster",
+      "reason": "dependent duplicate remains one cluster and one retained representative",
+      "scope": "all"
+    },
+    {
+      "exclusion_id": "epfl-output-cone-bound",
+      "frozen_before_timing": true,
+      "predicate": "no primary output has support 4..16 and at most 4096 source nodes",
+      "reason": "complete-relation and scalar-oracle execution would exceed the frozen bounded cone contract",
+      "scope": "development"
+    }
+  ],
+  "freeze_id": "comparative-p6-candidate-v4-2026-08-30",
+  "freeze_sha256": "c95eab19d19d0a8258efdf7f2811b3cae347888a542709e3c3b2d583fed6e94a",
+  "gate_requirements": {
+    "development_origins": [
+      "natural",
+      "synthetic",
+      "adversarial"
+    ],
+    "minimum_independent_clusters": {
+      "confirmation": 30,
+      "development": 24,
+      "regression": 12
+    },
+    "required_tasks": [
+      "ir_preparation",
+      "complete_relation",
+      "exact_count",
+      "sat_status",
+      "witness",
+      "structural_reload",
+      "feasibility_frontier"
+    ]
+  },
+  "primary_metrics": [
+    "task_total_wall_ns",
+    "process_tree_peak_rss_bytes"
+  ],
+  "provenance": {
+    "benchmark_plan_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/CM-FAST-VARIANTS-COMPARATIVE-BENCHMARK-PLAN-20260829.md",
+    "benchmark_plan_sha256": "78f18400c3b489bc37f802f3e7145a6e970d32a87a260f35091f5eb939f20cf3",
+    "comparative_timing_seen": false,
+    "confirmation_repository": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf12.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf29.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf32.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf35.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4v2/instancesTest/cnfs/cnf38.cnf",
+          "reason": "DIMACS clause count mismatch"
+        },
+        {
+          "path": "external/d4/benchTest/one.cnf",
+          "reason": "byte-identical to an earlier corpus case"
+        },
+        {
+          "path": "external/d4v2/3rdParty/bipe/instanceTest/cnf10.cnf",
+          "reason": "semantic comment directives: p-protected,p-show"
+        }
+      ],
+      "selected_paths": [
+        "external/d4v2/instancesTest/cnfs/cnf11.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf13.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf14.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf15.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf16.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf17.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf18.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf19.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf21.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf22.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf23.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf24.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf25.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf26.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf27.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf28.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf30.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf31.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf33.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf34.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf36.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf37.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf5.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf6.cnf",
+        "external/d4v2/instancesTest/cnfs/cnf9.cnf",
+        "external/d4/benchTest/bug.cnf",
+        "external/d4/benchTest/littleTest.cnf",
+        "external/d4/benchTest/test1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf1.cnf",
+        "external/d4v2/3rdParty/bipe/instanceTest/cnf11.cnf"
+      ],
+      "selection_rule": "exclude the 16 regression/development files and all byte duplicates; strictly parse ordinary p cnf; reject ind/max/p-show/p-protected/p-weight comment dialects; sort filenames bytewise; select 25 d4v2 main, 3 legacy d4, and 2 bipe cases; ignore remaining c-line comments semantically",
+      "sources": [
+        {
+          "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+          "license": "LGPL-2.1-only",
+          "license_sha256": "647732d8024eb919db082934730defa97264c0e87c23c1148e412eee9c3259ef",
+          "scope": "instancesTest/cnfs",
+          "url": "https://github.com/crillab/d4v2.git"
+        },
+        {
+          "commit": "333370cc1e843dd0749c1efe88516e72b5239174",
+          "license": "LGPL-3.0-only",
+          "license_sha256": "dbbdb98414cd9f4010abfa2302a8f18ad7dc57c9c37153cd1c2ec29d14b73431",
+          "scope": "benchTest",
+          "url": "https://github.com/crillab/d4.git"
+        },
+        {
+          "commit": "bc9ba957e43327afc1c96ee2663a2c77adebbefb",
+          "license": "AGPL-3.0-only",
+          "license_sha256": "90cdbe50b855a76547c078aeb7227d656584cf8d6dd806f74505428d363dc56c",
+          "scope": "instanceTest",
+          "url": "https://github.com/crillab/bipe.git"
+        }
+      ]
+    },
+    "d4_repository": {
+      "commit": "15eff31962466804a48374826b9e5a746fc2766e",
+      "url": "https://github.com/crillab/d4v2.git"
+    },
+    "epfl_output_selection": {
+      "comparative_timing_seen": false,
+      "rejected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/bar.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/div.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/hyp.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/log2.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/max.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sin.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/arbiter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/priority.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/router.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/voter.blif",
+          "reason": "no primary output has support 4..16 and at most 4096 source nodes"
+        }
+      ],
+      "rule": "for each circuit sorted by path, select the first bytewise-sorted primary output with exact support 4..16 and at most 4096 driven source nodes",
+      "selected": [
+        {
+          "path": "external/epfl-benchmarks/arithmetic/adder.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/multiplier.blif",
+          "root": "f[1]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/sqrt.blif",
+          "root": "asqrt[56]"
+        },
+        {
+          "path": "external/epfl-benchmarks/arithmetic/square.blif",
+          "root": "asquared[10]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/cavlc.blif",
+          "root": "coeff_token[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/ctrl.blif",
+          "root": "Cin"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/dec.blif",
+          "root": "selectp1[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/i2c.blif",
+          "root": "po038"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/int2float.blif",
+          "root": "E[0]"
+        },
+        {
+          "path": "external/epfl-benchmarks/random_control/mem_ctrl.blif",
+          "root": "po0184"
+        }
+      ]
+    },
+    "epfl_repository": {
+      "commit": "0060e156826e733d69bf5b3322d1bdd0d03a1f9a",
+      "url": "https://github.com/lsils/benchmarks.git"
+    },
+    "native_readiness_completed": true,
+    "native_readiness_path": "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/EXTERNAL-NATIVE-GAP-V20-FINAL-VERIFICATION-20260829-170627-870230.json",
+    "native_readiness_sha256": "12c191ebb00b3694a41d9280da4bfb5d0815c7a45b853a9e343c87e6087b113b",
+    "rejected_confirmation_source": {
+      "commit": "d1591805ea0e2c52dd38b7775b1cb8845cfd1131",
+      "comparative_timing_seen": false,
+      "reason": "benchmark-specific redistribution terms were not present in the BLIF files",
+      "url": "https://github.com/verilog-to-routing/vtr-verilog-to-routing.git"
+    },
+    "v4_execution_correction": {
+      "comparative_timing_seen": false,
+      "reason": "V3 did not identify an EPFL output cone and listed cm-compact-key even though compact interning is already part of cm-ir-current; it also named cm-fast-frozen before a distinct combined configuration had been frozen",
+      "supersedes": "comparative-p6-candidate-v3-2026-08-30"
+    },
+    "w5_development_partition": {
+      "case_count": 2,
+      "case_selection_uses_comparative_timing": false,
+      "parent_freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
+      "partition_id": "p7-relation-anchor",
+      "policy_id": "p7-relation",
+      "schema": "cm-comparative-p7-w5-development-partition/v1",
+      "selected_case_ids_in_parent_order": [
+        "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+        "development-epfl-dec-ac01ccb8dc43"
+      ],
+      "selected_case_ids_sha256": "c49e26c168f03bc4262e23e70379ad5d4ec8b96117656d6b53f95e950e270540",
+      "shard_size_uses_w4_resource_timing": true,
+      "typed_feasibility_exclusion": "development-epfl-sqrt-31cdaf5d0213"
+    }
+  },
+  "schedule_policies": [
+    {
+      "arms": [
+        "cm-dense",
+        "cm-packed-bigint",
+        "cm-packed-words",
+        "cm-no-reinflate",
+        "cm-cse-flat"
+      ],
+      "eligible_roles": [
+        "regression",
+        "development",
+        "confirmation"
+      ],
+      "locality": "round_robin",
+      "maximum_blocks": 20,
+      "minimum_blocks": 10,
+      "noise_rule": {
+        "independent_units_first": true,
+        "metric": "mad_over_median",
+        "step_blocks": 10,
+        "threshold_ppm": 50000
+      },
+      "order_ledger": [
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words"
+          ],
+          "block": 0,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 0,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "7d04ab6ee61f7dfc94b05e35ef32a5bf7de51b65b1de3918195bb0ee98898309",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words"
+          ],
+          "block": 0,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 1,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "c4c42c263fa12ea4a55f862e8d175e13368c93e39112d13981d2eddc5ea79792",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate"
+          ],
+          "block": 1,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 2,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "a072c14bca79132ce62b5824d58a6fff772844c093031dffeec0dd8162bf9182",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate"
+          ],
+          "block": 1,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 3,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "57dd0a95cbc46c362256995a190d35b206cb78832d734b3d85bc1296e54a1e0e",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense"
+          ],
+          "block": 2,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 4,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "3c28241cf2de664a51c3dcdd38f17f6c1d5603a06d14ac4a0fad4f60403b5bcd",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense"
+          ],
+          "block": 2,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 5,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "76b9001d43b9d123373daf4211dbede55e4f0d791b7e25b06f6f321ddef64829",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint"
+          ],
+          "block": 3,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 6,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "beed393bff803341e1e274f3892de2b0123d00af753a94402926db98e5c9c44a",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint"
+          ],
+          "block": 3,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 7,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "74e92e1fdc072421b479a6935037001cac84f2c8a84a5c516ede897df735d3aa",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words"
+          ],
+          "block": 4,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 8,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "a03a7abe05d32b6dbe8f3afd600682316d4eb9ee7b6ecc2adaea3373b6bb48da",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words"
+          ],
+          "block": 4,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 9,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "1b9eed303bb0422f36d785748f55121de40fd6d824798d36e8cbb280790cf658",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate"
+          ],
+          "block": 5,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 10,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "5a0e289902a3af6e6073f01df26b82bb122d13624f4a22080a9e42c5d6ade829",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate"
+          ],
+          "block": 5,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 11,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "a70687f8fd203a9fa0b6f1e8991137deb424536ff9b18dc2a684e64394465646",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat"
+          ],
+          "block": 6,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 12,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "e315ed8ea3461c2c399082b37f3e271017331bf529d58817b34d1f441f11cf57",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat"
+          ],
+          "block": 6,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 13,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "6b8f701cf73cc7e06b20bbe4c25729c1149574b2312fae16d0ac3e2ac66590df",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat"
+          ],
+          "block": 7,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 14,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "bb9bee1b385b30bd3863ef07f37bc275a2303f25a5a05ba016b0a3bea01147c0",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat"
+          ],
+          "block": 7,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 15,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "6c4fddd191d7b50ce3f18e7ad26f8a0ba188f39372cc411e97154f8818ff9d1d",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense"
+          ],
+          "block": 8,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 16,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "64e65346806c5e28411b8774378f9994314d5ccec40e4bf9b44efbf13eae7907",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense"
+          ],
+          "block": 8,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 17,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "61ab28e6dbd477b5ce79dc76d8839c308fd899abac0bbf0aa348c4420c0b4d2a",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint"
+          ],
+          "block": 9,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 18,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": false,
+          "order_sha256": "7d8d89289ad52a3ba707abf162084e1cf84de774d9843faaecd4ce79f0cabbff",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint"
+          ],
+          "block": 9,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 19,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": false,
+          "order_sha256": "68f352a47968f9db3a2c5b53ccddf862d9f4bf9a81115f83e2bbf4fe2c8bbfa4",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words"
+          ],
+          "block": 10,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 20,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "b67da1660837fb12d1cdb27f83f735eba8c9e8ee82ad3d7851ee8c8e66a8cf4d",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words"
+          ],
+          "block": 10,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 21,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "6141d7b6521d331589b1f639c423d558f85f5e3b7accc6147a69d570ada60bdd",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate"
+          ],
+          "block": 11,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 22,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "840c2d50c78e879880c1fceb097cf7e68863e91b3d0160fedea3c82921059d5b",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate"
+          ],
+          "block": 11,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 23,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "3100561023f7d4e95d3092bacc3ac911fcf2a256fabd3e9a1889f7d9153d987a",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense"
+          ],
+          "block": 12,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 24,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "e6906e0068da92136fffb0a66651ad84f5f4c79b409153f3b2db51507f3952ed",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense"
+          ],
+          "block": 12,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 25,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "b1372275ec389270b47821e7c21029ecf25b89804cfaaddaa5163c7c27fb2580",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint"
+          ],
+          "block": 13,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 26,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "3779e72b8bcfd00eb72c660e22dcc3bfbf36d2b97a2206e59ae262342b2193e0",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint"
+          ],
+          "block": 13,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 27,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "63d3b32c766e638d562d6ef0671bf2cdcc9708855f145672ad55513e2523ccf4",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words"
+          ],
+          "block": 14,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 28,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "7c9b41aeb038e98582341f5ee23b462405bb3fbd5c06516474004f4730f9e2c9",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate",
+            "cm-packed-words"
+          ],
+          "block": 14,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 29,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "c10004fd55156efc2bd1529e9f690133510ccb238dc04da4c9bf065efe2852ee",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate"
+          ],
+          "block": 15,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 30,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "8014a47d63aa7bbeffb7152fca478f6fe6b20e2f3caacb18221a526b4e97ea1a",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat",
+            "cm-no-reinflate"
+          ],
+          "block": 15,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 31,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "cc3cc2a34dd63b005a845f7398a23f805756b94eb0f075d0d426fb824d5bd6dd",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat"
+          ],
+          "block": 16,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 32,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "9a5ee35fdc0482eb06232a520a30c442050edb58ed2b15e15e761c5b60762db6",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-no-reinflate",
+            "cm-packed-words",
+            "cm-packed-bigint",
+            "cm-dense",
+            "cm-cse-flat"
+          ],
+          "block": 16,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 33,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "0370614f3c92e0076202d9c19297b47c3e079ecebedd814b0c1d850574f3bf05",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat"
+          ],
+          "block": 17,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 34,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "681bedf67145e850d106824f74c2373b5c6b1622a12661dfd90f9db0294eb362",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-dense",
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat"
+          ],
+          "block": 17,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 35,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "2ed1ca3e04979043e13beb7a75562de10366c273058eab38f84bcf1125ff4659",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense"
+          ],
+          "block": 18,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 36,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "c226dc14fc6169156fcbe8160ea6884b87731d0f910098c8fe40d483c787148f",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-bigint",
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense"
+          ],
+          "block": 18,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 37,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "5d35c8fa49bc0892fc3caabd497b0efd28c4cd1250ab95f8711a5dbdd23d5bdf",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint"
+          ],
+          "block": 19,
+          "case_id": "development-e3-e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "case_position": 38,
+          "cluster_id": "e3/e3c-k12-xor_dom-shared-2-8f5e66e2839b",
+          "conditional_extension": true,
+          "order_sha256": "5434ff9e57e58715b5ea689749ac0330482334ba8de956efc441f2ede37307cc",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        },
+        {
+          "arm_order": [
+            "cm-packed-words",
+            "cm-no-reinflate",
+            "cm-cse-flat",
+            "cm-dense",
+            "cm-packed-bigint"
+          ],
+          "block": 19,
+          "case_id": "development-epfl-dec-ac01ccb8dc43",
+          "case_position": 39,
+          "cluster_id": "epfl/dec",
+          "conditional_extension": true,
+          "order_sha256": "1937aecbcbe9049c8b372bf5b51a8d088c1889606beb9886d83ce885824e9823",
+          "policy_id": "p7-relation",
+          "task": "complete_relation"
+        }
+      ],
+      "policy_id": "p7-relation",
+      "seed": 61003,
+      "shard_cells": 240,
+      "task": "complete_relation"
+    }
+  ],
+  "schema": "cm-comparative-corpus-freeze/v1",
+  "secondary_metrics": [
+    "construction_ns",
+    "lowering_ns",
+    "query_ns",
+    "extraction_ns",
+    "restoration_ns",
+    "artifact_bytes",
+    "page_faults",
+    "cache_hits",
+    "cache_misses",
+    "cache_evictions",
+    "instruction_count",
+    "live_buffer_count",
+    "live_support",
+    "crossover_query_count"
+  ],
+  "timing_results_inspected": false
+}

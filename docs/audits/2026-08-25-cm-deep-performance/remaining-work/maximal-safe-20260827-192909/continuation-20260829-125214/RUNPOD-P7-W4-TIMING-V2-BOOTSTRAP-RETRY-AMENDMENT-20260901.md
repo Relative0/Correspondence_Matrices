@@ -1,6 +1,6 @@
 # P7 W4 timing scout: V2 bootstrap-compatibility retry amendment
 
-Date: 2026-09-01
+Date: 2026-09-01  
 Status: exact retry scope under the standing failed-run authorization
 
 ## Preserved failed attempt

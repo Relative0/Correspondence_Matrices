@@ -1,4 +1,4 @@
-"""One-create bootstrap-compatibility retry for the frozen P7 W4 scout."""
+"""Run one exact sequential shard of the frozen P7 W5 development campaign."""
 import argparse
 import base64
 from datetime import datetime, timezone
@@ -20,23 +20,31 @@ import zipfile
 import zlib
 
 import requests
-import http_p7_w4_timing_preflight_v1 as preflight
+import http_p7_w5_development_preflight_v1 as preflight
 
 HERE = Path(__file__).resolve().parent
 TRANSPORT = HERE.parent / "runpod-authorized-20260827-213104"
-OUT = HERE / "p7-w4-timing-v2-retry-001"
 spec = importlib.util.spec_from_file_location("preserved_cpu_smoke", TRANSPORT / "runpod_retry_cpu8_v1_controller.py")
 base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(base)
-REMOTE_CODE_PATH = HERE / "runpod_p7_w4_timing_remote_v1.py"
-base.REMOTE_CODE = REMOTE_CODE_PATH.read_text(encoding="utf-8")
-base.OUT = OUT
 BOOTSTRAP_PATH = HERE / "http_native_scout_bootstrap_v3_w4_deadlines.py"
 MANIFEST_PATH = HERE / "RUNPOD-P7-FUNCTIONAL-SCOUT-UPLOAD-MANIFEST-V2-20260830.json"
 BUNDLE_PATH = HERE / "RUNPOD-P7-FUNCTIONAL-SCOUT-UPLOAD-BUNDLE-V2-20260830.zip"
-PROPOSAL_PATH = HERE / "RUNPOD-P7-W4-TIMING-V2-BOOTSTRAP-RETRY-AMENDMENT-20260901.md"
-AUTHORIZATION_PATH = HERE / "HTTP-P7-W4-TIMING-V2-RETRY-AUTHORIZED-20260901.json"
-PACKAGE_VALIDATION_PATH = HERE / "P7-W4-TIMING-PACKAGE-V2-LOCAL-VALIDATION.json"
+PROPOSAL_PATH = HERE / "RUNPOD-P7-W5-DEVELOPMENT-PROPOSAL-20260901.md"
+AUTHORIZATION_PATH = HERE / "HTTP-P7-W5-DEVELOPMENT-AUTHORIZED-20260901.json"
+PACKAGE_VALIDATION_PATH = HERE / "P7-W5-PACKAGE-V1-LOCAL-VALIDATION.json"
+REMOTE_PROGRAMS_PATH = HERE / "P7-W5-REMOTE-PROGRAMS-V1.json"
+CAMPAIGN_PATH = (
+    HERE.parents[5]
+    / "docs/research/verification/comparative-p7-w5-development-v1-2026-09-01/campaign.json"
+)
+SHARD_ID = None
+SHARD = None
+CAMPAIGN = None
+PRIMARY = None
+ANCHOR = None
+REMOTE_CODE_PATH = None
+OUT = HERE / "p7-w5-unconfigured"
 STATE = OUT / "controller-state.json"
 IDENTITY = OUT / "POD-IDENTITY.json"
 READY = OUT / "watchdog-ready.json"
@@ -52,6 +60,46 @@ CAMPAIGN_CAP = 5.00
 STORAGE_RATE_RESERVE = 0.01
 CHUNK_BYTES = 256 << 10
 EXPECTED_PORTS = ["8080/http", "8081/http"]
+
+
+def configure(shard_id):
+    global SHARD_ID, SHARD, CAMPAIGN, PRIMARY, ANCHOR, REMOTE_CODE_PATH
+    global OUT, STATE, IDENTITY, READY, STATE_ACK, DONE, ABORT
+    programs = load(REMOTE_PROGRAMS_PATH)
+    matches = [row for row in programs.get("programs", []) if row.get("shard_id") == shard_id]
+    if len(matches) != 1:
+        raise RuntimeError("unknown or duplicate W5 shard")
+    SHARD_ID = shard_id
+    SHARD = matches[0]
+    CAMPAIGN = load(CAMPAIGN_PATH)
+    definitions = {row["partition_id"]: row for row in CAMPAIGN.get("definitions", [])}
+    PRIMARY = definitions.get(shard_id)
+    ANCHOR = definitions.get(SHARD["policy_id"] + "-anchor")
+    if (
+        not isinstance(PRIMARY, dict)
+        or not isinstance(ANCHOR, dict)
+        or PRIMARY.get("planned_cells") != SHARD.get("primary_cells")
+        or ANCHOR.get("planned_cells") != SHARD.get("diagnostic_cells")
+        or PRIMARY.get("freeze_sha256") != SHARD.get("primary_freeze_sha256")
+        or ANCHOR.get("freeze_sha256") != SHARD.get("anchor_freeze_sha256")
+    ):
+        raise RuntimeError("W5 campaign and remote-program manifest disagree")
+    REMOTE_CODE_PATH = HERE / SHARD["path"]
+    if (
+        not REMOTE_CODE_PATH.is_file()
+        or REMOTE_CODE_PATH.stat().st_size != SHARD["bytes"]
+        or hashlib.sha256(REMOTE_CODE_PATH.read_bytes()).hexdigest() != SHARD["sha256"]
+    ):
+        raise RuntimeError("W5 remote program identity changed")
+    OUT = HERE / ("p7-w5-" + shard_id + "-v1-001")
+    STATE = OUT / "controller-state.json"
+    IDENTITY = OUT / "POD-IDENTITY.json"
+    READY = OUT / "watchdog-ready.json"
+    STATE_ACK = OUT / "watchdog-state-ack.json"
+    DONE = OUT / "watchdog-done.json"
+    ABORT = OUT / "abort-requested.json"
+    base.REMOTE_CODE = REMOTE_CODE_PATH.read_text(encoding="utf-8")
+    base.OUT = OUT
 
 
 def write(path, value):
@@ -80,36 +128,32 @@ def append(path, value):
 
 
 def require_authorization():
+    if SHARD is None or SHARD_ID is None or REMOTE_CODE_PATH is None:
+        raise RuntimeError("W5 controller is not configured")
     if not AUTHORIZATION_PATH.is_file():
-        raise RuntimeError("exact P7 W4 timing-scout authorization record is absent")
+        raise RuntimeError("exact P7 W5 campaign authorization record is absent")
     authorization = load(AUTHORIZATION_PATH)
     expected = {
-        "schema": "cm-runpod-p7-w4-timing-retry-authorization/v2",
+        "schema": "cm-runpod-p7-w5-development-authorization/v1",
         "authorized": True,
-        "one_create": True,
-        "no_replacement_within_this_controller": True,
+        "authorized_shards": ["p7-ir-a", "p7-ir-b", "p7-relation-a", "p7-relation-b"],
+        "one_create_per_controller": True,
+        "sequential_launch_only": True,
+        "standing_failed_run_rerun_authorization": True,
         "external_source_upload_approved": True,
+        "reuse_exact_previously_authorized_96_file_payload": True,
         "source_files": 96,
         "source_bytes": 19484163,
         "source_bundle_bytes": 3197013,
-        "scout_cases": 12,
-        "independent_clusters": 12,
-        "synthetic_cases": 6,
-        "natural_cases": 6,
-        "ir_blocks": 8,
-        "relation_blocks": 10,
-        "ir_cells": 384,
-        "relation_cells": 600,
-        "planned_primary_cells": 984,
-        "fresh_cell_processes": 984,
-        "focused_tests_minimum": 39,
+        "parent_eligible_cases": 58,
+        "principal_cases": 57,
+        "typed_retained_exclusion": "development-epfl-sqrt-31cdaf5d0213",
+        "primary_cells": 7524,
+        "total_cells_including_diagnostics": 7852,
         "locked_binary_packages": 13,
         "performance_measurement": True,
-        "principal_p7_result": False,
-        "comparative_timing_inspected_before_selection": False,
-        "w8_confirmation_remains_untouched": True,
+        "principal_p7_result": True,
         "parent_freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
-        "derived_freeze_sha256": "d81ab57d4fbfe8a49a28314cc645d9ddf24e7d7182abfe1d2f36c016430c7b31",
         "source_builds_allowed": [],
         "system_packages_allowed": [],
         "container_disk_gb": 12,
@@ -119,36 +163,34 @@ def require_authorization():
         "phase_cap_usd": 0.10,
         "campaign_cap_usd": 5.00,
         "standing_campaign_authorization_applies": True,
-        "reuse_exact_previously_authorized_96_file_payload": True,
         "payload_previously_disclosed_to_runpod": True,
         "w3_correctness_audit_verified": True,
-        "w3_cleanup_verified": True,
-        "w8_confirmation_freeze_verified": True,
-        "w8_cleanup_verified": True,
+        "w4_resource_and_noise_audit_verified": True,
+        "w8_confirmation_remains_untouched": True,
         "chunk_bytes": CHUNK_BYTES,
-        "retry_of_pod_id": "fixszqtou7pal8",
-        "retry_reason": "final_payload_environment_allowlist_mismatch",
-        "prior_attempt_cleanup_verified": True,
-        "prior_attempt_uploaded_source_files": 0,
-        "bootstrap_change_only": True,
-        "standing_failed_run_rerun_authorization": True,
     }
     if any(authorization.get(key) != value for key, value in expected.items()):
-        raise RuntimeError("P7 W4 timing-scout authorization scope mismatch")
+        raise RuntimeError("P7 W5 authorization scope mismatch")
     hashes = {
         "proposal_sha256": hashlib.sha256(PROPOSAL_PATH.read_bytes()).hexdigest(),
         "upload_manifest_sha256": hashlib.sha256(MANIFEST_PATH.read_bytes()).hexdigest(),
         "upload_bundle_sha256": hashlib.sha256(BUNDLE_PATH.read_bytes()).hexdigest(),
         "controller_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "preflight_sha256": hashlib.sha256(Path(preflight.__file__).read_bytes()).hexdigest(),
-        "remote_program_sha256": hashlib.sha256(REMOTE_CODE_PATH.read_bytes()).hexdigest(),
         "bootstrap_sha256": hashlib.sha256(BOOTSTRAP_PATH.read_bytes()).hexdigest(),
         "package_validation_sha256": hashlib.sha256(PACKAGE_VALIDATION_PATH.read_bytes()).hexdigest(),
+        "remote_programs_sha256": hashlib.sha256(REMOTE_PROGRAMS_PATH.read_bytes()).hexdigest(),
+        "campaign_sha256": hashlib.sha256(CAMPAIGN_PATH.read_bytes()).hexdigest(),
     }
     if any(authorization.get(key) != value for key, value in hashes.items()):
-        raise RuntimeError("P7 W4 timing-scout authorization hash mismatch")
+        raise RuntimeError("P7 W5 authorization hash mismatch")
+    remote_hashes = authorization.get("remote_program_sha256_by_shard")
+    if (
+        not isinstance(remote_hashes, dict)
+        or remote_hashes.get(SHARD_ID) != hashlib.sha256(REMOTE_CODE_PATH.read_bytes()).hexdigest()
+    ):
+        raise RuntimeError("selected W5 remote-program authorization mismatch")
     return authorization
-
 
 def frozen_bundle(manifest):
     payload = BUNDLE_PATH.read_bytes()
@@ -229,7 +271,7 @@ def watchdog():
         time.sleep(1)
     state = load(STATE)
     if (set(state) != {"name", "created_epoch", "cleanup_epoch", "horizon_epoch"}
-        or not re.fullmatch(r"cm-p7-w4-timing-v2-retry-[a-f0-9]{12}", state["name"])
+        or not re.fullmatch(r"cm-p7-w5-" + re.escape(SHARD_ID) + r"-v1-[a-f0-9]{12}", state["name"])
         or any(not math.isfinite(state[key]) for key in ("created_epoch", "cleanup_epoch", "horizon_epoch"))
         or abs(state["cleanup_epoch"] - state["created_epoch"] - CLEANUP_AT) > 0.001
         or abs(state["horizon_epoch"] - state["created_epoch"] - HORIZON) > 0.001):
@@ -307,8 +349,13 @@ def bind_watchdog(proc, ready):
 def arm_watchdog():
     with (OUT / "watchdog.log").open("xb") as stream:
         flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "DETACHED_PROCESS", 0)
-        proc = subprocess.Popen([sys.executable, "-B", str(Path(__file__).resolve()), "--watchdog"],
-                                stdout=stream, stderr=subprocess.STDOUT, creationflags=flags, close_fds=True)
+        proc = subprocess.Popen(
+            [sys.executable, "-B", str(Path(__file__).resolve()), "--shard", SHARD_ID, "--watchdog"],
+            stdout=stream,
+            stderr=subprocess.STDOUT,
+            creationflags=flags,
+            close_fds=True,
+        )
     for _ in range(200):
         if READY.exists():
             ready = load(READY)
@@ -591,7 +638,11 @@ def execute_remote(pod_id, token, raw, created, record):
 
 def save_evidence(log):
     lines = log.splitlines()
-    starts = [json.loads(line[9:]) for line in lines if line.startswith("CM_EVENT ") and '"kind": "evidence_start"' in line]
+    starts = [
+        json.loads(line[9:])
+        for line in lines
+        if line.startswith("CM_EVENT ") and '"kind": "evidence_start"' in line
+    ]
     if not starts:
         raise RuntimeError("remote evidence marker missing")
     plain_log = "\n".join(line for line in lines if not line.startswith("CM_EVIDENCE ")) + "\n"
@@ -606,20 +657,26 @@ def save_evidence(log):
     result.update({"validation": validation, "runtime_pod_id": runtime.get("runpod_pod_id"), "verified": False})
     if validation.get("status") != "complete":
         result["partial_evidence"] = {
-            "remote_status": validation.get("status"), "remote_error": validation.get("error"),
+            "remote_status": validation.get("status"),
+            "remote_error": validation.get("error"),
             "validation_errors": validation.get("validation_errors", []),
             "source_unchanged": validation.get("source_unchanged"),
         }
         return result
     try:
-        derived = load(evidence_root / "DERIVED-FREEZE.json")
+        primary_freeze = load(evidence_root / (SHARD_ID + "-FREEZE.json"))
+        anchor_freeze = load(evidence_root / (ANCHOR["partition_id"] + "-FREEZE.json"))
         focused = load(evidence_root / "focused-tests.json")
         dependencies = load(evidence_root / "BASE-DEPENDENCIES.json")
         source_before = load(evidence_root / "SOURCE-BEFORE.json")
         source_after = load(evidence_root / "SOURCE-AFTER.json")
     except (FileNotFoundError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-        result["partial_evidence"] = {"evidence_error_type": type(exc).__name__, "evidence_error": str(exc)[:500]}
+        result["partial_evidence"] = {
+            "evidence_error_type": type(exc).__name__,
+            "evidence_error": str(exc)[:500],
+        }
         return result
+
     dependency_versions = {str(key).lower(): value for key, value in dependencies.items()}
     required_dependencies = {
         "numpy": "2.3.2", "sympy": "1.14.0", "mpmath": "1.3.0",
@@ -628,15 +685,25 @@ def save_evidence(log):
         "iniconfig": "2.1.0", "packaging": "26.3", "pluggy": "1.6.0",
         "pygments": "2.19.2",
     }
-    policy_rows = {}
+    expected_arms = (
+        {"cm-ir-current", "cm-ir-two-memo", "cm-cse-flat", "cm-raw-flat"}
+        if SHARD["policy_id"] == "p7-ir"
+        else {"cm-dense", "cm-packed-bigint", "cm-packed-words", "cm-no-reinflate", "cm-cse-flat"}
+    )
+    runs = (
+        ("primary", PRIMARY, primary_freeze, ["regression", "development"]),
+        ("diagnostic-anchor", ANCHOR, anchor_freeze, ["development"]),
+    )
+    run_rows = {}
     failures = []
-    expected_counts = {"p7-ir": (384, 8, 4), "p7-relation": (600, 10, 5)}
-    for policy, (cell_count, blocks, arms) in expected_counts.items():
+    for name, specification, freeze, roles in runs:
         try:
-            root = evidence_root / policy
+            root = evidence_root / name
             plan = load(root / "plan.json")
             summary = load(root / "summary.json")
-            verification = json.loads((evidence_root / (policy + "-verify.stdout.txt")).read_text(encoding="utf-8"))
+            verification = json.loads(
+                (evidence_root / (name + "-verify.stdout.txt")).read_text(encoding="utf-8")
+            )
             terminal = []
             for segment in sorted((root / "ledger").glob("segment-*.jsonl")):
                 for line in segment.read_text(encoding="utf-8").splitlines():
@@ -644,20 +711,33 @@ def save_evidence(log):
                     if row.get("status") != "running":
                         terminal.append(row)
             rss = [row.get("result", {}).get("process_tree_peak_rss_bytes") for row in terminal]
-            task_ns = [row.get("result", {}).get("timings_ns", {}).get("task_total_wall_ns") for row in terminal]
+            task_ns = [
+                row.get("result", {}).get("timings_ns", {}).get("task_total_wall_ns")
+                for row in terminal
+            ]
+            worker_pids = [
+                row.get("result", {}).get("worker", {}).get("environment", {}).get("pid")
+                for row in terminal
+            ]
+            cell_count = specification["planned_cells"]
+            case_count = specification["case_count"]
             if (
-                plan.get("schema") != "cm-comparative-p7-isolated-plan/v2"
-                or plan.get("freeze_sha256") != "d81ab57d4fbfe8a49a28314cc645d9ddf24e7d7182abfe1d2f36c016430c7b31"
-                or plan.get("policy_id") != policy
+                freeze.get("freeze_sha256") != specification["freeze_sha256"]
+                or len(freeze.get("cases") or []) != case_count
+                or len({case.get("cluster_id") for case in freeze.get("cases") or []}) != case_count
+                or len(freeze.get("schedule_policies") or []) != 1
+                or freeze["schedule_policies"][0].get("policy_id") != SHARD["policy_id"]
+                or plan.get("schema") != "cm-comparative-p7-isolated-plan/v2"
+                or plan.get("freeze_sha256") != specification["freeze_sha256"]
+                or plan.get("policy_id") != SHARD["policy_id"]
+                or plan.get("roles") != roles
                 or plan.get("profile") != "performance"
                 or plan.get("performance_measurement") is not True
-                or plan.get("blocks") != blocks
-                or len(plan.get("case_ids") or []) != 12
-                or len(set(plan.get("case_ids") or [])) != 12
+                or plan.get("blocks") != specification["blocks"]
+                or len(plan.get("case_ids") or []) != case_count
+                or set(plan.get("case_ids") or []) != set(specification["case_ids"])
                 or len(plan.get("cells") or []) != cell_count
-                or {cell.get("arm") for cell in plan.get("cells") or []}
-                != ({"cm-ir-current", "cm-ir-two-memo", "cm-cse-flat", "cm-raw-flat"}
-                    if arms == 4 else {"cm-dense", "cm-packed-bigint", "cm-packed-words", "cm-no-reinflate", "cm-cse-flat"})
+                or {cell.get("arm") for cell in plan.get("cells") or []} != expected_arms
                 or summary.get("status") != "passed"
                 or summary.get("profile") != "performance"
                 or summary.get("performance_measurement") is not True
@@ -678,60 +758,65 @@ def save_evidence(log):
                 or any(row.get("result", {}).get("worker", {}).get("source_preparation_in_timed_span") is not True for row in terminal)
                 or any(row.get("result", {}).get("resources", {}).get("cleanup_verified") is not True for row in terminal)
                 or any(row.get("result", {}).get("resources", {}).get("whole_tree_rss_measured") is not True for row in terminal)
-                or any(type(value) is not int or value <= 0 for value in rss + task_ns)
+                or any(type(value) is not int or value <= 0 for value in rss + task_ns + worker_pids)
+                or len(set(worker_pids)) != cell_count
             ):
-                failures.append(policy + " evidence mismatch")
-            policy_rows[policy] = {
-                "cases": 12,
-                "blocks": blocks,
-                "arms": arms,
+                failures.append(name + " evidence mismatch")
+            run_rows[name] = {
+                "kind": specification["kind"],
+                "freeze_sha256": specification["freeze_sha256"],
+                "cases": case_count,
+                "blocks": specification["blocks"],
+                "arms": len(expected_arms),
                 "cells": cell_count,
                 "terminal_ok": sum(row.get("status") == "ok" for row in terminal),
+                "fresh_worker_identities": len(set(worker_pids)),
                 "min_task_total_wall_ns": min(task_ns) if task_ns else None,
                 "max_task_total_wall_ns": max(task_ns) if task_ns else None,
                 "min_process_tree_peak_rss_bytes": min(rss) if rss else None,
                 "max_process_tree_peak_rss_bytes": max(rss) if rss else None,
             }
         except (FileNotFoundError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-            failures.append(policy + ":" + type(exc).__name__)
+            failures.append(name + ":" + type(exc).__name__)
+
     if (
         validation.get("validation_errors") != []
         or validation.get("source_unchanged") is not True
         or validation.get("source_files") != 96
         or validation.get("performance_measurement") is not True
-        or validation.get("principal_p7_result") is not False
+        or validation.get("principal_p7_result") is not True
+        or validation.get("w5_primary_freeze_sha256") != SHARD["primary_freeze_sha256"]
         or runtime.get("source_files") != 96
         or runtime.get("runpod_pod_id") != load(IDENTITY)["pod_id"]
         or len(runtime.get("affinity", [])) != 2
         or runtime.get("performance_measurement") is not True
-        or runtime.get("principal_p7_result") is not False
-        or runtime.get("w4_freeze_sha256")
-        != "d81ab57d4fbfe8a49a28314cc645d9ddf24e7d7182abfe1d2f36c016430c7b31"
+        or runtime.get("principal_p7_result") is not True
+        or runtime.get("w5_primary_freeze_sha256") != SHARD["primary_freeze_sha256"]
         or focused.get("returncode") != 0
         or any(dependency_versions.get(name) != version for name, version in required_dependencies.items())
         or source_before != source_after
-        or derived.get("freeze_sha256")
-        != "d81ab57d4fbfe8a49a28314cc645d9ddf24e7d7182abfe1d2f36c016430c7b31"
-        or len(derived.get("cases") or []) != 12
-        or len({case.get("cluster_id") for case in derived.get("cases") or []}) != 12
         or failures
     ):
         result["partial_evidence"] = {
             "remote_status": validation.get("status"),
-            "policy_failures": failures,
-            "validation_failure": "retrieved evidence did not satisfy frozen P7 W4 gates",
+            "run_failures": failures,
+            "validation_failure": "retrieved evidence did not satisfy frozen P7 W5 gates",
         }
         return result
     result["verified"] = True
-    result["p7_w4_timing"] = {
-        "freeze_sha256": derived["freeze_sha256"],
-        "independent_cases": 12,
-        "planned_primary_cells": 984,
-        "terminal_ok_cells": sum(row["terminal_ok"] for row in policy_rows.values()),
-        "policies": policy_rows,
+    result["p7_w5_shard"] = {
+        "shard_id": SHARD_ID,
+        "policy_id": SHARD["policy_id"],
+        "primary_freeze_sha256": SHARD["primary_freeze_sha256"],
+        "anchor_freeze_sha256": SHARD["anchor_freeze_sha256"],
+        "primary_cases": PRIMARY["case_count"],
+        "planned_primary_cells": PRIMARY["planned_cells"],
+        "planned_diagnostic_cells": ANCHOR["planned_cells"],
+        "terminal_ok_cells": sum(row["terminal_ok"] for row in run_rows.values()),
+        "runs": run_rows,
         "source_unchanged": True,
         "performance_measurement": True,
-        "principal_p7_result": False,
+        "principal_p7_result": True,
     }
     return result
 
@@ -755,23 +840,24 @@ def run():
                 or manifest.get("schema") != "cm-comparative-p7-runner-source-manifest/v1"
                 or manifest.get("performance_measurement") is not False
                 or manifest.get("secrets_included") is not False):
-            raise RuntimeError("frozen P7 W4 source package mismatch")
+            raise RuntimeError("frozen P7 W5 source package mismatch")
         bundle = frozen_bundle(manifest)
         package_validation = load(PACKAGE_VALIDATION_PATH)
         if (
             package_validation.get("ready") is not True
             or package_validation.get("exact_bundle_reproduces_freeze") is not True
-            or package_validation.get("planned_primary_cells") != 984
-            or package_validation.get("remote_program_sha256")
+            or package_validation.get("primary_cells") != 7524
+            or package_validation.get("total_cells_including_diagnostics") != 7852
+            or package_validation.get("remote_program_sha256_by_shard", {}).get(SHARD_ID)
             != hashlib.sha256(REMOTE_CODE_PATH.read_bytes()).hexdigest()
         ):
-            raise RuntimeError("P7 W4 local package validation changed")
+            raise RuntimeError("P7 W5 local package validation changed")
         watchdog_process = arm_watchdog()
         client = preflight.session()
         if any(inventories(client).values()):
             raise RuntimeError("zero-pod baseline changed before creation")
         created = time.time()
-        state = {"name": "cm-p7-w4-timing-v2-retry-" + uuid.uuid4().hex[:12], "created_epoch": created,
+        state = {"name": "cm-p7-w5-" + SHARD_ID + "-v1-" + uuid.uuid4().hex[:12], "created_epoch": created,
                  "cleanup_epoch": created + CLEANUP_AT, "horizon_epoch": created + HORIZON}
         raw = prepare_payload(bundle, manifest, created)
         token = secrets.token_urlsafe(32)
@@ -787,8 +873,11 @@ def run():
             "source_bundle_sha256": hashlib.sha256(bundle).hexdigest(), "source_bundle_bytes": len(bundle),
             "source_files": 96, "source_bytes": sum(row["bytes"] for row in manifest["files"]),
             "parent_freeze_sha256": "54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd",
-            "derived_freeze_sha256": "d81ab57d4fbfe8a49a28314cc645d9ddf24e7d7182abfe1d2f36c016430c7b31",
-            "planned_primary_cells": 984,
+            "shard_id": SHARD_ID,
+            "primary_freeze_sha256": SHARD["primary_freeze_sha256"],
+            "anchor_freeze_sha256": SHARD["anchor_freeze_sha256"],
+            "planned_primary_cells": SHARD["primary_cells"],
+            "planned_diagnostic_cells": SHARD["diagnostic_cells"],
             "transport_payload_sha256": hashlib.sha256(raw).hexdigest(), "transport_payload_bytes": len(raw),
             "manifest_sha256": hashlib.sha256(MANIFEST_PATH.read_bytes()).hexdigest(),
             "create_json_bytes": len(json.dumps(body).encode()), "create_environment_variables": len(body["env"]),
@@ -799,7 +888,7 @@ def run():
         record.update({"creation_attempted": True, "creation_uncertain": True,
                        "creation_request_utc": preflight.utc_now(), "creation_endpoint": preflight.V1 + "/pods",
                        "name": state["name"], "selected_cpu": offer["id"], "quoted_rate_usd_per_hour": offer["rate_usd_per_hour"]})
-        print(json.dumps({"action": "create_one_cpu_pod_for_p7_w4_timing_bootstrap_retry", "name": state["name"], "cpu": offer["id"], "rate": offer["rate_usd_per_hour"]}), flush=True)
+        print(json.dumps({"action": "create_one_cpu_pod_for_p7_w5_shard", "shard": SHARD_ID, "name": state["name"], "cpu": offer["id"], "rate": offer["rate_usd_per_hour"]}), flush=True)
         response = client.post(preflight.V1 + "/pods", json=body, timeout=(10, 50), allow_redirects=False)
         record["creation_http_status"] = response.status_code
         record["creation_response_headers"] = {key: response.headers[key][:400] for key in ("Date", "X-Request-Id", "X-Correlation-Id", "CF-Ray") if key in response.headers}
@@ -868,8 +957,14 @@ def run():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--shard",
+        required=True,
+        choices=("p7-ir-a", "p7-ir-b", "p7-relation-a", "p7-relation-b"),
+    )
     parser.add_argument("--watchdog", action="store_true")
     args = parser.parse_args()
+    configure(args.shard)
     if not args.watchdog:
         OUT.mkdir(exist_ok=False)
     with base.host_awake_guard("http-watchdog" if args.watchdog else "http-controller"):
@@ -882,4 +977,3 @@ if __name__ == "__main__":
     except Exception as exc:
         print(json.dumps({"error_type": type(exc).__name__}), flush=True)
         raise SystemExit(2)
-
