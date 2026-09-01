@@ -211,6 +211,11 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "status": "measured"
@@ -267,7 +272,7 @@
     "C": "C20 compiles the frozen exact screened leaf and clears the repeated retrospective VTR small-support tail; fresh-source and second-machine confirmation remain",
     "D": "D10 indexed four-rule engine and C15 exact CM/GF(2) decomposition measured; exact infrastructure passes, both timing promotion gates fail, and production remains disabled",
     "E": "E1 bounded BDD order selection and E2 exact SAT/equivalence guidance measured; both exact infrastructures pass, both learned timing policies remain negative, native/large-source follow-ups pending",
-    "F": "C31 prospectively replicates the unchanged C30 prepared-policy path on a physical Linux machine; both machines pass point and paired-lower gates with zero mismatches, admitting a separate shadow review while promotion stays false"
+    "F": "C32 implements a baseline-serving, candidate-observing prepared-policy boundary; all local exactness and containment controls pass with zero candidate delivery or production writes, while synchronous overhead motivates bounded asynchronous shadowing"
   },
   "schema": "crse-experiment-register/v1",
   "tracks": [
@@ -290,7 +295,7 @@
       "minimum_scope": "Direct/CSE/CM, bigint/words, later task-eligible BDD/SAT/counting; cheap features, query-count rules, learned feature acquisition, feasibility and tail-risk prediction",
       "models_and_deterministic_controls": "fixed direct/CSE/CM, query-count rule, cost tree",
       "name": "Task-aware routing and cost prediction",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "AST features",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -429,11 +434,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -454,7 +464,7 @@
       "minimum_scope": "Hidden affine/XOR, Horn, dual-Horn, 2-CNF, low-width/separator structure, independent components, cardinality/threshold constraints, mux/ITE, arithmetic blocks and adders",
       "models_and_deterministic_controls": "exact affine detector, CM simplifier, MLP, later GNN",
       "name": "Computational-subclass recognition",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "AST, local CM, later graph",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -528,11 +538,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -818,7 +833,7 @@
       "minimum_scope": "Cofactors, repeated/complementary blocks, disjoint supports, variable partitions, recursive blocks, GF(2) rank/factors, tensor/Kronecker-style exact decompositions",
       "models_and_deterministic_controls": "exhaustive small partitions, exact GF(2), learned ranking",
       "name": "CM decomposition and layout",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "cofactors, blocks, GF(2) factors",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -952,11 +967,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -1139,7 +1159,7 @@
       "minimum_scope": "Supervise graph models from local truth functions, cofactor relations, functional distances, and verified transformation costs; no full CM required at inference",
       "models_and_deterministic_controls": "supervised teacher, unsupervised/structural controls",
       "name": "CMs as exact training teachers",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "local CM teacher and source graph",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1223,11 +1243,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -1307,7 +1332,7 @@
       "minimum_scope": "Cost-sensitive regression/ranking, linear models, trees/rule lists, forests/boosting/quantile models; supervised, contrastive/self-supervised, multitask, imitation, transfer, and curriculum learning",
       "models_and_deterministic_controls": "linear, tree/rules, forest/boosting/quantile, supervised/contrastive/multitask/imitation/transfer/curriculum",
       "name": "Learning-method comparisons",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "cost features, graph/CM representations",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1401,11 +1426,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -1487,7 +1517,7 @@
       "minimum_scope": "Feature budgets, batching, incremental embeddings, early exits, distillation, quantization/binarization, model compilation, CPU/GPU crossover, and caching with explicit accounting",
       "models_and_deterministic_controls": "unbatched CPU, deterministic rules, distilled/quantized/binary models",
       "name": "Inference and training efficiency",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "features, batches, embeddings, compiled/quantized weights",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1691,11 +1721,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -1716,7 +1751,7 @@
       "minimum_scope": "Calibration, out-of-distribution behavior, feasibility, uncertainty-triggered fallback, negative transfer, adversarial near-matches, and hardware transfer",
       "models_and_deterministic_controls": "always fallback, fixed thresholds, calibrated policy",
       "name": "Confidence, novelty, and abstention",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "training ranges, uncertainty, feasibility",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -1850,11 +1885,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     },
     {
       "dependencies": {
@@ -1875,7 +1915,7 @@
       "minimum_scope": "Predicting raw AND/OR/XOR/equality/popcount versus exact packed operations; random/dense incompressible tables, no-sharing/anti-reduction cases, low oracle headroom, and overhead-dominated workloads",
       "models_and_deterministic_controls": "AND/OR/XOR/equality/popcount, no-sharing, random/untrained policy",
       "name": "Negative controls and hard limits",
-      "next_experiment": "C32 should implement an opt-in production-shaped shadow boundary around the frozen C30 prepared context: emit both exact baseline and candidate artifacts, serve only the baseline, measure boundary overhead and fallback/refusal events, and require zero divergence before considering a separately authorized rollout.",
+      "next_experiment": "C33 should move observational candidate work behind a bounded asynchronous or sampled queue: return the exact baseline before candidate execution, copy/hash-bind the request, drop safely under backpressure, and independently replay queued comparisons while measuring enqueue overhead and coverage.",
       "remaining_scope": "All minimum_scope items beyond the explicitly described slice remain pending; not whole-track completion.",
       "representation": "random/dense tables, packed bits, anti-reduction AST",
       "resource_needs": "CPU-only smoke: <=8 variables, <=2 threads, <=120 seconds/run; no downloads.",
@@ -2084,11 +2124,16 @@
           "machine_summary": "learning_milestone_c31_prepared_policy_replication_results.json",
           "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
           "scope": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+        },
+        {
+          "machine_summary": "learning_milestone_c32_prepared_policy_shadow_results.json",
+          "report": "LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+          "scope": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
         }
       ],
       "source_data": "Generated local fixtures initially; natural provenance-reviewed data pending.",
       "status": "measured",
-      "status_reason": "C31 ran the unchanged 71-file C30 package on a Secure AMD EPYC 9655 RunPod with no training or refit. The on-pod verifier and byte-identical local replay checked 128 batches, 1,024 exact queries, and 512 contexts with zero mismatches. Both physical machines pass the prospective point and paired-lower gates; the cross-machine floors are 1.036x/1.000x point and 1.024x/0.956x lower-bound. The candidate is eligible for a separate shadow review, but no promotion occurred."
+      "status_reason": "C32 adds an opt-in boundary that always serves the exact screened baseline and observes the frozen C30 candidate only. Across 1,024 served requests and 512 candidate observations, independent replay found zero mismatches and zero candidate results served. Exception, refusal, exact-but-nonbest divergence, wrong-binding, and changed-source controls were contained. Synchronous shadow work costs 2.045x total while baseline latency remains 1.003x; no promotion occurred."
     }
   ],
   "transformation_inventory": "constant propagation; irrelevant-variable elimination; idempotence; complement;\ndouble negation; absorption; consensus; associative/commutative flattening and\noperand ordering; De Morgan/NNF; implication/equivalence elimination or useful\nintroduction; XOR cancellation and affine extraction; distributive factoring\nand bounded expansion; mux/ITE introduction; Shannon expansion; cofactoring and\nrestriction; independent-component decomposition; common-subexpression/repeated\ncone recognition; symmetry; small-function classification; CM transpose,\nnegation, aligned composition and directional quotient/set difference; and AIG\nbalancing/rewrite/refactor/resubstitution. Keep semantic XOR difference distinct\nfrom directional quotient and repository-specific structural operator artifacts.",

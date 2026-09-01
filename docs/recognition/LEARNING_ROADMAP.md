@@ -241,6 +241,18 @@ worst point estimates are 1.0360x aggregate and 1.0002x minimum width, while the
 gates pass. This admits a separate production-shaped shadow review only; shadow and
 production promotion remain false.
 
+C32 now places that prepared policy behind a production-shaped, baseline-serving shadow
+boundary. The boundary served the exact screened baseline for all 1,024 requests while
+observing 512 prepared-policy candidates; it served zero candidate answers and performed
+no writes or promotions. Independent replay found zero exactness or selection
+divergences, and disabled-shadow, candidate-exception, candidate-refusal,
+exact-but-nonbest, wrong-binding, and changed-source controls all passed. Synchronous
+shadowing cost 2.0447x the disabled total time, although the served-baseline portion was
+stable at 1.0034x. C33 should therefore move observation off the serving critical path
+with a bounded asynchronous or sampled queue, preserve immutable hash-bound inputs, drop
+safely under backpressure, and independently replay every retained observation before
+any promotion review.
+
 1. **A: reusable foundation.** Retain feature ablations with the original
    direct/CSE/CM harness, add the equally cheap query-count rule, bind feature
    schemas to models, and implement bounded task/proposal/check/CM contracts.
