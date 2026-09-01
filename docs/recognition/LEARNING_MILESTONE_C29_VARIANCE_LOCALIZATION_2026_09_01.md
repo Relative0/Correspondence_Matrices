@@ -86,15 +86,15 @@ The run preserves exactness, but it is local diagnostic evidence and does not su
 C28's cross-machine ruling. Exact fallback remains mandatory. Shadow and production
 promotion remain false.
 
-## Recommended next milestone
+## C30 follow-up
 
-C30 should implement an immutable prepared-policy context for the C27 and C22 policies.
-It should hash-bind validated policy content, refuse changed-file or digest mismatches,
-retain advice-off/fallback/tamper behavior, and charge preparation once at the resident
-lifecycle boundary rather than reload both policy files for every eight-query batch.
-The unchanged exact query path should then repeat this C29 counterbalanced diagnostic.
-Only if n=3/n=4 improve and paired dispersion narrows should an unchanged two-machine
-confirmation be frozen. A learned selector remains premature.
+C30 now implements the immutable prepared-policy context, changed-source and digest
+binding refusals, advice-off and exact fallback controls, and fully conserved lifecycle
+charging. On the unchanged counterbalanced schedule, median per-session setup falls from
+0.6638 ms to 0.0431 ms. The charged surface reaches 1.0360x aggregate and 1.0002x minimum
+width; n=3 and n=4 improve to 1.0002x and 1.0304x. The local no-regret diagnostic passes,
+but cross-machine promotion remains pending. C31 should freeze and replicate this exact
+package without refitting.
 
 ## Evidence
 

@@ -224,6 +224,14 @@ the n=4 query gain but not all query variance. C30 should add a hash-bound immut
 prepared-policy context, charge preparation once at the resident lifecycle boundary,
 and repeat the exact counterbalanced diagnostic before another two-machine confirmation.
 
+C30 now implements that immutable prepared context and retains advice-off, exact fallback,
+changed-source, wrong-binding, and tampered-policy refusals. The one-time 0.752 ms
+preparation charge is fully allocated across 64 candidate batches. Median per-session
+setup falls to 0.043 ms, and the unchanged q8 schedule measures 1.0360x aggregate with a
+1.0002x minimum-width charged speedup. The local no-regret diagnostic passes, but n=3 is
+effectively neutral and half its paired blocks remain below 1.00x. Freeze C31 and repeat
+the exact package on a second physical machine before any shadow or learned routing.
+
 1. **A: reusable foundation.** Retain feature ablations with the original
    direct/CSE/CM harness, add the equally cheap query-count rule, bind feature
    schemas to models, and implement bounded task/proposal/check/CM contracts.

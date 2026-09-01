@@ -8,6 +8,7 @@ import time
 from typing import Any, Callable, Mapping
 
 from .gf2_decomposition import ExactGF2Artifact, analyze_exact_gf2, analyze_screened_exact_gf2
+from .gf2_prepared_support_context import PreparedSupportPolicyContext
 from .gf2_source_portfolio import SOURCE_PACKED_SCREENED, load_source_portfolio_policy
 from .gf2_support_aware_policy import (
     TRUTH_SCREENED, load_support_aware_policy, select_support_arm,
@@ -75,9 +76,12 @@ def _finish(timings: dict[str, int], started: int,
 
 
 class SupportAwareGF2Session:
-    def __init__(self, session_id: str, c27_policy_path: Path, c22_policy_path: Path, *,
+    def __init__(self, session_id: str, c27_policy_path: Path | None,
+                 c22_policy_path: Path | None, *,
                  advice_enabled: bool = True, max_queries: int = 32,
-                 clock: Callable[[], int] = time.perf_counter_ns):
+                 clock: Callable[[], int] = time.perf_counter_ns,
+                 prepared_context: PreparedSupportPolicyContext | None = None,
+                 required_prepared_context_sha256: str | None = None):
         if (
             type(session_id) is not str or not session_id or len(session_id) > 256
             or type(advice_enabled) is not bool
@@ -85,11 +89,28 @@ class SupportAwareGF2Session:
         ):
             raise ValueError("invalid C27 support-aware session configuration")
         setup_started = clock()
-        c27_policy = load_support_aware_policy(c27_policy_path)
-        c27_loaded = max(1, clock() - setup_started)
-        started = clock()
-        c22_policy = load_source_portfolio_policy(c22_policy_path)
-        c22_loaded = max(1, clock() - started)
+        if prepared_context is None:
+            if c27_policy_path is None or c22_policy_path is None:
+                raise ValueError("C27 policy paths are required without a prepared context")
+            if required_prepared_context_sha256 is not None:
+                raise ValueError("prepared context digest supplied without context")
+            c27_policy = load_support_aware_policy(c27_policy_path)
+            c27_loaded = max(1, clock() - setup_started)
+            started = clock()
+            c22_policy = load_source_portfolio_policy(c22_policy_path)
+            c22_loaded = max(1, clock() - started)
+            prepared_bind_ns = None
+        else:
+            if (
+                c27_policy_path is not None or c22_policy_path is not None
+                or type(prepared_context) is not PreparedSupportPolicyContext
+                or required_prepared_context_sha256 != prepared_context.context_sha256
+            ):
+                raise ValueError("invalid or unbound prepared C30 context")
+            started = clock()
+            c27_policy, c22_policy = prepared_context.policies()
+            prepared_bind_ns = max(1, clock() - started)
+            c27_loaded = c22_loaded = 0
         if (
             c27_policy["large_support_arm"] != c22_policy["selected_arm"]
             or c27_policy["large_support_arm"] != SOURCE_PACKED_SCREENED
@@ -107,13 +128,40 @@ class SupportAwareGF2Session:
         self._successful_queries = 0
         self._refused_queries = 0
         self._closed = False
-        self.setup_timings_ns = {
-            "c27_policy_load_validate_ns": c27_loaded,
-            "c22_policy_load_validate_ns": c22_loaded,
-            "session_initialize_ns": max(
-                1, clock() - setup_started - c27_loaded - c22_loaded),
-        }
+        if prepared_bind_ns is None:
+            self.setup_timings_ns = {
+                "c27_policy_load_validate_ns": c27_loaded,
+                "c22_policy_load_validate_ns": c22_loaded,
+                "session_initialize_ns": max(
+                    1, clock() - setup_started - c27_loaded - c22_loaded),
+            }
+        else:
+            self.setup_timings_ns = {
+                "prepared_context_bind_ns": prepared_bind_ns,
+                "session_initialize_ns": max(1, clock() - setup_started - prepared_bind_ns),
+            }
         self.setup_timings_ns["setup_total_ns"] = sum(self.setup_timings_ns.values())
+
+    @classmethod
+    def from_prepared_context(
+        cls,
+        session_id: str,
+        prepared_context: PreparedSupportPolicyContext,
+        *,
+        advice_enabled: bool = True,
+        max_queries: int = 32,
+        clock: Callable[[], int] = time.perf_counter_ns,
+    ) -> "SupportAwareGF2Session":
+        return cls(
+            session_id,
+            None,
+            None,
+            advice_enabled=advice_enabled,
+            max_queries=max_queries,
+            clock=clock,
+            prepared_context=prepared_context,
+            required_prepared_context_sha256=prepared_context.context_sha256,
+        )
 
     def snapshot(self) -> dict[str, Any]:
         return {
