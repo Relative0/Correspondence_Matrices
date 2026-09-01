@@ -232,6 +232,15 @@ setup falls to 0.043 ms, and the unchanged q8 schedule measures 1.0360x aggregat
 effectively neutral and half its paired blocks remain below 1.00x. Freeze C31 and repeat
 the exact package on a second physical machine before any shadow or learned routing.
 
+C31 now completes that prospective physical-machine replication without training or
+refitting. The unchanged 71-file package ran on a Secure AMD EPYC 9655 RunPod; the on-pod
+verifier and byte-identical post-retrieval replay checked 128 batches, 1,024 timed exact
+queries, and 512 verified contexts with zero mismatches. Across Windows and Linux, the
+worst point estimates are 1.0360x aggregate and 1.0002x minimum width, while the frozen
+96.1594%-coverage paired-block lower bounds are 1.0241x and 0.9555x. All prospective C31
+gates pass. This admits a separate production-shaped shadow review only; shadow and
+production promotion remain false.
+
 1. **A: reusable foundation.** Retain feature ablations with the original
    direct/CSE/CM harness, add the equally cheap query-count rule, bind feature
    schemas to models, and implement bounded task/proposal/check/CM contracts.

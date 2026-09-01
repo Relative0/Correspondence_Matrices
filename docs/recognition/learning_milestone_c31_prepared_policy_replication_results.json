@@ -1,0 +1,189 @@
+{
+  "authorized_execution": {
+    "cpu_flavor": "cpu3c",
+    "cpu_model": "AMD EPYC 9655 96-Core Processor",
+    "create_requests": 1,
+    "elapsed_since_create_s": 47.20037078857422,
+    "estimated_compute_cost_usd": 0.000786672846476237,
+    "owned_pod_absent_verified": true,
+    "pod_created": true,
+    "pod_id": "uh521ect8ufhlx",
+    "quoted_rate_usd_per_hour": 0.06,
+    "replacement_attempts": 0
+  },
+  "cross_machine_adjudication": "docs/recognition/c31_linux_confirmation/C31_CROSS_MACHINE_ADJUDICATION_20260901.json",
+  "cross_machine_floors": {
+    "aggregate_paired_median_lower": 1.0240934800134966,
+    "aggregate_point": 1.0359840018944573,
+    "minimum_width_paired_median_lower": 0.9555039456424422,
+    "minimum_width_point": 1.0002475828198092
+  },
+  "date": "2026-09-01",
+  "decision": "replicated_candidate_eligible_for_separate_shadow_review",
+  "eligible_for_separate_shadow_review": true,
+  "evidence_sha256": {
+    "cross_machine_adjudication": "e7ccb13ca462c7fd8f144b644bbe5b43aa8e2f2c949761b18aa8b48419711da4",
+    "final_verification": "a520d3c0b96ec2e6e236e2ae2f30369c2ad659009ef0cdcf33b38f032b6a1683",
+    "remote_measurements": "fd110f6277b17a43256b7085c857d6a84d54c334c5f0c0c14bc1e1fb21bd9e37",
+    "remote_results": "49ecb6b5da4b50ce0f15d0fa943d881a01e293b9d9ea81bd203aaae247da21d3"
+  },
+  "execution_results": [
+    {
+      "admissible": true,
+      "environment": {
+        "dd_version": "0.6.0",
+        "platform": "Windows-10-10.0.19045-SP0",
+        "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+        "thread_environment": {
+          "MKL_NUM_THREADS": null,
+          "OMP_NUM_THREADS": null,
+          "OPENBLAS_NUM_THREADS": null
+        }
+      },
+      "execution_id": "c30-windows-20260901-001",
+      "independent_verification_sha256": "f1ea8544d47c24fbf4e4f8143d6a190895d759396617f0bbab282002d049f374",
+      "lifecycle_preparation_ns": 752400,
+      "measurement_batches": 128,
+      "measurements_sha256": "9e6f083c729d3344204d68b4c417fed03c8ad0c160e81df4ec80ba37f86d065f",
+      "paired_batches": 64,
+      "paired_block_median_lower_bounds": {
+        "achieved_confidence_level": 0.9615936279296875,
+        "aggregate_speedup": 1.0240934800134966,
+        "by_width_speedup": {
+          "3": 0.9555039456424422,
+          "4": 1.01298945468933,
+          "5": 1.0085065751061253,
+          "6": 1.0291017996071299
+        },
+        "method": "exact_distribution_free_one_sided_binomial_order_statistic",
+        "minimum_width_speedup": 0.9555039456424422,
+        "order_statistic_rank_one_based": 5,
+        "requested_confidence_level": 0.95,
+        "sample_count": 16
+      },
+      "paired_lower_gate": true,
+      "physical_machine_id": "windows-desktop-qd8tm7n-c30",
+      "point_estimates": {
+        "aggregate_ratio_of_median_charged_total_speedup": 1.0359840018944573,
+        "by_width": {
+          "3": 1.0002475828198092,
+          "4": 1.0304037614002992,
+          "5": 1.0242795827373468,
+          "6": 1.042092579085617
+        },
+        "minimum_width_ratio_of_median_charged_total_speedup": 1.0002475828198092
+      },
+      "point_gate": true,
+      "preparation_charge_conserved": true,
+      "schema": "crse-c31-prepared-policy-execution-adjudication/v1",
+      "timed_queries": 1024
+    },
+    {
+      "admissible": true,
+      "environment": {
+        "dd_version": "0.6.0",
+        "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+        "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+        "thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        }
+      },
+      "execution_id": "c31-linux-runpod-20260901-001",
+      "independent_verification_sha256": "7026c20cf7b2995d59f13e8fb2bc85cccdff86af52522ebdea550f91db407a61",
+      "lifecycle_preparation_ns": 70397,
+      "measurement_batches": 128,
+      "measurements_sha256": "fd110f6277b17a43256b7085c857d6a84d54c334c5f0c0c14bc1e1fb21bd9e37",
+      "paired_batches": 64,
+      "paired_block_median_lower_bounds": {
+        "achieved_confidence_level": 0.9615936279296875,
+        "aggregate_speedup": 1.033444645866337,
+        "by_width_speedup": {
+          "3": 0.9763628461273219,
+          "4": 1.054763877330728,
+          "5": 1.014278108338713,
+          "6": 1.037619884148851
+        },
+        "method": "exact_distribution_free_one_sided_binomial_order_statistic",
+        "minimum_width_speedup": 0.9763628461273219,
+        "order_statistic_rank_one_based": 5,
+        "requested_confidence_level": 0.95,
+        "sample_count": 16
+      },
+      "paired_lower_gate": true,
+      "physical_machine_id": "runpod-uh521ect8ufhlx-amd-epyc-9655",
+      "point_estimates": {
+        "aggregate_ratio_of_median_charged_total_speedup": 1.0385141974554695,
+        "by_width": {
+          "3": 1.0154036967738278,
+          "4": 1.0659894713190083,
+          "5": 1.0164805309972123,
+          "6": 1.043493308303049
+        },
+        "minimum_width_ratio_of_median_charged_total_speedup": 1.0154036967738278
+      },
+      "point_gate": true,
+      "preparation_charge_conserved": true,
+      "schema": "crse-c31-prepared-policy-execution-adjudication/v1",
+      "timed_queries": 1024
+    }
+  ],
+  "final_verification": "docs/recognition/c31_linux_confirmation/RUNPOD_C31_FINAL_VERIFICATION_20260901.json",
+  "functional_controls_replayed": 6,
+  "initial_transport_invocation": {
+    "authorized_create_consumed": false,
+    "creation_attempted": false,
+    "estimated_compute_cost_usd": null,
+    "pod_created": false,
+    "reconciliation": "docs/recognition/c31_linux_confirmation/C31_INITIAL_NO_CREATE_RECONCILIATION_20260901.json",
+    "status": "reconciled_no_create",
+    "upload_performed": false
+  },
+  "interpretation": "The unchanged prepared-policy candidate passed the prospective C31 point and distribution-free paired-block gates on Windows and a physical Linux RunPod host. The cross-machine floors are 1.036x aggregate point, 1.000x minimum-width point, 1.024x aggregate lower bound, and 0.956x minimum-width lower bound. This admits a separate shadow review only; no shadow or production promotion occurred.",
+  "measurement_batches": 128,
+  "package": {
+    "source_bytes": 1153868,
+    "source_files": 71
+  },
+  "paired_batches": 64,
+  "policy_refit": false,
+  "post_retrieval_verification_byte_identical": true,
+  "production_promotion": false,
+  "remote_point_estimates": {
+    "aggregate_charged_total_speedup": 1.0385141974554695,
+    "minimum_width_charged_total_speedup": 1.0154036967738278
+  },
+  "remote_scientific_run": "docs/recognition/c31_linux_confirmation/runpod-c31-linux-execute-002/evidence/run-output/c31-prepared-policy-linux-20260901-001",
+  "replication_admissible": true,
+  "report": "LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
+  "run": "docs/recognition/c31_linux_confirmation/runpod-c31-linux-execute-002",
+  "runtime": {
+    "affinity": [
+      13,
+      109
+    ],
+    "bundle_sha256": "1f7350a12f2ee33b73da1ffefce25e48358c2c5736b6cc031d3055fee269036a",
+    "cgroup_cpu_max": "max 100000",
+    "cgroup_memory_max": "3999997952",
+    "cpu_flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin cppc amd_ibpb_ret arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid bus_lock_detect movdiri movdir64b overflow_recov succor smca fsrm avx512_vp2intersect flush_l1d debug_swap",
+    "cpu_model": "AMD EPYC 9655 96-Core Processor",
+    "gil_disabled": 0,
+    "image_amd64_digest": "sha256:b6bd71b0dd3811ddbcbc523ec2965fd1e1bcfdf7a20ab24679273d3bee726129",
+    "image_tag": "python:3.13.15-slim-bookworm",
+    "logical_cpus": 192,
+    "machine": "x86_64",
+    "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+    "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+    "runpod_pod_id": "uh521ect8ufhlx",
+    "source_files": 71
+  },
+  "schema": "crse-learning-milestone-c31-prepared-policy-replication-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "shadow_promotion": false,
+  "source_milestone": "C30",
+  "status": "verified_cross_machine_replication_eligible_for_separate_shadow_review",
+  "timed_queries": 1024,
+  "training": false,
+  "verified_context_records_replayed": 512
+}

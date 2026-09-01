@@ -1,0 +1,144 @@
+{
+  "contract_sha256": "0fc1a9fbe7e9b494ff8502e0477599de9e3488f100109ab49d6c28d6d1bf00d2",
+  "cross_machine_floors": {
+    "aggregate_paired_median_lower": 1.0240934800134966,
+    "aggregate_point": 1.0359840018944573,
+    "minimum_width_paired_median_lower": 0.9555039456424422,
+    "minimum_width_point": 1.0002475828198092
+  },
+  "decision": "replicated_candidate_eligible_for_separate_shadow_review",
+  "eligible_for_separate_shadow_review": true,
+  "exactness_and_charge_gate": true,
+  "execution_count": 2,
+  "execution_results": [
+    {
+      "admissible": true,
+      "environment": {
+        "dd_version": "0.6.0",
+        "platform": "Windows-10-10.0.19045-SP0",
+        "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+        "thread_environment": {
+          "MKL_NUM_THREADS": null,
+          "OMP_NUM_THREADS": null,
+          "OPENBLAS_NUM_THREADS": null
+        }
+      },
+      "execution_id": "c30-windows-20260901-001",
+      "independent_verification_sha256": "f1ea8544d47c24fbf4e4f8143d6a190895d759396617f0bbab282002d049f374",
+      "lifecycle_preparation_ns": 752400,
+      "measurement_batches": 128,
+      "measurements_sha256": "9e6f083c729d3344204d68b4c417fed03c8ad0c160e81df4ec80ba37f86d065f",
+      "paired_batches": 64,
+      "paired_block_median_lower_bounds": {
+        "achieved_confidence_level": 0.9615936279296875,
+        "aggregate_speedup": 1.0240934800134966,
+        "by_width_speedup": {
+          "3": 0.9555039456424422,
+          "4": 1.01298945468933,
+          "5": 1.0085065751061253,
+          "6": 1.0291017996071299
+        },
+        "method": "exact_distribution_free_one_sided_binomial_order_statistic",
+        "minimum_width_speedup": 0.9555039456424422,
+        "order_statistic_rank_one_based": 5,
+        "requested_confidence_level": 0.95,
+        "sample_count": 16
+      },
+      "paired_lower_gate": true,
+      "physical_machine_id": "windows-desktop-qd8tm7n-c30",
+      "point_estimates": {
+        "aggregate_ratio_of_median_charged_total_speedup": 1.0359840018944573,
+        "by_width": {
+          "3": 1.0002475828198092,
+          "4": 1.0304037614002992,
+          "5": 1.0242795827373468,
+          "6": 1.042092579085617
+        },
+        "minimum_width_ratio_of_median_charged_total_speedup": 1.0002475828198092
+      },
+      "point_gate": true,
+      "preparation_charge_conserved": true,
+      "schema": "crse-c31-prepared-policy-execution-adjudication/v1",
+      "timed_queries": 1024
+    },
+    {
+      "admissible": true,
+      "environment": {
+        "dd_version": "0.6.0",
+        "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.36",
+        "python": "3.13.15 (main, Aug 25 2026, 01:18:50) [GCC 12.2.0]",
+        "thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        }
+      },
+      "execution_id": "c31-linux-runpod-20260901-001",
+      "independent_verification_sha256": "7026c20cf7b2995d59f13e8fb2bc85cccdff86af52522ebdea550f91db407a61",
+      "lifecycle_preparation_ns": 70397,
+      "measurement_batches": 128,
+      "measurements_sha256": "fd110f6277b17a43256b7085c857d6a84d54c334c5f0c0c14bc1e1fb21bd9e37",
+      "paired_batches": 64,
+      "paired_block_median_lower_bounds": {
+        "achieved_confidence_level": 0.9615936279296875,
+        "aggregate_speedup": 1.033444645866337,
+        "by_width_speedup": {
+          "3": 0.9763628461273219,
+          "4": 1.054763877330728,
+          "5": 1.014278108338713,
+          "6": 1.037619884148851
+        },
+        "method": "exact_distribution_free_one_sided_binomial_order_statistic",
+        "minimum_width_speedup": 0.9763628461273219,
+        "order_statistic_rank_one_based": 5,
+        "requested_confidence_level": 0.95,
+        "sample_count": 16
+      },
+      "paired_lower_gate": true,
+      "physical_machine_id": "runpod-uh521ect8ufhlx-amd-epyc-9655",
+      "point_estimates": {
+        "aggregate_ratio_of_median_charged_total_speedup": 1.0385141974554695,
+        "by_width": {
+          "3": 1.0154036967738278,
+          "4": 1.0659894713190083,
+          "5": 1.0164805309972123,
+          "6": 1.043493308303049
+        },
+        "minimum_width_ratio_of_median_charged_total_speedup": 1.0154036967738278
+      },
+      "point_gate": true,
+      "preparation_charge_conserved": true,
+      "schema": "crse-c31-prepared-policy-execution-adjudication/v1",
+      "timed_queries": 1024
+    }
+  ],
+  "limitations": [
+    "The paired-block lower bound treats the 16 prespecified blocks as the sampling unit.",
+    "The exact order-statistic interval is distribution-free but does not model machine populations.",
+    "Two physical machines are a minimum replication surface, not broad hardware coverage.",
+    "Passing C31 does not itself authorize shadow or production promotion."
+  ],
+  "local_run": "docs/recognition/runs/c30-prepared-policy-windows-20260901-001",
+  "paired_lower_gate_all_executions": true,
+  "physical_machine_count": 2,
+  "physical_machine_ids": [
+    "runpod-uh521ect8ufhlx-amd-epyc-9655",
+    "windows-desktop-qd8tm7n-c30"
+  ],
+  "point_gate_all_executions": true,
+  "policy_refit": false,
+  "production_promotion": false,
+  "remote_run": "C:\\Users\\brian\\Documents\\CM_Computation\\docs\\recognition\\c31_linux_confirmation\\runpod-c31-linux-execute-002\\evidence\\run-output\\c31-prepared-policy-linux-20260901-001",
+  "replication_admissible": true,
+  "schema": "crse-c31-prepared-policy-cross-machine-adjudication/v1",
+  "shadow_promotion": false,
+  "thresholds": {
+    "aggregate_paired_median_lower_minimum": 1.0,
+    "aggregate_point_minimum": 1.0,
+    "minimum_width_paired_median_lower_minimum": 0.9,
+    "minimum_width_point_minimum": 0.9,
+    "paired_median_lower_confidence_level": 0.95
+  },
+  "timings_rerun_by_adjudicator": false,
+  "training": false
+}
