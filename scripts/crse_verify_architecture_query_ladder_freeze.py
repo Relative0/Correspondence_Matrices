@@ -30,6 +30,7 @@ def main() -> int:
         raise SystemExit("verification output must be a new in-project file")
     freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
     verification = verify_followup_freeze(freeze, ROOT)
+    output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x", encoding="utf-8", newline="\n") as stream:
         json.dump(verification, stream, indent=2, sort_keys=True, allow_nan=False)
         stream.write("\n")
