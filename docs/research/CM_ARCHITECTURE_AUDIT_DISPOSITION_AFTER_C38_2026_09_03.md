@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; accepted work implemented and tested, speculative work gated
+Status: recommendations reconciled; current-source comparison executed and follow-ups bounded
 
 ## Bottom line
 
@@ -34,7 +34,7 @@ value can be measured.
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
 | H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
-| H10 task-matched external controls | **Functionally admitted; timed campaign pending** | Current complete-relation, restriction, multi-root, count/SAT/witness/equivalence, and persistence contracts keep unlike artifacts separate. C34/C35 already exercise BDD/SAT controls where outputs match. A new public comparison requires a fresh frozen corpus and separate authorization. |
+| H10 task-matched external controls | **Timed on one Linux host; publication pending** | Retry 002 completed 19,646 verified rows with unlike artifacts kept separate. Direct BitSet led the complete-vector lane; native fused slots were mixed across restriction cohorts; shared multi-root union was consistently beneficial; natural CNF/CSE/SAT controls led smaller-task lanes. Separately timed q1/q4/q16 cells and cross-machine replication remain required before a public update. |
 
 ## Accepted architecture changes
 
@@ -62,18 +62,18 @@ training a router for the present q64 contract.
 
 ## Next controlled boundary
 
-1. Freeze a fresh current-source comparison corpus that includes the public regression
-   cohort plus new tree-like/high-sharing cases without using method timings for
-   selection.
-2. Freeze balanced schedules, exact arm configurations, source closure, failure rules,
-   memory fields, and publication gates.
-3. Validate the package locally and prepare one exact RunPod authorization request.
-4. Run no timed cloud campaign until that separate authorization is granted.
-5. If verified timing is later obtained, add new task-labelled sections to
+1. Treat retry 002 as the completed, source-bound one-host result; retain every favorable,
+   unfavorable, and refused cell.
+2. Correct Lane B so q1/q4/q16/q64 receive separate timing cells rather than only prefix
+   correctness digests.
+3. Add per-cell memory measurement if memory routing or memory comparisons are intended;
+   the current process-wide `ru_maxrss` field is not sufficient.
+4. Freeze the corrected schedule and source closure before any new timing, then obtain
+   fresh exact authorization rather than reusing retry 002's authorization.
+5. Replicate on a separate machine/compiler. Only then add task-labelled sections to
    `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
    silently replacing it.
 
 This is the safe stopping point for architecture implementation before the comparison
 freeze. It is not a claim that every research idea was implemented, nor that further
 testing can never expose another useful architecture.
-

@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: refresh contract; C38 completed with exactness confirmed and a mixed performance result
+Status: current-source Linux comparison executed; q-ladder correction and cross-machine replication pending
 
 ## Current implementation status
 
@@ -21,9 +21,10 @@ permanently unrun because the frozen package differs from current source in
 `bitset_backend.py`, `cm_exprlib.py`, and `cmbench/comparative/contracts.py`. No combined
 W5 conclusion is permitted and no old authorization may be reused.
 
-No current-source timing or public-site update has yet occurred. The next boundary is a
-fresh corpus/schedule/arm/gate freeze, followed by a separately authorized comparison
-campaign.
+The fresh corpus/schedule/arm/gate freeze and the separately authorized current-source
+Linux/GCC comparison have now completed. No public-site update has occurred. The verified
+result is recorded in
+`docs/recognition/architecture_comparison_execution_retry_20260903/VERIFIED_INTERPRETATION.md`.
 
 ## C38 result
 
@@ -49,6 +50,32 @@ Therefore C38 confirms the Linux/GCC implementation, exactness, and aggregate/mu
 benefit. It does not confirm unconditional single-root performance. The native backend
 remains guarded/opt-in; the comparison refresh must retain the individual Linux
 regression and must not refit the frozen gate after seeing it.
+
+## Current-source architecture comparison result
+
+Retry 002 completed all 19,646 scheduled rows on the single authorized Secure CPU Pod.
+The independent verifier found zero semantic, schedule, source, or artifact mismatches;
+the Pod was deleted and both final inventories were empty. Estimated compute cost was
+$0.003092.
+
+The task-matched result is also mixed:
+
+- for complete explicit relations, `cm_ir_recursive_packed` was 1.053x faster than dense
+  CM but achieved only 0.930x against the current identity-memoized direct BitSet; BitSet
+  won all 78 runnable case clusters;
+- for 64 repeated restrictions, native fused slots were 1.055x over Python R2 overall
+  and 1.179x on the 18 observed C36 cases, but only 0.997x on 36 fresh cases; the minimum
+  case was 0.812x and failed the frozen 0.95 floor, so native remains guarded/opt-in;
+- related-root union execution was consistently beneficial: 1.147x over separate Python
+  roots and 1.238x over separate native roots across all 12 case clusters;
+- the smaller count/SAT/witness/equivalence/persistence lanes favored their natural
+  CNF/CSE/SAT controls rather than CM as a universal fixed backend.
+
+Two measurement limitations block a public refresh. Lane B timed only the complete q64
+trace; q1/q4/q16 were correctness digests of prefixes, not separately timed cells, so no
+break-even ladder may be claimed. Per-row RSS came from process-wide `ru_maxrss`, so it
+cannot support per-arm memory routing. The run is one Linux host execution and does not
+satisfy the freeze's separate cross-machine publication condition.
 
 ## Decision
 
@@ -181,12 +208,15 @@ the evidence and denominator.
    the performance gate passes; its performance claim depends on the observed outcome.
 3. **Complete:** implement and locally validate the four-lane comparison harness using current source
    on observed development/regression cohorts.
-4. **Pending:** freeze a fresh comparison corpus, schedules, arm configurations, and publication
+4. **Complete:** freeze a fresh comparison corpus, schedules, arm configurations, and publication
    gates before timing it.
-5. **Pending:** request a separate RunPod authorization for the comparison campaign; do not reuse the
-   narrow C38 authorization.
-6. **Pending after verified timing:** update `expert.html` with scoped current sections, retain historical results and dates,
-   run generated-site consistency tests, and publish only under separate authorization.
+5. **Complete:** obtain a separate exact authorization and execute the current-source Linux/GCC
+   comparison; retry 002 completed and was independently verified.
+6. **Pending:** revise Lane B so q1/q4/q16/q64 are separate timed contracts, and replace
+   process-high-water RSS with a per-cell memory measurement before making memory claims.
+7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
+8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
+   results and dates, run generated-site consistency tests, and publish only under separate authorization.
 
 This sequence highlights where a CM or CM-family architecture is useful without turning
 a workload-specific advantage into a general claim.

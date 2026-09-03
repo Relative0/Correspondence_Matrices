@@ -5,9 +5,6 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
-
-
 ROOT = Path(__file__).resolve().parents[1]
 HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
 
@@ -106,7 +103,7 @@ def test_declared_refusal_count_matches_the_frozen_schedule():
     assert 19_646 - refused == request["scope"]["expected_counts"]["ok"] == 17_910
 
 
-def test_controller_remote_program_compiles_and_authorization_gate_is_closed():
+def test_controller_remote_program_compiles_and_exact_authorization_is_bound():
     controller = _controller()
     compile(controller.base.REMOTE_CODE, "<architecture-comparison-remote>", "exec")
     compile(controller.INSTALL_CODE, "<architecture-comparison-install>", "exec")
@@ -114,6 +111,11 @@ def test_controller_remote_program_compiles_and_authorization_gate_is_closed():
     assert "architecture-comparison-verification" in controller.base.REMOTE_CODE
     assert "--max-seconds', '420'" in controller.base.REMOTE_CODE
     assert controller.RESULT_CAP_BYTES == 48 << 20
-    assert not controller.AUTHORIZATION.exists()
-    with pytest.raises(FileNotFoundError):
-        controller.require_authorization()
+    assert controller.AUTHORIZATION.exists()
+    authorization = controller.require_authorization()
+    assert authorization["schema"] == (
+        "cm-runpod-architecture-comparison-retry-002-exact-payload-authorization/v1"
+    )
+    assert authorization["authorized"] is True
+    assert authorization["user_total_ceiling_usd"] == 0.05
+    assert authorization["prior_attempt_authorization_reused"] is False
