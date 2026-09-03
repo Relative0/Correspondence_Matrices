@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; query-ladder attempt 001 closed incomplete and retry correction implemented
+Status: recommendations reconciled; query-ladder retry 002 frozen and awaiting exact authorization
 
 ## Bottom line
 
@@ -68,12 +68,13 @@ training a router for the present q64 contract.
    than only prefix correctness digests.
 3. **Complete in source:** every decision-bearing cell now has an isolated-child memory
    contract; retry 002's process-wide `ru_maxrss` remains non-comparable.
-4. **Attempt 001 safely closed; refreeze pending:** the first exact run reached
+4. **Attempt 001 safely closed; retry 002 frozen:** the first exact run reached
    11,744/27,648 rows before timeout and produced no result. It exposed an inherited-heap
    `gc.collect()` artifact that consumed 83% of accounted time. The source correction
    preserves explicit cache cleanup, uses process exit for the remaining cell heap, and
-   reports isolation lifecycle time separately. A new immutable package and fresh exact
-   authorization are required; neither prior authorization may be reused.
+   reports isolation lifecycle time separately. The new immutable package passed clean
+   local replay; fresh exact authorization is still required, and neither prior
+   authorization may be reused.
 5. **Pending after that run:** replicate on a separate machine/compiler. Only then add task-labelled sections to
    `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
    silently replacing it.

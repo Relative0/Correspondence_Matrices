@@ -223,7 +223,8 @@ the evidence and denominator.
    that per-child `gc.collect()` spent 83% of accounted time scanning the inherited
    parent heap. The corrected source charges explicit cache clearing, delegates the
    remaining cell heap to child exit, and reports isolation lifecycle time separately.
-   It requires a new freeze and fresh exact authorization.
+   Retry 002 is source-frozen and passed isolated local package replay; its fresh exact
+   authorization remains pending.
 7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
 8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.

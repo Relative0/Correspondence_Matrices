@@ -1,6 +1,7 @@
 """Prepare the corrected query-ladder execution contract and upload manifest."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -17,13 +18,9 @@ from cmbench.comparative.architecture_query_ladder_followup import verify_follow
 
 HERE = ROOT / "docs/recognition/architecture_query_ladder_followup_execution_20260903"
 FREEZE = ROOT / "docs/recognition/architecture_query_ladder_followup_freeze_20260903/FREEZE.json"
-FREEZE_VERIFICATION = FREEZE.parent / "VERIFICATION.json"
 PARENT_ANALYSIS = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json"
 PARENT_MANIFEST = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903/UPLOAD_MANIFEST.json"
 ORACLES = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json"
-CONTRACT = HERE / "EXECUTION_CONTRACT.json"
-PROTOCOL = HERE / "PROTOCOL.md"
-MANIFEST = HERE / "UPLOAD_MANIFEST.json"
 RUN_NAME = "architecture-query-ladder-linux-gcc-20260903-001"
 IMAGE_TAG = "python:3.13.15-bookworm"
 IMAGE_AMD64_DIGEST = "sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8"
@@ -60,8 +57,6 @@ NEW_RUNTIME_SOURCES = (
     "scripts/cm_architecture_query_ladder_campaign.py",
     "scripts/crse_verify_architecture_query_ladder_freeze.py",
     "scripts/crse_verify_architecture_query_ladder_campaign.py",
-    "docs/recognition/architecture_query_ladder_followup_freeze_20260903/FREEZE.json",
-    "docs/recognition/architecture_query_ladder_followup_freeze_20260903/VERIFICATION.json",
     "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json",
 )
 
@@ -85,11 +80,40 @@ def _write_new(path: Path, value: Any) -> None:
 
 
 def main() -> int:
-    if HERE.exists():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=HERE)
+    parser.add_argument("--freeze", type=Path, default=FREEZE)
+    parser.add_argument("--freeze-verification", type=Path)
+    parser.add_argument("--run-name", default=RUN_NAME)
+    parser.add_argument("--date", default="2026-09-03")
+    parser.add_argument("--workload-wall-seconds", type=int, default=420)
+    parser.add_argument("--remote-command-seconds", type=int, default=480)
+    parser.add_argument("--cleanup-seconds", type=int, default=600)
+    parser.add_argument("--reconciliation-seconds", type=int, default=720)
+    args = parser.parse_args()
+    output_dir = args.output_dir.resolve()
+    freeze_path = args.freeze.resolve()
+    freeze_verification = (
+        args.freeze_verification.resolve()
+        if args.freeze_verification else freeze_path.parent / "VERIFICATION.json"
+    )
+    contract_path = output_dir / "EXECUTION_CONTRACT.json"
+    protocol_path = output_dir / "PROTOCOL.md"
+    manifest_path = output_dir / "UPLOAD_MANIFEST.json"
+    if (
+        not output_dir.is_relative_to(ROOT) or output_dir.exists()
+        or not freeze_path.is_relative_to(ROOT) or not freeze_verification.is_relative_to(ROOT)
+        or args.workload_wall_seconds <= 0
+        or args.remote_command_seconds <= args.workload_wall_seconds
+        or args.cleanup_seconds <= args.remote_command_seconds
+        or args.reconciliation_seconds <= args.cleanup_seconds
+    ):
+        raise SystemExit("invalid query-ladder execution-package boundary")
+    if output_dir.exists():
         raise SystemExit("refusing to overwrite query-ladder execution package")
-    freeze = _load(FREEZE)
+    freeze = _load(freeze_path)
     verified = verify_followup_freeze(freeze, ROOT)
-    recorded_verification = _load(FREEZE_VERIFICATION)
+    recorded_verification = _load(freeze_verification)
     if verified != recorded_verification or verified["planned_cells"] != TOTAL_CELLS:
         raise ValueError("query-ladder freeze verification mismatch")
     parent_analysis = _load(PARENT_ANALYSIS)
@@ -98,12 +122,12 @@ def main() -> int:
     contract = {
         "schema": "cm-architecture-query-ladder-execution-contract/v1",
         "status": "prepared_not_authorized",
-        "date": "2026-09-03",
-        "run_name": RUN_NAME,
+        "date": args.date,
+        "run_name": args.run_name,
         "source_checkpoint": freeze["source_checkpoint"],
-        "freeze_file_sha256": _sha256(FREEZE),
+        "freeze_file_sha256": _sha256(freeze_path),
         "freeze_canonical_sha256": freeze["freeze_sha256"],
-        "freeze_verification_sha256": _sha256(FREEZE_VERIFICATION),
+        "freeze_verification_sha256": _sha256(freeze_verification),
         "oracles_sha256": _sha256(ORACLES),
         "parent_analysis_sha256": _sha256(PARENT_ANALYSIS),
         "schedule": {
@@ -116,6 +140,8 @@ def main() -> int:
             "expected_counts": {"ok": TOTAL_CELLS, "refused": 0, "failed": 0},
         },
         "memory": freeze["measurement_contract"]["memory"],
+        "cleanup": freeze["measurement_contract"]["cleanup"],
+        "timing_isolation": freeze["measurement_contract"]["timing"],
         "runtime": {
             "image": IMAGE,
             "python": "3.13.15",
@@ -124,13 +150,13 @@ def main() -> int:
             "dependencies": [NUMPY, SIX, NETWORKX, PYTHON_SAT],
         },
         "limits": {
-            "workload_wall_seconds": 420,
-            "remote_command_seconds": 480,
+            "workload_wall_seconds": args.workload_wall_seconds,
+            "remote_command_seconds": args.remote_command_seconds,
             "result_cap_bytes": RESULT_CAP_BYTES,
             "one_cloud_create": True,
             "automatic_replacement": False,
-            "cleanup_seconds": 600,
-            "reconciliation_seconds": 720,
+            "cleanup_seconds": args.cleanup_seconds,
+            "reconciliation_seconds": args.reconciliation_seconds,
         },
         "permissions": {
             "local_functional_validation": True,
@@ -145,7 +171,7 @@ def main() -> int:
         },
         "claim_boundary": freeze["publication_gates"],
     }
-    _write_new(CONTRACT, contract)
+    _write_new(contract_path, contract)
     protocol = f"""# Corrected query-ladder and isolated-memory execution protocol
 
 This package is a source-bound Lane-B follow-up to architecture comparison retry 002.
@@ -157,8 +183,10 @@ revise the complete-vector, multi-root, or smaller-task lanes.
 Every decision-bearing cell runs inside a fresh Linux fork child. Timing starts and ends
 inside that child, so process-isolation launch cost is excluded from backend task time.
 The parent records the child's total peak RSS from `wait4` and the inherited baseline
-from `/proc/self/statm`, then reports their nonnegative difference. These are descriptive
-per-cell host-memory measurements; publication still requires a second machine.
+from `/proc/self/statm`, then reports their nonnegative difference. The task charges
+explicit backend-cache clearing and uses child exit for the remaining cell heap; the
+full fork/IPC/exit lifecycle is reported separately. These are descriptive per-cell
+host-memory measurements; publication still requires a second machine.
 
 The required artifact at every query count is the ordered explicit residual-relation
 prefix, including exact count, SAT flag, canonical witness, and digest. An independent
@@ -167,17 +195,23 @@ before interpretation. The workload uses no network after dependency setup.
 
 A later exact approval is limited to one Secure CPU Pod, one create and no replacement,
 2 vCPU, at least 4 GB RAM, 12 GB ephemeral disk, no persistent/network volume, a
-$0.25/hour rate ceiling, a $0.05 total ceiling, cleanup within ten minutes, and inventory
-reconciliation within twelve minutes. It authorizes no selector fitting, neural training,
+$0.25/hour rate ceiling and a separately declared total ceiling, cleanup within
+{args.cleanup_seconds} seconds, and inventory reconciliation within
+{args.reconciliation_seconds} seconds. It authorizes no selector fitting, neural training,
 production routing, website update, publication, commit, push, or reuse of an earlier
 authorization.
 """
-    _write_new(PROTOCOL, protocol)
+    _write_new(protocol_path, protocol)
     parent_manifest = _load(PARENT_MANIFEST)
     sources = {row["source"] for row in parent_manifest["files"]}
     sources.update(NEW_RUNTIME_SOURCES)
     sources.update(row["path"] for row in freeze["source_closure"])
-    sources.update({CONTRACT.relative_to(ROOT).as_posix(), PROTOCOL.relative_to(ROOT).as_posix()})
+    sources.update({
+        freeze_path.relative_to(ROOT).as_posix(),
+        freeze_verification.relative_to(ROOT).as_posix(),
+        contract_path.relative_to(ROOT).as_posix(),
+        protocol_path.relative_to(ROOT).as_posix(),
+    })
     files = []
     for relative in sorted(sources):
         path = ROOT.joinpath(*Path(relative).parts)
@@ -192,25 +226,26 @@ authorization.
     manifest = {
         "schema": "cm-architecture-query-ladder-runpod-upload-manifest/v1",
         "authorization_status": "upload_not_authorized_exact_approval_pending",
-        "created_date": "2026-09-03",
-        "run_name": RUN_NAME,
+        "created_date": args.date,
+        "run_name": args.run_name,
         "file_count": len(files),
         "bytes": sum(row["bytes"] for row in files),
         "files": files,
         "commands": [
             ["python", "-B", "scripts/cm_architecture_query_ladder_campaign.py",
-             "--output", f"run-output/{RUN_NAME}", "--compiler", "cc",
-             "--freeze", FREEZE.relative_to(ROOT).as_posix(),
-             "--oracles", ORACLES.relative_to(ROOT).as_posix(), "--max-seconds", "420"],
+             "--output", f"run-output/{args.run_name}", "--compiler", "cc",
+             "--freeze", freeze_path.relative_to(ROOT).as_posix(),
+             "--oracles", ORACLES.relative_to(ROOT).as_posix(),
+             "--max-seconds", str(args.workload_wall_seconds)],
             ["python", "-B", "scripts/crse_verify_architecture_query_ladder_campaign.py",
-             "--run-dir", f"run-output/{RUN_NAME}",
-             "--freeze", FREEZE.relative_to(ROOT).as_posix(),
+             "--run-dir", f"run-output/{args.run_name}",
+             "--freeze", freeze_path.relative_to(ROOT).as_posix(),
              "--oracles", ORACLES.relative_to(ROOT).as_posix()],
         ],
-        "execution_contract_sha256": _sha256(CONTRACT),
-        "protocol_sha256": _sha256(PROTOCOL),
-        "freeze_sha256": _sha256(FREEZE),
-        "freeze_verification_sha256": _sha256(FREEZE_VERIFICATION),
+        "execution_contract_sha256": _sha256(contract_path),
+        "protocol_sha256": _sha256(protocol_path),
+        "freeze_sha256": _sha256(freeze_path),
+        "freeze_verification_sha256": _sha256(freeze_verification),
         "oracles_sha256": _sha256(ORACLES),
         "runtime": contract["runtime"],
         "limits": contract["limits"],
@@ -222,7 +257,7 @@ authorization.
             "unrelated dirty work", "prior RunPod evidence",
         ],
     }
-    _write_new(MANIFEST, manifest)
+    _write_new(manifest_path, manifest)
     print(json.dumps({
         "status": manifest["authorization_status"],
         "planned_cells": TOTAL_CELLS,

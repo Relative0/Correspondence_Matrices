@@ -2,7 +2,7 @@
 
 Date: 2026-09-03
 Scope: non-neural repeated exact restrictions (architecture comparison Lane B)
-Status: attempt 001 closed incomplete; isolated-cleanup correction implemented for a fresh freeze
+Status: attempt 001 closed incomplete; retry 002 frozen and awaiting exact authorization
 
 ## What this phase corrects
 
@@ -68,5 +68,7 @@ cell heap. It therefore measured the isolation mechanism rather than backend cle
 
 The corrected implementation clears the declared backend caches inside the task timing,
 uses child exit for the remaining cell-heap cleanup, and reports the full fork/IPC/exit
-lifecycle separately. A new source closure, package, and exact authorization are required;
-attempt 001's authorization cannot be reused.
+lifecycle separately. Retry 002 is now source-frozen at checkpoint `13d9927`, and its
+regenerated 70-file package passed isolated local replay without timing or memory
+evidence. Attempt 001's authorization cannot be reused; the exact retry request is
+separate and remains ungranted.

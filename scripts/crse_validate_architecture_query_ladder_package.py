@@ -1,6 +1,7 @@
 """Validate the corrected query-ladder package in an isolated local tree."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -35,9 +36,17 @@ def _write_new(path: Path, value: Any) -> None:
 
 
 def main() -> int:
-    if ISOLATED.exists() or OUTPUT.exists():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--package-dir", type=Path, default=HERE)
+    parser.add_argument("--smoke-name", default=SMOKE_NAME)
+    args = parser.parse_args()
+    package_dir = args.package_dir.resolve()
+    manifest_path = package_dir / "UPLOAD_MANIFEST.json"
+    isolated = package_dir / ".isolated-package-validation"
+    output_path = package_dir / "LOCAL_PACKAGE_VALIDATION.json"
+    if not package_dir.is_relative_to(ROOT) or isolated.exists() or output_path.exists():
         raise SystemExit("refusing to overwrite query-ladder local package validation")
-    manifest = _load(MANIFEST)
+    manifest = _load(manifest_path)
     if (
         manifest.get("schema") != "cm-architecture-query-ladder-runpod-upload-manifest/v1"
         or manifest.get("authorization_status") != "upload_not_authorized_exact_approval_pending"
@@ -47,38 +56,43 @@ def main() -> int:
         or manifest.get("limits", {}).get("workload_wall_seconds") != 420
     ):
         raise ValueError("query-ladder upload manifest")
-    ISOLATED.mkdir(parents=True)
+    isolated.mkdir(parents=True)
     for row in manifest["files"]:
         source = ROOT.joinpath(*Path(row["source"]).parts)
-        target = ISOLATED.joinpath(*Path(row["target"]).parts)
+        target = isolated.joinpath(*Path(row["target"]).parts)
         if source.stat().st_size != row["bytes"] or _sha256(source) != row["sha256"]:
             raise ValueError(f"query-ladder package source changed: {row['source']}")
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
         if target.stat().st_size != row["bytes"] or _sha256(target) != row["sha256"]:
             raise ValueError(f"query-ladder isolated copy mismatch: {row['target']}")
-    initial = sorted(path.relative_to(ISOLATED).as_posix() for path in ISOLATED.rglob("*") if path.is_file())
+    initial = sorted(path.relative_to(isolated).as_posix() for path in isolated.rglob("*") if path.is_file())
     if initial != sorted(row["target"] for row in manifest["files"]):
         raise ValueError("unexpected query-ladder isolated package file")
     environment = os.environ.copy()
     environment.pop("PYTHONPATH", None)
+    campaign_command = manifest["commands"][0]
+    freeze_target = campaign_command[campaign_command.index("--freeze") + 1]
+    oracles_target = campaign_command[campaign_command.index("--oracles") + 1]
     freeze_check = subprocess.run(
         [
             sys.executable, "-B", "scripts/crse_verify_architecture_query_ladder_freeze.py",
+            "--freeze", freeze_target,
             "--output", "run-output/freeze-verification.json",
         ],
-        cwd=ISOLATED, env=environment, capture_output=True, text=True, timeout=120,
+        cwd=isolated, env=environment, capture_output=True, text=True, timeout=120,
     )
     if freeze_check.returncode:
         raise RuntimeError(f"isolated follow-up freeze verification failed: {freeze_check.stderr[-3000:]}")
-    smoke_output = ISOLATED / "run-output" / SMOKE_NAME
+    smoke_output = isolated / "run-output" / args.smoke_name
     command = [
         sys.executable, "-B", "scripts/cm_architecture_query_ladder_campaign.py",
-        "--output", str(smoke_output), "--functional-smoke", "--local-platform-validation",
+        "--output", str(smoke_output), "--freeze", freeze_target,
+        "--oracles", oracles_target, "--functional-smoke", "--local-platform-validation",
     ]
     started = time.perf_counter()
     completed = subprocess.run(
-        command, cwd=ISOLATED, env=environment, capture_output=True, text=True, timeout=300,
+        command, cwd=isolated, env=environment, capture_output=True, text=True, timeout=300,
     )
     if completed.returncode:
         raise RuntimeError(f"isolated query-ladder functional smoke failed: {completed.stderr[-3000:]}")
@@ -93,12 +107,12 @@ def main() -> int:
         or smoke.get("local_platform_validation_only") is not True
     ):
         raise RuntimeError("isolated query-ladder functional smoke invariant")
-    result_files = [path for path in (ISOLATED / "run-output").rglob("*") if path.is_file()]
+    result_files = [path for path in (isolated / "run-output").rglob("*") if path.is_file()]
     result_bytes = sum(path.stat().st_size for path in result_files)
     document = {
         "schema": "cm-architecture-query-ladder-local-package-validation/v1",
         "status": "pass",
-        "manifest_sha256": _sha256(MANIFEST),
+        "manifest_sha256": _sha256(manifest_path),
         "package_files": manifest["file_count"],
         "package_bytes": manifest["bytes"],
         "isolated_initial_files": len(initial),
@@ -121,7 +135,7 @@ def main() -> int:
         "stderr_sha256": hashlib.sha256(completed.stderr.encode()).hexdigest(),
         "wall_seconds": time.perf_counter() - started,
     }
-    _write_new(OUTPUT, document)
+    _write_new(output_path, document)
     print(json.dumps(document, sort_keys=True))
     return 0
 
