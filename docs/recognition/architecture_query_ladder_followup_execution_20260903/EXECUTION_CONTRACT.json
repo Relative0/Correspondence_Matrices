@@ -1,0 +1,115 @@
+{
+  "claim_boundary": {
+    "all_cells_have_isolated_memory_measurements": true,
+    "all_four_query_counts_separately_timed": true,
+    "cross_machine_claim_requires_separate_replication": true,
+    "historical_windows_1_472x_retained": true,
+    "native_minimum_case_speedup_floor_at_each_query_count": 0.95,
+    "no_universal_winner_headline": true,
+    "retain_all_unfavorable_cells": true,
+    "zero_semantic_schedule_source_or_artifact_mismatches": true
+  },
+  "date": "2026-09-03",
+  "freeze_canonical_sha256": "3c96d32bd94f4de6ce33bdf17026e478ca73674afa160b1027d70ef354c0a86b",
+  "freeze_file_sha256": "9b25f466abba5821431a8ed69067c54e2df3925c835fcff0f64dd2edd3f84b80",
+  "freeze_verification_sha256": "d6576ac8f62ac9e693a2b3c24093c1836ad96764c4fb48f5609cd68820a0c716",
+  "limits": {
+    "automatic_replacement": false,
+    "cleanup_seconds": 600,
+    "one_cloud_create": true,
+    "reconciliation_seconds": 720,
+    "remote_command_seconds": 480,
+    "result_cap_bytes": 50331648,
+    "workload_wall_seconds": 420
+  },
+  "memory": {
+    "baseline_source": "/proc/self/statm immediately before fork",
+    "interpretation": "descriptive total and incremental cell peak on the execution host",
+    "method": "isolated_fork_child_wait4_ru_maxrss/v1",
+    "one_fresh_child_per_timed_cell": true,
+    "peak_source": "os.wait4 child rusage.ru_maxrss",
+    "reports_inherited_baseline_and_incremental_peak": true,
+    "timing_inside_child_excludes_fork": true
+  },
+  "oracles_sha256": "079a60fddf61a47cd4f65ed085b93c1932bc4acdb6c1329094524cc67640b509",
+  "parent_analysis_sha256": "5a5c512621f8174ac3ef48df991928fe4038e5a637f7572d61df600bda1ebcc8",
+  "permissions": {
+    "local_functional_validation": true,
+    "local_timing": false,
+    "neural_training": false,
+    "production_routing_change": false,
+    "publication": false,
+    "runpod_authorization_request": true,
+    "runpod_execution": false,
+    "selector_fitting": false,
+    "website_update": false
+  },
+  "run_name": "architecture-query-ladder-linux-gcc-20260903-001",
+  "runtime": {
+    "compiler": "GCC-family cc",
+    "compiler_flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-shared",
+      "-fPIC"
+    ],
+    "dependencies": [
+      {
+        "name": "numpy",
+        "requirement": "numpy==2.3.2 --hash=sha256:938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "sha256": "938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "version": "2.3.2"
+      },
+      {
+        "bytes": 11050,
+        "filename": "six-1.17.0-py2.py3-none-any.whl",
+        "name": "six",
+        "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+        "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+        "version": "1.17.0"
+      },
+      {
+        "bytes": 2068504,
+        "filename": "networkx-3.6.1-py3-none-any.whl",
+        "name": "networkx",
+        "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+        "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+        "version": "3.6.1"
+      },
+      {
+        "bytes": 3943142,
+        "filename": "python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "name": "python-sat",
+        "sha256": "fd55285f4ef679aaa62699660121423ec35b97324095ae34db4edb0356422a45",
+        "url": "https://files.pythonhosted.org/packages/cf/96/4290b2af2853f81061b9aa6ddf118523bc9b1d922842ee78124844ee35d9/python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "version": "1.9.dev15"
+      }
+    ],
+    "image": "python:3.13.15-bookworm@sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8",
+    "python": "3.13.15"
+  },
+  "schedule": {
+    "arms": 8,
+    "cells_per_query_count": 6912,
+    "counterbalance_blocks": 16,
+    "expected_counts": {
+      "failed": 0,
+      "ok": 27648,
+      "refused": 0
+    },
+    "query_counts": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "runnable_cases": 54,
+    "total_cells": 27648
+  },
+  "schema": "cm-architecture-query-ladder-execution-contract/v1",
+  "source_checkpoint": "588c9329a693f1d678bda1801b415b7df542ebb4",
+  "status": "prepared_not_authorized"
+}

@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: current-source Linux comparison executed; q-ladder correction and cross-machine replication pending
+Status: current-source Linux comparison executed; corrected q-ladder frozen and awaiting exact authorization
 
 ## Current implementation status
 
@@ -73,9 +73,13 @@ The task-matched result is also mixed:
 
 Two measurement limitations block a public refresh. Lane B timed only the complete q64
 trace; q1/q4/q16 were correctness digests of prefixes, not separately timed cells, so no
-break-even ladder may be claimed. Per-row RSS came from process-wide `ru_maxrss`, so it
-cannot support per-arm memory routing. The run is one Linux host execution and does not
-satisfy the freeze's separate cross-machine publication condition.
+break-even ladder may be claimed from retry 002. Per-row RSS came from process-wide
+`ru_maxrss`, so that run cannot support per-arm memory routing. A corrected follow-up is
+now implemented, source-frozen, and locally replayed: q1/q4/q16/q64 are 27,648 distinct
+timed cells, and every decision-bearing cell uses a fresh Linux child with peak RSS
+collected by `wait4` and an inherited `/proc/self/statm` baseline. This is preparation,
+not timing evidence; the exact RunPod request still requires fresh authorization. A
+later separate-machine/compiler replication remains required for publication.
 
 ## Decision
 
@@ -212,8 +216,10 @@ the evidence and denominator.
    gates before timing it.
 5. **Complete:** obtain a separate exact authorization and execute the current-source Linux/GCC
    comparison; retry 002 completed and was independently verified.
-6. **Pending:** revise Lane B so q1/q4/q16/q64 are separate timed contracts, and replace
-   process-high-water RSS with a per-cell memory measurement before making memory claims.
+6. **Prepared; execution not authorized:** Lane B now gives q1/q4/q16/q64 separate timed
+   contracts and uses isolated-child `wait4` peak RSS with a pre-fork inherited baseline.
+   The 27,648-row source-closed package passed a clean local functional replay without
+   producing timing or memory evidence. Its exact one-Pod request awaits user authorization.
 7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
 8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.

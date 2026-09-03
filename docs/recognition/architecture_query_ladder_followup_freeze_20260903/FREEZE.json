@@ -1,0 +1,345 @@
+{
+  "date": "2026-09-03",
+  "freeze_sha256": "3c96d32bd94f4de6ce33bdf17026e478ca73674afa160b1027d70ef354c0a86b",
+  "measurement_contract": {
+    "artifact": "explicit residual relation prefix with exact count, SAT flag, canonical witness, and digest",
+    "memory": {
+      "baseline_source": "/proc/self/statm immediately before fork",
+      "interpretation": "descriptive total and incremental cell peak on the execution host",
+      "method": "isolated_fork_child_wait4_ru_maxrss/v1",
+      "one_fresh_child_per_timed_cell": true,
+      "peak_source": "os.wait4 child rusage.ru_maxrss",
+      "reports_inherited_baseline_and_incremental_peak": true,
+      "timing_inside_child_excludes_fork": true
+    },
+    "timing": {
+      "accounted_total_is_stage_sum": true,
+      "each_query_count_is_a_separate_cell": true,
+      "fork_launch_overhead_in_timing": false,
+      "reason": "fork is a measurement-isolation mechanism, not part of the backend task",
+      "stages": [
+        "parse_normalization_ns",
+        "representation_construction_ns",
+        "compilation_ns",
+        "binding_ns",
+        "evaluation_ns",
+        "delivery_ns",
+        "serialization_ns_when_applicable",
+        "cleanup_ns"
+      ]
+    }
+  },
+  "memory_evidence_produced": false,
+  "oracles": {
+    "bytes": 77195,
+    "path": "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json",
+    "sha256": "079a60fddf61a47cd4f65ed085b93c1932bc4acdb6c1329094524cc67640b509"
+  },
+  "parent_analysis": {
+    "bytes": 253621,
+    "path": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json",
+    "sha256": "5a5c512621f8174ac3ef48df991928fe4038e5a637f7572d61df600bda1ebcc8"
+  },
+  "parent_freeze": {
+    "bytes": 308659,
+    "path": "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json",
+    "sha256": "7a20c100a6b615cdced3a0146c9b9c88cb8b2c690279e398cb7f2c8459ef583a"
+  },
+  "permissions": {
+    "cloud_execution": false,
+    "local_synthetic_functional_validation": true,
+    "local_timing": false,
+    "neural_training": false,
+    "production_routing_change": false,
+    "publication": false,
+    "selector_fitting": false,
+    "website_update": false
+  },
+  "publication_gates": {
+    "all_cells_have_isolated_memory_measurements": true,
+    "all_four_query_counts_separately_timed": true,
+    "cross_machine_claim_requires_separate_replication": true,
+    "historical_windows_1_472x_retained": true,
+    "native_minimum_case_speedup_floor_at_each_query_count": 0.95,
+    "no_universal_winner_headline": true,
+    "retain_all_unfavorable_cells": true,
+    "zero_semantic_schedule_source_or_artifact_mismatches": true
+  },
+  "schedule": {
+    "arm_orders": [
+      [
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots"
+      ],
+      [
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness"
+      ],
+      [
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint"
+      ],
+      [
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words"
+      ],
+      [
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint"
+      ],
+      [
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words"
+      ],
+      [
+        "direct_bitset_restriction",
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection"
+      ],
+      [
+        "native_fused_slots",
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction"
+      ],
+      [
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness"
+      ],
+      [
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint"
+      ],
+      [
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words"
+      ],
+      [
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint"
+      ],
+      [
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words"
+      ],
+      [
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction",
+        "current_projection"
+      ],
+      [
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots",
+        "direct_bitset_restriction"
+      ],
+      [
+        "direct_bitset_restriction",
+        "current_projection",
+        "cse_flat_words",
+        "cse_flat_bigint",
+        "cm_ir_words",
+        "cm_ir_bigint",
+        "r2_topological_liveness",
+        "native_fused_slots"
+      ]
+    ],
+    "arms": [
+      "r2_topological_liveness",
+      "cm_ir_bigint",
+      "cm_ir_words",
+      "cse_flat_bigint",
+      "cse_flat_words",
+      "current_projection",
+      "direct_bitset_restriction",
+      "native_fused_slots"
+    ],
+    "blocks": 16,
+    "case_order": [
+      "c36-decoder_reverse_shift-e1ed090d392bb702",
+      "fresh-high-sharing-mixed-k11-r1",
+      "fresh-high-sharing-mixed-k14-r0",
+      "fresh-high-sharing-andor-k11-r1",
+      "fresh-high-sharing-andor-k8-r0",
+      "fresh-tree-andor-k8-r0",
+      "fresh-tree-mixed-k11-r1",
+      "fresh-tree-andor-k8-r1",
+      "c36-multiply_low_cone-183b0d87d566b432",
+      "fresh-high-sharing-andor-k11-r0",
+      "fresh-high-sharing-xor-eqv-k11-r1",
+      "fresh-tree-xor-eqv-k11-r1",
+      "fresh-tree-xor-eqv-k8-r1",
+      "fresh-tree-andor-k11-r1",
+      "fresh-tree-mixed-k8-r1",
+      "fresh-tree-mixed-k8-r0",
+      "c36-multiply_add_low_cone-60066513d884e8cd",
+      "fresh-tree-xor-eqv-k11-r0",
+      "fresh-tree-andor-k11-r0",
+      "fresh-high-sharing-xor-eqv-k14-r0",
+      "fresh-high-sharing-xor-eqv-k14-r1",
+      "fresh-tree-andor-k14-r1",
+      "fresh-high-sharing-andor-k8-r1",
+      "c36-multiply_low_cone-6609b0cc2915dfed",
+      "fresh-high-sharing-andor-k14-r1",
+      "fresh-high-sharing-mixed-k14-r1",
+      "c36-decoder_index-80388418676d128a",
+      "fresh-high-sharing-xor-eqv-k8-r0",
+      "fresh-tree-mixed-k14-r1",
+      "c36-addertree_sum-d44458ceb643f094",
+      "fresh-high-sharing-xor-eqv-k11-r0",
+      "fresh-tree-andor-k14-r0",
+      "fresh-high-sharing-mixed-k8-r0",
+      "c36-decoder_index-74361d31a2f66dd7",
+      "c36-decoder_index-9e6bc671034ca09b",
+      "c36-multiply_low_cone-74681b58360369df",
+      "fresh-high-sharing-mixed-k8-r1",
+      "fresh-tree-mixed-k14-r0",
+      "c36-addertree_sum-4a3815b6b6b457c9",
+      "fresh-tree-xor-eqv-k14-r1",
+      "fresh-high-sharing-andor-k14-r0",
+      "c36-decoder_reverse_shift-501605d63402a561",
+      "c36-multiply_low_cone-bfa77f977d9b63d0",
+      "fresh-tree-mixed-k11-r0",
+      "fresh-high-sharing-mixed-k11-r0",
+      "fresh-tree-xor-eqv-k14-r0",
+      "fresh-tree-xor-eqv-k8-r0",
+      "c36-decoder_index-7db1fed5788553b0",
+      "c36-decoder_reverse_shift-d38ec347450fbeda",
+      "c36-decoder_index-cabf7c990ef270a2",
+      "c36-decoder_reverse_shift-8bdee763e6cade28",
+      "c36-decoder_reverse_shift-01795fc9d2b0f4cf",
+      "c36-addertree_sum-1bde1edc369329c3",
+      "fresh-high-sharing-xor-eqv-k8-r1"
+    ],
+    "counterbalance_all_arm_positions_at_every_query_count": true,
+    "planned_cells": 27648,
+    "query_counts": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "selection_blind_to_followup_timings": true
+  },
+  "schema": "cm-architecture-query-ladder-freeze/v1",
+  "source_checkpoint": "588c9329a693f1d678bda1801b415b7df542ebb4",
+  "source_closure": [
+    {
+      "bytes": 16329,
+      "path": "cmbench/comparative/architecture_query_ladder_followup.py",
+      "sha256": "e57132a3581784fd8749a55757fa5f6fd59d447217fa87cc879fc3cc4b854cd2"
+    },
+    {
+      "bytes": 5780,
+      "path": "cmbench/comparative/architecture_query_ladder_freeze.py",
+      "sha256": "5a193036826554058236b255fd70d48c803938b1ed39f3b525c8e47b23385cad"
+    },
+    {
+      "bytes": 3479,
+      "path": "scripts/cm_architecture_query_ladder_campaign.py",
+      "sha256": "71e2b4203103db46f4b283e11c0a5eb954eb25689b84e9e8478996f7770c016d"
+    },
+    {
+      "bytes": 1959,
+      "path": "scripts/crse_prepare_architecture_query_ladder_freeze.py",
+      "sha256": "079caf9f12892f92c61bf14f7204102dda3fdf2d6c2f4b3fce5f1bb2894e16a4"
+    },
+    {
+      "bytes": 1436,
+      "path": "scripts/crse_verify_architecture_query_ladder_freeze.py",
+      "sha256": "779ecc4478da951797dd2b5d4faa136748e3fd9b98c94c4f5b9c8379721faac9"
+    },
+    {
+      "bytes": 7625,
+      "path": "scripts/crse_verify_architecture_query_ladder_campaign.py",
+      "sha256": "25b870ca446b611205fd670c1dbd0194109b85d128ca8713abe76136a2b22e54"
+    }
+  ],
+  "source_closure_sha256": "a0fe9b6101e55b2387e0cebc52d25faa0a17188fdfcdf2cd201153b77357d13a",
+  "status": "frozen_not_authorized",
+  "timing_evidence_produced": false
+}
