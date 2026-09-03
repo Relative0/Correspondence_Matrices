@@ -99,7 +99,13 @@ def build_followup_freeze(
                 "stages": list(STAGES),
                 "accounted_total_is_stage_sum": True,
                 "fork_launch_overhead_in_timing": False,
+                "isolation_lifecycle_reported_separately": True,
                 "reason": "fork is a measurement-isolation mechanism, not part of the backend task",
+            },
+            "cleanup": {
+                "method": "cache_clear_then_isolated_child_exit",
+                "gc_collect_in_fork_child": False,
+                "reason": "child exit releases the cell heap; collecting the inherited parent heap is not backend cleanup",
             },
             "memory": {
                 "method": MEMORY_METHOD,

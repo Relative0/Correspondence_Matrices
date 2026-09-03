@@ -2,7 +2,7 @@
 
 Date: 2026-09-03
 Scope: non-neural repeated exact restrictions (architecture comparison Lane B)
-Status: implemented, frozen, locally verified, and not authorized for cloud execution
+Status: attempt 001 closed incomplete; isolated-cleanup correction implemented for a fresh freeze
 
 ## What this phase corrects
 
@@ -50,3 +50,23 @@ publication, or a Git push.
 4. Replicate the corrected contract on a separate machine/compiler.
 5. Only then prepare task-labelled public sections; preserve the historical Windows
    1.472x result with its date/platform rather than replacing it.
+
+## Attempt 001 disposition
+
+The exact authorized attempt created one Secure CPU Pod at $0.06/hour. It completed
+11,744 of 27,648 scheduled cells before the 420-second workload deadline. The controller
+deleted the Pod after 536.059 seconds of billed lifetime at an estimated compute cost
+of $0.008934; controller cleanup and a later independent inventory check both found no
+remaining Pod. No replacement was created.
+
+The incomplete rows are not a performance or memory result, and the independent
+verifier did not run. They are retained only for failure diagnosis and retry sizing.
+Their stage accounting showed that `gc.collect()` inside each fork child consumed about
+257 of 310 accounted seconds (83%). That collection scanned the large heap inherited
+from the parent, although the child process immediately exited and released its entire
+cell heap. It therefore measured the isolation mechanism rather than backend cleanup.
+
+The corrected implementation clears the declared backend caches inside the task timing,
+uses child exit for the remaining cell-heap cleanup, and reports the full fork/IPC/exit
+lifecycle separately. A new source closure, package, and exact authorization are required;
+attempt 001's authorization cannot be reused.

@@ -110,10 +110,17 @@ def verify(run_dir: Path, freeze_path: Path, oracles_path: Path) -> dict[str, An
                 memory.get("method") == MEMORY_METHOD
                 and memory.get("interpretation_permitted") is True
                 and memory.get("child_exit_code") == 0
+                and type(memory.get("isolation_lifecycle_ns")) is int
+                and memory["isolation_lifecycle_ns"] >= timings["accounted_total_ns"]
+                and memory.get("isolation_lifecycle_in_accounted_timing") is False
                 and type(peak) is int and peak > 0
                 and type(baseline) is int and baseline > 0
                 and memory.get("incremental_peak_rss_bytes") == max(0, peak - baseline),
                 "query-ladder isolated memory measurement",
+            )
+            _require(
+                row.get("cleanup_method") == "cache_clear_then_isolated_child_exit",
+                "query-ladder isolated cleanup method",
             )
             query_rows[str(row["query_count"])] += 1
             rows += 1

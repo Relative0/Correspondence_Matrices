@@ -76,6 +76,7 @@ def execute_query_count_cell(
     case: Mapping[str, Any], arm: str, oracle: Mapping[str, Any],
     native: NativeSlotLibrary | None, query_count: int,
     *, clock: Callable[[], int] = time.perf_counter_ns,
+    isolated_process_cleanup: bool = False,
 ) -> dict[str, Any]:
     """Execute one separately charged query-count prefix."""
     _require(query_count in QUERY_COUNTS, "unsupported query count")
@@ -103,7 +104,16 @@ def execute_query_count_cell(
     timings["serialization_ns_when_applicable"], payload = _stage_timer(
         clock, lambda: canonical_bytes(document)
     )
-    timings["cleanup_ns"], _ = _stage_timer(clock, gc.collect)
+    if isolated_process_cleanup:
+        def clear_process_caches() -> None:
+            clear_bitset_env_cache()
+            clear_words_env_cache()
+
+        timings["cleanup_ns"], _ = _stage_timer(clock, clear_process_caches)
+        cleanup_method = "cache_clear_then_isolated_child_exit"
+    else:
+        timings["cleanup_ns"], _ = _stage_timer(clock, gc.collect)
+        cleanup_method = "gc_collect_in_process"
     _require(set(timings) == set(STAGES), "query-ladder timing stages")
     timings["accounted_total_ns"] = sum(timings[stage] for stage in STAGES)
     resources = dict(resources)
@@ -120,6 +130,7 @@ def execute_query_count_cell(
         "output_sha256": actual,
         "output_bytes": len(payload),
         "exact_check_passed": True,
+        "cleanup_method": cleanup_method,
         "retained_bytes": int(resources.get("retained_bytes", 0)),
         "resources": resources,
         "memory_measurement": {
@@ -151,6 +162,7 @@ def execute_isolated_linux_cell(function: Callable[[], dict[str, Any]]) -> dict[
     _require(sys.platform == "linux" and hasattr(os, "fork") and hasattr(os, "wait4"), "Linux fork/wait4 required")
     baseline = _current_rss_bytes()
     read_fd, write_fd = os.pipe()
+    lifecycle_started = time.perf_counter_ns()
     pid = os.fork()
     if pid == 0:
         os.close(read_fd)
@@ -178,6 +190,7 @@ def execute_isolated_linux_cell(function: Callable[[], dict[str, Any]]) -> dict[
     finally:
         os.close(read_fd)
     waited_pid, wait_status, usage = os.wait4(pid, 0)
+    lifecycle_ns = time.perf_counter_ns() - lifecycle_started
     _require(waited_pid == pid, "isolated child identity mismatch")
     exit_code = os.waitstatus_to_exitcode(wait_status)
     envelope = json.loads(b"".join(chunks)) if chunks else {}
@@ -195,6 +208,8 @@ def execute_isolated_linux_cell(function: Callable[[], dict[str, Any]]) -> dict[
         "inherited_baseline_rss_bytes": baseline,
         "incremental_peak_rss_bytes": max(0, peak - baseline),
         "child_exit_code": exit_code,
+        "isolation_lifecycle_ns": lifecycle_ns,
+        "isolation_lifecycle_in_accounted_timing": False,
     }
     return row
 
@@ -347,7 +362,8 @@ def run_campaign(
             row = execute_isolated_linux_cell(
                 lambda case=case, arm=planned["arm"], oracle=oracle,
                 query_count=planned["query_count"]: execute_query_count_cell(
-                    case, arm, oracle, native, query_count
+                    case, arm, oracle, native, query_count,
+                    isolated_process_cleanup=True,
                 )
             )
             row.update({key: value for key, value in planned.items() if key not in {"lane", "case_id", "arm", "query_count"}})

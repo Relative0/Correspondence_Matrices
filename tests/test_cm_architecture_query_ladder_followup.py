@@ -47,11 +47,38 @@ def test_every_query_count_is_an_exact_distinct_cell(parent_inputs) -> None:
     assert {row["query_count"] for row in rows} == {1, 4, 16, 64}
     assert all(row["resources"]["queries"] == row["query_count"] for row in rows)
     assert all(row["exact_check_passed"] for row in rows)
+    assert all(row["cleanup_method"] == "gc_collect_in_process" for row in rows)
     assert all(
         row["output_sha256"] == oracles["lanes"]["B"][case_id]["checkpoints"][str(row["query_count"])]
         for row in rows
     )
     assert all(row["memory_measurement"]["interpretation_permitted"] is False for row in rows)
+
+
+def test_isolated_process_cleanup_does_not_collect_the_inherited_heap(
+    parent_inputs, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    freeze, oracles, catalog = parent_inputs
+    native_path = find_native_library(ROOT)
+    if native_path is None:
+        pytest.skip("retained native library unavailable")
+    native = followup.load_native_slot_library(native_path)
+    case_id = next(
+        case for case in freeze["schedules"]["B"]["case_order"]
+        if case.startswith("fresh-tree-")
+    )
+
+    def refuse_collect() -> None:
+        raise AssertionError("isolated child cleanup must not scan the inherited heap")
+
+    monkeypatch.setattr(followup.gc, "collect", refuse_collect)
+    row = followup.execute_query_count_cell(
+        catalog[case_id], "r2_topological_liveness", oracles["lanes"]["B"][case_id],
+        native, 1, clock=parent._DeterministicClock(), isolated_process_cleanup=True,
+    )
+
+    assert row["cleanup_method"] == "cache_clear_then_isolated_child_exit"
+    assert row["timings_ns"]["cleanup_ns"] > 0
 
 
 def test_followup_freeze_preserves_parent_cases_and_counterbalance() -> None:

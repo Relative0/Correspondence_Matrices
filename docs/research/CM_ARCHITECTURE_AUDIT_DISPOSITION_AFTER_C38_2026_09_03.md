@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; corrected query-ladder follow-up frozen, locally verified, and awaiting authorization
+Status: recommendations reconciled; query-ladder attempt 001 closed incomplete and retry correction implemented
 
 ## Bottom line
 
@@ -29,8 +29,8 @@ value can be measured.
 | H2 compact CM IR keys | **Deferred** | The dossier identifies possible structural-hash/key cost, but no current profile establishes it as a top cost after native fusion. A key redesign would affect canonicalization, interning, serialization, and cache identity and should not be mixed into the comparison freeze. |
 | H3 dense CM layout/copy fusion | **Measured path retained; new rewrite deferred** | Dense CM is present in the eight-arm functional lane and matches the independent vector oracle. No caller-visible profile yet isolates one safe layout/copy change with a predeclared benefit; representation-specific memory calibration remains required. |
 | H4 no-reinflation boundaries | **Implemented and retested; no promotion claim** | Full and reduced no-reinflation paths are exact and included where they return the same artifact. Historical results show wrapper/conversion overhead can erase the avoided dense rebuild, so it remains an arm rather than a universal default. |
-| H5 prepared/reused break-even | **Corrected follow-up prepared** | C35/C36 and the q64 architecture run remain evidence for their declared contracts. The follow-up now schedules q1/q4/q16/q64 as separate cells across the same 54-case Lane-B cohort and eight arms. Local exact replay passed; no corrected Linux timing exists until separately authorized execution. |
-| H6 representation-specific memory estimates | **Isolated measurement implemented; routing change deferred** | The follow-up runs each timed cell in a fresh Linux fork child, records child peak RSS from `wait4`, and subtracts the inherited `/proc/self/statm` baseline. This provides descriptive per-cell evidence after execution, but is not yet conservative cross-machine calibration for a default routing change. |
+| H5 prepared/reused break-even | **Attempt incomplete; retry correction implemented** | C35/C36 and the q64 architecture run remain evidence for their declared contracts. Attempt 001 scheduled q1/q4/q16/q64 separately but reached only 11,744/27,648 rows before its wall bound, so it yields no break-even result. The inherited-heap collection artifact is removed in source; a new freeze and authorization are required. |
+| H6 representation-specific memory estimates | **Isolated measurement implemented; routing change deferred** | The follow-up runs each timed cell in a fresh Linux fork child, records child peak RSS from `wait4`, and subtracts the inherited `/proc/self/statm` baseline. Attempt 001 was incomplete. The retry source retains these fields and adds separate full isolation-lifecycle time; none of this is yet conservative cross-machine calibration for a default routing change. |
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
 | H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
@@ -68,9 +68,12 @@ training a router for the present q64 contract.
    than only prefix correctness digests.
 3. **Complete in source:** every decision-bearing cell now has an isolated-child memory
    contract; retry 002's process-wide `ru_maxrss` remains non-comparable.
-4. **Frozen and locally verified; execution pending:** the corrected source closure and
-   27,648-row schedule are immutable, and the exact one-Pod request requires fresh user
-   authorization rather than reusing retry 002's authorization.
+4. **Attempt 001 safely closed; refreeze pending:** the first exact run reached
+   11,744/27,648 rows before timeout and produced no result. It exposed an inherited-heap
+   `gc.collect()` artifact that consumed 83% of accounted time. The source correction
+   preserves explicit cache cleanup, uses process exit for the remaining cell heap, and
+   reports isolation lifecycle time separately. A new immutable package and fresh exact
+   authorization are required; neither prior authorization may be reused.
 5. **Pending after that run:** replicate on a separate machine/compiler. Only then add task-labelled sections to
    `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
    silently replacing it.

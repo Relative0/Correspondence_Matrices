@@ -5,9 +5,6 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
-
-
 ROOT = Path(__file__).resolve().parents[1]
 HERE = ROOT / "docs/recognition/architecture_query_ladder_followup_execution_20260903"
 FREEZE = ROOT / "docs/recognition/architecture_query_ladder_followup_freeze_20260903/FREEZE.json"
@@ -29,7 +26,7 @@ def _controller():
     return module
 
 
-def test_generated_package_is_exactly_bound_and_non_authorizing() -> None:
+def test_attempt_001_package_is_internally_bound_and_now_historical() -> None:
     manifest = _load(HERE / "UPLOAD_MANIFEST.json")
     contract = _load(HERE / "EXECUTION_CONTRACT.json")
     validation = _load(HERE / "LOCAL_PACKAGE_VALIDATION.json")
@@ -42,10 +39,16 @@ def test_generated_package_is_exactly_bound_and_non_authorizing() -> None:
     assert {row["path"] for row in freeze["source_closure"]} <= {
         row["source"] for row in manifest["files"]
     }
+    changed_after_attempt = set()
     for row in manifest["files"]:
         source = ROOT.joinpath(*Path(row["source"]).parts)
-        assert source.stat().st_size == row["bytes"]
-        assert _sha256(source) == row["sha256"]
+        if source.stat().st_size != row["bytes"] or _sha256(source) != row["sha256"]:
+            changed_after_attempt.add(row["source"])
+    assert changed_after_attempt == {
+        "cmbench/comparative/architecture_query_ladder_followup.py",
+        "cmbench/comparative/architecture_query_ladder_freeze.py",
+        "scripts/crse_verify_architecture_query_ladder_campaign.py",
+    }
 
     assert contract["status"] == "prepared_not_authorized"
     assert contract["schedule"] == {
@@ -75,7 +78,7 @@ def test_generated_package_is_exactly_bound_and_non_authorizing() -> None:
     assert request["resource_and_cost_boundary"]["total_cost_cap_usd"] == 0.05
 
 
-def test_controller_remote_program_compiles_and_requires_fresh_authorization() -> None:
+def test_attempt_001_controller_and_exact_authorization_remain_bound() -> None:
     controller = _controller()
     compile(controller.base.REMOTE_CODE, "<architecture-query-ladder-remote>", "exec")
     compile(controller.INSTALL_CODE, "<architecture-query-ladder-install>", "exec")
@@ -85,9 +88,13 @@ def test_controller_remote_program_compiles_and_requires_fresh_authorization() -
     assert controller.TOTAL_ROWS == 27_648
     assert controller.QUERY_ROWS == {"1": 6_912, "4": 6_912, "16": 6_912, "64": 6_912}
     assert controller.RESULT_CAP_BYTES == 48 << 20
-    assert controller.AUTHORIZATION.exists() is False
-    with pytest.raises(FileNotFoundError):
-        controller.require_authorization()
+    assert controller.AUTHORIZATION.exists() is True
+    authorization = controller.require_authorization()
+    assert authorization["schema"] == (
+        "cm-runpod-architecture-query-ladder-exact-payload-authorization/v1"
+    )
+    assert authorization["authorized"] is True
+    assert authorization["prior_authorization_reused"] is False
 
 
 def test_request_binds_every_controller_transport_source() -> None:
@@ -100,3 +107,25 @@ def test_request_binds_every_controller_transport_source() -> None:
     assert request["freeze_sha256"] == _sha256(FREEZE)
     assert request["upload_manifest_sha256"] == _sha256(HERE / "UPLOAD_MANIFEST.json")
     assert request["local_validation_sha256"] == _sha256(HERE / "LOCAL_PACKAGE_VALIDATION.json")
+
+
+def test_attempt_001_is_closed_incomplete_and_bound_to_retained_evidence() -> None:
+    status = _load(HERE / "ATTEMPT_001_STATUS.json")
+    run = HERE / "runpod-architecture-query-ladder-execute-001"
+    assert status["status"] == "closed_incomplete_timeout"
+    assert status["failure"]["completed_rows"] == 11_744
+    assert status["failure"]["planned_rows"] == 27_648
+    assert status["scientific_result"] == {
+        "break_even_interpretation_permitted": False,
+        "decision_bearing_result_produced": False,
+        "independent_verification_run": False,
+        "memory_comparison_permitted": False,
+        "performance_interpretation_permitted": False,
+    }
+    assert status["cleanup"]["automatic_replacement_created"] is False
+    assert status["cleanup"]["owned_pod_absent"] is True
+    assert status["cleanup"]["independent_post_run_inventories"] == {"v1": [], "v2": []}
+    assert status["evidence"]["run_sha256"] == _sha256(run / "RUN.json")
+    assert status["evidence"]["raw_measurements_sha256"] == _sha256(
+        run / "evidence/run-output/architecture-query-ladder-linux-gcc-20260903-001/raw_measurements.jsonl"
+    )

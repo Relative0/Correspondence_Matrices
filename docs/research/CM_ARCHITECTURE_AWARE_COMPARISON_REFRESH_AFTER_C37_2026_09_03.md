@@ -2,7 +2,7 @@
 
 Date: 2026-09-03  
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: current-source Linux comparison executed; corrected q-ladder frozen and awaiting exact authorization
+Status: current-source Linux comparison executed; corrected q-ladder attempt 001 closed incomplete
 
 ## Current implementation status
 
@@ -216,10 +216,14 @@ the evidence and denominator.
    gates before timing it.
 5. **Complete:** obtain a separate exact authorization and execute the current-source Linux/GCC
    comparison; retry 002 completed and was independently verified.
-6. **Prepared; execution not authorized:** Lane B now gives q1/q4/q16/q64 separate timed
-   contracts and uses isolated-child `wait4` peak RSS with a pre-fork inherited baseline.
-   The 27,648-row source-closed package passed a clean local functional replay without
-   producing timing or memory evidence. Its exact one-Pod request awaits user authorization.
+6. **Attempt 001 incomplete; retry correction in source:** Lane B gives q1/q4/q16/q64
+   separate timed contracts and uses isolated-child `wait4` peak RSS with a pre-fork
+   inherited baseline. The exact run safely closed after 11,744/27,648 rows at the
+   420-second bound, with no decision-bearing result. Diagnostic stage totals showed
+   that per-child `gc.collect()` spent 83% of accounted time scanning the inherited
+   parent heap. The corrected source charges explicit cache clearing, delegates the
+   remaining cell heap to child exit, and reports isolation lifecycle time separately.
+   It requires a new freeze and fresh exact authorization.
 7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
 8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.

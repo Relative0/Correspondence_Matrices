@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/usr/local/bin/python",
+    "-B",
+    "scripts/cm_architecture_query_ladder_campaign.py",
+    "--output",
+    "/workspace/cm-memory-smoke/run-output/architecture-query-ladder-linux-gcc-20260903-001",
+    "--compiler",
+    "cc",
+    "--freeze",
+    "docs/recognition/architecture_query_ladder_followup_freeze_20260903/FREEZE.json",
+    "--oracles",
+    "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json",
+    "--max-seconds",
+    "420"
+  ],
+  "name": "architecture-query-ladder-campaign",
+  "returncode": 1,
+  "stderr_sha256": "aa6c9907e9efe141aec1a1b43e2d5e5bd9b953678045ed8b266466c59c8bb8a1",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/cm-memory-smoke/scripts/cm_architecture_query_ladder_campaign.py\", line 93, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm-memory-smoke/scripts/cm_architecture_query_ladder_campaign.py\", line 79, in main\n    result = run_campaign(\n        project_root=ROOT,\n    ...<4 lines>...\n        max_seconds=args.max_seconds,\n    )\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_query_ladder_followup.py\", line 344, in run_campaign\n    raise TimeoutError(\"architecture query-ladder follow-up exceeded wall bound\")\nTimeoutError: architecture query-ladder follow-up exceeded wall bound\n",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wall_s": 440.05404927488416
+}
