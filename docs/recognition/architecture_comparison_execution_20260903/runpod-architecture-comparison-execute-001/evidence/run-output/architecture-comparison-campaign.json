@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/usr/local/bin/python",
+    "-B",
+    "scripts/cm_architecture_comparison_campaign.py",
+    "--output",
+    "/workspace/cm-memory-smoke/run-output/architecture-comparison-linux-gcc-20260903-001",
+    "--compiler",
+    "cc",
+    "--max-seconds",
+    "420"
+  ],
+  "name": "architecture-comparison-campaign",
+  "returncode": 1,
+  "stderr_sha256": "d81d2c9f4d76b50650aa2a713771e492f159535a66af03684c1e79d9f9f809af",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/cm-memory-smoke/scripts/cm_architecture_comparison_campaign.py\", line 143, in <module>\n    raise SystemExit(main())\n                     ~~~~^^\n  File \"/workspace/cm-memory-smoke/scripts/cm_architecture_comparison_campaign.py\", line 129, in main\n    result = run_campaign(\n        project_root=ROOT,\n    ...<4 lines>...\n        max_seconds=args.max_seconds,\n    )\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_campaign.py\", line 1106, in run_campaign\n    verify_freeze(freeze, root)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py\", line 517, in verify_freeze\n    source_match = all(_file_identity(root, row[\"path\"]) == row for row in freeze[\"source_closure\"])\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py\", line 517, in <genexpr>\n    source_match = all(_file_identity(root, row[\"path\"]) == row for row in freeze[\"source_closure\"])\n                       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py\", line 80, in _file_identity\n    _require(path.is_relative_to(root) and path.is_file(), f\"missing source: {relative}\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py\", line 71, in _require\n    raise ValueError(message)\nValueError: missing source: cmbench/backends/native_restriction.py\n",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wall_s": 6.97434052079916
+}

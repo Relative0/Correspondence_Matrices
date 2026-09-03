@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/workspace/cm-memory-smoke/scripts/cm_architecture_comparison_campaign.py", line 143, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/workspace/cm-memory-smoke/scripts/cm_architecture_comparison_campaign.py", line 129, in main
+    result = run_campaign(
+        project_root=ROOT,
+    ...<4 lines>...
+        max_seconds=args.max_seconds,
+    )
+  File "/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_campaign.py", line 1106, in run_campaign
+    verify_freeze(freeze, root)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py", line 517, in verify_freeze
+    source_match = all(_file_identity(root, row["path"]) == row for row in freeze["source_closure"])
+  File "/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py", line 517, in <genexpr>
+    source_match = all(_file_identity(root, row["path"]) == row for row in freeze["source_closure"])
+                       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py", line 80, in _file_identity
+    _require(path.is_relative_to(root) and path.is_file(), f"missing source: {relative}")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cm-memory-smoke/cmbench/comparative/architecture_comparison_freeze.py", line 71, in _require
+    raise ValueError(message)
+ValueError: missing source: cmbench/backends/native_restriction.py

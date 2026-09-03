@@ -16,21 +16,21 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HERE = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
 C38_CONTROLLER = ROOT / "docs/recognition/c38_linux_confirmation/runpod_c38_linux_controller.py"
 spec = importlib.util.spec_from_file_location("c38_transport", C38_CONTROLLER)
 c38 = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(c38)
 shared, base, preflight = c38.shared, c38.base, c38.preflight
 
-OUT = HERE / "runpod-architecture-comparison-execute-001"
+OUT = HERE / "runpod-architecture-comparison-retry-002"
 MANIFEST = HERE / "UPLOAD_MANIFEST.json"
-AUTHORIZATION = HERE / "RUNPOD_ARCHITECTURE_COMPARISON_EXACT_PAYLOAD_AUTHORIZED_2026_09_03.json"
+AUTHORIZATION = HERE / "RUNPOD_ARCHITECTURE_COMPARISON_RETRY_002_EXACT_PAYLOAD_AUTHORIZED_2026_09_03.json"
 PROTOCOL = HERE / "PROTOCOL.md"
 CONTRACT = HERE / "EXECUTION_CONTRACT.json"
 LOCAL_VALIDATION = HERE / "LOCAL_PACKAGE_VALIDATION.json"
-REQUEST = HERE / "RUNPOD_AUTHORIZATION_REQUEST_20260903.json"
-RUN_NAME = "architecture-comparison-linux-gcc-20260903-001"
+REQUEST = HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json"
+RUN_NAME = "architecture-comparison-linux-gcc-20260903-002"
 IMAGE_TAG = "python:3.13.15-bookworm"
 IMAGE_AMD64_DIGEST = (
     "sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8"
@@ -111,12 +111,15 @@ ARCHITECTURE_STAGE = (
     "    emit('stage', name='architecture-comparison-campaign')\n"
     "    run('architecture-comparison-campaign', [sys.executable, '-B',\n"
     "         'scripts/cm_architecture_comparison_campaign.py', '--output',\n"
-    "         str(OUT/'architecture-comparison-linux-gcc-20260903-001'),\n"
-    "         '--compiler', 'cc', '--max-seconds', '420'], 480)\n"
+    "         str(OUT/'architecture-comparison-linux-gcc-20260903-002'),\n"
+    "         '--compiler', 'cc', '--oracles',\n"
+    "         'docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json',\n"
+    "         '--max-seconds', '420'], 480)\n"
     "    emit('stage', name='architecture-comparison-verification')\n"
     "    run('architecture-comparison-verification', [sys.executable, '-B',\n"
     "         'scripts/crse_verify_architecture_comparison_campaign.py', '--run-dir',\n"
-    "         str(OUT/'architecture-comparison-linux-gcc-20260903-001')], 120)"
+    "         str(OUT/'architecture-comparison-linux-gcc-20260903-002'), '--oracles',\n"
+    "         'docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json'], 120)"
 )
 base.REMOTE_CODE = shared.replace_remote_once(
     base.REMOTE_CODE, c38.C38_STAGE, ARCHITECTURE_STAGE,
@@ -124,7 +127,7 @@ base.REMOTE_CODE = shared.replace_remote_once(
 
 ARCHITECTURE_VALIDATION = (
     "    try:\n"
-    "        study = OUT / 'architecture-comparison-linux-gcc-20260903-001'\n"
+    "        study = OUT / 'architecture-comparison-linux-gcc-20260903-002'\n"
     "        result = json.loads((study / 'results.json').read_text())\n"
     "        verified = json.loads((study / 'independent_verification.json').read_text())\n"
     "        binding = json.loads((study / 'runtime_binding.json').read_text())\n"
@@ -191,7 +194,7 @@ def require_authorization() -> dict:
     validation = load(LOCAL_VALIDATION)
     request = load(REQUEST)
     expected = {
-        "schema": "cm-runpod-architecture-comparison-exact-payload-authorization/v1",
+        "schema": "cm-runpod-architecture-comparison-retry-002-exact-payload-authorization/v1",
         "authorized": True,
         "user_total_ceiling_usd": 0.05,
         "controller_total_ceiling_usd": 0.05,
@@ -219,6 +222,7 @@ def require_authorization() -> dict:
         "local_isolated_validation": "pass",
         "local_validation_pythonpath_injected": False,
         "credentials_recorded_or_uploaded": False,
+        "prior_attempt_authorization_reused": False,
         "training": False,
         "selector_fit": False,
         "website_update": False,
@@ -242,6 +246,7 @@ def require_authorization() -> dict:
         or validation.get("status") != "pass"
         or validation.get("manifest_sha256") != sha256(MANIFEST)
         or validation.get("pythonpath_injected") is not False
+        or validation.get("parent_freeze_verification_passed") is not True
         or validation.get("timing_evidence_produced") is not False
         or validation.get("decision_bearing_result_produced") is not False
     ):
@@ -467,6 +472,9 @@ def run() -> int:
             or contract.get("schedule", {}).get("total_cells") != TOTAL_ROWS
             or contract.get("schedule", {}).get("lane_cells") != LANE_ROWS
             or contract.get("limits", {}).get("wall_seconds") != 420
+            or contract.get("retry_of", {}).get("attempt") != 1
+            or contract.get("retry_of", {}).get("scientific_rows_produced") != 0
+            or manifest.get("retry_of") != contract.get("retry_of")
         ):
             raise RuntimeError("frozen architecture comparison manifest mismatch")
         bundle = base.make_bundle(manifest)

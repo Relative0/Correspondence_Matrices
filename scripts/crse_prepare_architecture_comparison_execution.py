@@ -20,14 +20,15 @@ from cmbench.comparative.architecture_comparison_campaign import (
 from cmbench.comparative.architecture_comparison_freeze import verify_freeze
 
 
-HERE = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
+FIRST_ATTEMPT = ROOT / "docs/recognition/architecture_comparison_execution_20260903/ATTEMPT_001_STATUS.json"
 FREEZE = ROOT / "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json"
 ORACLES = HERE / "ORACLES.json"
 ORACLE_VERIFICATION = HERE / "ORACLE_VERIFICATION.json"
 CONTRACT = HERE / "EXECUTION_CONTRACT.json"
 PROTOCOL = HERE / "PROTOCOL.md"
 MANIFEST = HERE / "UPLOAD_MANIFEST.json"
-RUN_NAME = "architecture-comparison-linux-gcc-20260903-001"
+RUN_NAME = "architecture-comparison-linux-gcc-20260903-002"
 IMAGE_TAG = "python:3.13.15-bookworm"
 IMAGE_AMD64_DIGEST = "sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8"
 IMAGE = f"{IMAGE_TAG}@{IMAGE_AMD64_DIGEST}"
@@ -111,6 +112,7 @@ RUNTIME_SOURCES = (
     "docs/recognition/architecture_comparison_prefreeze_20260903/PREFREEZE.json",
     "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json",
     "docs/recognition/architecture_comparison_freeze_20260903/VERIFICATION.json",
+    "docs/recognition/architecture_comparison_execution_20260903/ATTEMPT_001_STATUS.json",
 )
 
 
@@ -139,6 +141,13 @@ def main() -> int:
         raise SystemExit("refusing to overwrite architecture comparison execution package")
     freeze = json.loads(FREEZE.read_text(encoding="utf-8"))
     freeze_verification = verify_freeze(freeze, ROOT)
+    first_attempt = json.loads(FIRST_ATTEMPT.read_text(encoding="utf-8"))
+    if (
+        first_attempt.get("status") != "closed_incomplete_premeasurement"
+        or first_attempt.get("scientific_result", {}).get("timed_rows_produced") != 0
+        or first_attempt.get("cleanup", {}).get("owned_pod_absent") is not True
+    ):
+        raise ValueError("attempt 001 is not safely closed for retry preparation")
     oracles = build_oracles(ROOT, freeze)
     validate_oracles(oracles, ROOT, freeze)
     _write_new(ORACLES, oracles)
@@ -175,6 +184,12 @@ def main() -> int:
         "status": "prepared_not_authorized",
         "date": "2026-09-03",
         "run_name": RUN_NAME,
+        "retry_of": {
+            "attempt": 1,
+            "status_path": FIRST_ATTEMPT.relative_to(ROOT).as_posix(),
+            "status_sha256": _sha256(FIRST_ATTEMPT),
+            "scientific_rows_produced": 0,
+        },
         "parent_freeze_file_sha256": _sha256(FREEZE),
         "parent_freeze_sha256": freeze["freeze_sha256"],
         "oracles_file_sha256": _sha256(ORACLES),
@@ -238,7 +253,7 @@ def main() -> int:
     _write_new(CONTRACT, contract)
     protocol = f"""# Architecture-aware four-lane comparison execution protocol
 
-This package executes the verified parent freeze without changing its selected
+This retry package executes the verified parent freeze without changing its selected
 cases, arm orders, or publication gates. It creates {contract['schedule']['total_cells']:,}
 timed rows across complete relations, q1/q4/q16/q64 repeated restrictions,
 related three-root outputs, and bounded smaller-task/persistence sublanes.
@@ -266,10 +281,16 @@ least 4 GB RAM, 12 GB ephemeral disk, no persistent/network volume, a
 $0.25/hour rate ceiling, a $0.05 controller cost ceiling, deletion within ten
 minutes, and twelve-minute inventory reconciliation. It authorizes no training,
 selector fit, production routing, website change, publication, commit, or push.
+
+Attempt 001 stopped before its first timed row because three parent-freeze
+source-closure files were absent from the upload. This retry includes every
+source identity declared by the parent freeze and makes isolated parent-freeze
+verification a required local gate. The prior authorization is not reusable.
 """
     _write_new(PROTOCOL, protocol)
 
-    package_paths = [*RUNTIME_SOURCES, ORACLES.relative_to(ROOT).as_posix(),
+    frozen_source_paths = [row["path"] for row in freeze["source_closure"]]
+    package_paths = [*RUNTIME_SOURCES, *frozen_source_paths, ORACLES.relative_to(ROOT).as_posix(),
                      ORACLE_VERIFICATION.relative_to(ROOT).as_posix(),
                      CONTRACT.relative_to(ROOT).as_posix(), PROTOCOL.relative_to(ROOT).as_posix()]
     files = []
@@ -292,9 +313,11 @@ selector fit, production routing, website change, publication, commit, or push.
         "commands": [
             ["python", "-B", "scripts/cm_architecture_comparison_campaign.py",
              "--output", f"run-output/{RUN_NAME}", "--compiler", "cc",
+             "--oracles", ORACLES.relative_to(ROOT).as_posix(),
              "--max-seconds", "420"],
             ["python", "-B", "scripts/crse_verify_architecture_comparison_campaign.py",
-             "--run-dir", f"run-output/{RUN_NAME}"],
+             "--run-dir", f"run-output/{RUN_NAME}",
+             "--oracles", ORACLES.relative_to(ROOT).as_posix()],
         ],
         "execution_contract_sha256": _sha256(CONTRACT),
         "protocol_sha256": _sha256(PROTOCOL),
@@ -306,6 +329,7 @@ selector fit, production routing, website change, publication, commit, or push.
         "network_during_workload": False,
         "result_cap_bytes": RESULT_CAP_BYTES,
         "excluded": [".env*", ".git/", "credentials", "tokens", "Windows DLLs", "website files", "unrelated dirty work"],
+        "retry_of": contract["retry_of"],
     }
     _write_new(MANIFEST, manifest)
     print(json.dumps({

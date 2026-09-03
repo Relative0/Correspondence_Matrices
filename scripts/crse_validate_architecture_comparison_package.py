@@ -13,11 +13,11 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HERE = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
 MANIFEST = HERE / "UPLOAD_MANIFEST.json"
 ISOLATED = HERE / ".isolated-package-validation"
 OUTPUT = HERE / "LOCAL_PACKAGE_VALIDATION.json"
-SMOKE_NAME = "architecture-comparison-local-package-smoke-20260903-001"
+SMOKE_NAME = "architecture-comparison-local-package-smoke-20260903-002"
 
 
 def _sha256(path: Path) -> str:
@@ -63,13 +63,29 @@ def main() -> int:
     )
     if initial != sorted(row["target"] for row in manifest["files"]):
         raise ValueError("unexpected isolated package file")
+    environment = os.environ.copy()
+    environment.pop("PYTHONPATH", None)
+    freeze_check = subprocess.run(
+        [
+            sys.executable, "-B", "-c",
+            "import json,pathlib; from cmbench.comparative.architecture_comparison_freeze "
+            "import verify_freeze; root=pathlib.Path.cwd(); artifact=root/'docs/recognition/"
+            "architecture_comparison_freeze_20260903/FREEZE.json'; "
+            "verify_freeze(json.loads(artifact.read_text()), root)",
+        ],
+        cwd=ISOLATED, env=environment, check=False, capture_output=True, text=True, timeout=120,
+    )
+    if freeze_check.returncode:
+        raise RuntimeError(
+            "isolated parent-freeze verification failed: "
+            f"{freeze_check.returncode}; {freeze_check.stderr[-3000:]}"
+        )
     output = ISOLATED / "run-output" / SMOKE_NAME
     command = [
         sys.executable, "-B", "scripts/cm_architecture_comparison_campaign.py",
         "--output", str(output), "--functional-smoke", "--local-platform-validation",
+        "--oracles", str(ISOLATED / "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json"),
     ]
-    environment = os.environ.copy()
-    environment.pop("PYTHONPATH", None)
     started = time.perf_counter()
     completed = subprocess.run(
         command, cwd=ISOLATED, env=environment, check=False,
@@ -107,6 +123,7 @@ def main() -> int:
         "functional_rows_by_lane": smoke["rows_by_lane"],
         "native_library_sha256": smoke["native_library_sha256"],
         "network_used": False,
+        "parent_freeze_verification_passed": True,
         "pythonpath_injected": False,
         "synthetic_clock_used": True,
         "timing_evidence_produced": False,

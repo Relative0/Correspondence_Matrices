@@ -9,13 +9,13 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HERE = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
 MANIFEST = HERE / "UPLOAD_MANIFEST.json"
 CONTRACT = HERE / "EXECUTION_CONTRACT.json"
 PROTOCOL = HERE / "PROTOCOL.md"
 LOCAL_VALIDATION = HERE / "LOCAL_PACKAGE_VALIDATION.json"
-REQUEST = HERE / "RUNPOD_AUTHORIZATION_REQUEST_20260903.json"
-AUTHORIZATION = HERE / "RUNPOD_ARCHITECTURE_COMPARISON_EXACT_PAYLOAD_AUTHORIZED_2026_09_03.json"
+REQUEST = HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json"
+AUTHORIZATION = HERE / "RUNPOD_ARCHITECTURE_COMPARISON_RETRY_002_EXACT_PAYLOAD_AUTHORIZED_2026_09_03.json"
 CONTROLLER = ROOT / "scripts/runpod_architecture_comparison_controller.py"
 
 
@@ -47,6 +47,7 @@ def main() -> int:
         or validation.get("status") != "pass"
         or validation.get("manifest_sha256") != _sha256(MANIFEST)
         or validation.get("network_used") is not False
+        or validation.get("parent_freeze_verification_passed") is not True
         or validation.get("timing_evidence_produced") is not False
         or validation.get("decision_bearing_result_produced") is not False
         or contract.get("schedule", {}).get("total_cells") != 19_646
@@ -61,12 +62,13 @@ def main() -> int:
         "created_date": "2026-09-03",
         "run_name": manifest["run_name"],
         "purpose": (
-            "Decision-bearing Linux/GCC execution of the frozen four-lane non-neural "
-            "architecture comparison; no selector fitting, training, publication, or routing change."
+            "Retry 002 of the decision-bearing Linux/GCC execution of the frozen four-lane "
+            "non-neural architecture comparison after attempt 001 ended before measurement; "
+            "no selector fitting, training, publication, or routing change."
         ),
         "exact_approval_text": (
-            "I authorize the exact Architecture Comparison RunPod run described in "
-            "RUNPOD_AUTHORIZATION_REQUEST_20260903.json, with a maximum total charge of $0.05."
+            "I authorize the exact Architecture Comparison RunPod retry 002 described in "
+            "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json, with a maximum total charge of $0.05."
         ),
         "scope": {
             "planned_rows": 19_646,
@@ -113,7 +115,7 @@ def main() -> int:
         "transport_sources": controller.transport_source_identities(),
         "authorization": {
             "granted": False,
-            "prior_c38_authorization_reused": False,
+            "prior_attempt_authorization_reused": False,
             "record_created": False,
         },
         "excluded": [

@@ -9,7 +9,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HERE = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+HERE = ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903"
 
 
 def _load(path: Path):
@@ -32,11 +32,15 @@ def test_generated_package_is_exactly_bound_and_non_authorizing():
     manifest = _load(HERE / "UPLOAD_MANIFEST.json")
     contract = _load(HERE / "EXECUTION_CONTRACT.json")
     validation = _load(HERE / "LOCAL_PACKAGE_VALIDATION.json")
-    request = _load(HERE / "RUNPOD_AUTHORIZATION_REQUEST_20260903.json")
+    request = _load(HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json")
 
     assert manifest["authorization_status"] == "upload_not_authorized_exact_approval_pending"
-    assert manifest["file_count"] == len(manifest["files"]) == 55
+    assert manifest["file_count"] == len(manifest["files"])
     assert manifest["bytes"] == sum(row["bytes"] for row in manifest["files"])
+    freeze = _load(ROOT / "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json")
+    assert {row["path"] for row in freeze["source_closure"]} <= {
+        row["source"] for row in manifest["files"]
+    }
     for row in manifest["files"]:
         source = ROOT.joinpath(*Path(row["source"]).parts)
         assert source.stat().st_size == row["bytes"]
@@ -51,11 +55,31 @@ def test_generated_package_is_exactly_bound_and_non_authorizing():
     assert validation["manifest_sha256"] == _sha256(HERE / "UPLOAD_MANIFEST.json")
     assert validation["timing_evidence_produced"] is False
     assert validation["decision_bearing_result_produced"] is False
+    assert validation["parent_freeze_verification_passed"] is True
     assert request["status"] == "exact_user_authorization_required_not_granted"
     assert request["authorization"] == {
-        "granted": False, "prior_c38_authorization_reused": False, "record_created": False,
+        "granted": False, "prior_attempt_authorization_reused": False, "record_created": False,
     }
     assert request["resource_and_cost_boundary"]["total_cost_cap_usd"] == 0.05
+
+
+def test_attempt_001_is_closed_before_measurement_and_bound_to_evidence():
+    first = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+    status = _load(first / "ATTEMPT_001_STATUS.json")
+    run = first / "runpod-architecture-comparison-execute-001"
+    assert status["status"] == "closed_incomplete_premeasurement"
+    assert status["scientific_result"] == {
+        "decision_bearing_result_produced": False,
+        "independent_verification_run": False,
+        "performance_interpretation_permitted": False,
+        "timed_rows_produced": 0,
+    }
+    assert status["cleanup"]["automatic_replacement_created"] is False
+    assert status["cleanup"]["owned_pod_absent"] is True
+    assert status["run_record_sha256"] == _sha256(run / "RUN.json")
+    assert status["failure"]["stderr_sha256"] == _sha256(
+        run / "evidence/run-output/architecture-comparison-campaign.stderr.txt"
+    )
 
 
 def test_declared_refusal_count_matches_the_frozen_schedule():
@@ -77,7 +101,7 @@ def test_declared_refusal_count_matches_the_frozen_schedule():
         oracles["lanes"]["D"][case_id]["status"] == "refused"
         for case_id in structural["case_order"]
     ) * structural["blocks"] * len(structural["arms"])
-    request = _load(HERE / "RUNPOD_AUTHORIZATION_REQUEST_20260903.json")
+    request = _load(HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json")
     assert refused == request["scope"]["expected_counts"]["refused"] == 1_736
     assert 19_646 - refused == request["scope"]["expected_counts"]["ok"] == 17_910
 
