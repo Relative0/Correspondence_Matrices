@@ -3,7 +3,7 @@
 Date: 2026-09-03
 Updated: 2026-09-04
 Scope: non-neural repeated exact restrictions (architecture comparison Lane B)
-Status: retry 002 verified on one Linux/GCC host; cross-machine replication pending
+Status: retry 002 verified on one Linux/GCC host; cross-machine package awaiting authorization
 
 ## What this phase corrects
 
@@ -45,7 +45,11 @@ publication, or a Git push.
 
 ## Remaining gates
 
-1. Replicate the corrected contract on a separate physical machine/compiler.
+1. **Prepared, not authorized:** replicate the corrected contract on a separate
+   physical machine/compiler. The exact 27,648-cell package requests RunPod `cpu5c`,
+   rejects the prior EPYC 9655 CPU model before setup or measurement, and uses pinned
+   Debian Clang 14. Its isolated local replay passed without timing evidence or a cloud
+   resource.
 2. Only then prepare task-labelled public sections; preserve the historical Windows
    1.472x result with its date/platform rather than replacing it.
 

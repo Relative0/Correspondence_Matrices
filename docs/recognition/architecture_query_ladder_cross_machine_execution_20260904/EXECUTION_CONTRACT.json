@@ -1,0 +1,180 @@
+{
+  "analysis_boundary": {
+    "neural_training": false,
+    "paired_cross_host_analysis_after_independent_verification": true,
+    "production_routing_change": false,
+    "publication": false,
+    "retain_all_favorable_and_unfavorable_cells": true,
+    "selector_or_gate_fitting": false,
+    "website_update": false
+  },
+  "cleanup": {
+    "gc_collect_in_fork_child": false,
+    "method": "cache_clear_then_isolated_child_exit",
+    "reason": "child exit releases the cell heap; collecting the inherited parent heap is not backend cleanup"
+  },
+  "compiler_separation": {
+    "compiler_executable_sha256_recorded": true,
+    "compiler_version_recorded": true,
+    "prior_executable_sha256": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+    "prior_family": "GCC",
+    "required_family": "Clang",
+    "required_package": "clang-14",
+    "required_package_version": "1:14.0.6-12"
+  },
+  "date": "2026-09-04",
+  "freeze_canonical_sha256": "98c81c12e1780e911973a9a0f1537a4f108fe2298f41644bd5695365d87c790c",
+  "freeze_file_sha256": "c5901ff7eaf4e75b1a8a8145707dfb2440d68e756f1f67821e6ad34b6405ada8",
+  "freeze_verification_sha256": "7b392a31b99084722087ab23d16bc23cf78d7e4a05820d1c34faba97f66d087c",
+  "host_separation": {
+    "cpu_flavor_must_differ": true,
+    "host_boot_id_sha256_recorded": true,
+    "new_pod_id_required": true,
+    "prior_cpu_flavor": "cpu3c",
+    "prior_cpu_model": "AMD EPYC 9655 96-Core Processor",
+    "prior_pod_id": "r5wx3ximopqw7g",
+    "reject_prior_cpu_model_before_workload": true,
+    "required_cpu_flavor": "cpu5c",
+    "runpod_machine_id_required": true
+  },
+  "limits": {
+    "automatic_replacement": false,
+    "cleanup_seconds": 600,
+    "compiler_install_seconds": 180,
+    "one_cloud_create": true,
+    "reconciliation_seconds": 720,
+    "remote_command_seconds": 480,
+    "result_cap_bytes": 50331648,
+    "setup_deadline_seconds": 300,
+    "workload_wall_seconds": 420
+  },
+  "memory": {
+    "baseline_source": "/proc/self/statm immediately before fork",
+    "interpretation": "descriptive total and incremental cell peak on the execution host",
+    "method": "isolated_fork_child_wait4_ru_maxrss/v1",
+    "one_fresh_child_per_timed_cell": true,
+    "peak_source": "os.wait4 child rusage.ru_maxrss",
+    "reports_inherited_baseline_and_incremental_peak": true,
+    "timing_inside_child_excludes_fork": true
+  },
+  "oracles_sha256": "079a60fddf61a47cd4f65ed085b93c1932bc4acdb6c1329094524cc67640b509",
+  "permissions": {
+    "local_functional_validation": true,
+    "local_timing": false,
+    "neural_training": false,
+    "production_routing_change": false,
+    "publication": false,
+    "runpod_authorization_request": true,
+    "runpod_execution": false,
+    "selector_fitting": false,
+    "website_update": false
+  },
+  "prior_result": {
+    "binding_sha256": "46296d2ea25134e12f93c2ded4ff25c6be8dd4299dbd23cbcde34ae513630ef3",
+    "compiler_executable": "/usr/bin/x86_64-linux-gnu-gcc-12",
+    "compiler_executable_sha256": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+    "compiler_version": "x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "cpu_flavor": "cpu3c",
+    "cpu_model": "AMD EPYC 9655 96-Core Processor",
+    "estimated_compute_cost_usd": 0.0026485436995824178,
+    "pod_id": "r5wx3ximopqw7g",
+    "post_inventory_sha256": "cd2054d829f8a117107d45bd3b643e3326173ad49925ee93767a3630da59b6a7",
+    "results_sha256": "4a2b2330fa894075b57a48439e2a6461604284737407f53a8a57bf54510c80eb",
+    "run_sha256": "625b8723d987d48427d07e89a367b9c090a0cdbdaa08158a0aab7619eaa79c7f",
+    "runtime_sha256": "a2fa6bd92de694234b6e3119891d4ebe8c7f28858a6f7d9bc93d9d1f23f5e9a4",
+    "verification_sha256": "54c09c6fdc60880718e04aa173f3605427191f4444b6621e3284ddeb4c8b0d56"
+  },
+  "run_name": "architecture-query-ladder-linux-clang-20260904-003",
+  "runtime": {
+    "compiler": "Debian Clang 14",
+    "compiler_executable": "/usr/bin/clang-14",
+    "compiler_flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-shared",
+      "-fPIC"
+    ],
+    "compiler_package": {
+      "installation": "apt-get with exact package version and no recommends",
+      "name": "clang-14",
+      "repository": "Debian Bookworm main",
+      "runtime_executable_sha256_required": true,
+      "version": "1:14.0.6-12"
+    },
+    "dependencies": [
+      {
+        "name": "numpy",
+        "requirement": "numpy==2.3.2 --hash=sha256:938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "sha256": "938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "version": "2.3.2"
+      },
+      {
+        "bytes": 11050,
+        "filename": "six-1.17.0-py2.py3-none-any.whl",
+        "name": "six",
+        "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+        "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+        "version": "1.17.0"
+      },
+      {
+        "bytes": 2068504,
+        "filename": "networkx-3.6.1-py3-none-any.whl",
+        "name": "networkx",
+        "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+        "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+        "version": "3.6.1"
+      },
+      {
+        "bytes": 3943142,
+        "filename": "python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "name": "python-sat",
+        "sha256": "fd55285f4ef679aaa62699660121423ec35b97324095ae34db4edb0356422a45",
+        "url": "https://files.pythonhosted.org/packages/cf/96/4290b2af2853f81061b9aa6ddf118523bc9b1d922842ee78124844ee35d9/python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "version": "1.9.dev15"
+      }
+    ],
+    "image": "python:3.13.15-bookworm@sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8",
+    "python": "3.13.15"
+  },
+  "schedule": {
+    "arms": 8,
+    "cells_per_query_count": 6912,
+    "counterbalance_blocks": 16,
+    "expected_counts": {
+      "failed": 0,
+      "ok": 27648,
+      "refused": 0
+    },
+    "query_counts": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "runnable_cases": 54,
+    "total_cells": 27648
+  },
+  "schema": "cm-architecture-query-ladder-cross-machine-execution-contract/v1",
+  "source_checkpoint": "13d99274fbed26cfbd05e9079b15cb9269c8e737",
+  "status": "prepared_not_authorized",
+  "timing_isolation": {
+    "accounted_total_is_stage_sum": true,
+    "each_query_count_is_a_separate_cell": true,
+    "fork_launch_overhead_in_timing": false,
+    "isolation_lifecycle_reported_separately": true,
+    "reason": "fork is a measurement-isolation mechanism, not part of the backend task",
+    "stages": [
+      "parse_normalization_ns",
+      "representation_construction_ns",
+      "compilation_ns",
+      "binding_ns",
+      "evaluation_ns",
+      "delivery_ns",
+      "serialization_ns_when_applicable",
+      "cleanup_ns"
+    ]
+  }
+}

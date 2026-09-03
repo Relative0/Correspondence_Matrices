@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; query-ladder verified on one host; replication pending
+Status: recommendations reconciled; query-ladder verified on one host; replication package awaiting authorization
 
 ## Bottom line
 
@@ -71,7 +71,10 @@ but they do prohibit training a router from this confirmation result.
    RSS and lifecycle fields. The zero-floored incremental field cannot fit a memory router.
 4. **Complete:** attempt 001 is closed incomplete, its 83% inherited-heap collection
    artifact is diagnosed, and corrected retry cleanup is only 0.23% of task time.
-5. **Pending:** replicate on a separate physical machine/compiler. Only then add task-labelled sections to
+5. **Prepared, not authorized:** replicate on a separate physical machine/compiler.
+   The package preserves the frozen ladder, rejects the prior CPU model before setup or
+   measurement, and records a pinned Clang compiler identity. Only after a complete,
+   independently verified result may task-labelled sections be prepared for
    `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
    silently replacing it.
 

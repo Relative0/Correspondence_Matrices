@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: corrected q-ladder verified on one Linux/GCC host; cross-machine gate pending
+Status: corrected q-ladder verified on one Linux/GCC host; cross-machine package awaiting authorization
 
 ## Current implementation status
 
@@ -237,7 +237,11 @@ the evidence and denominator.
    isolated-child `wait4` peak RSS with a pre-fork inherited baseline, charges explicit
    cache clearing, delegates remaining heap release to child exit, and reports full
    isolation lifecycle separately. Independent verification found zero mismatches.
-7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
+7. **Prepared, not authorized:** replicate the corrected current-source comparison on
+   a separate machine/compiler. The immutable one-create package preserves all 27,648
+   cells, requests a different RunPod CPU flavor and actual CPU model, and replaces GCC
+   12 with pinned Debian Clang 14. Local isolated-tree validation produced no timing or
+   decision-bearing evidence.
 8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.
 
