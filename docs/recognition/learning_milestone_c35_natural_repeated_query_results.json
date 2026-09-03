@@ -1,0 +1,268 @@
+{
+  "controls": {
+    "all_passed": true,
+    "method_contract_mismatch_refused": true,
+    "output_contract_aligned": true,
+    "policy_refit": false,
+    "production_promotion": false,
+    "production_write": false,
+    "schema": "crse-c35-functional-controls/v1",
+    "tampered_trace_refused": true,
+    "training": false,
+    "wrong_oracle_refused": true
+  },
+  "dataset": {
+    "cases": 8,
+    "fresh_confirmation": false,
+    "natural_source_reused": true,
+    "queries_per_case": 64,
+    "widths": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "date": "2026-09-01",
+  "fresh_confirmation": false,
+  "interpretation": "At 64 exact partial-context queries CM IR is 1.2245x faster than direct AST but only 0.9303x flattened structural CSE and wins that pair on 2/8 cases. The exact lifecycle gate fails; no second-machine or production promotion follows.",
+  "measurement_rows": 576,
+  "policy_refit": false,
+  "production_promotion": false,
+  "production_write": false,
+  "report": "LEARNING_MILESTONE_C35_NATURAL_REPEATED_QUERY_2026_09_01.md",
+  "run": "docs/recognition/runs/c35-natural-repeated-windows-20260901-002",
+  "runpod": {
+    "cost_usd": 0.0,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c35-natural-repeated-query-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "source_dataset_reused": true,
+  "source_milestone": "C34",
+  "status": "verified_local_cm_gate_failed_no_promotion",
+  "summary": {
+    "by_width": {
+      "10": {
+        "best_at_64": "flattened_cse_restrict",
+        "case_id": "c23-multiply_low_cone-7ce6200be0c11862",
+        "cm_vs_flattened_cse_at_64": 0.9436152570480929
+      },
+      "3": {
+        "best_at_64": "direct_ast_restrict",
+        "case_id": "c23-decoder_reverse_shift-dcc1ac29c4533305",
+        "cm_vs_flattened_cse_at_64": 1.0909634949132256
+      },
+      "4": {
+        "best_at_64": "direct_ast_restrict",
+        "case_id": "c23-decoder_set_bit-0202c39e2ecb5d14",
+        "cm_vs_flattened_cse_at_64": 1.1688583768452265
+      },
+      "5": {
+        "best_at_64": "direct_ast_restrict",
+        "case_id": "c23-decoder_clear_bit-0664b5d12f8c050e",
+        "cm_vs_flattened_cse_at_64": 0.900717735993232
+      },
+      "6": {
+        "best_at_64": "direct_ast_restrict",
+        "case_id": "c23-decoder_clear_bit-00debc09c81dd540",
+        "cm_vs_flattened_cse_at_64": 0.812351758566943
+      },
+      "7": {
+        "best_at_64": "direct_ast_restrict",
+        "case_id": "c23-decoder_clear_bit-00abe33a63c523f5",
+        "cm_vs_flattened_cse_at_64": 0.9263520356491797
+      },
+      "8": {
+        "best_at_64": "flattened_cse_restrict",
+        "case_id": "c23-multiply_low_cone-373576cb0eb57eda",
+        "cm_vs_flattened_cse_at_64": 0.8269522480432012
+      },
+      "9": {
+        "best_at_64": "flattened_cse_restrict",
+        "case_id": "c23-multiply_add_low_cone-0d1220b52c263d1a",
+        "cm_vs_flattened_cse_at_64": 0.9389959415843799
+      }
+    },
+    "cases": 8,
+    "checkpoints": {
+      "1": {
+        "best_fixed_method": "direct_ast_restrict",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_direct_ast": 0.26650679071112665,
+        "cm_speedup_over_direct_truth_cache": 0.47219242959231633,
+        "cm_speedup_over_flattened_cse": 0.42757980742579627,
+        "method_total_ns": {
+          "bdd_autoref_restrict": 486840250,
+          "cadical_enumeration": 14259900,
+          "cm_ir_restrict": 4149050,
+          "direct_ast_restrict": 1105750,
+          "direct_truth_cache": 1959150,
+          "flattened_cse_restrict": 1774050
+        },
+        "per_case_winners": {
+          "c23-decoder_clear_bit-00abe33a63c523f5": "direct_ast_restrict",
+          "c23-decoder_clear_bit-00debc09c81dd540": "direct_ast_restrict",
+          "c23-decoder_clear_bit-0664b5d12f8c050e": "direct_ast_restrict",
+          "c23-decoder_reverse_shift-dcc1ac29c4533305": "direct_ast_restrict",
+          "c23-decoder_set_bit-0202c39e2ecb5d14": "direct_ast_restrict",
+          "c23-multiply_add_low_cone-0d1220b52c263d1a": "direct_ast_restrict",
+          "c23-multiply_low_cone-373576cb0eb57eda": "direct_ast_restrict",
+          "c23-multiply_low_cone-7ce6200be0c11862": "direct_ast_restrict"
+        }
+      },
+      "16": {
+        "best_fixed_method": "flattened_cse_restrict",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_direct_ast": 0.7800032065907774,
+        "cm_speedup_over_direct_truth_cache": 2.237990700886746,
+        "cm_speedup_over_flattened_cse": 0.7042783320794741,
+        "method_total_ns": {
+          "bdd_autoref_restrict": 598504650,
+          "cadical_enumeration": 111339900,
+          "cm_ir_restrict": 8108300,
+          "direct_ast_restrict": 6324500,
+          "direct_truth_cache": 18146300,
+          "flattened_cse_restrict": 5710500
+        },
+        "per_case_winners": {
+          "c23-decoder_clear_bit-00abe33a63c523f5": "direct_ast_restrict",
+          "c23-decoder_clear_bit-00debc09c81dd540": "direct_ast_restrict",
+          "c23-decoder_clear_bit-0664b5d12f8c050e": "direct_ast_restrict",
+          "c23-decoder_reverse_shift-dcc1ac29c4533305": "direct_ast_restrict",
+          "c23-decoder_set_bit-0202c39e2ecb5d14": "direct_ast_restrict",
+          "c23-multiply_add_low_cone-0d1220b52c263d1a": "direct_ast_restrict",
+          "c23-multiply_low_cone-373576cb0eb57eda": "flattened_cse_restrict",
+          "c23-multiply_low_cone-7ce6200be0c11862": "flattened_cse_restrict"
+        }
+      },
+      "4": {
+        "best_fixed_method": "direct_ast_restrict",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_direct_ast": 0.4370271826539325,
+        "cm_speedup_over_direct_truth_cache": 1.1017314298195104,
+        "cm_speedup_over_flattened_cse": 0.5239362230208685,
+        "method_total_ns": {
+          "bdd_autoref_restrict": 510267150,
+          "cadical_enumeration": 34438150,
+          "cm_ir_restrict": 5036300,
+          "direct_ast_restrict": 2201000,
+          "direct_truth_cache": 5548650,
+          "flattened_cse_restrict": 2638700
+        },
+        "per_case_winners": {
+          "c23-decoder_clear_bit-00abe33a63c523f5": "direct_ast_restrict",
+          "c23-decoder_clear_bit-00debc09c81dd540": "direct_ast_restrict",
+          "c23-decoder_clear_bit-0664b5d12f8c050e": "direct_ast_restrict",
+          "c23-decoder_reverse_shift-dcc1ac29c4533305": "direct_ast_restrict",
+          "c23-decoder_set_bit-0202c39e2ecb5d14": "direct_ast_restrict",
+          "c23-multiply_add_low_cone-0d1220b52c263d1a": "direct_ast_restrict",
+          "c23-multiply_low_cone-373576cb0eb57eda": "direct_ast_restrict",
+          "c23-multiply_low_cone-7ce6200be0c11862": "flattened_cse_restrict"
+        }
+      },
+      "64": {
+        "best_fixed_method": "flattened_cse_restrict",
+        "cm_case_win_fraction_vs_flattened_cse": 0.25,
+        "cm_speedup_over_direct_ast": 1.2244897959183674,
+        "cm_speedup_over_direct_truth_cache": 3.374774733902453,
+        "cm_speedup_over_flattened_cse": 0.9302891219474081,
+        "method_total_ns": {
+          "bdd_autoref_restrict": 923568950,
+          "cadical_enumeration": 385966950,
+          "cm_ir_restrict": 19837650,
+          "direct_ast_restrict": 24291000,
+          "direct_truth_cache": 66947600,
+          "flattened_cse_restrict": 18454750
+        },
+        "per_case_winners": {
+          "c23-decoder_clear_bit-00abe33a63c523f5": "direct_ast_restrict",
+          "c23-decoder_clear_bit-00debc09c81dd540": "direct_ast_restrict",
+          "c23-decoder_clear_bit-0664b5d12f8c050e": "direct_ast_restrict",
+          "c23-decoder_reverse_shift-dcc1ac29c4533305": "direct_ast_restrict",
+          "c23-decoder_set_bit-0202c39e2ecb5d14": "direct_ast_restrict",
+          "c23-multiply_add_low_cone-0d1220b52c263d1a": "flattened_cse_restrict",
+          "c23-multiply_low_cone-373576cb0eb57eda": "flattened_cse_restrict",
+          "c23-multiply_low_cone-7ce6200be0c11862": "flattened_cse_restrict"
+        }
+      }
+    },
+    "cm_break_even_query_count_vs_direct_ast": 64,
+    "cm_break_even_query_count_vs_flattened_cse": null,
+    "cm_promotion_gate": false,
+    "cm_promotion_gate_contract": {
+      "case_win_fraction_vs_flattened_cse_minimum": 0.75,
+      "checkpoint": 64,
+      "speedup_over_direct_truth_cache_minimum": 1.0,
+      "speedup_over_flattened_cse_minimum": 1.05
+    },
+    "measurement_rows": 576,
+    "methods": {
+      "bdd_autoref_restrict": {
+        "aggregate_setup_median_ns": 5544600,
+        "aggregate_warm_query_median_ns": 6762320,
+        "median_case_setup_ns": 264900,
+        "median_case_warm_query_ns": 300894
+      },
+      "cadical_enumeration": {
+        "aggregate_setup_median_ns": 7975650,
+        "aggregate_warm_query_median_ns": 5724520,
+        "median_case_setup_ns": 874550,
+        "median_case_warm_query_ns": 213432
+      },
+      "cm_ir_restrict": {
+        "aggregate_setup_median_ns": 3700900,
+        "aggregate_warm_query_median_ns": 237800,
+        "median_case_setup_ns": 309950,
+        "median_case_warm_query_ns": 30947
+      },
+      "direct_ast_restrict": {
+        "aggregate_setup_median_ns": 625250,
+        "aggregate_warm_query_median_ns": 368731,
+        "median_case_setup_ns": 59000,
+        "median_case_warm_query_ns": 26494
+      },
+      "direct_truth_cache": {
+        "aggregate_setup_median_ns": 857000,
+        "aggregate_warm_query_median_ns": 999746,
+        "median_case_setup_ns": 78600,
+        "median_case_warm_query_ns": 54676
+      },
+      "flattened_cse_restrict": {
+        "aggregate_setup_median_ns": 1360200,
+        "aggregate_warm_query_median_ns": 251319,
+        "median_case_setup_ns": 121300,
+        "median_case_warm_query_ns": 27643
+      }
+    },
+    "timed_queries": 36864,
+    "timed_sessions": 576,
+    "timing_is_local_and_machine_specific": true
+  },
+  "timed_queries": 36864,
+  "training": false,
+  "verification": {
+    "contracts_checked": 48,
+    "dataset_cases_replayed": 8,
+    "manifest_sha256": "0daff47182e9ecbe4433a7bf38fcbdedc7c951a5ce0357bd8291f27fd0ab1f87",
+    "measurement_mismatches": 0,
+    "measurement_rows_checked": 576,
+    "oracle_mismatches": 0,
+    "path": "docs/recognition/runs/c35-natural-repeated-windows-20260901-002/independent_verification.json",
+    "production_promotion": false,
+    "production_write": false,
+    "queries_replayed": 512,
+    "results_sha256": "4e2d8714e2ac463ddbfe3f56e4797f4fb0be7319824da9cf3a742b03b8c5d138",
+    "schema": "crse-c35-independent-verification/v1",
+    "semantic_mismatches": 0,
+    "status": "verified",
+    "summary_mismatches": 0,
+    "summary_recomputed_independently": true,
+    "timed_queries_checked": 36864,
+    "trace_mismatches": 0
+  }
+}

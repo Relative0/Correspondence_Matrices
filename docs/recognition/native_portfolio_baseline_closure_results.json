@@ -1,0 +1,232 @@
+{
+  "dataset": {
+    "cases": 18,
+    "classification": "development_exposed_c36_not_confirmation",
+    "path": "docs/recognition/c36_wide_repeated_query_dataset.json",
+    "queries_per_case": 64,
+    "sha256": "ce6afdde4321682a5345269ba4d9f7c80a916931f15a7c0cc6f2ca93beb0eaa1"
+  },
+  "date": "2026-09-03",
+  "decision": {
+    "native_fixed_improvement_gate": true,
+    "production_promotion": false,
+    "production_write": false,
+    "prospective_confirmation_allowed": false,
+    "prospective_data_consumed": false,
+    "selector_development_headroom_gate": false,
+    "training_allowed": false,
+    "training_performed": false
+  },
+  "methods": [
+    "r2_per_query",
+    "cse_bigint",
+    "cse_words",
+    "cm_ir_bigint",
+    "cm_ir_words",
+    "projection_u16_tuple",
+    "native_fused_slots"
+  ],
+  "production_promotion": false,
+  "production_write": false,
+  "prospective_data_consumed": false,
+  "reassessment": "docs/recognition/runs/neural-native-portfolio-reassessment-development-20260903-001",
+  "reassessment_verification": {
+    "assessment_sha256": "f8c83eb8c0d11d46958cfcb77ac1d499898c049f3e07bd66b71f9df247b801cb",
+    "backend_labels_replayed": 18,
+    "manifest_sha256": "ba83138987a84a5782f077834311c440078a2a3f9d1a31ab92c72782a6f705c3",
+    "production_promotion": false,
+    "production_write": false,
+    "prospective_data_consumed": false,
+    "schema": "crse-neural-native-portfolio-reassessment-independent-verification/v1",
+    "status": "verified",
+    "training_performed": false
+  },
+  "report": "../research/CM_NATIVE_PORTFOLIO_BASELINE_CLOSURE_2026_09_03.md",
+  "run": "docs/recognition/runs/native-portfolio-development-20260903-001",
+  "schema": "crse-native-portfolio-baseline-closure-summary/v1",
+  "status": "verified_fixed_native_gain_zero_selector_headroom",
+  "summary": {
+    "aggregate_case_median_stage_ns": {
+      "cm_ir_bigint": {
+        "accounted_total_ns": 157752600,
+        "cleanup_ns": 1087600,
+        "delivery_ns": 57392800,
+        "evaluation_ns": 69279900,
+        "input_decode_ns": 3697300,
+        "query_total_ns": 131005600,
+        "representation_ns": 21995800,
+        "restriction_setup_ns": 3685600
+      },
+      "cm_ir_words": {
+        "accounted_total_ns": 235133900,
+        "cleanup_ns": 904600,
+        "delivery_ns": 59579700,
+        "evaluation_ns": 144177900,
+        "input_decode_ns": 3744600,
+        "query_total_ns": 207274500,
+        "representation_ns": 22299100,
+        "restriction_setup_ns": 3242400
+      },
+      "cse_bigint": {
+        "accounted_total_ns": 141848800,
+        "cleanup_ns": 826900,
+        "delivery_ns": 57938900,
+        "evaluation_ns": 70537200,
+        "input_decode_ns": 3711800,
+        "query_total_ns": 132468300,
+        "representation_ns": 4768100,
+        "restriction_setup_ns": 3759000
+      },
+      "cse_words": {
+        "accounted_total_ns": 215322300,
+        "cleanup_ns": 648500,
+        "delivery_ns": 58497400,
+        "evaluation_ns": 142675100,
+        "input_decode_ns": 3775100,
+        "query_total_ns": 205510700,
+        "representation_ns": 4806700,
+        "restriction_setup_ns": 3869600
+      },
+      "native_fused_slots": {
+        "accounted_total_ns": 111451100,
+        "cleanup_ns": 144800,
+        "delivery_ns": 45235100,
+        "evaluation_ns": 39189200,
+        "input_decode_ns": 3292100,
+        "query_total_ns": 104817200,
+        "representation_ns": 3078800,
+        "restriction_setup_ns": 20459000
+      },
+      "projection_u16_tuple": {
+        "accounted_total_ns": 152669800,
+        "cleanup_ns": 242000,
+        "delivery_ns": 43243400,
+        "evaluation_ns": 8508600,
+        "input_decode_ns": 3196400,
+        "query_total_ns": 54198100,
+        "representation_ns": 94548700,
+        "restriction_setup_ns": 2243900
+      },
+      "r2_per_query": {
+        "accounted_total_ns": 163926900,
+        "cleanup_ns": 290300,
+        "delivery_ns": 59679400,
+        "evaluation_ns": 93500800,
+        "input_decode_ns": 3690200,
+        "query_total_ns": 157384800,
+        "representation_ns": 2158400,
+        "restriction_setup_ns": 3982600
+      }
+    },
+    "best_fixed_method": "native_fused_slots",
+    "best_non_native_method": "cse_bigint",
+    "cases": 18,
+    "memory_profile_sessions": 126,
+    "memory_profiles": {
+      "cm_ir_bigint": {
+        "max_sampled_rss_delta_bytes": 651264,
+        "max_tracemalloc_peak_bytes": 638259,
+        "sessions": 18
+      },
+      "cm_ir_words": {
+        "max_sampled_rss_delta_bytes": 724992,
+        "max_tracemalloc_peak_bytes": 602515,
+        "sessions": 18
+      },
+      "cse_bigint": {
+        "max_sampled_rss_delta_bytes": 708608,
+        "max_tracemalloc_peak_bytes": 601427,
+        "sessions": 18
+      },
+      "cse_words": {
+        "max_sampled_rss_delta_bytes": 507904,
+        "max_tracemalloc_peak_bytes": 572140,
+        "sessions": 18
+      },
+      "native_fused_slots": {
+        "max_sampled_rss_delta_bytes": 0,
+        "max_tracemalloc_peak_bytes": 546112,
+        "sessions": 18
+      },
+      "projection_u16_tuple": {
+        "max_sampled_rss_delta_bytes": 0,
+        "max_tracemalloc_peak_bytes": 1054178,
+        "sessions": 18
+      },
+      "r2_per_query": {
+        "max_sampled_rss_delta_bytes": 557056,
+        "max_tracemalloc_peak_bytes": 570008,
+        "sessions": 18
+      }
+    },
+    "native_case_wins": 18,
+    "native_speedup_over_best_non_native": 1.2727447284055518,
+    "native_ten_percent_gate": true,
+    "oracle_speedup_over_best_fixed": 1.0,
+    "per_case_oracle_total_ns": 111451100,
+    "per_case_winner_counts": {
+      "native_fused_slots": 18
+    },
+    "per_case_winners": {
+      "c36-addertree_sum-1bde1edc369329c3": "native_fused_slots",
+      "c36-addertree_sum-4a3815b6b6b457c9": "native_fused_slots",
+      "c36-addertree_sum-d44458ceb643f094": "native_fused_slots",
+      "c36-decoder_index-74361d31a2f66dd7": "native_fused_slots",
+      "c36-decoder_index-7db1fed5788553b0": "native_fused_slots",
+      "c36-decoder_index-80388418676d128a": "native_fused_slots",
+      "c36-decoder_index-9e6bc671034ca09b": "native_fused_slots",
+      "c36-decoder_index-cabf7c990ef270a2": "native_fused_slots",
+      "c36-decoder_reverse_shift-01795fc9d2b0f4cf": "native_fused_slots",
+      "c36-decoder_reverse_shift-501605d63402a561": "native_fused_slots",
+      "c36-decoder_reverse_shift-8bdee763e6cade28": "native_fused_slots",
+      "c36-decoder_reverse_shift-d38ec347450fbeda": "native_fused_slots",
+      "c36-decoder_reverse_shift-e1ed090d392bb702": "native_fused_slots",
+      "c36-multiply_add_low_cone-60066513d884e8cd": "native_fused_slots",
+      "c36-multiply_low_cone-183b0d87d566b432": "native_fused_slots",
+      "c36-multiply_low_cone-6609b0cc2915dfed": "native_fused_slots",
+      "c36-multiply_low_cone-74681b58360369df": "native_fused_slots",
+      "c36-multiply_low_cone-bfa77f977d9b63d0": "native_fused_slots"
+    },
+    "performance_sessions": 1764,
+    "q64_accounted_total_ns": {
+      "cm_ir_bigint": 157752600,
+      "cm_ir_words": 235133900,
+      "cse_bigint": 141848800,
+      "cse_words": 215322300,
+      "native_fused_slots": 111451100,
+      "projection_u16_tuple": 152669800,
+      "r2_per_query": 163926900
+    },
+    "selector_development_headroom_gate": false,
+    "timed_queries": 112896
+  },
+  "training": false,
+  "verification": {
+    "artifact_mismatches": 0,
+    "correctness_mismatches": 0,
+    "dataset_mismatches": 0,
+    "decision_mismatches": 0,
+    "interpreter_mismatches": 0,
+    "manifest_sha256": "89bca68671d343dee864d06297028e3a2c3d2b87186a29498f7071c813729d64",
+    "memory_profile_sessions": 126,
+    "native_identity_mismatches": 0,
+    "native_library_sha256": "2d444c32d352284ab28474fef5554659f4f08225158d79feedc48633cf4875a0",
+    "native_mismatches": 0,
+    "performance_sessions": 1764,
+    "production_promotion": false,
+    "production_write": false,
+    "prospective_data_consumed": false,
+    "queries_replayed_independently": 1152,
+    "raw_query_rows_checked": 120960,
+    "results_sha256": "b2f81e78a9285b9a4f4cbacb4928a03dd1b90cd6637f0663e1dd6e14081772f7",
+    "run_id": "native-portfolio-development-20260903-001",
+    "schedule_mismatches": 0,
+    "schema": "crse-native-portfolio-independent-verification/v1",
+    "source_mismatches": 0,
+    "status": "verified",
+    "structure_mismatches": 0,
+    "summary_mismatches": 0,
+    "timing_mismatches": 0,
+    "training_performed": false
+  }
+}

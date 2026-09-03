@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.20)
+project(cm_fused_slots C)
+
+add_library(cm_fused_slots SHARED fused_slot_executor.c)
+target_compile_features(cm_fused_slots PRIVATE c_std_11)
+if(MSVC)
+  target_compile_options(cm_fused_slots PRIVATE /O2 /W4)
+else()
+  target_compile_options(cm_fused_slots PRIVATE -O3 -Wall -Wextra -Wpedantic)
+endif()

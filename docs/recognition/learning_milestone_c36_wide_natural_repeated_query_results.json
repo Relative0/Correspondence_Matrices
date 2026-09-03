@@ -1,0 +1,510 @@
+{
+  "controls": {
+    "all_passed": true,
+    "method_contract_mismatch_refused": true,
+    "policy_refit": false,
+    "production_promotion": false,
+    "production_write": false,
+    "schema": "crse-c36-functional-controls/v1",
+    "tampered_trace_refused": true,
+    "training": false,
+    "wrong_oracle_refused": true
+  },
+  "dataset": {
+    "cases": 18,
+    "cases_per_width": 3,
+    "fresh_parameter_and_truth_identities": true,
+    "source_repository_reused": true,
+    "widths": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "date": "2026-09-01",
+  "external_functional_probes": {
+    "autoref_bdd": {
+      "performance_ranking_permitted": false,
+      "rows": [
+        {
+          "case_id": "c36-decoder_index-7db1fed5788553b0",
+          "diagnostic_total_ns": 36031000,
+          "exact_check_passed": true,
+          "n_vars": 11,
+          "node_count": 383,
+          "queries": 4
+        },
+        {
+          "case_id": "c36-addertree_sum-1bde1edc369329c3",
+          "diagnostic_total_ns": 17214200,
+          "exact_check_passed": true,
+          "n_vars": 12,
+          "node_count": 36,
+          "queries": 4
+        },
+        {
+          "case_id": "c36-multiply_low_cone-74681b58360369df",
+          "diagnostic_total_ns": 107904900,
+          "exact_check_passed": true,
+          "n_vars": 13,
+          "node_count": 401,
+          "queries": 4
+        },
+        {
+          "case_id": "c36-multiply_low_cone-183b0d87d566b432",
+          "diagnostic_total_ns": 63715700,
+          "exact_check_passed": true,
+          "n_vars": 14,
+          "node_count": 448,
+          "queries": 4
+        },
+        {
+          "case_id": "c36-addertree_sum-4a3815b6b6b457c9",
+          "diagnostic_total_ns": 23078000,
+          "exact_check_passed": true,
+          "n_vars": 15,
+          "node_count": 48,
+          "queries": 4
+        },
+        {
+          "case_id": "c36-decoder_reverse_shift-01795fc9d2b0f4cf",
+          "diagnostic_total_ns": 62434600,
+          "exact_check_passed": true,
+          "n_vars": 16,
+          "node_count": 8191,
+          "queries": 4
+        }
+      ],
+      "timed": false
+    },
+    "cadical": {
+      "performance_ranking_permitted": false,
+      "rows": [
+        {
+          "case_id": "c36-decoder_index-7db1fed5788553b0",
+          "diagnostic_total_ns": 2257800,
+          "exact_check_passed": true,
+          "n_vars": 11,
+          "solve_calls": 256
+        },
+        {
+          "case_id": "c36-addertree_sum-1bde1edc369329c3",
+          "diagnostic_total_ns": 611000,
+          "exact_check_passed": true,
+          "n_vars": 12,
+          "solve_calls": 64
+        },
+        {
+          "case_id": "c36-multiply_low_cone-74681b58360369df",
+          "diagnostic_total_ns": 3775400,
+          "exact_check_passed": true,
+          "n_vars": 13,
+          "solve_calls": 256
+        },
+        {
+          "case_id": "c36-multiply_low_cone-183b0d87d566b432",
+          "diagnostic_total_ns": 13362600,
+          "exact_check_passed": true,
+          "n_vars": 14,
+          "solve_calls": 1024
+        },
+        {
+          "case_id": "c36-addertree_sum-4a3815b6b6b457c9",
+          "diagnostic_total_ns": 669200,
+          "exact_check_passed": true,
+          "n_vars": 15,
+          "solve_calls": 64
+        },
+        {
+          "case_id": "c36-decoder_reverse_shift-01795fc9d2b0f4cf",
+          "diagnostic_total_ns": 2670300,
+          "exact_check_passed": true,
+          "n_vars": 16,
+          "solve_calls": 256
+        }
+      ],
+      "timed": false
+    },
+    "native_cudd": {
+      "available": false,
+      "error": "dd.cudd: ModuleNotFoundError(\"No module named 'dd.cudd'\")",
+      "timed": false
+    },
+    "schema": "crse-c36-external-functional-probes/v1",
+    "status": "passed"
+  },
+  "fresh_parameter_and_truth_identities": true,
+  "interpretation": "At q64 CM IR is 0.8783x flattened CSE and 0.9376x compiled truth projection, so its fixed promotion gate fails. A post-hoc family rule is 1.2841x the best fixed method after the frozen recognition charge, creating prospective C37 routing headroom but permitting no current promotion.",
+  "measurement_rows": 576,
+  "policy_refit": false,
+  "production_promotion": false,
+  "production_write": false,
+  "report": "LEARNING_MILESTONE_C36_WIDE_NATURAL_REPEATED_QUERY_2026_09_01.md",
+  "run": "docs/recognition/runs/c36-wide-repeated-windows-20260901-003",
+  "runpod": {
+    "cost_usd": 0.0,
+    "used": false
+  },
+  "schema": "crse-learning-milestone-c36-wide-natural-repeated-query-summary/v1",
+  "semantic_or_artifact_mismatches": 0,
+  "source_milestone": "C35",
+  "source_repository_reused": true,
+  "status": "verified_local_cm_gate_failed_exploratory_routing_headroom",
+  "summary": {
+    "by_family": {
+      "addertree_sum": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 3,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 19601500,
+          "compiled_truth_projection": 19827400,
+          "direct_ast_restrict": 13376650,
+          "flattened_cse_words": 17273050
+        }
+      },
+      "decoder_index": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 5,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 35841050,
+          "compiled_truth_projection": 34730900,
+          "direct_ast_restrict": 19615450,
+          "flattened_cse_words": 30823450
+        }
+      },
+      "decoder_reverse_shift": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 5,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 34498050,
+          "compiled_truth_projection": 35338500,
+          "direct_ast_restrict": 19822550,
+          "flattened_cse_words": 30551350
+        }
+      },
+      "multiply_add_low_cone": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 1,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 6603800,
+          "compiled_truth_projection": 6037900,
+          "direct_ast_restrict": 4673250,
+          "flattened_cse_words": 6129250
+        }
+      },
+      "multiply_low_cone": {
+        "best_at_64": "compiled_truth_projection",
+        "cases": 4,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 46291500,
+          "compiled_truth_projection": 37990650,
+          "direct_ast_restrict": 704198050,
+          "flattened_cse_words": 40676550
+        }
+      }
+    },
+    "by_width": {
+      "11": {
+        "best_at_64": "compiled_truth_projection",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.871457645431556,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 21472300,
+          "compiled_truth_projection": 18263800,
+          "direct_ast_restrict": 68113300,
+          "flattened_cse_words": 18712200
+        }
+      },
+      "12": {
+        "best_at_64": "compiled_truth_projection",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.9045501816499218,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 21827700,
+          "compiled_truth_projection": 18672500,
+          "direct_ast_restrict": 33602150,
+          "flattened_cse_words": 19744250
+        }
+      },
+      "13": {
+        "best_at_64": "flattened_cse_words",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.874427069167879,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 27392050,
+          "compiled_truth_projection": 27758600,
+          "direct_ast_restrict": 496697300,
+          "flattened_cse_words": 23952350
+        }
+      },
+      "14": {
+        "best_at_64": "compiled_truth_projection",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.8532168729890584,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 27614550,
+          "compiled_truth_projection": 23185550,
+          "direct_ast_restrict": 135821800,
+          "flattened_cse_words": 23561200
+        }
+      },
+      "15": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.8706186974904677,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 22882750,
+          "compiled_truth_projection": 22409350,
+          "direct_ast_restrict": 14320200,
+          "flattened_cse_words": 19922150
+        }
+      },
+      "16": {
+        "best_at_64": "direct_ast_restrict",
+        "cases": 3,
+        "cm_speedup_over_flattened_cse_at_64": 0.903677491332337,
+        "method_total_ns_at_64": {
+          "cm_ir_words": 21646550,
+          "compiled_truth_projection": 23635550,
+          "direct_ast_restrict": 13131200,
+          "flattened_cse_words": 19561500
+        }
+      }
+    },
+    "cases": 18,
+    "checkpoints": {
+      "1": {
+        "best_fixed_method": "flattened_cse_words",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_compiled_truth_projection": 3.9259855301921958,
+        "cm_speedup_over_direct_ast": 0.6402529210172956,
+        "cm_speedup_over_flattened_cse": 0.4312644046736277,
+        "method_total_ns": {
+          "cm_ir_words": 24948500,
+          "compiled_truth_projection": 97947450,
+          "direct_ast_restrict": 15973350,
+          "flattened_cse_words": 10759400
+        },
+        "per_case_oracle_speedup_over_best_fixed": 1.5438611595388247,
+        "per_case_oracle_total_ns": 6969150,
+        "per_case_winners": {
+          "c36-addertree_sum-1bde1edc369329c3": "direct_ast_restrict",
+          "c36-addertree_sum-4a3815b6b6b457c9": "direct_ast_restrict",
+          "c36-addertree_sum-d44458ceb643f094": "direct_ast_restrict",
+          "c36-decoder_index-74361d31a2f66dd7": "direct_ast_restrict",
+          "c36-decoder_index-7db1fed5788553b0": "direct_ast_restrict",
+          "c36-decoder_index-80388418676d128a": "direct_ast_restrict",
+          "c36-decoder_index-9e6bc671034ca09b": "direct_ast_restrict",
+          "c36-decoder_index-cabf7c990ef270a2": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-01795fc9d2b0f4cf": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-501605d63402a561": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-8bdee763e6cade28": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-d38ec347450fbeda": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-e1ed090d392bb702": "direct_ast_restrict",
+          "c36-multiply_add_low_cone-60066513d884e8cd": "direct_ast_restrict",
+          "c36-multiply_low_cone-183b0d87d566b432": "flattened_cse_words",
+          "c36-multiply_low_cone-6609b0cc2915dfed": "direct_ast_restrict",
+          "c36-multiply_low_cone-74681b58360369df": "flattened_cse_words",
+          "c36-multiply_low_cone-bfa77f977d9b63d0": "flattened_cse_words"
+        }
+      },
+      "16": {
+        "best_fixed_method": "flattened_cse_words",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_compiled_truth_projection": 1.9507497202672313,
+        "cm_speedup_over_direct_ast": 3.5345766103313423,
+        "cm_speedup_over_flattened_cse": 0.7153085807798986,
+        "method_total_ns": {
+          "cm_ir_words": 54873800,
+          "compiled_truth_projection": 107045050,
+          "direct_ast_restrict": 193955650,
+          "flattened_cse_words": 39251700
+        },
+        "per_case_oracle_speedup_over_best_fixed": 1.3181287747642163,
+        "per_case_oracle_total_ns": 29778350,
+        "per_case_winners": {
+          "c36-addertree_sum-1bde1edc369329c3": "direct_ast_restrict",
+          "c36-addertree_sum-4a3815b6b6b457c9": "direct_ast_restrict",
+          "c36-addertree_sum-d44458ceb643f094": "direct_ast_restrict",
+          "c36-decoder_index-74361d31a2f66dd7": "direct_ast_restrict",
+          "c36-decoder_index-7db1fed5788553b0": "direct_ast_restrict",
+          "c36-decoder_index-80388418676d128a": "direct_ast_restrict",
+          "c36-decoder_index-9e6bc671034ca09b": "direct_ast_restrict",
+          "c36-decoder_index-cabf7c990ef270a2": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-01795fc9d2b0f4cf": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-501605d63402a561": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-8bdee763e6cade28": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-d38ec347450fbeda": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-e1ed090d392bb702": "direct_ast_restrict",
+          "c36-multiply_add_low_cone-60066513d884e8cd": "direct_ast_restrict",
+          "c36-multiply_low_cone-183b0d87d566b432": "flattened_cse_words",
+          "c36-multiply_low_cone-6609b0cc2915dfed": "flattened_cse_words",
+          "c36-multiply_low_cone-74681b58360369df": "flattened_cse_words",
+          "c36-multiply_low_cone-bfa77f977d9b63d0": "flattened_cse_words"
+        }
+      },
+      "4": {
+        "best_fixed_method": "flattened_cse_words",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_compiled_truth_projection": 3.1778728217903582,
+        "cm_speedup_over_direct_ast": 1.5942206744029386,
+        "cm_speedup_over_flattened_cse": 0.5410253314183306,
+        "method_total_ns": {
+          "cm_ir_words": 31470800,
+          "compiled_truth_projection": 100010200,
+          "direct_ast_restrict": 50171400,
+          "flattened_cse_words": 17026500
+        },
+        "per_case_oracle_speedup_over_best_fixed": 1.4228173898510457,
+        "per_case_oracle_total_ns": 11966750,
+        "per_case_winners": {
+          "c36-addertree_sum-1bde1edc369329c3": "direct_ast_restrict",
+          "c36-addertree_sum-4a3815b6b6b457c9": "direct_ast_restrict",
+          "c36-addertree_sum-d44458ceb643f094": "direct_ast_restrict",
+          "c36-decoder_index-74361d31a2f66dd7": "direct_ast_restrict",
+          "c36-decoder_index-7db1fed5788553b0": "direct_ast_restrict",
+          "c36-decoder_index-80388418676d128a": "direct_ast_restrict",
+          "c36-decoder_index-9e6bc671034ca09b": "direct_ast_restrict",
+          "c36-decoder_index-cabf7c990ef270a2": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-01795fc9d2b0f4cf": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-501605d63402a561": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-8bdee763e6cade28": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-d38ec347450fbeda": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-e1ed090d392bb702": "direct_ast_restrict",
+          "c36-multiply_add_low_cone-60066513d884e8cd": "direct_ast_restrict",
+          "c36-multiply_low_cone-183b0d87d566b432": "flattened_cse_words",
+          "c36-multiply_low_cone-6609b0cc2915dfed": "flattened_cse_words",
+          "c36-multiply_low_cone-74681b58360369df": "flattened_cse_words",
+          "c36-multiply_low_cone-bfa77f977d9b63d0": "flattened_cse_words"
+        }
+      },
+      "64": {
+        "best_fixed_method": "flattened_cse_words",
+        "cm_case_win_fraction_vs_flattened_cse": 0.0,
+        "cm_speedup_over_compiled_truth_projection": 0.9376168736291086,
+        "cm_speedup_over_direct_ast": 5.332594606818033,
+        "cm_speedup_over_flattened_cse": 0.8783061541251184,
+        "method_total_ns": {
+          "cm_ir_words": 142835900,
+          "compiled_truth_projection": 133925350,
+          "direct_ast_restrict": 761685950,
+          "flattened_cse_words": 125453650
+        },
+        "per_case_oracle_speedup_over_best_fixed": 1.3564279786891849,
+        "per_case_oracle_total_ns": 92488250,
+        "per_case_winners": {
+          "c36-addertree_sum-1bde1edc369329c3": "direct_ast_restrict",
+          "c36-addertree_sum-4a3815b6b6b457c9": "direct_ast_restrict",
+          "c36-addertree_sum-d44458ceb643f094": "direct_ast_restrict",
+          "c36-decoder_index-74361d31a2f66dd7": "direct_ast_restrict",
+          "c36-decoder_index-7db1fed5788553b0": "direct_ast_restrict",
+          "c36-decoder_index-80388418676d128a": "direct_ast_restrict",
+          "c36-decoder_index-9e6bc671034ca09b": "direct_ast_restrict",
+          "c36-decoder_index-cabf7c990ef270a2": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-01795fc9d2b0f4cf": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-501605d63402a561": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-8bdee763e6cade28": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-d38ec347450fbeda": "direct_ast_restrict",
+          "c36-decoder_reverse_shift-e1ed090d392bb702": "direct_ast_restrict",
+          "c36-multiply_add_low_cone-60066513d884e8cd": "direct_ast_restrict",
+          "c36-multiply_low_cone-183b0d87d566b432": "compiled_truth_projection",
+          "c36-multiply_low_cone-6609b0cc2915dfed": "compiled_truth_projection",
+          "c36-multiply_low_cone-74681b58360369df": "flattened_cse_words",
+          "c36-multiply_low_cone-bfa77f977d9b63d0": "compiled_truth_projection"
+        }
+      }
+    },
+    "cm_break_even_query_count_vs_compiled_truth_projection": 1,
+    "cm_break_even_query_count_vs_direct_ast": 4,
+    "cm_break_even_query_count_vs_flattened_cse": null,
+    "cm_promotion_gate": false,
+    "cm_promotion_gate_contract": {
+      "case_win_fraction_vs_flattened_cse_minimum": 0.75,
+      "checkpoint": 64,
+      "speedup_over_compiled_truth_projection_minimum": 1.0,
+      "speedup_over_flattened_cse_minimum": 1.05
+    },
+    "measurement_rows": 576,
+    "methods": {
+      "cm_ir_words": {
+        "aggregate_setup_median_ns": 20533000,
+        "aggregate_warm_query_median_ns": 1850084,
+        "median_case_setup_ns": 959750,
+        "median_case_warm_query_ns": 97446
+      },
+      "compiled_truth_projection": {
+        "aggregate_setup_median_ns": 96596300,
+        "aggregate_warm_query_median_ns": 555413,
+        "median_case_setup_ns": 4668900,
+        "median_case_warm_query_ns": 30313
+      },
+      "direct_ast_restrict": {
+        "aggregate_setup_median_ns": 3222000,
+        "aggregate_warm_query_median_ns": 11818625,
+        "median_case_setup_ns": 156075,
+        "median_case_warm_query_ns": 66153
+      },
+      "flattened_cse_words": {
+        "aggregate_setup_median_ns": 6972400,
+        "aggregate_warm_query_median_ns": 1796777,
+        "median_case_setup_ns": 336725,
+        "median_case_warm_query_ns": 91931
+      }
+    },
+    "routing_headroom": {
+      "best_fixed_method": "flattened_cse_words",
+      "best_fixed_total_ns": 125453650,
+      "charged_router_budget_ns_per_case": 123400,
+      "checkpoint": 64,
+      "exploratory_headroom_gate": true,
+      "family_rule_budget_adjusted_speedup": 1.284073398345441,
+      "family_rule_budget_adjusted_total_ns": 97699750,
+      "family_rule_methods": {
+        "addertree_sum": "direct_ast_restrict",
+        "decoder_index": "direct_ast_restrict",
+        "decoder_reverse_shift": "direct_ast_restrict",
+        "multiply_add_low_cone": "direct_ast_restrict",
+        "multiply_low_cone": "compiled_truth_projection"
+      },
+      "family_rule_raw_speedup": 1.3139459072220934,
+      "family_rule_total_ns": 95478550,
+      "per_case_oracle_raw_speedup": 1.3564279786891849,
+      "per_case_oracle_total_ns": 92488250,
+      "promotion_permitted": false,
+      "selection_is_post_hoc": true,
+      "training_performed": false
+    },
+    "timed_queries": 36864,
+    "timed_sessions": 576,
+    "timing_is_local_and_machine_specific": true
+  },
+  "timed_queries": 36864,
+  "training": false,
+  "verification": {
+    "contract_mismatches": 0,
+    "contracts_checked": 72,
+    "control_mismatches": 0,
+    "dataset_cases_replayed": 18,
+    "external_probe_rows_checked": 12,
+    "manifest_sha256": "a4661885b1283b50ff82a699feede28b28837c0101da885c0ed7f97b5cfa71de",
+    "measurement_mismatches": 0,
+    "measurement_rows_checked": 576,
+    "oracle_mismatches": 0,
+    "path": "docs/recognition/runs/c36-wide-repeated-windows-20260901-003/independent_verification.json",
+    "policy_refit": false,
+    "production_promotion": false,
+    "production_write": false,
+    "queries_replayed": 1152,
+    "results_sha256": "a9a4723d9ec9b6a6968ffa0f56dd268a158db62b50e66ec64b4bde6f481f63a3",
+    "schema": "crse-c36-independent-verification/v1",
+    "status": "verified",
+    "summary_mismatches": 0,
+    "summary_recomputed_independently": true,
+    "timed_queries_checked": 36864,
+    "trace_mismatches": 0,
+    "training_performed": false
+  }
+}

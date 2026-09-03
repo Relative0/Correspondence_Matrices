@@ -2,8 +2,20 @@
 
 Read the material directly on GitHub, or download it to inspect the
 interactive explainer, raw measurements, source snapshots and tests locally.
-This library integrates the project's August 27–28, 2026 follow-up work.
+This library integrates the project's August 27–September 3, 2026 follow-up work.
 Evidence boundaries and unsuccessful experiments are retained.
+
+Latest exact-execution and comparison decision:
+[C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md) and the
+[four-lane local functional admission](CM_FOUR_LANE_COMPARISON_HARNESS_FUNCTIONAL_ADMISSION_2026_09_03.md).
+The [architecture-audit disposition](CM_ARCHITECTURE_AUDIT_DISPOSITION_AFTER_C38_2026_09_03.md)
+records which H0-H10 recommendations were implemented, rejected, or deferred and why.
+C38 confirmed exact native execution and aggregate/multi-root benefit on Linux, but its
+0.840x minimum single-root case failed the frozen 0.95x floor, so native remains
+guarded/opt-in. The new four-lane harness then matched exact artifacts across complete
+relations, repeated restrictions, related roots, and separate smaller-query/persistence
+sublanes. It deliberately produced no timing evidence and consumed no fresh or
+prospective corpus. Training, production promotion, and publication remain disabled.
 
 Latest comparative follow-up: [fresh-process structural persistence](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md).
 CM, structural CSE, direct CNF and a portable `dd.autoref` ROBDD control passed
@@ -17,7 +29,7 @@ but not ordered user-event sessions; its non-commercial datasets are linked,
 not redistributed. These are correctness and provenance results, not a
 performance, memory, full-model or independent-replication claim.
 
-Latest recognition follow-up: [Milestone D9 frozen calibrated profitability policy](../recognition/NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md).
+Earlier rewrite-recognition follow-up: [Milestone D9 frozen calibrated profitability policy](../recognition/NATURAL_PROFITABILITY_POLICY_MILESTONE_D9_2026_08_29.md).
 The leakage-controlled policy was exact on 501 measurements from 23 optimized
 BLIF cones, but found no profitable rewrite region. It abstained on all 33 sealed
 evaluation workloads; unconditional one pass measured 0.429x and the charged

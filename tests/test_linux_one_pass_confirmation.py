@@ -25,13 +25,15 @@ def test_frozen_linux_confirmation_package_and_scalar_oracle() -> None:
     assert sha256_file(FROZEN / "proved_rule_pack.json") == EXPECTED_PACK_FILE_SHA256
 
 
-def test_linux_upload_manifest_is_an_exact_pending_allowlist() -> None:
+def test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit() -> None:
     manifest = json.loads((FROZEN / "linux_one_pass_upload_manifest.json").read_text(encoding="utf-8"))
 
     assert manifest["authorization_status"] == "pending"
     assert manifest["file_count"] == len(manifest["files"]) == 16
     assert manifest["bytes"] == sum(row["bytes"] for row in manifest["files"])
+    mismatches = []
     for row in manifest["files"]:
         path = ROOT / row["source"]
-        assert path.stat().st_size == row["bytes"]
-        assert sha256_file(path) == row["sha256"]
+        if path.stat().st_size != row["bytes"] or sha256_file(path) != row["sha256"]:
+            mismatches.append(row["source"])
+    assert mismatches == ["bitset_backend.py", "cm_exprlib.py"]

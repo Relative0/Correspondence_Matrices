@@ -77,11 +77,14 @@ class ComparativeNativeTransportTests(unittest.TestCase):
         self.assertEqual(
             mismatches,
             [
+                "bitset_backend.py",
                 "cm_exprlib.py",
+                "cmbench/comparative/arms.py",
                 "cmbench/comparative/contracts.py",
                 "cmbench/comparative/linux_supervisor.py",
                 "scripts/cm_comparative_native_scout.py",
                 "scripts/cm_native_contracts.py",
+                "tests/test_cm_comparative_foundation.py",
                 "tests/test_cm_comparative_linux_supervisor.py",
                 "tests/test_cm_comparative_native_scout.py",
                 "tests/test_cm_native_contracts.py",
@@ -95,7 +98,7 @@ class ComparativeNativeTransportTests(unittest.TestCase):
 
     def test_historical_v6_bundle_rebuild_refuses_live_source_drift(self):
         manifest = procfs_controller.load(procfs_controller.MANIFEST_PATH)
-        with self.assertRaisesRegex(RuntimeError, "approved upload hash mismatch: cm_exprlib.py"):
+        with self.assertRaisesRegex(RuntimeError, "approved upload hash mismatch: bitset_backend.py"):
             procfs_controller.base.make_bundle(manifest)
 
     def test_bounded_transport_payload_fits_new_bootstrap(self):

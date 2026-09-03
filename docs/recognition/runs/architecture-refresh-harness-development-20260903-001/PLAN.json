@@ -1,0 +1,82 @@
+{
+  "fresh_corpus_permitted": false,
+  "lanes": {
+    "A": {
+      "arms": [
+        "cm_dense_full_reinflation",
+        "cm_packed_bigint",
+        "cm_packed_words",
+        "cm_hybrid_no_reinflate",
+        "cm_ir_recursive_packed",
+        "structural_cse_flat",
+        "raw_flat",
+        "direct_expression_bitset"
+      ],
+      "artifact": "uint8_truth_vector_in_declared_variable_order",
+      "task": "complete_explicit_relation"
+    },
+    "B": {
+      "arms": [
+        "r2_topological_liveness",
+        "cm_ir_bigint",
+        "cm_ir_words",
+        "cse_flat_bigint",
+        "cse_flat_words",
+        "current_projection",
+        "direct_bitset_restriction",
+        "native_fused_slots"
+      ],
+      "artifact": "residual_relation_count_sat_witness_and_digest",
+      "query_counts": [
+        1,
+        4,
+        16,
+        64
+      ],
+      "task": "repeated_exact_restrictions"
+    },
+    "C": {
+      "arms": [
+        "python_sharing_union",
+        "python_sharing_separate",
+        "native_union",
+        "native_separate"
+      ],
+      "artifact": "ordered_residuals_count_sat_witness_and_digest",
+      "task": "related_multi_root_outputs"
+    },
+    "D": {
+      "persistence_backends": [
+        "cm",
+        "cse",
+        "cnf"
+      ],
+      "sublanes": [
+        "exact_count",
+        "sat_status",
+        "witness",
+        "partial_context",
+        "version_history",
+        "equivalence_delta",
+        "structural_reload"
+      ],
+      "task": "smaller_query_benefits",
+      "task_backends": [
+        "cm",
+        "cse",
+        "cnf",
+        "sat"
+      ],
+      "task_lifecycles": [
+        "fresh_engine",
+        "resident_engine"
+      ]
+    }
+  },
+  "prospective_data_permitted": false,
+  "publication_claim_permitted": false,
+  "role": "local_functional_admission_only",
+  "schema": "cm-architecture-refresh-functional-plan/v1",
+  "selector_fitting_permitted": false,
+  "timing_permitted": false
+}

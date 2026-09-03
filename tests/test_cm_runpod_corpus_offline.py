@@ -46,6 +46,7 @@ def test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explic
         if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
             mismatches.append(row["source"])
     assert mismatches == [
+        "bitset_backend.py",
         "cm_bench.py",
         "cm_exprlib.py",
         "cmbench/backends/robdd_dd.py",
@@ -55,7 +56,7 @@ def test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explic
 
 
 def test_historical_bundle_rebuild_refuses_live_source_drift():
-    with pytest.raises(RuntimeError, match="approved upload hash mismatch: cm_bench.py"):
+    with pytest.raises(RuntimeError, match="approved upload hash mismatch: bitset_backend.py"):
         controller.base.make_bundle(_manifest())
 
 

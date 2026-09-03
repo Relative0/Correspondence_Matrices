@@ -253,6 +253,76 @@ with a bounded asynchronous or sampled queue, preserve immutable hash-bound inpu
 safely under backpressure, and independently replay every retained observation before
 any promotion review.
 
+C33 now enforces that separation with an explicit delivery acknowledgement: sampled
+candidate work cannot enter the worker queue until the exact baseline has returned. Ten
+mutation, saturation, sampling, exception, refusal, divergence, binding, source-change,
+and shutdown controls pass. The 256-batch local run served 2,048 exact responses and
+replayed 1,152 candidate observations with zero pre-ack starts, mismatches, candidate
+deliveries, writes, or promotions. Full asynchronous serving measured 1.0382x disabled
+with an 80.3 microsecond enqueue p95, versus 2.0401x for synchronous C32 shadowing;
+quarter sampling measured 0.9958x with 25% coverage. The local engineering gate passes.
+C34 should now shift from serving mechanics to larger task-matched natural workloads and
+measure exact CM/GF(2) headroom against aligned CSE, packed, AIG/ABC, BDD/CUDD, and SAT
+controls before resuming learned ranking.
+
+C34 now completes that no-training adjudication on 48 reused natural Yosys expressions at
+support 3-10. Direct AST bitset evaluation wins all 48 complete-vector cases; CM IR is
+4.40x slower and flattened CSE is 1.72x slower for this fresh one-shot lifecycle. On 15
+cases with the complete `2^(n-1)-1` partition universe, flattened CSE is the best fixed
+input path to exact CM/GF(2) decomposition, but the unattainable per-case oracle provides
+only 1.0035x raw and 1.0033x budget-adjusted headroom. The post-hoc width rule provides
+1.0021x after budget. Both frozen headroom gates fail with zero exactness mismatches. Do
+not train or replicate these one-shot surfaces. C35 should move to natural repeated-query
+count, restriction, SAT/witness, persistence, and version lifecycles where resident exact
+structures may amortize their compile cost.
+
+C35 now completes the first of those resident natural lifecycles. Six methods delivered
+the same reduced relation, exact count, SAT status, and canonical witness for 64 frozen
+partial assignments on one outcome-independently selected natural expression at every
+support width 3-10. Across 576 resident sessions and 36,864 exact query deliveries, CM IR
+amortizes past direct AST at q64 by 1.2245x and beats the transparent full-truth projection
+control by 3.3748x. Sharing-aware flattened CSE remains the best fixed method at q64 and is
+1.075x faster than CM in aggregate; CM beats CSE on only 2/8 cases and is the complete
+per-case winner on none. Independent replay finds zero semantic, trace, oracle,
+measurement, or summary mismatches. The frozen CM gate fails, so no second-machine run,
+training, or production promotion follows. C36 should separate wider fresh natural
+restriction/count/SAT/witness evidence from persistence/reload and related-version traces,
+with efficient packed projection, native CUDD when available, and charged changed-cone
+invalidation.
+
+C36 now extends that lifecycle to 18 fresh natural functions, with three cases at every
+support width 11-16 and an efficient compiled truth-projection control. Across 576
+resident sessions and 36,864 exact query deliveries, flattened CSE remains the best
+fixed method at q64. CM IR is 0.8783x flattened CSE and 0.9376x compiled projection,
+and beats CSE on no final cases, so the fixed CM gate fails. The per-family winners are
+cleaner: direct AST wins adder/decoder/multiply-add families while compiled projection
+wins multiply in aggregate. A post-hoc family rule is 1.2841x the best fixed method
+after the frozen recognition charge and captures most of the 1.3564x per-case oracle
+ceiling. Independent replay finds zero mismatches. C37 should freeze that simple rule
+before loading unseen identities and an independent source, then compare it prospectively
+with a tiny development-only cost tree. No training or promotion occurred in C36.
+
+The September 3 cache-isolated native-portfolio closure supersedes that C37 instruction.
+One source-bound run compared R2, CSE bigint/words, CM-IR bigint/words, optimized
+projection, and fused native slots on the same exposed C36 q64 task. Native measured
+111.451 ms versus 141.849 ms for the best non-native fixed method, CSE bigint, and won
+all 18 cases. The fixed exact improvement is 1.2727x, but the best fixed method equals
+the per-case oracle exactly, leaving 1.0000x selector headroom. The independently
+verified neural-readiness update therefore keeps training, C37, prospective-data use,
+and production promotion disabled. Resume prospective or learned selection only for a
+genuinely new exact decision surface with approximately 1.10x development oracle
+headroom after optimized exact baselines.
+
+C38 subsequently reproduced the native exact contract on Linux/GCC. Aggregate
+single-root and multi-root speedups were 1.366x and 1.260x, but one single-root case was
+0.840x and failed the frozen 0.95x floor. Native therefore remains guarded/opt-in. The
+next local step is also complete: the four-lane functional harness matched all admitted
+complete-vector, repeated-restriction, related-root, smaller-query, and structural-reload
+artifacts, including the retained native DLL. This development artifact contains no
+measured timing and consumes no fresh/prospective corpus. The only admitted continuation
+is to freeze a fresh comparison corpus, schedules, arm configurations, and gates before
+requesting any separately authorized timed execution.
+
 1. **A: reusable foundation.** Retain feature ablations with the original
    direct/CSE/CM harness, add the equally cheap query-count rule, bind feature
    schemas to models, and implement bounded task/proposal/check/CM contracts.

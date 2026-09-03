@@ -294,6 +294,7 @@ class ComparativeArmTests(unittest.TestCase):
             "cm_no_reinflate": "packed_bigint",
             "cse_flat": "packed_bigint",
             "raw_flat": "packed_bigint",
+            "direct_expr_bitset": "packed_bigint",
         }
         hashes = set()
         for arm, kind in kinds.items():
@@ -350,7 +351,12 @@ class ComparativeArmTests(unittest.TestCase):
             expected_bits = scalar_relation(expr, variables, {})
             self.assertEqual(expected_bits, mask)
             expected = semantic_sha256(mask, 2)
-            for arm in ("cm_flat_bigint", "cm_no_reinflate", "cse_flat"):
+            for arm in (
+                "cm_flat_bigint",
+                "cm_no_reinflate",
+                "cse_flat",
+                "direct_expr_bitset",
+            ):
                 with self.subTest(mask=mask, arm=arm):
                     contract = relation_contract(f"truth-{mask}-{arm}", "packed_bigint", variables, expected)
                     result = execute_arm(expr=expr, contract=contract, case_id=f"truth-{mask}", arm=arm, smoke_bound=8)
@@ -369,4 +375,3 @@ class ComparativeArmTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

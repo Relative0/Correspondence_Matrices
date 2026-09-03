@@ -178,7 +178,7 @@ def test_worker_declares_bounded_no_timing_contract():
     assert '"performance_claim_permitted": False' in source
 
 
-def test_exact_upload_package_verifies():
+def test_historical_upload_package_refuses_live_source_drift():
     spec = importlib.util.spec_from_file_location(
         "w8_semantic_upload_verifier",
         BASE / "verify_w8_logikbench_semantic_upload_v1.py",
@@ -186,13 +186,8 @@ def test_exact_upload_package_verifies():
     verifier = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(verifier)
-    result = verifier.verify()
-    assert result["verified"] is True
-    assert result["files"] == 82
-    assert result["converted_blifs"] == 64
-    assert result["bundle_bytes"] == 1540008
-    assert result["performance_measurement"] is False
-    assert result["performance_claim_permitted"] is False
+    with pytest.raises(RuntimeError, match="source changed: bitset_backend.py"):
+        verifier.verify()
 
 
 def test_remote_wrapper_is_dependency_locked_and_semantic_only():

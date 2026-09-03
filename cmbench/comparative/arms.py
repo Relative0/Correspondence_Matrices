@@ -17,10 +17,12 @@ from bitset_backend import (
     PreparedFlatEvaluation,
     _bind_flat_program,
     _eval_prepared_flat,
+    build_bitset_env,
     compile_expr_cse,
     compile_expr_flat,
     eval_cm_node_flat,
     eval_cm_node_words,
+    eval_expr_bitset,
     get_flat_program,
 )
 from cm_ir import compile_expr_to_cm_ir, materialize_cm, materialize_hybrid_no_reinflate
@@ -30,7 +32,15 @@ from .contracts import RESULT_SCHEMA, contract_digest, validate_contract, valida
 from .ir import cm_ir_stats, exact_diagnostic_record, expression_stats, flat_program_record
 
 
-ARMS = frozenset({"cm_dense", "cm_flat_bigint", "cm_flat_words", "cm_no_reinflate", "cse_flat", "raw_flat"})
+ARMS = frozenset({
+    "cm_dense",
+    "cm_flat_bigint",
+    "cm_flat_words",
+    "cm_no_reinflate",
+    "cse_flat",
+    "raw_flat",
+    "direct_expr_bitset",
+})
 MAX_SMOKE_K = 8
 
 
@@ -126,6 +136,7 @@ def execute_arm(
         "cm_no_reinflate": {"packed_bigint", "reduced_bigint"},
         "cse_flat": {"packed_bigint"},
         "raw_flat": {"packed_bigint"},
+        "direct_expr_bitset": {"packed_bigint"},
     }[arm]
     if kind not in allowed_kind:
         raise ValueError("arm cannot deliver declared artifact")
@@ -151,8 +162,13 @@ def execute_arm(
             program, timings["lower_flat_ns"] = _stage(clock, lambda: get_flat_program(node))
     elif arm == "cse_flat":
         program, timings["prepare_cse_flat_ns"] = _stage(clock, lambda: compile_expr_cse(expr, flatten=True))
-    else:
+    elif arm == "raw_flat":
         program, timings["prepare_raw_flat_ns"] = _stage(clock, lambda: compile_expr_flat(expr))
+    else:
+        if fixed:
+            raise ValueError("direct expression BitSet complete relation requires no fixed axes")
+        environment, timings["prepare_environment_ns"] = _stage(
+            clock, lambda: build_bitset_env(variables))
 
     native_bytes: int
     if arm == "cm_dense":
@@ -205,9 +221,15 @@ def execute_arm(
         bits, timings["execute_ns"] = _stage(clock, lambda: _execute_program(program, variables, fixed))
         delivered, timings["deliver_ns"] = _stage(clock, lambda: _semantic_bytes(bits, len(output_variables)))
         native_bytes = len(delivered)
-    else:
+    elif arm == "raw_flat":
         bits, timings["execute_ns"] = _stage(clock, lambda: _execute_program(program, variables, fixed))
         delivered, timings["deliver_ns"] = _stage(clock, lambda: _semantic_bytes(bits, len(output_variables)))
+        native_bytes = len(delivered)
+    else:
+        bits, timings["execute_ns"] = _stage(
+            clock, lambda: eval_expr_bitset(expr, environment))
+        delivered, timings["deliver_ns"] = _stage(
+            clock, lambda: _semantic_bytes(bits, len(output_variables)))
         native_bytes = len(delivered)
 
     task_total = clock() - started

@@ -18,10 +18,52 @@ from bitset_backend import (
     get_flat_program,
 )
 from cm_exprlib import Eqv, Imp, Not, Or, Var, Xor, eval_expr_tt, random_expr
-from cm_ir import compile_expr_to_cm_ir
+from cm_ir import CMNode, compile_expr_to_cm_ir
 
 
 class BitsetBackendTests(unittest.TestCase):
+    def test_expr_bitset_evaluates_shared_dag_nodes_once(self) -> None:
+        class CountingEnv(dict):
+            def __init__(self, values) -> None:
+                super().__init__(values)
+                self.lookups = {name: 0 for name in values}
+
+            def __getitem__(self, name):
+                self.lookups[name] += 1
+                return super().__getitem__(name)
+
+        shared = Xor(Var(0), Var(1))
+        expression = shared
+        for _ in range(40):
+            expression = Or(expression, expression)
+
+        expected = eval_expr_bitset(shared, build_bitset_env(("x0", "x1")))
+        env = CountingEnv(build_bitset_env(("x0", "x1")))
+        self.assertEqual(eval_expr_bitset(expression, env), expected)
+        self.assertEqual(env.lookups, {"x0": 1, "x1": 1})
+
+    def test_cm_node_bitset_memoizes_shared_zero_results(self) -> None:
+        class CountingFixed(dict):
+            def __init__(self, values) -> None:
+                super().__init__(values)
+                self.lookups = 0
+
+            def __getitem__(self, name):
+                self.lookups += 1
+                return super().__getitem__(name)
+
+        shared = CMNode(
+            kind="var", key=("var", "x0"), vars=("x0",),
+            const_value=None, var_name="x0",
+        )
+        root = CMNode(
+            kind="op", key=("OR", 0, 0), vars=("x0",),
+            const_value=None, op="OR", args=(shared, shared),
+        )
+        fixed = CountingFixed({"x0": 0})
+        self.assertEqual(eval_cm_node_bitset(root, ("x1",), fixed=fixed), 0)
+        self.assertEqual(fixed.lookups, 1)
+
     def test_truth_table_ordering_matches_eval_expr_tt_random(self) -> None:
         rng = np.random.default_rng(1234)
         for n in range(1, 17):

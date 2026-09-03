@@ -1,0 +1,65 @@
+{
+  "created_date": "2026-09-03",
+  "decision": {
+    "failed_performance_gate_is_retained_as_valid_replication_evidence": true,
+    "gate_refit": false,
+    "method_substitution": false,
+    "policy_refit": false,
+    "production_promotion": false,
+    "production_write": false,
+    "training": false,
+    "website_update": false
+  },
+  "host_variation": {
+    "compiler_binary_sha256_recorded": true,
+    "compiler_executable_and_version_recorded": true,
+    "compiler_family": "GCC-family cc from the pinned buildpack-deps image",
+    "compiler_flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-shared",
+      "-fPIC"
+    ],
+    "native_binary_sha256_recorded": true,
+    "required_architecture": "amd64",
+    "required_os": "Linux"
+  },
+  "parent_c37": {
+    "dataset_sha256": "f5ad98f83551b3abeb59f26c101408a445a2a2498817487db482356b88f08892",
+    "dataset_verification_sha256": "d32c0709db8a99e28c0df997f2a8125353ca1fe83270cbf838804ae16d7e6b44",
+    "freeze_sha256": "5d7c9a98c92ac4c15250945f741219fe482019da6e2c94d257894fa38c47023c",
+    "windows_independent_verification_sha256": "f3342466df3fe4ca8e8e5c6e13ea324fe75fd4378216c6c5dc59dff13e0ed106",
+    "windows_manifest_sha256": "358e74c3e601703757ca4717280c7018c6de895be58b37084f0cda0a24725856",
+    "windows_native_library_sha256": "0f4510685988150b75ebf9579f8784c61ed90d49aee8ea17649f94a94134eb02",
+    "windows_results_sha256": "83f84a8fb2e80419b12a367d7c4f2e23f9cf9157416cdb03b296aee81d7e7a88"
+  },
+  "purpose": "Rebuild the exact C37 native source with the execution host's GCC-family C11 compiler and repeat the unchanged C37 dataset, schedule, outputs, and gates.",
+  "schema": "crse-c38-c37-native-replication-contract/v1",
+  "unchanged_scientific_contract": {
+    "gates": {
+      "multi_aggregate_minimum": 1.1,
+      "multi_node_reduction_each_workload": true,
+      "multi_p95_minimum": 0.95,
+      "multi_workload_minimum": 1.0,
+      "multi_workspace_no_larger_each_workload": true,
+      "single_aggregate_minimum": 1.1,
+      "single_case_minimum": 0.95,
+      "single_p95_minimum": 0.95,
+      "single_width_minimum": 1.0,
+      "single_workspace_max_bytes": 67108864
+    },
+    "multi_root_blocks": 20,
+    "multi_root_exact_output_query_checks": 48384,
+    "multi_root_methods": 2,
+    "multi_root_workloads": 6,
+    "raw_sessions": 954,
+    "restrictions_per_session": 64,
+    "single_root_blocks": 12,
+    "single_root_cases": 18,
+    "single_root_exact_query_checks": 44928,
+    "single_root_methods": 3
+  }
+}

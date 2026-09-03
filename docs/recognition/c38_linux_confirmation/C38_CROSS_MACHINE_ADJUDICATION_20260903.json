@@ -1,0 +1,94 @@
+{
+  "aggregate_multi_root_speedup_at_least_1_10_on_both": true,
+  "aggregate_single_root_speedup_at_least_1_10_on_both": true,
+  "all_predeclared_performance_gates_passed_on_both": false,
+  "controller_summary_sha256": "b11b2e0829fbd052c2863543ea298cf46fa90c8fce1e885d8ad9b45cb79880e3",
+  "cross_machine_observed_floors": {
+    "multi_root_aggregate_speedup": 1.2595189733410512,
+    "multi_root_minimum_workload_speedup": 1.2239122439448025,
+    "multi_root_p95_session_speedup": 1.152946187633042,
+    "single_root_aggregate_speedup": 1.3662211451923076,
+    "single_root_minimum_case_speedup": 0.8399843250575483,
+    "single_root_minimum_width_speedup": 1.0280520462643674,
+    "single_root_p95_session_speedup": 1.7139645152917653
+  },
+  "exactness_verified_on_both": true,
+  "execution_count": 2,
+  "executions": [
+    {
+      "all_predeclared_gates_passed": true,
+      "environment": "windows_msvc",
+      "gate_refit": false,
+      "independent_verification_sha256": "f3342466df3fe4ca8e8e5c6e13ea324fe75fd4378216c6c5dc59dff13e0ed106",
+      "multi_root": {
+        "aggregate_speedup": 1.2851338646747168,
+        "failed_gates": [],
+        "minimum_workload_speedup": 1.2783881582543484,
+        "p95_session_speedup": 1.3839074184207705
+      },
+      "policy_refit": false,
+      "production_promotion": false,
+      "results_sha256": "83f84a8fb2e80419b12a367d7c4f2e23f9cf9157416cdb03b296aee81d7e7a88",
+      "single_root": {
+        "aggregate_speedup": 1.472004945748838,
+        "failed_gates": [],
+        "minimum_case_speedup": 0.988855648678892,
+        "minimum_width_speedup": 1.1638306899982442,
+        "p95_session_speedup": 1.81992008670754,
+        "slowest_case": "c37-addertree_sum-c4f402c3a3a5c06d",
+        "slowest_case_speedup": 0.988855648678892
+      },
+      "training": false
+    },
+    {
+      "all_predeclared_gates_passed": false,
+      "environment": "linux_gcc",
+      "gate_refit": false,
+      "independent_verification_sha256": "0ad102f1b88f6cf17e5ecf13ef9a0a02b34dc2ccc8c9fe04762f714a971b7f4f",
+      "multi_root": {
+        "aggregate_speedup": 1.2595189733410512,
+        "failed_gates": [],
+        "minimum_workload_speedup": 1.2239122439448025,
+        "p95_session_speedup": 1.152946187633042
+      },
+      "policy_refit": false,
+      "production_promotion": false,
+      "results_sha256": "c47fcf976149d43442fa9f8859b23516ed2cf0b4c1b5b595d58bc71491d17cd5",
+      "single_root": {
+        "aggregate_speedup": 1.3662211451923076,
+        "failed_gates": [
+          "minimum_case_speedup_at_least_0_95"
+        ],
+        "minimum_case_speedup": 0.8399843250575483,
+        "minimum_width_speedup": 1.0280520462643674,
+        "p95_session_speedup": 1.7139645152917653,
+        "slowest_case": "c37-addertree_sum-c4f402c3a3a5c06d",
+        "slowest_case_speedup": 0.8399843250575483
+      },
+      "training": false
+    }
+  ],
+  "failed_cross_machine_gate": "single_root_minimum_case_speedup_at_least_0_95",
+  "final_verification_sha256": "b55e58e9b754290ebe0b83817ee250cf159c922a8f22fe825b2a5165ffddef79",
+  "gate_refit": false,
+  "guarded_opt_in_backend_retained": true,
+  "guarded_retention_basis": "Exactness transferred to Linux/GCC and aggregate performance remained positive, but the existing fail-closed Python R2 fallback remains mandatory.",
+  "limitations": [
+    "Two machines and compiler families establish portability evidence, not broad hardware coverage.",
+    "The Linux width-11 adder-tree case is retained at 0.839984x; the frozen 0.95x individual-case gate failed.",
+    "Aggregate q64 speedups do not establish q1, q4, or q16 break-even behavior.",
+    "C38 does not authorize a public benchmark update or production-default change."
+  ],
+  "os_and_compiler_families": 2,
+  "physical_machine_count": 2,
+  "policy_refit": false,
+  "production_promotion": false,
+  "prospective_rerun_authorized": false,
+  "replication_admissible": true,
+  "schema": "crse-c38-c37-native-cross-machine-adjudication/v1",
+  "selector_training_justified": false,
+  "shadow_promotion": false,
+  "status": "exact_replication_passed_per_case_performance_not_confirmed",
+  "training": false,
+  "unqualified_per_case_performance_claim": false
+}

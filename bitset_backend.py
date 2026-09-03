@@ -58,29 +58,42 @@ def build_bitset_env(vars: Sequence[str]) -> Mapping[str, int]:
 
 
 def eval_expr_bitset(expr: Expr, env: Mapping[str, int]) -> int:
-    """Evaluate Expr to a packed truth-table bitset with width 2^n."""
+    """Evaluate an expression DAG to a packed truth-table bitset with width 2^n."""
     if not env:
         return 0
     n_vars = len(env)
     n_rows = 1 << n_vars
     full_mask = (1 << n_rows) - 1
+    # Expr v2 preserves shared subexpressions.  Cache by identity so evaluating a
+    # DAG costs O(unique nodes), rather than O(tree unfolding), without paying the
+    # recursive structural-hash cost of using frozen dataclass values as keys.
+    memo: Dict[int, int] = {}
 
     def rec(e: Expr) -> int:
+        node_id = id(e)
+        try:
+            return memo[node_id]
+        except KeyError:
+            pass
+
         if isinstance(e, Var):
-            return env[f"x{e.i}"]
-        if isinstance(e, Not):
-            return (~rec(e.a)) & full_mask
-        if isinstance(e, And):
-            return rec(e.a) & rec(e.b)
-        if isinstance(e, Or):
-            return rec(e.a) | rec(e.b)
-        if isinstance(e, Xor):
-            return rec(e.a) ^ rec(e.b)
-        if isinstance(e, Imp):
-            return ((~rec(e.a)) | rec(e.b)) & full_mask
-        if isinstance(e, Eqv):
-            return (~(rec(e.a) ^ rec(e.b))) & full_mask
-        raise TypeError(e)
+            result = env[f"x{e.i}"]
+        elif isinstance(e, Not):
+            result = (~rec(e.a)) & full_mask
+        elif isinstance(e, And):
+            result = rec(e.a) & rec(e.b)
+        elif isinstance(e, Or):
+            result = rec(e.a) | rec(e.b)
+        elif isinstance(e, Xor):
+            result = rec(e.a) ^ rec(e.b)
+        elif isinstance(e, Imp):
+            result = ((~rec(e.a)) | rec(e.b)) & full_mask
+        elif isinstance(e, Eqv):
+            result = (~(rec(e.a) ^ rec(e.b))) & full_mask
+        else:
+            raise TypeError(e)
+        memo[node_id] = result
+        return result
 
     return rec(expr)
 
@@ -121,9 +134,11 @@ def eval_cm_node_bitset(
     memo: Dict[int, int] = {}
 
     def rec(cur: "CMNode") -> int:
-        cached = memo.get(id(cur))
-        if cached is not None:
-            return cached
+        node_id = id(cur)
+        try:
+            return memo[node_id]
+        except KeyError:
+            pass
 
         if cur.kind == "const":
             out = full_mask if int(cur.const_value or 0) else 0
@@ -160,7 +175,7 @@ def eval_cm_node_bitset(
         else:
             raise TypeError(cur)
 
-        memo[id(cur)] = out
+        memo[node_id] = out
         return out
 
     return rec(node)
