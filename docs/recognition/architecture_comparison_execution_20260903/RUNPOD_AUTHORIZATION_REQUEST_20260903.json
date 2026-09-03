@@ -1,0 +1,175 @@
+{
+  "authorization": {
+    "granted": false,
+    "prior_c38_authorization_reused": false,
+    "record_created": false
+  },
+  "controller_sha256": "24c679fbb09f16ba73fb23a13a81f6039da1f0866f84ce76f80b61a111da81cd",
+  "created_date": "2026-09-03",
+  "exact_approval_text": "I authorize the exact Architecture Comparison RunPod run described in RUNPOD_AUTHORIZATION_REQUEST_20260903.json, with a maximum total charge of $0.05.",
+  "excluded": [
+    "neural training",
+    "selector or gate fitting",
+    "production routing changes",
+    "website updates",
+    "publication",
+    "git push",
+    "automatic replacement pod",
+    "persistent storage",
+    "credential recording or upload"
+  ],
+  "execution_contract_sha256": "e91b1a58028becfb3f3b86bb171d2e7f886b5500bc98e082730cdfd3b537af42",
+  "local_validation_sha256": "01f76a8a54444a4185c41bc23ea4f0a5f8594051738299d02e48552dd29d55fe",
+  "network_boundary": {
+    "dependency_urls_are_hash_and_size_bound": true,
+    "during_setup": "pinned image plus four hash-locked wheels only",
+    "during_workload": false
+  },
+  "package": {
+    "local_isolated_validation": "pass",
+    "local_validation_pythonpath_injected": false,
+    "source_bytes": 3612569,
+    "source_files": 55
+  },
+  "protocol_sha256": "bfd75e454a1e0c8e3298bed15f83a2a047fae1359229ef1a7dab495fd4a12143",
+  "purpose": "Decision-bearing Linux/GCC execution of the frozen four-lane non-neural architecture comparison; no selector fitting, training, publication, or routing change.",
+  "resource_and_cost_boundary": {
+    "cleanup_seconds": 600,
+    "container_disk_gb": 12,
+    "health_checks_before_upload": 2,
+    "https_ports": [
+      "8080/http"
+    ],
+    "minimum_ram_gb": 4,
+    "network_volume": false,
+    "no_replacement": true,
+    "one_create": true,
+    "pod_volume_gb": 0,
+    "rate_cap_usd_per_hour": 0.25,
+    "reconciliation_seconds": 720,
+    "result_cap_bytes": 50331648,
+    "same_pod_payload_attempt_limit": 6,
+    "secure_cpu_pod": true,
+    "total_cost_cap_usd": 0.05,
+    "vcpu_count": 2
+  },
+  "run_name": "architecture-comparison-linux-gcc-20260903-001",
+  "runtime": {
+    "compiler": "GCC-family cc",
+    "compiler_flags": [
+      "-std=c11",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-shared",
+      "-fPIC"
+    ],
+    "dependencies": [
+      {
+        "name": "numpy",
+        "requirement": "numpy==2.3.2 --hash=sha256:938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "sha256": "938065908d1d869c7d75d8ec45f735a034771c6ea07088867f713d1cd3bbbe4f",
+        "version": "2.3.2"
+      },
+      {
+        "bytes": 11050,
+        "filename": "six-1.17.0-py2.py3-none-any.whl",
+        "name": "six",
+        "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+        "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+        "version": "1.17.0"
+      },
+      {
+        "bytes": 2068504,
+        "filename": "networkx-3.6.1-py3-none-any.whl",
+        "name": "networkx",
+        "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+        "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+        "version": "3.6.1"
+      },
+      {
+        "bytes": 3943142,
+        "filename": "python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "name": "python-sat",
+        "sha256": "fd55285f4ef679aaa62699660121423ec35b97324095ae34db4edb0356422a45",
+        "url": "https://files.pythonhosted.org/packages/cf/96/4290b2af2853f81061b9aa6ddf118523bc9b1d922842ee78124844ee35d9/python_sat-1.9.dev15-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+        "version": "1.9.dev15"
+      }
+    ],
+    "image": "python:3.13.15-bookworm@sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8",
+    "python": "3.13.15"
+  },
+  "schema": "cm-runpod-architecture-comparison-authorization-request/v1",
+  "scope": {
+    "commands": [
+      [
+        "python",
+        "-B",
+        "scripts/cm_architecture_comparison_campaign.py",
+        "--output",
+        "run-output/architecture-comparison-linux-gcc-20260903-001",
+        "--compiler",
+        "cc",
+        "--max-seconds",
+        "420"
+      ],
+      [
+        "python",
+        "-B",
+        "scripts/crse_verify_architecture_comparison_campaign.py",
+        "--run-dir",
+        "run-output/architecture-comparison-linux-gcc-20260903-001"
+      ]
+    ],
+    "expected_counts": {
+      "failed": 0,
+      "ok": 17910,
+      "refused": 1736
+    },
+    "lane_rows": {
+      "A": 10880,
+      "B": 6912,
+      "C": 384,
+      "D": 1470
+    },
+    "planned_rows": 19646,
+    "refusals_are_timed_zero_allocation_schedule_rows": true
+  },
+  "status": "exact_user_authorization_required_not_granted",
+  "transport_sources": {
+    "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/http_corpus_preflight_v4.py": {
+      "bytes": 10925,
+      "sha256": "b6aac993e56748bfc9f8933d75c13d5a5457e0e7df58da1e0b3049ce3df33956"
+    },
+    "docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/runpod-authorized-20260827-213104/runpod_retry_cpu8_v1_controller.py": {
+      "bytes": 33717,
+      "sha256": "40adb66b61ba59dda9282bf264b6767c738d168ed31abc84c790e1c6c2b3ccac"
+    },
+    "docs/recognition/c16_linux_confirmation/runpod_c16_linux_controller_v2.py": {
+      "bytes": 22070,
+      "sha256": "133da1c343b98989ce601b59f2f6340a63762b2e180bfd6d9a82248c92070b31"
+    },
+    "docs/recognition/c31_linux_confirmation/runpod_c31_linux_controller.py": {
+      "bytes": 26006,
+      "sha256": "5bd3aefe171f00aa6a8ce3dfa4ee37b98c84dc739a00c8fd332d8860699fdd26"
+    },
+    "docs/recognition/c38_linux_confirmation/runpod_c38_linux_controller.py": {
+      "bytes": 29968,
+      "sha256": "87977bf0470a9e0c57f00d689cdaf5373ea77884503b311073281d50123cf13a"
+    },
+    "docs/recognition/c7_linux_confirmation/http_transport_bootstrap_c7_single_port.py": {
+      "bytes": 8961,
+      "sha256": "aaeabbb9b77ce61dc45e7b421c562d1fcde2bff2110c6c416cdd9840f5e101cd"
+    },
+    "docs/recognition/c7_linux_confirmation/runpod_c7_linux_single_port_controller.py": {
+      "bytes": 40069,
+      "sha256": "47d21f3b57b8ac851683513e894dc59edf7591e767b13e8b703595f607188d45"
+    },
+    "scripts/runpod_architecture_comparison_controller.py": {
+      "bytes": 29412,
+      "sha256": "24c679fbb09f16ba73fb23a13a81f6039da1f0866f84ce76f80b61a111da81cd"
+    }
+  },
+  "upload_manifest_sha256": "49c3ac7795c1881c92939c7d1fb0466e1f0612ab42e834dabbd085d112e13e30"
+}
