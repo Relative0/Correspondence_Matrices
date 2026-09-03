@@ -1,8 +1,9 @@
 # CM architecture-audit disposition after C38
 
 Date: 2026-09-03  
+Updated: 2026-09-04
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; query-ladder retry 002 frozen and awaiting exact authorization
+Status: recommendations reconciled; query-ladder verified on one host; replication pending
 
 ## Bottom line
 
@@ -29,12 +30,12 @@ value can be measured.
 | H2 compact CM IR keys | **Deferred** | The dossier identifies possible structural-hash/key cost, but no current profile establishes it as a top cost after native fusion. A key redesign would affect canonicalization, interning, serialization, and cache identity and should not be mixed into the comparison freeze. |
 | H3 dense CM layout/copy fusion | **Measured path retained; new rewrite deferred** | Dense CM is present in the eight-arm functional lane and matches the independent vector oracle. No caller-visible profile yet isolates one safe layout/copy change with a predeclared benefit; representation-specific memory calibration remains required. |
 | H4 no-reinflation boundaries | **Implemented and retested; no promotion claim** | Full and reduced no-reinflation paths are exact and included where they return the same artifact. Historical results show wrapper/conversion overhead can erase the avoided dense rebuild, so it remains an arm rather than a universal default. |
-| H5 prepared/reused break-even | **Attempt incomplete; retry correction implemented** | C35/C36 and the q64 architecture run remain evidence for their declared contracts. Attempt 001 scheduled q1/q4/q16/q64 separately but reached only 11,744/27,648 rows before its wall bound, so it yields no break-even result. The inherited-heap collection artifact is removed in source; a new freeze and authorization are required. |
-| H6 representation-specific memory estimates | **Isolated measurement implemented; routing change deferred** | The follow-up runs each timed cell in a fresh Linux fork child, records child peak RSS from `wait4`, and subtracts the inherited `/proc/self/statm` baseline. Attempt 001 was incomplete. The retry source retains these fields and adds separate full isolation-lifecycle time; none of this is yet conservative cross-machine calibration for a default routing change. |
+| H5 prepared/reused break-even | **Four-point one-host ladder complete; replication pending** | After attempt 001 closed incomplete, corrected retry 002 independently verified all 27,648 q1/q4/q16/q64 cells. R2 was the best fixed arm at q1/q4, CSE-flat bigint at q16/q64, and native first crossed R2 only by point estimate at q64. This is an observed sampled ladder, not an interpolated universal threshold. |
+| H6 representation-specific memory estimates | **Isolated measurement verified; routing change deferred** | Every retry cell ran in a fresh Linux fork child with peak RSS from `wait4`, an inherited `/proc/self/statm` baseline, and full isolation lifecycle reported separately. Child peak was below the inherited baseline in all 27,648 rows, making every nonnegative incremental value zero; absolute host peak data are descriptive and cannot calibrate a default memory router. |
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
 | H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
-| H10 task-matched external controls | **Timed on one Linux host; correction prepared** | Retry 002 completed 19,646 verified rows with unlike artifacts kept separate. Direct BitSet led the complete-vector lane; native fused slots were mixed across restriction cohorts; shared multi-root union was consistently beneficial; natural CNF/CSE/SAT controls led smaller-task lanes. A source-frozen correction for separately timed q1/q4/q16/q64 cells and isolated memory is locally verified but not yet authorized; cross-machine replication remains required before a public update. |
+| H10 task-matched external controls | **Timed; corrected Lane B verified on one Linux host** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. The corrected Lane-B retry then verified 27,648 separately timed q1/q4/q16/q64 cells. CSE-flat bigint led q16/q64; native was mixed by cohort. Cross-machine replication remains required before a public update. |
 
 ## Accepted architecture changes
 
@@ -55,30 +56,25 @@ value can be measured.
 
 Multi-query concatenation/union-care batching, trace-specialized caching, full-screen
 ANF, bounded-rank routing, and broad projection rewrites did not pass their continuation
-gates in the tested formulations. A selector is also stopped: native won all 18 exposed
-C36 portfolio cases, giving exactly 1.0000x per-case-oracle headroom. These results do
-not prohibit different future tasks, but they do prohibit spending confirmation data or
-training a router for the present q64 contract.
+gates in the tested formulations. A selector remains stopped. Native won all 18 observed
+C36 cases at q64 (1.328x geomean) but only 18 of 36 fresh cases (0.933x geomean), while
+CSE-flat bigint won all 54 cases. These results do not prohibit different future tasks,
+but they do prohibit training a router from this confirmation result.
 
 ## Next controlled boundary
 
-1. **Complete:** treat retry 002 as the completed, source-bound one-host result; retain
-   every favorable, unfavorable, and refused cell.
-2. **Complete in source:** Lane B now gives q1/q4/q16/q64 separate timing cells rather
-   than only prefix correctness digests.
-3. **Complete in source:** every decision-bearing cell now has an isolated-child memory
-   contract; retry 002's process-wide `ru_maxrss` remains non-comparable.
-4. **Attempt 001 safely closed; retry 002 frozen:** the first exact run reached
-   11,744/27,648 rows before timeout and produced no result. It exposed an inherited-heap
-   `gc.collect()` artifact that consumed 83% of accounted time. The source correction
-   preserves explicit cache cleanup, uses process exit for the remaining cell heap, and
-   reports isolation lifecycle time separately. The new immutable package passed clean
-   local replay; fresh exact authorization is still required, and neither prior
-   authorization may be reused.
-5. **Pending after that run:** replicate on a separate machine/compiler. Only then add task-labelled sections to
+1. **Complete:** corrected retry 002 is a source-bound one-host result retaining every
+   favorable and unfavorable cell; all 27,648 cells passed exact verification.
+2. **Complete:** Lane B gives q1/q4/q16/q64 separate timing cells rather than only prefix
+   correctness digests.
+3. **Complete for descriptive host data:** every decision-bearing cell has isolated-child
+   RSS and lifecycle fields. The zero-floored incremental field cannot fit a memory router.
+4. **Complete:** attempt 001 is closed incomplete, its 83% inherited-heap collection
+   artifact is diagnosed, and corrected retry cleanup is only 0.23% of task time.
+5. **Pending:** replicate on a separate physical machine/compiler. Only then add task-labelled sections to
    `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
    silently replacing it.
 
-No corrected timing, break-even, or per-cell memory result is claimed at this boundary.
-It is not a claim that every research idea was implemented, nor that further testing
-can never expose another useful architecture.
+The corrected result permits only the observed four-point one-host ladder and descriptive
+host-memory reporting. It is not a universal break-even claim, a selector or neural
+result, a routing change, or a claim that every research idea was implemented.

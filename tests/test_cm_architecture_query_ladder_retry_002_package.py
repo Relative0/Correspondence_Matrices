@@ -5,13 +5,13 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
-
-
 ROOT = Path(__file__).resolve().parents[1]
 HERE = ROOT / "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904"
 FREEZE = ROOT / "docs/recognition/architecture_query_ladder_followup_retry_002_freeze_20260904/FREEZE.json"
 ATTEMPT = ROOT / "docs/recognition/architecture_query_ladder_followup_execution_20260903/ATTEMPT_001_STATUS.json"
+AUTHORIZATION = (
+    HERE / "RUNPOD_ARCHITECTURE_QUERY_LADDER_RETRY_002_EXACT_PAYLOAD_AUTHORIZED_2026_09_04.json"
+)
 
 
 def _load(path: Path):
@@ -76,15 +76,24 @@ def test_retry_package_is_source_exact_and_non_authorizing() -> None:
     assert request["prior_attempt"]["authorization_reused"] is False
 
 
-def test_retry_controller_compiles_and_fails_closed_without_new_authorization() -> None:
+def test_retry_controller_compiles_and_accepts_only_the_exact_authorization() -> None:
     retry = _controller()
     compile(retry.base.REMOTE_CODE, "<query-ladder-retry-002-remote>", "exec")
     assert retry.RUN_NAME in retry.base.REMOTE_CODE
     assert "architecture-query-ladder-linux-gcc-20260903-001" not in retry.base.REMOTE_CODE
     assert retry.shared.CAMPAIGN_CAP == 0.04
-    assert retry.AUTHORIZATION.exists() is False
-    with pytest.raises(FileNotFoundError):
-        retry.require_authorization()
+    assert retry.AUTHORIZATION == AUTHORIZATION
+    authorization = retry.require_authorization()
+    assert authorization["schema"] == (
+        "cm-runpod-architecture-query-ladder-retry-002-exact-payload-authorization/v1"
+    )
+    assert authorization["authorized"] is True
+    assert authorization["authorization_request_sha256"] == _sha256(
+        HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260904.json"
+    )
+    assert authorization["total_cost_cap_usd"] == 0.04
+    assert authorization["cumulative_hard_ceiling_usd"] == 0.05
+    assert authorization["prior_authorization_reused"] is False
 
 
 def test_retry_request_binds_controller_transport_and_package() -> None:

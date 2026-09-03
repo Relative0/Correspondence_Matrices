@@ -2,7 +2,7 @@
 
 Date: 2026-09-04
 Scope: corrected non-neural Lane-B q1/q4/q16/q64 execution
-Status: frozen, locally verified, and not authorized
+Status: exact authorization executed; result independently verified; Pod deleted
 
 Attempt 001 is closed incomplete with no scientific result. It completed 11,744 of
 27,648 cells before the 420-second workload bound, then deleted its only Pod. Both
@@ -34,4 +34,25 @@ estimated cost plus the retry's hard ceiling remains below $0.05. It authorizes 
 training, selector fitting, routing, website update, publication, persistent storage,
 credential upload, or Git push.
 
-No cloud action may occur until the exact retry request receives fresh user authorization.
+The exact request received fresh user authorization. The authorization was recorded in
+`RUNPOD_ARCHITECTURE_QUERY_LADDER_RETRY_002_EXACT_PAYLOAD_AUTHORIZED_2026_09_04.json`;
+neither attempt 001 nor any earlier comparison authorization was reused.
+
+## Execution outcome
+
+The controller created one Secure CPU Pod (`r5wx3ximopqw7g`) with 2 vCPU and 4 GB RAM
+at $0.06/hour. The workload completed all 27,648 rows in 88.074 seconds, including
+6,912 separately timed rows at each query count. The independent verifier reported zero
+semantic, schedule, source/artifact, and memory-field mismatches. The controller deleted
+the Pod after 158.913 seconds from creation, with estimated retry compute cost $0.002649.
+Combined estimated cost for attempt 001 and retry 002 was $0.011583, below both the
+retry's $0.04 cap and the cumulative $0.05 ceiling. Controller and later independent
+v1/v2 inventory checks were empty.
+
+The verified interpretation is deliberately one-host and task-specific. CSE-flat bigint
+was the best fixed arm at q16 and q64 and reached 1.100x over Python R2 at q64 with all
+54 cases above 1.0. Native fused slots reached 1.049x at q64 overall, but its interval
+included 1.0 and its 0.567x minimum failed the predeclared 0.95 floor. Native was 1.328x
+on the 18 observed C36 cases but only 0.933x on 36 fresh cases. No selector, neural,
+routing, website, or publication action was taken. A separate physical-machine/compiler
+replication remains the next gate.

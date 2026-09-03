@@ -1,8 +1,9 @@
 # Architecture-aware CM comparison refresh after C37
 
 Date: 2026-09-03  
+Updated: 2026-09-04
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: current-source Linux comparison executed; corrected q-ladder attempt 001 closed incomplete
+Status: corrected q-ladder verified on one Linux/GCC host; cross-machine gate pending
 
 ## Current implementation status
 
@@ -71,15 +72,30 @@ The task-matched result is also mixed:
 - the smaller count/SAT/witness/equivalence/persistence lanes favored their natural
   CNF/CSE/SAT controls rather than CM as a universal fixed backend.
 
-Two measurement limitations block a public refresh. Lane B timed only the complete q64
-trace; q1/q4/q16 were correctness digests of prefixes, not separately timed cells, so no
-break-even ladder may be claimed from retry 002. Per-row RSS came from process-wide
-`ru_maxrss`, so that run cannot support per-arm memory routing. A corrected follow-up is
-now implemented, source-frozen, and locally replayed: q1/q4/q16/q64 are 27,648 distinct
-timed cells, and every decision-bearing cell uses a fresh Linux child with peak RSS
-collected by `wait4` and an inherited `/proc/self/statm` baseline. This is preparation,
-not timing evidence; the exact RunPod request still requires fresh authorization. A
-later separate-machine/compiler replication remains required for publication.
+Those two measurement limitations were corrected by the later architecture query-ladder
+retry 002. It completed 27,648 distinct q1/q4/q16/q64 cells and independently verified
+the isolated-child `wait4` RSS and pre-fork baseline fields. This supplies a one-host
+setup-amortization curve, but not calibrated memory routing: the child peak was
+below the inherited baseline—all 27,648 incremental values were zero. A later
+separate physical-machine/compiler replication remains required for publication.
+
+## Corrected query-ladder result
+
+The corrected retry completed all 27,648 scheduled cells, with 6,912 rows at each query
+count and zero semantic, schedule, source/artifact, or memory-field mismatches. Estimated
+retry cost was $0.002649; combined estimated cost with the incomplete attempt was
+$0.011583. The Pod was deleted, and controller plus independent post-run inventories
+were empty.
+
+Python R2 was the best fixed arm at q1 and q4. CSE-flat bigint became the best fixed arm
+at q16 and q64; at q64 it delivered a 1.100x case-cluster geomean over R2, won all 54
+cases, and had a 1.031x minimum. Native fused slots first exceeded R2 at q64 by point
+estimate (1.049x), but its 95% case-cluster interval was 0.969x–1.139x and its 0.567x
+minimum failed the frozen 0.95 floor. Native was strong on the 18 observed C36 cases
+(1.328x) and slower overall on the 36 fresh cases (0.933x). These data do not support a universal
+native-default claim and do not authorize selector fitting. They also reinforce why
+CSE-flat and other current controls must be rerun rather than left as historical fixed
+denominators.
 
 ## Decision
 
@@ -216,15 +232,11 @@ the evidence and denominator.
    gates before timing it.
 5. **Complete:** obtain a separate exact authorization and execute the current-source Linux/GCC
    comparison; retry 002 completed and was independently verified.
-6. **Attempt 001 incomplete; retry correction in source:** Lane B gives q1/q4/q16/q64
-   separate timed contracts and uses isolated-child `wait4` peak RSS with a pre-fork
-   inherited baseline. The exact run safely closed after 11,744/27,648 rows at the
-   420-second bound, with no decision-bearing result. Diagnostic stage totals showed
-   that per-child `gc.collect()` spent 83% of accounted time scanning the inherited
-   parent heap. The corrected source charges explicit cache clearing, delegates the
-   remaining cell heap to child exit, and reports isolation lifecycle time separately.
-   Retry 002 is source-frozen and passed isolated local package replay; its fresh exact
-   authorization remains pending.
+6. **Complete on one Linux/GCC host:** after attempt 001 safely closed incomplete, the
+   corrected retry completed all 27,648 separately timed q1/q4/q16/q64 cells. It uses
+   isolated-child `wait4` peak RSS with a pre-fork inherited baseline, charges explicit
+   cache clearing, delegates remaining heap release to child exit, and reports full
+   isolation lifecycle separately. Independent verification found zero mismatches.
 7. **Pending:** replicate the corrected current-source comparison on a separate machine/compiler.
 8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.
