@@ -1,0 +1,364 @@
+{
+  "analytical_controls": {
+    "bounded_control_matches_current_oracle_labels": true,
+    "controls": {
+      "bounded_cnf_then_sat": "structural width/clause bound; retrospective sanity only",
+      "fixed_cnf": "zero-fit exact fixed baseline",
+      "fixed_sat": "zero-fit exact fixed baseline"
+    },
+    "credit_toward_training_gate": false,
+    "predictions_by_opaque_case_order": {
+      "bounded_cnf_then_sat": [
+        "cnf/resident_engine",
+        "sat/resident_engine",
+        "sat/resident_engine"
+      ],
+      "fixed_cnf": [
+        "cnf/resident_engine",
+        "cnf/resident_engine",
+        "cnf/resident_engine"
+      ],
+      "fixed_sat": [
+        "sat/resident_engine",
+        "sat/resident_engine",
+        "sat/resident_engine"
+      ]
+    },
+    "timing": {
+      "budget_ns_per_case": 3560.5,
+      "clock": "time.perf_counter_ns",
+      "combined_feature_and_control": {
+        "bounded_cnf_then_sat": {
+          "batches": 21,
+          "checksum": 0,
+          "median_ns_per_case": 2686.65,
+          "minimum_ns_per_case": 2624.6666666666665,
+          "p95_ns_per_case": 2894.1833333333334,
+          "p95_within_budget": true,
+          "repetitions_per_case_per_batch": 2000,
+          "samples": 21
+        },
+        "fixed_cnf": {
+          "batches": 21,
+          "checksum": 0,
+          "median_ns_per_case": 2892.5666666666666,
+          "minimum_ns_per_case": 2800.5,
+          "p95_ns_per_case": 3430.6,
+          "p95_within_budget": true,
+          "repetitions_per_case_per_batch": 2000,
+          "samples": 21
+        },
+        "fixed_sat": {
+          "batches": 21,
+          "checksum": 0,
+          "median_ns_per_case": 2657.4166666666665,
+          "minimum_ns_per_case": 2544.65,
+          "p95_ns_per_case": 2786.0833333333335,
+          "p95_within_budget": true,
+          "repetitions_per_case_per_batch": 2000,
+          "samples": 21
+        }
+      },
+      "exact_backend_executions": 0,
+      "feature_extraction": {
+        "batches": 21,
+        "checksum": 0,
+        "median_ns_per_case": 3028.0666666666666,
+        "minimum_ns_per_case": 2655.483333333333,
+        "p95_ns_per_case": 5880.1,
+        "repetitions_per_case_per_batch": 2000,
+        "samples": 21
+      },
+      "host": {
+        "implementation": "CPython",
+        "platform": "Windows-10-10.0.19045-SP0",
+        "python": "3.13.5"
+      },
+      "measurement_role": "local_development_diagnostic_not_cross_host_evidence"
+    }
+  },
+  "benchmark_input": {
+    "artifact_path": "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001",
+    "assessment_sha256": "40bd8e37a475090496beaf88d17ce31442e57190060d2b94b46dac650be3e8df",
+    "consumption_mode": "verified_artifact_only_no_benchmark_replay",
+    "exact_backend_executions": 0,
+    "independent_verification_sha256": "5b1f3da6b4ed3f73319742dc171e0c86d753df3cf26d20863c4aa1c084cd119f",
+    "manifest_sha256": "1f829053ff2d68053c7f7f66ecf09b82e839a482d322c24d686c376142c5bac1",
+    "surface_id": "lane_d_version_history_resident_engine",
+    "verification_status": "verified_no_training"
+  },
+  "c5_certificate_investigation": {
+    "current_record": {
+      "adversarial_certificate_failures": null,
+      "all_unexplored_partitions_covered": false,
+      "candidate_reconstruction_exact": true,
+      "certificate_present": false,
+      "certificate_verification_ns_per_case": null,
+      "checker_independent_of_model": false,
+      "completion_search_not_run": false,
+      "exact_fallback_unchanged": true,
+      "global_objective_bound_sound": false,
+      "measured_global_work_avoided_fraction": 0.0,
+      "sharing_or_operand_order_failures": null,
+      "variable_renaming_failures": 0
+    },
+    "evaluation": {
+      "material_work_avoidance_passed": false,
+      "metamorphic_and_adversarial_tests_passed": false,
+      "minimum_global_work_avoided_fraction": 0.25,
+      "partition_learning_eligible": false,
+      "reason": "no sound charged certificate currently avoids material global-best work",
+      "required_properties": [
+        "certificate_present",
+        "global_objective_bound_sound",
+        "all_unexplored_partitions_covered",
+        "checker_independent_of_model",
+        "candidate_reconstruction_exact",
+        "exact_fallback_unchanged",
+        "completion_search_not_run"
+      ],
+      "soundness_properties_passed": false,
+      "verification_cost_measured": false
+    },
+    "future_requirement": "an independently checked global bound must cover every unexplored partition and avoid at least 25% of measured completion work after certificate-verification cost",
+    "global_best_completion_still_required": true
+  },
+  "classification": "source_blind_development_only_fail_closed",
+  "dataset": {
+    "case_ids_exposed_to_model": false,
+    "cases": 3,
+    "label_counts": {
+      "cnf/resident_engine": 1,
+      "sat/resident_engine": 2
+    },
+    "prospective_cases_consumed": 0,
+    "role": "already_exposed_development_only",
+    "rows": [
+      {
+        "backend_label": "cnf/resident_engine",
+        "case_token": "ed4c26038c4063abdb6cc710c17aaf922d7591b83cce461197ef2d60489de2f9",
+        "features": [
+          6,
+          3,
+          8,
+          2,
+          3,
+          1,
+          4,
+          4,
+          3,
+          1
+        ],
+        "label_source": "independently_verified_exact_per_case_median_oracle",
+        "source_group_sha256": "0335b77bbe994caba8dae90a3502533cca393a7f06b335c1b175a6bb40fbf169",
+        "split": "development_fit"
+      },
+      {
+        "backend_label": "sat/resident_engine",
+        "case_token": "9eccf0a7dec25eafb2e1284c6d50f97150266ed15c2cd0e5f0238bdb2f895f2a",
+        "features": [
+          8,
+          2,
+          32,
+          16,
+          16,
+          0,
+          10,
+          8,
+          2,
+          8
+        ],
+        "label_source": "independently_verified_exact_per_case_median_oracle",
+        "source_group_sha256": "eb567e6750ae9634c2cd3d3424e9dcd201ea0aad701b11850697506840916e66",
+        "split": "development_validation"
+      },
+      {
+        "backend_label": "sat/resident_engine",
+        "case_token": "7b83184b7b5b56d924150a7a36799070e674b9cf46662692766a6095e632e386",
+        "features": [
+          8,
+          2,
+          38,
+          18,
+          20,
+          2,
+          10,
+          8,
+          2,
+          8
+        ],
+        "label_source": "independently_verified_exact_per_case_median_oracle",
+        "source_group_sha256": "627b2060e6a4dc74ebc9b0093064e52525199d591827dc2060dee67948d81fe1",
+        "split": "development_fit"
+      }
+    ],
+    "source_groups": 3,
+    "source_groups_per_label": {
+      "cnf/resident_engine": 1,
+      "sat/resident_engine": 2
+    },
+    "split_audit": {
+      "assignment": "sha256(salt:source_group_sha256) modulo 100",
+      "cross_split_source_group_intersections": 0,
+      "minimum_source_groups_by_split": {
+        "development_audit": 8,
+        "development_fit": 16,
+        "development_validation": 8
+      },
+      "minimum_split_sizes_passed": false,
+      "source_groups_by_split": {
+        "development_audit": 0,
+        "development_fit": 2,
+        "development_validation": 1
+      },
+      "split_isolation_passed": true,
+      "split_ranges": {
+        "development_audit": [
+          80,
+          100
+        ],
+        "development_fit": [
+          0,
+          60
+        ],
+        "development_validation": [
+          60,
+          80
+        ]
+      }
+    }
+  },
+  "decision": {
+    "advice_enabled": false,
+    "benchmark_executed_by_learning_task": false,
+    "complete_abstention": true,
+    "exact_fallback": "unchanged exact path",
+    "production_promotion": false,
+    "production_write": false,
+    "prospective_data_consumed": false,
+    "reason": "three exposed source groups are insufficient; protocol postdates the labels; local recognition timing is cross-host; full verification, inference, and fallback costs are absent; the new query ladder is one-host and forbids selector/neural claims; C5 has no early-stop certificate",
+    "selector_fitted": false,
+    "training_allowed": false,
+    "training_label_table_ready": false,
+    "training_performed": false
+  },
+  "economics": {
+    "cost_coverage_complete": false,
+    "cross_host_timing_used_for_authorization": false,
+    "development_gate": 1.1,
+    "fully_charged_costs_ns_per_case": {
+      "exact_verification": null,
+      "expected_fallback": null,
+      "feature_extraction_and_control": 2894.1833333333334,
+      "model_inference": null
+    },
+    "fully_charged_speedup": null,
+    "maximum_total_overhead_ns_per_case_preserving_1_10": 3560.5,
+    "optimistic_p95_costs_ns_per_case": {
+      "exact_verification": 0,
+      "expected_fallback": 0,
+      "feature_extraction_and_control": 2894.1833333333334,
+      "model_inference": 0
+    },
+    "optimistic_p95_speedup_if_retrospective_control_is_oracle": 1.1068428207790568,
+    "verified_best_fixed_ns": 355668.5,
+    "verified_gross_saving_ns": 43015.0,
+    "verified_gross_speedup": 1.1375804204974516,
+    "verified_oracle_ns": 312653.5
+  },
+  "gates": {
+    "all_recognition_verification_and_fallback_costs_measured": false,
+    "benchmark_artifact_independently_verified": true,
+    "benchmark_evidence_hashes_current": true,
+    "benchmark_execution_performed_here": false,
+    "c5_sound_early_termination_certificate": false,
+    "fully_charged_speedup_at_least_1_10": false,
+    "gross_exact_headroom_at_least_1_10": true,
+    "minimum_label_support": false,
+    "minimum_split_sizes": false,
+    "protocol_precommitted_before_current_labels": false,
+    "query_ladder_cross_machine_replication_complete": false,
+    "query_ladder_result_independently_verified": true,
+    "query_ladder_selector_or_neural_claim_permitted": false,
+    "query_ladder_sum_based_charged_headroom_available": false,
+    "source_blind_model_features": true,
+    "split_isolation": true,
+    "timing_host_matches_exact_benchmark_host": false
+  },
+  "protocol": {
+    "current_labels_were_exposed_before_protocol": true,
+    "current_results_are_retrospective_diagnostics_only": true,
+    "feature_names": [
+      "variable_count",
+      "version_count",
+      "total_clause_count",
+      "minimum_version_clause_count",
+      "maximum_version_clause_count",
+      "clause_count_churn_l1",
+      "query_count",
+      "assumption_literal_count",
+      "distinct_versions_queried",
+      "version_query_revisit_count"
+    ],
+    "forbidden_model_fields": [
+      "case_id",
+      "case_token",
+      "source_group_sha256",
+      "source_path",
+      "source_family",
+      "cluster_id",
+      "split",
+      "backend_label",
+      "method_timing",
+      "oracle_timing",
+      "arm_order",
+      "block"
+    ],
+    "minimum_source_groups_per_label": 8,
+    "model_input_contains_only_feature_vector": true,
+    "prospective_split_defined_or_consumed": false,
+    "role": "post-label mechanics audit and future development protocol",
+    "selector_fit_performed": false,
+    "source_grouping_visible_to_split_auditor_only": true,
+    "split_salt": "crse-version-history-source-blind-development-split-v1"
+  },
+  "query_ladder_input": {
+    "analysis_path": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/ANALYSIS.json",
+    "consumption_mode": "verified_analysis_only_no_benchmark_replay",
+    "evidence_sha256": {
+      "analysis": "c0e0063a6377a8496ab4f2278f36c0f3fca1375b1ba6b17c254ddc467ef64b6c",
+      "attempt_001_status": "b53eae43d562f10e2a94e475e94a1bcccf377e5e66accb3408fa09639789fa68",
+      "controller": "625b8723d987d48427d07e89a367b9c090a0cdbdaa08158a0aab7619eaa79c7f",
+      "freeze": "c5901ff7eaf4e75b1a8a8145707dfb2440d68e756f1f67821e6ad34b6405ada8",
+      "independent_verification": "54c09c6fdc60880718e04aa173f3605427191f4444b6621e3284ddeb4c8b0d56",
+      "post_run_inventory": "cd2054d829f8a117107d45bd3b643e3326173ad49925ee93767a3630da59b6a7",
+      "raw_measurements": "67a96277053a1f951a1cc9ce7b98e7c1536a6d1af5ccf5e9fa7ab621ee25d0d4",
+      "results": "4a2b2330fa894075b57a48439e2a6461604284737407f53a8a57bf54510c80eb",
+      "runtime_binding": "46296d2ea25134e12f93c2ded4ff25c6be8dd4299dbd23cbcde34ae513630ef3"
+    },
+    "exact_backend_executions": 0,
+    "summary": {
+      "cross_machine_claim_permitted": false,
+      "metric_is_sum_based_charged_headroom": false,
+      "q64_best_fixed_arm": "cse_flat_bigint",
+      "q64_best_fixed_case_median_geomean_slowdown_to_oracle": 1.1078622156389766,
+      "query_counts": [
+        1,
+        4,
+        16,
+        64
+      ],
+      "rows_checked": 27648,
+      "selector_or_neural_claim_permitted": false,
+      "status": "verified_interpretation_complete"
+    }
+  },
+  "schema": "crse-version-history-learning-protocol/v1",
+  "source_bindings": {
+    "cmbench/recognition/version_history_learning_protocol.py": "873b5cc1ba3969ca98aed794942dee2856246ae1056c6decbbe78fea50a9142b",
+    "scripts/cm_version_history_learning_protocol.py": "0c99c0963e3b5f6a818bc51e49bf1bdc660ea523fd1df8d2496bde767c22b33d",
+    "scripts/crse_version_history_learning_protocol_verify.py": "e6f44f05a4de5a4668810ca8524aa349ef0a961a2687407964761e840bf5d657"
+  },
+  "source_checkpoint": "d780389903dd074765d4249265057f52bee9a17b",
+  "status": "complete_no_training"
+}
