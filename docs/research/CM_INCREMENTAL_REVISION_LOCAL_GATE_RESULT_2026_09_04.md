@@ -105,13 +105,20 @@ gate failed.
 
 ## Next admissible H9 experiment
 
-A future experiment must start with a new, source-closed trace whose confirmation
-partition contains actual normalized changed regions across several independent
-histories. Hardware design revisions with stable net/node identity are the strongest
-candidate because they can expose changed-cone size directly. Full rebuild, the
-current persistent CM cache, structural-CSE, and the incremental prototype must still
-return the same declared artifact and charge parsing, matching, invalidation,
-compilation, lowering, evaluation, delivery, and retained state.
+A separately frozen
+[hardware-revision feasibility audit](CM_HARDWARE_REVISION_FEASIBILITY_RESULT_2026_09_04.md)
+tested this direction with 48 natural transitions from four public repositories. It
+also stopped: the two held-out histories changed only 7/670 comparable stable source
+seeds (1.04%), and overall source-driver parse coverage was 63.61%. These were
+pre-synthesis source seeds rather than synthesized cones, so the failed activation gate
+does not support proceeding to Yosys or timing on that corpus.
+
+A future experiment must start with another source-closed, preregistered trace whose
+confirmation partition contains actual normalized changed regions across several
+independent histories. Full rebuild, the current persistent CM cache, structural-CSE,
+and the incremental prototype must still return the same declared artifact and charge
+parsing, matching, invalidation, compilation, lowering, evaluation, delivery, and
+retained state.
 
 Do not select transitions after looking for CM wins. Freeze an activation rule before
 timing, retain zero-change/refused cases, and stop locally again unless the new trace
