@@ -69,8 +69,16 @@ def _git(
     offline: bool = False,
 ) -> str | bytes:
     environment = os.environ.copy()
-    environment.update({"GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "core.autocrlf",
-                        "GIT_CONFIG_VALUE_0": "false"})
+    environment.update({
+        "GIT_CONFIG_COUNT": "2",
+        "GIT_CONFIG_KEY_0": "core.autocrlf",
+        "GIT_CONFIG_VALUE_0": "false",
+        # These ignored clones were created by this audit from frozen public
+        # origins. Bind the exception to this one resolved path; never mutate
+        # user or global Git configuration.
+        "GIT_CONFIG_KEY_1": "safe.directory",
+        "GIT_CONFIG_VALUE_1": repository.resolve().as_posix(),
+    })
     if offline:
         environment["GIT_NO_LAZY_FETCH"] = "1"
     process = subprocess.run(
