@@ -64,4 +64,6 @@ but it must freeze that rule, repositories, split, cutoff, and stop criteria bef
 examining CM performance. It must retain inactive and refused cases and may not
 retroactively cherry-pick the active development transitions from this phase. Only a
 new source trace that passes activation and provenance should proceed to a separately
-frozen Yosys correctness gate.
+frozen Yosys correctness gate. The self-contained
+[new-task prompt](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_NEW_TASK_PROMPT_2026_09_04.md)
+defines that boundary.
