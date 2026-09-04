@@ -1,5 +1,9 @@
 # Prompt for a new task: hardware behavior-change corpus
 
+Status: executed through the frozen source gate on 2026-09-04; do not rerun as a fresh
+confirmation task. See
+[the result](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md).
+
 Continue the exact, non-neural CM architecture investigation in
 `C:\Users\brian\Documents\CM_Computation`. This is a new experimental task, not a
 neural-network, learned-selector, website-redesign, or video-production task.

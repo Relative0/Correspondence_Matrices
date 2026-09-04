@@ -66,4 +66,7 @@ retroactively cherry-pick the active development transitions from this phase. On
 new source trace that passes activation and provenance should proceed to a separately
 frozen Yosys correctness gate. The self-contained
 [new-task prompt](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_NEW_TASK_PROMPT_2026_09_04.md)
-defines that boundary.
+defined that boundary. The resulting
+[behavior-change corpus audit](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md)
+improved activation on BlackParrot but stopped because its second frozen confirmation
+history supplied zero qualifying transitions; it did not proceed to Yosys.

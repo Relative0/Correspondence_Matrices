@@ -35,7 +35,7 @@ value can be measured.
 | H6 representation-specific memory estimates | **Isolated measurement verified; routing change deferred** | Every retry cell ran in a fresh Linux fork child with peak RSS from `wait4`, an inherited `/proc/self/statm` baseline, and full isolation lifecycle reported separately. Child peak was below the inherited baseline in all 27,648 rows, making every nonnegative incremental value zero; absolute host peak data are descriptive and cannot calibrate a default memory router. |
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
-| H9 incremental compilation across edits | **Two local traces tested; neither promoted** | The source-closed 120-case feature-model gate produced 3,000 exact rows but its prototype lost to the existing persistent cache and CSE-flat, with only three activated confirmation cases. A separately frozen hardware-revision feasibility audit then admitted four public histories and independently replayed 48 transitions, but the held-out histories changed only 7/670 comparable stable source seeds (1.04%) and overall source-driver parse coverage was 63.61%. The second trace stops before Yosys, timing, or RunPod. |
+| H9 incremental compilation across edits | **Three local traces tested; none promoted** | The 120-case feature-model prototype lost to the existing persistent cache and CSE-flat, with only three activated confirmation cases. A first 48-transition hardware audit failed activation/coverage. A corrected behavior-change selector then screened 214 commits and replayed exactly: BlackParrot supplied 12 active/reusable transitions, but the second frozen confirmation project exhausted 42 commits with zero qualifying transitions. The corpus stops before Yosys, timing, or RunPod. |
 | H10 task-matched external controls | **Timed, replicated, and scoped for public presentation** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. Two corrected 27,648-cell Lane-B runs then showed R2 at q1/q4, a host-sensitive q16 boundary, robust CSE-flat q64 advantage, and a mixed native cohort result. The expert page presents these as task-specific results rather than a universal ranking. |
 
 ## Accepted architecture changes
@@ -81,14 +81,15 @@ but they do prohibit training a router from this confirmation result.
    it. Focused website checks passed. External deployment remains the effect of pushing
    the reviewed branch to `origin/main`.
 
-The first H9 local gate stopped its digest-radix prototype. The separately
-[preregistered hardware-revision feasibility audit](CM_HARDWARE_REVISION_FEASIBILITY_RESULT_2026_09_04.md)
-also stopped: all four repositories and the 48-transition offline replay passed, but
-confirmation activation and total parser coverage failed the frozen gates. A future H9
-attempt therefore requires a distinct preregistered corpus based on actual HDL-behavior
-changes before synthesis, optimization, or remote timing. H2/H3 layout work remains
-gated on an admitted workload producing a profile that identifies key construction or
-dense copying as a material cost.
+The first H9 local gate stopped its digest-radix prototype, and the first hardware
+feasibility audit stopped on activation/coverage. The corrected
+[behavior-change corpus audit](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md)
+then admitted and replayed BlackParrot strongly but stopped because the second frozen
+confirmation history supplied zero qualifying transitions. H9 is deferred until a
+genuinely independent active revision history or real workflow is identified before a
+new freeze; repository replacement after observing this result is not admissible.
+H2/H3 layout work remains gated on an admitted workload producing a profile that
+identifies key construction or dense copying as a material cost.
 
 The corrected result permits an observed four-point separate-host portability map and
 descriptive host-memory reporting. It is not a universal break-even claim, a selector or

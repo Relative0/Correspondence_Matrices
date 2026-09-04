@@ -7,13 +7,14 @@ Evidence boundaries and unsuccessful experiments are retained.
 
 Latest incremental-compilation decision:
 [the source-closed 120-case local gate](CM_INCREMENTAL_REVISION_LOCAL_GATE_RESULT_2026_09_04.md)
-verified 3,000/3,000 rows but did not promote the digest-radix prototype. Its subsequent
+verified 3,000/3,000 rows but did not promote the digest-radix prototype. The first
 [hardware-revision feasibility audit](CM_HARDWARE_REVISION_FEASIBILITY_RESULT_2026_09_04.md)
-mechanically sampled and independently replayed 48 natural transitions from four
-public repositories. The frozen corpus was also stopped: its held-out confirmation
-histories changed only 7/670 comparable stable source seeds (1.04%), and total parser
-coverage was 63.61%. These are pre-synthesis source seeds, not synthesized cones; no
-Yosys, timing, RunPod follow-up, or public speed claim is warranted from this workload.
+also stopped. A corrected
+[behavior-change corpus audit](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md)
+then screened 214 commits and independently replayed all decisions: BlackParrot supplied
+12 active/reusable transitions, but the second frozen confirmation history exhausted 42
+commits with zero qualifying transitions. These are pre-synthesis source regions, not
+synthesized cones; no Yosys, timing, RunPod follow-up, or speed claim is warranted.
 
 Latest exact-execution and comparison decision:
 [C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md), the
@@ -127,6 +128,7 @@ commit-pinned download for a reproducible version.
 | [Measurement-repair protocol](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/CONFIGURATION-FM-MEASUREMENT-RERUN-PROTOCOL-2026-08-28.md) | A specified protocol and a separate 28-cell local functional pilot. | Execution of the complete repaired benchmark campaign. |
 | [Matched session/version correctness](SESSION-AND-VERSION-CONTRACT-PROGRESS-2026-08-28.md) | Fresh/reused CM, CSE, direct CNF and native SAT agree on bounded partial configurations and complete version deltas; 208 main cells and 16 separate positive-control cells passed. | Speed or memory superiority, representative nonzero-change coverage, unknown-version online ingestion, or complete measurement repair. |
 | [Hardware-revision feasibility audit](CM_HARDWARE_REVISION_FEASIBILITY_RESULT_2026_09_04.md) | Four provenance-admitted public histories, 48 mechanically selected transitions, and an exact offline replay with zero mismatches. | A timing result, synthesized cone trace, or admissible workload: confirmation activation was 1.04% and the frozen gate stopped. |
+| [Hardware behavior-change corpus audit](CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md) | A frozen production-RTL stable-driver selector, 214 screened commits, 36 selected transitions, and an exact offline replay. | Yosys or timing admission: one confirmation project passed strongly, but the second supplied zero qualifying transitions and could not be replaced. |
 | [EPFL context pilot](../../deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/HARDWARE-EPFL-CONTEXT-PILOT-RESULTS.md) | A published hardware-expression adjacency and bounded context tests. | A deployed design workflow or whole-chip scalability. |
 | [Runpod memory smoke](readers/RUNPOD-MEMORY-SMOKE.md) | 70 passing focused tests; 312 successful rows, including 72 comparable representation calls; verified pod deletion. | Real-world workload performance, full estimator calibration, or production acceptance. |
 | [Structural persistence pilot](PERSISTENCE-AND-TRACE-PROGRESS-2026-08-29.md) | CM/CSE/direct-CNF structures reload to exact bounded relations in 144/144 cells; generated and natural trace provenance are mechanically separated. | Native-backend persistence, timing/RSS/file-size rankings, natural user traces, full models or external replication. |
