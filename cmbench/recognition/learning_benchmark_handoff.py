@@ -73,6 +73,40 @@ def replication_economics(replication: Mapping[str, Any]) -> dict[str, float]:
     }
 
 
+def _incomplete_replication_economics(
+    replication: Mapping[str, Any],
+) -> dict[str, float | None]:
+    """Replay known economics while preserving absent charged costs as absent."""
+    best_fixed = _finite_positive(replication.get("best_fixed_sum_ns"), "best fixed")
+    oracle = _finite_positive(replication.get("oracle_sum_ns"), "oracle")
+    cases = replication.get("complete_cases")
+    _require(type(cases) is int and cases > 0 and oracle <= best_fixed, "replication cases")
+    costs = replication.get("p95_costs_ns_per_case")
+    _require(
+        isinstance(costs, Mapping) and set(costs) == set(REQUIRED_COSTS),
+        "replication cost fields",
+    )
+    if any(costs[name] is None for name in REQUIRED_COSTS):
+        _require(
+            all(
+                costs[name] is None
+                or (
+                    type(costs[name]) in (int, float)
+                    and math.isfinite(costs[name])
+                    and costs[name] >= 0
+                )
+                for name in REQUIRED_COSTS
+            ),
+            "incomplete replication costs",
+        )
+        return {
+            "gross_speedup": best_fixed / oracle,
+            "p95_total_cost_ns_per_case": None,
+            "fully_charged_speedup": None,
+        }
+    return replication_economics(replication)
+
+
 def validate_handoff(handoff: Mapping[str, Any]) -> None:
     expected = {
         "schema", "status", "surface_id", "task_contract_sha256",
@@ -115,7 +149,8 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
             "cross_split_source_group_intersections", "prospective_cases_consumed",
             "case_set_sha256", "label_table_sha256",
         }
-        and cohort.get("role") == "source_blind_development"
+        and cohort.get("role")
+        in {"source_blind_development", "retrospective_development"}
         and type(cohort.get("protocol_frozen_before_labels")) is bool
         and type(cohort.get("source_groups")) is int
         and cohort["source_groups"] >= 0
@@ -195,20 +230,30 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
             "label_table_sha256",
         ):
             _hash(replication.get(name), f"replication:{name}")
-        economics = replication_economics(replication)
-        _require(
+        economics = _incomplete_replication_economics(replication)
+        economics_match = (
             type(replication.get("gross_speedup")) is float
-            and type(replication.get("fully_charged_speedup")) is float
             and math.isclose(
                 replication["gross_speedup"], economics["gross_speedup"], rel_tol=1e-15
             )
-            and math.isclose(
-                replication["fully_charged_speedup"],
-                economics["fully_charged_speedup"],
-                rel_tol=1e-15,
-            ),
-            "replication economics replay",
         )
+        if economics["fully_charged_speedup"] is None:
+            economics_match = (
+                economics_match
+                and handoff.get("status") == "incomplete"
+                and replication.get("fully_charged_speedup") is None
+            )
+        else:
+            economics_match = (
+                economics_match
+                and type(replication.get("fully_charged_speedup")) is float
+                and math.isclose(
+                    replication["fully_charged_speedup"],
+                    economics["fully_charged_speedup"],
+                    rel_tol=1e-15,
+                )
+            )
+        _require(economics_match, "replication economics replay")
 
     claim = handoff["claim_boundary"]
     _require(
@@ -241,6 +286,10 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
         closure["status"] != "verified_complete"
         or closure["all_relevant_exact_baselines_included"] is not True,
         "exact_baseline_closure_incomplete",
+    )
+    block(
+        cohort["role"] != "source_blind_development",
+        "cohort_is_retrospective_not_source_blind",
     )
     block(not cohort["protocol_frozen_before_labels"], "protocol_not_frozen_before_labels")
     block(
@@ -298,17 +347,21 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
             not row["p95_costs_measured_same_host"],
             f"same_host_p95_costs_missing:{prefix}",
         )
-        economics = replication_economics(row)
+        economics = _incomplete_replication_economics(row)
         gross_speedups.append(economics["gross_speedup"])
-        charged_speedups.append(economics["fully_charged_speedup"])
+        if economics["fully_charged_speedup"] is not None:
+            charged_speedups.append(economics["fully_charged_speedup"])
+        else:
+            block(True, f"fully_charged_cost_vector_incomplete:{prefix}")
         block(
             economics["gross_speedup"] < history.DEVELOPMENT_HEADROOM_GATE,
             f"gross_headroom_below_1_10:{prefix}",
         )
-        block(
-            economics["fully_charged_speedup"] < history.DEVELOPMENT_HEADROOM_GATE,
-            f"charged_headroom_below_1_10:{prefix}",
-        )
+        if economics["fully_charged_speedup"] is not None:
+            block(
+                economics["fully_charged_speedup"] < history.DEVELOPMENT_HEADROOM_GATE,
+                f"charged_headroom_below_1_10:{prefix}",
+            )
     block(
         claim["development_training_eligibility_permitted"] is not True,
         "benchmark_claim_boundary_forbids_development_training",
@@ -329,7 +382,9 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
             row["physical_machine_sha256"] for row in replications
         }),
         "minimum_gross_speedup": min(gross_speedups),
-        "minimum_fully_charged_speedup": min(charged_speedups),
+        "minimum_fully_charged_speedup": (
+            min(charged_speedups) if len(charged_speedups) == len(replications) else None
+        ),
         "blockers": blockers,
         "development_training_eligible": eligible,
         "training_performed": False,
@@ -357,6 +412,108 @@ def assess_or_abstain(handoff: Mapping[str, Any]) -> dict[str, Any]:
             "exact_fallback": "unchanged exact path",
             "production_routing_permitted": False,
         }
+
+
+def validate_handoff_against_learning_freeze(
+    handoff: Mapping[str, Any],
+    freeze: Mapping[str, Any],
+    *,
+    freeze_file_sha256: str,
+) -> None:
+    """Bind a future q64 handoff to its pre-label source-blind freeze."""
+    from cmbench.recognition import query_ladder_learning_freeze as query_freeze
+
+    validate_handoff(handoff)
+    query_freeze.validate_freeze(freeze)
+    _hash(freeze_file_sha256, "learning freeze file")
+    _require(
+        handoff["surface_id"] == "architecture_query_ladder_q64",
+        "learning freeze surface",
+    )
+    _require(
+        handoff["freeze_sha256"] == freeze_file_sha256
+        and handoff["task_contract_sha256"]
+        == query_freeze.digest(freeze["exact_task_contract"])
+        and handoff["source_checkpoint"]
+        == query_freeze.digest(freeze["source_checkpoint"])
+        and handoff["source_tree"] == freeze["source_closure_sha256"],
+        "learning freeze identity binding",
+    )
+    cohort = handoff["cohort"]
+    frozen_cohort = freeze["cohort"]
+    _require(
+        cohort["role"] == "source_blind_development"
+        and cohort["protocol_frozen_before_labels"] is True
+        and cohort["source_groups"] == frozen_cohort["source_groups"]
+        and cohort["source_groups_by_split"]
+        == frozen_cohort["source_group_counts_by_split"]
+        and cohort["cross_split_source_group_intersections"] == 0
+        and cohort["prospective_cases_consumed"] == 0
+        and cohort["case_set_sha256"] == frozen_cohort["case_set_sha256"],
+        "learning freeze cohort binding",
+    )
+    _require(
+        handoff["exact_methods"]["arms"] == freeze["exact_task_contract"]["arms"]
+        and handoff["exact_methods"]["refused_rows_retained"] is True
+        and handoff["exact_methods"]["task_identical_exact_outputs"] is True,
+        "learning freeze exact method binding",
+    )
+
+
+def assess_frozen_handoff_or_abstain(
+    handoff: Mapping[str, Any],
+    freeze: Mapping[str, Any],
+    *,
+    freeze_file_sha256: str,
+) -> dict[str, Any]:
+    try:
+        validate_handoff_against_learning_freeze(
+            handoff,
+            freeze,
+            freeze_file_sha256=freeze_file_sha256,
+        )
+        return assess_handoff(handoff)
+    except (KeyError, TypeError, ValueError):
+        return {
+            "schema": READINESS_SCHEMA,
+            "status": "abstained",
+            "blockers": ["malformed_unverified_or_freeze_mismatched_handoff"],
+            "development_training_eligible": False,
+            "training_performed": False,
+            "prospective_data_consumption_permitted": False,
+            "advice_enabled": False,
+            "complete_abstention": True,
+            "exact_fallback": "unchanged exact path",
+            "production_routing_permitted": False,
+        }
+
+
+def assess_query_ladder_evidence(evidence: Mapping[str, Any]) -> dict[str, Any]:
+    """Normalize completed q64 evidence and feed it through this same gate."""
+    from cmbench.recognition import query_ladder_learning_evidence as query_evidence
+
+    query_evidence.validate_evidence(evidence)
+    result = assess_handoff(query_evidence.normalize_incomplete_handoff(evidence))
+    return {
+        **result,
+        "evidence_schema": evidence["schema"],
+        "query_count": evidence["query_count"],
+        "cross_host_label_agreement_cases": evidence["cross_host"][
+            "label_agreement_cases"
+        ],
+        "cross_host_label_disagreement_cases": evidence["cross_host"][
+            "label_disagreement_cases"
+        ],
+        "gross_headroom_at_least_1_10_on_both_hosts": evidence["cross_host"][
+            "gross_headroom_at_least_1_10_on_both_hosts"
+        ],
+        "per_host_maximum_total_cost_ns_per_case_preserving_1_10": {
+            host_id: host[
+                "maximum_total_cost_ns_per_case_preserving_1_10"
+            ]
+            for host_id, host in evidence["hosts"].items()
+        },
+    }
 
 
 def current_evidence_readiness(assessment: Mapping[str, Any]) -> dict[str, Any]:

@@ -6,6 +6,7 @@ import json
 import pytest
 
 from cmbench.recognition import learning_benchmark_handoff as handoff
+from cmbench.recognition import query_ladder_learning_freeze as query_freeze
 from cmbench.recognition import version_history_learning_protocol as history
 
 
@@ -193,6 +194,76 @@ def test_missing_charged_cost_fails_closed(eligible_handoff):
     ] = None
     result = handoff.assess_or_abstain(eligible_handoff)
     assert result["status"] == "abstained"
+    assert result["development_training_eligible"] is False
+    assert result["advice_enabled"] is False
+
+
+def _bind_to_query_freeze(candidate: dict) -> tuple[dict, dict, str]:
+    artifact = (
+        query_freeze.ROOT
+        / "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001"
+    )
+    frozen = json.loads((artifact / "FREEZE.json").read_text(encoding="utf-8"))
+    freeze_file_sha256 = query_freeze.file_sha256(artifact / "FREEZE.json")
+    candidate["surface_id"] = "architecture_query_ladder_q64"
+    candidate["task_contract_sha256"] = query_freeze.digest(
+        frozen["exact_task_contract"]
+    )
+    candidate["source_checkpoint"] = query_freeze.digest(
+        frozen["source_checkpoint"]
+    )
+    candidate["source_tree"] = frozen["source_closure_sha256"]
+    candidate["freeze_sha256"] = freeze_file_sha256
+    candidate["baseline_closure"]["sha256"] = query_freeze.digest(
+        frozen["exact_task_contract"]["arms"]
+    )
+    candidate["cohort"].update({
+        "source_groups": 72,
+        "source_groups_by_split": dict(
+            frozen["cohort"]["source_group_counts_by_split"]
+        ),
+        "source_groups_per_label": {
+            "native_fused_slots": 24,
+            "cse_flat_bigint": 24,
+            "direct_bitset_restriction": 24,
+        },
+        "case_set_sha256": frozen["cohort"]["case_set_sha256"],
+    })
+    candidate["exact_methods"]["arms"] = list(query_freeze.EXACT_ARMS)
+    for replication in candidate["replications"]:
+        replication["case_set_sha256"] = frozen["cohort"]["case_set_sha256"]
+        replication["complete_cases"] = 72
+        replication["best_fixed_method"] = "native_fused_slots"
+        _refresh_economics(replication)
+    return candidate, frozen, freeze_file_sha256
+
+
+def test_future_handoff_must_bind_to_prelabel_learning_freeze(eligible_handoff):
+    candidate, frozen, freeze_file_sha256 = _bind_to_query_freeze(eligible_handoff)
+    handoff.validate_handoff_against_learning_freeze(
+        candidate,
+        frozen,
+        freeze_file_sha256=freeze_file_sha256,
+    )
+    result = handoff.assess_frozen_handoff_or_abstain(
+        candidate,
+        frozen,
+        freeze_file_sha256=freeze_file_sha256,
+    )
+    assert result["development_training_eligible"] is True
+
+
+def test_freeze_mismatch_fails_closed(eligible_handoff):
+    candidate, frozen, freeze_file_sha256 = _bind_to_query_freeze(eligible_handoff)
+    candidate["freeze_sha256"] = "0" * 64
+    result = handoff.assess_frozen_handoff_or_abstain(
+        candidate,
+        frozen,
+        freeze_file_sha256=freeze_file_sha256,
+    )
+    assert result["blockers"] == [
+        "malformed_unverified_or_freeze_mismatched_handoff"
+    ]
     assert result["development_training_eligible"] is False
     assert result["advice_enabled"] is False
 

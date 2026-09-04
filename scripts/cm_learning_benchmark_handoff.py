@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from cmbench.recognition import learning_benchmark_handoff as handoff
+from cmbench.recognition import query_ladder_learning_evidence as query_evidence
 from cmbench.recognition import version_history_learning_protocol as history
 
 
@@ -47,7 +48,18 @@ def _current_readiness() -> dict:
         or verification.get("status") != "verified_protocol_no_training"
     ):
         return handoff.assess_or_abstain({})
-    return handoff.current_evidence_readiness(assessment)
+    try:
+        evidence = query_evidence.build_evidence()
+        result = handoff.assess_query_ladder_evidence(evidence)
+    except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
+        return handoff.assess_or_abstain({})
+    result["version_history_gross_speedup"] = assessment["economics"][
+        "verified_gross_speedup"
+    ]
+    result["version_history_training_allowed"] = assessment["decision"][
+        "training_allowed"
+    ]
+    return result
 
 
 def main() -> int:
@@ -57,12 +69,27 @@ def main() -> int:
         type=Path,
         help="in-project crse-learning-benchmark-handoff/v1 JSON; omit for current evidence",
     )
+    parser.add_argument(
+        "--freeze",
+        type=Path,
+        help="pre-label q64 learning FREEZE.json to authenticate --handoff",
+    )
     args = parser.parse_args()
     if args.handoff is None:
+        if args.freeze is not None:
+            parser.error("--freeze requires --handoff")
         result = _current_readiness()
     else:
         try:
-            result = handoff.assess_or_abstain(_read_json(args.handoff))
+            candidate = _read_json(args.handoff)
+            if args.freeze is None:
+                result = handoff.assess_or_abstain(candidate)
+            else:
+                result = handoff.assess_frozen_handoff_or_abstain(
+                    candidate,
+                    _read_json(args.freeze),
+                    freeze_file_sha256=history.file_sha256(args.freeze.resolve()),
+                )
         except (OSError, ValueError, json.JSONDecodeError):
             result = handoff.assess_or_abstain({})
     print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
