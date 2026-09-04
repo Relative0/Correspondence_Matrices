@@ -483,3 +483,183 @@ identities, 63 isolated focused tests pass, and the combined local surface has
 
 Its authorization file is absent. Do not create a pod or replay any consumed
 attempt without separate exact authorization.
+
+### V6 local host-power refusal and V7 amendment
+
+Brian authorized the exact V6 procfs retry, but no Runpod request occurred. The
+controller created an empty local directory and then the Windows host-awake
+guard refused because `ACLineStatus=0`; the guard wraps `run()`, so no preflight,
+watchdog, or create POST was reached by that controller. The cloud-create scope
+is unconsumed and the empty directory is preserved.
+
+Review found the frozen V6 controller also retained the V5 byte total
+`5,500,977` instead of the V6 manifest's correct `5,504,396`. Do not replay V6.
+The V7 amendment corrects only that local byte check, uses the shorter fresh
+output `native-procfs-v7-001`, preserves the original authorization/local
+failure hashes, and adds a read-only AC-power readiness gate. The remote 37-file
+workload and every cloud/resource/runtime bound remain unchanged. Its proposal
+is:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-HOST-PREFLIGHT-AMENDMENT-PROPOSAL-20260829.md`.
+
+The authenticated amendment preflight found empty Runpod inventories and valid
+budget/offer/account gates, but its first receipt correctly returned
+`ready=false` while the host was off AC. Brian later connected AC power and
+authorized the exact amendment. Its fresh preflight passed and the controller
+created pod `3o7r0za7cm72yn`, whose Secure 2-vCPU/4-GB, 12-GB-container,
+zero-volume identity matched. Both generic proxy health checks passed; the next
+proxied request returned HTTP 404 before any upload or worker start. The owned
+pod was deleted with HTTP 204. Independent postflight found both inventories
+empty, all ten known pod details 404 through v1/v2, exited guards, verified
+watchdog cleanup, and a `$0.0065713420` conservative campaign bound. See:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-NATIVE-SCOUT-HOST-PREFLIGHT-AMENDMENT-RESULT-AUDIT-20260829.md`.
+
+The V7 authorization is consumed and no replacement is authorized. Generic
+`/health` is identical on both bootstrap ports and therefore does not establish
+role-specific routing. A future proposal should validate the authenticated
+8080 upload-status and 8081 progress routes, retry bounded setup-time 404s, and
+record the failing method/route/status without recording credentials.
+
+### Concurrent V8/V9 scope conflict
+
+After V7, a concurrent workspace writer created V8/V9 wrappers and recorded an
+automatic V9 authorization with a `$10` aggregate cap. That record conflicted
+with V7's exact no-replacement scope and the `$0.20` campaign cap. V8 stopped
+locally before create. V9 had already created pod `jwyi342sjmjkcj` when this
+task detected the conflict; its authorization is now preserved under an
+`.invalid-no-replacement` name so it cannot be replayed.
+
+V9 completed 63 focused tests, 144 P5 cells, dependency installation, Linux
+controls, and seven native CaDiCaL functional cases. CUDD then failed closed at
+`process_tree_measurement_incomplete`; no CUDD/d4/perf result or timing ranking
+was accepted. The controller deleted the pod with HTTP 204. Independent checks
+found both inventories empty, all eleven known pod details 404, exited guards,
+verified watchdog cleanup, and a corrected `$0.0085160335` attributable bound
+under the user's `$0.20` cap. The cost compliance does not cure the
+authorization conflict. Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-CONCURRENT-NATIVE-SCOUT-V9-RESULT-AUDIT-20260829.md`.
+
+Do not treat any V8/V9 automatic record as permission for another create.
+Coordinate one exclusive launch owner and obtain a new exact user authorization
+before any further pod. The remaining technical gate is the CUDD supervisor
+measurement refusal; CaDiCaL readiness is now functionally established, but no
+performance comparison has run.
+
+A second concurrent automatic retry, V10, also completed before its record was
+discovered. Pod `kvpu2s8ozs7j27` repeated the successful 64-test/144-cell/native
+CaDiCaL path, but the bounded RSS reread still left CUDD at
+`process_tree_measurement_incomplete`; d4 and perf did not run. DELETE was 204,
+both inventories are empty, all twelve known pod details are 404, guards exited,
+and the corrected campaign bound is `$0.0111925934`. Its authorization is also
+preserved under `.invalid-no-replacement`. Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-CONCURRENT-NATIVE-SCOUT-V10-RESULT-AUDIT-20260829.md`.
+
+V11 controller/preflight files appeared after V10. Its exact required
+authorization path now contains a fail-closed `authorized=false`,
+`cloud_writes_authorized=0` coordination record, and no V11 output directory
+exists. Do not overwrite that record or launch V11 without a new exact user
+authorization after exclusive ownership is established.
+
+### Externally owned V12 result
+
+A separate workspace task later ran V12 under an authorization record that
+cites a newer cross-task `$10` continuation instruction. This task cannot
+inspect that source conversation, so it records the result without adopting or
+rejecting the authority claim. Pod `omsz7w8fmlhqn0` uploaded all 37 frozen
+files; 65 focused testcase elements, 144 P5 cells, dependencies, controls,
+seven native CaDiCaL cases, and four native CUDD cases all passed. CUDD exact
+dump/reload and whole-process-tree RSS/cleanup were verified. d4 then failed
+closed at `d4 dynamic dependencies`; no d4/perf result or ranking exists.
+
+Independent read-only postflight found both inventories empty, all 13 known pod
+details 404, exited original guards, and a corrected `$0.0129657686` campaign
+bound. Windows had reused the watchdog PID after release; the verifier compared
+process creation time to distinguish the unrelated current occupant. Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-EXTERNAL-NATIVE-GAP-V12-RESULT-AUDIT-20260829.md`.
+
+This handoff supplies no new create or replacement authorization. A later d4
+fence or timing campaign must establish its own valid scope and exclusive
+launch owner.
+
+The same external task subsequently ran V13 to fence short-lived d4 children.
+Its 65 focused testcase elements, 144 P5 cells, dependency closure, and Linux
+controls passed, but the first CaDiCaL worker regressed to
+`process_tree_measurement_incomplete`. No CaDiCaL/CUDD/d4/perf output was
+created, so V13 never exercised d4 and V12 remains the stronger readiness
+record. Pod `4ovdjr0todatgl` was deleted; both inventories were empty, all 14
+known details were 404, guards exited, and the corrected conservative bound was
+`$0.0147740342`. Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-EXTERNAL-NATIVE-GAP-V13-RESULT-AUDIT-20260829.md`.
+
+### Externally owned V20 readiness completion and local P6 freeze
+
+The external campaign continued through V20. V14 and V18 made no create;
+V15/V16/V17/V19 were cleaned after bounded d4 failures. V20 pod
+`rg3zlg5gbdbp5p` passed 68 focused testcase elements, all 144 P5 cells,
+dependency closure, Linux controls, seven CaDiCaL cases, four CUDD cases with
+exact dump/reload, and five exact d4 counts. The d4 executable was static and
+had SHA-256
+`29cb30f351ed92b02343e5e7a98b082e949d9838245f37c0bcdecf68a57ffd39`.
+`perf` was unavailable; no comparative timing or ranking ran.
+
+Independent verification found v1/v2 inventories empty, all 19 known pod
+details 404, all created-attempt guards released, and a conservative campaign
+bound of `$0.024656037269035973`. The evidence ZIP SHA-256 is
+`3f508be7c11bad4242dfcd64c439dcc4e4b3a8fda455d725a384ff857346b6d2`.
+Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-EXTERNAL-NATIVE-GAP-V20-RESULT-AUDIT-20260830.md`.
+
+Authorization compliance for the externally owned V14-V20 series remains
+unverifiable from this task. Do not treat the result or its `$10` record as
+permission for another create.
+
+The V3 corpus package remains preserved but is superseded for execution because
+its EPFL cases did not freeze output roots and two P7 labels were not distinct
+executable configurations. The authoritative local package is now
+`docs/research/verification/comparative-p6-candidate-v4-2026-08-30`: 104
+source-verified cases, 30 untouched confirmation clusters, ten bounded EPFL
+output cones, six policies, and 9,672 deterministic order rows. Its freeze
+SHA-256 is
+`54ea61a38135426975a0d1fead9b24c020dc565eb3d952356640fa38062598dd`.
+The separate `docs/research/verification/comparative-p7-offline-gate-v1-2026-08-30`
+package prepares all 58 eligible P7 cases and passes a two-case, nine-arm
+non-performance oracle dry run. Neither package is paid-run authorization. The
+next prerequisite is an isolated Linux cell runner and its negative controls.
+Read:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/P6-CORPUS-SCHEDULE-FREEZE-RESULT-AUDIT-20260830.md`.
+
+The complete next-step sequence is in:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/CM-COMPARATIVE-NEXT-STEPS-EXECUTION-PLAN-20260830.md`.
+
+It places a non-performance Linux correctness/oracle scout before the first
+timing scout, then a sharded P7 development campaign, a distinct-or-omitted
+`CM-Fast-Frozen` decision, task-matched P8 native comparisons, and untouched
+P9 confirmation. It grants no cloud create or replacement.
+
+### P7 isolated-runner V1 failure and V2 retry gate
+
+The first 36-cell Linux functional scout consumed pod `1xh6csc4oxy067` but
+failed during pytest collection because its upload manifest was not dependency-
+closed. No P7 cell or timing result ran. Cleanup found empty inventories and
+absent owned pod details. The result audit is:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-P7-FUNCTIONAL-SCOUT-V1-RESULT-AUDIT-20260830.md`.
+
+Runner schema V2 and dependency-closed package V2 now pass 42 focused tests,
+26 subtests, isolated source-tree execution, offline gate V6, closure, checksum,
+and read-only verification. The exact non-performance retry proposal is:
+
+`docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/RUNPOD-P7-FUNCTIONAL-SCOUT-V2-RETRY-PROPOSAL-20260830.md`.
+
+Its SHA-256 is
+`b10c1a84115e11af3a733440e463144d111149674e1ae76b2e7d2d5cc491c133`.
+The required V2 authorization file is absent. Do not upload or create a pod
+without a new exact user authorization; V1 cannot be replayed.
