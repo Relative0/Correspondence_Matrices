@@ -6,16 +6,21 @@ This library integrates the project's August 27–September 3, 2026 follow-up wo
 Evidence boundaries and unsuccessful experiments are retained.
 
 Latest exact-execution and comparison decision:
-[C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md) and the
-[four-lane local functional admission](CM_FOUR_LANE_COMPARISON_HARNESS_FUNCTIONAL_ADMISSION_2026_09_03.md).
+[C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md), the
+[four-lane local functional admission](CM_FOUR_LANE_COMPARISON_HARNESS_FUNCTIONAL_ADMISSION_2026_09_03.md),
+and the cross-machine q1/q4/q16/q64 architecture ladder now summarized on the expert
+page as a task map.
 The [architecture-audit disposition](CM_ARCHITECTURE_AUDIT_DISPOSITION_AFTER_C38_2026_09_03.md)
 records which H0-H10 recommendations were implemented, rejected, or deferred and why.
 C38 confirmed exact native execution and aggregate/multi-root benefit on Linux, but its
 0.840x minimum single-root case failed the frozen 0.95x floor, so native remains
 guarded/opt-in. The new four-lane harness then matched exact artifacts across complete
 relations, repeated restrictions, related roots, and separate smaller-query/persistence
-sublanes. It deliberately produced no timing evidence and consumed no fresh or
-prospective corpus. Training, production promotion, and publication remain disabled.
+sublanes. The later timing campaigns retained direct BitSet, CSE-flat and natural
+smaller-query controls, and the public page preserves both favorable and unfavorable
+results rather than promoting a universal CM backend. Training and production
+promotion remain disabled; the website changes are published only through the reviewed
+branch workflow.
 
 Latest comparative follow-up: [fresh-process structural persistence](FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md).
 CM, structural CSE, direct CNF and a portable `dd.autoref` ROBDD control passed

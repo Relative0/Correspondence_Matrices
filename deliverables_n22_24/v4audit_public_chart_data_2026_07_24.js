@@ -59,7 +59,7 @@ const V4AUDIT_CHART_DATA = {
     ]
   },
   "schema_version": 1,
-  "source_revision": "5dd6ec77b31839b291aa1785b9ff218c83591380",
+  "source_revision": "d2643523b22b0d94c151bef635aaaabc722129fa",
   "sources": {
     "CM_FABLE_BENCHMARKS_2026-07-21.md": {
       "rule": "documented Audit V3 paired rerun n=16..24",

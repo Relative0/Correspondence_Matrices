@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; query-ladder verified across separate host/compiler pairs
+Status: recommendations reconciled; query-ladder verified across separate host/compiler pairs; public task map prepared
 
 ## Bottom line
 
@@ -13,7 +13,8 @@ current exact-backend work closes the high-value correctness and execution items
 were supported by measurements: shared-DAG memoization, zero-safe caches, topological
 restricted evaluation, explicit q1/q4/q16/q64 comparisons, projection variants, native
 fused slots, related-root union execution, exact fallback, and source-bound
-cross-machine replication.
+cross-machine replication. The public expert page now adds a task-labelled architecture
+map while retaining the historical Windows/MSVC 1.472x headline and its original scope.
 
 The remaining large ideas are not missing accidental TODOs. They are explicitly
 deferred because the prerequisite profile or task contract is absent, an earlier exact
@@ -35,7 +36,7 @@ value can be measured.
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
 | H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
-| H10 task-matched external controls | **Timed; corrected Lane B replicated across Linux hosts/compilers** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. Two corrected 27,648-cell Lane-B runs then showed R2 at q1/q4, a host-sensitive q16 boundary, robust CSE-flat q64 advantage, and a mixed native cohort result. Public presentation remains separately controlled. |
+| H10 task-matched external controls | **Timed, replicated, and scoped for public presentation** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. Two corrected 27,648-cell Lane-B runs then showed R2 at q1/q4, a host-sensitive q16 boundary, robust CSE-flat q64 advantage, and a mixed native cohort result. The expert page presents these as task-specific results rather than a universal ranking. |
 
 ## Accepted architecture changes
 
@@ -75,9 +76,15 @@ but they do prohibit training a router from this confirmation result.
    9575F CPU model, and pinned Clang 14 compiler. All 27,648 cells passed, the local
    verifier reproduced the remote verification byte-for-byte, and final inventories
    were empty.
-6. **Pending under a separate boundary:** prepare task-labelled `expert.html` sections;
-   retain historical dates and the Windows-only 1.472x result rather than silently
-   replacing it.
+6. **Complete in the publication source:** task-labelled `expert.html` sections retain
+   historical dates and the Windows-only 1.472x result rather than silently replacing
+   it. Focused website checks passed. External deployment remains the effect of pushing
+   the reviewed branch to `origin/main`.
+
+The next distinct non-neural research boundary is H9: freeze a realistic adjacent-
+revision trace and measure full rebuild against exact changed-cone reuse, including
+retained-memory accounting. H2/H3 layout work remains gated on that workload producing
+a profile that identifies key construction or dense copying as a material cost.
 
 The corrected result permits an observed four-point separate-host portability map and
 descriptive host-memory reporting. It is not a universal break-even claim, a selector or

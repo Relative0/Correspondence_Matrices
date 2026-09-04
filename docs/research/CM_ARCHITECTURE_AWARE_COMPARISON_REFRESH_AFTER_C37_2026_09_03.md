@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: corrected q-ladder verified on separate Linux/GCC and Linux/Clang hosts
+Status: corrected q-ladder verified across Linux/GCC and Linux/Clang; public task map prepared
 
 ## Current implementation status
 
@@ -23,8 +23,9 @@ permanently unrun because the frozen package differs from current source in
 W5 conclusion is permitted and no old authorization may be reused.
 
 The fresh corpus/schedule/arm/gate freeze and the separately authorized current-source
-Linux/GCC comparison have now completed. No public-site update has occurred. The verified
-result is recorded in
+Linux/GCC comparison have now completed. The expert page now includes the resulting
+task-labelled comparison map without replacing the historical Windows/MSVC headline.
+The verified result is recorded in
 `docs/recognition/architecture_comparison_execution_retry_20260903/VERIFIED_INTERPRETATION.md`.
 
 ## C38 result
@@ -77,8 +78,9 @@ retry 002. It completed 27,648 distinct q1/q4/q16/q64 cells and independently ve
 the isolated-child `wait4` RSS and pre-fork baseline fields. This supplies a one-host
 setup-amortization curve, but not calibrated memory routing: the child peak was
 below the inherited baseline—all 27,648 incremental values were zero. The later
-separate physical-machine/compiler replication is now complete; publication remains a
-separate controlled boundary.
+separate physical-machine/compiler replication is now complete. The public source and
+focused website checks are complete; deployment remains tied to an authorized push of
+the reviewed branch.
 
 ## Corrected query-ladder result
 
@@ -258,8 +260,15 @@ the evidence and denominator.
    isolation lifecycle separately. Independent verification found zero mismatches.
 7. **Complete:** the exact 27,648-cell ladder replicated on a different RunPod flavor,
    CPU model, and compiler with zero verification mismatches and empty final inventories.
-8. **Pending under a separate boundary:** update `expert.html` with scoped current sections, retain historical
-   results and dates, run generated-site consistency tests, and publish only under separate authorization.
+8. **Complete in source and locally verified:** `expert.html` has scoped current sections,
+   retains historical results and dates, and passes the focused generated-site checks.
+   External publication remains controlled by the authorized `origin/main` push.
+
+The comparison refresh does not authorize another generic timing sweep. Its next
+research successor is a separately frozen incremental-compilation experiment over
+real adjacent revisions, with changed-cone reuse and retained memory measured against
+full rebuild. Compact-key and dense-layout changes stay deferred until that experiment
+identifies either cost as material.
 
 This sequence highlights where a CM or CM-family architecture is useful without turning
 a workload-specific advantage into a general claim.
