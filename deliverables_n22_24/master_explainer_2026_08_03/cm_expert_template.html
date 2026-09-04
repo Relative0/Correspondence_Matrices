@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Correspondence Matrices — technical summary</title>
-<meta name="description" content="Dense technical cut: every chart, every interval with its clustering basis, protocol notes, corrections ledger, and file-level provenance.">
+<meta name="description" content="Dense technical cut: current non-neural CM architecture comparisons, every campaign chart and interval, protocol notes, corrections, and file-level provenance.">
 <meta property="og:title" content="Correspondence Matrices — technical summary">
-<meta property="og:description" content="Every benchmark result, confidence interval, protocol note, correction, and source file in one technical summary.">
+<meta property="og:description" content="Current task-matched CM architecture comparisons plus every benchmark result, confidence interval, protocol note, correction, and source file.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="og.png">
@@ -30,11 +30,13 @@ const DATA = /*__CM_DATA__*/null;
 
 const C = DATA._content;
 const M = DATA._campaign;
+const A = DATA.e21_current_architecture;
 const app = document.getElementById("app");
+const metric = token => P(`{{${token}}}`);
 
 document.body.prepend(topbar({
   brand: "Correspondence Matrices <span>· technical summary</span>",
-  links: [["index.html", "← full knowledge base"], ["#x1", "Kernel"], ["#x2", "Boundary"],
+  links: [["index.html", "← full knowledge base"], ["#x0", "Current map"], ["#x1", "Kernel"], ["#x2", "Boundary"],
           ["#x3", "Economics"], ["#x4", "Symbolic"], ["#x5", "Protocol"],
           ["#x6", "Corrections"], ["#x7", "Open"], ["#x8", "Provenance"],
           ["usecases.html", "CM use cases"]],
@@ -43,8 +45,8 @@ document.body.prepend(topbar({
 app.append(h("header", { class: "page" }, [
   h("h1", { text: "Correspondence Matrices — technical summary" }),
   h("p", { class: "lede", text:
-    "Every measurement from the 2026-08-03 campaign, with its scope, its clustering basis, and the file it " +
-    "was read from. Interpretation is kept to where it changes what a number means." }),
+    "The 2026-08-03 campaign plus a 2026-09-04 current-source, non-neural architecture addendum. Every " +
+    "result is labelled by task and environment; historical and current measurements are never pooled." }),
   h("p", { class: "meta", html:
     `Evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> · campaign revision <code>${M.campaign_revision.slice(0, 7)}</code> · ` +
     `local box ${M.local_env.platform}, ${M.local_env.cpu}, Python ${M.local_env.python}, numpy ${M.local_env.numpy} · ` +
@@ -66,6 +68,132 @@ app.append(banner("note", "Reading conventions enforced throughout", [
 
 app.append(featureModelAuditUpdate());
 app.append(currentEvidenceUpdate("expert"));
+
+/* ------------------------------------------------------------ current architecture */
+{
+  const s = section("x0", "Current", "Current architecture task map — 2026-09-04",
+    "Exact non-neural comparisons on frozen output contracts. This section supplements the dated campaign " +
+    "below; it does not pool unlike hosts, train a selector, or change a production default.");
+  s.append(h("p", { class: "meta", html:
+    `Architecture-comparison freeze <code>${A.source_freezes.architecture_comparison_sha256}</code> · ` +
+    `query-ladder freeze <code>${A.source_freezes.query_ladder_sha256}</code>` }));
+
+  s.append(banner("warn", "How to read the retained Windows result", [
+    P("The {{arch.native.windows.single}} figure remains the original Windows/MSVC C37 result for one " +
+      "specific q64 contract: native fused slots versus Python R2 on the frozen single-root workload. " +
+      "The exact Linux/GCC replication measured {{arch.native.linux.single}}, but its slowest case was " +
+      "{{arch.native.linux.single_min}}. That failed the predeclared 0.95× case floor, so native remains " +
+      "guarded/opt-in. Neither number is a universal CM headline."),
+    "CSE-flat and direct BitSet are comparison controls, not CM-family members. Python R2, packed/recursive " +
+    "CM, and native fused slots are CM-family implementations with different construction and query costs.",
+  ]));
+
+  s.append(h("h3", { text: "Frozen native portability check — q64 only" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["environment", "single-root native / R2", "slowest single-root case",
+           "multi-root union / separate", "slowest multi-root workload"],
+      A.native_portability.rows.map(r => [
+        r.environment,
+        metric(r.single_token),
+        metric(r.single_min_token),
+        metric(r.multi_token),
+        metric(r.multi_min_token),
+      ]), "wrap")
+  ]));
+  s.append(h("p", { class: "claim", html: P(
+    "The Windows multi-root result remains {{arch.native.windows.multi}} and the Linux replication was " +
+    "{{arch.native.linux.multi}}. Both are favorable for union sharing, while only the Linux single-root " +
+    "replication exposes the cross-machine gate failure. These are frozen C37/C38 results, not replacements " +
+    "for the current-source comparisons below.") }));
+
+  s.append(h("h3", { text: "Current-source comparisons — use the task, not one global ranking" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["task contract", "what the measured comparison says", "supported use"], [
+      ["Complete explicit relation",
+       P("Best fixed CM (<code>cm_ir_recursive_packed</code>) was {{arch.complete.cm_over_dense}} " +
+         "[{{arch.complete.cm_over_dense_lo}}, {{arch.complete.cm_over_dense_hi}}] over dense CM, but " +
+         "{{arch.complete.cm_over_bitset}} [{{arch.complete.cm_over_bitset_lo}}, " +
+         "{{arch.complete.cm_over_bitset_hi}}] versus direct BitSet. BitSet won " +
+         "{{arch.complete.bitset_wins}}/{{arch.complete.cases}} cases."),
+       "Packed/recursive CM improves the CM baseline; direct BitSet remains the complete-vector choice on this lane."],
+      ["Repeated restrictions",
+       "The separately timed ladder below keeps Python R2 at q1/q4 on both hosts, straddles at q16, and " +
+       "selects CSE-flat bigint at q64 on both hosts.",
+       "Route by query-count contract; do not infer a universal native crossover."],
+      ["Related multi-root outputs",
+       P("On the broader one-host Lane C, sharing-aware union was {{arch.multi.python_union.speedup}} " +
+         "[{{arch.multi.python_union.lo}}, {{arch.multi.python_union.hi}}] over separate Python roots and " +
+         "{{arch.multi.native_union.speedup}} [{{arch.multi.native_union.lo}}, " +
+         "{{arch.multi.native_union.hi}}] over separate native arenas, with all " +
+         "{{arch.multi.cases}} cases favoring each union arm. Native union versus Python union was " +
+         "{{arch.multi.native_vs_python.speedup}} [{{arch.multi.native_vs_python.lo}}, " +
+         "{{arch.multi.native_vs_python.hi}}]."),
+       "Share related outputs; do not turn near-parity native/Python evidence into native-superiority wording."],
+      ["Smaller task-specific queries",
+       "Natural CNF or SAT controls were the fixed winners for exact count, SAT status, witnesses, " +
+       "equivalence deltas, partial contexts, version history, and structural reload.",
+       "Keep CM as an exact diagnostic/reference representation where useful, not a replacement for every task path."],
+    ], "wrap")
+  ]));
+
+  s.append(h("h3", { text: "Repeated-restriction query ladder — within-host speedup over Python R2" }));
+  s.append(h("p", { html: P(
+    `${A.query_ladder.hosts[0]} and ${A.query_ladder.hosts[1]} each completed ` +
+    "{{arch.ladder.rows_per_host}} verified rows. Absolute timings are not compared between the unlike " +
+    "CPUs, and the CPU and compiler changed together, so their separate causal effects cannot be identified.") }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["q", "GCC best fixed", "Clang best fixed", "CSE-flat/R2 · GCC → Clang",
+           "native/R2 · GCC → Clang", "native minimum · GCC → Clang"],
+      A.query_ladder.rows.map(r => [
+        String(r.query_count),
+        `<code>${r.gcc_best}</code>`,
+        `<code>${r.clang_best}</code>`,
+        `${metric(r.gcc_cse_token)} → ${metric(r.clang_cse_token)}`,
+        `${metric(r.gcc_native_token)} → ${metric(r.clang_native_token)}`,
+        `${metric(r.gcc_native_min_token)} → ${metric(r.clang_native_min_token)}`,
+      ]), "wrap")
+  ]));
+  s.append(h("p", { class: "claim", html: P(
+    "At q16, CSE-flat was {{arch.ladder.q16.gcc.cse}} on GCC but {{arch.ladder.q16.clang.cse}} on " +
+    "Clang: a threshold straddle, not a portable crossover. At q64 it was " +
+    "{{arch.ladder.q64.gcc.cse}} and {{arch.ladder.q64.clang.cse}}, won " +
+    "{{arch.ladder.q64.gcc.cse_wins}} and {{arch.ladder.q64.clang.cse_wins}} of " +
+    "{{arch.ladder.q64.cases}} cases, and kept " +
+    "minimums of {{arch.ladder.q64.gcc.cse_min}} and {{arch.ladder.q64.clang.cse_min}}.") }));
+  s.append(h("p", { class: "claim", html: P(
+    "Native q64 remained cohort-dependent: the observed C36 cohort was {{arch.ladder.q64.gcc.native_observed}} " +
+    "→ {{arch.ladder.q64.clang.native_observed}}, while the fresh cohort was " +
+    "{{arch.ladder.q64.gcc.native_fresh}} → {{arch.ladder.q64.clang.native_fresh}}. This is why the " +
+    "aggregate native result is shown without promoting it to a default.") }));
+
+  s.append(h("h3", { text: "Smaller queries — fixed task-matched winner over the CM arm" }));
+  s.append(h("div", { class: "tablewrap" }, [
+    table(["task / lifecycle", "fastest fixed backend", "winner speedup over CM"],
+      A.small_queries.rows.map(r => [
+        `<code>${r.task}</code>`,
+        `<code>${r.winner}</code>`,
+        metric(r.over_cm_token),
+      ]), "wrap")
+  ]));
+
+  s.append(banner("note", "Boundary of this update", [
+    P("Both query-ladder hosts recorded {{arch.ladder.memory_nonzero_rows}} rows with nonzero incremental " +
+      "child RSS. That field therefore cannot calibrate a memory router or support a memory-win claim."),
+    "No neural training or selector fit was performed; no production routing changed; no universal native " +
+    "default or universal break-even point is claimed. This local website change is distinct from publication.",
+  ]));
+
+  const provenance = h("details", { class: "prov" });
+  provenance.append(h("summary", { text: "Current architecture evidence files" }));
+  const sources = h("ul");
+  A.provenance.forEach(src => sources.append(h("li", {}, [
+    h("a", { href: src.href, text: src.label }),
+    document.createTextNode(" — " + src.scope),
+  ])));
+  provenance.append(sources);
+  s.append(provenance);
+  app.append(s);
+}
 
 /* ------------------------------------------------------------ verdicts */
 {

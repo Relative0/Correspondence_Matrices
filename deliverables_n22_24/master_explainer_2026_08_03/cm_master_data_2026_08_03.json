@@ -3144,6 +3144,196 @@
       "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-frozen-audit-regression-2026-08-27/junit.xml :: testcase counts and outcomes"
     ]
   },
+  "e21_current_architecture": {
+    "as_of": "2026-09-04",
+    "kind": "exact non-neural task map; no selector fit or production-routing change",
+    "source_freezes": {
+      "architecture_comparison_sha256": "7a20c100a6b615cdced3a0146c9b9c88cb8b2c690279e398cb7f2c8459ef583a",
+      "query_ladder_sha256": "c5901ff7eaf4e75b1a8a8145707dfb2440d68e756f1f67821e6ad34b6405ada8"
+    },
+    "native_portability": {
+      "contract": "frozen C37/C38 q64 single-root native-fused/R2 and multi-root native-union/separate",
+      "rows": [
+        {
+          "environment": "Windows / MSVC (C37 original)",
+          "single_token": "arch.native.windows.single",
+          "single_min_token": "arch.native.windows.single_min",
+          "multi_token": "arch.native.windows.multi",
+          "multi_min_token": "arch.native.windows.multi_min"
+        },
+        {
+          "environment": "Linux / GCC 12 / AMD EPYC 7713 64-Core Processor (C38 replication)",
+          "single_token": "arch.native.linux.single",
+          "single_min_token": "arch.native.linux.single_min",
+          "multi_token": "arch.native.linux.multi",
+          "multi_min_token": "arch.native.linux.multi_min"
+        }
+      ],
+      "guarded_opt_in_backend_retained": true,
+      "failed_cross_machine_gate": "single_root_minimum_case_speedup_at_least_0_95"
+    },
+    "complete_relation": {
+      "contract": "complete explicit relation",
+      "best_cm": "cm_ir_recursive_packed",
+      "decision": "retain packed/recursive CM benefit but do not claim a complete-vector win over current direct BitSet"
+    },
+    "query_ladder": {
+      "contract": "separately timed q1/q4/q16/q64 repeated restrictions; within-host speedups over Python R2",
+      "hosts": [
+        "Linux/GCC 12 on AMD EPYC 9655",
+        "Linux/Clang 14 on AMD EPYC 9575F"
+      ],
+      "rows": [
+        {
+          "query_count": 1,
+          "gcc_best": "r2_topological_liveness",
+          "gcc_cse_token": "arch.ladder.q1.gcc.cse",
+          "gcc_native_token": "arch.ladder.q1.gcc.native",
+          "gcc_native_min_token": "arch.ladder.q1.gcc.native_min",
+          "clang_best": "r2_topological_liveness",
+          "clang_cse_token": "arch.ladder.q1.clang.cse",
+          "clang_native_token": "arch.ladder.q1.clang.native",
+          "clang_native_min_token": "arch.ladder.q1.clang.native_min"
+        },
+        {
+          "query_count": 4,
+          "gcc_best": "r2_topological_liveness",
+          "gcc_cse_token": "arch.ladder.q4.gcc.cse",
+          "gcc_native_token": "arch.ladder.q4.gcc.native",
+          "gcc_native_min_token": "arch.ladder.q4.gcc.native_min",
+          "clang_best": "r2_topological_liveness",
+          "clang_cse_token": "arch.ladder.q4.clang.cse",
+          "clang_native_token": "arch.ladder.q4.clang.native",
+          "clang_native_min_token": "arch.ladder.q4.clang.native_min"
+        },
+        {
+          "query_count": 16,
+          "gcc_best": "cse_flat_bigint",
+          "gcc_cse_token": "arch.ladder.q16.gcc.cse",
+          "gcc_native_token": "arch.ladder.q16.gcc.native",
+          "gcc_native_min_token": "arch.ladder.q16.gcc.native_min",
+          "clang_best": "r2_topological_liveness",
+          "clang_cse_token": "arch.ladder.q16.clang.cse",
+          "clang_native_token": "arch.ladder.q16.clang.native",
+          "clang_native_min_token": "arch.ladder.q16.clang.native_min"
+        },
+        {
+          "query_count": 64,
+          "gcc_best": "cse_flat_bigint",
+          "gcc_cse_token": "arch.ladder.q64.gcc.cse",
+          "gcc_native_token": "arch.ladder.q64.gcc.native",
+          "gcc_native_min_token": "arch.ladder.q64.gcc.native_min",
+          "clang_best": "cse_flat_bigint",
+          "clang_cse_token": "arch.ladder.q64.clang.cse",
+          "clang_native_token": "arch.ladder.q64.clang.native",
+          "clang_native_min_token": "arch.ladder.q64.clang.native_min"
+        }
+      ],
+      "best_fixed_agreement_count": 3,
+      "absolute_cross_host_timing_comparison_permitted": false,
+      "memory_router_calibration_permitted": false
+    },
+    "multi_root": {
+      "contract": "ordered explicit related-root outputs",
+      "decision": "retain shared union arenas; do not claim unconditional native superiority"
+    },
+    "small_queries": {
+      "contract": "task-matched smaller queries and structural persistence",
+      "decision": "use natural task-specific controls; CM is not the fixed winner",
+      "rows": [
+        {
+          "task": "equivalence_delta/fresh_engine",
+          "winner": "cnf/fresh_engine",
+          "over_cm_token": "arch.small.equivalence_delta.fresh_engine"
+        },
+        {
+          "task": "equivalence_delta/resident_engine",
+          "winner": "cnf/resident_engine",
+          "over_cm_token": "arch.small.equivalence_delta.resident_engine"
+        },
+        {
+          "task": "exact_count/fresh_engine",
+          "winner": "cnf/fresh_engine",
+          "over_cm_token": "arch.small.exact_count.fresh_engine"
+        },
+        {
+          "task": "exact_count/resident_engine",
+          "winner": "cnf/resident_engine",
+          "over_cm_token": "arch.small.exact_count.resident_engine"
+        },
+        {
+          "task": "partial_context/fresh_engine",
+          "winner": "sat/fresh_engine",
+          "over_cm_token": "arch.small.partial_context.fresh_engine"
+        },
+        {
+          "task": "partial_context/resident_engine",
+          "winner": "sat/resident_engine",
+          "over_cm_token": "arch.small.partial_context.resident_engine"
+        },
+        {
+          "task": "sat_status/fresh_engine",
+          "winner": "sat/fresh_engine",
+          "over_cm_token": "arch.small.sat_status.fresh_engine"
+        },
+        {
+          "task": "sat_status/resident_engine",
+          "winner": "sat/resident_engine",
+          "over_cm_token": "arch.small.sat_status.resident_engine"
+        },
+        {
+          "task": "structural_reload",
+          "winner": "cnf",
+          "over_cm_token": "arch.small.structural_reload"
+        },
+        {
+          "task": "version_history/fresh_engine",
+          "winner": "sat/fresh_engine",
+          "over_cm_token": "arch.small.version_history.fresh_engine"
+        },
+        {
+          "task": "version_history/resident_engine",
+          "winner": "sat/resident_engine",
+          "over_cm_token": "arch.small.version_history.resident_engine"
+        },
+        {
+          "task": "witness/fresh_engine",
+          "winner": "cnf/fresh_engine",
+          "over_cm_token": "arch.small.witness.fresh_engine"
+        },
+        {
+          "task": "witness/resident_engine",
+          "winner": "cnf/resident_engine",
+          "over_cm_token": "arch.small.witness.resident_engine"
+        }
+      ]
+    },
+    "limits": {
+      "neural_or_selector_claim": false,
+      "production_routing_change": false,
+      "universal_native_default": false,
+      "universal_break_even": false,
+      "host_and_compiler_effects_separable": false,
+      "publication_authorized_by_evidence_runs": false
+    },
+    "provenance": [
+      {
+        "label": "C38 C37-native cross-machine adjudication",
+        "href": "../../docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json",
+        "scope": "original Windows/MSVC and exact Linux/GCC replication"
+      },
+      {
+        "label": "Architecture comparison retry 002 analysis",
+        "href": "../../docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json",
+        "scope": "complete relations, q64 restrictions, related roots, and smaller tasks on one Linux/GCC host"
+      },
+      {
+        "label": "Cross-machine query-ladder analysis",
+        "href": "../../docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json",
+        "scope": "separately timed q1/q4/q16/q64 on Linux/GCC and Linux/Clang hosts"
+      }
+    ]
+  },
   "_content": {
     "_readme": [
       "Authored prose for the CM master knowledge base. This file contains NO measured results.",
@@ -6702,6 +6892,450 @@
       "fmt": "ratio3",
       "prov": "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-deep-artifact-audit-2026-08-27/clustered-statistics.json :: 16.endpoint_cm_over_cudd_extraction",
       "note": "Saved feature-model cohort only; performance remains provisional."
+    },
+    "arch.native.windows.single": {
+      "value": 1.472004945748838,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[0].single_root.aggregate_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.windows.single_min": {
+      "value": 0.988855648678892,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[0].single_root.minimum_case_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.windows.multi": {
+      "value": 1.2851338646747168,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[0].multi_root.aggregate_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.windows.multi_min": {
+      "value": 1.2783881582543484,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[0].multi_root.minimum_workload_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.linux.single": {
+      "value": 1.3662211451923076,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[1].single_root.aggregate_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.linux.single_min": {
+      "value": 0.8399843250575483,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[1].single_root.minimum_case_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.linux.multi": {
+      "value": 1.2595189733410512,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[1].multi_root.aggregate_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.native.linux.multi_min": {
+      "value": 1.2239122439448025,
+      "fmt": "x3",
+      "prov": "docs/recognition/c38_linux_confirmation/C38_CROSS_MACHINE_ADJUDICATION_20260903.json :: executions[1].multi_root.minimum_workload_speedup",
+      "note": "frozen q64 contract; values above 1 mean the named candidate is faster"
+    },
+    "arch.complete.cm_over_dense": {
+      "value": 1.0533002936000821,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.best_fixed_cm_over_dense.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cm_over_dense_lo": {
+      "value": 1.0457643288196516,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.best_fixed_cm_over_dense.case_cluster_bootstrap_ci95_low",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cm_over_dense_hi": {
+      "value": 1.060967111692112,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.best_fixed_cm_over_dense.case_cluster_bootstrap_ci95_high",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cm_over_bitset": {
+      "value": 0.929550053969419,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cm_over_bitset_lo": {
+      "value": 0.9219159117813743,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_bootstrap_ci95_low",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cm_over_bitset_hi": {
+      "value": 0.9372462694795436,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_bootstrap_ci95_high",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.cases": {
+      "value": 78,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.direct_bitset_over_best_fixed_cm.case_clusters",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.complete.bitset_wins": {
+      "value": 78,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.A.direct_bitset_over_best_fixed_cm.case_clusters - candidate_case_wins",
+      "note": "single verified Linux/GCC host; complete explicit-relation contract"
+    },
+    "arch.multi.python_union.speedup": {
+      "value": 1.146961242654943,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.python_union_over_separate.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.python_union.lo": {
+      "value": 1.1266659278204303,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.python_union_over_separate.case_cluster_bootstrap_ci95_low",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.python_union.hi": {
+      "value": 1.1673265167341922,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.python_union_over_separate.case_cluster_bootstrap_ci95_high",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_union.speedup": {
+      "value": 1.237987205540231,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_separate.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_union.lo": {
+      "value": 1.2094897042554107,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_separate.case_cluster_bootstrap_ci95_low",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_union.hi": {
+      "value": 1.2635229003956634,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_separate.case_cluster_bootstrap_ci95_high",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_vs_python.speedup": {
+      "value": 1.002884067108386,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_python_union.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_vs_python.lo": {
+      "value": 0.9532511720690202,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_python_union.case_cluster_bootstrap_ci95_low",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.native_vs_python.hi": {
+      "value": 1.0465873727708035,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.native_union_over_python_union.case_cluster_bootstrap_ci95_high",
+      "note": "single verified Linux/GCC host; related multi-root contract"
+    },
+    "arch.multi.cases": {
+      "value": 12,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.C.python_union_over_separate.case_clusters",
+      "note": ""
+    },
+    "arch.ladder.q1.gcc.cse": {
+      "value": 0.8227266062871784,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.1.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q1.gcc.native": {
+      "value": 0.7274917675793245,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.1.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q1.gcc.native_min": {
+      "value": 0.5984575282852246,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.1.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q1.clang.cse": {
+      "value": 0.8204151017574389,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.1.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q1.clang.native": {
+      "value": 0.7210177419377255,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.1.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q1.clang.native_min": {
+      "value": 0.5998961848446426,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.1.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.gcc.cse": {
+      "value": 0.8979580725889508,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.4.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.gcc.native": {
+      "value": 0.8185384828295841,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.4.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.gcc.native_min": {
+      "value": 0.6068552545168506,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.4.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.clang.cse": {
+      "value": 0.8974117283333218,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.4.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.clang.native": {
+      "value": 0.8048907917371362,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.4.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q4.clang.native_min": {
+      "value": 0.6049330694765936,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.4.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.gcc.cse": {
+      "value": 1.0041478740937828,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.16.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.gcc.native": {
+      "value": 0.9854616798873357,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.16.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.gcc.native_min": {
+      "value": 0.6211141719096203,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.16.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.clang.cse": {
+      "value": 0.9946084903764483,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.16.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.clang.native": {
+      "value": 0.9605007621858178,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.16.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q16.clang.native_min": {
+      "value": 0.6030496468810488,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.16.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.gcc.cse": {
+      "value": 1.1003675355508402,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.gcc.native": {
+      "value": 1.0493485581414423,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.gcc.native_min": {
+      "value": 0.5671436217268969,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.clang.cse": {
+      "value": 1.0901610660623866,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.cse_flat_bigint.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.clang.native": {
+      "value": 1.0256215564754094,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.native_fused_slots.case_cluster_geomean_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.clang.native_min": {
+      "value": 0.5489976250316945,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.native_fused_slots.minimum_case_speedup",
+      "note": "within-host speedup over Python R2; absolute host timings are not compared"
+    },
+    "arch.ladder.q64.gcc.cse_min": {
+      "value": 1.0306431715124937,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.cse_flat_bigint.minimum_case_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.gcc.cse_wins": {
+      "value": 54,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.cse_flat_bigint.candidate_case_wins",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.gcc.native_fresh": {
+      "value": 0.9328369083353143,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.native_fused_slots.fresh.case_cluster_geomean_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.gcc.native_observed": {
+      "value": 1.3278464857082772,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.query_counts.64.speedup_over_r2.native_fused_slots.observed_regression.case_cluster_geomean_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.clang.cse_min": {
+      "value": 1.0130959233759051,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.cse_flat_bigint.minimum_case_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.clang.cse_wins": {
+      "value": 54,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.cse_flat_bigint.candidate_case_wins",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.clang.native_fresh": {
+      "value": 0.9107288948989337,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.native_fused_slots.fresh.case_cluster_geomean_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.clang.native_observed": {
+      "value": 1.3007181167687927,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.clang_epyc_9575f.query_counts.64.speedup_over_r2.native_fused_slots.observed_regression.case_cluster_geomean_speedup",
+      "note": "within-host q64 result; unfavorable cohort and case values retained"
+    },
+    "arch.ladder.q64.cases": {
+      "value": 54,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.*.query_counts.64.speedup_over_r2.cse_flat_bigint.case_clusters",
+      "note": ""
+    },
+    "arch.ladder.rows_per_host": {
+      "value": 27648,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: hosts.gcc_epyc_9655.rows",
+      "note": ""
+    },
+    "arch.ladder.memory_nonzero_rows": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: memory.prior_incremental_peak_nonzero_rows + memory.current_incremental_peak_nonzero_rows",
+      "note": "zero does not prove equal memory use; the field could not calibrate a memory router"
+    },
+    "arch.small.equivalence_delta.fresh_engine": {
+      "value": 8.238776869644267,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.equivalence_delta/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.equivalence_delta.resident_engine": {
+      "value": 13.214413699083787,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.equivalence_delta/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.exact_count.fresh_engine": {
+      "value": 8.0228591221153,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.exact_count/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.exact_count.resident_engine": {
+      "value": 15.542728309934503,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.exact_count/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.partial_context.fresh_engine": {
+      "value": 16.231786238112672,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.partial_context/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.partial_context.resident_engine": {
+      "value": 15.525608085152705,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.partial_context/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.sat_status.fresh_engine": {
+      "value": 14.698621189173425,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.sat_status/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.sat_status.resident_engine": {
+      "value": 13.266463156374305,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.sat_status/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.structural_reload": {
+      "value": 2.2002892959714693,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.structural_reload.winner_speedup_over.cm.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.version_history.fresh_engine": {
+      "value": 14.809365296658767,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.version_history/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.version_history.resident_engine": {
+      "value": 13.09267301506616,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.version_history/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.witness.fresh_engine": {
+      "value": 5.3795744931713845,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.witness/fresh_engine.winner_speedup_over.cm/fresh_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
+    },
+    "arch.small.witness.resident_engine": {
+      "value": 3.922884677050307,
+      "fmt": "x3",
+      "prov": "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json :: lanes.D.tasks.witness/resident_engine.winner_speedup_over.cm/resident_engine.case_cluster_geomean_speedup",
+      "note": "single verified Linux/GCC host; task-matched control over the CM arm"
     }
   }
 }

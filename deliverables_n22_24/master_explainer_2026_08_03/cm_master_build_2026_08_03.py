@@ -1,4 +1,4 @@
-"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-08-30).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-09-04).
 
 Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
 campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
@@ -163,6 +163,10 @@ P_LATE_EVIDENCE = HERE / "website_audit_2026-08-27" / "ACCEPTED-LATE-EVIDENCE.js
 P_CONTENT = HERE / "cm_master_content_2026_08_03.json"
 P_USE_CASE_CATALOG = HERE / "use_case_benchmarks_2026-08-27" / "CM-USE-CASE-BENCHMARK-CATALOG.json"
 P_C16_RESULTS = REPO / "docs" / "recognition" / "learning_milestone_c16_exact_screened_gf2_results.json"
+P_C38_ADJUDICATION = REPO / "docs" / "recognition" / "c38_linux_confirmation" / "C38_CROSS_MACHINE_ADJUDICATION_20260903.json"
+P_C38_FINAL = REPO / "docs" / "recognition" / "c38_linux_confirmation" / "RUNPOD_C38_FINAL_VERIFICATION_20260903.json"
+P_ARCHITECTURE_ANALYSIS = REPO / "docs" / "recognition" / "architecture_comparison_execution_retry_20260903" / "ANALYSIS.json"
+P_ARCHITECTURE_CROSS_MACHINE = REPO / "docs" / "recognition" / "architecture_query_ladder_cross_machine_execution_20260904" / "CROSS_MACHINE_ANALYSIS.json"
 
 # ---------------------------------------------------------------- load
 
@@ -218,6 +222,10 @@ late_evidence = load_json(P_LATE_EVIDENCE)
 content = load_json(P_CONTENT)
 use_case_catalog = load_json(P_USE_CASE_CATALOG)
 c16_results = load_json(P_C16_RESULTS)
+c38_adjudication = load_json(P_C38_ADJUDICATION)
+c38_final = load_json(P_C38_FINAL)
+architecture_analysis = load_json(P_ARCHITECTURE_ANALYSIS)
+architecture_cross_machine = load_json(P_ARCHITECTURE_CROSS_MACHINE)
 
 D: dict = {}
 
@@ -1541,6 +1549,252 @@ D["e20_feature_model_audit"], feature_model_numbers = build_feature_model_eviden
 for key, record in feature_model_numbers.items():
     num(key, record["value"], record["fmt"], record["prov"], record["note"])
 
+# ================================================================= E21
+# Current-source exact, non-neural architecture evidence (2026-09-03/04).
+# This is a task map, not a replacement for the frozen 2026-08-03 campaign or
+# a production-routing policy.  Keep the original Windows/MSVC result and its
+# Linux replication side by side, retain unfavorable cases, and never compare
+# absolute timings across unlike hosts.
+
+if c38_adjudication.get("schema") != "crse-c38-c37-native-cross-machine-adjudication/v1":
+    raise SystemExit("unexpected C38 adjudication schema")
+if not c38_adjudication.get("replication_admissible") or not c38_adjudication.get("exactness_verified_on_both"):
+    raise SystemExit("C38 exact cross-machine evidence is not admissible")
+if c38_adjudication.get("production_promotion") or c38_adjudication.get("training"):
+    raise SystemExit("C38 evidence unexpectedly changes production or training")
+if not c38_adjudication.get("guarded_opt_in_backend_retained") or c38_adjudication.get("unqualified_per_case_performance_claim"):
+    raise SystemExit("C38 guarded/per-case claim boundary changed")
+if c38_final.get("status") != "pass" or not c38_final.get("scientific_replication_complete"):
+    raise SystemExit("C38 Linux final verification is incomplete")
+
+if architecture_analysis.get("schema") != "cm-architecture-comparison-analysis/v1":
+    raise SystemExit("unexpected architecture-comparison schema")
+if architecture_analysis.get("status") != "verified_interpretation_complete":
+    raise SystemExit("architecture comparison is not verified complete")
+_arch_verify = architecture_analysis["verification"]
+if _arch_verify.get("status") != "verified_complete" or any(
+    _arch_verify.get(field) != 0
+    for field in ("semantic_mismatches", "schedule_mismatches", "source_or_artifact_mismatches")
+):
+    raise SystemExit("architecture comparison verification mismatches")
+if architecture_analysis["measurement_limits"].get("selector_or_neural_claim_permitted"):
+    raise SystemExit("architecture comparison unexpectedly permits selector/neural claims")
+
+if architecture_cross_machine.get("schema") != "cm-architecture-query-ladder-cross-machine-analysis/v1":
+    raise SystemExit("unexpected cross-machine query-ladder schema")
+if architecture_cross_machine.get("status") != "verified_cross_machine_interpretation_complete":
+    raise SystemExit("cross-machine query ladder is not verified complete")
+_cross_boundary = architecture_cross_machine["claim_boundary"]
+if not _cross_boundary.get("separate_host_and_compiler_replication_complete"):
+    raise SystemExit("cross-machine query-ladder replication is incomplete")
+if not _cross_boundary.get("task_specific_portability_interpretation_permitted"):
+    raise SystemExit("cross-machine task-specific interpretation is not permitted")
+if _cross_boundary.get("selector_or_neural_claim_permitted") or _cross_boundary.get("production_routing_change_permitted"):
+    raise SystemExit("cross-machine evidence unexpectedly permits routing or learning claims")
+if architecture_cross_machine["task_contract"].get("query_counts") != [1, 4, 16, 64]:
+    raise SystemExit("unexpected query-ladder counts")
+if not architecture_cross_machine["task_contract"].get("same_frozen_schedule_artifact_and_oracles"):
+    raise SystemExit("cross-machine query-ladder artifacts are not frozen identically")
+if architecture_cross_machine["memory"].get("prior_incremental_peak_nonzero_rows") != 0 or architecture_cross_machine["memory"].get("current_incremental_peak_nonzero_rows") != 0:
+    raise SystemExit("query-ladder memory boundary changed; review website wording")
+
+_c38_by_env = {run["environment"]: run for run in c38_adjudication["executions"]}
+if set(_c38_by_env) != {"windows_msvc", "linux_gcc"}:
+    raise SystemExit("unexpected C38 environment set")
+
+_native_portability_rows = []
+for _index, _env, _label in (
+    (0, "windows_msvc", "Windows / MSVC (C37 original)"),
+    (1, "linux_gcc", "Linux / GCC 12 / %s (C38 replication)" % c38_final["cpu_model"]),
+):
+    _run = _c38_by_env[_env]
+    _prefix = "arch.native.%s" % ("windows" if _env == "windows_msvc" else "linux")
+    _fields = (
+        ("single", _run["single_root"]["aggregate_speedup"], "executions[%d].single_root.aggregate_speedup" % _index),
+        ("single_min", _run["single_root"]["minimum_case_speedup"], "executions[%d].single_root.minimum_case_speedup" % _index),
+        ("multi", _run["multi_root"]["aggregate_speedup"], "executions[%d].multi_root.aggregate_speedup" % _index),
+        ("multi_min", _run["multi_root"]["minimum_workload_speedup"], "executions[%d].multi_root.minimum_workload_speedup" % _index),
+    )
+    _tokens = {}
+    for _name, _value, _field in _fields:
+        _token = "%s.%s" % (_prefix, _name)
+        num(_token, _value, "x3", "%s :: %s" % (rel(P_C38_ADJUDICATION), _field),
+            "frozen q64 contract; values above 1 mean the named candidate is faster")
+        _tokens[_name + "_token"] = _token
+    _native_portability_rows.append({"environment": _label, **_tokens})
+
+_lane_a = architecture_analysis["lanes"]["A"]
+_complete_metrics = (
+    ("arch.complete.cm_over_dense", _lane_a["best_fixed_cm_over_dense"]["case_cluster_geomean_speedup"], "lanes.A.best_fixed_cm_over_dense.case_cluster_geomean_speedup", "x3"),
+    ("arch.complete.cm_over_dense_lo", _lane_a["best_fixed_cm_over_dense"]["case_cluster_bootstrap_ci95_low"], "lanes.A.best_fixed_cm_over_dense.case_cluster_bootstrap_ci95_low", "x3"),
+    ("arch.complete.cm_over_dense_hi", _lane_a["best_fixed_cm_over_dense"]["case_cluster_bootstrap_ci95_high"], "lanes.A.best_fixed_cm_over_dense.case_cluster_bootstrap_ci95_high", "x3"),
+    ("arch.complete.cm_over_bitset", _lane_a["direct_bitset_over_best_fixed_cm"]["case_cluster_geomean_speedup"], "lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_geomean_speedup", "x3"),
+    ("arch.complete.cm_over_bitset_lo", _lane_a["direct_bitset_over_best_fixed_cm"]["case_cluster_bootstrap_ci95_low"], "lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_bootstrap_ci95_low", "x3"),
+    ("arch.complete.cm_over_bitset_hi", _lane_a["direct_bitset_over_best_fixed_cm"]["case_cluster_bootstrap_ci95_high"], "lanes.A.direct_bitset_over_best_fixed_cm.case_cluster_bootstrap_ci95_high", "x3"),
+    ("arch.complete.cases", _lane_a["direct_bitset_over_best_fixed_cm"]["case_clusters"], "lanes.A.direct_bitset_over_best_fixed_cm.case_clusters", "int"),
+    ("arch.complete.bitset_wins", _lane_a["direct_bitset_over_best_fixed_cm"]["case_clusters"] - _lane_a["direct_bitset_over_best_fixed_cm"]["candidate_case_wins"], "lanes.A.direct_bitset_over_best_fixed_cm.case_clusters - candidate_case_wins", "int"),
+)
+for _token, _value, _field, _fmt in _complete_metrics:
+    num(_token, _value, _fmt, "%s :: %s" % (rel(P_ARCHITECTURE_ANALYSIS), _field),
+        "single verified Linux/GCC host; complete explicit-relation contract")
+
+_lane_c = architecture_analysis["lanes"]["C"]
+for _short, _field in (
+    ("python_union", "python_union_over_separate"),
+    ("native_union", "native_union_over_separate"),
+    ("native_vs_python", "native_union_over_python_union"),
+):
+    _metric = _lane_c[_field]
+    for _suffix, _json_field in (
+        ("speedup", "case_cluster_geomean_speedup"),
+        ("lo", "case_cluster_bootstrap_ci95_low"),
+        ("hi", "case_cluster_bootstrap_ci95_high"),
+    ):
+        num("arch.multi.%s.%s" % (_short, _suffix), _metric[_json_field], "x3",
+            "%s :: lanes.C.%s.%s" % (rel(P_ARCHITECTURE_ANALYSIS), _field, _json_field),
+            "single verified Linux/GCC host; related multi-root contract")
+num("arch.multi.cases", _lane_c["python_union_over_separate"]["case_clusters"], "int",
+    "%s :: lanes.C.python_union_over_separate.case_clusters" % rel(P_ARCHITECTURE_ANALYSIS))
+
+_query_host_specs = (
+    ("gcc", "gcc_epyc_9655"),
+    ("clang", "clang_epyc_9575f"),
+)
+_query_rows = []
+for _q in (1, 4, 16, 64):
+    _row = {"query_count": _q}
+    for _short, _host_key in _query_host_specs:
+        _host = architecture_cross_machine["hosts"][_host_key]
+        if _host.get("rows") != 27648:
+            raise SystemExit("unexpected query-ladder row count for %s" % _host_key)
+        _cell = _host["query_counts"][str(_q)]
+        _row[_short + "_best"] = _cell["best_fixed"]["best_fixed_arm"]
+        for _metric_name, _arm, _json_field in (
+            ("cse", "cse_flat_bigint", "case_cluster_geomean_speedup"),
+            ("native", "native_fused_slots", "case_cluster_geomean_speedup"),
+            ("native_min", "native_fused_slots", "minimum_case_speedup"),
+        ):
+            _token = "arch.ladder.q%d.%s.%s" % (_q, _short, _metric_name)
+            num(_token, _cell["speedup_over_r2"][_arm][_json_field], "x3",
+                "%s :: hosts.%s.query_counts.%d.speedup_over_r2.%s.%s" % (
+                    rel(P_ARCHITECTURE_CROSS_MACHINE), _host_key, _q, _arm, _json_field),
+                "within-host speedup over Python R2; absolute host timings are not compared")
+            _row[_short + "_" + _metric_name + "_token"] = _token
+    _query_rows.append(_row)
+
+for _short, _host_key in _query_host_specs:
+    _q64 = architecture_cross_machine["hosts"][_host_key]["query_counts"]["64"]
+    for _name, _arm, _json_field in (
+        ("cse_min", "cse_flat_bigint", "minimum_case_speedup"),
+        ("cse_wins", "cse_flat_bigint", "candidate_case_wins"),
+        ("native_fresh", "native_fused_slots", "fresh.case_cluster_geomean_speedup"),
+        ("native_observed", "native_fused_slots", "observed_regression.case_cluster_geomean_speedup"),
+    ):
+        _node = _q64["speedup_over_r2"][_arm]
+        for _part in _json_field.split("."):
+            _node = _node[_part]
+        _fmt = "int" if _name == "cse_wins" else "x3"
+        num("arch.ladder.q64.%s.%s" % (_short, _name), _node, _fmt,
+            "%s :: hosts.%s.query_counts.64.speedup_over_r2.%s.%s" % (
+                rel(P_ARCHITECTURE_CROSS_MACHINE), _host_key, _arm, _json_field),
+            "within-host q64 result; unfavorable cohort and case values retained")
+_q64_case_counts = {
+    architecture_cross_machine["hosts"][host_key]["query_counts"]["64"]
+    ["speedup_over_r2"]["cse_flat_bigint"]["case_clusters"]
+    for _, host_key in _query_host_specs
+}
+if len(_q64_case_counts) != 1:
+    raise SystemExit("q64 host case counts differ")
+num("arch.ladder.q64.cases", _q64_case_counts.pop(), "int",
+    "%s :: hosts.*.query_counts.64.speedup_over_r2.cse_flat_bigint.case_clusters" % rel(P_ARCHITECTURE_CROSS_MACHINE))
+num("arch.ladder.rows_per_host", architecture_cross_machine["hosts"]["gcc_epyc_9655"]["rows"], "int",
+    "%s :: hosts.gcc_epyc_9655.rows" % rel(P_ARCHITECTURE_CROSS_MACHINE))
+num("arch.ladder.memory_nonzero_rows",
+    architecture_cross_machine["memory"]["prior_incremental_peak_nonzero_rows"]
+    + architecture_cross_machine["memory"]["current_incremental_peak_nonzero_rows"], "int",
+    "%s :: memory.prior_incremental_peak_nonzero_rows + memory.current_incremental_peak_nonzero_rows" % rel(P_ARCHITECTURE_CROSS_MACHINE),
+    "zero does not prove equal memory use; the field could not calibrate a memory router")
+
+_small_query_rows = []
+for _task_name, _task in architecture_analysis["lanes"]["D"]["tasks"].items():
+    _cm_keys = [key for key in _task["winner_speedup_over"] if key == "cm" or key.startswith("cm/")]
+    if len(_cm_keys) != 1:
+        raise SystemExit("expected one CM baseline for task %s" % _task_name)
+    _cm_key = _cm_keys[0]
+    _metric = _task["winner_speedup_over"][_cm_key]["case_cluster_geomean_speedup"]
+    _token = "arch.small.%s" % _task_name.replace("/", ".")
+    num(_token, _metric, "x3",
+        "%s :: lanes.D.tasks.%s.winner_speedup_over.%s.case_cluster_geomean_speedup" % (
+            rel(P_ARCHITECTURE_ANALYSIS), _task_name, _cm_key),
+        "single verified Linux/GCC host; task-matched control over the CM arm")
+    _small_query_rows.append({
+        "task": _task_name,
+        "winner": _task["fixed_winner"],
+        "over_cm_token": _token,
+    })
+
+D["e21_current_architecture"] = {
+    "as_of": architecture_cross_machine["generated_date"],
+    "kind": "exact non-neural task map; no selector fit or production-routing change",
+    "source_freezes": {
+        "architecture_comparison_sha256": architecture_analysis["inputs"]["freeze_sha256"],
+        "query_ladder_sha256": architecture_cross_machine["task_contract"]["freeze_sha256"],
+    },
+    "native_portability": {
+        "contract": "frozen C37/C38 q64 single-root native-fused/R2 and multi-root native-union/separate",
+        "rows": _native_portability_rows,
+        "guarded_opt_in_backend_retained": c38_adjudication["guarded_opt_in_backend_retained"],
+        "failed_cross_machine_gate": c38_adjudication["failed_cross_machine_gate"],
+    },
+    "complete_relation": {
+        "contract": _lane_a["contract"],
+        "best_cm": _lane_a["best_fixed_cm_arm"],
+        "decision": _lane_a["decision"],
+    },
+    "query_ladder": {
+        "contract": "separately timed q1/q4/q16/q64 repeated restrictions; within-host speedups over Python R2",
+        "hosts": [architecture_cross_machine["hosts"][key]["label"] for _, key in _query_host_specs],
+        "rows": _query_rows,
+        "best_fixed_agreement_count": architecture_cross_machine["transfer"]["best_fixed_agreement_count"],
+        "absolute_cross_host_timing_comparison_permitted": architecture_cross_machine["task_contract"]["absolute_cross_host_timing_comparison_permitted"],
+        "memory_router_calibration_permitted": architecture_cross_machine["memory"]["memory_router_calibration_permitted"],
+    },
+    "multi_root": {
+        "contract": _lane_c["contract"],
+        "decision": _lane_c["decision"],
+    },
+    "small_queries": {
+        "contract": architecture_analysis["lanes"]["D"]["contract"],
+        "decision": architecture_analysis["lanes"]["D"]["decision"],
+        "rows": _small_query_rows,
+    },
+    "limits": {
+        "neural_or_selector_claim": False,
+        "production_routing_change": False,
+        "universal_native_default": False,
+        "universal_break_even": False,
+        "host_and_compiler_effects_separable": False,
+        "publication_authorized_by_evidence_runs": False,
+    },
+    "provenance": [
+        {
+            "label": "C38 C37-native cross-machine adjudication",
+            "href": "../../" + rel(P_C38_ADJUDICATION),
+            "scope": "original Windows/MSVC and exact Linux/GCC replication",
+        },
+        {
+            "label": "Architecture comparison retry 002 analysis",
+            "href": "../../" + rel(P_ARCHITECTURE_ANALYSIS),
+            "scope": "complete relations, q64 restrictions, related roots, and smaller tasks on one Linux/GCC host",
+        },
+        {
+            "label": "Cross-machine query-ladder analysis",
+            "href": "../../" + rel(P_ARCHITECTURE_CROSS_MACHINE),
+            "scope": "separately timed q1/q4/q16/q64 on Linux/GCC and Linux/Clang hosts",
+        },
+    ],
+}
+
 # ---------------------------------------------------------------- content
 
 content["use_case_benchmark_catalog"] = use_case_catalog
@@ -1574,9 +1828,23 @@ def walk_strings(node):
             yield from walk_strings(v)
 
 
+def walk_data_tokens(node):
+    """Token references carried as data for table-driven expert-page rows."""
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if isinstance(key, str) and key.endswith("_token") and isinstance(value, str):
+                yield value
+            else:
+                yield from walk_data_tokens(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from walk_data_tokens(value)
+
+
 used: set[str] = set()
 for s in walk_strings(content):
     used.update(TOKEN_RE.findall(s))
+used.update(walk_data_tokens(D))
 
 # Templates and the shared library may also write {{token}} inside their prose
 # strings; hold them to the same rule.

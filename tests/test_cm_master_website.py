@@ -12,6 +12,9 @@ SITE = ROOT / "deliverables_n22_24" / "master_explainer_2026_08_03"
 RERUN = ROOT / "docs" / "audits" / "2026-08-25-cm-deep-performance" / "reruns" / "campaign-20260826-132038"
 THREE_LANE = ROOT / "docs" / "audits" / "2026-08-25-cm-deep-performance" / "remaining-work" / "three-lane-20260827-011536"
 USE_CASE_BENCHMARKS = SITE / "use_case_benchmarks_2026-08-27"
+C38_ADJUDICATION = ROOT / "docs" / "recognition" / "c38_linux_confirmation" / "C38_CROSS_MACHINE_ADJUDICATION_20260903.json"
+ARCHITECTURE_ANALYSIS = ROOT / "docs" / "recognition" / "architecture_comparison_execution_retry_20260903" / "ANALYSIS.json"
+ARCHITECTURE_CROSS_MACHINE = ROOT / "docs" / "recognition" / "architecture_query_ladder_cross_machine_execution_20260904" / "CROSS_MACHINE_ANALYSIS.json"
 
 
 class Parser(HTMLParser):
@@ -107,6 +110,75 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         self.assertEqual(c16["verification"]["source_cases_replayed"], 40)
         self.assertEqual(c16["verification"]["controls_replayed"], 12)
         self.assertEqual(c16["verification"]["measurement_rows_checked"], 360)
+
+    def test_expert_current_architecture_task_map_tracks_verified_evidence(self):
+        c38 = json.loads(C38_ADJUDICATION.read_text(encoding="utf-8"))
+        architecture = json.loads(ARCHITECTURE_ANALYSIS.read_text(encoding="utf-8"))
+        cross_machine = json.loads(ARCHITECTURE_CROSS_MACHINE.read_text(encoding="utf-8"))
+        current = self.data["e21_current_architecture"]
+        numbers = self.data["_numbers"]
+
+        self.assertEqual(
+            current["source_freezes"]["architecture_comparison_sha256"],
+            architecture["inputs"]["freeze_sha256"],
+        )
+        self.assertEqual(
+            current["source_freezes"]["query_ladder_sha256"],
+            cross_machine["task_contract"]["freeze_sha256"],
+        )
+
+        self.assertEqual(c38["status"], "exact_replication_passed_per_case_performance_not_confirmed")
+        self.assertTrue(c38["exactness_verified_on_both"])
+        self.assertTrue(current["native_portability"]["guarded_opt_in_backend_retained"])
+        self.assertEqual(
+            numbers["arch.native.windows.single"]["value"],
+            c38["executions"][0]["single_root"]["aggregate_speedup"],
+        )
+        self.assertEqual(
+            numbers["arch.native.linux.single_min"]["value"],
+            c38["executions"][1]["single_root"]["minimum_case_speedup"],
+        )
+
+        lane_a = architecture["lanes"]["A"]
+        self.assertEqual(current["complete_relation"]["best_cm"], "cm_ir_recursive_packed")
+        self.assertEqual(
+            numbers["arch.complete.cm_over_dense"]["value"],
+            lane_a["best_fixed_cm_over_dense"]["case_cluster_geomean_speedup"],
+        )
+        self.assertEqual(
+            numbers["arch.complete.cm_over_bitset"]["value"],
+            lane_a["direct_bitset_over_best_fixed_cm"]["case_cluster_geomean_speedup"],
+        )
+        self.assertEqual(numbers["arch.complete.bitset_wins"]["value"], 78)
+
+        query_rows = {row["query_count"]: row for row in current["query_ladder"]["rows"]}
+        self.assertEqual(query_rows[1]["gcc_best"], "r2_topological_liveness")
+        self.assertEqual(query_rows[4]["clang_best"], "r2_topological_liveness")
+        self.assertEqual(query_rows[16]["gcc_best"], "cse_flat_bigint")
+        self.assertEqual(query_rows[16]["clang_best"], "r2_topological_liveness")
+        self.assertEqual(query_rows[64]["gcc_best"], "cse_flat_bigint")
+        self.assertEqual(query_rows[64]["clang_best"], "cse_flat_bigint")
+        self.assertEqual(
+            numbers["arch.ladder.q64.clang.cse"]["value"],
+            cross_machine["hosts"]["clang_epyc_9575f"]["query_counts"]["64"]
+            ["speedup_over_r2"]["cse_flat_bigint"]["case_cluster_geomean_speedup"],
+        )
+        self.assertFalse(current["query_ladder"]["absolute_cross_host_timing_comparison_permitted"])
+        self.assertFalse(current["query_ladder"]["memory_router_calibration_permitted"])
+
+        task_rows = {row["task"]: row for row in current["small_queries"]["rows"]}
+        self.assertEqual(task_rows["exact_count/fresh_engine"]["winner"], "cnf/fresh_engine")
+        self.assertEqual(task_rows["sat_status/resident_engine"]["winner"], "sat/resident_engine")
+        for row in current["native_portability"]["rows"] + current["query_ladder"]["rows"] + current["small_queries"]["rows"]:
+            for key, value in row.items():
+                if key.endswith("_token"):
+                    self.assertIn(value, numbers, (key, value))
+
+        expert = (SITE / "cm_expert_template.html").read_text(encoding="utf-8")
+        self.assertIn('section("x0", "Current", "Current architecture task map — 2026-09-04"', expert)
+        self.assertIn("{{arch.native.windows.single}}", expert)
+        self.assertIn("CSE-flat and direct BitSet are comparison controls, not CM-family members", expert)
+        self.assertIn("No neural training or selector fit was performed", expert)
 
     def test_master_focuses_top_navigation_and_keeps_specialist_views_at_bottom(self):
         template = (SITE / "cm_master_template.html").read_text(encoding="utf-8")
