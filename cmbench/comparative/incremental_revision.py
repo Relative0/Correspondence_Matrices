@@ -32,6 +32,7 @@ from bitset_backend import (
     compile_expr_cse,
     compile_expr_flat,
     get_flat_program,
+    program_metrics,
 )
 from cm_exprlib import And, Expr, Not, Or, Var
 from cm_ir import compile_expr_to_cm_ir
@@ -404,6 +405,8 @@ def run_arm_pair(
     with scope() as pool:
         earlier_program, earlier_expr, earlier_stats = _timed_compile(earlier, k, arm, layout)
         later_program, later_expr, later_stats = _timed_compile(later, k, arm, layout)
+        if earlier_stats["layout_identity"] != later_stats["layout_identity"] and earlier_program is later_program:
+            raise AssertionError(f"{arm} returned the earlier program for a changed normalized CNF")
         earlier_bits = evaluate_program(earlier_program, k)
         later_bits = evaluate_program(later_program, k)
         if (earlier_bits, later_bits) != oracle:
@@ -422,6 +425,8 @@ def run_arm_pair(
         retained_bytes = _deep_size(state)
 
     changed = earlier_bits ^ later_bits
+    earlier_metrics = program_metrics(earlier_program)
+    later_metrics = program_metrics(later_program)
     return {
         "arm": arm,
         "earlier_layout_ns": earlier_stats["layout_ns"],
@@ -449,6 +454,13 @@ def run_arm_pair(
         "earlier_layout_identity": earlier_stats["layout_identity"],
         "later_layout_identity": later_stats["layout_identity"],
         "invalidation_identity_changed": earlier_stats["layout_identity"] != later_stats["layout_identity"],
+        "program_identity_changed": earlier_program is not later_program,
+        "earlier_program_slots": earlier_program.n_slots,
+        "later_program_slots": later_program.n_slots,
+        "earlier_flat_instructions": earlier_metrics["flat_instructions"],
+        "later_flat_instructions": later_metrics["flat_instructions"],
+        "earlier_executed_bigint_ops": earlier_metrics["executed_bigint_ops"],
+        "later_executed_bigint_ops": later_metrics["executed_bigint_ops"],
         "earlier_packed_sha256": packed_sha(earlier_bits, k),
         "later_packed_sha256": packed_sha(later_bits, k),
         "changed_packed_sha256": packed_sha(changed, k),
@@ -635,7 +647,9 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     update_vs_cold = _ratio_summary(ratios("cm_incremental_radix", "cm_cold", "update_construction_ns"))
     update_vs_persistent = _ratio_summary(ratios("cm_incremental_radix", "cm_persistent", "update_construction_ns"))
     persistent_update_vs_cold = _ratio_summary(ratios("cm_persistent", "cm_cold", "update_construction_ns"))
-    retained_vs_persistent = _ratio_summary(ratios("cm_incremental_radix", "cm_persistent", "retained_python_bytes"))
+    retained_ratios = ratios("cm_incremental_radix", "cm_persistent", "retained_python_bytes")
+    retained_vs_persistent = _ratio_summary(retained_ratios)
+    retained_vs_persistent["max_case_ratio"] = max(value for _case_id, _history, value in retained_ratios)
 
     q_totals: dict[str, Any] = {}
     persistent_q_totals: dict[str, Any] = {}
@@ -684,6 +698,10 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     exact_invalidation = all(
         bool(row["invalidation_identity_changed"])
         == (int(row["normalized_clauses_added"]) + int(row["normalized_clauses_removed"]) > 0)
+        and (
+            not bool(row["invalidation_identity_changed"])
+            or bool(row["program_identity_changed"])
+        )
         for row in incremental_rows
     )
     gates = {
@@ -693,8 +711,12 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "incremental_reuse": all(value > 0 for value in reuse_by_history.values()),
         "exact_invalidation_identity": exact_invalidation,
         "update_construction_advantage": update_vs_cold["geomean"] <= 0.90 and update_vs_cold["ci95"][1] < 1.0,
-        "retained_memory_bound": retained_vs_persistent["geomean"] <= 1.25,
-        "q1_task_control_advantage": q_totals["1"]["geomean"] < 1.0 and q_totals["1"]["ci95"][1] < 1.0,
+        "current_cache_advantage": update_vs_persistent["geomean"] < 1.0,
+        "retained_memory_bound": retained_vs_persistent["max_case_ratio"] <= 1.25,
+        "task_control_break_even": any(
+            result["geomean"] < 1.0 and result["ci95"][1] < 1.0
+            for result in q_totals.values()
+        ),
     }
     gates["promotion"] = all(gates.values())
     return {

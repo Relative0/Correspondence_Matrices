@@ -1,7 +1,9 @@
 from collections import Counter, OrderedDict
 
 import cm_ir
+import pytest
 from cmbench.comparative import incremental_revision as subject
+from scripts import cm_incremental_revision_verify as verifier
 
 
 def test_normalize_cnf_is_semantic_and_deterministic():
@@ -15,6 +17,13 @@ def test_direct_cnf_bits_uses_x0_as_least_significant_assignment_bit():
     assert subject.direct_cnf_bits(((1,),), 2) == 0b1010
     assert subject.direct_cnf_bits(((-2,),), 2) == 0b0011
     assert subject.direct_cnf_bits(((1,), (-2,)), 2) == 0b0010
+
+
+def test_independent_raw_cnf_verifier_handles_duplicate_and_tautological_clauses():
+    raw = [[1, 1], [2, -2, 1], [-2], [-2]]
+    assert verifier.raw_cnf_bits(raw, 2) == subject.direct_cnf_bits(subject.normalize_cnf(raw, 2), 2)
+    with pytest.raises(ValueError, match="duplicate JSON key"):
+        verifier.strict_json('{"a":1,"a":2}')
 
 
 def test_incremental_radix_reuses_unchanged_regions_and_changes_source_identity():
@@ -122,6 +131,7 @@ def test_summary_keeps_incremental_and_current_persistent_controls_separate():
                 "layout_branch_hits_update": 0,
                 "persistent_hits_update": int(arm == "cm_incremental_radix"),
                 "invalidation_identity_changed": changed,
+                "program_identity_changed": changed,
                 **change,
             })
     summary = subject.summarize(rows)
@@ -129,6 +139,7 @@ def test_summary_keeps_incremental_and_current_persistent_controls_separate():
     assert summary["confirmation_case_count"] == 42
     assert summary["incremental_update_over_cold_cm"]["geomean"] == 0.4
     assert summary["current_persistent_update_over_cold_cm"]["geomean"] == 0.5
+    assert summary["incremental_retained_over_current_persistent_cm"]["max_case_ratio"] == 1.1
     assert set(summary["current_persistent_total_over_cse_flat_by_q"]) == {
         str(q) for q in subject.QUERY_COUNTS
     }
