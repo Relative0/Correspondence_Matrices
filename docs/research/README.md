@@ -5,6 +5,15 @@ interactive explainer, raw measurements, source snapshots and tests locally.
 This library integrates the project's August 27–September 3, 2026 follow-up work.
 Evidence boundaries and unsuccessful experiments are retained.
 
+Latest incremental-compilation decision:
+[the source-closed 120-case local gate](CM_INCREMENTAL_REVISION_LOCAL_GATE_RESULT_2026_09_04.md)
+verified 3,000/3,000 rows but did not promote the digest-radix prototype. The current
+persistent CM cache compiled updates faster and retained less Python-owned memory,
+while CSE-flat remained faster end-to-end through q64. Only three of 42 confirmation
+cases contained a normalized clause change, so no RunPod follow-up or public speed
+claim is warranted from this workload. A distinct follow-up should use the
+[changed-cone hardware-revision task prompt](CM_CHANGED_CONE_HARDWARE_TRACE_NEW_TASK_PROMPT_2026_09_04.md).
+
 Latest exact-execution and comparison decision:
 [C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md), the
 [four-lane local functional admission](CM_FOUR_LANE_COMPARISON_HARNESS_FUNCTIONAL_ADMISSION_2026_09_03.md),

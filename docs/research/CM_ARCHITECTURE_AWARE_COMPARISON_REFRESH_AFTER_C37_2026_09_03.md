@@ -264,11 +264,13 @@ the evidence and denominator.
    retains historical results and dates, and passes the focused generated-site checks.
    External publication remains controlled by the authorized `origin/main` push.
 
-The comparison refresh does not authorize another generic timing sweep. Its next
-research successor is a separately frozen incremental-compilation experiment over
-real adjacent revisions, with changed-cone reuse and retained memory measured against
-full rebuild. Compact-key and dense-layout changes stay deferred until that experiment
-identifies either cost as material.
+The comparison refresh does not authorize another generic timing sweep. Its first
+incremental-compilation successor is now complete: 3,000 source-closed local rows were
+exact, but the digest-radix prototype was slower than the current persistent cache,
+retained more Python-owned memory, remained behind CSE-flat through q64, and saw
+normalized changes in only three of 42 confirmation cases. It is stopped without a
+RunPod follow-up. Compact-key and dense-layout changes stay deferred until a better-
+activated real revision workload identifies either cost as material.
 
 This sequence highlights where a CM or CM-family architecture is useful without turning
 a workload-specific advantage into a general claim.

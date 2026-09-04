@@ -17,7 +17,7 @@ if str(ROOT) not in sys.path:
 from cmbench.comparative import incremental_revision as experiment  # noqa: E402
 
 
-DEFAULT_RUN = ROOT / "docs" / "research" / "verification" / "incremental-revision-local-gate-retry-002-2026-09-04"
+DEFAULT_RUN = ROOT / "docs" / "research" / "verification" / "incremental-revision-local-gate-retry-003-2026-09-04"
 
 
 def file_sha(path: Path) -> str:

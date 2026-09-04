@@ -35,7 +35,7 @@ value can be measured.
 | H6 representation-specific memory estimates | **Isolated measurement verified; routing change deferred** | Every retry cell ran in a fresh Linux fork child with peak RSS from `wait4`, an inherited `/proc/self/statm` baseline, and full isolation lifecycle reported separately. Child peak was below the inherited baseline in all 27,648 rows, making every nonnegative incremental value zero; absolute host peak data are descriptive and cannot calibrate a default memory router. |
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
-| H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
+| H9 incremental compilation across edits | **Local prototype tested; not promoted; better-activated trace still open** | A source-closed 120-case natural feature-model gate produced 3,000 exact rows. The radix prototype was 0.442x versus cold CM update construction, but the existing persistent cache was better at 0.400x; the prototype was 1.104x versus that cache, retained 1.678x its Python-owned memory (3.793x worst case), and remained 2.875x/1.459x versus CSE-flat at q1/q64. Only three of 42 confirmation cases changed after normalization, all from one history, so no RunPod follow-up is justified. |
 | H10 task-matched external controls | **Timed, replicated, and scoped for public presentation** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. Two corrected 27,648-cell Lane-B runs then showed R2 at q1/q4, a host-sensitive q16 boundary, robust CSE-flat q64 advantage, and a mixed native cohort result. The expert page presents these as task-specific results rather than a universal ranking. |
 
 ## Accepted architecture changes
@@ -81,10 +81,11 @@ but they do prohibit training a router from this confirmation result.
    it. Focused website checks passed. External deployment remains the effect of pushing
    the reviewed branch to `origin/main`.
 
-The next distinct non-neural research boundary is H9: freeze a realistic adjacent-
-revision trace and measure full rebuild against exact changed-cone reuse, including
-retained-memory accounting. H2/H3 layout work remains gated on that workload producing
-a profile that identifies key construction or dense copying as a material cost.
+The first H9 local gate is complete and stopped its digest-radix prototype. A future H9
+attempt requires a better-activated real adjacent-revision trace—preferably hardware
+revisions with stable cone identity—before any more optimization or remote timing.
+H2/H3 layout work remains gated on such a workload producing a profile that identifies
+key construction or dense copying as a material cost.
 
 The corrected result permits an observed four-point separate-host portability map and
 descriptive host-memory reporting. It is not a universal break-even claim, a selector or
