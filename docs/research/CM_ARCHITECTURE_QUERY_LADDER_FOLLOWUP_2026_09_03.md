@@ -3,7 +3,7 @@
 Date: 2026-09-03
 Updated: 2026-09-04
 Scope: non-neural repeated exact restrictions (architecture comparison Lane B)
-Status: retry 002 verified on one Linux/GCC host; cross-machine package awaiting authorization
+Status: separate-host/compiler replication complete and locally reverified
 
 ## What this phase corrects
 
@@ -43,15 +43,25 @@ $0.05 total ceiling, ten-minute cleanup, and twelve-minute reconciliation. The r
 does not authorize neural training, selector fitting, routing changes, website changes,
 publication, or a Git push.
 
-## Remaining gates
+## Gate status
 
-1. **Prepared, not authorized:** replicate the corrected contract on a separate
-   physical machine/compiler. The exact 27,648-cell package requests RunPod `cpu5c`,
-   rejects the prior EPYC 9655 CPU model before setup or measurement, and uses pinned
-   Debian Clang 14. Its isolated local replay passed without timing evidence or a cloud
-   resource.
-2. Only then prepare task-labelled public sections; preserve the historical Windows
+1. **Complete:** the exact 27,648-cell contract replicated on RunPod `cpu5c`, AMD EPYC
+   9575F, and pinned Debian Clang 14. All rows passed remote verification, the local
+   verifier reproduced the result byte-for-byte, and controller plus later independent
+   inventories were empty.
+2. **Pending under a separate boundary:** prepare task-labelled public sections; preserve the historical Windows
    1.472x result with its date/platform rather than replacing it.
+
+## Cross-machine result
+
+R2 remained the best fixed arm at q1/q4 on both hosts. The q16 fixed-arm result straddled
+the threshold: CSE-flat bigint was 1.004x over R2 under GCC but 0.995x under Clang. At
+q64, CSE-flat was stable at 1.100x and 1.090x, won all 54 cases on both hosts, and kept
+minimum-case speedups above 1.0. Native q64 remained an aggregate point advantage at
+1.049x and 1.026x, but its minimum fell from 0.567x to 0.549x and its case-cluster
+interval crossed 1.0 on both hosts. The observed C36 cohort stayed favorable and the
+fresh cohort stayed unfavorable. This confirms a portable task map while rejecting a
+universal native-default claim.
 
 ## Attempt 001 disposition
 

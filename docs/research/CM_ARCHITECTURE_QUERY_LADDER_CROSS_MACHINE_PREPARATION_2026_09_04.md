@@ -2,7 +2,7 @@
 
 Date: 2026-09-04
 Scope: exact, non-neural repeated-restriction portability check
-Status: package validated; cloud execution not authorized
+Status: exact run complete, locally reverified, and cleaned up
 
 ## Prepared comparison
 
@@ -35,7 +35,7 @@ verify every manifest source hash, the unchanged schedule, the host/compiler gua
 the exact prior-result bindings, transport-source bindings, and refusal to proceed
 without the new authorization record.
 
-## Authorization boundary
+## Authorization and execution
 
 The immutable request is
 `docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/RUNPOD_ARCHITECTURE_QUERY_LADDER_CROSS_MACHINE_AUTHORIZATION_REQUEST_20260904.json`
@@ -46,5 +46,23 @@ a $0.04 cumulative hard ceiling including the preceding ladder attempts. The Pod
 2 vCPU, at least 4 GB RAM, 12 GB disposable disk, no persistent or network volume,
 ten-minute cleanup, and twelve-minute inventory reconciliation.
 
-No cloud resource has been created. The prior authorization is not reusable. Execution
-requires the exact new approval text recorded in the request.
+The user authorized the exact request. One `cpu5c` Pod was created at $0.07/hour with
+Pod identity `gv80d48w0afk3m` and machine-placement identity `3n7hlaf04ogy`. Its actual
+CPU was an AMD EPYC 9575F rather than the prior EPYC 9655. The pinned Clang package and
+compiler identity passed before the workload.
+
+The run completed all 27,648 cells in the frozen schedule. The remote independent
+verifier reported zero semantic, schedule, source/artifact, and memory-field mismatches;
+a later local replay reproduced that verification byte-for-byte. Controller cleanup and
+a separate later inventory query both found empty RunPod v1/v2 inventories. No
+replacement was created. Estimated compute cost was $0.002916, bringing the three ladder
+attempts to an estimated $0.014499, below the $0.04 cumulative ceiling.
+
+Within-host results transferred with one narrow boundary change. Python R2 remained the
+best fixed arm at q1/q4 on both hosts. CSE-flat bigint narrowly crossed R2 at q16 under
+GCC (1.004x) but narrowly missed under Clang (0.995x), so q16 is not a portable
+crossover. At q64, CSE-flat remained best: 1.100x under GCC and 1.090x under Clang, with
+all 54 case wins and minimums of 1.031x and 1.013x. Native fused slots remained mixed:
+1.049x and 1.026x q64 aggregate speedups, but minimums of 0.567x and 0.549x; the observed
+C36 cohort stayed favorable while the fresh cohort stayed unfavorable. The result
+supports a task-labelled portability map, not a universal native default or selector.

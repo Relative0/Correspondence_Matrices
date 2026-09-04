@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/usr/local/bin/python",
+    "-c",
+    "import hashlib\nimport json\nfrom pathlib import Path\nimport sys\n\noutput = Path(sys.argv[1])\nruntime = json.loads(Path(sys.argv[2]).read_text(encoding='utf-8'))\ncpu_model = runtime.get('cpu_model')\npod_id = runtime.get('runpod_pod_id')\nif not isinstance(cpu_model, str) or not cpu_model or cpu_model == 'AMD EPYC 9655 96-Core Processor':\n    raise SystemExit('replication host CPU model is not independent from prior host class')\nif not isinstance(pod_id, str) or not pod_id or pod_id == 'r5wx3ximopqw7g':\n    raise SystemExit('replication Pod identity is not new')\nboot_path = Path('/proc/sys/kernel/random/boot_id')\nboot_id = boot_path.read_text(encoding='utf-8').strip()\nif not boot_id:\n    raise SystemExit('host boot identity unavailable')\ndocument = {\n    'schema': 'cm-architecture-query-ladder-cross-machine-host-preflight/v1',\n    'status': 'pass',\n    'prior_pod_id': 'r5wx3ximopqw7g',\n    'current_pod_id': pod_id,\n    'prior_cpu_model': 'AMD EPYC 9655 96-Core Processor',\n    'current_cpu_model': cpu_model,\n    'cpu_model_differs': True,\n    'boot_id_sha256': hashlib.sha256(boot_id.encode()).hexdigest(),\n}\noutput.write_text(json.dumps(document, indent=2, sort_keys=True) + '\\n', encoding='utf-8')",
+    "/workspace/cm-memory-smoke/run-output/CROSS-MACHINE-HOST-PREFLIGHT.json",
+    "/workspace/cm-memory-smoke/run-output/RUNTIME.json"
+  ],
+  "name": "architecture-cross-machine-host-preflight",
+  "returncode": 0,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wall_s": 0.03173990175127983
+}

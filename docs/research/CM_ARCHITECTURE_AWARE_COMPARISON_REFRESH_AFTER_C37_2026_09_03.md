@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM-family benchmarking and public evidence  
-Status: corrected q-ladder verified on one Linux/GCC host; cross-machine package awaiting authorization
+Status: corrected q-ladder verified on separate Linux/GCC and Linux/Clang hosts
 
 ## Current implementation status
 
@@ -76,8 +76,9 @@ Those two measurement limitations were corrected by the later architecture query
 retry 002. It completed 27,648 distinct q1/q4/q16/q64 cells and independently verified
 the isolated-child `wait4` RSS and pre-fork baseline fields. This supplies a one-host
 setup-amortization curve, but not calibrated memory routing: the child peak was
-below the inherited baseline—all 27,648 incremental values were zero. A later
-separate physical-machine/compiler replication remains required for publication.
+below the inherited baseline—all 27,648 incremental values were zero. The later
+separate physical-machine/compiler replication is now complete; publication remains a
+separate controlled boundary.
 
 ## Corrected query-ladder result
 
@@ -96,6 +97,24 @@ minimum failed the frozen 0.95 floor. Native was strong on the 18 observed C36 c
 native-default claim and do not authorize selector fitting. They also reinforce why
 CSE-flat and other current controls must be rerun rather than left as historical fixed
 denominators.
+
+## Cross-machine query-ladder result
+
+The exact ladder then completed on a different RunPod flavor, CPU model, and compiler:
+`cpu5c`, AMD EPYC 9575F, and Debian Clang 14 instead of `cpu3c`, EPYC 9655, and GCC 12.
+All 27,648 cells passed independent verification, and a local verifier reproduced the
+verification byte-for-byte. The Pod was deleted; controller and later independent
+inventories were empty. Estimated replication cost was $0.002916.
+
+The fixed-arm map agreed at three of four query counts. R2 led q1/q4 on both hosts;
+CSE-flat bigint led q64 on both. At q16, CSE-flat changed from 1.004x under GCC to
+0.995x under Clang, which is a threshold-straddling sample rather than a portable
+break-even claim. At q64, CSE-flat changed only from 1.100x to 1.090x, won every case on
+both hosts, and retained minimums above 1.0. Native changed from 1.049x to 1.026x but
+again failed the 0.95 minimum floor (0.567x and 0.549x); its observed cohort remained
+favorable and fresh cohort unfavorable. The portable result is therefore task-specific
+and favors CSE-flat for this q64 explicit-residual contract, not a universal native
+default.
 
 ## Decision
 
@@ -237,12 +256,9 @@ the evidence and denominator.
    isolated-child `wait4` peak RSS with a pre-fork inherited baseline, charges explicit
    cache clearing, delegates remaining heap release to child exit, and reports full
    isolation lifecycle separately. Independent verification found zero mismatches.
-7. **Prepared, not authorized:** replicate the corrected current-source comparison on
-   a separate machine/compiler. The immutable one-create package preserves all 27,648
-   cells, requests a different RunPod CPU flavor and actual CPU model, and replaces GCC
-   12 with pinned Debian Clang 14. Local isolated-tree validation produced no timing or
-   decision-bearing evidence.
-8. **Pending after those gates:** update `expert.html` with scoped current sections, retain historical
+7. **Complete:** the exact 27,648-cell ladder replicated on a different RunPod flavor,
+   CPU model, and compiler with zero verification mismatches and empty final inventories.
+8. **Pending under a separate boundary:** update `expert.html` with scoped current sections, retain historical
    results and dates, run generated-site consistency tests, and publish only under separate authorization.
 
 This sequence highlights where a CM or CM-family architecture is useful without turning

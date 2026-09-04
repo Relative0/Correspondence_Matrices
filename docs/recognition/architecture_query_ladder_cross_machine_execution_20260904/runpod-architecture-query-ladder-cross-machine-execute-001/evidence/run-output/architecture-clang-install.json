@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/usr/local/bin/python",
+    "-c",
+    "import hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\n\noutput = Path(sys.argv[1])\nenvironment = os.environ.copy()\nenvironment['DEBIAN_FRONTEND'] = 'noninteractive'\nsubprocess.run(['apt-get', 'update', '-qq'], check=True, env=environment)\nsubprocess.run([\n    'apt-get', 'install', '-y', '-qq', '--no-install-recommends',\n    'clang-14=1:14.0.6-12',\n], check=True, env=environment)\nresolved = shutil.which('clang-14')\nif resolved is None:\n    raise SystemExit('version-locked Clang executable unavailable after install')\nexecutable = Path(resolved).resolve()\npackage_version = subprocess.run([\n    'dpkg-query', '-W', '-f=${Version}', 'clang-14',\n], check=True, capture_output=True, text=True, timeout=20).stdout.strip()\nversion = subprocess.run([\n    str(executable), '--version',\n], check=True, capture_output=True, text=True, timeout=20).stdout.strip()\nif package_version != '1:14.0.6-12' or 'clang version 14.0.6' not in version:\n    raise SystemExit('installed Clang identity differs from frozen compiler contract')\ndocument = {\n    'schema': 'cm-architecture-query-ladder-clang-install/v1',\n    'status': 'pass',\n    'apt_package': 'clang-14',\n    'apt_package_version': package_version,\n    'compiler_executable': str(executable),\n    'compiler_executable_sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),\n    'compiler_version': version,\n}\noutput.write_text(json.dumps(document, indent=2, sort_keys=True) + '\\n', encoding='utf-8')",
+    "/workspace/cm-memory-smoke/run-output/CLANG-INSTALL.json"
+  ],
+  "name": "architecture-clang-install",
+  "returncode": 0,
+  "stderr_sha256": "f77216c41aadf6c667ac1a602069951966cea350daab793ffe11ae0de1225ddc",
+  "stdout_sha256": "c86527e301fb7ebc591e85bfc7e6aef044e4c6b187481576000e9f1b14111d61",
+  "wall_s": 3.9775530360639095
+}

@@ -3,7 +3,7 @@
 Date: 2026-09-03  
 Updated: 2026-09-04
 Scope: exact, non-neural CM and CM-family implementation  
-Status: recommendations reconciled; query-ladder verified on one host; replication package awaiting authorization
+Status: recommendations reconciled; query-ladder verified across separate host/compiler pairs
 
 ## Bottom line
 
@@ -30,12 +30,12 @@ value can be measured.
 | H2 compact CM IR keys | **Deferred** | The dossier identifies possible structural-hash/key cost, but no current profile establishes it as a top cost after native fusion. A key redesign would affect canonicalization, interning, serialization, and cache identity and should not be mixed into the comparison freeze. |
 | H3 dense CM layout/copy fusion | **Measured path retained; new rewrite deferred** | Dense CM is present in the eight-arm functional lane and matches the independent vector oracle. No caller-visible profile yet isolates one safe layout/copy change with a predeclared benefit; representation-specific memory calibration remains required. |
 | H4 no-reinflation boundaries | **Implemented and retested; no promotion claim** | Full and reduced no-reinflation paths are exact and included where they return the same artifact. Historical results show wrapper/conversion overhead can erase the avoided dense rebuild, so it remains an arm rather than a universal default. |
-| H5 prepared/reused break-even | **Four-point one-host ladder complete; replication pending** | After attempt 001 closed incomplete, corrected retry 002 independently verified all 27,648 q1/q4/q16/q64 cells. R2 was the best fixed arm at q1/q4, CSE-flat bigint at q16/q64, and native first crossed R2 only by point estimate at q64. This is an observed sampled ladder, not an interpolated universal threshold. |
+| H5 prepared/reused break-even | **Four-point separate-host ladder complete** | Both exact 27,648-cell runs verified q1/q4/q16/q64. R2 led q1/q4 on both hosts; q16 straddled the CSE-flat/R2 threshold; CSE-flat led q64 on both. Native crossed R2 only by aggregate point estimate at q64 and failed its minimum floor on both. This is an observed sampled ladder, not an interpolated universal threshold. |
 | H6 representation-specific memory estimates | **Isolated measurement verified; routing change deferred** | Every retry cell ran in a fresh Linux fork child with peak RSS from `wait4`, an inherited `/proc/self/statm` baseline, and full isolation lifecycle reported separately. Child peak was below the inherited baseline in all 27,648 rows, making every nonnegative incremental value zero; absolute host peak data are descriptive and cannot calibrate a default memory router. |
 | H7 native/fused words | **Implemented, cross-machine exact, guarded** | C37 confirmed Windows/MSVC and C38 rebuilt on Linux/GCC. Aggregate single-root and multi-root gains transferred, but one Linux case was 0.840x and failed the 0.95x floor. Native stays opt-in with SHA/ABI checks and Python R2 fallback. |
 | H8 parallel/streamed CM | **Deferred by activation gate** | Existing multiprocessing evidence is overhead-bound and the current target tasks do not require a sufficiently large streamed/live-tensor contract. No new compute is justified. |
 | H9 incremental compilation across edits | **Open, lower priority** | Persistence and version-history contracts exist, but the audited project still lacks a realistic changed-version trace with measured changed-cone reuse and retained-memory accounting. This is a distinct future task, not part of the complete/restriction refresh. |
-| H10 task-matched external controls | **Timed; corrected Lane B verified on one Linux host** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. The corrected Lane-B retry then verified 27,648 separately timed q1/q4/q16/q64 cells. CSE-flat bigint led q16/q64; native was mixed by cohort. Cross-machine replication remains required before a public update. |
+| H10 task-matched external controls | **Timed; corrected Lane B replicated across Linux hosts/compilers** | The broad comparison's 19,646 verified rows kept unlike artifacts separate: direct BitSet led the complete-vector lane, shared multi-root union was consistently beneficial, and natural CNF/CSE/SAT controls led smaller tasks. Two corrected 27,648-cell Lane-B runs then showed R2 at q1/q4, a host-sensitive q16 boundary, robust CSE-flat q64 advantage, and a mixed native cohort result. Public presentation remains separately controlled. |
 
 ## Accepted architecture changes
 
@@ -71,13 +71,14 @@ but they do prohibit training a router from this confirmation result.
    RSS and lifecycle fields. The zero-floored incremental field cannot fit a memory router.
 4. **Complete:** attempt 001 is closed incomplete, its 83% inherited-heap collection
    artifact is diagnosed, and corrected retry cleanup is only 0.23% of task time.
-5. **Prepared, not authorized:** replicate on a separate physical machine/compiler.
-   The package preserves the frozen ladder, rejects the prior CPU model before setup or
-   measurement, and records a pinned Clang compiler identity. Only after a complete,
-   independently verified result may task-labelled sections be prepared for
-   `expert.html`; retain historical dates and the Windows-only 1.472x result rather than
-   silently replacing it.
+5. **Complete:** the frozen ladder replicated on a separate RunPod flavor, AMD EPYC
+   9575F CPU model, and pinned Clang 14 compiler. All 27,648 cells passed, the local
+   verifier reproduced the remote verification byte-for-byte, and final inventories
+   were empty.
+6. **Pending under a separate boundary:** prepare task-labelled `expert.html` sections;
+   retain historical dates and the Windows-only 1.472x result rather than silently
+   replacing it.
 
-The corrected result permits only the observed four-point one-host ladder and descriptive
-host-memory reporting. It is not a universal break-even claim, a selector or neural
-result, a routing change, or a claim that every research idea was implemented.
+The corrected result permits an observed four-point separate-host portability map and
+descriptive host-memory reporting. It is not a universal break-even claim, a selector or
+neural result, a routing change, or a claim that every research idea was implemented.
