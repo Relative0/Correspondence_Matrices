@@ -248,7 +248,7 @@ def check():
 
 def report_target(path):
     target = path.absolute()
-    roots = (ROOT / "tmp", ROOT / "docs/research/verification")
+    roots = ((ROOT / "tmp").resolve(), (ROOT / "docs/research/verification").resolve())
     require(target.suffix == ".json" and any(target.resolve().is_relative_to(root) for root in roots),
             "report must be under project tmp or research verification")
     require(not target.exists(), "report already exists")

@@ -131,7 +131,6 @@ class RunpodP7FunctionalScoutV2Tests(unittest.TestCase):
         freeze = json.loads((
             ROOT / "docs/research/verification/comparative-p6-candidate-v4-2026-08-30/freeze.json"
         ).read_text(encoding="utf-8"))
-        source = p7_runner.source_identity(ROOT, freeze, p7_cli.CODE_PATHS)
         limits = linux_supervisor.Limits(
             timeout_seconds=30.0,
             rss_stop_bytes=1 << 30,
@@ -143,7 +142,13 @@ class RunpodP7FunctionalScoutV2Tests(unittest.TestCase):
         common = {
             "roles": ["regression", "development"],
             "blocks": 1,
-            "worker_source_manifest_sha256": p7_runner.record_sha256(source),
+            # Plan construction only requires a bound source-manifest identity.
+            # Executable source verification is covered separately and depends on
+            # intentionally untracked external corpora that are absent in clean CI.
+            "worker_source_manifest_sha256": p7_runner.record_sha256({
+                "fixture": "clean-checkout-plan-test",
+                "freeze_sha256": freeze["freeze_sha256"],
+            }),
             "resource_limits": p7_runner.limits_record(limits),
             "profile": "functional",
         }

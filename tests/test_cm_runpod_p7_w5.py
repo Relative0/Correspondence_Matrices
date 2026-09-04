@@ -123,13 +123,24 @@ class P7W5RunpodTests(unittest.TestCase):
             )
 
     def test_battery_amendment_preserves_shards_and_requires_known_charge_floor(self):
-        status = self.battery_preflight.host_power_status()
+        # This test validates the frozen authorization contract, not the current
+        # machine's battery. Live host power is checked immediately before launch.
+        self.assertEqual(self.battery_preflight.MINIMUM_BATTERY_PERCENT, 50)
+
+        class FakeKernel:
+            @staticmethod
+            def GetSystemPowerStatus(pointer):
+                pointer._obj.ACLineStatus = 0
+                pointer._obj.BatteryLifePercent = 75
+                return 1
+
+        with mock.patch.object(self.battery_preflight.os, "name", "nt"), mock.patch(
+            "ctypes.WinDLL", create=True, return_value=FakeKernel()
+        ):
+            status = self.battery_preflight.host_power_status()
         self.assertTrue(status["battery_status_known"])
         self.assertEqual(status["minimum_battery_percent_when_not_on_ac"], 50)
-        self.assertEqual(
-            status["battery_gate_passed"],
-            status["ac_connected"] or status["battery_percent"] >= 50,
-        )
+        self.assertTrue(status["battery_gate_passed"])
         for row in self.programs["programs"]:
             self.battery_controller.configure(row["shard_id"])
             self.assertEqual(self.battery_controller.SHARD, row)
