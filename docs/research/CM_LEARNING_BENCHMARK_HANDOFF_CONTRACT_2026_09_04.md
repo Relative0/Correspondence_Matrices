@@ -24,9 +24,13 @@ The contract requires:
 - a source-blind development protocol frozen before labels;
 - at least 16 fit, 8 validation, and 8 audit source groups;
 - at least two backend labels with at least eight source groups per label;
+- every non-abstain label names a method in the frozen exact-arm closure, and
+  non-abstain label counts cannot exceed the source-group cohort;
 - zero source-group overlap and zero prospective cases consumed;
 - at least two independently verified runs on distinct physical machines;
+- a distinct independent-verification artifact for every replication;
 - identical case-set and label-table hashes across both machines;
+- complete-case counts matching the frozen source-group cohort on every replication;
 - zero schedule, semantic, and source/artifact mismatches;
 - sum-based best-fixed and per-case-oracle totals, not a geometric-mean proxy;
 - p95 feature/control, inference, exact-verification, and expected-fallback costs

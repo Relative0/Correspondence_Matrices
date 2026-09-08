@@ -21,6 +21,7 @@ PAGES = {
     "cm_expert_template.html": "expert.html",
     "cm_usecases_template.html": "usecases.html",
     "cm_feature_model_template.html": "feature-model-evidence.html",
+    "cm_learning_neural_template.html": "learning-neural-evidence.html",
 }
 
 
@@ -98,8 +99,9 @@ class FeatureModelWebsiteTests(unittest.TestCase):
     def test_summaries_are_visible_routes_not_only_embedded_data(self):
         shared = (SITE / "cm_master_shared.js").read_text(encoding="utf-8")
         self.assertIn('["feature-model-evidence.html", "Results & audit"]', shared)
+        self.assertIn('["learning-neural-evidence.html", "Learning & neural"]', shared)
         for template in PAGES:
-            if template != "cm_feature_model_template.html":
+            if template not in {"cm_feature_model_template.html", "cm_learning_neural_template.html"}:
                 self.assertIn("app.append(featureModelAuditUpdate());", (SITE / template).read_text(encoding="utf-8"))
         page = (SITE / "cm_feature_model_template.html").read_text(encoding="utf-8")
         for anchor in ("summary", "correctness", "comparisons", "coverage", "artifacts", "gaps", "scope", "downloads"):

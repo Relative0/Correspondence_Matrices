@@ -309,6 +309,14 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
         or any(value < history.MIN_SOURCE_GROUPS_PER_LABEL for value in label_counts.values()),
         "insufficient_source_groups_per_label",
     )
+    block(
+        not set(label_counts).issubset(set(exact["arms"])),
+        "label_outside_exact_method_closure",
+    )
+    block(
+        sum(label_counts.values()) > cohort["source_groups"],
+        "non_abstain_label_count_exceeds_cohort",
+    )
     block(cohort["prospective_cases_consumed"] != 0, "prospective_data_consumed_early")
     block(
         exact["refused_rows_retained"] is not True
@@ -319,6 +327,15 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
     block(
         len({row["physical_machine_sha256"] for row in replications}) < 2,
         "physical_machines_not_distinct",
+    )
+    block(
+        len({row["independent_verification_sha256"] for row in replications})
+        != len(replications),
+        "independent_verification_artifacts_not_distinct",
+    )
+    block(
+        any(row["complete_cases"] != cohort["source_groups"] for row in replications),
+        "replication_case_count_mismatch",
     )
     block(
         any(row["case_set_sha256"] != cohort["case_set_sha256"] for row in replications),

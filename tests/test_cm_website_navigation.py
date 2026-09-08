@@ -10,7 +10,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "deliverables_n22_24/master_explainer_2026_08_03"
-PAGES = ("index.html", "layperson.html", "investor.html", "expert.html", "usecases.html", "feature-model-evidence.html")
+PAGES = ("index.html", "layperson.html", "investor.html", "expert.html", "usecases.html", "feature-model-evidence.html", "learning-neural-evidence.html")
 
 
 class Document(HTMLParser):
@@ -107,7 +107,7 @@ class WebsiteNavigationTests(unittest.TestCase):
                 with self.subTest(page=doc.path.name, image=attrs.get("src")):
                     self.assertIn("alt", attrs)
 
-    def test_shared_navigation_declares_all_six_entry_pages(self):
+    def test_shared_navigation_declares_all_entry_pages(self):
         for doc in self.documents:
             with self.subTest(page=doc.path.name):
                 for page in PAGES:

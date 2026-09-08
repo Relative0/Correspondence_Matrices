@@ -62,6 +62,7 @@ const FMT = {
   x1: (v) => Number(v).toFixed(1) + "×",
   x2: (v) => Number(v).toFixed(2) + "×",
   x3: (v) => Number(v).toFixed(3) + "×",
+  x9: (v) => Number(v).toFixed(9) + "×",
   xcomma: (v) => commas(Math.round(v)) + "×",
   pct0: (v) => Math.round(v) + "%",
   pct1: (v) => Number(v).toFixed(1) + "%",
@@ -670,6 +671,9 @@ function topbar(cfg) {
   if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
   }
+  if (!(cfg.links || []).some(([, label]) => label === "Learning & neural")) {
+    cfg = { ...cfg, links: [...(cfg.links || []), ["learning-neural-evidence.html", "Learning & neural"]] };
+  }
   const bar = h("div", { class: "topbar" });
   const inner = h("div", { class: "inner" });
   inner.append(h("div", { class: "brand", html: cfg.brand }));
@@ -794,6 +798,21 @@ function featureModelAuditUpdate() {
     h("a", { href: "feature-model-evidence.html", text: "Read the results, qualifications and evidence" }),
     h("a", { href: "feature-model-evidence.html#gaps", text: "Review every measurement gap" }),
     h("a", { href: "feature-model-evidence.html#downloads", text: "Reuse the data and audit tools" }),
+  ]));
+  return s;
+}
+
+function learningNeuralUpdate() {
+  const s = section("learning-neural-update", "Learning evidence · 2026-09-04",
+    "The learning program is mapped; no learned route is promoted",
+    "Across exact relation learning, cut proposals, partition ranking, backend choice, cost prediction and representation learning, the current decision is complete abstention with the exact fallback unchanged.");
+  s.append(banner("note", "Evidence before enthusiasm", [
+    "The strongest new query-ladder surface has gross headroom on two machines, but labels disagree on one case and the fully charged cost vector is missing. A separately frozen source-blind cohort has no timings, labels or fitted models.",
+  ]));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "learning-neural-evidence.html", text: "Explore the full learning timeline" }),
+    h("a", { href: "learning-neural-evidence.html#economics", text: "Audit selector economics" }),
+    h("a", { href: "learning-neural-evidence.html#next-work", text: "See the next admissible gates" }),
   ]));
   return s;
 }

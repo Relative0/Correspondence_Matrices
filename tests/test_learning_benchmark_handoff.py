@@ -166,6 +166,45 @@ def test_requires_stable_case_and_label_tables(eligible_handoff):
     assert result["development_training_eligible"] is False
 
 
+def test_requires_distinct_independent_verification_artifacts(eligible_handoff):
+    eligible_handoff["replications"][1]["independent_verification_sha256"] = (
+        eligible_handoff["replications"][0]["independent_verification_sha256"]
+    )
+    result = handoff.assess_handoff(eligible_handoff)
+    assert "independent_verification_artifacts_not_distinct" in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
+def test_replication_case_count_must_match_frozen_cohort(eligible_handoff):
+    eligible_handoff["replications"][1]["complete_cases"] -= 1
+    _refresh_economics(eligible_handoff["replications"][1])
+    result = handoff.assess_handoff(eligible_handoff)
+    assert "replication_case_count_mismatch" in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
+@pytest.mark.parametrize(
+    ("labels", "blocker"),
+    [
+        (
+            {"cnf/resident_engine": 8, "invented_backend": 8},
+            "label_outside_exact_method_closure",
+        ),
+        (
+            {"cnf/resident_engine": 24, "sat/resident_engine": 24},
+            "non_abstain_label_count_exceeds_cohort",
+        ),
+    ],
+)
+def test_non_abstain_label_accounting_is_closed(
+    eligible_handoff, labels, blocker
+):
+    eligible_handoff["cohort"]["source_groups_per_label"] = labels
+    result = handoff.assess_handoff(eligible_handoff)
+    assert blocker in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
 def test_requires_sum_based_same_host_fully_charged_economics(eligible_handoff):
     row = eligible_handoff["replications"][0]
     row["sum_based_economics"] = False
