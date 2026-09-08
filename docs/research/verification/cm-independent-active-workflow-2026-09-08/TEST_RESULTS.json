@@ -1,0 +1,52 @@
+{
+  "schema": "cm-independent-active-workflow-test-results/v1",
+  "date": "2026-09-08",
+  "new_focused_tests": {
+    "command": "python -m pytest -q tests/test_cm_independent_active_workflow_gate.py",
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "status": "passed"
+  },
+  "broader_focused_tests": {
+    "basetemp": ".pytest-temp/focused-final",
+    "passed": 32,
+    "failed": 1,
+    "skipped": 1,
+    "status": "passed_with_one_preexisting_portability_failure",
+    "failure": {
+      "test": "tests/test_cm_comparative_h6_representation_estimator_candidate.py::test_candidate_freeze_is_deterministic_and_blind_to_memory_values",
+      "cause": "historical H6 freeze stores LF Git-blob hashes while the Windows checkout materializes CRLF bytes",
+      "unrelated_to_new_files": true,
+      "hash_examples": [
+        {
+          "path": "cmbench/comparative/h2_h3_profile_gate.py",
+          "stored_and_git_blob_sha256": "43f0d0eb89f7ed5c71b0955b23b169cbbe116d0f0d7991d90cb13cde10eff3f2",
+          "windows_worktree_sha256": "bee3d13943093d9b14aca0e765c3c3b2806c17196ce039b3081d401d696c870b"
+        },
+        {
+          "path": "cmbench/comparative/h6_fresh_process_memory_gate.py",
+          "stored_and_git_blob_sha256": "e98f59ef9451aafedad49ab45bfa6c2c5080c3d2c5cbcd7eff329080a84accc2",
+          "windows_worktree_sha256": "eafb8c276c24390f0ae18f350707e4f4d8ef4a4a764e4f1b0e8dbfa2c5101e34"
+        },
+        {
+          "path": "scripts/cm_h6_fresh_process_memory_gate.py",
+          "stored_and_git_blob_sha256": "f9493f06e5632219d5f9ce20cd3f4d609799d50e679daf767b75f0872d0fc99f",
+          "windows_worktree_sha256": "6b6e6cda5aac81c4c57328f53c80b5385ceda48dc47e2403765a2b40dad42464"
+        },
+        {
+          "path": "scripts/crse_verify_h6_fresh_process_memory_gate.py",
+          "stored_and_git_blob_sha256": "3e1b16b6e29f7e9fa58ac3dae28900428d3c0fc364a7c566c551a159f642a23d",
+          "windows_worktree_sha256": "72e033398eb266f2bad4660831c93d384695e2f5832c5e12a399e0c1e829f7bd"
+        }
+      ]
+    }
+  },
+  "research_check": {
+    "command": "python scripts/cm_research_check.py",
+    "current_tests_passed": 249,
+    "immutable_snapshot_tests_passed": 121,
+    "exit_code": 0,
+    "status": "passed"
+  }
+}
