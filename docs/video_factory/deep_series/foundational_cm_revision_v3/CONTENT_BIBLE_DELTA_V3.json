@@ -1,0 +1,361 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_not_applied",
+  "revision_id": "foundational-cm-v3",
+  "base_bible_content_hash": "e7c9c86b5c82fa02af16c20d6929be7c2766aaa835f540ab75c6835cc765877a",
+  "episode_count": {
+    "from": 51,
+    "to": 53
+  },
+  "approval_effect": "Applying this delta makes every prior Bible/review approval stale and requires a new content review identity. It does not authorize rendering, remote work, or paid work.",
+  "stable_examples_to_add": [
+    {
+      "example_id": "ex-paper-operator-cms-2",
+      "title": "Paper two-input operator CMs",
+      "purpose": "Derive the sixteen two-input Boolean functions and show their complete 2x2 matrices under the paper's state order.",
+      "definition": "Rows are X and not-X; columns are Y and not-Y. AND=[[1,0],[0,0]], OR=[[1,1],[1,0]], XOR=[[0,1],[1,0]], equivalence=[[1,0],[0,1]], implication=[[1,0],[1,1]].",
+      "conceptual": true,
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ]
+    },
+    {
+      "example_id": "ex-paper-lm-cm-4",
+      "title": "Paper LM-to-4x4-CM construction",
+      "purpose": "Distinguish expression-valued LMs from binary CMs and trace one paper construction through positive valuation.",
+      "definition": "The paper's worked expression (W XOR X) implies (not Y AND Z), measured with left state Y,W and right state X,Z, yields valued rows 1100,1110,0011,1011.",
+      "conceptual": true,
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ]
+    }
+  ],
+  "episodes_to_add": [
+    {
+      "video_id": "operator-cms-from-truth-tables",
+      "section_id": "boolean-foundations",
+      "order": 5,
+      "title": "Why there are sixteen 2x2 operator CMs",
+      "audience": "Curious nontechnical and technical viewers",
+      "duration_tier": "focused_explainer",
+      "duration_minutes": {
+        "minimum": 4.25,
+        "maximum": 4.58
+      },
+      "prerequisite_ids": [
+        "expression-truth-function"
+      ],
+      "thesis": "Two Boolean inputs have four ordered assignments; choosing one output for each defines a complete binary Boolean function, so there are exactly sixteen functions represented in the paper by sixteen distinct 2x2 operator CMs.",
+      "owns": [
+        "four state pairs for a binary Boolean function",
+        "sixteen binary Boolean functions",
+        "one complete 2x2 matrix per operator",
+        "paper state ordering for operator CMs"
+      ],
+      "references": [
+        "expression-truth-function",
+        "logical-matrices-to-higher-dimensional-cms"
+      ],
+      "excludes": [
+        "No logical-matrix derivation, repository rectangular layout, CM-IR, packed-output, solver, or benchmark mechanism is taught here."
+      ],
+      "definitions": [
+        "2x2 operator CM (paper)",
+        "input-state pair",
+        "complete binary Boolean function"
+      ],
+      "claim_ids": [
+        "paper-two-input-operator-cms"
+      ],
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ],
+      "worked_example_id": "ex-paper-operator-cms-2",
+      "teaching_beats": [
+        "Ask sixteen what, then distinguish sixteen functions from sixteen assignments.",
+        "Move the four input pairs into the paper's X/not-X by Y/not-Y state order.",
+        "Populate AND and distinguish one entry from one complete operator matrix.",
+        "Derive 2^4=16 from four independent binary output choices.",
+        "Read named examples in the full Figure 1 gallery without demanding memorization.",
+        "Swap operands for implication to demonstrate ordering dependence.",
+        "Retrieve XOR from its unlabeled output pattern.",
+        "Handoff from binary entries to expression-valued logical matrices."
+      ],
+      "visual_spine": [
+        "Four persistent assignment cards move from truth-table order into the paper's 2x2 state order.",
+        "One complete operator matrix expands into sixteen complete 2x2 patterns through four binary choices.",
+        "Named symmetric and asymmetric operators illuminate inside the Figure 1 gallery.",
+        "An unlabeled XOR matrix supports retrieval before the name appears."
+      ],
+      "dialogue_anchors": {
+        "hook": "There are sixteen matrices here, but sixteen what?",
+        "definition": "One complete 2x2 binary pattern represents one complete two-input Boolean function under a declared state order.",
+        "boundary": "These are not sixteen assignments of one four-variable function and they are not repository layouts.",
+        "closing": "One cell is one state-pair output; one complete matrix is one operator."
+      },
+      "retrieval_check": "Read the four ordered outputs of the unlabeled XOR matrix before naming the operator.",
+      "closing_takeaway": "Four ordered input cases allow sixteen complete output patterns and therefore sixteen two-input operator CMs.",
+      "misconceptions": [
+        "The sixteen matrices are sixteen assignments or sixteen cells of one larger function.",
+        "One positive matrix cell is itself the logical operator."
+      ],
+      "caveats": [
+        "The state/operand order must remain visible, especially for asymmetric operators."
+      ],
+      "chapter_plan": [
+        {
+          "chapter_id": "c01",
+          "working_title": "Four cases and one complete operator",
+          "purpose": "Establish state order and the entry-versus-operator distinction.",
+          "teaching_beat_numbers": [1, 2, 3],
+          "visual_spine_indices": [1]
+        },
+        {
+          "chapter_id": "c02",
+          "working_title": "Why the count is sixteen",
+          "purpose": "Derive the number of functions and form the gallery.",
+          "teaching_beat_numbers": [4, 5],
+          "visual_spine_indices": [2, 3]
+        },
+        {
+          "chapter_id": "c03",
+          "working_title": "Order, retrieval, and handoff",
+          "purpose": "Test semantic reading, show asymmetry, and prepare the LM distinction.",
+          "teaching_beat_numbers": [6, 7, 8],
+          "visual_spine_indices": [3, 4]
+        }
+      ],
+      "visual_contract": {
+        "minimum_distinct_compositions": 12,
+        "minimum_meaningful_state_changes": 28,
+        "required_asset_kinds": [
+          "paper-order input-state map",
+          "2x2 operator construction",
+          "sixteen-operator gallery",
+          "operand-order transformation",
+          "prediction-and-answer retrieval state"
+        ],
+        "continuity_assets": [
+          "ex-paper-operator-cms-2",
+          "paper state-order legend",
+          "persistent four assignment cards"
+        ],
+        "external_imagery_policy": "Use source-faithful vector reconstruction, not screenshots or decorative imagery.",
+        "progression_rule": "Every state change must populate, count, compare, swap, or retrieve a mathematically identified operator entry.",
+        "forbidden_shortcuts": [
+          "anonymous sixteen-box gallery",
+          "unlabeled state order",
+          "one matrix cell labeled as the operator",
+          "generic card row or paragraph substitute for the derivation"
+        ]
+      }
+    },
+    {
+      "video_id": "logical-matrices-to-higher-dimensional-cms",
+      "section_id": "boolean-foundations",
+      "order": 6,
+      "title": "From logical matrices to higher-dimensional CMs",
+      "audience": "Curious nontechnical and technical viewers",
+      "duration_tier": "focused_explainer",
+      "duration_minutes": {
+        "minimum": 5.0,
+        "maximum": 5.33
+      },
+      "prerequisite_ids": [
+        "operator-cms-from-truth-tables"
+      ],
+      "thesis": "The paper's logical matrices contain logical expressions, positive valuation produces their binary CMs, and projection/tensor/modifier structure extends the construction to larger square matrices for compound logic.",
+      "owns": [
+        "logical matrix versus correspondence matrix",
+        "positive valuation",
+        "paper 4x4 construction",
+        "paper higher-dimensional square rule"
+      ],
+      "references": [
+        "operator-cms-from-truth-tables",
+        "what-is-explicit-cm"
+      ],
+      "excludes": [
+        "No repository rectangular materialization, CM-IR implementation, or benchmark result is taught here."
+      ],
+      "definitions": [
+        "Logical matrix",
+        "positive valuation",
+        "Higher-dimensional valued CM (paper)"
+      ],
+      "claim_ids": [
+        "paper-lm-positive-valuation",
+        "paper-four-variable-cm-construction",
+        "paper-higher-dimensional-square-rule"
+      ],
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ],
+      "worked_example_id": "ex-paper-lm-cm-4",
+      "teaching_beats": [
+        "Replace binary CM entries with expression-valued LM entries.",
+        "Construct the base two-variable LM in the paper's state order.",
+        "Apply positive valuation entrywise and recover a binary operator CM.",
+        "Project/tensor smaller logical matrices into a 4x4 expression-valued structure.",
+        "Substitute the paper's worked compound expression and apply the implication modifier.",
+        "Reveal the exact valued 4x4 CM and its Y,W by X,Z order.",
+        "Retrieve the LM-versus-CM classification from one persistent cell.",
+        "State the paper's square higher-dimensional rule and separate it from repository rectangles."
+      ],
+      "visual_spine": [
+        "One persistent matrix cell changes type only through visible positive valuation.",
+        "A process rail grows 2x2 LM to tensor/projection to 4x4 LM to valued CM.",
+        "The paper's compound expression feeds an implication modifier and settles into an exact 4x4 binary matrix.",
+        "Square paper growth and rectangular repository preview remain on separated rails."
+      ],
+      "dialogue_anchors": {
+        "hook": "What does a matrix look like before its entries have become bits?",
+        "definition": "An LM contains logical expressions; the paper's positive valuation produces the corresponding binary CM.",
+        "boundary": "The paper's formal higher-dimensional construction is square and is not the repository's arbitrary rectangular API rule.",
+        "closing": "Expressions first, valuation second, binary CM afterward."
+      },
+      "retrieval_check": "Classify one persistent entry before and after positive valuation as belonging to an LM or a CM.",
+      "closing_takeaway": "The paper builds larger logical matrices for compound logic and obtains their CMs through positive valuation.",
+      "misconceptions": [
+        "An LM and CM are two names for the same binary array.",
+        "The paper creates its 4x4 example by arbitrarily reshaping a truth column."
+      ],
+      "caveats": [
+        "Bra-ket notation remains secondary to the visible state and valuation actions.",
+        "The paper is an author manuscript; its framework claims are not upgraded to peer-reviewed consensus."
+      ],
+      "chapter_plan": [
+        {
+          "chapter_id": "c01",
+          "working_title": "Expressions in the cells",
+          "purpose": "Define LM entries and positive valuation.",
+          "teaching_beat_numbers": [1, 2, 3],
+          "visual_spine_indices": [1]
+        },
+        {
+          "chapter_id": "c02",
+          "working_title": "Construct the paper's 4x4 example",
+          "purpose": "Make projection, tensor structure, substitution, modifier, and ordering visible.",
+          "teaching_beat_numbers": [4, 5, 6],
+          "visual_spine_indices": [2, 3]
+        },
+        {
+          "chapter_id": "c03",
+          "working_title": "Retrieve the distinction and set the boundary",
+          "purpose": "Test entry type and distinguish paper square growth from repository layouts.",
+          "teaching_beat_numbers": [7, 8],
+          "visual_spine_indices": [1, 4]
+        }
+      ],
+      "visual_contract": {
+        "minimum_distinct_compositions": 14,
+        "minimum_meaningful_state_changes": 32,
+        "required_asset_kinds": [
+          "expression-valued logical matrix",
+          "positive-valuation transformation",
+          "tensor/projection construction",
+          "exact 4x4 paper result",
+          "prediction-and-answer retrieval state"
+        ],
+        "continuity_assets": [
+          "ex-paper-lm-cm-4",
+          "LM-to-CM process rail",
+          "persistent expression-to-bit cell"
+        ],
+        "external_imagery_policy": "Use source-faithful vector equations and diagrams; no decorative imagery or full-page paper screenshot.",
+        "progression_rule": "Every change must construct an LM, value an entry, combine a component, reveal declared order, or test LM/CM classification.",
+        "forbidden_shortcuts": [
+          "4x4 matrix appearing without construction",
+          "LM and CM sharing one undifferentiated cell style",
+          "paper equation reduced to unreadable page text",
+          "repository rectangle presented as the paper rule"
+        ]
+      }
+    }
+  ],
+  "episode_to_revise": {
+    "video_id": "what-is-explicit-cm",
+    "revision_id": "v3",
+    "order": {
+      "from": 5,
+      "to": 7
+    },
+    "title": {
+      "from": "What a correspondence matrix is",
+      "to": "The repository's explicit row-column CM layout"
+    },
+    "duration_tier": {
+      "from": "core_episode",
+      "to": "focused_explainer"
+    },
+    "duration_minutes": {
+      "from": {"minimum": 8, "maximum": 12},
+      "to": {"minimum": 4.67, "maximum": 5.08}
+    },
+    "prerequisite_ids": [
+      "logical-matrices-to-higher-dimensional-cms",
+      "expression-truth-function"
+    ],
+    "thesis": "The repository materializes one exact Boolean function as a dense row-column truth matrix over ordered R and C lists; re-partitioning changes the matrix shape and coordinates while preserving every assignment-to-output pair.",
+    "owns": [
+      "ordered R/C partition",
+      "assignment-to-coordinate indexing",
+      "coordinate context",
+      "repository dense output layout",
+      "repository rectangular re-partitioning"
+    ],
+    "excludes": [
+      "Paper LM derivation is a reminder only; compactness, solver behavior, performance, CM-IR mechanics, and packed-output mechanics remain in neighboring episodes."
+    ],
+    "definitions": [
+      "Repository explicit CM layout",
+      "Row-column truth matrix",
+      "Matrix coordinate",
+      "ordered row variables",
+      "ordered column variables"
+    ],
+    "claim_ids": [
+      "cm-explicit-definition",
+      "repo-ordered-coordinate-context",
+      "repo-rectangular-layout-generalization"
+    ],
+    "source_ids": [
+      "src-cm-build",
+      "src-cm-ir",
+      "src-cm-paper-source-note"
+    ],
+    "worked_example_id": "ex-truth-layout-4",
+    "script_path": "docs/video_factory/deep_series/episodes/what-is-explicit-cm/revision_v3/SCRIPT_V3.md",
+    "visual_spec_path": "docs/video_factory/deep_series/episodes/what-is-explicit-cm/revision_v3/VISUAL_AND_PRODUCTION_SPEC_V3.md",
+    "content_removed": [
+      "sixteen answers language",
+      "address terminology",
+      "unqualified rectangular CM claims",
+      "matrix multiplication denial",
+      "solver and performance digression",
+      "detailed CM-IR and packed-output comparison"
+    ]
+  },
+  "existing_episode_order_transform": "For every original episode with order >= 6, add 2. The revised what-is-explicit-cm moves from 5 to 7; new episodes occupy 5 and 6.",
+  "existing_prerequisite_updates": {
+    "what-cm-does-not-claim": [
+      "what-is-explicit-cm"
+    ],
+    "explicit-cm-vs-cm-ir": [
+      "what-is-explicit-cm",
+      "what-cm-does-not-claim"
+    ]
+  },
+  "required_authoring_schema_updates": {
+    "baseline_episode_count": 53,
+    "episodes_minItems": 53,
+    "episodes_maxItems": 53,
+    "authoring_EPISODE_COUNT": 53,
+    "new_example_visual_systems": [
+      "paper state-order map",
+      "operator matrix gallery",
+      "LM valuation",
+      "tensor/projection construction"
+    ]
+  }
+}

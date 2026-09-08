@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_not_applied",
+  "revision_id": "foundational-cm-v3",
+  "replace_entry": {
+    "term": "Correspondence matrix",
+    "reason": "The current generic definition collapses paper and repository objects.",
+    "replacement_policy": "Use a qualified term from proposed_entries whenever the layer matters. CM alone is an umbrella label only after the object has been identified."
+  },
+  "proposed_entries": [
+    {
+      "term": "2x2 operator CM (paper)",
+      "expansion": "two-by-two operator correspondence matrix",
+      "plain_definition": "A complete 2x2 binary pattern representing one two-input Boolean function under the paper's declared state order.",
+      "technical_definition": "One of the sixteen matrices in Figure 1, indexed by X/not-X and Y/not-Y operand states.",
+      "common_confusion": "One cell is one state-pair output; the complete four-cell matrix is the operator.",
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ]
+    },
+    {
+      "term": "Logical matrix",
+      "expansion": "LM",
+      "plain_definition": "A paper-defined matrix whose entries are logical expressions rather than final bits.",
+      "technical_definition": "An expression-valued measurement matrix whose entrywise positive valuation produces a corresponding CM in the paper's framework.",
+      "common_confusion": "An LM is not already the binary CM produced from it.",
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ]
+    },
+    {
+      "term": "Higher-dimensional valued CM (paper)",
+      "expansion": "CM",
+      "plain_definition": "A larger binary matrix obtained by positively valuing a larger paper-defined logical matrix.",
+      "technical_definition": "The valued result of the paper's projection/tensor/modifier construction under a declared state order; formal Section 5.2 uses square power-of-two dimensions.",
+      "common_confusion": "It is not one of the sixteen elementary two-input operator CMs and is not automatically an arbitrary repository rectangle.",
+      "source_ids": [
+        "src-cm-paper-source-note"
+      ]
+    },
+    {
+      "term": "Repository explicit CM layout",
+      "expansion": "explicit CM layout",
+      "plain_definition": "The repository's complete row-column grid of exact Boolean outputs over ordered row and column variables.",
+      "technical_definition": "A dense Boolean array produced by alignment to ordered R+C and reshape to 2^|R| by 2^|C|.",
+      "common_confusion": "This implementation contract is not the paper's general dimensional definition.",
+      "source_ids": [
+        "src-cm-build",
+        "src-cm-ir"
+      ]
+    },
+    {
+      "term": "Row-column truth matrix",
+      "expansion": "",
+      "plain_definition": "A neutral name for a grid whose row and column labels encode parts of each complete assignment.",
+      "technical_definition": "A dense 2^|R| by 2^|C| truth-valued array interpreted with ordered R, C, bit-order, and fixed-context metadata.",
+      "common_confusion": "The matrix shape alone does not identify its variables, order, or construction history.",
+      "source_ids": [
+        "src-cm-build",
+        "src-cm-ir"
+      ]
+    },
+    {
+      "term": "Matrix coordinate",
+      "expansion": "",
+      "plain_definition": "A row index and column index locating one entry in a declared layout.",
+      "technical_definition": "The integer pair obtained by accumulating assignment bits MSB-first over ordered R and C sequences in the repository lookup contract.",
+      "common_confusion": "A coordinate is not the stored output and cannot recover an assignment without the layout metadata.",
+      "source_ids": [
+        "src-cm-build"
+      ]
+    }
+  ],
+  "deprecated_foundational_word": {
+    "word": "address",
+    "replacement": "coordinate, row index, or column index",
+    "exception": "A later software lesson may define address explicitly as an analogy; it is not used in this mini-arc."
+  }
+}
+

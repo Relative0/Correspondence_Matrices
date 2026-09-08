@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_not_applied",
+  "revision_id": "foundational-cm-v3",
+  "revised_claims": [
+    {
+      "id": "cm-explicit-definition",
+      "replaces_allowed_wording": "An explicit CM is a dense truth-layout representation over a declared row/column variable split.",
+      "allowed_wording": "In this repository, an explicit dense CM layout is a dense row-column truth matrix over ordered row variables R and ordered column variables C.",
+      "plain_wording": "The repository can place every assignment's exact output in a labeled row-column grid.",
+      "technical_wording": "materialize_cm aligns output axes to the ordered target tuple R+C, broadcasts missing axes, and reshapes the dense Boolean output to (1 << len(R), 1 << len(C)).",
+      "type": "fact",
+      "status": "proposed_revision",
+      "scope": "implemented dense output contract",
+      "measurement_boundary": "representation",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "compile_expr_to_cm and eval_cm_boolean"
+        },
+        {
+          "source_id": "src-cm-ir",
+          "locator": "materialize_cm target_vars, alignment, broadcast, and final reshape"
+        }
+      ]
+    }
+  ],
+  "proposed_claims": [
+    {
+      "id": "paper-two-input-operator-cms",
+      "allowed_wording": "Under the paper's declared X/not-X by Y/not-Y state ordering, each complete two-input Boolean function corresponds to one 2x2 binary operator CM, and Figure 1 enumerates all sixteen.",
+      "plain_wording": "Four input cases allow sixteen complete output patterns, so there are sixteen two-input operator matrices.",
+      "technical_wording": "A binary function has four ordered input-state pairs and therefore 2^4 possible output patterns; the paper represents each pattern as one complete 2x2 CM.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "originating paper Section 3 and standard Boolean-function counting",
+      "measurement_boundary": "mathematical definition",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "paper-specific state order must remain declared",
+      "sources": [
+        {
+          "source_id": "src-cm-paper-source-note",
+          "locator": "Section 3 and Figure 1, printed pages 5-7"
+        }
+      ]
+    },
+    {
+      "id": "paper-lm-positive-valuation",
+      "allowed_wording": "In the originating paper, a logical matrix contains logical expressions and its positive valuation produces the corresponding binary CM.",
+      "plain_wording": "An LM holds expressions; positive valuation turns their entries into the bits of a CM.",
+      "technical_wording": "Section 4.1 states [Theta] = V_T([M_XThetaY]) and applies V_T entrywise under the LM's declared state ordering.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "originating paper LM/CM framework",
+      "measurement_boundary": "mathematical construction",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "paper-specific framework",
+      "sources": [
+        {
+          "source_id": "src-cm-paper-source-note",
+          "locator": "Section 4.1, printed pages 14-16"
+        }
+      ]
+    },
+    {
+      "id": "paper-four-variable-cm-construction",
+      "allowed_wording": "The paper constructs a 4x4 LM for compound four-variable logic through projection, tensor structure, substitution, and modifiers, then obtains a binary 4x4 CM by positive valuation.",
+      "plain_wording": "The paper builds the larger logical matrix first and values it into bits afterward.",
+      "technical_wording": "Section 5.1's worked expression (W XOR X) implies (not Y AND Z) yields the valued rows 1100, 1110, 0011, 1011 under the paper's declared Y,W by X,Z measurement order.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "originating paper Section 5.1 worked construction",
+      "measurement_boundary": "mathematical construction",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "ordering and paper notation must remain visible",
+      "sources": [
+        {
+          "source_id": "src-cm-paper-source-note",
+          "locator": "Section 5.1, printed pages 19-22"
+        }
+      ]
+    },
+    {
+      "id": "paper-higher-dimensional-square-rule",
+      "allowed_wording": "The paper's formal higher-dimensional construction gives a square 2^n by 2^n LM for 2n logical subexpressions and obtains the corresponding CM by valuation.",
+      "plain_wording": "The paper's stated general construction grows through square power-of-two matrices.",
+      "technical_wording": "Section 5.2 proves the square dimension by induction; the earlier n-factorial/n-by-n introductory wording is not used as the dimensional rule.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "originating paper Section 5.2 formal construction",
+      "measurement_boundary": "mathematical construction",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "paper contains a separate introductory wording discrepancy",
+      "sources": [
+        {
+          "source_id": "src-cm-paper-source-note",
+          "locator": "Section 5.2, printed pages 22-23"
+        }
+      ]
+    },
+    {
+      "id": "repo-ordered-coordinate-context",
+      "allowed_wording": "A repository matrix coordinate identifies a complete assignment only when R, C, their internal order, the bit-index convention, and relevant fixed-variable context are known.",
+      "plain_wording": "A bare row and column number cannot tell you which variables supplied the bits.",
+      "technical_wording": "eval_cm_boolean accumulates assignment bits MSB-first in the sequence order supplied by R and C; fixed values participate when an assignment omits a declared variable.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "implemented dense output and lookup contract",
+      "measurement_boundary": "representation indexing",
+      "comparator": "none",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "none",
+      "sources": [
+        {
+          "source_id": "src-cm-build",
+          "locator": "eval_cm_boolean"
+        }
+      ]
+    },
+    {
+      "id": "repo-rectangular-layout-generalization",
+      "allowed_wording": "The repository supports dense layouts of shape 2^|R| by 2^|C|, including rectangular 2x8 and 8x2 layouts; the originating paper does not state this arbitrary rectangular R/C rule as its formal higher-dimensional definition.",
+      "plain_wording": "The repository can re-partition one function into rectangles that the paper's general square rule does not define.",
+      "technical_wording": "materialize_cm reshapes the aligned target variables to (1 << len(R), 1 << len(C)); Section 5.2 of the paper instead presents a square 2^n by 2^n construction.",
+      "type": "fact",
+      "status": "proposed",
+      "scope": "paper-versus-implementation terminology boundary",
+      "measurement_boundary": "representation",
+      "comparator": "paper construction versus repository API contract",
+      "ratio_direction": "not a ratio",
+      "uncertainty": "repository terminology is a project convention",
+      "sources": [
+        {
+          "source_id": "src-cm-ir",
+          "locator": "materialize_cm final reshape"
+        },
+        {
+          "source_id": "src-cm-paper-source-note",
+          "locator": "Section 5.2 and Repository boundary"
+        }
+      ]
+    }
+  ],
+  "episode_claim_bindings": {
+    "operator-cms-from-truth-tables": [
+      "paper-two-input-operator-cms"
+    ],
+    "logical-matrices-to-higher-dimensional-cms": [
+      "paper-lm-positive-valuation",
+      "paper-four-variable-cm-construction",
+      "paper-higher-dimensional-square-rule"
+    ],
+    "what-is-explicit-cm": [
+      "cm-explicit-definition",
+      "repo-ordered-coordinate-context",
+      "repo-rectangular-layout-generalization"
+    ]
+  }
+}
+
