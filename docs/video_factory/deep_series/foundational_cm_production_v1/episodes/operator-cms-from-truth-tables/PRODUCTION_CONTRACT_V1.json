@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "status": "preview_ready_final_render_not_authorized",
+  "video_id": "operator-cms-from-truth-tables",
+  "script": {
+    "path": "docs/video_factory/deep_series/episodes/operator-cms-from-truth-tables/revision_v2/SCRIPT_V2.md",
+    "sha256": "3c670fa2377858bac865b89f2d44cda6731b97c7a1a17a74208b2f2d6d873f66"
+  },
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p"
+  },
+  "duration_s": 187,
+  "scenes": [
+    {
+      "scene_id": "s01",
+      "title": "One rule, four cases",
+      "start_s": 0,
+      "end_s": 24,
+      "duration_s": 24,
+      "voiceover": "A two-input Boolean rule can be written as one small grid. The rows tell us\nwhether X is true or false. The columns do the same for Y. That gives four\ncells—one for every possible pair of input states.\n\nFill each cell with the rule's output, zero or one, and the complete two-by-two\npattern is that rule's correspondence matrix, or CM.",
+      "visual_direction": "Begin with switches `X` and `Y` beside one empty 2×2 grid—not the sixteen-matrix\ngallery. Toggle through the four state pairs and let each identified pair claim\none cell. Keep the state labels attached:\n\n```text\n             Y=true   Y=false\nX=true          11       10\nX=false         01       00\n```"
+    },
+    {
+      "scene_id": "s02",
+      "title": "Build AND",
+      "start_s": 24,
+      "end_s": 58,
+      "duration_s": 34,
+      "voiceover": "Take AND. It returns one only when both inputs are true. So the top-left cell,\nthe X-true, Y-true case, gets a one. The other three cases get zero.\n\nNow read the whole grid: true-true gives one; true-false, false-true, and\nfalse-false give zero. One cell records one case. All four cells together\nrecord the complete rule.\n\nThis row and column arrangement—X then not-X, Y then not-Y—is the ordering used\nin the paper. Keeping it visible prevents the bits from becoming an anonymous\npattern.",
+      "visual_direction": "Evaluate AND on the four persistent state cards and place the results one at a\ntime. After the fourth value, outline the entire matrix and label it `AND`:\n\n```text\n[1 0]\n[0 0]\n```"
+    },
+    {
+      "scene_id": "s03",
+      "title": "Why the count is sixteen",
+      "start_s": 58,
+      "end_s": 94,
+      "duration_s": 36,
+      "voiceover": "AND is one possible rule. How many complete rules are there?\n\nEach of the four cells may independently contain zero or one. That is two\nchoices for the first case, two for the second, two for the third, and two for\nthe fourth. Multiply them: two to the fourth power equals sixteen.\n\nSo there are sixteen possible four-cell output patterns, and therefore sixteen\nBoolean functions of two inputs. Each complete pattern has its own two-by-two\noperator CM.",
+      "visual_direction": "Turn the four identified cells into binary switches. Show the multiplication\n`2 × 2 × 2 × 2 = 16`, then let the sixteen completed patterns settle into a\ngallery. Do not branch into a large decision tree."
+    },
+    {
+      "scene_id": "s04",
+      "title": "Patterns have meanings",
+      "start_s": 94,
+      "end_s": 137,
+      "duration_s": 43,
+      "voiceover": "Some patterns are familiar. All zeros means always false. AND turns on only\nthe true-true cell. OR turns off only the false-false cell. XOR turns on the\ntwo cases where the inputs disagree. Equivalence turns on the two cases where\nthey agree. All ones means always true.\n\nThe positions matter most for an asymmetric rule. X implies Y is false only\nwhen X is true and Y is false. Swap the operands, and that false case moves.\n\nThe matrix does not discover an operator's name. It records the rule's four\nordered outputs; a familiar name is shorthand for that complete behavior.",
+      "visual_direction": "Reveal only six named patterns inside the gallery: false, AND, OR, XOR,\nequivalence, and true. Then enlarge implication `[[1,0],[1,1]]`; animate the\nsingle zero moving when operand labels swap. Keep all unnamed matrices dim."
+    },
+    {
+      "scene_id": "s05",
+      "title": "Retrieval",
+      "start_s": 137,
+      "end_s": 165,
+      "duration_s": 28,
+      "voiceover": "Try reading one without its name. This grid returns zero when the inputs agree\nand one when they differ. What rule is it?\n\n\n\nIt is exclusive-or, or XOR: zero, one, one, zero in the paper's cell order.",
+      "visual_direction": "Show `[[0,1],[1,0]]` with state labels but no name. During the pause, pulse the\nagreement diagonal, then the disagreement diagonal. Reveal `XOR` only after\nthe response."
+    },
+    {
+      "scene_id": "s06",
+      "title": "Language checkpoint and close",
+      "start_s": 165,
+      "end_s": 187,
+      "duration_s": 22,
+      "voiceover": "One useful language check: these are sixteen different functions, each with\nfour input cases. Later, a four-input function will itself have sixteen input\nassignments. The number is the same; what we are counting is different.\n\nFor now, retain this: one cell is one case's output; one complete two-by-two CM\nis one two-input Boolean rule.",
+      "visual_direction": "Hold one matrix beside its four state cards. Add a small end card:\n`4 cases per two-input rule → 16 possible rules`. Then let one binary entry\nchange into an expression tile to preview the LM lesson."
+    }
+  ],
+  "math_typography_contract": "docs/video_factory/deep_series/foundational_cm_production_v1/MATH_TYPOGRAPHY_CONTRACT_V1.json",
+  "narration": {
+    "status": "voice_selection_pending",
+    "scratch_tts_allowed": true,
+    "final_mechanical_tts_forbidden": true
+  },
+  "remote_or_paid_authorized": false,
+  "narration_contract": {
+    "path": "docs/video_factory/deep_series/foundational_cm_production_v1/episodes/operator-cms-from-truth-tables/NARRATION_CONTRACT_V1.json",
+    "sha256": "228e42a121122e0f33fc76d6fae7decffc74b2b56c24ed80ebfca84729b92a8e"
+  },
+  "content_hash": "dadeca980d7641727fb9c9829f4fadba1b27c3faec7104e79380c5dd59fda015"
+}

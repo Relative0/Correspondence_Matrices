@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "status": "voice_selection_pending_scratch_tts_permitted",
+  "video_id": "logical-matrices-to-higher-dimensional-cms",
+  "sample_rate_hz": 48000,
+  "channels": 1,
+  "cues": [
+    {
+      "cue_id": "n01",
+      "scene_id": "s01",
+      "start_s": 0,
+      "end_s": 28,
+      "window_s": 28,
+      "text": "A correspondence matrix contains binary outputs. A logical matrix keeps one\nstep more information: its cells contain logical expressions.\n\nHere are the four input states for X and Y, written directly into their matrix\npositions: X and Y; X and not-Y; not-X and Y; not-X and not-Y. Because these\nentries are expressions rather than bits, this is a logical matrix—an LM."
+    },
+    {
+      "cue_id": "n02",
+      "scene_id": "s02",
+      "start_s": 28,
+      "end_s": 72,
+      "window_s": 44,
+      "text": "The paper then applies a positive valuation, written V sub T, to each\nexpression. Under this valuation, a positive variable state receives one and\nits complemented state receives zero; the logical operations are evaluated\nconsistently from those values.\n\nFor equivalence, the expression is true in the two agreement positions and\nfalse in the two disagreement positions. After positive valuation, its LM\ntherefore yields the binary matrix one-zero, zero-one.\n\nThat is the central relationship: the LM holds logical expressions; applying\npositive valuation entry by entry produces the corresponding binary CM. Shape\nand cell order stay fixed while the entry type changes."
+    },
+    {
+      "cue_id": "n03",
+      "scene_id": "s03",
+      "start_s": 72,
+      "end_s": 120,
+      "window_s": 48,
+      "text": "To represent a compound rule with four variables, the paper builds rather\nthan reshapes. First it forms logical matrices for smaller expressions. Then a\ntensor-and-projection construction places their combinations into a\nfour-by-four expression grid. Finally, the outer logical operator determines\nwhich combined expressions remain in the larger LM.\n\nYou do not need to perform the tensor algebra here. What matters is what each\nstage contributes: the smaller LMs supply expressions; the construction gives\nevery combined state a declared position; and the outer operator supplies the\ncompound rule. Only after that does positive valuation turn the larger LM into\na binary CM."
+    },
+    {
+      "cue_id": "n04",
+      "scene_id": "s04",
+      "start_s": 120,
+      "end_s": 184,
+      "window_s": 64,
+      "text": "The paper's example asks whether W exclusive-or X implies not-Y and Z. Compute\nthe two inner expressions first: W XOR X on the left, and not-Y AND Z on the\nright. The outer operator is implication, which is false only when its left\nside is true and its right side is false.\n\nThose components are combined in the expression-valued four-by-four LM. After\npositive valuation, the resulting CM has rows:\n\none-one-zero-zero;\none-one-one-zero;\nzero-zero-one-one;\none-zero-one-one.\n\nThe ordering is part of the result. In the paper's measurement form, the row\nstate is ordered by Y and W, and the column state by X and Z. So a cell can be\ninterpreted only together with those state labels.\n\nThis four-by-four object represents one compound four-variable rule. It is not\none of the elementary two-input operator CMs from the previous lesson."
+    },
+    {
+      "cue_id": "n05",
+      "scene_id": "s05",
+      "start_s": 184,
+      "end_s": 218,
+      "window_s": 34,
+      "text": "Pause on this cell. Before V sub T, it contains an expression. Which object are\nwe looking at?\n\n\n\nAn LM. Now apply the valuation. The same position contains zero or one, and the\nresulting object is the CM. The question is not whether the frame looks like a\nmatrix; it is what kind of entry the frame contains."
+    },
+    {
+      "cue_id": "n06",
+      "scene_id": "s06",
+      "start_s": 218,
+      "end_s": 246,
+      "window_s": 28,
+      "text": "The paper extends this construction inductively. For an expression built from\ntwo-n logical subexpressions, it gives a square two-to-the-n by two-to-the-n LM\nand then its positive valuation.\n\nThe next lesson follows a separate repository operation: arranging a complete\ntruth output into ordered row and column layouts, including rectangles. That\nis an implementation layout rule, not this paper construction.\n\nSo retain the sequence: expressions in an LM, positive valuation, binary CM."
+    }
+  ],
+  "pronunciation_policy": {
+    "CM": "C M",
+    "LM": "L M",
+    "XOR": "exclusive-or",
+    "V_T": "V sub T",
+    "M[2,3]": "M of two comma three",
+    "2^4": "two to the fourth power",
+    "MSB": "most significant bit"
+  },
+  "quality_gate": "A final voice must sound conversational and pass human audition. Windows SAPI may be used only for timing and must not be released as final narration.",
+  "remote_or_paid_authorized": false
+}
