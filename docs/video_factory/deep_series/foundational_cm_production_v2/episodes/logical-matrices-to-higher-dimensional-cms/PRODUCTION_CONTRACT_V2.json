@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "status": "preview_ready_final_render_not_authorized",
+  "video_id": "logical-matrices-to-higher-dimensional-cms",
+  "script": {
+    "path": "docs/video_factory/deep_series/episodes/logical-matrices-to-higher-dimensional-cms/revision_v3/SCRIPT_V3.md",
+    "sha256": "81686ade819a506d610518bee793274c13f634ce3e7cdf53b95975bd37509457"
+  },
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p"
+  },
+  "duration_s": 265,
+  "scenes": [
+    {
+      "scene_id": "s01",
+      "title": "An outer product creates a base LM",
+      "start_s": 0,
+      "end_s": 40,
+      "duration_s": 40,
+      "voiceover": "A correspondence matrix contains binary outputs. A logical matrix keeps one\nstep more information: its cells contain logical expressions.\n\nWrite ket X as the column X, not-X, and bra Y as the row Y, not-Y. Their outer\nproduct—ket X times bra Y—creates a two-by-two logical matrix. The first row is\nX and Y, then X and not-Y. The second is not-X and Y, then not-X and not-Y.\n\nSo the ket supplies the row states, the bra supplies the column states, and\neach cell is their conjunction.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "A correspondence matrix contains binary outputs. A logical matrix keeps one\nstep more information: its cells contain logical expressions.\n\nWrite ket X as the column X, not-X, and bra Y as the row Y, not-Y. Their outer\nproduct—ket X times bra Y—creates a two-by-two logical matrix. The first row is\nX and Y, then X and not-Y. The second is not-X and Y, then not-X and not-Y.\n\nSo the ket supplies the row states, the bra supplies the column states, and\neach cell is their conjunction."
+        }
+      ],
+      "visual_direction": "Build, do not merely reveal:\n\n```text\n|X⟩ = [X, ¬X]ᵀ       ⟨Y| = [Y, ¬Y]\n\n|X⟩ ⊗ ⟨Y| = |X⟩⟨Y| = M_XY\n\nM_XY = [ X∧Y      X∧¬Y  ]\n       [ ¬X∧Y     ¬X∧¬Y ]\n```\n\nAnimate the column distributing across the row. Badge the result\n`LM · expression-valued`."
+    },
+    {
+      "scene_id": "s02",
+      "title": "Positive valuation makes the CM",
+      "start_s": 40,
+      "end_s": 72,
+      "duration_s": 32,
+      "voiceover": "The paper applies positive valuation, written V sub T, to every expression.\nFor equivalence, the two agreement entries are true and the disagreement\nentries are false. Positive valuation therefore yields one-zero, zero-one.\n\nThat is the central relationship: the L M holds expressions; positive\nvaluation, entry by entry, produces the binary C M. The shape and cell order\nstay fixed while the entry type changes.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "The paper applies positive valuation, written V sub T, to every expression.\nFor equivalence, the two agreement entries are true and the disagreement\nentries are false. Positive valuation therefore yields one-zero, zero-one.\n\nThat is the central relationship: the L M holds expressions; positive\nvaluation, entry by entry, produces the binary C M. The shape and cell order\nstay fixed while the entry type changes."
+        }
+      ],
+      "visual_direction": "Show the paper's equivalence LM, then pass a gold `V_T` scan through it:\n\n```text\n[ X↔Y       X XOR Y ]       [1 0]\n[ X XOR Y   X↔Y     ]  →    [0 1]\n```\n\nKeep `LM expressions → V_T → CM bits` visible."
+    },
+    {
+      "scene_id": "s03",
+      "title": "Tensor two smaller LMs",
+      "start_s": 72,
+      "end_s": 115,
+      "duration_s": 43,
+      "voiceover": "For four variables, the paper builds a larger L M from two smaller ones. One\nbase matrix is ket W bra X. The other is ket Y bra Z. Their tensor, or\nKronecker, product is four by four.\n\nEquivalently, combine the two kets into a four-component column state and the\ntwo bras into a four-component row state; their outer product fills the\nfour-by-four expression grid. This is a construction from paired states—not a\ntwo-by-two matrix stretched into a larger shape.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "For four variables, the paper builds a larger L M from two smaller ones. One\nbase matrix is ket W bra X. The other is ket Y bra Z. Their tensor, or\nKronecker, product is four by four.\n\nEquivalently, combine the two kets into a four-component column state and the\ntwo bras into a four-component row state; their outer product fills the\nfour-by-four expression grid. This is a construction from paired states—not a\ntwo-by-two matrix stretched into a larger shape."
+        }
+      ],
+      "visual_direction": "Show both equivalent views, with terms moving rather than cross-fading:\n\n```text\n(|W⟩⟨X|) ⊗ (|Y⟩⟨Z|)\n          =\n(|W⟩ ⊗ |Y⟩)(⟨X| ⊗ ⟨Z|)\n```\n\nExpand the left compound ket and right compound bra to four components. Show a\nsingle outer-product entry before drawing the full 4×4 frame."
+    },
+    {
+      "scene_id": "s04",
+      "title": "Four components on each side",
+      "start_s": 115,
+      "end_s": 155,
+      "duration_s": 40,
+      "voiceover": "The four-by-four matrix has a four-component state on each side. In the\npaper's measurement form, the row operand is bra Y followed by bra W, and the\ncolumn operand is ket X followed by ket Z.\n\nThat gives row labels Y-W and column labels X-Z, each ordered true-true,\ntrue-false, false-true, false-false. The four variables appear across the two\nsides: Y and W identify a row; X and Z identify a column. Together they identify\none of sixteen four-variable assignments.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "The four-by-four matrix has a four-component state on each side. In the\npaper's measurement form, the row operand is bra Y followed by bra W, and the\ncolumn operand is ket X followed by ket Z.\n\nThat gives row labels Y-W and column labels X-Z, each ordered true-true,\ntrue-false, false-true, false-false. The four variables appear across the two\nsides: Y and W identify a row; X and Z identify a column. Together they identify\none of sixteen four-variable assignments."
+        }
+      ],
+      "visual_direction": "Display the paper's measurement form and expand both compound state vectors:\n\n```text\n⟨Y|⟨W|  M  |X⟩|Z⟩\n\n⟨Y,W| = [YW, Y¬W, ¬YW, ¬Y¬W]\n|X,Z⟩ = [XZ, X¬Z, ¬XZ, ¬X¬Z]ᵀ\n```\n\nCross one row and one column and show their four-literal cell expression. Add\nthe small clarification `4 components per side · 4 variables across both sides`."
+    },
+    {
+      "scene_id": "s05",
+      "title": "Follow the paper's worked example",
+      "start_s": 155,
+      "end_s": 212,
+      "duration_s": 57,
+      "voiceover": "The paper's example asks whether W exclusive-or X implies not-Y and Z. Compute\nthe two inner expressions first. The outer implication is false only when its\nleft side is true and its right side is false.\n\nThe tensor construction supplies the sixteen positioned combinations; the\nouter operator selects the compound expressions; and positive valuation turns\nthem into bits. The resulting C M has rows: one-one-zero-zero;\none-one-one-zero; zero-zero-one-one; one-zero-one-one.\n\nThe labels must remain attached. Rows are ordered Y-W and columns X-Z. This\nfour-by-four object represents one compound four-variable rule. It is not one\nof the elementary two-input operator C Ms.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "The paper's example asks whether W exclusive-or X implies not-Y and Z. Compute\nthe two inner expressions first. The outer implication is false only when its\nleft side is true and its right side is false.\n\nThe tensor construction supplies the sixteen positioned combinations; the\nouter operator selects the compound expressions; and positive valuation turns\nthem into bits. The resulting C M has rows: one-one-zero-zero;\none-one-one-zero; zero-zero-one-one; one-zero-one-one.\n\nThe labels must remain attached. Rows are ordered Y-W and columns X-Z. This\nfour-by-four object represents one compound four-variable rule. It is not one\nof the elementary two-input operator C Ms."
+        }
+      ],
+      "visual_direction": "Build `W XOR X` and `¬Y AND Z`, then feed both into implication. Track one false\ncase through a labeled 4×4 LM before revealing the valued result:\n\n```text\n[1 1 0 0]\n[1 1 1 0]\n[0 0 1 1]\n[1 0 1 1]\n```\n\nKeep row headers `(Y,W)` and column headers `(X,Z)` present throughout."
+    },
+    {
+      "scene_id": "s06",
+      "title": "Retrieval",
+      "start_s": 212,
+      "end_s": 238,
+      "duration_s": 26,
+      "voiceover": "Pause on this cell. Before V sub T, it contains a logical expression. Which\nobject are we looking at?\n\n\n\nAn L M. Apply positive valuation and the same position becomes zero or one in\nthe C M. The frame shape did not decide the name; the entry type did.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Pause on this cell. Before V sub T, it contains a logical expression. Which\nobject are we looking at?"
+        },
+        {
+          "kind": "pause",
+          "duration_s": 4.0
+        },
+        {
+          "kind": "speech",
+          "text": "An L M. Apply positive valuation and the same position becomes zero or one in\nthe C M. The frame shape did not decide the name; the entry type did."
+        }
+      ],
+      "visual_direction": "Hold one identified cell fixed. On the answer, pass `V_T` through that cell and\nchange its badge from `LM entry: expression` to `CM entry: bit`."
+    },
+    {
+      "scene_id": "s07",
+      "title": "Higher dimensions and boundary",
+      "start_s": 238,
+      "end_s": 265,
+      "duration_s": 27,
+      "voiceover": "The paper extends this construction inductively. For two-n logical\nsubexpressions, it gives a square two-to-the-n by two-to-the-n L M, followed by\nits positive valuation.\n\nThe next lesson uses a separate repository operation that arranges truth\noutputs into ordered row-column layouts, including rectangles. For this paper\nconstruction, retain the sequence: state-vector outer products, tensor smaller\nL Ms, then positive valuation to a binary C M.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "The paper extends this construction inductively. For two-n logical\nsubexpressions, it gives a square two-to-the-n by two-to-the-n L M, followed by\nits positive valuation.\n\nThe next lesson uses a separate repository operation that arranges truth\noutputs into ordered row-column layouts, including rectangles. For this paper\nconstruction, retain the sequence: state-vector outer products, tensor smaller\nL Ms, then positive valuation to a binary C M."
+        }
+      ],
+      "visual_direction": "Grow `2×2 → 4×4 → 8×8` on a `paper construction` rail. Below a visible\nseparator, preview `repository row-column layout`. End on:\n`outer product → tensor construction → LM → V_T → CM`."
+    }
+  ],
+  "math_typography_contract": "docs/video_factory/deep_series/foundational_cm_production_v2/MATH_TYPOGRAPHY_CONTRACT_V2.json",
+  "narration": {
+    "status": "offline_neural_audition_pending",
+    "scratch_tts_allowed": true,
+    "final_mechanical_tts_forbidden": true
+  },
+  "remote_or_paid_authorized": false,
+  "narration_contract": {
+    "path": "docs/video_factory/deep_series/foundational_cm_production_v2/episodes/logical-matrices-to-higher-dimensional-cms/NARRATION_CONTRACT_V2.json",
+    "sha256": "b2471a649d8744c49dabe549ff810e0241774b644656178fe3da9ae7c0eb8d87"
+  },
+  "content_hash": "e21825e9c1d981b260a30a35f721f427278c28ee0c0675e281355ba4c6c42fcb"
+}
