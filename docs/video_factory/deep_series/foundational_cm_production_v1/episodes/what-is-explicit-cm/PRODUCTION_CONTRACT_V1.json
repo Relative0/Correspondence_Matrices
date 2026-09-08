@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "status": "preview_ready_final_render_not_authorized",
+  "video_id": "what-is-explicit-cm",
+  "script": {
+    "path": "docs/video_factory/deep_series/episodes/what-is-explicit-cm/revision_v4/SCRIPT_V4.md",
+    "sha256": "db89d10c4541bbbb3a6070da752f5aca5a1769f4a197aaf0710074aeb6ee259a"
+  },
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p"
+  },
+  "duration_s": 220,
+  "scenes": [
+    {
+      "scene_id": "s01",
+      "title": "Give every output a coordinate",
+      "start_s": 0,
+      "end_s": 24,
+      "duration_s": 24,
+      "voiceover": "A four-input Boolean function assigns one output to each of its sixteen input\nassignments. The repository can arrange those assignment-output pairs in a\nmatrix by choosing which input bits name the rows and which name the columns.\n\nLet us build that layout and follow one assignment all the way to its cell.",
+      "visual_direction": "Show the fixed rule and one tracked card before revealing the other fifteen:\n\n```text\nF(A,B,C,D) = (A AND B) XOR (C OR D)\ntracked assignment: 1011 → 1\n```\n\nKeep the function and tracked card on a stationary invariant rail."
+    },
+    {
+      "scene_id": "s02",
+      "title": "The layout contract",
+      "start_s": 24,
+      "end_s": 56,
+      "duration_s": 32,
+      "voiceover": "Choose the ordered row list A, B and the ordered column list C, D. A complete\nassignment now supplies two row bits and two column bits. Read each pair\nmost-significant bit first, and each becomes an index from zero through three.\n\nFor assignment one-zero-one-one, A-B is one-zero, so the row index is two.\nC-D is one-one, so the column index is three. The assignment belongs at\ncoordinate two, three.",
+      "visual_direction": "Split the intact `1011 → 1` card into temporary index guides while leaving the\noriginal card visible:\n\n```text\nR=[A,B]: 10₂ → row 2\nC=[C,D]: 11₂ → column 3\norder: MSB-first\n```\n\nCross the row and column cursors at `(2,3)`."
+    },
+    {
+      "scene_id": "s03",
+      "title": "Materialize the 4×4 matrix",
+      "start_s": 56,
+      "end_s": 92,
+      "duration_s": 36,
+      "voiceover": "Two row variables produce four rows, and two column variables produce four\ncolumns. Place every assignment's output at the coordinate determined by its\nA-B and C-D bits. The completed rows are zero-one-one-one, repeated three\ntimes, followed by one-zero-zero-zero.\n\nAt our tracked cell, the output is one: A AND B is zero; C OR D is one; and\nzero XOR one is one. In this project, the completed dense row-column truth\nmatrix is called a repository explicit CM layout.",
+      "visual_direction": "Reveal headers `00, 01, 10, 11` on both axes. Place the tracked card first,\nthen fill the remaining identified cards in a single controlled wave. Settle on:\n\n```text\n0111\n0111\n0111\n1000\n```\n\nKeep `M[2,3]=1` highlighted and retain a small `repository layout` badge."
+    },
+    {
+      "scene_id": "s04",
+      "title": "Coordinates need a key",
+      "start_s": 92,
+      "end_s": 124,
+      "duration_s": 32,
+      "voiceover": "Now suppose someone gives us only coordinate two, three. Can we recover the\nassignment? Not yet. We need the ordered row list, the ordered column list,\nand the bit-order convention.\n\nRestore A-B on the rows, C-D on the columns, and most-significant bit first.\nNow row two decodes to one-zero and column three to one-one, giving assignment\none-zero-one-one. The coordinate locates a case; the value stored there is the\nfunction's output for that case.",
+      "visual_direction": "Temporarily remove the axis key while keeping `(2,3)` visible. Restore `R`, `C`,\nand `MSB-first` one at a time, then reconstruct `1011`. Keep the cell value\nvisually separate from the decoded assignment."
+    },
+    {
+      "scene_id": "s05",
+      "title": "Retrieval",
+      "start_s": 124,
+      "end_s": 154,
+      "duration_s": 30,
+      "voiceover": "Your turn. With A-B on the rows and C-D on the columns, where does assignment\none-one-one-zero go, and what is stored there?\n\n\n\nThe row bits one-one give row three. The column bits one-zero give column two.\nThe function returns zero, so M of three comma two is zero.",
+      "visual_direction": "Show `1110` and three prompts: `row? column? output?`. Reveal `3`, `2`, and `0`\nonly after the pause, with a short evaluation available in captions."
+    },
+    {
+      "scene_id": "s06",
+      "title": "Repartition without changing the function",
+      "start_s": 154,
+      "end_s": 196,
+      "duration_s": 42,
+      "voiceover": "The split need not be even. Put A on the rows and B-C-D on the columns. The\nshape becomes two by eight. Our same assignment now lands at row one, column\nthree, and still stores one.\n\nPut A-B-C on the rows and D on the columns. The shape becomes eight by two.\nThe same assignment lands at row five, column one, still storing one.\n\nThe function has not changed: every complete assignment keeps its output. The\nordered partition changes the shape and the coordinates. These rectangular\nforms are repository-supported row-column truth layouts; they are distinct\nfrom the paper's square logical-matrix construction.",
+      "visual_direction": "Track the single intact card across three layouts:\n\n```text\nAB / CD      4×4     (2,3) → 1\nA / BCD      2×8     (1,3) → 1\nABC / D      8×2     (5,1) → 1\n```\n\nMorph only the layout rail. The invariant rail must not move or change."
+    },
+    {
+      "scene_id": "s07",
+      "title": "Dense and close",
+      "start_s": 196,
+      "end_s": 220,
+      "duration_s": 24,
+      "voiceover": "Dense means that every cell in the requested layout is materialized. With four\ninput variables, these layouts each contain sixteen cells, however rows and\ncolumns divide them.\n\nThe function determines each assignment's output. The ordered row and column\nlists determine where that assignment-output pair appears. That is the\nrepository's explicit layout contract.",
+      "visual_direction": "Show all cells filled in each shape, then return to the unchanged `1011 → 1`\ncard with its three coordinates beneath it. No CM-IR, packed-output, solver, or\nperformance preview is needed."
+    }
+  ],
+  "math_typography_contract": "docs/video_factory/deep_series/foundational_cm_production_v1/MATH_TYPOGRAPHY_CONTRACT_V1.json",
+  "narration": {
+    "status": "voice_selection_pending",
+    "scratch_tts_allowed": true,
+    "final_mechanical_tts_forbidden": true
+  },
+  "remote_or_paid_authorized": false,
+  "narration_contract": {
+    "path": "docs/video_factory/deep_series/foundational_cm_production_v1/episodes/what-is-explicit-cm/NARRATION_CONTRACT_V1.json",
+    "sha256": "4afc4460bdb613ae34fd7045dc4b937e168eb826762cbbe0989f2364bef90d96"
+  },
+  "content_hash": "a03074878572928d3fa92b6b5f711a2dcb35123682dda1d7210c7efdedb73af8"
+}

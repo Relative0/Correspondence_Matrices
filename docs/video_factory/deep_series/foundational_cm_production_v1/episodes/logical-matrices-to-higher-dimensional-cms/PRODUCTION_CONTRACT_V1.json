@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "status": "preview_ready_final_render_not_authorized",
+  "video_id": "logical-matrices-to-higher-dimensional-cms",
+  "script": {
+    "path": "docs/video_factory/deep_series/episodes/logical-matrices-to-higher-dimensional-cms/revision_v2/SCRIPT_V2.md",
+    "sha256": "407e4113e35a5a77969fb13984979b5a9b1de0fecb8544f0e74879a4244921cd"
+  },
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p"
+  },
+  "duration_s": 246,
+  "scenes": [
+    {
+      "scene_id": "s01",
+      "title": "Expressions before bits",
+      "start_s": 0,
+      "end_s": 28,
+      "duration_s": 28,
+      "voiceover": "A correspondence matrix contains binary outputs. A logical matrix keeps one\nstep more information: its cells contain logical expressions.\n\nHere are the four input states for X and Y, written directly into their matrix\npositions: X and Y; X and not-Y; not-X and Y; not-X and not-Y. Because these\nentries are expressions rather than bits, this is a logical matrix—an LM.",
+      "visual_direction": "Build one 2×2 frame from the same four state cards used in the previous lesson.\nPlace the expression tiles directly into their cells:\n\n```text\nM_XY = [ X∧Y      X∧¬Y  ]\n       [ ¬X∧Y     ¬X∧¬Y ]\n```\n\nBadge the object `LM: expression-valued`."
+    },
+    {
+      "scene_id": "s02",
+      "title": "Positive valuation makes the CM",
+      "start_s": 28,
+      "end_s": 72,
+      "duration_s": 44,
+      "voiceover": "The paper then applies a positive valuation, written V sub T, to each\nexpression. Under this valuation, a positive variable state receives one and\nits complemented state receives zero; the logical operations are evaluated\nconsistently from those values.\n\nFor equivalence, the expression is true in the two agreement positions and\nfalse in the two disagreement positions. After positive valuation, its LM\ntherefore yields the binary matrix one-zero, zero-one.\n\nThat is the central relationship: the LM holds logical expressions; applying\npositive valuation entry by entry produces the corresponding binary CM. Shape\nand cell order stay fixed while the entry type changes.",
+      "visual_direction": "First show the paper's equivalence LM:\n\n```text\n[ X↔Y       X XOR Y ]\n[ X XOR Y   X↔Y     ]\n```\n\nPass a gold `V_T` scan through it. Maintain each cell's identity as the tiles\nresolve to `[[1,0],[0,1]]`. Keep a persistent rail:\n`LM expressions → V_T → CM bits`."
+    },
+    {
+      "scene_id": "s03",
+      "title": "How a larger LM is built",
+      "start_s": 72,
+      "end_s": 120,
+      "duration_s": 48,
+      "voiceover": "To represent a compound rule with four variables, the paper builds rather\nthan reshapes. First it forms logical matrices for smaller expressions. Then a\ntensor-and-projection construction places their combinations into a\nfour-by-four expression grid. Finally, the outer logical operator determines\nwhich combined expressions remain in the larger LM.\n\nYou do not need to perform the tensor algebra here. What matters is what each\nstage contributes: the smaller LMs supply expressions; the construction gives\nevery combined state a declared position; and the outer operator supplies the\ncompound rule. Only after that does positive valuation turn the larger LM into\na binary CM.",
+      "visual_direction": "Use a three-stage construction, revealing only the cells needed to understand\neach step:\n\n```text\nsmaller LMs → positioned combinations in a 4×4 LM → outer operator → V_T\n```\n\nShow tensor/projection notation as a secondary label beside the positioning\naction, not as a full-screen equation. Never make the 4×4 grid appear by\nstretching or reshaping a truth vector."
+    },
+    {
+      "scene_id": "s04",
+      "title": "Follow the paper's worked example",
+      "start_s": 120,
+      "end_s": 184,
+      "duration_s": 64,
+      "voiceover": "The paper's example asks whether W exclusive-or X implies not-Y and Z. Compute\nthe two inner expressions first: W XOR X on the left, and not-Y AND Z on the\nright. The outer operator is implication, which is false only when its left\nside is true and its right side is false.\n\nThose components are combined in the expression-valued four-by-four LM. After\npositive valuation, the resulting CM has rows:\n\none-one-zero-zero;\none-one-one-zero;\nzero-zero-one-one;\none-zero-one-one.\n\nThe ordering is part of the result. In the paper's measurement form, the row\nstate is ordered by Y and W, and the column state by X and Z. So a cell can be\ninterpreted only together with those state labels.\n\nThis four-by-four object represents one compound four-variable rule. It is not\none of the elementary two-input operator CMs from the previous lesson.",
+      "visual_direction": "Build two clearly labeled inner modules:\n\n```text\nleft:  W XOR X       right: ¬Y AND Z\n                 ↓\n             implication\n```\n\nTrack one false implication case through the construction before revealing the\nfull valued matrix:\n\n```text\n[1 1 0 0]\n[1 1 1 0]\n[0 0 1 1]\n[1 0 1 1]\n```\n\nLabel rows `(Y,W)` and columns `(X,Z)` throughout the reveal."
+    },
+    {
+      "scene_id": "s05",
+      "title": "Retrieval",
+      "start_s": 184,
+      "end_s": 218,
+      "duration_s": 34,
+      "voiceover": "Pause on this cell. Before V sub T, it contains an expression. Which object are\nwe looking at?\n\n\n\nAn LM. Now apply the valuation. The same position contains zero or one, and the\nresulting object is the CM. The question is not whether the frame looks like a\nmatrix; it is what kind of entry the frame contains.",
+      "visual_direction": "Hold one identified cell fixed. On the learner's answer, pass `V_T` through\nthat cell and change its badge from `LM: expression` to `CM: bit`."
+    },
+    {
+      "scene_id": "s06",
+      "title": "Higher dimensions and boundary",
+      "start_s": 218,
+      "end_s": 246,
+      "duration_s": 28,
+      "voiceover": "The paper extends this construction inductively. For an expression built from\ntwo-n logical subexpressions, it gives a square two-to-the-n by two-to-the-n LM\nand then its positive valuation.\n\nThe next lesson follows a separate repository operation: arranging a complete\ntruth output into ordered row and column layouts, including rectangles. That\nis an implementation layout rule, not this paper construction.\n\nSo retain the sequence: expressions in an LM, positive valuation, binary CM.",
+      "visual_direction": "Grow `2×2 → 4×4 → 8×8` on a rail labeled `paper construction`. Below it,\npreview `repository row-column layout` behind a visible separator. End on\n`LM → V_T → CM`."
+    }
+  ],
+  "math_typography_contract": "docs/video_factory/deep_series/foundational_cm_production_v1/MATH_TYPOGRAPHY_CONTRACT_V1.json",
+  "narration": {
+    "status": "voice_selection_pending",
+    "scratch_tts_allowed": true,
+    "final_mechanical_tts_forbidden": true
+  },
+  "remote_or_paid_authorized": false,
+  "narration_contract": {
+    "path": "docs/video_factory/deep_series/foundational_cm_production_v1/episodes/logical-matrices-to-higher-dimensional-cms/NARRATION_CONTRACT_V1.json",
+    "sha256": "81726f10e26b8a62ea2e051e11ab82062aba05ed5d0371da0da04482188a6724"
+  },
+  "content_hash": "cbe63ed4efb224c2991c20eece400396aef1e5b90ddfc379abd3c435f7271003"
+}

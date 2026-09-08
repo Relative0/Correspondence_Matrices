@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "status": "voice_selection_pending_scratch_tts_permitted",
+  "video_id": "operator-cms-from-truth-tables",
+  "sample_rate_hz": 48000,
+  "channels": 1,
+  "cues": [
+    {
+      "cue_id": "n01",
+      "scene_id": "s01",
+      "start_s": 0,
+      "end_s": 24,
+      "window_s": 24,
+      "text": "A two-input Boolean rule can be written as one small grid. The rows tell us\nwhether X is true or false. The columns do the same for Y. That gives four\ncells—one for every possible pair of input states.\n\nFill each cell with the rule's output, zero or one, and the complete two-by-two\npattern is that rule's correspondence matrix, or CM."
+    },
+    {
+      "cue_id": "n02",
+      "scene_id": "s02",
+      "start_s": 24,
+      "end_s": 58,
+      "window_s": 34,
+      "text": "Take AND. It returns one only when both inputs are true. So the top-left cell,\nthe X-true, Y-true case, gets a one. The other three cases get zero.\n\nNow read the whole grid: true-true gives one; true-false, false-true, and\nfalse-false give zero. One cell records one case. All four cells together\nrecord the complete rule.\n\nThis row and column arrangement—X then not-X, Y then not-Y—is the ordering used\nin the paper. Keeping it visible prevents the bits from becoming an anonymous\npattern."
+    },
+    {
+      "cue_id": "n03",
+      "scene_id": "s03",
+      "start_s": 58,
+      "end_s": 94,
+      "window_s": 36,
+      "text": "AND is one possible rule. How many complete rules are there?\n\nEach of the four cells may independently contain zero or one. That is two\nchoices for the first case, two for the second, two for the third, and two for\nthe fourth. Multiply them: two to the fourth power equals sixteen.\n\nSo there are sixteen possible four-cell output patterns, and therefore sixteen\nBoolean functions of two inputs. Each complete pattern has its own two-by-two\noperator CM."
+    },
+    {
+      "cue_id": "n04",
+      "scene_id": "s04",
+      "start_s": 94,
+      "end_s": 137,
+      "window_s": 43,
+      "text": "Some patterns are familiar. All zeros means always false. AND turns on only\nthe true-true cell. OR turns off only the false-false cell. XOR turns on the\ntwo cases where the inputs disagree. Equivalence turns on the two cases where\nthey agree. All ones means always true.\n\nThe positions matter most for an asymmetric rule. X implies Y is false only\nwhen X is true and Y is false. Swap the operands, and that false case moves.\n\nThe matrix does not discover an operator's name. It records the rule's four\nordered outputs; a familiar name is shorthand for that complete behavior."
+    },
+    {
+      "cue_id": "n05",
+      "scene_id": "s05",
+      "start_s": 137,
+      "end_s": 165,
+      "window_s": 28,
+      "text": "Try reading one without its name. This grid returns zero when the inputs agree\nand one when they differ. What rule is it?\n\n\n\nIt is exclusive-or, or XOR: zero, one, one, zero in the paper's cell order."
+    },
+    {
+      "cue_id": "n06",
+      "scene_id": "s06",
+      "start_s": 165,
+      "end_s": 187,
+      "window_s": 22,
+      "text": "One useful language check: these are sixteen different functions, each with\nfour input cases. Later, a four-input function will itself have sixteen input\nassignments. The number is the same; what we are counting is different.\n\nFor now, retain this: one cell is one case's output; one complete two-by-two CM\nis one two-input Boolean rule."
+    }
+  ],
+  "pronunciation_policy": {
+    "CM": "C M",
+    "LM": "L M",
+    "XOR": "exclusive-or",
+    "V_T": "V sub T",
+    "M[2,3]": "M of two comma three",
+    "2^4": "two to the fourth power",
+    "MSB": "most significant bit"
+  },
+  "quality_gate": "A final voice must sound conversational and pass human audition. Windows SAPI may be used only for timing and must not be released as final narration.",
+  "remote_or_paid_authorized": false
+}
