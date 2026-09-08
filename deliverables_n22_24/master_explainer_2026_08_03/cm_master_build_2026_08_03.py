@@ -14,6 +14,7 @@ self-contained master page, three derived audience pages, and a use-case guide.
     expert.html                      dense technical cut
     usecases.html                    field-oriented application hypotheses
     feature-model-evidence.html       saved real-model results and audit gaps
+    learning-neural-evidence.html     complete learning/neural evidence map
 
 Every number rendered on any page is read from a raw or summary evidence file
 by this script and carried in `_numbers` with a file+field provenance string.
@@ -39,6 +40,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from cm_feature_model_evidence import build_feature_model_evidence
+from cm_learning_neural_evidence import build_learning_neural_evidence
 
 HERE = Path(__file__).resolve().parent
 DELIV = HERE.parent
@@ -1549,6 +1551,12 @@ D["e20_feature_model_audit"], feature_model_numbers = build_feature_model_eviden
 for key, record in feature_model_numbers.items():
     num(key, record["value"], record["fmt"], record["prov"], record["note"])
 
+# ---------------------------------------------------------------- learning/neural evidence (separately pinned, read-only)
+
+D["e22_learning_neural"], learning_neural_numbers = build_learning_neural_evidence(HERE)
+for key, record in learning_neural_numbers.items():
+    num(key, record["value"], record["fmt"], record["prov"], record["note"])
+
 # ================================================================= E21
 # Current-source exact, non-neural architecture evidence (2026-09-03/04).
 # This is a task map, not a replacement for the frozen 2026-08-03 campaign or
@@ -1868,6 +1876,7 @@ PAGES = [
     ("cm_expert_template.html", "expert.html"),
     ("cm_usecases_template.html", "usecases.html"),
     ("cm_feature_model_template.html", "feature-model-evidence.html"),
+    ("cm_learning_neural_template.html", "learning-neural-evidence.html"),
 ]
 
 out_json = HERE / "cm_master_data_2026_08_03.json"

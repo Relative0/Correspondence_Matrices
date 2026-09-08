@@ -3144,6 +3144,1045 @@
       "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-frozen-audit-regression-2026-08-27/junit.xml :: testcase counts and outcomes"
     ]
   },
+  "e22_learning_neural": {
+    "schema": "cm-learning-neural-website-evidence/v1",
+    "status": "verified_read_only_no_training",
+    "updated": "2026-09-04",
+    "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
+    "tasks": [
+      {
+        "id": "A",
+        "name": "Exact answers / relations",
+        "role": "Predict a complete exact Boolean object",
+        "verdict": "Do not replace the exact output and checker."
+      },
+      {
+        "id": "B",
+        "name": "Decomposition / cuts",
+        "role": "Propose useful exact decompositions",
+        "verdict": "Current learned proposals do not avoid certified global work."
+      },
+      {
+        "id": "C",
+        "name": "Partition ranking",
+        "role": "Order exact candidate search",
+        "verdict": "Blocked on a sound early-termination certificate."
+      },
+      {
+        "id": "D",
+        "name": "Exact backend selection",
+        "role": "Choose among task-identical exact arms",
+        "verdict": "Current exposed portfolios are fixed-winner or evidence-incomplete."
+      },
+      {
+        "id": "E",
+        "name": "Runtime / cost prediction",
+        "role": "Predict exact execution cost",
+        "verdict": "Analytical controls remain stronger; all routing costs must be charged."
+      },
+      {
+        "id": "F",
+        "name": "CM representation learning",
+        "role": "Learn embeddings over CM structure",
+        "verdict": "Research-only until a downstream task, ablation and economic gate exist."
+      }
+    ],
+    "timeline": [
+      {
+        "milestone": "AB",
+        "task": "A,F",
+        "question": "exact relation learning",
+        "cohort": "Synthetic exhaustive relations",
+        "method": "NumPy MLP and exact validator",
+        "baselines": "Plain controls",
+        "result": "Exact on the narrow generated task; did not establish a useful deployed decision surface.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "superseded",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONES_AB_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestones_ab_results.json"
+      },
+      {
+        "milestone": "C",
+        "task": "A,F",
+        "question": "architecture transfer",
+        "cohort": "Synthetic train/test plus EPFL confirmation",
+        "method": "matrix MLP/CNN, graph GNN, fused and retrieval",
+        "baselines": "majority and structural controls",
+        "result": "Some test splits were perfect; transfer and seed behavior were inconsistent.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c_results.json"
+      },
+      {
+        "milestone": "C2",
+        "task": "A,F",
+        "question": "variable-size transfer",
+        "cohort": "Variable-size synthetic plus EPFL",
+        "method": "multiscale CNN, GNN and fusion",
+        "baselines": "exact detector",
+        "result": "EPFL was all-negative; specificity only, so no balanced deployment claim.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C2_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c2_results.json"
+      },
+      {
+        "milestone": "C3",
+        "task": "B,F",
+        "question": "natural decomposition",
+        "cohort": "Natural decompositions with held-out confirmation",
+        "method": "natural GNN and decoder",
+        "baselines": "structural linear",
+        "result": "Balanced accuracy was modest and accepted-positive recall was low.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c3_natural_decomposition_results.json"
+      },
+      {
+        "milestone": "C4",
+        "task": "B,C",
+        "question": "direct cut ranking",
+        "cohort": "Natural cut candidates",
+        "method": "cut-ranking GNN",
+        "baselines": "exact ranking/control",
+        "result": "Confirmation ranking improved, but test transfer and accepted coverage did not hold.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json"
+      },
+      {
+        "milestone": "C5",
+        "task": "B,C",
+        "question": "variable conditioned cuts",
+        "cohort": "Variable-width natural cuts",
+        "method": "conditioned GNN",
+        "baselines": "exact ANF control",
+        "result": "Equivariance stayed exact; learned safe path was slower and recall remained low.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "retained",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json"
+      },
+      {
+        "milestone": "C6–C12",
+        "task": "B,C",
+        "question": "screening, bounds and completion",
+        "cohort": "Successive natural candidate cohorts",
+        "method": "exact structural screens plus learned ranking probes",
+        "baselines": "analytical and exact controls",
+        "result": "The work shifted from classifier quality to whether global-best completion could be avoided; it could not.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "superseded",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c12_adaptive_dispatcher_results.json"
+      },
+      {
+        "milestone": "C13–C18",
+        "task": "C,D",
+        "question": "backend/candidate decision surfaces",
+        "cohort": "Held-out and exact-screened cohorts",
+        "method": "small policies and structural features",
+        "baselines": "fixed exact backends",
+        "result": "Signals appeared on restricted surfaces but did not survive stronger exact baselines or charged economics.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c18_independent_gf2_transfer_results.json"
+      },
+      {
+        "milestone": "C19–C22",
+        "task": "B,C",
+        "question": "global-best certificates",
+        "cohort": "Natural candidate universes",
+        "method": "ranking and completion policies",
+        "baselines": "global completion search",
+        "result": "C21 exposed the completion barrier; C22 retained the certificate boundary.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "blocked",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c21_task_matched_gf2_method_table_results.json"
+      },
+      {
+        "milestone": "C23–C29",
+        "task": "D,E",
+        "question": "prepared/runtime policies",
+        "cohort": "Prepared exact evaluation surfaces",
+        "method": "rules, predictors and shadow policies",
+        "baselines": "fixed and oracle exact arms",
+        "result": "Headroom narrowed as task contracts and baselines became more exact.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c29_variance_localization_results.json"
+      },
+      {
+        "milestone": "C30–C36",
+        "task": "D,E",
+        "question": "context and repeated-query routing",
+        "cohort": "Natural repeated-query cohorts",
+        "method": "prepared policies and shadow evaluation",
+        "baselines": "current bigint/native exact portfolio",
+        "result": "The final exposed portfolio selected one fixed exact method, leaving no decision to learn.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "retained",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C36_WIDE_NATURAL_REPEATED_QUERY_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c36_wide_natural_repeated_query_results.json"
+      },
+      {
+        "milestone": "D–D4",
+        "task": "D,E",
+        "question": "exact backend and cost prediction",
+        "cohort": "Exact backend cohorts",
+        "method": "trees/rules and cost models",
+        "baselines": "stronger exact portfolio",
+        "result": "Early heterogeneity did not become an admissible, fully charged routing policy.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "superseded",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_D_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_d_results.json"
+      },
+      {
+        "milestone": "D5–D10",
+        "task": "D,E",
+        "question": "gated selectors and shadow evaluation",
+        "cohort": "Held-out/shadow exact surfaces",
+        "method": "abstaining policies",
+        "baselines": "fixed/oracle exact arms",
+        "result": "D9 abstained on every case; gate and unconditional economics were unfavorable.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_d10_indexed_rule_engine_results.json"
+      },
+      {
+        "milestone": "E1–E2",
+        "task": "E",
+        "question": "analytical recognition/cost",
+        "cohort": "Exact cost surfaces",
+        "method": "first-occurrence control and learned cost tree",
+        "baselines": "analytical controls",
+        "result": "The analytical control was strongest; the learned cost tree was slower.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "retained",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_e2_sat_guidance_results.json"
+      },
+      {
+        "milestone": "Reassessment",
+        "task": "A–F",
+        "question": "neural eligibility",
+        "cohort": "All exposed development evidence",
+        "method": "evidence synthesis; no fitting",
+        "baselines": "current exact portfolios",
+        "result": "No training: advice off, complete abstention, exact fallback unchanged.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "retained",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/research/CM_NEURAL_ARCHITECTURE_REASSESSMENT_2026_09_02.md",
+        "artifact": "../../docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json"
+      },
+      {
+        "milestone": "Post-benchmark",
+        "task": "B–E",
+        "question": "new decision surfaces",
+        "cohort": "Verified architecture comparison",
+        "method": "gross/charged economics audit",
+        "baselines": "task-identical fixed and oracle arms",
+        "result": "A small version-history gross signal remained development-only and cost-incomplete.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "retained",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/research/CM_POST_BENCHMARK_NEURAL_ELIGIBILITY_2026_09_03.md",
+        "artifact": "../../docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json"
+      },
+      {
+        "milestone": "Current protocol",
+        "task": "D,E",
+        "question": "source-blind future gate",
+        "cohort": "Frozen source-group cohort",
+        "method": "label-free features; fit not authorized",
+        "baselines": "majority and analytical controls",
+        "result": "Freeze verified with no timings, labels, models, prospective data or cloud work.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "development-only",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/research/CM_VERSION_HISTORY_LEARNING_PROTOCOL_2026_09_04.md",
+        "artifact": "../../docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json"
+      }
+    ],
+    "milestone_sources": [
+      {
+        "milestone": "AB",
+        "report": "../../docs/recognition/LEARNING_MILESTONES_AB_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestones_ab_results.json",
+        "artifact_sha256": "02eac562a7627ea86738abcfc7ee6caf3514083418e76a149c9e2254505236e7"
+      },
+      {
+        "milestone": "C",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c_results.json",
+        "artifact_sha256": "f9ee8df9dc6e500624cd50f396c4520028409c0394647066633baa1a0f7f44d5"
+      },
+      {
+        "milestone": "C2",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C2_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c2_results.json",
+        "artifact_sha256": "764ff3f0b81c3a0692f828165279d0216240c90cba4645a369ff2ba8d0c3631b"
+      },
+      {
+        "milestone": "C3",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c3_natural_decomposition_results.json",
+        "artifact_sha256": "2ce77d28434160902fd1fc23024620b99580cfd7b56b1df56e75264af647ea78"
+      },
+      {
+        "milestone": "C4",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json",
+        "artifact_sha256": "9c6fe8b1084929bf1f58f91912d53e0b9e58cee12874c2d2f21eb3a586bc0d7c"
+      },
+      {
+        "milestone": "C5",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json",
+        "artifact_sha256": "f1f535562ed82336c9d5257810f74ebb9feab6907a50815b9497f1db48ef7d4a"
+      },
+      {
+        "milestone": "C6",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c6_packed_source_anf_results.json",
+        "artifact_sha256": "ec398dcb6eddcbc534f0a27c176c8f535fe49441b8ddae2c8a923e59ede3dfa6"
+      },
+      {
+        "milestone": "C7 machine attempt",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C7_SECOND_MACHINE_ATTEMPT_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c7_second_machine_attempt_results.json",
+        "artifact_sha256": "65e1a5bb7e8fde310af00556adab0645bd99f1dc70a020d7f33f8312beb6482b"
+      },
+      {
+        "milestone": "C7 source confirmation",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C7_YOSYS_SOURCE_CONFIRMATION_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c7_yosys_source_confirmation_results.json",
+        "artifact_sha256": "3f034363536072ab08a669e6eaa75b1a0e06c6d66dd92889fdfd5b8848cd2fb6"
+      },
+      {
+        "milestone": "C8",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C8_LINUX_SOURCE_ANF_CONFIRMATION_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c8_linux_source_anf_results.json",
+        "artifact_sha256": "f0d9b350d50a62b60a0452c871728ebf7c1426ca881cd4877f4b44920385b58a"
+      },
+      {
+        "milestone": "C9–C12 consolidated",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c12_adaptive_dispatcher_results.json",
+        "artifact_sha256": "13c306fe6b5443347458ccfc4e16c504ef857a41153362b9241f8e110777c22a"
+      },
+      {
+        "milestone": "C13",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C13_IN_KERNEL_TAIL_SENTINEL_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c13_in_kernel_sentinel_results.json",
+        "artifact_sha256": "a6507e283839cc9a0e72ccea78eb42c3f0ad8663afbe26c636f275f93eef0e91"
+      },
+      {
+        "milestone": "C14",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C14_TASK_GUARD_SHADOW_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c14_task_guard_results.json",
+        "artifact_sha256": "560518fe675cca5425d62745f233eae3bd0ba1f6f12fae189e3d2cc2540483c5"
+      },
+      {
+        "milestone": "C15",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c15_exact_cm_gf2_results.json",
+        "artifact_sha256": "6b7fb5dcf345297efbe6db910a06ec032671e641dc8b323b58905d05970a4d58"
+      },
+      {
+        "milestone": "C16",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_c16_exact_screened_gf2_results.json",
+        "artifact_sha256": "eb96e68f9368aa6b4cd7a8a2eaa2047c981ee9f7660991011396f0f16025a47c"
+      },
+      {
+        "milestone": "C17",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C17_GF2_TASK_DISPATCHER_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c17_gf2_task_dispatcher_results.json",
+        "artifact_sha256": "81bb0f789b2b7592a3888aee902b16f64923bf9d73d99bba3e561e57ea0594c2"
+      },
+      {
+        "milestone": "C18",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c18_independent_gf2_transfer_results.json",
+        "artifact_sha256": "956e41c32f97f2983559063e4bec8bc01f818a92ab957a3f8e1dda1511a867f0"
+      },
+      {
+        "milestone": "C19",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C19_CHEAP_GF2_WORK_POLICY_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c19_cheap_gf2_work_policy_results.json",
+        "artifact_sha256": "f12a4bb216493e5689cf367a85a8f2235072c450028c3f40d0aeeecc044f53d1"
+      },
+      {
+        "milestone": "C20",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C20_COMPILED_GF2_POLICY_VTR_TAIL_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c20_compiled_gf2_policy_vtr_tail_results.json",
+        "artifact_sha256": "69216cc800d479369d7c81451dbace8c5c1d285cdeb68fc6a05dd301075e7630"
+      },
+      {
+        "milestone": "C21",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c21_task_matched_gf2_method_table_results.json",
+        "artifact_sha256": "86dee2f954ba422bb3ef79348b02bd51eab423ea649dd90d14e2d3dc6da4cea7"
+      },
+      {
+        "milestone": "C22 boundary",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C24_C22_BOUNDARY_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c24_c22_boundary_results.json",
+        "artifact_sha256": "93b79064b4458a30101fb9baf4724e6072af031bd3e2f86615ff7119456b0839"
+      },
+      {
+        "milestone": "C23",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C23_FRESH_YOSYS_GF2_TABLE_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c23_fresh_yosys_gf2_table_results.json",
+        "artifact_sha256": "c4952c20830055f82ac701d4497a4fa2491c0afa028a0e1afd5964c74a084618"
+      },
+      {
+        "milestone": "C25",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C25_RESIDENT_C22_SESSION_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c25_resident_c22_session_results.json",
+        "artifact_sha256": "fb0d28b6064631f56f80ff84850a8e963beb14284c8beef57d38756b9b8d5dd6"
+      },
+      {
+        "milestone": "C26",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C26_FUSED_VERIFIED_CONTEXT_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c26_fused_verified_context_results.json",
+        "artifact_sha256": "87334ba38ad7b55b7a321c3ce274179c8181247352852ac753ff9f058ac8b1db"
+      },
+      {
+        "milestone": "C27",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C27_SUPPORT_AWARE_FRESH_CONFIRMATION_2026_08_31.md",
+        "artifact": "../../docs/recognition/learning_milestone_c27_support_aware_fresh_confirmation_results.json",
+        "artifact_sha256": "0f94d3b01aeb09f4ca31b91ea1d88b7fede804645629ee9c5379d630de33b103"
+      },
+      {
+        "milestone": "C28",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C28_CROSS_MACHINE_PROFITABILITY_ADJUDICATION_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c28_cross_machine_profitability_adjudication_results.json",
+        "artifact_sha256": "96da72330c286e2e31a5b0341850b0bd09add941bfaf0283b68e65c88c6b788a"
+      },
+      {
+        "milestone": "C29",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c29_variance_localization_results.json",
+        "artifact_sha256": "315cc0c3716c043f041ffab569adbf3558037da7b6fc8031d3388c526c670558"
+      },
+      {
+        "milestone": "C30",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C30_PREPARED_POLICY_CONTEXT_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c30_prepared_policy_context_results.json",
+        "artifact_sha256": "1e59ccb25b3d6fd385a13acf8aa68ad5d989536fc99d6c56ba23bbd026c7c6cb"
+      },
+      {
+        "milestone": "C31",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C31_PROSPECTIVE_SECOND_MACHINE_FREEZE_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c31_prepared_policy_replication_results.json",
+        "artifact_sha256": "2a47b9d8fac2a6065a5b4c9e256d16699a4c7eac8c9fadaa7ce1ec66a609255f"
+      },
+      {
+        "milestone": "C32",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C32_PREPARED_POLICY_SHADOW_BOUNDARY_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c32_prepared_policy_shadow_results.json",
+        "artifact_sha256": "6c569eb823f47c6baa146ac9a18eb052b8988345d8bff1fe04142c9a14ee2207"
+      },
+      {
+        "milestone": "C33",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C33_BOUNDED_ASYNC_SHADOW_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c33_async_shadow_results.json",
+        "artifact_sha256": "2f3aec70c10a50ba53430438647ac6c5df94a3e14cf8d6f6cc6f4444f3fc044e"
+      },
+      {
+        "milestone": "C34",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C34_NATURAL_TASK_MATCHED_HEADROOM_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c34_natural_headroom_results.json",
+        "artifact_sha256": "5cb1ed27d73098d6a255f9af56820f379509124479209cd09e89f840c5d2c743"
+      },
+      {
+        "milestone": "C35",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C35_NATURAL_REPEATED_QUERY_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c35_natural_repeated_query_results.json",
+        "artifact_sha256": "ebbc616f30e10cc51599a53bf7b76c1ad4ed5984fd842545c3f170238a86edf2"
+      },
+      {
+        "milestone": "C36",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_C36_WIDE_NATURAL_REPEATED_QUERY_2026_09_01.md",
+        "artifact": "../../docs/recognition/learning_milestone_c36_wide_natural_repeated_query_results.json",
+        "artifact_sha256": "2fac5a306347e2692c50ca4ea1a6447d57b4c2505859b66f68fd796c6d6851f6"
+      },
+      {
+        "milestone": "D–D9 consolidated",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_D_2026_08_29.md",
+        "artifact": "../../docs/recognition/learning_milestone_d_results.json",
+        "artifact_sha256": "354825f6420401079719f137ebd9b929d1c12cc52779a89ec48ade0a5e5954eb"
+      },
+      {
+        "milestone": "D10",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_D10_INDEXED_RULE_ENGINE_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_d10_indexed_rule_engine_results.json",
+        "artifact_sha256": "b73df10fff09ddeac78b6dd882d722dd017f7d8822fa071b9bad8f41b54c1e8d"
+      },
+      {
+        "milestone": "E1",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_E1_BDD_ORDER_SELECTION_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_e1_bdd_order_results.json",
+        "artifact_sha256": "b0cee859f81cbbf11efc3632bd496bf2ebf6d7c15bad8f964b1d12f39895385a"
+      },
+      {
+        "milestone": "E2",
+        "report": "../../docs/recognition/LEARNING_MILESTONE_E2_SAT_EQUIVALENCE_GUIDANCE_2026_08_30.md",
+        "artifact": "../../docs/recognition/learning_milestone_e2_sat_guidance_results.json",
+        "artifact_sha256": "44c2e1997e7cd1769902c2241dd63734f9d971946b79518a13cffa64a2185240"
+      }
+    ],
+    "quality": [
+      {
+        "model": "C matrix_mlp · seed 1",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_0_value"
+      },
+      {
+        "model": "C matrix_mlp · seed 2",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_1_value"
+      },
+      {
+        "model": "C matrix_mlp · seed 1",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_2_value"
+      },
+      {
+        "model": "C matrix_mlp · seed 2",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_3_value"
+      },
+      {
+        "model": "C graph_gnn · seed 1",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_4_value"
+      },
+      {
+        "model": "C graph_gnn · seed 2",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_5_value"
+      },
+      {
+        "model": "C graph_gnn · seed 1",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_6_value"
+      },
+      {
+        "model": "C graph_gnn · seed 2",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_7_value"
+      },
+      {
+        "model": "C fused · seed 1",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_8_value"
+      },
+      {
+        "model": "C fused · seed 2",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_9_value"
+      },
+      {
+        "model": "C fused · seed 1",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_10_value"
+      },
+      {
+        "model": "C fused · seed 2",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_11_value"
+      },
+      {
+        "model": "C retrieval · seed 173",
+        "split": "confirmatory",
+        "metric": "top-1 exact retrieval",
+        "value": "ln.quality_12_value"
+      },
+      {
+        "model": "C retrieval · seed 271",
+        "split": "confirmatory",
+        "metric": "top-1 exact retrieval",
+        "value": "ln.quality_13_value"
+      },
+      {
+        "model": "C3 matched natural GNN · seed-619",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_14_value",
+        "sensitivity": "ln.quality_14_sensitivity",
+        "specificity": "ln.quality_14_specificity"
+      },
+      {
+        "model": "C3 matched natural GNN · seed-619",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_15_value",
+        "sensitivity": "ln.quality_15_sensitivity",
+        "specificity": "ln.quality_15_specificity"
+      },
+      {
+        "model": "C3 matched natural GNN · seed-887",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_16_value",
+        "sensitivity": "ln.quality_16_sensitivity",
+        "specificity": "ln.quality_16_specificity"
+      },
+      {
+        "model": "C3 matched natural GNN · seed-887",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_17_value",
+        "sensitivity": "ln.quality_17_sensitivity",
+        "specificity": "ln.quality_17_specificity"
+      },
+      {
+        "model": "C4 direct-cut GNN · seed-1049",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_18_value",
+        "sensitivity": "ln.quality_18_sensitivity",
+        "specificity": "ln.quality_18_specificity",
+        "accepted": "ln.quality_18_accepted"
+      },
+      {
+        "model": "C4 direct-cut GNN · seed-1049",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_19_value",
+        "sensitivity": "ln.quality_19_sensitivity",
+        "specificity": "ln.quality_19_specificity",
+        "accepted": "ln.quality_19_accepted"
+      },
+      {
+        "model": "C4 direct-cut GNN · seed-1301",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_20_value",
+        "sensitivity": "ln.quality_20_sensitivity",
+        "specificity": "ln.quality_20_specificity",
+        "accepted": "ln.quality_20_accepted"
+      },
+      {
+        "model": "C4 direct-cut GNN · seed-1301",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_21_value",
+        "sensitivity": "ln.quality_21_sensitivity",
+        "specificity": "ln.quality_21_specificity",
+        "accepted": "ln.quality_21_accepted"
+      },
+      {
+        "model": "C5 variable-cut GNN · seed-1049",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_22_value",
+        "sensitivity": "ln.quality_22_sensitivity",
+        "specificity": "ln.quality_22_specificity",
+        "accepted": "ln.quality_22_accepted"
+      },
+      {
+        "model": "C5 variable-cut GNN · seed-1049",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_23_value",
+        "sensitivity": "ln.quality_23_sensitivity",
+        "specificity": "ln.quality_23_specificity",
+        "accepted": "ln.quality_23_accepted"
+      },
+      {
+        "model": "C5 variable-cut GNN · seed-1301",
+        "split": "confirmatory",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_24_value",
+        "sensitivity": "ln.quality_24_sensitivity",
+        "specificity": "ln.quality_24_specificity",
+        "accepted": "ln.quality_24_accepted"
+      },
+      {
+        "model": "C5 variable-cut GNN · seed-1301",
+        "split": "test",
+        "metric": "balanced accuracy",
+        "value": "ln.quality_25_value",
+        "sensitivity": "ln.quality_25_sensitivity",
+        "specificity": "ln.quality_25_specificity",
+        "accepted": "ln.quality_25_accepted"
+      },
+      {
+        "model": "C2 always-abstain control",
+        "split": "EPFL (no positive labels)",
+        "metric": "ordinary accuracy",
+        "value": "ln.quality_26_value"
+      },
+      {
+        "model": "C graph GNN · seed 1",
+        "split": "EPFL (no positive labels)",
+        "metric": "specificity only",
+        "value": "ln.quality_27_value"
+      },
+      {
+        "model": "C graph GNN · seed 2",
+        "split": "EPFL (no positive labels)",
+        "metric": "specificity only",
+        "value": "ln.quality_28_value"
+      }
+    ],
+    "models": [
+      {
+        "family": "Matrix MLP",
+        "parameters": "ln.params_matrix_mlp",
+        "input": "dense fixed CM tensor → binary label",
+        "exactness": "prediction only; exact checker retained",
+        "lesson": "Strong narrow splits did not establish stable transfer."
+      },
+      {
+        "family": "Matrix CNN",
+        "parameters": "ln.params_matrix_cnn",
+        "input": "CM image-like tensor",
+        "exactness": "prediction only",
+        "lesson": "No durable advantage over simpler controls."
+      },
+      {
+        "family": "Graph GNN",
+        "parameters": "ln.params_graph_gnn",
+        "input": "canonical source-DAG graph → label/proposal",
+        "exactness": "equivariant proposal; exact output checked",
+        "lesson": "Some perfect split scores coexisted with weak confirmation and low accepted recall."
+      },
+      {
+        "family": "Fusion",
+        "parameters": "ln.params_fusion",
+        "input": "combined structural views",
+        "exactness": "advisory only",
+        "lesson": "Added representation capacity did not close deployment gates."
+      },
+      {
+        "family": "Graph retrieval",
+        "parameters": "ln.params_retrieval",
+        "input": "source-DAG embedding → top-1 exact artifact",
+        "exactness": "retrieval accepted only after exact check",
+        "lesson": "Confirmation varied across seeds."
+      },
+      {
+        "family": "Variable matrix MLP",
+        "parameters": "ln.params_variable_mlp",
+        "input": "padded variable-size CM tensor → label",
+        "exactness": "prediction only",
+        "lesson": "Size transfer did not survive natural evaluation."
+      },
+      {
+        "family": "Multiscale CM",
+        "parameters": "ln.params_multiscale",
+        "input": "multi-resolution CM tensors → label",
+        "exactness": "prediction only",
+        "lesson": "Natural EPFL had no positive labels; only specificity was identifiable."
+      },
+      {
+        "family": "Variable fusion",
+        "parameters": "ln.params_variable_fused",
+        "input": "variable matrix plus source graph → label",
+        "exactness": "prediction only",
+        "lesson": "Fusion did not close the natural transfer gate."
+      },
+      {
+        "family": "Natural multitask GNN",
+        "parameters": "ln.params_natural_multitask",
+        "input": "canonical source DAG → label plus interaction edges",
+        "exactness": "decoded proposal checked exactly",
+        "lesson": "Auxiliary edge fit did not yield accepted exact partitions."
+      },
+      {
+        "family": "Structural linear",
+        "parameters": "ln.params_structural",
+        "input": "hand-defined source features → label/rank",
+        "exactness": "analytical comparison control",
+        "lesson": "Simple controls were often competitive and cheaper."
+      },
+      {
+        "family": "Direct-cut / rank GNN",
+        "parameters": "ln.params_direct_cut",
+        "input": "source DAG and candidate cut → label/rank",
+        "exactness": "proposal plus exact ANF/fallback",
+        "lesson": "Ranking gains were split- and seed-sensitive."
+      },
+      {
+        "family": "Variable cut model",
+        "parameters": "ln.params_cut",
+        "input": "conditioned cut candidates",
+        "exactness": "zero equivariance error retained",
+        "lesson": "Safe learned path remained slower than exact ANF."
+      },
+      {
+        "family": "CM IR / packed ANF",
+        "parameters": null,
+        "input": "compiler IR or source polynomial → exact output",
+        "exactness": "exact CM-family execution/teacher, not an embedding",
+        "lesson": "These are foundational exact controls, not learned models."
+      },
+      {
+        "family": "Non-CM exact controls",
+        "parameters": null,
+        "input": "CSE-flat, direct BitSet, R2/native slots, ROBDD/CUDD, SAT/CNF",
+        "exactness": "task-identical exact output required",
+        "lesson": "Control identity and requested artifact must remain explicit."
+      },
+      {
+        "family": "Trees and rules",
+        "parameters": null,
+        "input": "structural/cost features → abstain or exact arm",
+        "exactness": "abstaining advice plus exact fallback",
+        "lesson": "Analytical recognition generally dominated fitted cost policies."
+      }
+    ],
+    "hosts": [
+      {
+        "id": "gcc_epyc_9655",
+        "label": "GCC / EPYC 9655",
+        "prefix": "gcc",
+        "best_fixed": "native_fused_slots"
+      },
+      {
+        "id": "clang_epyc_9575f",
+        "label": "Clang / EPYC 9575F",
+        "prefix": "clang",
+        "best_fixed": "native_fused_slots"
+      }
+    ],
+    "ladder_blockers": [
+      "oracle_labels_not_stable_across_hosts",
+      "learning_protocol_not_frozen_before_labels",
+      "learning_split_not_frozen_before_labels",
+      "fully_charged_cost_vector_incomplete",
+      "same_host_recognition_timing_missing",
+      "benchmark_claim_boundary_forbids_learning"
+    ],
+    "charged_costs": [
+      {
+        "key": "feature_extraction_and_control",
+        "label": "feature extraction and control",
+        "status": "missing"
+      },
+      {
+        "key": "model_inference",
+        "label": "model inference",
+        "status": "missing"
+      },
+      {
+        "key": "exact_verification",
+        "label": "exact verification",
+        "status": "missing"
+      },
+      {
+        "key": "expected_fallback",
+        "label": "expected fallback",
+        "status": "missing"
+      }
+    ],
+    "source_blind": {
+      "features": [
+        "variable_count",
+        "identity_node_count",
+        "edge_count",
+        "maximum_depth",
+        "shared_node_count",
+        "maximum_reference_count",
+        "not_count",
+        "and_count",
+        "or_count",
+        "xor_count",
+        "imp_count",
+        "eqv_count",
+        "query_count"
+      ],
+      "forbidden": [
+        "case_id",
+        "source_group_sha256",
+        "family",
+        "shape",
+        "replicate",
+        "split",
+        "expression_v2",
+        "query_trace",
+        "structural_digest",
+        "alpha_structural_digest",
+        "oracle_label",
+        "method_timing",
+        "output_sha256",
+        "physical_machine_sha256",
+        "compiler_sha256",
+        "block",
+        "arm_order"
+      ],
+      "split_assignment": "SHA-256 salted source-group assignment; source group is visible only to the split auditor.",
+      "freeze_sha256": "3cf5c2672e01aae6130282f2ea1a65de32746597a59689605a2d913a675a0692"
+    },
+    "certificate": [
+      "certificate_present",
+      "global_objective_bound_sound",
+      "all_unexplored_partitions_covered",
+      "checker_independent_of_model",
+      "candidate_reconstruction_exact",
+      "exact_fallback_unchanged",
+      "completion_search_not_run"
+    ],
+    "next_actions": {
+      "now": [
+        "Replay pinned verifiers and website evidence tests.",
+        "Harden malformed, drifted and economically inconsistent handoff fixtures.",
+        "Prepare candidate code that remains disabled until a freeze-bound handoff is eligible.",
+        "Develop the independent C5 certificate checker and metamorphic fixtures without fitting a model."
+      ],
+      "benchmark": [
+        "Run the frozen exact cohort on two distinct physical machines.",
+        "Generate joint cross-host labels under the precommitted abstention policy.",
+        "Measure every charged p95 component on each decision-bearing host.",
+        "Return a source-closed, independently verified handoff with all refusals retained."
+      ],
+      "prohibited": [
+        "Do not train or fit on the already inspected historical cohort.",
+        "Do not read validation, audit or prospective labels before their gate permits it.",
+        "Do not combine absolute timings across hosts or runs.",
+        "Do not enable advice, production routing or a learned exactness bypass."
+      ]
+    },
+    "links": [
+      {
+        "label": "Deep technical dossier",
+        "href": "../../docs/research/CM_COMPUTATION_DEEP_TECHNICAL_DOSSIER.md"
+      },
+      {
+        "label": "Learning roadmap",
+        "href": "../../docs/recognition/LEARNING_ROADMAP.md"
+      },
+      {
+        "label": "Neural benchmark assessment",
+        "href": "../../docs/recognition/CM_NEURAL_BENCHMARK_ASSESSMENT_2026_08_29.md"
+      },
+      {
+        "label": "Neural architecture reassessment",
+        "href": "../../docs/research/CM_NEURAL_ARCHITECTURE_REASSESSMENT_2026_09_02.md"
+      },
+      {
+        "label": "Post-benchmark eligibility",
+        "href": "../../docs/research/CM_POST_BENCHMARK_NEURAL_ELIGIBILITY_2026_09_03.md"
+      },
+      {
+        "label": "Version-history learning protocol",
+        "href": "../../docs/research/CM_VERSION_HISTORY_LEARNING_PROTOCOL_2026_09_04.md"
+      },
+      {
+        "label": "Learning benchmark handoff contract",
+        "href": "../../docs/research/CM_LEARNING_BENCHMARK_HANDOFF_CONTRACT_2026_09_04.md"
+      },
+      {
+        "label": "Query-ladder learning evaluation",
+        "href": "../../docs/research/CM_QUERY_LADDER_DEVELOPMENT_LEARNING_EVALUATION_2026_09_04.md"
+      },
+      {
+        "label": "Source-blind freeze manifest",
+        "href": "../../docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/MANIFEST.json"
+      },
+      {
+        "label": "Source-blind independent verification",
+        "href": "../../docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json"
+      }
+    ],
+    "identities": [
+      {
+        "role": "c",
+        "path": "docs/recognition/learning_milestone_c_results.json",
+        "sha256": "f9ee8df9dc6e500624cd50f396c4520028409c0394647066633baa1a0f7f44d5"
+      },
+      {
+        "role": "c2",
+        "path": "docs/recognition/learning_milestone_c2_results.json",
+        "sha256": "764ff3f0b81c3a0692f828165279d0216240c90cba4645a369ff2ba8d0c3631b"
+      },
+      {
+        "role": "c3",
+        "path": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json",
+        "sha256": "2ce77d28434160902fd1fc23024620b99580cfd7b56b1df56e75264af647ea78"
+      },
+      {
+        "role": "c4",
+        "path": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json",
+        "sha256": "9c6fe8b1084929bf1f58f91912d53e0b9e58cee12874c2d2f21eb3a586bc0d7c"
+      },
+      {
+        "role": "c5",
+        "path": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json",
+        "sha256": "f1f535562ed82336c9d5257810f74ebb9feab6907a50815b9497f1db48ef7d4a"
+      },
+      {
+        "role": "initial",
+        "path": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json",
+        "sha256": "b6025da7d5169f448629c62f01ff60b0f06e9f9fe8a172382735c654cead2f9f"
+      },
+      {
+        "role": "native",
+        "path": "docs/recognition/runs/neural-native-portfolio-reassessment-development-20260903-001/assessment.json",
+        "sha256": "f8c83eb8c0d11d46958cfcb77ac1d499898c049f3e07bd66b71f9df247b801cb"
+      },
+      {
+        "role": "post",
+        "path": "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json",
+        "sha256": "40bd8e37a475090496beaf88d17ce31442e57190060d2b94b46dac650be3e8df"
+      },
+      {
+        "role": "protocol",
+        "path": "docs/recognition/runs/version-history-learning-development-20260904-004/assessment.json",
+        "sha256": "50d24b481c1e91a94329ae563042624b3e1f2bcf1601134e29a974c8e9d00460"
+      },
+      {
+        "role": "freeze",
+        "path": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json",
+        "sha256": "3cf5c2672e01aae6130282f2ea1a65de32746597a59689605a2d913a675a0692"
+      },
+      {
+        "role": "freeze_verification",
+        "path": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json",
+        "sha256": "a205649db2b9b4e6a74ad74949437dc98ed428a89d4cc9cde5a692ddb9617c7e"
+      }
+    ]
+  },
   "e21_current_architecture": {
     "as_of": "2026-09-04",
     "kind": "exact non-neural task map; no selector fit or production-routing change",
@@ -6892,6 +7931,678 @@
       "fmt": "ratio3",
       "prov": "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-deep-artifact-audit-2026-08-27/clustered-statistics.json :: 16.endpoint_cm_over_cudd_extraction",
       "note": "Saved feature-model cohort only; performance remains provisional."
+    },
+    "ln.initial_cases": {
+      "value": 18,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json :: labels.cases",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.word_headroom": {
+      "value": 1.0004156208947645,
+      "fmt": "x9",
+      "prov": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json :: economics.post_r2_word_portfolio.gross_headroom_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.bigint_headroom": {
+      "value": 1.0,
+      "fmt": "x9",
+      "prov": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json :: economics.r2_plus_bigint_engine_portfolio.gross_headroom_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.bigint_labels": {
+      "value": 18,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json :: labels.r2_plus_bigint_engine_portfolio.counts.cse_bigint",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.native_headroom": {
+      "value": 1.0,
+      "fmt": "x9",
+      "prov": "docs/recognition/runs/neural-native-portfolio-reassessment-development-20260903-001/assessment.json :: economics.gross_headroom_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.version_cases": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json :: strongest_surface.complete_cases",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.version_gross": {
+      "value": 1.1375804204974516,
+      "fmt": "x9",
+      "prov": "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json :: strongest_surface.gross_headroom_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.version_budget": {
+      "value": 3560.5,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json :: strongest_surface.maximum_overhead_ns_per_case_preserving_1_10x",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.protocol_feature_cost": {
+      "value": 2894.1833333333334,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/version-history-learning-development-20260904-004/assessment.json :: economics.fully_charged_costs_ns_per_case.feature_extraction_and_control",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.protocol_optimistic": {
+      "value": 1.1068428207790568,
+      "fmt": "x3",
+      "prov": "docs/recognition/runs/version-history-learning-development-20260904-004/assessment.json :: economics.optimistic_p95_speedup_if_retrospective_control_is_oracle",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.freeze_cases": {
+      "value": 72,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.case_count",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.split_development_audit": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.source_group_counts_by_split.development_audit",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.split_development_fit": {
+      "value": 40,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.source_group_counts_by_split.development_fit",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.split_development_validation": {
+      "value": 16,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.source_group_counts_by_split.development_validation",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.features": {
+      "value": 13,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: model_input_contract.bounded_inference_shape.features",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.prior_overlap": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.prior_alpha_structural_overlap_count",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.seed_min": {
+      "value": 3,
+      "fmt": "int",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_NEURAL_TRAINING_SEEDS",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gate_ba": {
+      "value": 65.0,
+      "fmt": "pct0",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_BALANCED_ACCURACY",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gate_chance": {
+      "value": 15.0,
+      "fmt": "pct0",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_BALANCED_ACCURACY_ABOVE_CHANCE",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gate_accuracy": {
+      "value": 10.0,
+      "fmt": "pct0",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_ACCURACY_ABOVE_MAJORITY",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gate_control": {
+      "value": 3.0,
+      "fmt": "pct0",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_BALANCED_ACCURACY_ABOVE_ANALYTICAL_CONTROL",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gate_coverage": {
+      "value": 80.0,
+      "fmt": "pct0",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_NON_ABSTAIN_COVERAGE",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.economic_gate": {
+      "value": 1.1,
+      "fmt": "x2",
+      "prov": "cmbench/recognition/query_ladder_development_experiment.py :: MIN_FULLY_CHARGED_SPEEDUP",
+      "note": "Minimum fully charged development speedup; gross oracle headroom alone does not pass this gate."
+    },
+    "ln.certificate_work": {
+      "value": 25.0,
+      "fmt": "pct0",
+      "prov": "docs/recognition/runs/version-history-learning-development-20260904-004/assessment.json :: c5_certificate_investigation.evaluation.minimum_global_work_avoided_fraction",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.c5_slow_min": {
+      "value": 6.287634664887024,
+      "fmt": "x1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: min(cost_ratios.*.safe_learned_over_exact_anf)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.c5_slow_max": {
+      "value": 9.231957288588045,
+      "fmt": "x1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: max(cost_ratios.*.safe_learned_over_exact_anf)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.c5_exact_reference": {
+      "value": 1.0,
+      "fmt": "x1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: definition of safe_learned_over_exact_anf ratio",
+      "note": "Exact ANF is the denominator and therefore the 1.0x reference."
+    },
+    "ln.params_matrix_mlp": {
+      "value": 73985,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: models.matrix_mlp_parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_matrix_cnn": {
+      "value": 83841,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: models.matrix_cnn_parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_graph_gnn": {
+      "value": 80001,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: natural GNN run model metadata",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_natural_multitask": {
+      "value": 82926,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: natural multitask GNN run model metadata",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_fusion": {
+      "value": 72337,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: models.fused_parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_retrieval": {
+      "value": 72992,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: models.graph_retrieval_parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_variable_mlp": {
+      "value": 99953,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c2_results.json :: models[variable_matrix_mlp].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_multiscale": {
+      "value": 60289,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c2_results.json :: models[multiscale_cm].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_variable_fused": {
+      "value": 64017,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c2_results.json :: models[variable_fused].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_structural": {
+      "value": 18,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: models[structural_pair_ranker].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_direct_cut": {
+      "value": 80651,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: models[direct_cut_gnn].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.params_cut": {
+      "value": 136962,
+      "fmt": "int",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: models[variable_cut_gnn].parameters",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gcc_fixed_ns": {
+      "value": 141549155.0,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: sum(q64 per-case medians for best fixed arm)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gcc_oracle_ns": {
+      "value": 127998459.5,
+      "fmt": "num1",
+      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: sum(q64 per-case per-arm oracle medians)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gcc_gross": {
+      "value": 1.1058660827085969,
+      "fmt": "x9",
+      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: best_fixed_sum_ns / oracle_sum_ns",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.gcc_rows": {
+      "value": 6912,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: q64_rows",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.clang_fixed_ns": {
+      "value": 127877156.0,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: sum(q64 per-case medians for best fixed arm)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.clang_oracle_ns": {
+      "value": 114731375.5,
+      "fmt": "num1",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: sum(q64 per-case per-arm oracle medians)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.clang_gross": {
+      "value": 1.1145787753586203,
+      "fmt": "x9",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: best_fixed_sum_ns / oracle_sum_ns",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.clang_rows": {
+      "value": 6912,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: q64_rows",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.ladder_cases": {
+      "value": 54,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.complete_cases",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.label_agree": {
+      "value": 53,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.label_agreement_cases",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.label_disagree": {
+      "value": 1,
+      "fmt": "int",
+      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.label_disagreement_cases",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.quality_0_value": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.matrix_mlp.test[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_1_value": {
+      "value": 46.875,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.matrix_mlp.test[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_2_value": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.matrix_mlp.confirmatory[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_3_value": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.matrix_mlp.confirmatory[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_4_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.test[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_5_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.test[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_6_value": {
+      "value": 62.5,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.confirmatory[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_7_value": {
+      "value": 62.5,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.confirmatory[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_8_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.fused.test[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_9_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.fused.test[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_10_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.fused.confirmatory[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_11_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.fused.confirmatory[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_12_value": {
+      "value": 87.5,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: retrieval_top1_exact.seed_173.confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_13_value": {
+      "value": 81.25,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: retrieval_top1_exact.seed_271.confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_14_value": {
+      "value": 58.333333333333336,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_14_sensitivity": {
+      "value": 38.88888888888889,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_14_specificity": {
+      "value": 77.77777777777779,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_15_value": {
+      "value": 53.125,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_15_sensitivity": {
+      "value": 25.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_15_specificity": {
+      "value": 81.25,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-619/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_16_value": {
+      "value": 61.111111111111114,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_16_sensitivity": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_16_specificity": {
+      "value": 72.22222222222221,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_17_value": {
+      "value": 59.375,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_17_sensitivity": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_17_specificity": {
+      "value": 68.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c3_natural_decomposition_results.json :: matched_classification.natural_graph_gnn/seed-887/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_18_value": {
+      "value": 63.888888888888886,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_18_sensitivity": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_18_specificity": {
+      "value": 77.77777777777779,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_18_accepted": {
+      "value": 11.11111111111111,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/confirmatory.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_19_value": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_19_sensitivity": {
+      "value": 56.25,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_19_specificity": {
+      "value": 43.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_19_accepted": {
+      "value": 0.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1049/test.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_20_value": {
+      "value": 66.66666666666666,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_20_sensitivity": {
+      "value": 44.44444444444444,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_20_specificity": {
+      "value": 88.88888888888889,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_20_accepted": {
+      "value": 11.11111111111111,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/confirmatory.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_21_value": {
+      "value": 53.125,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_21_sensitivity": {
+      "value": 43.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_21_specificity": {
+      "value": 62.5,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_21_accepted": {
+      "value": 0.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json :: classification.direct_cut_gnn/seed-1301/test.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_22_value": {
+      "value": 77.77777777777779,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_22_sensitivity": {
+      "value": 72.22222222222221,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_22_specificity": {
+      "value": 83.33333333333334,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_22_accepted": {
+      "value": 22.22222222222222,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/confirmatory.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_23_value": {
+      "value": 59.375,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_23_sensitivity": {
+      "value": 68.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_23_specificity": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_23_accepted": {
+      "value": 12.5,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1049/test.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_24_value": {
+      "value": 75.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/confirmatory.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_24_sensitivity": {
+      "value": 83.33333333333334,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/confirmatory.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_24_specificity": {
+      "value": 66.66666666666666,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/confirmatory.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_24_accepted": {
+      "value": 33.33333333333333,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/confirmatory.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_25_value": {
+      "value": 56.25,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/test.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_25_sensitivity": {
+      "value": 68.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/test.sensitivity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_25_specificity": {
+      "value": 43.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/test.specificity",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_25_accepted": {
+      "value": 18.75,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: classification.variable_cut_gnn/seed-1301/test.accepted",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_26_value": {
+      "value": 100.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c2_results.json :: controls.epfl.always_abstain_accuracy.value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_27_value": {
+      "value": 25.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.epfl_specificity_only[0].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.quality_28_value": {
+      "value": 50.0,
+      "fmt": "pct1",
+      "prov": "docs/recognition/learning_milestone_c_results.json :: classification_balanced_accuracy.graph_gnn.epfl_specificity_only[1].value",
+      "note": "Historical held-out or inspected-confirmation metric; small cohorts and seed variance apply."
+    },
+    "ln.milestone_source_pairs": {
+      "value": 38,
+      "fmt": "int",
+      "prov": "deliverables_n22_24/master_explainer_2026_08_03/cm_learning_neural_evidence.py :: len(MILESTONE_SOURCES)",
+      "note": "Explicit publication allowlist; consolidated stages are labeled as such."
     },
     "arch.native.windows.single": {
       "value": 1.472004945748838,

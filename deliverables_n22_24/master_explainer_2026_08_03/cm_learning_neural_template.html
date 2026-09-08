@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — learning and neural evidence</title>
+<meta name="description" content="A complete, evidence-bound map of CM learning and neural experiments, exact controls, selector economics, provenance and future gates.">
+<meta property="og:title" content="Correspondence Matrices — learning and neural evidence">
+<meta property="og:description" content="What was learned, what failed, why no route is promoted, and what evidence would justify another experiment.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section class="sec">
+    <h1>Learning and neural evidence</h1>
+    <p>This source template is populated by the site builder. <a href="learning-neural-evidence.html">Open the generated page</a>.</p>
+  </section>
+</main>
+<script>
+const IS_SOURCE_TEMPLATE = /(?:^|\/)cm_learning_neural_template\.html$/i.test(location.pathname);
+if (IS_SOURCE_TEMPLATE) location.replace("learning-neural-evidence.html");
+const DATA = IS_SOURCE_TEMPLATE ? { _numbers: {} } : /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+<script>
+if (!IS_SOURCE_TEMPLATE) {
+const E = DATA.e22_learning_neural;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· learning & neural</span>",
+  links: [["index.html", "Full knowledge base"], ["layperson.html", "Simple One-Pager"],
+          ["investor.html", "Investor overview"], ["expert.html", "Technical Summary"],
+          ["usecases.html", "CM Use Cases"], ["feature-model-evidence.html", "Results & audit"], ["#dashboard", "Summary"],
+          ["#economics", "Economics"], ["#tasks", "Tasks A–F"], ["#timeline", "Timeline"],
+          ["#provenance", "Provenance"], ["#next-work", "Next gates"]],
+}));
+
+function evidenceTable(headers, rows, label) {
+  const table = h("table", { class: "ln-matrix", "aria-label": label });
+  table.append(h("thead", {}, [h("tr", {}, headers.map(text => h("th", { scope: "col", text })))]));
+  table.append(h("tbody", {}, rows.map(row => h("tr", {}, row.map(cell => h("td", { text: cell }))))));
+  return h("div", { class: "ln-scroll", tabindex: "0", role: "region", "aria-label": label }, [table]);
+}
+
+app.append(h("header", { class: "page" }, [
+  h("p", { class: "eyebrow", text: "Saved evidence · no runtime experiment" }),
+  h("h1", { text: "Learning & neural evidence" }),
+  h("p", { class: "lede", text: "Signal found; no route promoted. The exact fallback remains authoritative while this page separates retained science from missing operational evidence." }),
+  h("p", { class: "meta", text: `Evidence updated ${E.updated}. This browser page reads embedded saved data; it does not fetch artifacts, run benchmarks, fit selectors, or train models.` }),
+]));
+
+{
+  const s = section("dashboard", "Decision dashboard", "The useful answer, before the experiment history",
+    "The current program has a narrow diagnostic signal, several valuable negative results, and no learned execution authority. Every number below is bound to saved evidence.");
+  s.append(h("div", { class: "ln-decision-grid" }, [
+    h("article", { class: "ln-answer" }, [
+      h("p", { class: "pill bad", text: "Current action" }),
+      h("h2", { text: "Use the unchanged exact path" }),
+      h("p", { class: "ln-answer-line", text: "Advice off · complete abstention · no route promoted" }),
+      h("p", { text: E.decision }),
+    ]),
+    h("article", { class: "ln-answer ln-answer-next" }, [
+      h("p", { class: "pill open", text: "What could reopen development" }),
+      h("h2", { text: "A verified, fully charged handoff" }),
+      h("p", { html: `The next admissible evidence is a source-closed two-host Benchmark handoff that passes validation and audit, preserves at least ${T("ln.economic_gate")} after every routing cost, and repeats across ${T("ln.seed_min")} neural seeds.` }),
+      h("p", { text: "That evidence does not exist yet; no prospective data was consumed and no model was trained under the current protocol." }),
+    ]),
+  ]));
+
+  const q64 = h("figure", { class: "ln-figure", "aria-labelledby": "ln-q64-title" });
+  q64.append(h("h3", { id: "ln-q64-title", text: "q64 gross oracle headroom" }));
+  E.hosts.forEach(host => {
+    const value = TV(`ln.${host.prefix}_gross`);
+    const position = Math.max(0, Math.min(100, 100 * (value - 1.00) / 0.12));
+    const gatePosition = Math.max(0, Math.min(100, 100 * (TV("ln.economic_gate") - 1.00) / 0.12));
+    q64.append(h("div", { class: "ln-bullet-row", role: "img", "aria-label": `${host.label}: ${T(`ln.${host.prefix}_gross`)} gross oracle headroom; ${T("ln.economic_gate")} is the fully charged development threshold.` }, [
+      h("div", { class: "ln-bullet-head" }, [h("strong", { text: host.label }), h("span", { text: T(`ln.${host.prefix}_gross`) })]),
+      h("div", { class: "ln-bullet-track", "aria-hidden": "true" }, [
+        h("span", { class: "ln-bullet-fill", style: `width:${position}%` }),
+        h("span", { class: "ln-bullet-gate", style: `left:${gatePosition}%` }),
+        h("span", { class: "ln-bullet-dot", style: `left:${position}%` }),
+      ]),
+    ]));
+  });
+  q64.append(h("div", { class: "ln-bullet-axis", "aria-hidden": "true" }, [
+    h("span", { text: "1.00×" }), h("span", { text: `${T("ln.economic_gate")} gate` }), h("span", { text: "1.12×" }),
+  ]));
+  q64.append(h("figcaption", { html: `Magnified within-host ratios on ${T("ln.ladder_cases")} task-matched cases. Hatched bars are gross oracle upper bounds—not achieved learned speedups. Absolute timings are not compared across hosts.` }));
+
+  const agreement = h("div", { class: "ln-agreement", role: "img", "aria-label": `${T("ln.label_agree")} of ${T("ln.ladder_cases")} oracle labels agree across hosts; ${T("ln.label_disagree")} differs.` }, [
+    h("div", { class: "ln-agreement-head" }, [h("strong", { text: "Cross-host oracle labels" }), h("span", { text: `${T("ln.label_agree")} agree · ${T("ln.label_disagree")} differs` })]),
+    h("div", { class: "ln-agreement-bar", "aria-hidden": "true" }, [
+      h("span", { class: "ln-agree", style: `flex:${TV("ln.label_agree")} 1 0` }),
+      h("span", { class: "ln-differ", style: `flex:${TV("ln.label_disagree")} 1 0` }),
+    ]),
+    h("p", { html: `Agreement is ${T("ln.label_agree")} of ${T("ln.ladder_cases")}; one unstable label is retained, not averaged away.` }),
+  ]);
+
+  const gates = [
+    ["measured", "Measured", `Gross headroom reaches ${T("ln.economic_gate")} on both hosts`, "Necessary, but it is only an oracle upper bound."],
+    ["blocked", "Blocked", "Stable joint labels", `${T("ln.label_agree")} agree and ${T("ln.label_disagree")} differs across ${T("ln.ladder_cases")} cases.`],
+    ["missing", "Missing", "Fully charged same-host costs", "Feature/control, inference, exact verification and fallback costs are absent."],
+    ["pending", "Not run", "Source-blind validation and audit", `The separate ${T("ln.freeze_cases")}-group freeze contains no labels or timings.`],
+    ["pending", "Not run", `${T("ln.seed_min")} independently passing neural seeds`, "No fit or training is authorized by the current evidence."],
+  ];
+  const cascade = h("div", { class: "ln-gate-cascade", "aria-label": "Learning eligibility gate status" }, [
+    h("h3", { text: "Why the route remains closed" }), agreement,
+  ]);
+  gates.forEach(([state, status, title, copy]) => cascade.append(h("div", { class: "ln-gate", "data-state": state }, [
+    h("span", { class: "ln-gate-mark", "aria-hidden": "true", text: state === "measured" ? "1" : state === "blocked" ? "2" : state === "missing" ? "3" : "—" }),
+    h("div", {}, [h("p", {}, [h("span", { class: `pill ${state === "measured" ? "" : state === "pending" ? "" : "open"}`, text: status }), h("strong", { text: title })]), h("p", { text: copy })]),
+  ])));
+  cascade.append(h("p", { class: "ln-gate-result", text: "Result → abstain and preserve the exact fallback" }));
+  s.append(h("div", { class: "ln-diagnostic-grid" }, [q64, cascade]));
+
+  const c5Min = TV("ln.c5_slow_min"), c5Max = TV("ln.c5_slow_max"), c5Scale = 10;
+  const c5Graphic = h("div", { class: "ln-c5-graphic", role: "img", "aria-label": `Exact ANF is the ${T("ln.c5_exact_reference")} reference. The C5 safe learned path is ${T("ln.c5_slow_min")} to ${T("ln.c5_slow_max")} slower.` }, [
+    h("div", { class: "ln-c5-track", "aria-hidden": "true" }, [
+      h("span", { class: "ln-c5-reference", style: `left:${100 * TV("ln.c5_exact_reference") / c5Scale}%` }),
+      h("span", { class: "ln-c5-range", style: `left:${100 * c5Min / c5Scale}%;width:${100 * (c5Max - c5Min) / c5Scale}%` }),
+    ]),
+    h("div", { class: "ln-c5-axis" }, [h("span", { text: `Exact ANF ${T("ln.c5_exact_reference")}` }), h("span", { text: `safe learned ${T("ln.c5_slow_min")}–${T("ln.c5_slow_max")}` })]),
+  ]);
+  s.append(h("div", { class: "ln-result-grid" }, [
+    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Exact portfolios" }), h("h3", { text: "The decision surface disappeared" }), h("p", { class: "ln-result-value", text: T("ln.bigint_headroom") }), h("p", { html: `Task-identical bigint and source-closed native portfolios both reduce to ${T("ln.native_headroom")} gross headroom. All ${T("ln.bigint_labels")} of ${T("ln.initial_cases")} exposed labels chose one fixed bigint arm.` })]),
+    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "C5 · useful negative result" }), h("h3", { text: "Symmetry retained; economics failed" }), c5Graphic, h("p", { text: "Variable-renaming equivariance and exact reconstruction survived, but recall, a global certificate and cost did not." })]),
+    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Source-blind next asset" }), h("h3", { html: `${T("ln.freeze_cases")} groups, still unconsumed` }), h("p", { class: "ln-result-value", html: `${T("ln.split_development_fit")} / ${T("ln.split_development_validation")} / ${T("ln.split_development_audit")}` }), h("p", { html: `${T("ln.features")} identity-free features and ${T("ln.prior_overlap")} prior alpha-structural overlap. No labels, timings or fitted models.` })]),
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("status", "Current answer", "No selector or neural route is promoted",
+    "The decision is not ‘neural networks never work.’ It is narrower and testable: under the current exact task contracts, baselines, cohorts, and cost accounting, learned advice has not earned execution authority.");
+  s.append(h("div", { class: "ln-status" }, [
+    h("div", {}, [
+      h("h2", { text: "Advice off. Abstain on every case." }),
+      h("p", { text: E.decision }),
+      h("p", { text: "Promising classification snapshots are retained as evidence, not promoted into a solver claim. Exact reconstruction, exact verification, and the exact fallback remain mandatory." }),
+    ]),
+    h("div", { class: "ln-signal" }, [
+      h("p", { class: "eyebrow", text: "Why the latest signal is still blocked" }),
+      h("p", { html: `The query-ladder comparison covers ${T("ln.ladder_cases")} exact cases. Labels agree on ${T("ln.label_agree")} and disagree on ${T("ln.label_disagree")}; fully charged same-host routing costs are absent.` }),
+      h("p", { html: `The separate source-blind freeze contains ${T("ln.freeze_cases")} source groups and ${T("ln.features")} identity-free structural features, but deliberately contains no labels or fitted models.` }),
+    ]),
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("tasks", "What ‘learning’ could mean", "Six different tasks, six different contracts",
+    "Accuracy on one task cannot justify another. Each card states the learned role and the current evidence verdict.");
+  const grid = h("div", { class: "ln-task-grid" });
+  E.tasks.forEach(task => grid.append(h("article", { class: "ln-task" }, [
+    h("p", { class: "eyebrow", text: `Task ${task.id}` }), h("h3", { text: task.name }),
+    h("p", { text: task.role }), h("p", {}, [h("strong", { text: "Verdict: " }), document.createTextNode(task.verdict)]),
+  ])));
+  s.append(grid);
+  s.append(banner("warn", "A classifier score is not a routing policy", [
+    "For Tasks B–E, the operational question is whether advice avoids enough exact work after feature extraction, inference, verification, abstention and fallback. If global-best completion still runs, ranking quality alone cannot produce the claimed saving.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("timeline", "Experiment record", "The complete learning arc, with filters",
+    "Filter by task or evidence status. Search spans milestone, cohort, method, baseline, result and question. Open a row for its exactness boundary and continuation rule.");
+  const controls = h("div", { class: "ln-controls" });
+  const task = h("select", { id: "ln-task", "aria-label": "Filter timeline by task" }, [
+    h("option", { value: "", text: "All tasks" }), ...E.tasks.map(x => h("option", { value: x.id, text: `Task ${x.id} · ${x.name}` })),
+  ]);
+  const status = h("select", { id: "ln-status", "aria-label": "Filter timeline by status" }, [
+    h("option", { value: "", text: "All statuses" }),
+    ...["retained", "negative", "superseded", "blocked", "development-only"].map(x => h("option", { value: x, text: x })),
+  ]);
+  const search = h("input", { id: "ln-search", type: "search", placeholder: "model, milestone, cohort…", "aria-label": "Search timeline" });
+  const count = h("span", { class: "ln-count", "aria-live": "polite" });
+  controls.append(h("label", { text: "Task" }, [task]), h("label", { text: "Outcome" }, [status]), h("label", { text: "Search" }, [search]), count);
+  const timeline = h("div", { class: "ln-timeline" });
+  const render = () => {
+    const q = search.value.trim().toLowerCase();
+    const rows = E.timeline.filter(row => (!task.value || row.task.includes(task.value)) && (!status.value || row.status === status.value) && (!q || Object.values(row).join(" ").toLowerCase().includes(q)));
+    timeline.replaceChildren(...rows.map(row => {
+      const details = h("details", { class: "ln-event", "data-status": row.status });
+      details.append(h("summary", {}, [h("strong", { text: row.milestone }), h("span", { class: `pill ${row.status === "retained" ? "ok" : row.status === "superseded" ? "" : "open"}`, text: row.status }), h("span", { text: row.question })]));
+      details.append(h("div", { class: "ln-event-body" }, [
+        h("p", {}, [h("span", { class: "ln-k", text: "Task" }), document.createTextNode(row.task)]),
+        h("p", {}, [h("span", { class: "ln-k", text: "Cohort" }), document.createTextNode(row.cohort)]),
+        h("p", {}, [h("span", { class: "ln-k", text: "Method / representation" }), document.createTextNode(row.method)]),
+        h("p", {}, [h("span", { class: "ln-k", text: "Baseline" }), document.createTextNode(row.baselines)]),
+        h("p", { class: "wide" }, [h("span", { class: "ln-k", text: "Result" }), document.createTextNode(row.result)]),
+        h("p", { class: "wide" }, [h("span", { class: "ln-k", text: "Exactness" }), document.createTextNode(row.exactness)]),
+        h("p", { class: "wide" }, [h("span", { class: "ln-k", text: "Continuation rule" }), document.createTextNode(row.continuation)]),
+        h("p", { class: "wide" }, [h("a", { href: row.report, text: "Open report" }), document.createTextNode(" · "), h("a", { href: row.artifact, text: "Open machine-readable artifact" })]),
+      ]));
+      return details;
+    }));
+    count.textContent = `${rows.length} of ${E.timeline.length} timeline groups`;
+  };
+  [task, status, search].forEach(control => control.addEventListener("input", render));
+  const sourceIndex = evidenceTable(["Milestone", "Report", "Machine-readable artifact", "Artifact SHA-256"], E.milestone_sources.map(row => [
+    row.milestone, row.report, row.artifact, row.artifact_sha256,
+  ]), "Complete allowlisted milestone source index");
+  // Replace path text with routed links while keeping the checksum as text.
+  sourceIndex.querySelectorAll("tbody tr").forEach((tr, index) => {
+    const row = E.milestone_sources[index];
+    tr.children[1].replaceChildren(h("a", { href: row.report, text: "Report" }));
+    tr.children[2].replaceChildren(h("a", { href: row.artifact, text: "Artifact" }));
+  });
+  s.append(controls, timeline, moreBlock([
+    h("p", { html: `${T("ln.milestone_source_pairs")} explicit report/artifact pairs are allowlisted. Consolidated stages are labeled rather than invented as separate artifacts.` }),
+    sourceIndex,
+  ], "Complete milestone source index")); render(); app.append(s);
+}
+
+{
+  const s = section("representations", "Models and representations", "Capacity was not the missing ingredient",
+    "The program tested matrix, convolutional, graph, fusion, retrieval, cut-conditioned, tree and analytical forms. Parameter count below is descriptive, not evidence of quality.");
+  const grid = h("div", { class: "ln-model-grid" });
+  E.models.forEach(model => grid.append(h("article", { class: "ln-model" }, [
+    h("p", { class: "eyebrow", text: model.parameters ? `${T(model.parameters)} parameters` : "non-neural control" }),
+    h("h3", { text: model.family }), h("p", {}, [h("strong", { text: "Input: " }), document.createTextNode(model.input)]),
+    h("p", {}, [h("strong", { text: "Exactness: " }), document.createTextNode(model.exactness)]), h("p", { text: model.lesson }),
+  ])));
+  s.append(grid); app.append(s);
+}
+
+{
+  const s = section("quality", "Learning quality", "Held-out metrics must travel together",
+    "Balanced accuracy without sensitivity, specificity, accepted-positive recall, coverage, seed stability and cohort context is incomplete. A dash means that this compact comparison does not claim the metric.");
+  s.append(evidenceTable(["Model / seed", "Split", "Metric", "Value", "Sensitivity", "Specificity", "Accepted-positive recall"], E.quality.map(row => [
+    row.model, row.split, row.metric, row.value ? T(row.value) : "—", row.sensitivity ? T(row.sensitivity) : "—", row.specificity ? T(row.specificity) : "—", row.accepted ? T(row.accepted) : "—",
+  ]), "Selected historical learning-quality evidence"));
+  s.append(banner("note", "How to read the apparent peaks", [
+    "Perfect scores occurred on some small, narrow splits. Confirmation, natural transfer, accepted-positive recall and seed behavior were less stable. The exact controls and downstream economics—not the best isolated score—set the decision.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("exact-controls", "Exact controls", "The baseline kept getting stronger—and the learnable regret disappeared",
+    "Learned advice was compared against exact reconstruction/checking, structural linear rules, exact ANF, global-best completion, current bigint evaluators, native fused-slot execution, fixed backend choices and analytical controls.");
+  s.append(evidenceTable(["Decision surface", "Cases", "Best fixed / control", "Oracle headroom", "Disposition"], [
+    ["Post-R2 word portfolio", T("ln.initial_cases"), "restricted exact evaluator", T("ln.word_headroom"), "Below development gate before full costs"],
+    ["Task-identical bigint portfolio", T("ln.initial_cases"), "cse_bigint", T("ln.bigint_headroom"), "No regret to learn"],
+    ["Source-closed native portfolio", T("ln.initial_cases"), "native fused slots", T("ln.native_headroom"), "One fixed winner"],
+    ["Resident version-history signal", T("ln.version_cases"), "resident SAT", T("ln.version_gross"), "Tiny, retrospective, cost-incomplete cohort"],
+  ], "Learned decision surfaces versus exact controls"));
+  s.append(h("h3", { text: "Task-separated CM-family comparisons" }));
+  s.append(evidenceTable(["Task", "Cohort / aggregate", "CM-family arm", "Non-CM or foundational control", "Host / evidence class", "Result boundary"], [
+    ["Complete relation materialization", "Frozen comprehensive campaign; corpus-level ratios", "mathematical CM kernel / CM IR", "plain CSE, CSE-flat, direct BitSet", "Windows plus saved pod replications; exact", "Kernel gains are workload-specific; wrapper and preparation can reverse them"],
+    ["Restriction / q64 query ladder", `${T("ln.ladder_cases")} cases; sum of per-case medians`, "CM IR bigint/words and native fused slots", "CSE bigint/words, full projection, R2", "GCC and Clang on distinct physical machines; exact cross-machine", `${T("ln.gcc_gross")} and ${T("ln.clang_gross")} gross only; labels not identical`],
+    ["Multi-root / repeated outputs", `${T("ln.initial_cases")} exposed development cases`, "CM IR and native slot portfolio", "CSE bigint and R2", "one retained exact development run", `${T("ln.bigint_labels")} of ${T("ln.initial_cases")} labels select cse_bigint; no decision remains`],
+    ["Resident version history", `${T("ln.version_cases")} exposed cases; median-sum economics`, "resident CM-family evaluators", "resident SAT/CNF", "one benchmark host; retrospective", `${T("ln.version_gross")} gross, but fully charged evidence is absent`],
+    ["Decomposition / global best", "C5 test and inspected confirmation splits", "variable-cut GNN proposals", "packed exact ANF plus global completion", "one development host; exact fallback", `Safe learned execution is ${T("ln.c5_slow_min")}–${T("ln.c5_slow_max")} slower than exact ANF`],
+    ["Configuration / BDD / SAT", "saved bounded feature-model cohort", "CM exact relation artifact", "direct CNF, CUDD/ROBDD, d-DNNF and SAT checks", "separately pinned audit; correctness passed, performance provisional", "See Results & audit; no configuration result is a neural-routing claim"],
+  ], "Task-separated exact CM-family and non-CM comparisons"));
+  app.append(s);
+}
+
+{
+  const s = section("economics", "Perfect-predictor economics", "Gross headroom is necessary; fully charged headroom decides",
+    "A per-case oracle is an unattainable upper bound. A selector must also pay for features, control logic, inference, exact verification and expected fallback regret, using same-host p95 costs and sum-based task-identical timings.");
+  const grid = h("div", { class: "ln-economics" });
+  E.hosts.forEach(host => grid.append(h("article", { class: "ln-econ" }, [
+    h("p", { class: "eyebrow", text: host.label }), h("p", { class: "v", text: T(`ln.${host.prefix}_gross`) }),
+    h("p", { text: `Gross oracle headroom; best fixed arm: ${host.best_fixed}.` }),
+    h("p", { html: `Best-fixed sum ${T(`ln.${host.prefix}_fixed_ns`)} ns · oracle sum ${T(`ln.${host.prefix}_oracle_ns`)} ns.` }),
+  ])));
+  s.append(grid);
+  const ledger = h("div", { class: "ln-cost-ledger", "aria-label": "Required q64 charged-cost ledger" }, [
+    h("h3", { text: "Charged-cost ledger" }),
+    h("p", { text: "Unknown means missing evidence, never zero cost." }),
+  ]);
+  E.charged_costs.forEach(item => ledger.append(h("div", { class: "ln-cost-row" }, [
+    h("span", { text: item.label }), h("span", { class: "pill open", text: item.status }),
+  ])));
+  s.append(ledger);
+  s.append(banner("warn", "Why this still fails closed", [
+    `The version-history surface allowed only ${T("ln.version_budget")} ns of total overhead per case to preserve the development threshold. A local retrospective control measured ${T("ln.protocol_feature_cost")} ns before model inference, exact verification and fallback were known. Even its optimistic diagnostic speedup of ${T("ln.protocol_optimistic")} is not a fully charged cross-host result.`,
+    "For the query ladder, both hosts show gross headroom, but the label table is not identical and every required same-host p95 routing-cost field is still null. No training or routing claim follows.",
+  ]));
+  app.append(s);
+}
+
+{
+  const s = section("provenance", "Provenance and split hygiene", "Identity is evidence",
+    "The current source-blind cohort was frozen before timing or labels. Source groups, not rows, define isolation; identity fields, timings, outputs, labels, prior case IDs and prospective data are forbidden from model input.");
+  s.append(h("figure", { class: "ln-figure ln-split-figure", role: "img", "aria-label": `${T("ln.freeze_cases")} frozen source groups: ${T("ln.split_development_fit")} fit, ${T("ln.split_development_validation")} validation, ${T("ln.split_development_audit")} audit.` }, [
+    h("h3", { text: "Frozen source-group allocation" }),
+    h("div", { class: "ln-split-bar", "aria-hidden": "true" }, [
+      h("span", { class: "ln-split-fit", style: `flex:${TV("ln.split_development_fit")} 1 0` }),
+      h("span", { class: "ln-split-validation", style: `flex:${TV("ln.split_development_validation")} 1 0` }),
+      h("span", { class: "ln-split-audit", style: `flex:${TV("ln.split_development_audit")} 1 0` }),
+    ]),
+    h("div", { class: "ln-split-legend" }, [
+      h("span", {}, [h("i", { class: "ln-split-fit" }), document.createTextNode(`Fit ${T("ln.split_development_fit")}`)]),
+      h("span", {}, [h("i", { class: "ln-split-validation" }), document.createTextNode(`Validation ${T("ln.split_development_validation")}`)]),
+      h("span", {}, [h("i", { class: "ln-split-audit" }), document.createTextNode(`Audit ${T("ln.split_development_audit")}`)]),
+    ]),
+    h("figcaption", { html: `${T("ln.freeze_cases")} source groups were assigned by salted hash before labels or timings; the bar is allocation, not performance.` }),
+  ]));
+  s.append(tiles([
+    ["Frozen source groups", T("ln.freeze_cases"), "one source group per case"],
+    ["Fit / validation / audit", `${T("ln.split_development_fit")} / ${T("ln.split_development_validation")} / ${T("ln.split_development_audit")}`, "salted source-group split"],
+    ["Structural features", T("ln.features"), "identity-free, label-free at freeze"],
+    ["Prior-alpha overlap", T("ln.prior_overlap"), "structural identity overlap"],
+  ]));
+  s.append(h("p", { text: E.source_blind.split_assignment }));
+  s.append(moreBlock([
+    h("p", {}, [h("strong", { text: "Allowed features: " }), document.createTextNode(E.source_blind.features.join(", "))]),
+    h("p", {}, [h("strong", { text: "Forbidden fields: " }), document.createTextNode(E.source_blind.forbidden.join(", "))]),
+  ], "Inspect allowed and forbidden model fields"));
+  const ids = h("div", { class: "ln-identity" });
+  E.identities.forEach(item => ids.append(h("p", {}, [h("strong", { text: `${item.role}: ` }), document.createTextNode(item.path), h("code", { text: item.sha256 })])));
+  s.append(moreBlock([ids], "Pinned evidence identities")); app.append(s);
+}
+
+{
+  const s = section("certificate", "C5 certificate boundary", "Ranking becomes useful only when it safely stops exact work",
+    `A future partition learner must provide an independently checked global certificate and avoid at least ${T("ln.certificate_work")} of measured completion work after certificate-verification cost.`);
+  const list = h("ul"); E.certificate.forEach(item => list.append(h("li", { text: item })));
+  s.append(list);
+  s.append(banner("warn", "The current record does not meet this boundary", [
+    "Candidate reconstruction is exact and variable-renaming checks passed, but no certificate covers every unexplored partition, completion search still runs, verification cost is unmeasured, and measured global work avoidance is absent.",
+  ])); app.append(s);
+}
+
+{
+  const s = section("next-work", "Reproducibility and next admissible work", "Freeze first; consume evidence only after authorization",
+    "The next step is not another opportunistic fit. It is an independently verified handoff that closes cohort, split, exact-task, cross-machine and charged-cost fields without reading prospective labels early.");
+  const actionGrid = h("div", { class: "ln-task-grid" });
+  [["Can be done now", E.next_actions.now, "ok"], ["Requires an authorized Benchmark task", E.next_actions.benchmark, "open"], ["Prohibited until a gate passes", E.next_actions.prohibited, "bad"]].forEach(([title, items, kind]) => {
+    const list = h("ul"); items.forEach(item => list.append(h("li", { text: item })));
+    actionGrid.append(h("article", { class: "ln-task" }, [h("p", { class: `pill ${kind}`, text: title }), list]));
+  });
+  s.append(actionGrid);
+  s.append(h("ol", {}, [
+    h("li", { html: `Keep the source-group freeze intact and retain all abstentions and unfavorable rows.` }),
+    h("li", { html: `Require validation and audit balanced accuracy of at least ${T("ln.gate_ba")} and at least ${T("ln.gate_chance")} above class chance, accuracy at least ${T("ln.gate_accuracy")} above majority, balanced accuracy at least ${T("ln.gate_control")} above the analytical control, and non-abstain coverage of at least ${T("ln.gate_coverage")}.` }),
+    h("li", { html: `Require ${T("ln.seed_min")} distinct passing neural seeds; choose the model family before audit consumption.` }),
+    h("li", { text: "Measure feature/control, inference, exact verification and expected fallback p95 costs on each exact-timing host." }),
+    h("li", { text: "Require the candidate to preserve the development speedup threshold and beat the analytical control on every host. Keep production routing out of scope." }),
+  ]));
+  s.append(h("h3", { text: "Read-only verification entry points" }));
+  s.append(evidenceTable(["Saved environment", "Rows/check", "Role", "Boundary"], E.hosts.map(host => [
+    host.label, T(`ln.${host.prefix}_rows`), "independently verified q64 timed cells", "Absolute timings stay within this host; only task-matched interpretations cross hosts",
+  ]).concat([["Source-blind freeze", "byte-identical cohort replay", "independent verification", "No exact execution, timing, labels, models, prospective data or cloud resources"]]), "Saved verification environments"));
+  s.append(h("pre", {}, [h("code", { text: ".venv\\Scripts\\python.exe scripts\\crse_query_ladder_learning_freeze_verify.py --artifact docs\\recognition\\runs\\query-ladder-source-blind-learning-freeze-20260904-001\n.venv\\Scripts\\python.exe -m pytest tests\\test_query_ladder_learning_evidence.py tests\\test_learning_benchmark_handoff.py" })]));
+  const links = h("ul", { class: "benchmark-source-list" });
+  E.links.forEach(item => links.append(h("li", {}, [h("a", { href: item.href, text: item.label })])));
+  s.append(links); app.append(s);
+}
+
+[
+  "dashboard", "status", "tasks", "economics", "exact-controls", "quality",
+  "timeline", "representations", "provenance", "certificate", "next-work",
+].forEach(id => app.append(document.getElementById(id)));
+app.append(pageFooter("Learning evidence is development-only. No model was trained by this website build, and no learned advice is enabled.", true));
+if (location.hash) {
+  const initialTarget = document.getElementById(location.hash.slice(1));
+  if (initialTarget) requestAnimationFrame(() => initialTarget.scrollIntoView());
+}
+}
+</script>
+</body>
+</html>
