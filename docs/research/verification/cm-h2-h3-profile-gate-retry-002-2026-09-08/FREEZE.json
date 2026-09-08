@@ -1,0 +1,305 @@
+{
+  "candidate_gate": {
+    "exact_oracle_mismatches_max": 0,
+    "individual_applicable_speedup_min": 0.95,
+    "low_sharing_speedup_min": 0.97,
+    "only_one_small_reversible_candidate": true,
+    "ordering_or_hash_mismatches_max": 0,
+    "peak_memory_ratio_max": 1.05,
+    "retained_memory_ratio_max": 1.05,
+    "targeted_component_speedup_min": 1.05,
+    "targeted_end_to_end_geomean_speedup_min": 1.03
+  },
+  "continuation": {
+    "cloud_execution_authorized": false,
+    "h9_work_authorized": false,
+    "material_component": "test_one_candidate_against_unchanged_current_source",
+    "no_material_component": "close_h2_h3_still_deferred",
+    "production_behavior_change_authorized_during_profile": false,
+    "publication_authorized": false,
+    "runpod_request": "prepare_only_if_every_local_identity_exactness_stability_memory_performance_replay_and_test_gate_passes"
+  },
+  "date": "2026-09-08",
+  "fetch_status": "attempted_github_unreachable_local_origin_main_equal_to_head",
+  "freeze_sha256": "05fcfa622da6d3a6812687ad70829a5d8d30ff672ed68f7c09a007f7346078e3",
+  "materiality_gate": {
+    "aggregate_exclusive_share_min": 0.15,
+    "allocation_copy_peak_excess_over_output_min": 0.25,
+    "cell_prevalence_min": 0.5,
+    "cell_prevalence_share_floor": 0.1,
+    "h2_components": [
+      "key_creation",
+      "hashing",
+      "interning"
+    ],
+    "h2_scope": {
+      "lifecycle": "cold",
+      "workload_classes": [
+        "complete_relation",
+        "repeated_restriction"
+      ]
+    },
+    "h3_components": [
+      "dense_lifting",
+      "allocation",
+      "conversion",
+      "temporary_copies"
+    ],
+    "h3_scope": {
+      "lifecycles": [
+        "cold",
+        "reused"
+      ],
+      "workload_classes": [
+        "complete_relation"
+      ]
+    },
+    "median_cell_share_min": 0.1,
+    "median_component_ns_min": 50000,
+    "minimum_exact_cells": 6,
+    "observed_and_fresh_aggregate_share_min": 0.1,
+    "single_candidate_priority": "largest_aggregate_exclusive_share_then_component_name"
+  },
+  "measurement": {
+    "aggregation": "median_of_retained_raw_repetitions",
+    "cache_clear_and_gc_outside_timed_span": true,
+    "clock": "time.perf_counter_ns",
+    "component_categories": [
+      "key_creation",
+      "hashing",
+      "interning",
+      "serialization",
+      "dense_lifting",
+      "allocation",
+      "conversion",
+      "temporary_copies"
+    ],
+    "component_classification": "exclusive_first_match_rules_in_frozen_instrumentation_source",
+    "memory": {
+      "baseline": "after_reused_preparation_or_cold_cache_reset_and_gc",
+      "peak": "max_current_rss_samples_during_operation_minus_baseline_nonnegative",
+      "post_release": "current_rss_after_artifact_release_and_gc_minus_baseline_signed",
+      "python_allocations": "tracemalloc_current_and_peak_with_same_boundaries",
+      "retained": "current_rss_before_artifact_release_minus_baseline_signed"
+    },
+    "memory_pass": "separate_sampled_current_rss_plus_tracemalloc",
+    "output_cache_allowed": false,
+    "profile_pass": "separate_cProfile_exclusive_internal_time",
+    "repetitions": 7,
+    "rss_sample_interval_seconds": 0.001,
+    "timing_pass": "uninstrumented",
+    "warmups": 2
+  },
+  "parent_freeze": {
+    "canonical_sha256": "f00c688efd2d939936d78814794e5638e21bb2352f65863adf5c612b92c99148",
+    "file_sha256": "f132798b50824737b6824d69ffdfeb2e4cb7f9e83ca78fd29d3e0fc7d75b5ea9",
+    "path": "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json"
+  },
+  "parent_oracles": {
+    "file_sha256": "ded20ef9269ffaf62b800205339c7ae2802573c313c287831a6074babff3d530",
+    "path": "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json"
+  },
+  "schema": "cm-h2-h3-profile-freeze/v1",
+  "source_checkpoint": "c9af2a3c80388e467944bd706036996db9eed9b8",
+  "source_closure": [
+    {
+      "bytes": 38544,
+      "path": "bitset_backend.py",
+      "sha256": "f439353914974bcc22bc3fe3886af6c2416fc4c83b58071aeb599d88ea56212a"
+    },
+    {
+      "bytes": 11554,
+      "path": "cm_expr_serde.py",
+      "sha256": "7e72749d3108b74dfe815a7f0a43085c0723183ec23a1b29f9708e4b4d26282c"
+    },
+    {
+      "bytes": 96672,
+      "path": "cm_ir.py",
+      "sha256": "7c6a518a6199e6f5a1faa544446909e15807f5060700acfafe0231d128cfb5f0"
+    },
+    {
+      "bytes": 6648,
+      "path": "cm_normalize.py",
+      "sha256": "7de16b5dc28c5381bf80931403a6803d2ff6b9c249065e45464305d3f25ec6d8"
+    },
+    {
+      "bytes": 52229,
+      "path": "cmbench/comparative/architecture_comparison_campaign.py",
+      "sha256": "d120951cc8854de86e1fdb133e7c418227dc2df125205c02f9f64d60a66629d3"
+    },
+    {
+      "bytes": 22455,
+      "path": "cmbench/comparative/architecture_comparison_freeze.py",
+      "sha256": "25bd59c3774a2a73f678ed201d3342e356e36486fcfa2ac34aca3f64704dba12"
+    },
+    {
+      "bytes": 12439,
+      "path": "cmbench/comparative/contracts.py",
+      "sha256": "1fb14b383929419d54ffc36524edcdb0943237672840e89694f07275e5a11eff"
+    },
+    {
+      "bytes": 11353,
+      "path": "cmbench/comparative/gf2_multi_root.py",
+      "sha256": "270aae41b5fc5418544ce225ab445085f5e0f1defd61c37548f1bb6bf6c8fc6b"
+    },
+    {
+      "bytes": 5981,
+      "path": "cmbench/comparative/gf2_multi_root_python.py",
+      "sha256": "64cfa166c023b2c169134207f7b245c21621f31e696a51719c0e1650df1e2b0e"
+    },
+    {
+      "bytes": 16637,
+      "path": "cmbench/comparative/gf2_wide_repeated_queries.py",
+      "sha256": "afed1ad41e00ea2d35b9e59a42f18bf3fa98812ba0152ee3d65dc058deab2923"
+    },
+    {
+      "bytes": 44393,
+      "path": "cmbench/comparative/h2_h3_profile_gate.py",
+      "sha256": "43f0d0eb89f7ed5c71b0955b23b169cbbe116d0f0d7991d90cb13cde10eff3f2"
+    },
+    {
+      "bytes": 322320,
+      "path": "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json",
+      "sha256": "f132798b50824737b6824d69ffdfeb2e4cb7f9e83ca78fd29d3e0fc7d75b5ea9"
+    },
+    {
+      "bytes": 79357,
+      "path": "docs/recognition/architecture_comparison_execution_retry_20260903/ORACLES.json",
+      "sha256": "ded20ef9269ffaf62b800205339c7ae2802573c313c287831a6074babff3d530"
+    },
+    {
+      "bytes": 4711,
+      "path": "docs/research/CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md",
+      "sha256": "22109569bd7cdbd309d1914c124157b88b83c7267cd49c675705567c7597698a"
+    },
+    {
+      "bytes": 9196,
+      "path": "docs/research/CM_ARCHITECTURE_AUDIT_DISPOSITION_AFTER_C38_2026_09_03.md",
+      "sha256": "aa621f693e8677543d7941c12ae5236d47bfb12cdd962900b563dd0d0f9e29ce"
+    },
+    {
+      "bytes": 6109,
+      "path": "docs/research/CM_H2_H3_CURRENT_SOURCE_PROFILE_GATE_PROTOCOL_2026_09_08.md",
+      "sha256": "982ad186d71272cd0e2f4e95a698eb194a252985a58d01234a00d2f2c478a101"
+    }
+  ],
+  "source_closure_sha256": "86f65b0569892a3c9ff94c678bb1ef02b5b7c4473aaa7fbc8e31b3a7801ad5ce",
+  "status": "frozen_before_decision_bearing_execution",
+  "workload": {
+    "complete_relation": {
+      "case_ids": [
+        "controlled_live_8-n20-i0-d5b65d38ee9c",
+        "controlled_live_12-n20-i1-156e4e181070",
+        "controlled_live_16-n20-i2-759d82a72018",
+        "fresh-tree-andor-k8-r0",
+        "fresh-high-sharing-andor-k8-r0",
+        "fresh-tree-xor-eqv-k8-r0",
+        "fresh-high-sharing-xor-eqv-k8-r0",
+        "fresh-tree-mixed-k8-r0",
+        "fresh-high-sharing-mixed-k8-r0",
+        "fresh-tree-andor-k14-r0",
+        "fresh-high-sharing-andor-k14-r0",
+        "fresh-tree-xor-eqv-k14-r0",
+        "fresh-high-sharing-xor-eqv-k14-r0",
+        "fresh-tree-mixed-k14-r0",
+        "fresh-high-sharing-mixed-k14-r0"
+      ],
+      "lifecycles": [
+        "cold",
+        "reused"
+      ],
+      "operation": "current_cm_dense_full_reinflation"
+    },
+    "refusals_and_unfavorable_cells_retained": true,
+    "related_multi_root": {
+      "case_ids": [
+        "fresh-related-roots-mixed-k11-r0",
+        "fresh-related-roots-mixed-k14-r1",
+        "c37-multi-add7-bits345",
+        "fresh-related-roots-mixed-k8-r1",
+        "c37-multi-muladd4x4c7-bits234",
+        "c37-multi-multiply7x7-bits234",
+        "fresh-related-roots-mixed-k14-r0",
+        "c37-multi-multiply8x7-bits456",
+        "fresh-related-roots-mixed-k11-r1",
+        "c37-multi-addertree3x5-bits234",
+        "fresh-related-roots-mixed-k8-r0",
+        "c37-multi-popcount15-bits123"
+      ],
+      "lifecycles": [
+        "cold",
+        "reused"
+      ],
+      "operations": [
+        "python_sharing_union",
+        "python_sharing_separate"
+      ],
+      "query_count": 64
+    },
+    "repeated_restriction": {
+      "case_ids": [
+        "c36-decoder_index-7db1fed5788553b0",
+        "c36-decoder_reverse_shift-d38ec347450fbeda",
+        "c36-multiply_low_cone-bfa77f977d9b63d0",
+        "c36-addertree_sum-1bde1edc369329c3",
+        "c36-multiply_add_low_cone-60066513d884e8cd",
+        "c36-multiply_low_cone-6609b0cc2915dfed",
+        "c36-decoder_index-cabf7c990ef270a2",
+        "c36-decoder_reverse_shift-e1ed090d392bb702",
+        "c36-multiply_low_cone-74681b58360369df",
+        "c36-decoder_index-9e6bc671034ca09b",
+        "c36-decoder_reverse_shift-501605d63402a561",
+        "c36-multiply_low_cone-183b0d87d566b432",
+        "c36-addertree_sum-4a3815b6b6b457c9",
+        "c36-decoder_index-80388418676d128a",
+        "c36-decoder_reverse_shift-8bdee763e6cade28",
+        "c36-addertree_sum-d44458ceb643f094",
+        "c36-decoder_index-74361d31a2f66dd7",
+        "c36-decoder_reverse_shift-01795fc9d2b0f4cf",
+        "fresh-tree-andor-k8-r0",
+        "fresh-high-sharing-andor-k8-r0",
+        "fresh-tree-xor-eqv-k8-r0",
+        "fresh-high-sharing-xor-eqv-k8-r0",
+        "fresh-tree-mixed-k8-r0",
+        "fresh-high-sharing-mixed-k8-r0",
+        "fresh-tree-andor-k14-r0",
+        "fresh-high-sharing-andor-k14-r0",
+        "fresh-tree-xor-eqv-k14-r0",
+        "fresh-high-sharing-xor-eqv-k14-r0",
+        "fresh-tree-mixed-k14-r0",
+        "fresh-high-sharing-mixed-k14-r0"
+      ],
+      "lifecycles": [
+        "cold",
+        "reused"
+      ],
+      "operation": "current_cm_ir_bigint",
+      "query_counts": [
+        1,
+        64
+      ]
+    },
+    "selection_blind_to_outputs_and_timings": true,
+    "smaller_query": {
+      "arms": [
+        "cm/fresh_engine",
+        "cm/resident_engine"
+      ],
+      "case_ids": [
+        "architecture-refresh-control-k6",
+        "history-fresh-tree-mixed-k8-r0",
+        "history-fresh-tree-mixed-k8-r1"
+      ],
+      "structural_reload_arm": "cm",
+      "sublanes": [
+        "exact_count",
+        "sat_status",
+        "witness",
+        "partial_context",
+        "version_history",
+        "equivalence_delta",
+        "structural_reload"
+      ]
+    }
+  }
+}

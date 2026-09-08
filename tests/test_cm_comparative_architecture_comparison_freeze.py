@@ -78,11 +78,31 @@ def test_tampered_freeze_fails_closed():
             freeze.validate_freeze(item)
 
 
-def test_checked_in_freeze_replays_when_present():
+def test_checked_in_historical_freeze_is_self_consistent():
     artifact = ROOT / "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json"
     if not artifact.exists():
         pytest.skip("freeze artifact not generated yet")
     recorded = json.loads(artifact.read_text(encoding="utf-8"))
-    verification = freeze.verify_freeze(recorded, ROOT)
+    verification = json.loads(
+        artifact.with_name("VERIFICATION.json").read_text(encoding="utf-8")
+    )
+    assert freeze.validate_freeze(recorded) == recorded
     assert verification["status"] == "verified_frozen_not_authorized"
+    assert verification["freeze_sha256"] == recorded["freeze_sha256"]
+    assert verification["source_closure_match"] is True
     assert verification["replay_byte_identical"] is True
+
+
+def test_live_freeze_verification_still_fails_closed_on_source_drift(monkeypatch):
+    recorded = _build()
+    original = freeze._file_identity
+
+    def drifted_identity(root, relative):
+        identity = original(root, relative)
+        if relative == freeze.SOURCE_CLOSURE_PATHS[0]:
+            return {**identity, "sha256": "0" * 64}
+        return identity
+
+    monkeypatch.setattr(freeze, "_file_identity", drifted_identity)
+    with pytest.raises(ValueError, match="freeze verification"):
+        freeze.verify_freeze(recorded, ROOT)
