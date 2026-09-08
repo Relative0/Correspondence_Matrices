@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "status": "preview_ready_final_render_not_authorized",
+  "video_id": "operator-cms-from-truth-tables",
+  "script": {
+    "path": "docs/video_factory/deep_series/episodes/operator-cms-from-truth-tables/revision_v3/SCRIPT_V3.md",
+    "sha256": "2bced9e3f0dbaad1d69e140834af016fc45a26cfd34d5820f809041a885ad2c3"
+  },
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p"
+  },
+  "duration_s": 219,
+  "scenes": [
+    {
+      "scene_id": "s01",
+      "title": "One rule, four cases",
+      "start_s": 0,
+      "end_s": 24,
+      "duration_s": 24,
+      "voiceover": "A two-input Boolean rule can be written as one small grid. The rows tell us\nwhether X is true or false. The columns do the same for Y. That gives four\ncells—one for every possible pair of input states.\n\nFill each cell with the rule's output, zero or one. The complete two-by-two\npattern is that rule's correspondence matrix, or C M.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "A two-input Boolean rule can be written as one small grid. The rows tell us\nwhether X is true or false. The columns do the same for Y. That gives four\ncells—one for every possible pair of input states.\n\nFill each cell with the rule's output, zero or one. The complete two-by-two\npattern is that rule's correspondence matrix, or C M."
+        }
+      ],
+      "visual_direction": "Begin with switches `X` and `Y` beside one empty 2×2 grid. Toggle through the\nfour state pairs and let each pair claim one labeled cell:\n\n```text\n             Y=true   Y=false\nX=true          11       10\nX=false         01       00\n```"
+    },
+    {
+      "scene_id": "s02",
+      "title": "Build AND",
+      "start_s": 24,
+      "end_s": 58,
+      "duration_s": 34,
+      "voiceover": "Take AND. It returns one only when both inputs are true. So the top-left cell,\nthe X-true, Y-true case, gets a one. The other three cases get zero.\n\nOne cell records one case. All four cells together record the complete rule.\nThe paper orders the rows as X then not-X, and the columns as Y then not-Y.\nKeeping that order visible prevents the bits from becoming an anonymous\npattern.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Take AND. It returns one only when both inputs are true. So the top-left cell,\nthe X-true, Y-true case, gets a one. The other three cases get zero.\n\nOne cell records one case. All four cells together record the complete rule.\nThe paper orders the rows as X then not-X, and the columns as Y then not-Y.\nKeeping that order visible prevents the bits from becoming an anonymous\npattern."
+        }
+      ],
+      "visual_direction": "Evaluate AND on four persistent state cards and populate the matrix one cell at\na time. After the fourth value, outline and label the complete matrix `AND`:\n\n```text\n[1 0]\n[0 0]\n```\n\nThen add the secondary notation `|1⟩⟨1|` below it as a preview, without yet\nasking the learner to interpret it."
+    },
+    {
+      "scene_id": "s03",
+      "title": "Four basis dyads",
+      "start_s": 58,
+      "end_s": 87,
+      "duration_s": 29,
+      "voiceover": "Here is what that compact notation means. The paper writes the true state as\nket one, a column vector one-zero, and false as ket zero, zero-one. Transposing\na ket gives a bra, which is a row vector.\n\nTake a ket times a bra as an outer product. The paper also writes this with a\ntensor-product sign. The four possible pairs produce four two-by-two matrices,\neach with exactly one active cell. These are the four basis dyads.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Here is what that compact notation means. The paper writes the true state as\nket one, a column vector one-zero, and false as ket zero, zero-one. Transposing\na ket gives a bra, which is a row vector.\n\nTake a ket times a bra as an outer product. The paper also writes this with a\ntensor-product sign. The four possible pairs produce four two-by-two matrices,\neach with exactly one active cell. These are the four basis dyads."
+        }
+      ],
+      "visual_direction": "Build the vectors, then expand all four outer products. Keep the equivalence of\nthe two paper notations visible:\n\n```text\n|i⟩ ⊗ ⟨j| = |i⟩⟨j|\n\n|1⟩⟨1| = [1 0]   |1⟩⟨0| = [0 1]\n            [0 0]               [0 0]\n\n|0⟩⟨1| = [0 0]   |0⟩⟨0| = [0 0]\n            [1 0]               [0 1]\n```\n\nCall these objects `basis dyads`, not four logical operators."
+    },
+    {
+      "scene_id": "s04",
+      "title": "From four choices to sixteen operators",
+      "start_s": 87,
+      "end_s": 125,
+      "duration_s": 38,
+      "voiceover": "Any operator C M is an exclusive-or sum of the basis dyads whose positions\ncontain one. AND uses only ket-one bra-one. OR uses the first three dyads.\nExclusive-or uses the two off-diagonal dyads.\n\nEach of the four positions may independently be zero or one: two choices,\nfour times. Two to the fourth power is sixteen. So there are sixteen complete\ntwo-input rules, not sixteen answers to one rule.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Any operator C M is an exclusive-or sum of the basis dyads whose positions\ncontain one. AND uses only ket-one bra-one. OR uses the first three dyads.\nExclusive-or uses the two off-diagonal dyads.\n\nEach of the four positions may independently be zero or one: two choices,\nfour times. Two to the fourth power is sixteen. So there are sixteen complete\ntwo-input rules, not sixteen answers to one rule."
+        }
+      ],
+      "visual_direction": "Show `2 × 2 × 2 × 2 = 2⁴ = 16`, then settle into a legible 4×4 operator table\nmodeled on Figure 1 of the paper. Every tile contains, in this order:\n\n1. the familiar name or defining expression;\n2. the 2×2 matrix;\n3. its ket-bra dyadic expansion.\n\nUse the paper's four-column grouping: constants and parity; single-feature\nrules; implication-family rules; operand projections. Highlight AND, OR, XOR,\nand equivalence. Long dyadic sums may wrap to two lines but must remain\nreadable at 1920×1080."
+    },
+    {
+      "scene_id": "s05",
+      "title": "Patterns encode behavior",
+      "start_s": 125,
+      "end_s": 165,
+      "duration_s": 40,
+      "voiceover": "Now the table has meaning. All zeros means always false. OR is off only at the\nfalse-false position. Equivalence is on when the inputs agree. All ones means\nalways true.\n\nOrder matters most for an asymmetric rule. X implies Y is false only when X\nis true and Y is false. Swap the operands, and that zero moves to the other\noff-diagonal position.\n\nThe matrix does not discover an operator's name. It records four ordered\noutputs; the name is shorthand for that complete behavior.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Now the table has meaning. All zeros means always false. OR is off only at the\nfalse-false position. Equivalence is on when the inputs agree. All ones means\nalways true.\n\nOrder matters most for an asymmetric rule. X implies Y is false only when X\nis true and Y is false. Swap the operands, and that zero moves to the other\noff-diagonal position.\n\nThe matrix does not discover an operator's name. It records four ordered\noutputs; the name is shorthand for that complete behavior."
+        }
+      ],
+      "visual_direction": "Keep the full table faintly present while enlarging false, OR, equivalence, and\ntrue in sequence. Then compare `X → Y = [[1,0],[1,1]]` with\n`Y → X = [[1,1],[0,1]]`; animate only the zero moving. The ket-bra expansions\nremain secondary and do not reappear after this scene."
+    },
+    {
+      "scene_id": "s06",
+      "title": "Retrieval",
+      "start_s": 165,
+      "end_s": 193,
+      "duration_s": 28,
+      "voiceover": "Try reading one without its name. This grid returns zero when the inputs agree\nand one when they differ. What rule is it?\n\n\n\nIt is exclusive-or: zero, one, one, zero in the paper's cell order. In the\ndyadic table, it was the sum of the two off-diagonal basis matrices.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "Try reading one without its name. This grid returns zero when the inputs agree\nand one when they differ. What rule is it?"
+        },
+        {
+          "kind": "pause",
+          "duration_s": 4.0
+        },
+        {
+          "kind": "speech",
+          "text": "It is exclusive-or: zero, one, one, zero in the paper's cell order. In the\ndyadic table, it was the sum of the two off-diagonal basis matrices."
+        }
+      ],
+      "visual_direction": "Show `[[0,1],[1,0]]` with state labels but no name. During the pause, pulse the\nagreement diagonal, then the disagreement diagonal. Reveal `XOR` after the\nresponse. Briefly show `|1⟩⟨0| ⊕ |0⟩⟨1|`, then remove the notation."
+    },
+    {
+      "scene_id": "s07",
+      "title": "Language checkpoint and close",
+      "start_s": 193,
+      "end_s": 219,
+      "duration_s": 26,
+      "voiceover": "One language check: these are sixteen different functions, each with four\ninput cases. Later, one four-input function will itself have sixteen input\nassignments. The number is the same; what we count is different.\n\nRetain this: one cell is one case's output. One complete two-by-two C M is one\ntwo-input rule. The four basis dyads are simply a compact way to build any of\nthose rules.",
+      "voice_segments": [
+        {
+          "kind": "speech",
+          "text": "One language check: these are sixteen different functions, each with four\ninput cases. Later, one four-input function will itself have sixteen input\nassignments. The number is the same; what we count is different.\n\nRetain this: one cell is one case's output. One complete two-by-two C M is one\ntwo-input rule. The four basis dyads are simply a compact way to build any of\nthose rules."
+        }
+      ],
+      "visual_direction": "Hold one matrix beside its four state cards. Add:\n`4 cases per two-input rule → 16 possible rules`. End by replacing the four\nbits with four expressions to preview the logical-matrix lesson."
+    }
+  ],
+  "math_typography_contract": "docs/video_factory/deep_series/foundational_cm_production_v2/MATH_TYPOGRAPHY_CONTRACT_V2.json",
+  "narration": {
+    "status": "offline_neural_audition_pending",
+    "scratch_tts_allowed": true,
+    "final_mechanical_tts_forbidden": true
+  },
+  "remote_or_paid_authorized": false,
+  "narration_contract": {
+    "path": "docs/video_factory/deep_series/foundational_cm_production_v2/episodes/operator-cms-from-truth-tables/NARRATION_CONTRACT_V2.json",
+    "sha256": "ced871480ba42c01c2308ef7274b531a30d54a867b6c8e61bc722ab3f184ec89"
+  },
+  "content_hash": "a603c8e3c672edb3a02103f869b40d9220d2ee756e377c59112e633ca1dd9072"
+}
