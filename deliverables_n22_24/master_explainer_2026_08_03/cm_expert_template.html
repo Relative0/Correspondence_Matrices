@@ -45,7 +45,7 @@ document.body.prepend(topbar({
 app.append(h("header", { class: "page" }, [
   h("h1", { text: "Correspondence Matrices — technical summary" }),
   h("p", { class: "lede", text:
-    "The 2026-08-03 campaign plus a 2026-09-04 current-source, non-neural architecture addendum. Every " +
+    "The 2026-08-03 campaign plus current-source architecture and research dispositions through 2026-09-08. Every " +
     "result is labelled by task and environment; historical and current measurements are never pooled." }),
   h("p", { class: "meta", html:
     `Evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> · campaign revision <code>${M.campaign_revision.slice(0, 7)}</code> · ` +
@@ -68,6 +68,7 @@ app.append(banner("note", "Reading conventions enforced throughout", [
 
 app.append(featureModelAuditUpdate());
 app.append(learningNeuralUpdate());
+app.append(currentResearchDisposition("expert"));
 app.append(currentEvidenceUpdate("expert"));
 
 /* ------------------------------------------------------------ current architecture */

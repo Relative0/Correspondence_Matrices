@@ -38,9 +38,11 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         self.assertEqual(len(self.evidence["tasks"]), 6)
         self.assertGreaterEqual(len(self.evidence["timeline"]), 15)
         self.assertEqual(self.numbers["ln.label_disagree"]["value"], 1)
-        self.assertEqual(self.numbers["ln.native_headroom"]["value"], 1.0)
         self.assertEqual(self.numbers["ln.economic_gate"]["value"], 1.10)
         self.assertTrue(all(item["status"] == "missing" for item in self.evidence["charged_costs"]))
+        self.assertEqual(len(self.evidence["excluded_missing_artifacts"]), 2)
+        for token in ("ln.initial_cases", "ln.word_headroom", "ln.bigint_headroom", "ln.bigint_labels", "ln.native_headroom"):
+            self.assertNotIn(token, self.numbers)
 
     def test_page_exposes_required_sections_and_interactions(self):
         for anchor in ("dashboard", "status", "tasks", "timeline", "representations", "quality", "exact-controls", "economics", "provenance", "certificate", "next-work"):
@@ -52,6 +54,7 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         for token in ("ln.gcc_gross", "ln.clang_gross", "ln.economic_gate", "ln.c5_slow_min", "ln.freeze_cases"):
             self.assertIn(token, self.template)
         self.assertIn("prefers-reduced-motion", self.page)
+        self.assertIn("Unsupported numbers excluded", self.page)
 
     def test_source_template_forwards_to_generated_page_without_a_fourth_script(self):
         self.assertIn("cm_learning_neural_template\\.html", self.template)

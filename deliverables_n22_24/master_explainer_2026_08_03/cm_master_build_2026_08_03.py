@@ -1,4 +1,4 @@
-"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-09-04).
+"""CM master knowledge-base builder (2026-08-03, evidence updated 2026-09-08).
 
 Reads the refreshed evidence of the 2026-08-03 comprehensive benchmark
 campaign (B1-B7 + BX1/BX2), the accepted 2026-08-25 symmetric V3 correction,
@@ -169,6 +169,20 @@ P_C38_ADJUDICATION = REPO / "docs" / "recognition" / "c38_linux_confirmation" / 
 P_C38_FINAL = REPO / "docs" / "recognition" / "c38_linux_confirmation" / "RUNPOD_C38_FINAL_VERIFICATION_20260903.json"
 P_ARCHITECTURE_ANALYSIS = REPO / "docs" / "recognition" / "architecture_comparison_execution_retry_20260903" / "ANALYSIS.json"
 P_ARCHITECTURE_CROSS_MACHINE = REPO / "docs" / "recognition" / "architecture_query_ladder_cross_machine_execution_20260904" / "CROSS_MACHINE_ANALYSIS.json"
+P_INCREMENTAL_SUMMARY = REPO / "docs" / "research" / "verification" / "incremental-revision-local-gate-retry-003-2026-09-04" / "SUMMARY.json"
+P_INCREMENTAL_VERIFY = P_INCREMENTAL_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_HARDWARE_FEASIBILITY_SUMMARY = REPO / "docs" / "research" / "verification" / "hardware-revision-feasibility-retry-002-2026-09-04" / "SUMMARY.json"
+P_HARDWARE_FEASIBILITY_VERIFY = P_HARDWARE_FEASIBILITY_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_HARDWARE_BEHAVIOR_SUMMARY = REPO / "docs" / "research" / "verification" / "hardware-behavior-corpus-2026-09-04" / "SUMMARY.json"
+P_HARDWARE_BEHAVIOR_VERIFY = P_HARDWARE_BEHAVIOR_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_H2_H3_SUMMARY = REPO / "docs" / "research" / "verification" / "cm-h2-h3-profile-gate-retry-002-2026-09-08" / "SUMMARY.json"
+P_H2_H3_VERIFY = P_H2_H3_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_H6_CALIBRATION_SUMMARY = REPO / "docs" / "research" / "verification" / "cm-h6-fresh-process-memory-attempt-001-2026-09-08" / "SUMMARY.json"
+P_H6_CALIBRATION_VERIFY = P_H6_CALIBRATION_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_H6_ESTIMATOR_SUMMARY = REPO / "docs" / "research" / "verification" / "cm-h6-representation-estimator-attempt-001-2026-09-08" / "SUMMARY.json"
+P_H6_ESTIMATOR_VERIFY = P_H6_ESTIMATOR_SUMMARY.parent / "INDEPENDENT_VERIFICATION.json"
+P_INDEPENDENT_WORKFLOW_SUMMARY = REPO / "docs" / "research" / "verification" / "cm-independent-active-workflow-2026-09-08" / "SUMMARY_RETRY_002.json"
+P_INDEPENDENT_WORKFLOW_VERIFY = P_INDEPENDENT_WORKFLOW_SUMMARY.parent / "INDEPENDENT_VERIFICATION_RETRY_002.json"
 
 # ---------------------------------------------------------------- load
 
@@ -228,6 +242,20 @@ c38_adjudication = load_json(P_C38_ADJUDICATION)
 c38_final = load_json(P_C38_FINAL)
 architecture_analysis = load_json(P_ARCHITECTURE_ANALYSIS)
 architecture_cross_machine = load_json(P_ARCHITECTURE_CROSS_MACHINE)
+incremental_summary = load_json(P_INCREMENTAL_SUMMARY)
+incremental_verify = load_json(P_INCREMENTAL_VERIFY)
+hardware_feasibility_summary = load_json(P_HARDWARE_FEASIBILITY_SUMMARY)
+hardware_feasibility_verify = load_json(P_HARDWARE_FEASIBILITY_VERIFY)
+hardware_behavior_summary = load_json(P_HARDWARE_BEHAVIOR_SUMMARY)
+hardware_behavior_verify = load_json(P_HARDWARE_BEHAVIOR_VERIFY)
+h2_h3_summary = load_json(P_H2_H3_SUMMARY)
+h2_h3_verify = load_json(P_H2_H3_VERIFY)
+h6_calibration_summary = load_json(P_H6_CALIBRATION_SUMMARY)
+h6_calibration_verify = load_json(P_H6_CALIBRATION_VERIFY)
+h6_estimator_summary = load_json(P_H6_ESTIMATOR_SUMMARY)
+h6_estimator_verify = load_json(P_H6_ESTIMATOR_VERIFY)
+independent_workflow_summary = load_json(P_INDEPENDENT_WORKFLOW_SUMMARY)
+independent_workflow_verify = load_json(P_INDEPENDENT_WORKFLOW_VERIFY)
 
 D: dict = {}
 
@@ -1801,6 +1829,175 @@ D["e21_current_architecture"] = {
             "scope": "separately timed q1/q4/q16/q64 on Linux/GCC and Linux/Clang hosts",
         },
     ],
+}
+
+# ================================================================= E23
+# Current research dispositions through 2026-09-08. These are boundary
+# results, including negative and stopped outcomes. Categorical decisions are
+# loaded from the controlling summaries and independently replayed records;
+# selected measurements reach prose only through provenance-bearing tokens.
+
+if incremental_summary.get("schema") != "cm-incremental-revision-local-gate/v1":
+    raise SystemExit("unexpected incremental-revision summary schema")
+if incremental_summary.get("status") != "completed" or incremental_summary["gates"].get("promotion"):
+    raise SystemExit("incremental-revision disposition no longer records a completed no-promotion result")
+if incremental_verify.get("status") != "passed" or not incremental_verify.get("summary_reproduced"):
+    raise SystemExit("incremental-revision independent verification is incomplete")
+
+if hardware_feasibility_summary.get("schema") != "cm-hardware-revision-feasibility-summary/v1":
+    raise SystemExit("unexpected hardware-revision feasibility schema")
+if hardware_feasibility_summary.get("status_without_replay") != "insufficient_activation_or_provenance":
+    raise SystemExit("hardware-revision feasibility disposition changed")
+if hardware_feasibility_verify.get("status") != "passed" or not hardware_feasibility_verify.get("summary_reproduced"):
+    raise SystemExit("hardware-revision feasibility replay is incomplete")
+
+if hardware_behavior_summary.get("schema") != "cm-hardware-behavior-corpus-summary/v1":
+    raise SystemExit("unexpected hardware-behavior corpus schema")
+if hardware_behavior_summary.get("status_without_replay") != "insufficient_behavior_change_or_provenance":
+    raise SystemExit("hardware-behavior corpus disposition changed")
+if hardware_behavior_verify.get("status") != "passed" or not hardware_behavior_verify.get("summary_reproduced"):
+    raise SystemExit("hardware-behavior corpus replay is incomplete")
+
+if h2_h3_summary.get("schema") != "cm-h2-h3-profile-summary/v1":
+    raise SystemExit("unexpected H2/H3 profile schema")
+if h2_h3_summary.get("decision") != "no_go_close_h2_h3_still_deferred":
+    raise SystemExit("H2/H3 disposition changed")
+if h2_h3_summary.get("qualifying_components") or h2_h3_summary.get("candidate_implemented"):
+    raise SystemExit("H2/H3 summary unexpectedly permits a candidate")
+if h2_h3_verify.get("status") != "verified_no_go_close_h2_h3_still_deferred":
+    raise SystemExit("H2/H3 independent verification is incomplete")
+
+if h6_calibration_summary.get("schema") != "cm-h6-fresh-process-memory-summary/v1":
+    raise SystemExit("unexpected H6 calibration schema")
+if h6_calibration_summary.get("decision") != "go_memory_calibration_only_requires_separate_candidate_freeze":
+    raise SystemExit("H6 calibration disposition changed")
+if not all(h6_calibration_summary.get("conditions", {}).values()):
+    raise SystemExit("H6 calibration validity conditions are incomplete")
+if h6_calibration_verify.get("status") != "verified":
+    raise SystemExit("H6 calibration independent verification is incomplete")
+
+if h6_estimator_summary.get("schema") != "cm-h6-representation-estimator-summary/v1":
+    raise SystemExit("unexpected H6 estimator schema")
+if h6_estimator_summary.get("decision") != "no_go_h6_estimator_and_routing_deferred":
+    raise SystemExit("H6 estimator disposition changed")
+if h6_estimator_summary.get("production_routing_changed"):
+    raise SystemExit("H6 estimator unexpectedly changes production routing")
+if h6_estimator_verify.get("status") != "verified" or h6_estimator_verify.get("decision_mismatches"):
+    raise SystemExit("H6 estimator independent verification is incomplete")
+
+if independent_workflow_summary.get("schema") != "cm-independent-active-workflow-summary/v1":
+    raise SystemExit("unexpected independent-workflow summary schema")
+if independent_workflow_summary.get("decision") != "no_go_no_material_component":
+    raise SystemExit("independent-workflow disposition changed")
+if not independent_workflow_summary.get("measurement_valid") or independent_workflow_summary.get("passing_components"):
+    raise SystemExit("independent-workflow materiality result changed")
+if independent_workflow_summary.get("production_behavior_changed") or independent_workflow_summary.get("runpod_authorization_request_permitted"):
+    raise SystemExit("independent workflow unexpectedly changes production or permits RunPod")
+if independent_workflow_verify.get("status") != "verified" or independent_workflow_verify.get("mismatch_count"):
+    raise SystemExit("independent-workflow verification is incomplete")
+
+_h2_largest = max(h2_h3_summary["materiality"], key=lambda row: row["aggregate_exclusive_share"])
+if _h2_largest["component"] != "key_creation" or _h2_largest.get("passes"):
+    raise SystemExit("unexpected H2/H3 largest-component disposition")
+_ind_largest = max(independent_workflow_summary["materiality"], key=lambda row: row["aggregate_exclusive_share"])
+if _ind_largest["component"] != "key_creation" or _ind_largest.get("passed"):
+    raise SystemExit("unexpected independent-workflow largest-component disposition")
+_hardware_repositories = {row["slug"]: row for row in hardware_behavior_summary["repositories"]}
+_blackparrot = _hardware_repositories["black-parrot/black-parrot"]
+_riscv = _hardware_repositories["ultraembedded/riscv"]
+
+num("recent.h2h3.rows", h2_h3_summary["rows"], "int",
+    "%s :: rows" % rel(P_H2_H3_SUMMARY))
+num("recent.h2h3.largest_share", _h2_largest["aggregate_exclusive_share"] * 100, "pct2",
+    "%s :: materiality[key_creation].aggregate_exclusive_share" % rel(P_H2_H3_SUMMARY),
+    "largest observed component; it failed the frozen materiality gate")
+num("recent.h6.rows", h6_calibration_summary["rows"], "int",
+    "%s :: rows" % rel(P_H6_CALIBRATION_SUMMARY))
+num("recent.h6.cells", h6_calibration_summary["logical_cells"], "int",
+    "%s :: logical_cells" % rel(P_H6_CALIBRATION_SUMMARY))
+num("recent.h6.stable_signal", h6_calibration_summary["stable_signal_prevalence"] * 100, "pct2",
+    "%s :: stable_signal_prevalence" % rel(P_H6_CALIBRATION_SUMMARY))
+num("recent.h6.discrimination", h6_calibration_summary["arm_discrimination_prevalence"] * 100, "pct2",
+    "%s :: arm_discrimination_prevalence" % rel(P_H6_CALIBRATION_SUMMARY))
+num("recent.h6.ordered_pairs", h6_estimator_summary["metrics"]["pairwise_order_agreements"], "int",
+    "%s :: metrics.pairwise_order_agreements" % rel(P_H6_ESTIMATOR_SUMMARY))
+num("recent.h6.material_pairs", h6_estimator_summary["metrics"]["materially_ordered_pairs"], "int",
+    "%s :: metrics.materially_ordered_pairs" % rel(P_H6_ESTIMATOR_SUMMARY))
+num("recent.incremental.vs_cold", incremental_summary["incremental_update_over_cold_cm"]["geomean"], "x3",
+    "%s :: incremental_update_over_cold_cm.geomean" % rel(P_INCREMENTAL_SUMMARY))
+num("recent.incremental.vs_cache", incremental_summary["incremental_update_over_current_persistent_cm"]["geomean"], "x3",
+    "%s :: incremental_update_over_current_persistent_cm.geomean" % rel(P_INCREMENTAL_SUMMARY))
+num("recent.incremental.memory", incremental_summary["incremental_retained_over_current_persistent_cm"]["geomean"], "x3",
+    "%s :: incremental_retained_over_current_persistent_cm.geomean" % rel(P_INCREMENTAL_SUMMARY))
+num("recent.incremental.q64_cse", incremental_summary["incremental_total_over_cse_flat_by_q"]["64"]["geomean"], "x3",
+    "%s :: incremental_total_over_cse_flat_by_q.64.geomean" % rel(P_INCREMENTAL_SUMMARY))
+num("recent.hardware.changed_seeds", hardware_feasibility_summary["overall"]["confirmation_changed_stable_seeds"], "int",
+    "%s :: overall.confirmation_changed_stable_seeds" % rel(P_HARDWARE_FEASIBILITY_SUMMARY))
+num("recent.hardware.comparable_seeds", hardware_feasibility_summary["overall"]["confirmation_comparable_stable_seeds"], "int",
+    "%s :: overall.confirmation_comparable_stable_seeds" % rel(P_HARDWARE_FEASIBILITY_SUMMARY))
+num("recent.hardware.change_fraction", hardware_feasibility_summary["overall"]["confirmation_change_fraction"] * 100, "pct2",
+    "%s :: overall.confirmation_change_fraction" % rel(P_HARDWARE_FEASIBILITY_SUMMARY))
+num("recent.hardware.blackparrot_transitions", _blackparrot["selected_transitions"], "int",
+    "%s :: repositories[black-parrot/black-parrot].selected_transitions" % rel(P_HARDWARE_BEHAVIOR_SUMMARY))
+num("recent.hardware.confirmation_scanned", _riscv["scanned_commits"], "int",
+    "%s :: repositories[ultraembedded/riscv].scanned_commits" % rel(P_HARDWARE_BEHAVIOR_SUMMARY))
+num("recent.hardware.confirmation_transitions", _riscv["selected_transitions"], "int",
+    "%s :: repositories[ultraembedded/riscv].selected_transitions" % rel(P_HARDWARE_BEHAVIOR_SUMMARY))
+num("recent.workflow.profile_rows", independent_workflow_summary["profile_rows"], "int",
+    "%s :: profile_rows" % rel(P_INDEPENDENT_WORKFLOW_SUMMARY))
+num("recent.workflow.memory_rows", independent_workflow_summary["memory_rows"], "int",
+    "%s :: memory_rows" % rel(P_INDEPENDENT_WORKFLOW_SUMMARY))
+num("recent.workflow.largest_share", _ind_largest["aggregate_exclusive_share"] * 100, "pct2",
+    "%s :: materiality[key_creation].aggregate_exclusive_share" % rel(P_INDEPENDENT_WORKFLOW_SUMMARY),
+    "largest observed component; it failed the frozen materiality/prevalence gate")
+
+D["e23_current_research"] = {
+    "as_of": "2026-09-08",
+    "production_behavior_changed": False,
+    "runtime_selector_enabled": False,
+    "runpod_request_permitted": False,
+    "decisions": {
+        "h2_h3": {
+            "decision": h2_h3_summary["decision"],
+            "verification_status": h2_h3_verify["status"],
+            "source_commit": "43fffcfaa53aab0d2ce95ca902c11e8f23484dfe",
+            "result_href": "../../docs/research/CM_H2_H3_CURRENT_SOURCE_PROFILE_GATE_RESULT_2026_09_08.md",
+            "summary_href": "../../" + rel(P_H2_H3_SUMMARY),
+            "verification_href": "../../" + rel(P_H2_H3_VERIFY),
+        },
+        "h6": {
+            "decision": h6_estimator_summary["decision"],
+            "verification_status": h6_estimator_verify["status"],
+            "source_commit": "43fffcfaa53aab0d2ce95ca902c11e8f23484dfe",
+            "result_href": "../../docs/research/CM_H6_FRESH_PROCESS_MEMORY_AND_ESTIMATOR_RESULT_2026_09_08.md",
+            "summary_href": "../../" + rel(P_H6_ESTIMATOR_SUMMARY),
+            "verification_href": "../../" + rel(P_H6_ESTIMATOR_VERIFY),
+        },
+        "independent_workflow": {
+            "decision": independent_workflow_summary["decision"],
+            "verification_status": independent_workflow_verify["status"],
+            "source_commit": "f6339c739c1905c16afb1433ed2ab1db9513404d",
+            "result_href": "../../docs/research/CM_INDEPENDENT_ACTIVE_VIDEO_TRUTH_LAYOUT_PROFILE_RESULT_2026_09_08.md",
+            "summary_href": "../../" + rel(P_INDEPENDENT_WORKFLOW_SUMMARY),
+            "verification_href": "../../" + rel(P_INDEPENDENT_WORKFLOW_VERIFY),
+        },
+        "incremental": {
+            "decision": "stop_no_promotion",
+            "verification_status": incremental_verify["status"],
+            "source_commit": "d795ae7f5e81612fec8b6d8ccaf2786e0b7b192f",
+            "result_href": "../../docs/research/CM_INCREMENTAL_REVISION_LOCAL_GATE_RESULT_2026_09_04.md",
+            "summary_href": "../../" + rel(P_INCREMENTAL_SUMMARY),
+            "verification_href": "../../" + rel(P_INCREMENTAL_VERIFY),
+        },
+        "hardware": {
+            "decision": hardware_behavior_summary["status_without_replay"],
+            "verification_status": hardware_behavior_verify["status"],
+            "source_commit": "e1c6414643a184595efeaccffafc94b9a28b75a7",
+            "result_href": "../../docs/research/CM_HARDWARE_BEHAVIOR_CHANGE_CORPUS_RESULT_2026_09_04.md",
+            "summary_href": "../../" + rel(P_HARDWARE_BEHAVIOR_SUMMARY),
+            "verification_href": "../../" + rel(P_HARDWARE_BEHAVIOR_VERIFY),
+        },
+    },
 }
 
 # ---------------------------------------------------------------- content

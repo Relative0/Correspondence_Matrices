@@ -193,14 +193,14 @@ def format_number(record):
         number = math.floor(float(value) + 0.5)
         return (f"{number:,}" if fmt != "pct0" else str(number)) + ("×" if fmt in ("x0", "xcomma") else "%" if fmt == "pct0" else "")
     digits = {"ratio2": 2, "ratio3": 3, "ratio4": 4, "num1": 1, "num1s": 1,
-              "x1": 1, "x2": 2, "pct1": 1, "pct2": 2, "pctsign2": 2, "usd": 4}
+              "x1": 1, "x2": 2, "x3": 3, "pct1": 1, "pct2": 2, "pctsign2": 2, "usd": 4}
     if fmt in digits:
         output = f"{float(value):.{digits[fmt]}f}"
         if fmt == "num1s":
             output = output.removesuffix(".0")
         if fmt == "pctsign2" and value >= 0:
             output = "+" + output
-        return ("$" if fmt == "usd" else "") + output + ("×" if fmt in ("x1", "x2") else "%" if fmt.startswith("pct") else "")
+        return ("$" if fmt == "usd" else "") + output + ("×" if fmt in ("x1", "x2", "x3") else "%" if fmt.startswith("pct") else "")
     if fmt == "ms0":
         return f"{value:.1f} ms" if value < 10 else f"{value:.0f} ms"
     if fmt == "us0":

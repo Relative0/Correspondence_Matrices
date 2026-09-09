@@ -40,14 +40,6 @@ PINNED = {
         "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json",
         "f1f535562ed82336c9d5257810f74ebb9feab6907a50815b9497f1db48ef7d4a",
     ),
-    "initial": (
-        "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json",
-        "b6025da7d5169f448629c62f01ff60b0f06e9f9fe8a172382735c654cead2f9f",
-    ),
-    "native": (
-        "docs/recognition/runs/neural-native-portfolio-reassessment-development-20260903-001/assessment.json",
-        "f8c83eb8c0d11d46958cfcb77ac1d499898c049f3e07bd66b71f9df247b801cb",
-    ),
     "post": (
         "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json",
         "40bd8e37a475090496beaf88d17ce31442e57190060d2b94b46dac650be3e8df",
@@ -114,12 +106,17 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _lf_sha256(path: Path) -> str:
+    """Hash the Git-blob byte form without rewriting a CRLF checkout."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def _read_pinned(key: str) -> dict:
     relative, expected = PINNED[key]
     path = (ROOT / relative).resolve()
     if not path.is_relative_to(ROOT) or not path.is_file():
         raise ValueError(f"Missing pinned learning evidence: {relative}")
-    if _sha256(path) != expected:
+    if _sha256(path) != expected and _lf_sha256(path) != expected:
         raise ValueError(f"Pinned learning evidence changed: {relative}")
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
@@ -138,8 +135,6 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     if site.resolve() != (ROOT / "deliverables_n22_24/master_explainer_2026_08_03").resolve():
         raise ValueError("Unexpected website root")
 
-    initial = _read_pinned("initial")
-    native = _read_pinned("native")
     post = _read_pinned("post")
     protocol = _read_pinned("protocol")
     freeze = _read_pinned("freeze")
@@ -151,10 +146,6 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     c5 = _read_pinned("c5")
     ladder = build_evidence()
 
-    if initial.get("status") != "complete" or initial.get("decision", {}).get("training_performed"):
-        raise ValueError("Initial neural reassessment boundary changed")
-    if native.get("status") != "complete" or native.get("decision", {}).get("advice_enabled"):
-        raise ValueError("Native-portfolio reassessment boundary changed")
     if post.get("status") != "complete_no_training" or post.get("decision", {}).get("selector_fitted"):
         raise ValueError("Post-benchmark neural boundary changed")
     if protocol.get("status") != "complete_no_training" or protocol.get("decision", {}).get("training_allowed"):
@@ -188,17 +179,10 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
             "note": note or "Saved development evidence; not a production-routing claim.",
         }
 
-    initial_path = PINNED["initial"][0]
-    native_path = PINNED["native"][0]
     post_path = PINNED["post"][0]
     protocol_path = PINNED["protocol"][0]
     freeze_path = PINNED["freeze"][0]
 
-    number("initial_cases", initial["labels"]["cases"], "int", initial_path, "labels.cases")
-    number("word_headroom", initial["economics"]["post_r2_word_portfolio"]["gross_headroom_speedup"], "x9", initial_path, "economics.post_r2_word_portfolio.gross_headroom_speedup")
-    number("bigint_headroom", initial["economics"]["r2_plus_bigint_engine_portfolio"]["gross_headroom_speedup"], "x9", initial_path, "economics.r2_plus_bigint_engine_portfolio.gross_headroom_speedup")
-    number("bigint_labels", initial["labels"]["r2_plus_bigint_engine_portfolio"]["counts"]["cse_bigint"], "int", initial_path, "labels.r2_plus_bigint_engine_portfolio.counts.cse_bigint")
-    number("native_headroom", native["economics"]["gross_headroom_speedup"], "x9", native_path, "economics.gross_headroom_speedup")
     number("version_cases", post["strongest_surface"]["complete_cases"], "int", post_path, "strongest_surface.complete_cases")
     number("version_gross", post["strongest_surface"]["gross_headroom_speedup"], "x9", post_path, "strongest_surface.gross_headroom_speedup")
     number("version_budget", post["strongest_surface"]["maximum_overhead_ns_per_case_preserving_1_10x"], "num1", post_path, "strongest_surface.maximum_overhead_ns_per_case_preserving_1_10x")
@@ -311,7 +295,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "D–D4": "docs/recognition/learning_milestone_d_results.json",
         "D5–D10": "docs/recognition/learning_milestone_d10_indexed_rule_engine_results.json",
         "E1–E2": "docs/recognition/learning_milestone_e2_sat_guidance_results.json",
-        "Reassessment": PINNED["initial"][0], "Post-benchmark": PINNED["post"][0],
+        "Reassessment": "docs/research/CM_NEURAL_ARCHITECTURE_REASSESSMENT_2026_09_02.md", "Post-benchmark": PINNED["post"][0],
         "Current protocol": PINNED["freeze"][0],
     }
     timeline = []
@@ -352,6 +336,16 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "status": "verified_read_only_no_training",
         "updated": "2026-09-04",
         "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
+        "excluded_missing_artifacts": [
+            {
+                "path": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json",
+                "reason": "Not present in integrated Git history; numeric claims that depended on it are intentionally not rendered.",
+            },
+            {
+                "path": "docs/recognition/runs/neural-native-portfolio-reassessment-development-20260903-001/assessment.json",
+                "reason": "Not present in integrated Git history; numeric claims that depended on it are intentionally not rendered.",
+            },
+        ],
         "tasks": [
             {"id": "A", "name": "Exact answers / relations", "role": "Predict a complete exact Boolean object", "verdict": "Do not replace the exact output and checker."},
             {"id": "B", "name": "Decomposition / cuts", "role": "Propose useful exact decompositions", "verdict": "Current learned proposals do not avoid certified global work."},

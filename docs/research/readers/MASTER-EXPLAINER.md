@@ -18,7 +18,7 @@ This is the complete evidence version. A simple one-pager, investor brief, techn
 
 ### Honesty
 
-Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated 2026-08-26–30 follow-up, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn.
+Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated follow-up through 2026-09-08, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn.
 
 ## Project state
 
@@ -40,9 +40,9 @@ Structural wedge
 
 #### Summary
 
-Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic all-hit reuse has now been measured; production workflow value is still unvalidated.
+Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic reuse and one independently maintained local caller have now been measured; deployed-production workflow value is still unvalidated.
 
-### Measure reuse in a real workflow
+### Measure production reuse economics
 
 #### Label
 
@@ -50,7 +50,7 @@ Decisive next proof
 
 #### Summary
 
-The commercial question is whether deployed systems reuse logic enough—or need structural operations enough—to repay preparation and wrapper cost.
+One maintained local video-contract caller did not activate the frozen H2/H3 materiality gate. The commercial question remains whether deployed systems reuse logic enough—or need structural operations enough—to repay preparation and wrapper cost.
 
 ### Boundaries
 
@@ -58,7 +58,7 @@ Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3
 
 Whole call: BitSet led at every measured semantic support through live_k=16 in the legacy wrapper campaign; this is not a ranking of the later feature-model tasks.
 
-Economics: real production reuse counts have not been measured.
+Economics: one independently maintained local caller has been profiled and did not activate H2/H3 materiality; deployed-production reuse counts and end-to-end economics have not been measured.
 
 External scope: EPFL hardware expressions and bounded neighborhoods of official feature models, not deployed workflows. Feature-model timing conclusions remain provisional under the separate measurement audit.
 
@@ -74,7 +74,7 @@ If deployed systems do not repeat logic enough, preparation never amortises.
 
 ##### Test
 
-Instrument one real consumer workload and compare its reuse distribution with the matched-baseline break-even distribution.
+Instrument a deployed consumer workload, or another independently admitted maintained caller, and compare its reuse distribution and fully charged task cost with matched baselines.
 
 #### The setup premium may remain
 
@@ -239,6 +239,166 @@ master
 expert
 
 investor
+
+## Current research disposition
+
+Current research disposition
+
+### Master lede
+
+Recent profile-first studies produced useful boundary evidence, not new product claims. Valid measurements, failed gates, stopped corpora, and zero-candidate outcomes are retained together.
+
+### Lay lede
+
+Several promising ideas were tested and did not earn a product change. That is useful: it narrows where CM may matter without pretending that a negative result is a win.
+
+### Investor lede
+
+The latest gates reduce technical uncertainty while leaving the commercial thesis unproven. No result below changed defaults, routing, or production behavior.
+
+### Expert lede
+
+Decision-bearing September 4 and 8 results, loaded from their controlling summaries and independent replays. Invalid attempts and development-only evidence remain visible but do not supply headline measurements.
+
+### H2/H3 profile-first gate: no candidate
+
+#### Summary
+
+The corrected current-source profile was valid, but no compact-key or dense-layout component passed the frozen materiality gate. H2 and H3 remain deferred.
+
+#### Lay summary
+
+A valid profile found no large enough key-building or matrix-layout bottleneck to justify redesigning either one.
+
+#### Investor summary
+
+The profile closed two speculative optimization routes without implementation spend: no component qualified and no candidate was built.
+
+#### Detail
+
+All 237 retry rows passed the decision checks. Key creation was the largest aggregate component at 7.88%, still below the frozen threshold and without the required prevalence/cohort support.
+
+#### Audiences
+
+master
+
+layperson
+
+investor
+
+expert
+
+### H6 memory calibration: valid protocol, failed router
+
+#### Summary
+
+Fresh-process memory calibration became valid, but the only permitted representation estimator failed holdout ordering. There is no memory router.
+
+#### Lay summary
+
+Memory can now be measured more reliably, but the first rule for choosing a representation predicted the important ordering incorrectly, so it was rejected.
+
+#### Investor summary
+
+Measurement infrastructure improved; the routing candidate did not clear its holdout gate and produced no product feature.
+
+#### Detail
+
+Calibration completed 708 rows across 236 logical cells, with 98.58% stable-signal prevalence and 58.11% arm discrimination. The estimator ordered 0/3 materially separated holdout arm pairs correctly, failing the preregistered gate.
+
+#### Audiences
+
+master
+
+layperson
+
+investor
+
+expert
+
+### Independent maintained caller: valid no-go
+
+#### Summary
+
+Provenance independence was established for one maintained local video truth-layout workflow, and its retry measurement was valid. No H2/H3 component passed materiality or prevalence; no implementation candidate or RunPod request followed.
+
+#### Lay summary
+
+One real, independently existing local caller was profiled. It worked correctly, but none of the suspected costs was large or common enough to justify a new implementation.
+
+#### Investor summary
+
+A caller-backed local test reduced selection bias but did not validate production economics or unlock a candidate.
+
+#### Detail
+
+The independent replay verified 300 profile rows and 24 fresh-process memory rows. Key creation was again the largest aggregate component at 5.80%; zero components passed the complete gate.
+
+#### Audiences
+
+master
+
+layperson
+
+investor
+
+expert
+
+### Incremental revisions: prototype not promoted
+
+#### Summary
+
+The digest-radix prototype beat cold CM compilation but lost to the existing persistent cache, retained more memory, and remained behind CSE-flat. It stays research-only.
+
+#### Lay summary
+
+Reusing pieces was faster than starting from scratch, but the repository's existing cache was faster and smaller, and the strongest comparison still won overall.
+
+#### Investor summary
+
+The incumbent internal cache dominated the new prototype on the promotion criteria, avoiding a higher-memory implementation path.
+
+#### Detail
+
+Incremental update/cold CM was 0.442×, but incremental/current-cache was 1.104× and retained memory was 1.678× the current cache. At q64, incremental total/CSE-flat was 1.459×.
+
+#### Audiences
+
+master
+
+layperson
+
+investor
+
+expert
+
+### Hardware revisions / H9: stopped before timing
+
+#### Summary
+
+Two frozen corpus-admission attempts stopped before Yosys or timing. BlackParrot is exposed development evidence, not held-out confirmation; the second confirmation history supplied no qualifying transitions.
+
+#### Lay summary
+
+The hardware-history data was not strong enough to run the proposed speed experiment, so the study stopped before synthesis or timing instead of choosing friendlier examples afterward.
+
+#### Investor summary
+
+H9 remains gated by corpus quality. No cloud spend or implementation work was justified from an inadmissible confirmation cohort.
+
+#### Detail
+
+The first confirmation audit changed only 7/670 stable seeds (1.04%). The corrected selector exposed 12 BlackParrot transitions as development evidence, while the second confirmation history scanned 42 commits and admitted 0 transitions. No Yosys, timing, selector, or routing claim follows.
+
+#### Audiences
+
+master
+
+layperson
+
+investor
+
+expert
 
 ## Domains
 
@@ -2190,7 +2350,7 @@ Everything here answers “how many times would you have to re-run this before c
 
 #### Technical statement
 
-This is distinct from what the external validation delivered. The EPFL campaign supplied real circuit cones and validated kernel ratios and the structure of the preparation and break-even economics on real expressions — but it measured per-formula kernel and preparation costs, not an application's actual reuse distribution or end-to-end task cost. The ranked next test is a reuse-distribution measurement on a real consumer workload, to calibrate expected reuse against predicted break-even. The candidate validation domains named by the project remain untested as workloads: configuration and policy systems, hardware verification and EDA, compiler and program analysis, and constraint satisfaction in AI systems.
+This is distinct from what the external validation delivered. The EPFL campaign supplied real circuit cones and validated kernel ratios and the structure of the preparation and break-even economics on real expressions — but it measured per-formula kernel and preparation costs, not an application's actual reuse distribution or end-to-end task cost. One independently existing maintained local video-contract caller has now been profiled and did not activate the frozen H2/H3 materiality gate; it is not a deployed production workflow and does not settle production reuse economics. The ranked next test is a fully charged reuse and task-cost measurement on a deployed consumer workload, or another independently admitted maintained caller with a materially different contract. The candidate validation domains named by the project remain untested as deployed workloads: configuration and policy systems, hardware verification and EDA, compiler and program analysis, and constraint satisfaction in AI systems.
 
 #### Why it matters
 
@@ -5121,6 +5281,27 @@ Values below retain the source field and any qualification used by the website.
 - `memory.refusals` = 4. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: count(cases[].refusal_before_materialization)`.
 - `prep.max` = 4.4×. Source: `max over the three prep-multiple geomeans — deliverables_n22_24/b1_e3_replay_2026_08_03/cm_gap_e3_corrected_results_2026_08_02.json :: geomean(formulas[].prep_ratio_cm_vs_cse) · deliverables_n22_24/cm_gap_e3_corrected_results_2026_08_02.json :: geomean(formulas[].prep_ratio_cm_vs_cse) (archived run) · deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: prep_multiple_cm_vs_cse_flat_geomean`.
 - `prep.min` = 4.1×. Source: `min over the three prep-multiple geomeans — deliverables_n22_24/b1_e3_replay_2026_08_03/cm_gap_e3_corrected_results_2026_08_02.json :: geomean(formulas[].prep_ratio_cm_vs_cse) · deliverables_n22_24/cm_gap_e3_corrected_results_2026_08_02.json :: geomean(formulas[].prep_ratio_cm_vs_cse) (archived run) · deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: prep_multiple_cm_vs_cse_flat_geomean`.
+- `recent.h2h3.largest_share` = 7.88%. Source: `docs/research/verification/cm-h2-h3-profile-gate-retry-002-2026-09-08/SUMMARY.json :: materiality[key_creation].aggregate_exclusive_share`. largest observed component; it failed the frozen materiality gate
+- `recent.h2h3.rows` = 237. Source: `docs/research/verification/cm-h2-h3-profile-gate-retry-002-2026-09-08/SUMMARY.json :: rows`.
+- `recent.h6.cells` = 236. Source: `docs/research/verification/cm-h6-fresh-process-memory-attempt-001-2026-09-08/SUMMARY.json :: logical_cells`.
+- `recent.h6.discrimination` = 58.11%. Source: `docs/research/verification/cm-h6-fresh-process-memory-attempt-001-2026-09-08/SUMMARY.json :: arm_discrimination_prevalence`.
+- `recent.h6.material_pairs` = 3. Source: `docs/research/verification/cm-h6-representation-estimator-attempt-001-2026-09-08/SUMMARY.json :: metrics.materially_ordered_pairs`.
+- `recent.h6.ordered_pairs` = 0. Source: `docs/research/verification/cm-h6-representation-estimator-attempt-001-2026-09-08/SUMMARY.json :: metrics.pairwise_order_agreements`.
+- `recent.h6.rows` = 708. Source: `docs/research/verification/cm-h6-fresh-process-memory-attempt-001-2026-09-08/SUMMARY.json :: rows`.
+- `recent.h6.stable_signal` = 98.58%. Source: `docs/research/verification/cm-h6-fresh-process-memory-attempt-001-2026-09-08/SUMMARY.json :: stable_signal_prevalence`.
+- `recent.hardware.blackparrot_transitions` = 12. Source: `docs/research/verification/hardware-behavior-corpus-2026-09-04/SUMMARY.json :: repositories[black-parrot/black-parrot].selected_transitions`.
+- `recent.hardware.change_fraction` = 1.04%. Source: `docs/research/verification/hardware-revision-feasibility-retry-002-2026-09-04/SUMMARY.json :: overall.confirmation_change_fraction`.
+- `recent.hardware.changed_seeds` = 7. Source: `docs/research/verification/hardware-revision-feasibility-retry-002-2026-09-04/SUMMARY.json :: overall.confirmation_changed_stable_seeds`.
+- `recent.hardware.comparable_seeds` = 670. Source: `docs/research/verification/hardware-revision-feasibility-retry-002-2026-09-04/SUMMARY.json :: overall.confirmation_comparable_stable_seeds`.
+- `recent.hardware.confirmation_scanned` = 42. Source: `docs/research/verification/hardware-behavior-corpus-2026-09-04/SUMMARY.json :: repositories[ultraembedded/riscv].scanned_commits`.
+- `recent.hardware.confirmation_transitions` = 0. Source: `docs/research/verification/hardware-behavior-corpus-2026-09-04/SUMMARY.json :: repositories[ultraembedded/riscv].selected_transitions`.
+- `recent.incremental.memory` = 1.678×. Source: `docs/research/verification/incremental-revision-local-gate-retry-003-2026-09-04/SUMMARY.json :: incremental_retained_over_current_persistent_cm.geomean`.
+- `recent.incremental.q64_cse` = 1.459×. Source: `docs/research/verification/incremental-revision-local-gate-retry-003-2026-09-04/SUMMARY.json :: incremental_total_over_cse_flat_by_q.64.geomean`.
+- `recent.incremental.vs_cache` = 1.104×. Source: `docs/research/verification/incremental-revision-local-gate-retry-003-2026-09-04/SUMMARY.json :: incremental_update_over_current_persistent_cm.geomean`.
+- `recent.incremental.vs_cold` = 0.442×. Source: `docs/research/verification/incremental-revision-local-gate-retry-003-2026-09-04/SUMMARY.json :: incremental_update_over_cold_cm.geomean`.
+- `recent.workflow.largest_share` = 5.80%. Source: `docs/research/verification/cm-independent-active-workflow-2026-09-08/SUMMARY_RETRY_002.json :: materiality[key_creation].aggregate_exclusive_share`. largest observed component; it failed the frozen materiality/prevalence gate
+- `recent.workflow.memory_rows` = 24. Source: `docs/research/verification/cm-independent-active-workflow-2026-09-08/SUMMARY_RETRY_002.json :: memory_rows`.
+- `recent.workflow.profile_rows` = 300. Source: `docs/research/verification/cm-independent-active-workflow-2026-09-08/SUMMARY_RETRY_002.json :: profile_rows`.
 - `symv3.bare.k16` = 0.9612. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: live_k/all/16/cm_current_over_cse_flat_current.paired_formula_cluster_geomean`.
 - `symv3.bare.overall` = 0.8906. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_geomean`.
 - `symv3.bare.overall.hi` = 0.9073. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high`.

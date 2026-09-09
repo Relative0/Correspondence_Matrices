@@ -127,7 +127,7 @@ app.append(h("header", { class: "page" }, [
     h("div", { class: "ln-c5-axis" }, [h("span", { text: `Exact ANF ${T("ln.c5_exact_reference")}` }), h("span", { text: `safe learned ${T("ln.c5_slow_min")}–${T("ln.c5_slow_max")}` })]),
   ]);
   s.append(h("div", { class: "ln-result-grid" }, [
-    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Exact portfolios" }), h("h3", { text: "The decision surface disappeared" }), h("p", { class: "ln-result-value", text: T("ln.bigint_headroom") }), h("p", { html: `Task-identical bigint and source-closed native portfolios both reduce to ${T("ln.native_headroom")} gross headroom. All ${T("ln.bigint_labels")} of ${T("ln.initial_cases")} exposed labels chose one fixed bigint arm.` })]),
+    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Preservation audit" }), h("h3", { text: "Unsupported numbers excluded" }), h("p", { text: "Two assessment artifacts referenced by the preserved website work are absent from integrated Git history. Their five dependent portfolio figures are not rendered; the human-readable reassessment remains linked as categorical context." })]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "C5 · useful negative result" }), h("h3", { text: "Symmetry retained; economics failed" }), c5Graphic, h("p", { text: "Variable-renaming equivariance and exact reconstruction survived, but recall, a global certificate and cost did not." })]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Source-blind next asset" }), h("h3", { html: `${T("ln.freeze_cases")} groups, still unconsumed` }), h("p", { class: "ln-result-value", html: `${T("ln.split_development_fit")} / ${T("ln.split_development_validation")} / ${T("ln.split_development_audit")}` }), h("p", { html: `${T("ln.features")} identity-free features and ${T("ln.prior_overlap")} prior alpha-structural overlap. No labels, timings or fitted models.` })]),
   ]));
@@ -246,16 +246,15 @@ app.append(h("header", { class: "page" }, [
   const s = section("exact-controls", "Exact controls", "The baseline kept getting stronger—and the learnable regret disappeared",
     "Learned advice was compared against exact reconstruction/checking, structural linear rules, exact ANF, global-best completion, current bigint evaluators, native fused-slot execution, fixed backend choices and analytical controls.");
   s.append(evidenceTable(["Decision surface", "Cases", "Best fixed / control", "Oracle headroom", "Disposition"], [
-    ["Post-R2 word portfolio", T("ln.initial_cases"), "restricted exact evaluator", T("ln.word_headroom"), "Below development gate before full costs"],
-    ["Task-identical bigint portfolio", T("ln.initial_cases"), "cse_bigint", T("ln.bigint_headroom"), "No regret to learn"],
-    ["Source-closed native portfolio", T("ln.initial_cases"), "native fused slots", T("ln.native_headroom"), "One fixed winner"],
     ["Resident version-history signal", T("ln.version_cases"), "resident SAT", T("ln.version_gross"), "Tiny, retrospective, cost-incomplete cohort"],
   ], "Learned decision surfaces versus exact controls"));
+  s.append(banner("warn", "Two portfolio rows intentionally omitted", [
+    "The preserved route referenced machine-readable architecture and native-portfolio assessments that are absent from integrated Git history. Their numeric fields are excluded until an authoritative artifact is restored and pinned.",
+  ]));
   s.append(h("h3", { text: "Task-separated CM-family comparisons" }));
   s.append(evidenceTable(["Task", "Cohort / aggregate", "CM-family arm", "Non-CM or foundational control", "Host / evidence class", "Result boundary"], [
     ["Complete relation materialization", "Frozen comprehensive campaign; corpus-level ratios", "mathematical CM kernel / CM IR", "plain CSE, CSE-flat, direct BitSet", "Windows plus saved pod replications; exact", "Kernel gains are workload-specific; wrapper and preparation can reverse them"],
     ["Restriction / q64 query ladder", `${T("ln.ladder_cases")} cases; sum of per-case medians`, "CM IR bigint/words and native fused slots", "CSE bigint/words, full projection, R2", "GCC and Clang on distinct physical machines; exact cross-machine", `${T("ln.gcc_gross")} and ${T("ln.clang_gross")} gross only; labels not identical`],
-    ["Multi-root / repeated outputs", `${T("ln.initial_cases")} exposed development cases`, "CM IR and native slot portfolio", "CSE bigint and R2", "one retained exact development run", `${T("ln.bigint_labels")} of ${T("ln.initial_cases")} labels select cse_bigint; no decision remains`],
     ["Resident version history", `${T("ln.version_cases")} exposed cases; median-sum economics`, "resident CM-family evaluators", "resident SAT/CNF", "one benchmark host; retrospective", `${T("ln.version_gross")} gross, but fully charged evidence is absent`],
     ["Decomposition / global best", "C5 test and inspected confirmation splits", "variable-cut GNN proposals", "packed exact ANF plus global completion", "one development host; exact fallback", `Safe learned execution is ${T("ln.c5_slow_min")}–${T("ln.c5_slow_max")} slower than exact ANF`],
     ["Configuration / BDD / SAT", "saved bounded feature-model cohort", "CM exact relation artifact", "direct CNF, CUDD/ROBDD, d-DNNF and SAT checks", "separately pinned audit; correctness passed, performance provisional", "See Results & audit; no configuration result is a neural-routing claim"],

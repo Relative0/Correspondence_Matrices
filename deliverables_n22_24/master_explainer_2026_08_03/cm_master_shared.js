@@ -817,6 +817,47 @@ function learningNeuralUpdate() {
   return s;
 }
 
+function currentResearchDisposition(audience = "master") {
+  const E = DATA.e23_current_research;
+  const c = DATA._content.current_research_disposition;
+  const lede = c[`${audience}_lede`] || c.master_lede;
+  const s = section("current-research-disposition", `Research disposition · ${E.as_of}`,
+    c.title, lede);
+  const grid = h("div", { class: "evidence-update-grid" });
+  c.items.filter(item => item.audiences.includes(audience)).forEach(item => {
+    const decision = E.decisions[item.id];
+    const summary = audience === "layperson" ? item.lay_summary
+      : audience === "investor" ? item.investor_summary : item.summary;
+    const card = h("article", { class: "evidence-update-card", id: `recent-${item.id}` }, [
+      h("h3", { text: item.title }),
+      h("p", { html: P(summary) }),
+    ]);
+    if (audience === "expert") {
+      card.append(h("p", { html: P(item.detail) }));
+      card.append(h("p", { class: "meta", html:
+        `Decision <code>${decision.decision}</code> · verification <code>${decision.verification_status}</code> · ` +
+        `source commit <code>${decision.source_commit}</code>` }));
+    } else if (audience === "master") {
+      card.append(moreBlock([h("p", { html: P(item.detail) })], "Measured boundary"));
+    }
+    card.append(h("p", { class: "meta" }, [
+      h("a", { href: decision.result_href, text: "Result" }),
+      document.createTextNode(" · "),
+      h("a", { href: decision.summary_href, text: "Controlling summary" }),
+      ...(audience === "expert" ? [
+        document.createTextNode(" · "),
+        h("a", { href: decision.verification_href, text: "Independent verification" }),
+      ] : []),
+    ]));
+    grid.append(card);
+  });
+  s.append(grid);
+  s.append(banner("warn", "Production behavior remains unchanged", [
+    "No recent disposition enabled a runtime selector, changed a production default or route, or permitted a RunPod request. Negative and stopped results are boundary evidence, not positive performance claims.",
+  ]));
+  return s;
+}
+
 function currentEvidenceUpdate(audience = "master") {
   const c = DATA._content.current_update;
   const s = section("latest-evidence", "Evidence update · 2026-08-26/27", c.title,

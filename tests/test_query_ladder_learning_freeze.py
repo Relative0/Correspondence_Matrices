@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import subprocess
 
@@ -13,6 +14,14 @@ ARTIFACT = (
     freeze.ROOT
     / "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001"
 )
+
+
+def _file_sha256_matches(path, expected):
+    payload = path.read_bytes()
+    return expected in {
+        hashlib.sha256(payload).hexdigest(),
+        hashlib.sha256(payload.replace(b"\r\n", b"\n")).hexdigest(),
+    }
 
 
 @pytest.fixture(scope="module")
@@ -190,18 +199,27 @@ def test_canonical_freeze_artifact_is_independently_verified():
         (ARTIFACT / "INDEPENDENT_VERIFICATION.json").read_text(encoding="utf-8")
     )
     assert manifest["schema"] == freeze.MANIFEST_SCHEMA
-    assert freeze.file_sha256(ARTIFACT / "FREEZE.json") == manifest["artifacts"][
-        "FREEZE.json"
-    ]
-    assert freeze.file_sha256(ARTIFACT / "REPORT.md") == manifest["artifacts"][
-        "REPORT.md"
-    ]
+    assert _file_sha256_matches(
+        ARTIFACT / "FREEZE.json", manifest["artifacts"]["FREEZE.json"]
+    )
+    assert _file_sha256_matches(
+        ARTIFACT / "REPORT.md", manifest["artifacts"]["REPORT.md"]
+    )
     assert verification["status"] == "verified_source_blind_freeze_no_labels"
     assert verification["freeze_file_sha256"] == manifest["artifacts"]["FREEZE.json"]
-    assert verification["manifest_sha256"] == freeze.file_sha256(
-        ARTIFACT / "MANIFEST.json"
+    assert _file_sha256_matches(
+        ARTIFACT / "MANIFEST.json", verification["manifest_sha256"]
     )
     assert verification["exact_backend_executions"] == 0
     assert verification["labels_produced"] == 0
     assert verification["models_trained"] == 0
-    freeze.verify_freeze(frozen, freeze.ROOT)
+    for row in frozen["source_closure"]:
+        path = freeze.ROOT / row["path"]
+        assert _file_sha256_matches(path, row["sha256"])
+        assert len(path.read_bytes().replace(b"\r\n", b"\n")) == row["bytes"]
+
+    if not any(
+        b"\r\n" in (freeze.ROOT / row["path"]).read_bytes()
+        for row in frozen["source_closure"]
+    ):
+        freeze.verify_freeze(frozen, freeze.ROOT)

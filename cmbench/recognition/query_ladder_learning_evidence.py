@@ -76,6 +76,13 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def file_sha256_matches(path: Path, expected: str) -> bool:
+    """Match a frozen Git-blob hash without rewriting a CRLF checkout."""
+    if file_sha256(path) == expected:
+        return True
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest() == expected
+
+
 def canonical_sha256(value: Any) -> str:
     return hashlib.sha256(
         json.dumps(
@@ -119,7 +126,7 @@ def _summarize_raw(
     expected_sha256: str,
     expected_arms: tuple[str, ...],
 ) -> dict[str, Any]:
-    _require(file_sha256(path) == expected_sha256, "raw measurement hash mismatch")
+    _require(file_sha256_matches(path, expected_sha256), "raw measurement hash mismatch")
     cells: dict[tuple[str, str], list[int]] = defaultdict(list)
     outputs: dict[str, set[tuple[str, int]]] = defaultdict(set)
     seen: set[tuple[int, str, str]] = set()
@@ -248,19 +255,16 @@ def build_evidence(
     )
     cross_inputs = cross_analysis.get("inputs", {})
     _require(
-        file_sha256(cross_verification_path)
-        == cross_inputs.get("local_independent_verification_sha256")
-        and file_sha256(cross_inventory_path)
-        == cross_inputs.get("post_run_inventory_sha256")
-        and file_sha256(prior_analysis_path) == cross_inputs.get("prior_analysis_sha256"),
+        file_sha256_matches(cross_verification_path, cross_inputs.get("local_independent_verification_sha256"))
+        and file_sha256_matches(cross_inventory_path, cross_inputs.get("post_run_inventory_sha256"))
+        and file_sha256_matches(prior_analysis_path, cross_inputs.get("prior_analysis_sha256")),
         "cross-machine input binding",
     )
     _verified_zero_mismatches(cross_verification, "cross-machine")
     _verified_zero_mismatches(prior_analysis.get("verification", {}), "prior")
     _verified_zero_mismatches(prior_verification, "prior independent")
     _require(
-        file_sha256(prior_verification_path)
-        == prior_analysis.get("inputs", {}).get("independent_verification_sha256"),
+        file_sha256_matches(prior_verification_path, prior_analysis.get("inputs", {}).get("independent_verification_sha256")),
         "prior independent verification binding",
     )
 
@@ -274,7 +278,7 @@ def build_evidence(
         "cross-machine task contract",
     )
     _require(
-        file_sha256(freeze_path) == task.get("freeze_sha256")
+        file_sha256_matches(freeze_path, task.get("freeze_sha256"))
         and freeze.get("schema") == "cm-architecture-query-ladder-freeze/v1"
         and tuple(freeze.get("schedule", {}).get("arms", ())) == arms
         and freeze.get("schedule", {}).get("blocks") == EXPECTED_REPEATS,
