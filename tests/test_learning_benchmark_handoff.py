@@ -83,6 +83,32 @@ def eligible_handoff() -> dict:
             "refused_rows_retained": True,
             "task_identical_exact_outputs": True,
         },
+        "decision_surface": {
+            "status": "verified_complete",
+            "metric": "resident_task_time_ns",
+            "lower_is_better": True,
+            "label_policy_sha256": "6" * 64,
+            "label_table_sha256": "8" * 64,
+            "independent_verification_sha256": "9" * 64,
+            "source_groups_with_stable_material_winner": 32,
+            "source_groups_with_stable_material_winner_by_split": {
+                "development_fit": 16,
+                "development_validation": 8,
+                "development_audit": 8,
+            },
+            "cross_host_winner_disagreement_source_groups": 0,
+            "threshold_abstention_source_groups": 0,
+            "non_abstain_coverage": 1.0,
+            "non_abstain_coverage_by_split": {
+                "development_fit": 1.0,
+                "development_validation": 1.0,
+                "development_audit": 1.0,
+            },
+            "material_winner_arms": [
+                "cnf/resident_engine",
+                "sat/resident_engine",
+            ],
+        },
         "replications": [
             _replication("machine-a", "a"),
             _replication("machine-b", "b"),
@@ -166,6 +192,52 @@ def test_requires_stable_case_and_label_tables(eligible_handoff):
     assert result["development_training_eligible"] is False
 
 
+def test_legacy_handoff_cannot_reach_the_fit_gate_without_surface_evidence(
+    eligible_handoff,
+):
+    eligible_handoff["schema"] = handoff.LEGACY_SCHEMA
+    del eligible_handoff["decision_surface"]
+    result = handoff.assess_handoff(eligible_handoff)
+    assert "decision_surface_evidence_missing" in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
+def test_decision_surface_requires_two_material_winner_arms(eligible_handoff):
+    eligible_handoff["cohort"]["source_groups_per_label"] = {
+        "sat/resident_engine": 32,
+    }
+    eligible_handoff["decision_surface"]["material_winner_arms"] = [
+        "sat/resident_engine"
+    ]
+    result = handoff.assess_handoff(eligible_handoff)
+    assert "fewer_than_two_material_winner_arms" in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
+def test_decision_surface_coverage_is_required_in_every_split(eligible_handoff):
+    eligible_handoff["cohort"]["source_groups_per_label"] = {
+        "cnf/resident_engine": 15,
+        "sat/resident_engine": 14,
+    }
+    surface = eligible_handoff["decision_surface"]
+    surface["source_groups_with_stable_material_winner"] = 29
+    surface["source_groups_with_stable_material_winner_by_split"] = {
+        "development_fit": 16,
+        "development_validation": 7,
+        "development_audit": 6,
+    }
+    surface["threshold_abstention_source_groups"] = 3
+    surface["non_abstain_coverage"] = 29 / 32
+    surface["non_abstain_coverage_by_split"] = {
+        "development_fit": 1.0,
+        "development_validation": 7 / 8,
+        "development_audit": 6 / 8,
+    }
+    result = handoff.assess_handoff(eligible_handoff)
+    assert "decision_surface_split_coverage_below_0_80" in result["blockers"]
+    assert result["development_training_eligible"] is False
+
+
 def test_requires_distinct_independent_verification_artifacts(eligible_handoff):
     eligible_handoff["replications"][1]["independent_verification_sha256"] = (
         eligible_handoff["replications"][0]["independent_verification_sha256"]
@@ -199,6 +271,8 @@ def test_replication_case_count_must_match_frozen_cohort(eligible_handoff):
 def test_non_abstain_label_accounting_is_closed(
     eligible_handoff, labels, blocker
 ):
+    eligible_handoff["schema"] = handoff.LEGACY_SCHEMA
+    del eligible_handoff["decision_surface"]
     eligible_handoff["cohort"]["source_groups_per_label"] = labels
     result = handoff.assess_handoff(eligible_handoff)
     assert blocker in result["blockers"]
@@ -269,6 +343,22 @@ def _bind_to_query_freeze(candidate: dict) -> tuple[dict, dict, str]:
         "case_set_sha256": frozen["cohort"]["case_set_sha256"],
     })
     candidate["exact_methods"]["arms"] = list(query_freeze.EXACT_ARMS)
+    candidate["decision_surface"].update({
+        "label_policy_sha256": query_freeze.digest(frozen["label_policy"]),
+        "source_groups_with_stable_material_winner": 72,
+        "source_groups_with_stable_material_winner_by_split": dict(
+            frozen["cohort"]["source_group_counts_by_split"]
+        ),
+        "non_abstain_coverage": 1.0,
+        "non_abstain_coverage_by_split": {
+            split: 1.0 for split in frozen["cohort"]["source_group_counts_by_split"]
+        },
+        "material_winner_arms": [
+            "native_fused_slots",
+            "cse_flat_bigint",
+            "direct_bitset_restriction",
+        ],
+    })
     for replication in candidate["replications"]:
         replication["case_set_sha256"] = frozen["cohort"]["case_set_sha256"]
         replication["complete_cases"] = 72

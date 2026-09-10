@@ -67,7 +67,10 @@ def main() -> int:
     parser.add_argument(
         "--handoff",
         type=Path,
-        help="in-project crse-learning-benchmark-handoff/v1 JSON; omit for current evidence",
+        help=(
+            "in-project crse-learning-benchmark-handoff/v1 or v2 JSON; "
+            "only v2 can reach fitting eligibility; omit for current evidence"
+        ),
     )
     parser.add_argument(
         "--freeze",

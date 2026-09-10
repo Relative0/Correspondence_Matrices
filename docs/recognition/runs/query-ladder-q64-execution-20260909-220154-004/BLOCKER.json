@@ -1,0 +1,41 @@
+{
+  "blocker": "second_distinct_physical_host_not_available_under_current_local_only_authorization",
+  "child_freeze_file_sha256": "87ca40e32b0ee33e73e557d41d7bbc01ca1a6a1940669a54470d2f8e52a18a6f",
+  "current_outcome": {
+    "candidate_or_learning_eligibility": "not_assessable",
+    "final_decision_surface_cli_run": false,
+    "joint_labels_derived": false,
+    "normalized_evidence_created": false,
+    "production_status": "unchanged_disabled",
+    "runpod_request_permitted": false,
+    "surface_independent_verification_created": false
+  },
+  "first_host": {
+    "charged_cost_file_sha256": "6c2dcd18ad183961e505262de5b2a6933ab540143865b58c65ec2bdb5e6533a1",
+    "completed_cells": 9216,
+    "compiler_identity_sha256": "9a2767299b3da52cb63c9c287ace3b6265b75ddf687c548b5defd6bec7485afe",
+    "expected_cells": 9216,
+    "failures": 0,
+    "host_independent_verification_file_sha256": "b2fc1d16ccfc94aecb693aed6c84605d02db6780b89ecd91d23039076889315f",
+    "native_library_sha256": "e35d1f937e8d21977d2bebc2827a93d12aa62812a3c32b0628581eb35cc3abf4",
+    "physical_machine_sha256": "511b05dff7d58f683f4f188b4aded5bff2ad38857546ff8d238596deb34e9191",
+    "raw_file_sha256": "a3658971d854f47ac692fcd8d58098b9602a46fb1eb33f97b62288d75fbb9390",
+    "refusals": 0,
+    "replication_id": "windows-physical-001",
+    "semantic_mismatches": 0,
+    "status": "verified_complete",
+    "timeouts": 0
+  },
+  "models_trained": 0,
+  "next_bounded_artifact": "SECOND_HOST_HANDOFF.json",
+  "prospective_cases_consumed": 0,
+  "reasoning": [
+    "The frozen contract requires two distinct physical-machine identities.",
+    "Only one qualifying physical machine is accessible in this local task.",
+    "A same-machine VM is explicitly non-qualifying.",
+    "Cloud and RunPod use are explicitly outside the current authorization.",
+    "Joint labels, expected fallback, normalized evidence, economics, and the final eligibility replay therefore remain unopened."
+  ],
+  "schema": "crse-query-ladder-q64-fail-closed-blocker/v1",
+  "status": "blocked_pending_second_distinct_physical_host"
+}

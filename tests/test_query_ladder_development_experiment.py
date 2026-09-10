@@ -118,6 +118,26 @@ def _dataset_and_handoff(frozen: dict, freeze_sha256: str) -> tuple[dict, dict]:
             "refused_rows_retained": True,
             "task_identical_exact_outputs": True,
         },
+        "decision_surface": {
+            "status": "verified_complete",
+            "metric": "q64_task_time_ns",
+            "lower_is_better": True,
+            "label_policy_sha256": query_freeze.digest(frozen["label_policy"]),
+            "label_table_sha256": "8" * 64,
+            "independent_verification_sha256": "9" * 64,
+            "source_groups_with_stable_material_winner": 72,
+            "source_groups_with_stable_material_winner_by_split": dict(
+                frozen["cohort"]["source_group_counts_by_split"]
+            ),
+            "cross_host_winner_disagreement_source_groups": 0,
+            "threshold_abstention_source_groups": 0,
+            "non_abstain_coverage": 1.0,
+            "non_abstain_coverage_by_split": {
+                split: 1.0
+                for split in frozen["cohort"]["source_group_counts_by_split"]
+            },
+            "material_winner_arms": list(LABELS),
+        },
         "replications": [
             _replication("machine-a", "a", frozen),
             _replication("machine-b", "b", frozen),
@@ -317,6 +337,14 @@ def test_abstained_labels_are_retained_but_excluded_from_fit(frozen_protocol):
     fit_row["label"] = query_freeze.ABSTAIN_LABEL
     dataset["records_sha256"] = query_freeze.digest(dataset["records"])
     handoff["cohort"]["source_groups_per_label"][old_label] -= 1
+    surface = handoff["decision_surface"]
+    surface["source_groups_with_stable_material_winner"] -= 1
+    surface["source_groups_with_stable_material_winner_by_split"][
+        "development_fit"
+    ] -= 1
+    surface["threshold_abstention_source_groups"] += 1
+    surface["non_abstain_coverage"] = 71 / 72
+    surface["non_abstain_coverage_by_split"]["development_fit"] = 39 / 40
     captured = []
 
     def fitter(rows):

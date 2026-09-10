@@ -4,6 +4,15 @@
 **Status:** evaluation and fit guards implemented; no labels consumed, model fit,
 neural training, prospective access, exact benchmark execution, or routing change.
 
+**2026-09-09 boundary update:** a legacy v1 benchmark handoff remains readable but
+cannot invoke the fitter. Development fitting now requires a v2 handoff with an
+independently verified, frozen-policy-bound decision surface: at least two materially
+winning exact arms and at least 80% stable non-abstain coverage overall and in every
+split. Memory-estimator development uses the separate fail-closed contract documented
+in `CM_LEARNING_DECISION_SURFACE_AND_MEMORY_EVALUATION_2026_09_09.md`; its neural path
+now also requires one independently bound pre-training candidate specification and
+every seed in a predeclared schedule of at least three distinct seeds.
+
 ## Decision
 
 There is now an executable post-benchmark learning boundary for the frozen q64

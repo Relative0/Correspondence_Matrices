@@ -1,0 +1,48 @@
+{
+  "authorization_required": "a second already-available, explicitly authorized physical machine; cloud or RunPod provisioning remains forbidden",
+  "child_freeze_file_sha256": "87ca40e32b0ee33e73e557d41d7bbc01ca1a6a1940669a54470d2f8e52a18a6f",
+  "commands": {
+    "linux_or_macos": [
+      "python3 scripts/cm_query_ladder_q64_execution.py prepare-host --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002 --compiler cc",
+      "python3 scripts/cm_query_ladder_q64_execution.py run-host --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002 --max-seconds 14400",
+      "python3 scripts/crse_verify_query_ladder_q64_execution.py --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002"
+    ],
+    "windows_powershell": [
+      ".\\.venv\\Scripts\\python.exe scripts\\cm_query_ladder_q64_execution.py prepare-host --run-dir docs\\recognition\\runs\\query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002",
+      ".\\.venv\\Scripts\\python.exe scripts\\cm_query_ladder_q64_execution.py run-host --run-dir docs\\recognition\\runs\\query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002 --max-seconds 14400",
+      ".\\.venv\\Scripts\\python.exe scripts\\crse_verify_query_ladder_q64_execution.py --run-dir docs\\recognition\\runs\\query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002"
+    ]
+  },
+  "completion_instructions": [
+    "Extract the current bundle into a new empty directory on the second physical machine.",
+    "Use an existing authorized Python environment with the project dependencies; do not provision cloud resources.",
+    "Run the three commands for that host OS without changing source, freeze, schedule, or oracle files.",
+    "Confirm the new HOST_PREFLIGHT physical_machine_sha256 differs from 511b05dff7d58f683f4f188b4aded5bff2ad38857546ff8d238596deb34e9191 before timing.",
+    "Return the complete physical-002 directory without deleting failures, zeroes, refusals, or logs.",
+    "Only after both host verifications pass, run scripts/cm_package_query_ladder_q64_surface.py with --host windows-physical-001 --host physical-002, then run the frozen read-only decision-surface CLI. Do not invoke a fitter."
+  ],
+  "current_package": {
+    "bytes": 1755915,
+    "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SECOND_HOST_SOURCE_BUNDLE_V2.zip",
+    "sha256": "6baf8e95062b9b80f2dee4a5c98e16983ea0dfb2c111e681cc672e774a45671d"
+  },
+  "first_host": {
+    "compiler_identity_sha256": "9a2767299b3da52cb63c9c287ace3b6265b75ddf687c548b5defd6bec7485afe",
+    "physical_machine_sha256": "511b05dff7d58f683f4f188b4aded5bff2ad38857546ff8d238596deb34e9191",
+    "replication_id": "windows-physical-001"
+  },
+  "forbidden_substitutions": [
+    "virtual machine on the first physical host",
+    "copied or imputed timings",
+    "earlier 54-case q1/q4/q16/q64 evidence",
+    "cloud or RunPod machine without separate authorization"
+  ],
+  "prospective_cases_consumed": 0,
+  "schema": "crse-query-ladder-q64-second-host-handoff/v1",
+  "status": "ready_for_separately_authorized_distinct_physical_host",
+  "superseded_package_retained": {
+    "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SECOND_HOST_SOURCE_BUNDLE.zip",
+    "reason": "superseded before handoff by V2, which includes the post-host surface packager",
+    "sha256": "1a59ca0c4f0eb4f80bf4365ce04616d1b9f8225b977b47e6a7a9e0621d1fdb3d"
+  }
+}

@@ -14,7 +14,9 @@ from typing import Any, Mapping, Sequence
 from cmbench.recognition import version_history_learning_protocol as history
 
 
-SCHEMA = "crse-learning-benchmark-handoff/v1"
+LEGACY_SCHEMA = "crse-learning-benchmark-handoff/v1"
+SCHEMA = "crse-learning-benchmark-handoff/v2"
+SUPPORTED_SCHEMAS = frozenset((LEGACY_SCHEMA, SCHEMA))
 READINESS_SCHEMA = "crse-learning-benchmark-handoff-readiness/v1"
 REQUIRED_COSTS = (
     "feature_extraction_and_control",
@@ -24,6 +26,7 @@ REQUIRED_COSTS = (
 )
 REQUIRED_SPLITS = tuple(history.MIN_SPLIT_SOURCE_GROUPS)
 HEX = frozenset("0123456789abcdef")
+MIN_DECISION_SURFACE_COVERAGE = 0.80
 
 
 def _require(condition: Any, message: str) -> None:
@@ -114,11 +117,14 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
         "baseline_closure", "cohort", "exact_methods", "replications",
         "claim_boundary",
     }
-    _require(isinstance(handoff, Mapping) and set(handoff) == expected,
-             "handoff fields")
+    _require(isinstance(handoff, Mapping), "handoff fields")
+    schema = handoff.get("schema")
+    _require(schema in SUPPORTED_SCHEMAS, "handoff schema")
+    if schema == SCHEMA:
+        expected.add("decision_surface")
+    _require(set(handoff) == expected, "handoff fields")
     _require(
-        handoff.get("schema") == SCHEMA
-        and handoff.get("status") in {"verified_complete", "incomplete"}
+        handoff.get("status") in {"verified_complete", "incomplete"}
         and type(handoff.get("surface_id")) is str
         and bool(handoff["surface_id"]),
         "handoff identity",
@@ -190,6 +196,100 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
         "exact method closure",
     )
 
+    if schema == SCHEMA:
+        surface = handoff["decision_surface"]
+        _require(
+            isinstance(surface, Mapping)
+            and set(surface)
+            == {
+                "status",
+                "metric",
+                "lower_is_better",
+                "label_policy_sha256",
+                "label_table_sha256",
+                "independent_verification_sha256",
+                "source_groups_with_stable_material_winner",
+                "source_groups_with_stable_material_winner_by_split",
+                "cross_host_winner_disagreement_source_groups",
+                "threshold_abstention_source_groups",
+                "non_abstain_coverage",
+                "non_abstain_coverage_by_split",
+                "material_winner_arms",
+            }
+            and surface.get("status") in {"verified_complete", "incomplete"}
+            and type(surface.get("metric")) is str
+            and bool(surface["metric"])
+            and type(surface.get("lower_is_better")) is bool,
+            "decision surface identity",
+        )
+        for name in (
+            "label_policy_sha256",
+            "label_table_sha256",
+            "independent_verification_sha256",
+        ):
+            _hash(surface.get(name), f"decision surface:{name}")
+        stable_by_split = surface["source_groups_with_stable_material_winner_by_split"]
+        coverage_by_split = surface["non_abstain_coverage_by_split"]
+        _require(
+            isinstance(stable_by_split, Mapping)
+            and set(stable_by_split) == set(REQUIRED_SPLITS)
+            and all(type(value) is int and value >= 0 for value in stable_by_split.values())
+            and isinstance(coverage_by_split, Mapping)
+            and set(coverage_by_split) == set(REQUIRED_SPLITS)
+            and all(
+                type(value) in (int, float) and math.isfinite(value) and 0 <= value <= 1
+                for value in coverage_by_split.values()
+            ),
+            "decision surface split accounting",
+        )
+        stable = surface["source_groups_with_stable_material_winner"]
+        disagreements = surface["cross_host_winner_disagreement_source_groups"]
+        threshold_abstentions = surface["threshold_abstention_source_groups"]
+        coverage = surface["non_abstain_coverage"]
+        winner_arms = surface["material_winner_arms"]
+        _require(
+            type(stable) is int
+            and stable >= 0
+            and type(disagreements) is int
+            and disagreements >= 0
+            and type(threshold_abstentions) is int
+            and threshold_abstentions >= 0
+            and type(coverage) in (int, float)
+            and math.isfinite(coverage)
+            and 0 <= coverage <= 1
+            and type(winner_arms) is list
+            and len(set(winner_arms)) == len(winner_arms)
+            and all(type(arm) is str and arm in exact_methods["arms"] for arm in winner_arms),
+            "decision surface accounting",
+        )
+        non_abstain = sum(cohort["source_groups_per_label"].values())
+        _require(
+            surface["label_table_sha256"] == cohort["label_table_sha256"]
+            and stable == non_abstain
+            and stable == sum(stable_by_split.values())
+            and disagreements + threshold_abstentions
+            == cohort["source_groups"] - non_abstain
+            and math.isclose(
+                float(coverage),
+                non_abstain / cohort["source_groups"] if cohort["source_groups"] else 0.0,
+                rel_tol=1e-15,
+                abs_tol=1e-15,
+            )
+            and all(
+                math.isclose(
+                    float(coverage_by_split[name]),
+                    stable_by_split[name] / cohort["source_groups_by_split"][name]
+                    if cohort["source_groups_by_split"][name]
+                    else 0.0,
+                    rel_tol=1e-15,
+                    abs_tol=1e-15,
+                )
+                for name in REQUIRED_SPLITS
+            )
+            and set(winner_arms) == set(cohort["source_groups_per_label"]),
+            "decision surface closure",
+        )
+
     replications = handoff["replications"]
     _require(type(replications) is list and bool(replications), "replications")
     expected_replication_fields = {
@@ -202,6 +302,7 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
         "semantic_mismatches", "source_or_artifact_mismatches",
     }
     replication_ids: set[str] = set()
+    replication_verifications: set[str] = set()
     for replication in replications:
         _require(
             isinstance(replication, Mapping)
@@ -230,6 +331,7 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
             "label_table_sha256",
         ):
             _hash(replication.get(name), f"replication:{name}")
+        replication_verifications.add(replication["independent_verification_sha256"])
         economics = _incomplete_replication_economics(replication)
         economics_match = (
             type(replication.get("gross_speedup")) is float
@@ -254,6 +356,12 @@ def validate_handoff(handoff: Mapping[str, Any]) -> None:
                 )
             )
         _require(economics_match, "replication economics replay")
+    if schema == SCHEMA:
+        _require(
+            handoff["decision_surface"]["independent_verification_sha256"]
+            not in replication_verifications,
+            "decision surface verification must be distinct",
+        )
 
     claim = handoff["claim_boundary"]
     _require(
@@ -276,6 +384,7 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
     exact = handoff["exact_methods"]
     replications: Sequence[Mapping[str, Any]] = handoff["replications"]
     claim = handoff["claim_boundary"]
+    surface = handoff.get("decision_surface")
 
     def block(condition: bool, code: str) -> None:
         if condition:
@@ -323,6 +432,32 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
         or exact["task_identical_exact_outputs"] is not True,
         "exact_task_or_refusal_closure_incomplete",
     )
+    block(surface is None, "decision_surface_evidence_missing")
+    if surface is not None:
+        block(
+            surface["status"] != "verified_complete",
+            "decision_surface_not_verified_complete",
+        )
+        block(
+            surface["source_groups_with_stable_material_winner"] <= 0,
+            "no_stable_material_winners",
+        )
+        block(
+            len(surface["material_winner_arms"]) < 2,
+            "fewer_than_two_material_winner_arms",
+        )
+        block(
+            surface["non_abstain_coverage"] < MIN_DECISION_SURFACE_COVERAGE,
+            "decision_surface_coverage_below_0_80",
+        )
+        block(
+            any(
+                surface["non_abstain_coverage_by_split"][name]
+                < MIN_DECISION_SURFACE_COVERAGE
+                for name in REQUIRED_SPLITS
+            ),
+            "decision_surface_split_coverage_below_0_80",
+        )
     block(len(replications) < 2, "fewer_than_two_replications")
     block(
         len({row["physical_machine_sha256"] for row in replications}) < 2,
@@ -402,6 +537,15 @@ def assess_handoff(handoff: Mapping[str, Any]) -> dict[str, Any]:
         "minimum_fully_charged_speedup": (
             min(charged_speedups) if len(charged_speedups) == len(replications) else None
         ),
+        "minimum_decision_surface_coverage": MIN_DECISION_SURFACE_COVERAGE,
+        "decision_surface_non_abstain_coverage": (
+            surface["non_abstain_coverage"] if surface is not None else None
+        ),
+        "decision_surface_cross_host_winner_disagreements": (
+            surface["cross_host_winner_disagreement_source_groups"]
+            if surface is not None
+            else None
+        ),
         "blockers": blockers,
         "development_training_eligible": eligible,
         "training_performed": False,
@@ -475,6 +619,12 @@ def validate_handoff_against_learning_freeze(
         and handoff["exact_methods"]["task_identical_exact_outputs"] is True,
         "learning freeze exact method binding",
     )
+    if handoff["schema"] == SCHEMA:
+        _require(
+            handoff["decision_surface"]["label_policy_sha256"]
+            == query_freeze.digest(freeze["label_policy"]),
+            "learning freeze label policy binding",
+        )
 
 
 def assess_frozen_handoff_or_abstain(

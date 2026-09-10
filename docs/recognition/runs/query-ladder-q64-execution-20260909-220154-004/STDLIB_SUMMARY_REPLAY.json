@@ -1,0 +1,112 @@
+{
+  "all_failures_refusals_and_zeroes_retained": true,
+  "hosts": {
+    "physical-002": {
+      "completed_rows": 9216,
+      "expected_cells": 9216,
+      "independent_verification_file_sha256": "38409a8b1b85a1eb75f8210d9a336db02433d12ecaea1ef591e80e199a054ab1",
+      "physical_machine_sha256": "b682d74af46e2c3476dd6607bb8540a34c013a46e0afae807baa42979e89d286",
+      "raw_file_sha256": "1f46b19f4818f7f57dd33f915d0e5de717fa95b17418e94c32eb97f40219a5f2",
+      "schedule_mismatches": 0,
+      "semantic_mismatches": 0,
+      "status_counts": {
+        "failed": 0,
+        "ok": 9216,
+        "refused": 0,
+        "timeout": 0
+      },
+      "timing_mismatches": 0
+    },
+    "windows-physical-001": {
+      "completed_rows": 9216,
+      "expected_cells": 9216,
+      "independent_verification_file_sha256": "b2fc1d16ccfc94aecb693aed6c84605d02db6780b89ecd91d23039076889315f",
+      "physical_machine_sha256": "511b05dff7d58f683f4f188b4aded5bff2ad38857546ff8d238596deb34e9191",
+      "raw_file_sha256": "a3658971d854f47ac692fcd8d58098b9602a46fb1eb33f97b62288d75fbb9390",
+      "schedule_mismatches": 0,
+      "semantic_mismatches": 0,
+      "status_counts": {
+        "failed": 0,
+        "ok": 9216,
+        "refused": 0,
+        "timeout": 0
+      },
+      "timing_mismatches": 0
+    }
+  },
+  "inputs": {
+    "child_freeze_file_sha256": "87ca40e32b0ee33e73e557d41d7bbc01ca1a6a1940669a54470d2f8e52a18a6f",
+    "normalized_evidence_file_sha256": "ff06e9b0ae278e7b26eba894e54248c0bb2b4f8af7c02db76a87e5df5f5f280e",
+    "oracles_file_sha256": "ea769d31fbeff60279671bb34607d7ee6161ece2e9ac4ace51bbc3cefd0c646a",
+    "parent_freeze_file_sha256": "3cf5c2672e01aae6130282f2ea1a65de32746597a59689605a2d913a675a0692",
+    "surface_assessment_file_sha256": "c5de8c33915dcddd743af7f89aae72525ae5d6eb631d466d3869193d182c5b3f",
+    "surface_verification_file_sha256": "d9f9bd27642237fb09102c7258f15d8c352f0b76793a190dc81fd9255b3b2c8c"
+  },
+  "method": "independent_standard_library_raw_schedule_oracle_timing_label_cost_and_summary_replay",
+  "mismatch_count": 0,
+  "mismatches": [],
+  "models_trained": 0,
+  "project_imports": [],
+  "prospective_cases_consumed": 0,
+  "readiness": {
+    "blockers": [
+      "insufficient_source_groups_per_label",
+      "fewer_than_two_material_winner_arms",
+      "decision_surface_coverage_below_0_80",
+      "decision_surface_split_coverage_below_0_80",
+      "charged_headroom_below_1_10:windows-physical-001",
+      "charged_headroom_below_1_10:physical-002"
+    ],
+    "development_training_eligible": false,
+    "production_routing_permitted": false,
+    "status": "abstained",
+    "training_performed": false
+  },
+  "schema": "crse-query-ladder-q64-stdlib-surface-replay/v1",
+  "status": "verified_complete",
+  "surface": {
+    "abstentions": 54,
+    "cross_host_winner_disagreements": 0,
+    "economics_by_host": {
+      "physical-002": {
+        "best_fixed_arm": "native_fused_slots",
+        "best_fixed_sum_ns": 234625301.0,
+        "fully_charged_speedup": 0.9779720285307208,
+        "gross_speedup": 1.1475896459075299,
+        "oracle_sum_ns": 204450521.0,
+        "p95_costs_ns_per_case": {
+          "exact_verification": 76.26016666666666,
+          "expected_fallback": 419189.34934375086,
+          "feature_extraction_and_control": 60415.50397222222,
+          "model_inference": 12812.099680555555
+        }
+      },
+      "windows-physical-001": {
+        "best_fixed_arm": "native_fused_slots",
+        "best_fixed_sum_ns": 302540750.0,
+        "fully_charged_speedup": 0.9493409163839316,
+        "gross_speedup": 1.1542264176569421,
+        "oracle_sum_ns": 262115600.0,
+        "p95_costs_ns_per_case": {
+          "exact_verification": 219.29861111111111,
+          "expected_fallback": 561794.9708333345,
+          "feature_extraction_and_control": 186325.29722222223,
+          "model_inference": 37347.13055555556
+        }
+      }
+    },
+    "label_table_sha256": "9d8925e84f36690cc4820e8ed88029c707a3f57c069442f9063893b8fc271807",
+    "non_abstain_coverage": 0.25,
+    "non_abstain_coverage_by_split": {
+      "development_audit": 0.25,
+      "development_fit": 0.25,
+      "development_validation": 0.25
+    },
+    "source_groups": 72,
+    "source_groups_per_label": {
+      "native_fused_slots": 18
+    }
+  },
+  "third_party_imports": [],
+  "verifier_source_sha256": "b3e02b53bbae373e56f65fafa91474a1e793207a753184cef9b76d5e54e4a92e"
+}

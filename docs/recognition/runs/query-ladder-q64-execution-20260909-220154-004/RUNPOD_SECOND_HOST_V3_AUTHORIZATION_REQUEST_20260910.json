@@ -1,0 +1,49 @@
+{
+  "bootstrap_sha256": "99474db385c4208b1e81fb65d6916d9b820098fc5f99fd8948c39e994141a288",
+  "child_freeze_file_sha256": "87ca40e32b0ee33e73e557d41d7bbc01ca1a6a1940669a54470d2f8e52a18a6f",
+  "controller_battery_launch_authorized_by_prior_user_message": true,
+  "controller_sha256": "3bfb94f233bf42290943f49547819e2ba2e2b45eecb2af17027b6c0cb33c80fe",
+  "correction": {
+    "added_files": [
+      "scripts/cm_measurement_verify.py",
+      "scripts/cm_native_contracts.py",
+      "scripts/cm_session_contracts.py"
+    ],
+    "reason": "V2 omitted three unchanged transitive import dependencies",
+    "v2_command_1_failure": "ImportError before host preparation and before timing"
+  },
+  "exact_commands": [
+    "python3 scripts/cm_query_ladder_q64_execution.py prepare-host --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002 --compiler cc",
+    "python3 scripts/cm_query_ladder_q64_execution.py run-host --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002 --max-seconds 14400",
+    "python3 scripts/crse_verify_query_ladder_q64_execution.py --run-dir docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004 --replication-id physical-002"
+  ],
+  "first_physical_machine_sha256": "511b05dff7d58f683f4f188b4aded5bff2ad38857546ff8d238596deb34e9191",
+  "handoff_sha256": "b590064f35ab1117e91b120fb44904c9c53d0182c57304012514b95b469a8401",
+  "hard_lifetime_seconds": 18000,
+  "image": "python:3.13.15-bookworm@sha256:a53008522631dbcb063c4d5982aa91a00e86e51d90bbcf3513313f1a5c163af8",
+  "local_validation": {
+    "all_arms_match_independent_oracles": true,
+    "decision_cells_executed": 0,
+    "functional_preflight_cells": 576,
+    "status": "pass",
+    "timing_results_opened": false
+  },
+  "one_additional_create": true,
+  "prior_failed_run_sha256": "498ff84806f2bd12aa7a246ae8f215be0efd9491b49d611fd3da6b56055d4685",
+  "prior_prelaunch_failure_sha256": "eac1d2860cc1b02454cc55fa262945dc4792a57eeb1b4f8e881521d6e0b18930",
+  "proposed_authorization_quote": "I authorize uploading SECOND_HOST_SOURCE_BUNDLE_V3.zip (1,815,934 bytes; SHA-256 04703c8afaa2afd0cfaf77c7b387883dc9a8c3a192f73afe3fc094a913aedacb) to one additional temporary RunPod Secure Cloud CPU pod. V3 differs from V2 only by adding scripts/cm_measurement_verify.py, scripts/cm_native_contracts.py, and scripts/cm_session_contracts.py, all unchanged from the frozen source checkpoint. I authorize executing the same three commands in SECOND_HOST_HANDOFF.json, retrieving all evidence, and deleting the pod. No credentials may be uploaded or recorded. The battery-launch override remains authorized.",
+  "rate_cap_usd_per_hour": 0.06,
+  "recorded_utc": "2026-09-10T05:19:02.1099587Z",
+  "replacement_automatically_authorized": false,
+  "schema": "crse-query-ladder-q64-runpod-second-host-v3-authorization-request/v1",
+  "source_export_to_runpod_authorized": false,
+  "status": "awaiting_exact_user_authorization",
+  "total_cost_cap_usd": 0.36,
+  "v3_bundle": {
+    "bytes": 1815934,
+    "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SECOND_HOST_SOURCE_BUNDLE_V3.zip",
+    "sha256": "04703c8afaa2afd0cfaf77c7b387883dc9a8c3a192f73afe3fc094a913aedacb"
+  },
+  "v3_local_validation_sha256": "ec588fd40caf67afa091b0c7bd8f26fb39b739cda4d0e817be27b1555cb8a943",
+  "v3_manifest_sha256": "c595df2825f49a66fac81bb2b8b0105e17b0380b41fadeaeba4e30cb61f1cbe4"
+}

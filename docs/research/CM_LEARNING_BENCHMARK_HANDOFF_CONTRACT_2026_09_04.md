@@ -2,13 +2,16 @@
 
 **Date:** 2026-09-04  
 **Status:** cross-machine q64 evidence ingested; current gate abstains; no training or benchmark run.
+**Updated:** 2026-09-09 with the v2 decision-surface eligibility boundary
 
 ## Purpose
 
 The Benchmark task and learning task now have an explicit machine-readable
 boundary. The Benchmark task may produce exact evidence independently; the learning
-task accepts only a normalized `crse-learning-benchmark-handoff/v1` document and
-recomputes its economics. It never calls the benchmark runner.
+task accepts normalized `crse-learning-benchmark-handoff/v1` evidence for historical
+read-only assessment and a v2 document for possible development eligibility. It
+recomputes the economics and never calls the benchmark runner. A v1 document now
+fails closed at `decision_surface_evidence_missing`; it cannot invoke a fitter.
 
 Passing this contract permits only consideration of a development learning
 experiment. It does not itself train a model, open prospective data, enable routing,
@@ -36,6 +39,15 @@ The contract requires:
 - p95 feature/control, inference, exact-verification, and expected-fallback costs
   measured on each exact-timing host; and
 - at least `1.10x` gross and fully charged speedup on every replication.
+
+The v2 eligibility contract additionally requires an independently verified decision
+surface bound to the frozen label policy and label table. At least two exact arms must
+win materially separated cases, and stable non-abstain labels must cover at least 80%
+of the complete cohort and at least 80% of each fit, validation, and audit split.
+Cross-host winner disagreements and threshold failures remain explicit abstentions.
+The summary is not accepted as an unsupported aggregate: the read-only q64 verifier
+reconstructs it from every frozen case/arm/host block, recomputes the label table and
+economics, constructs the v2 handoff in memory, and sends it through this validator.
 
 The handoff must explicitly permit development-training eligibility while keeping
 prospective consumption and production routing prohibited. Economic totals and
@@ -118,6 +130,11 @@ component measurements. This learning task must not reproduce that benchmark. A
 future handoff can be checked against the exact pre-label freeze with:
 
 ```powershell
+.\.venv\Scripts\python.exe scripts\cm_query_ladder_decision_surface.py `
+  --evidence <verified-complete-q64-block-timings.json> `
+  --freeze docs\recognition\runs\query-ladder-source-blind-learning-freeze-20260904-001\FREEZE.json `
+  --emit-handoff
+
 .\.venv\Scripts\python.exe scripts\cm_learning_benchmark_handoff.py `
   --handoff <verified-handoff.json> `
   --freeze docs\recognition\runs\query-ladder-source-blind-learning-freeze-20260904-001\FREEZE.json
@@ -126,14 +143,17 @@ future handoff can be checked against the exact pre-label freeze with:
 ## Implementation
 
 - `cmbench/recognition/learning_benchmark_handoff.py`
+- `cmbench/recognition/query_ladder_decision_surface.py`
 - `cmbench/recognition/query_ladder_learning_evidence.py`
 - `cmbench/recognition/query_ladder_learning_freeze.py`
 - `cmbench/recognition/query_ladder_development_experiment.py`
 - `scripts/cm_learning_benchmark_handoff.py`
+- `scripts/cm_query_ladder_decision_surface.py`
 - `scripts/cm_query_ladder_learning_freeze.py`
 - `scripts/cm_query_ladder_development_experiment.py`
 - `scripts/crse_query_ladder_learning_freeze_verify.py`
 - `tests/test_learning_benchmark_handoff.py`
+- `tests/test_query_ladder_decision_surface.py`
 - `tests/test_query_ladder_learning_evidence.py`
 - `tests/test_query_ladder_learning_freeze.py`
 - `tests/test_query_ladder_development_experiment.py`
