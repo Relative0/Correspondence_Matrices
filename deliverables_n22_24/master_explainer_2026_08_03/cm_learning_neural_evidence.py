@@ -26,19 +26,19 @@ PINNED = {
     ),
     "c2": (
         "docs/recognition/learning_milestone_c2_results.json",
-        "764ff3f0b81c3a0692f828165279d0216240c90cba4645a369ff2ba8d0c3631b",
+        "54963176656040c44fd539ff0828cb158904f10f1f3e272498570ac0d2113062",
     ),
     "c3": (
         "docs/recognition/learning_milestone_c3_natural_decomposition_results.json",
-        "2ce77d28434160902fd1fc23024620b99580cfd7b56b1df56e75264af647ea78",
+        "3e66b22cd35d20db280456f77c77ec014cfb3c6ed210a441d8fa2e1daba4871b",
     ),
     "c4": (
         "docs/recognition/learning_milestone_c4_direct_cut_ranking_results.json",
-        "9c6fe8b1084929bf1f58f91912d53e0b9e58cee12874c2d2f21eb3a586bc0d7c",
+        "1191b4cc7e892df01c775907c910b6c32bbb9effde71f7290095d5a125de3b7b",
     ),
     "c5": (
         "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json",
-        "f1f535562ed82336c9d5257810f74ebb9feab6907a50815b9497f1db48ef7d4a",
+        "5225e424b4ca109b468f7fd9f673c86b83b8d51cf484c543d00a1c306f17047e",
     ),
     "post": (
         "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json",
@@ -103,11 +103,7 @@ MILESTONE_SOURCES = (
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _lf_sha256(path: Path) -> str:
-    """Hash the Git-blob byte form without rewriting a CRLF checkout."""
+    """Hash text evidence in the LF-normalized form stored by Git."""
     return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
@@ -116,7 +112,7 @@ def _read_pinned(key: str) -> dict:
     path = (ROOT / relative).resolve()
     if not path.is_relative_to(ROOT) or not path.is_file():
         raise ValueError(f"Missing pinned learning evidence: {relative}")
-    if _sha256(path) != expected and _lf_sha256(path) != expected:
+    if _sha256(path) != expected:
         raise ValueError(f"Pinned learning evidence changed: {relative}")
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):

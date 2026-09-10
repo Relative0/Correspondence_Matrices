@@ -85,7 +85,8 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
             artifact = (SITE / row["artifact"]).resolve()
             self.assertTrue(report.is_file(), row["milestone"])
             self.assertTrue(artifact.is_file(), row["milestone"])
-            self.assertEqual(hashlib.sha256(artifact.read_bytes()).hexdigest(), row["artifact_sha256"])
+            payload = artifact.read_bytes().replace(b"\r\n", b"\n")
+            self.assertEqual(hashlib.sha256(payload).hexdigest(), row["artifact_sha256"])
         for row in self.evidence["timeline"]:
             self.assertTrue((SITE / row["report"]).resolve().is_file(), row["milestone"])
             self.assertTrue((SITE / row["artifact"]).resolve().is_file(), row["milestone"])
