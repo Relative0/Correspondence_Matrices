@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "proposal_id": "cm-video-foundational-three-production-remote-v2",
+  "status": "exact_authorization_requested",
+  "remote_or_paid_work_authorized": false,
+  "purpose": "Render and QA three symbol-safe 1920x1080 silent visual masters for the revised foundational CM lessons. Narration, mux, publication, and unrelated episodes are excluded.",
+  "content_identity": {
+    "teacher_review_package_identity": "e9a80fbc0f20c76f7b7e9abc703df5750bf1872d306a6434b20b2d167a173fea",
+    "production_package_identity": "57107a6e7eb497123ff00b7708e161aeba296d78b8511c8ff1586f9ccc64597c",
+    "scope": [
+      "operator-cms-from-truth-tables",
+      "logical-matrices-to-higher-dimensional-cms",
+      "what-is-explicit-cm"
+    ]
+  },
+  "immutable_inputs": {
+    "bundle_file": "bundle.zip",
+    "bundle_sha256": "e0dbdb5933adfc9bde22e04b0a6806c9df7a8e848c75235e12fe8a4485c45838",
+    "bundle_bytes": 1007682,
+    "package_manifest_sha256": "6243361abb00239746c7894a3d3b16daca8f429a0b81eb5492058d336870c6c7",
+    "controller_core_file": "../foundational_three_execute.py",
+    "controller_core_sha256": "4aeaf5f86d74b7ee47124b8bb845538f145defa3df224725762430d8fa90c921"
+  },
+  "render_contract": {
+    "episodes": 3,
+    "scenes": 19,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "total_frames": 19590,
+    "duration_seconds": 653,
+    "audio": false,
+    "font": "embedded DejaVu Sans/Mono with pre-render cmap audit",
+    "matrix_brackets": "drawn geometry",
+    "required_qa": [
+      "exact hashes",
+      "frame count and media contract",
+      "opening/middle/final decoded frames",
+      "remote font cmap audit",
+      "symbol specimen",
+      "owned-pod cleanup"
+    ]
+  },
+  "resource": {
+    "provider": "RunPod",
+    "product": "Pod",
+    "cloud": "SECURE",
+    "gpu_id": "NVIDIA RTX A5000",
+    "gpu_count": 1,
+    "minimum_vcpus": 4,
+    "minimum_ram_gb": 8,
+    "container_disk_gb": 30,
+    "volume_gb": 0,
+    "base_image": "python:3.10.15-slim-bookworm@sha256:97ff6fda70178dee6c144d41030fb88b6ec86d75e1c517fe96b8f62094ea7ac2",
+    "ports": [
+      "22/tcp"
+    ],
+    "mismatch_policy": "Delete immediately without rendering if exact owned resource checks fail."
+  },
+  "quote": {
+    "rate_usd_per_hour": 0.27,
+    "pricing_checked_date": "2026-09-01",
+    "source": "https://www.runpod.io/pricing",
+    "estimate_is_not_a_charge": true
+  },
+  "cost_model": {
+    "measured_floor_frames_per_second": 4.4176,
+    "render_seconds_estimate": 4434.5,
+    "setup_encode_download_allowance_seconds": 1500,
+    "estimated_runtime_seconds": 5934.5,
+    "estimated_compute_usd": 0.4451
+  },
+  "v1_correction": {
+    "prior_proposal_id": "cm-video-foundational-three-production-remote-v1",
+    "prior_create_consumed": true,
+    "prior_estimated_compute_usd": 0.1117,
+    "prior_owned_pod_absent_verified": true,
+    "changes": [
+      "Bundle the six preview artifacts referenced by remote validation.",
+      "Launch the render as a detached in-pod job and reconnect for status polling if SSH monitoring drops."
+    ]
+  },
+  "authorization_ceiling": {
+    "maximum_total_runpod_spend_usd": 1.25,
+    "maximum_pod_creates": 1,
+    "maximum_parallel_pods": 1,
+    "maximum_runtime_seconds": 14400,
+    "retry_policy": "No second pod create. Resume inside the one owned pod only; a failed or deleted pod requires a new exact proposal.",
+    "no_other_paid_services": true
+  },
+  "transport_and_cleanup": {
+    "credential_reference": "existing RUNPOD_API_KEY environment variable; never print, persist, bundle, or transmit its value except as the RunPod API authorization header",
+    "upload": "one hash-bound bundle via SFTP; verify SHA-256 before extraction",
+    "download": "one bounded result ZIP plus SHA-256; reject unsafe paths or unexpected files",
+    "publish": false,
+    "commit_or_push": false,
+    "delete_on_terminal": true,
+    "final_owned_inventory_reconciliation": true,
+    "detached_render_monitor": "The render runs as an in-pod detached job. The controller polls its exit record, reconnects after transient SSH loss, and downloads only after an exact zero exit."
+  },
+  "authorization_effect": "Approval authorizes only one new Secure A5000 pod/create for the corrected exact three silent masters in this bundle, up to an additional $1.25. It does not authorize narration services, publication, other episodes, commit, or push.",
+  "proposal_sha256": "4fe3d358db5ed1ffe499214a7a0063024ac20551e165978cf6c70c9711d84cb6"
+}

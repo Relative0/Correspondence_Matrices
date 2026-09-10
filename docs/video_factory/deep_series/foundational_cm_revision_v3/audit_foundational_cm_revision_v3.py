@@ -54,7 +54,9 @@ BANNED_LEARNER_PHRASES = (
 
 
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # Git may check text files out with CRLF on Windows. Hash their canonical
+    # repository form so the audit remains stable across checkout platforms.
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def words(text: str) -> list[str]:

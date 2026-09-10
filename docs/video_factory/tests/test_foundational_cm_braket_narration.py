@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -59,7 +60,14 @@ def test_offline_neural_audition_and_pending_remote_proposal() -> None:
     assert audition["status"] == "human_voice_selection_required"
     assert audition["remote_or_paid_work"] is False
     assert [item["voice"] for item in audition["voices"]] == ["af_heart", "af_bella", "bf_emma"]
-    assert all((ROOT / item["path"]).is_file() for item in audition["voices"])
+    audition_paths = [ROOT / item["path"] for item in audition["voices"]]
+    assert all(path.suffix == ".wav" for path in audition_paths)
+    present = [path.is_file() for path in audition_paths]
+    assert all(present) or not any(present), "audition WAV set must be complete when retained locally"
+    if all(present):
+        for item, path in zip(audition["voices"], audition_paths):
+            assert path.stat().st_size == item["bytes"]
+            assert hashlib.sha256(path.read_bytes()).hexdigest() == item["sha256"]
 
     proposal = json.loads(
         (ROOT / "docs" / "video_factory" / "runpod" / "foundational_three_v3" / "proposal.json").read_text(encoding="utf-8")
