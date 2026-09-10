@@ -103,6 +103,8 @@ app.append(h("header", { class: "page" }, [
 
   const gates = [
     ["measured", "Measured", `Gross headroom reaches ${T("ln.economic_gate")} on both hosts`, "Necessary, but it is only an oracle upper bound."],
+    ["measured", "Ready", "Raw q64 evidence verifier", "Reconstructs joint labels, label digest, economics and the v2 handoff from every case/arm/host block; aggregate winner counts are not trusted."],
+    ["measured", "Ready", "Neural memory repeatability gate", `Requires one independently bound candidate specification and every predeclared seed—at least ${T("ln.seed_min")}—to pass safety, ordering, selection and coverage on validation and audit.`],
     ["blocked", "Blocked", "Stable joint labels", `${T("ln.label_agree")} agree and ${T("ln.label_disagree")} differs across ${T("ln.ladder_cases")} cases.`],
     ["missing", "Missing", "Fully charged same-host costs", "Feature/control, inference, exact verification and fallback costs are absent."],
     ["pending", "Not run", "Source-blind validation and audit", `The separate ${T("ln.freeze_cases")}-group freeze contains no labels or timings.`],
@@ -130,6 +132,7 @@ app.append(h("header", { class: "page" }, [
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Preservation audit" }), h("h3", { text: "Unsupported numbers excluded" }), h("p", { text: "Two assessment artifacts referenced by the preserved website work are absent from integrated Git history. Their five dependent portfolio figures are not rendered; the human-readable reassessment remains linked as categorical context." })]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "C5 · useful negative result" }), h("h3", { text: "Symmetry retained; economics failed" }), c5Graphic, h("p", { text: "Variable-renaming equivariance and exact reconstruction survived, but recall, a global certificate and cost did not." })]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Source-blind next asset" }), h("h3", { html: `${T("ln.freeze_cases")} groups, still unconsumed` }), h("p", { class: "ln-result-value", html: `${T("ln.split_development_fit")} / ${T("ln.split_development_validation")} / ${T("ln.split_development_audit")}` }), h("p", { html: `${T("ln.features")} identity-free features and ${T("ln.prior_overlap")} prior alpha-structural overlap. No labels, timings or fitted models.` })]),
+    h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Gate infrastructure" }), h("h3", { text: "Raw evidence, not aggregate trust" }), h("p", { text: "The q64 verifier derives the frozen 1.03× / 75% / p10≥1.00 joint-host labels from all 16 timing blocks. Memory-neural evidence must bind one frozen candidate specification and pass every predeclared seed. The H6 line-ending portability audit is also ready; none of these paths trains or executes an exact backend." })]),
   ]));
   app.append(s);
 }
@@ -350,7 +353,7 @@ app.append(h("header", { class: "page" }, [
   s.append(evidenceTable(["Saved environment", "Rows/check", "Role", "Boundary"], E.hosts.map(host => [
     host.label, T(`ln.${host.prefix}_rows`), "independently verified q64 timed cells", "Absolute timings stay within this host; only task-matched interpretations cross hosts",
   ]).concat([["Source-blind freeze", "byte-identical cohort replay", "independent verification", "No exact execution, timing, labels, models, prospective data or cloud resources"]]), "Saved verification environments"));
-  s.append(h("pre", {}, [h("code", { text: ".venv\\Scripts\\python.exe scripts\\crse_query_ladder_learning_freeze_verify.py --artifact docs\\recognition\\runs\\query-ladder-source-blind-learning-freeze-20260904-001\n.venv\\Scripts\\python.exe -m pytest tests\\test_query_ladder_learning_evidence.py tests\\test_learning_benchmark_handoff.py" })]));
+  s.append(h("pre", {}, [h("code", { text: ".venv\\Scripts\\python.exe scripts\\crse_query_ladder_learning_freeze_verify.py --artifact docs\\recognition\\runs\\query-ladder-source-blind-learning-freeze-20260904-001\n.venv\\Scripts\\python.exe scripts\\cm_query_ladder_decision_surface.py --evidence <verified-q64-blocks.json> --freeze docs\\recognition\\runs\\query-ladder-source-blind-learning-freeze-20260904-001\\FREEZE.json\n.venv\\Scripts\\python.exe scripts\\cm_memory_learning_evidence.py --measurements <verified-memory.json> --neural-protocol <frozen-neural-protocol.json> --neural-predictions <seed-11.json> <seed-23.json> <seed-47.json>\n.venv\\Scripts\\python.exe scripts\\crse_audit_h6_freeze_portability.py\n.venv\\Scripts\\python.exe -m pytest tests\\test_query_ladder_decision_surface.py tests\\test_memory_learning_evidence.py tests\\test_h6_freeze_portability.py" })]));
   const links = h("ul", { class: "benchmark-source-list" });
   E.links.forEach(item => links.append(h("li", {}, [h("a", { href: item.href, text: item.label })])));
   s.append(links); app.append(s);

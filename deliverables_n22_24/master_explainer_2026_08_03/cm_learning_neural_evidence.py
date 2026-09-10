@@ -307,6 +307,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("Version-history learning protocol", "docs/research/CM_VERSION_HISTORY_LEARNING_PROTOCOL_2026_09_04.md"),
         ("Learning benchmark handoff contract", "docs/research/CM_LEARNING_BENCHMARK_HANDOFF_CONTRACT_2026_09_04.md"),
         ("Query-ladder learning evaluation", "docs/research/CM_QUERY_LADDER_DEVELOPMENT_LEARNING_EVALUATION_2026_09_04.md"),
+        ("Decision-surface and memory-evaluation boundary", "docs/research/CM_LEARNING_DECISION_SURFACE_AND_MEMORY_EVALUATION_2026_09_09.md"),
         ("Source-blind freeze manifest", "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/MANIFEST.json"),
         ("Source-blind independent verification", "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json"),
     ]
@@ -330,7 +331,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     evidence = {
         "schema": "cm-learning-neural-website-evidence/v1",
         "status": "verified_read_only_no_training",
-        "updated": "2026-09-04",
+        "updated": "2026-09-09",
         "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
         "excluded_missing_artifacts": [
             {
@@ -390,13 +391,15 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "next_actions": {
             "now": [
                 "Replay pinned verifiers and website evidence tests.",
-                "Harden malformed, drifted and economically inconsistent handoff fixtures.",
-                "Prepare candidate code that remains disabled until a freeze-bound handoff is eligible.",
-                "Develop the independent C5 certificate checker and metamorphic fixtures without fitting a model.",
+                "Validate any future q64 package from all raw 16-block timings; reconstruct labels, economics and the v2 handoff rather than trusting aggregates.",
+                "Use the split-isolated memory evaluator and its precommitted three-seed neural wrapper for synthetic guardrail testing while keeping exposed H6 cases out of training.",
+                "Audit the historical H6 freeze for byte-exact or LF/CRLF-equivalent bindings without altering its strict validator.",
+                "Keep candidate code disabled until a freeze-bound handoff is eligible.",
             ],
             "benchmark": [
                 "Run the frozen exact cohort on two distinct physical machines.",
-                "Generate joint cross-host labels under the precommitted abstention policy.",
+                "Retain every case, arm and all 16 paired q64 blocks, including ties, refusals and unfavorable rows.",
+                "Generate joint cross-host labels under the precommitted materiality and abstention policy.",
                 "Measure every charged p95 component on each decision-bearing host.",
                 "Return a source-closed, independently verified handoff with all refusals retained.",
             ],

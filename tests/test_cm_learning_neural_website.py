@@ -96,6 +96,19 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         self.assertEqual(set(actions), {"now", "benchmark", "prohibited"})
         self.assertTrue(all(actions.values()))
         self.assertIn("Do not train", " ".join(actions["prohibited"]))
+        self.assertIn("raw 16-block timings", " ".join(actions["now"]))
+        self.assertIn("all 16 paired q64 blocks", " ".join(actions["benchmark"]))
+
+    def test_new_read_only_integrity_gates_are_visible(self):
+        self.assertEqual(self.evidence["updated"], "2026-09-09")
+        self.assertIn("Raw q64 evidence verifier", self.template)
+        self.assertIn("Neural memory repeatability gate", self.template)
+        self.assertIn("cm_query_ladder_decision_surface.py", self.template)
+        self.assertIn("crse_audit_h6_freeze_portability.py", self.template)
+        self.assertTrue(any(
+            link["label"] == "Decision-surface and memory-evaluation boundary"
+            for link in self.evidence["links"]
+        ))
 
     def test_source_blind_contract_is_visible(self):
         self.assertEqual(self.numbers["ln.freeze_cases"]["value"], 72)
