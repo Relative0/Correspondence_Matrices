@@ -74,7 +74,9 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         text = (SITE / "index.html").read_text(encoding="utf-8")
         self.assertIn("local synthetic kernel, {{kernel.local.pct}} faster; EPFL", text)
         self.assertIn("Linux synthetic replications", text)
-        self.assertIn("with its clustered interval spanning parity", text)
+        self.assertIn('P("{{symv3.bare.overall}}")', text)
+        self.assertIn("current B2/B4 V3 bare kernel", text)
+        self.assertIn("Historical B1/E3 {{flat.local}} remains in the comparison chart", text)
         self.assertNotIn("replicated on real circuits and on {{kernel.pod.count}}", text)
 
     def test_master_links_latest_public_repository_evidence(self):
@@ -95,8 +97,10 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
             (ROOT / "docs" / "recognition" / "learning_milestone_c16_exact_screened_gf2_results.json")
             .read_text(encoding="utf-8")
         )
-        self.assertIn("Latest public-repository evidence · 2026-08-30", text)
+        self.assertIn("Exact-screening evidence · reviewed 2026-09-10", text)
         self.assertIn("C16 exact-screened CM/GF(2) tail", text)
+        self.assertIn("{{recognition.c16.linux_whole_path_speedup}}", text)
+        self.assertIn("{{recognition.c16.linux_p95_speedup}}", text)
         self.assertIn("LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md", text)
         self.assertIn("COMPARATIVE-PLAN-EXECUTION-STATUS-20260829.md", text)
         self.assertIn("256/256 counterbalanced cells", text)
@@ -195,7 +199,8 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
     def test_github_pages_routes_evidence_files_to_the_repository(self):
         shared = (SITE / "cm_master_shared.js").read_text(encoding="utf-8")
         self.assertIn("function hostedEvidenceHref(href)", shared)
-        self.assertIn("https://github.com/Relative0/Correspondence_Matrices/blob/main/", shared)
+        self.assertIn('REVIEWED_EVIDENCE_REVISION = "ff7511b401b0008ef3bff0f426f24c59a74c84f5"', shared)
+        self.assertIn("blob/${REVIEWED_EVIDENCE_REVISION}/", shared)
         self.assertIn('t === "a" && k === "href"', shared)
 
     def test_decision_atlas_has_five_independent_why_dialogs(self):

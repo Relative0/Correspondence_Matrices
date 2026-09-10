@@ -12,7 +12,8 @@
 const S1 = "var(--series-1)", S2 = "var(--series-2)", S3 = "var(--series-3)", S4 = "var(--series-4)";
 
 /* ---------------------------------------------------------------- dom */
-const REPOSITORY_BLOB_ROOT = "https://github.com/Relative0/Correspondence_Matrices/blob/main/";
+const REVIEWED_EVIDENCE_REVISION = "ff7511b401b0008ef3bff0f426f24c59a74c84f5";
+const REPOSITORY_BLOB_ROOT = `https://github.com/Relative0/Correspondence_Matrices/blob/${REVIEWED_EVIDENCE_REVISION}/`;
 const SITE_SOURCE_ROOT = "deliverables_n22_24/master_explainer_2026_08_03/";
 function hostedEvidenceHref(href) {
   if (typeof href !== "string" || typeof location === "undefined") return href;
@@ -40,6 +41,22 @@ const h = (t, a = {}, kids = []) => {
 };
 const frag = (kids) => { const d = document.createDocumentFragment(); [].concat(kids).forEach(c => c && d.append(c)); return d; };
 
+let chartSerial = 0;
+function chartSvg(width, height, title, description) {
+  const id = `cm-chart-${++chartSerial}`;
+  const name = title || "Evidence chart";
+  const detail = description || "Measured evidence chart. Exact values are provided in the adjacent table.";
+  const svg = el("svg", {
+    width, height, viewBox: `0 0 ${width} ${height}`, role: "img",
+    "aria-labelledby": `${id}-title ${id}-desc`,
+  });
+  svg.append(
+    el("title", { id: `${id}-title` }, [document.createTextNode(name)]),
+    el("desc", { id: `${id}-desc` }, [document.createTextNode(detail)]),
+  );
+  return svg;
+}
+
 /* ---------------------------------------------------------------- format */
 const f = (x, d = 3) => (x === null || x === undefined) ? "—" : Number(x).toFixed(d);
 const us = (x) => x === null || x === undefined ? "—"
@@ -62,6 +79,7 @@ const FMT = {
   x1: (v) => Number(v).toFixed(1) + "×",
   x2: (v) => Number(v).toFixed(2) + "×",
   x3: (v) => Number(v).toFixed(3) + "×",
+  x6: (v) => Number(v).toFixed(6) + "×",
   x9: (v) => Number(v).toFixed(9) + "×",
   xcomma: (v) => commas(Math.round(v)) + "×",
   pct0: (v) => Math.round(v) + "%",
@@ -96,7 +114,7 @@ function P(s) {
     if (!rec) { console.error("unknown number token:", tok); return "‹?" + tok + "›"; }
     const val = (FMT[rec.fmt] || FMT.text)(rec.value);
     const title = (rec.prov + (rec.note ? " — " + rec.note : "")).replace(/"/g, "&quot;");
-    return `<span class="num" title="${title}">${val}</span>`;
+    return `<span class="num" data-token="${tok}" title="${title}">${val}</span>`;
   });
 }
 
@@ -281,8 +299,8 @@ function forest(rows, opt) {
   const H = padT + rows.length * rowH + 46;
   const lo = opt.domain[0], hi = opt.domain[1];
   const x = linScale(lo, hi, padL, W - padR);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
-                        "aria-label": opt.title || "forest plot" });
+  const g = chartSvg(W, H, opt.title || "Forest plot",
+    opt.desc || `Horizontal axis: ${opt.xTitle}. Reference line: ${opt.refLabel || "parity 1.00"}. Exact values and interval bases are provided in the adjacent table.`);
 
   niceTicks(lo, hi, opt.ticks || 6).forEach(t => {
     g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 8, y2: padT + rows.length * rowH,
@@ -334,8 +352,8 @@ function groupedCols(cfg) {
   const maxV = cfg.max || Math.max(...allV) * 1.12;
   const minV = isLog ? (cfg.min || Math.pow(10, Math.floor(Math.log10(Math.min(...allV))))) : 0;
   const y = isLog ? logScale(minV, maxV, padT + plotH, padT) : linScale(minV, maxV, padT + plotH, padT);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
-                        "aria-label": cfg.title || "grouped columns" });
+  const g = chartSvg(W, H, cfg.title || "Grouped columns",
+    cfg.desc || `Horizontal axis: ${cfg.xTitle}. Vertical axis: ${cfg.yTitle}. Exact values are provided in the adjacent table.`);
 
   (isLog ? logTicks(minV, maxV) : niceTicks(minV, maxV, 5)).forEach(t => {
     g.append(el("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: "var(--grid)", "stroke-width": 1 }));
@@ -393,7 +411,8 @@ function dumbbell(cats, cfg) {
   const W = cfg.width || 900, padL = cfg.padL || 175, padR = 30, padT = 26, rowH = cfg.rowH || 24;
   const H = padT + cats.length * rowH + 48;
   const x = linScale(cfg.domain[0], cfg.domain[1], padL, W - padR);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `Horizontal axis: ${cfg.xTitle}. Each row compares ${cfg.aLabel} with ${cfg.bLabel}. Exact values are provided in the adjacent table.`);
   niceTicks(cfg.domain[0], cfg.domain[1], 6).forEach(t => {
     g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 6, y2: padT + cats.length * rowH,
                           stroke: "var(--grid)", "stroke-width": 1 }));
@@ -432,7 +451,8 @@ function xyPlot(cfg) {
                      : linScale(cfg.xDomain[0], cfg.xDomain[1], padL, W - padR);
   const y = cfg.logY ? logScale(cfg.yDomain[0], cfg.yDomain[1], padT + plotH, padT)
                      : linScale(cfg.yDomain[0], cfg.yDomain[1], padT + plotH, padT);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `Horizontal axis: ${cfg.xTitle}. Vertical axis: ${cfg.yTitle}. Exact values are provided in the adjacent table.`);
 
   (cfg.logY ? logTicks(cfg.yDomain[0], cfg.yDomain[1]) : niceTicks(cfg.yDomain[0], cfg.yDomain[1], 5)).forEach(t => {
     g.append(el("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: "var(--grid)", "stroke-width": 1 }));
@@ -487,7 +507,8 @@ function hBars(rows, cfg) {
   const H = padT + rows.length * rowH + 44;
   const maxV = cfg.max || Math.max(...rows.map(r => r.value)) * 1.1;
   const x = linScale(0, maxV, padL, W - padR);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `Horizontal axis: ${cfg.xTitle}. Exact values are provided in the adjacent table.`);
   niceTicks(0, maxV, 5).forEach(t => {
     g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 6, y2: padT + rows.length * rowH,
                           stroke: "var(--grid)", "stroke-width": 1 }));
@@ -522,7 +543,8 @@ function stackedPercentBars(rows, cfg) {
   const W = cfg.width || 900, padL = cfg.padL || 245, padR = 128, padT = 30, rowH = cfg.rowH || 46;
   const H = padT + rows.length * rowH + 46;
   const x = linScale(0, 100, padL, W - padR);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || "Horizontal axis: percent of outcomes. Exact values are provided in the adjacent table.");
   [0, 25, 50, 75, 100].forEach(t => {
     g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 8, y2: padT + rows.length * rowH,
                           stroke: "var(--grid)", "stroke-width": 1 }));
@@ -561,7 +583,8 @@ function dotLog(rows, cfg) {
   const lo = cfg.min || Math.pow(10, Math.floor(Math.log10(Math.min(...vals))));
   const hi = cfg.max || Math.pow(10, Math.ceil(Math.log10(Math.max(...vals))));
   const x = logScale(lo, hi, padL, W - padR);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `Logarithmic horizontal axis: ${cfg.xTitle}. Exact values are provided in the adjacent table.`);
   logTicks(lo, hi).forEach(t => {
     g.append(el("line", { x1: x(t), x2: x(t), y1: padT - 6, y2: padT + rows.length * rowH,
                           stroke: "var(--grid)", "stroke-width": 1 }));
@@ -600,7 +623,8 @@ function histogram(cfg) {
   const H = cfg.height || 260, plotW = W - padL - padR, plotH = H - padT - padB;
   const maxV = Math.max(...cfg.series.flatMap(s => s.counts)) * 1.15;
   const y = linScale(0, maxV, padT + plotH, padT);
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `Horizontal axis: ${cfg.xTitle}. Vertical axis: ${cfg.yTitle || "formulas"}. Exact values are provided in the adjacent table.`);
   niceTicks(0, maxV, 4).forEach(t => {
     g.append(el("line", { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: "var(--grid)", "stroke-width": 1 }));
     g.append(el("text", { x: padL - 9, y: y(t) + 4, class: "tick", "text-anchor": "end" },
@@ -637,7 +661,8 @@ function heatGrid(cfg) {
   const cellW = cfg.cellW || 118, cellH = 40, padL = cfg.padL || 110, padT = 34;
   const W = padL + cfg.cols.length * cellW + 16;
   const H = padT + cfg.rows.length * cellH + 16;
-  const g = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.title });
+  const g = chartSvg(W, H, cfg.title,
+    cfg.desc || `${cfg.rows.length} by ${cfg.cols.length} ratio grid for ${cfg.arm}. Exact values are provided in the adjacent table.`);
   const vals = cfg.cells.map(c => c.value);
   const lo = Math.min(...vals), hi = Math.max(...vals);
   cfg.cols.forEach((c, ci) =>
@@ -673,6 +698,9 @@ function topbar(cfg) {
   }
   if (!(cfg.links || []).some(([, label]) => label === "Learning & neural")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["learning-neural-evidence.html", "Learning & neural"]] };
+  }
+  if (!(cfg.links || []).some(([, label]) => label === "Data & downloads")) {
+    cfg = { ...cfg, links: [...(cfg.links || []), ["data-downloads.html", "Data & downloads"]] };
   }
   const bar = h("div", { class: "topbar" });
   const inner = h("div", { class: "inner" });
@@ -803,9 +831,12 @@ function featureModelAuditUpdate() {
 }
 
 function learningNeuralUpdate() {
-  const s = section("learning-neural-update", "Learning evidence · 2026-09-04",
-    "The learning program is mapped; no learned route is promoted",
-    "Across exact relation learning, cut proposals, partition ranking, backend choice, cost prediction and representation learning, the current decision is complete abstention with the exact fallback unchanged.");
+  const s = section("learning-neural-update", "Learning evidence · reviewed 2026-09-10",
+    "The packed exact core advanced; no learned route is promoted",
+    "C6 found a positive exact-core use case while the broader learning decision remains complete abstention with the exact fallback unchanged.");
+  s.append(banner("note", "C6 exact-core result", [
+    "Against truth-vector exact ANF, cached packed source-ANF measured {{ln.c6.test.median_speedup}} median and {{ln.c6.test.p95_speedup}} p95 speedups on the held-out test split, then {{ln.c6.confirmatory.median_speedup}} median and {{ln.c6.confirmatory.p95_speedup}} p95 on confirmation. All {{ln.c6.dataset_rows}} cases retained exact and canonical accuracy with {{ln.c6.semantic_mismatches}} semantic mismatches. The packed core advanced; the learned hybrid and production routing did not.",
+  ]));
   s.append(banner("note", "Evidence before enthusiasm", [
     "The strongest new query-ladder surface has gross headroom on two machines, but labels disagree on one case and the fully charged cost vector is missing. A separately frozen source-blind cohort has no timings, labels or fitted models.",
   ]));
@@ -1361,7 +1392,7 @@ FIG.flatForest = () => {
   return card({
     id: "fig-flat",
     scope: "Accepted B1/E3, EPFL and pod evidence plus current B2/B4 V3 · bare CM kernel ÷ sharing-aware CSE-flat kernel",
-    title: "The CSE-flat result is workload-specific, not one universal ratio",
+    title: "Current B2/B4 bare CM/CSE-flat ratio is 0.8906; below 1 favors CM",
     caption: `B1/E3 and EPFL remain parity evidence for their workloads. The later, exactly counterbalanced ` +
       `B2/B4 V3 study (${T("symv3.formulas")} formulas, ${T("symv3.rows")} timing rows) measured ${T("symv3.bare.overall")} ` +
       `[${T("symv3.bare.overall.lo")}, ${T("symv3.bare.overall.hi")}] overall and ` +
@@ -1369,12 +1400,12 @@ FIG.flatForest = () => {
       `${T("symv3.repeat.runs")} fresh same-host repetitions ranged from ${T("symv3.repeat.min")} to ` +
       `${T("symv3.repeat.max")} (run geomean ${T("symv3.repeat.geomean")}), showing that the formula-only ` +
       `interval does not measure run-level variation. This remains a modest bare-program structural win on ` +
-      `B2/B4, not a universal CM advantage.`,
+      `B2/B4, not a universal CM advantage. The historical B1/E3 point (${T("flat.local")}) is retained as a distinct workload, not used as the headline.`,
     legend: [[S4, "current B2/B4 V3"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
     svg: forest(d.rows, {
       domain: pad(d.rows.flatMap(r => [r.value, r.lo, r.hi]).concat([1.0]), 0.01), ref: 1.0,
-      xTitle: "bare CM kernel ÷ CSE-flat kernel (geometric mean)",
-      arm: "CM / CSE-flat", title: "CM versus CSE-flat across accepted workload scopes",
+      xTitle: "bare CM kernel ÷ CSE-flat kernel (geometric mean; below 1 favors CM)",
+      arm: "CM / CSE-flat", title: "CM versus CSE-flat across accepted workload scopes; below 1 favors CM",
     }),
     table: table(["scope", "geomean", "95% CI", "clustering basis"],
       d.rows.map(r => [r.label, f(r.value, 4), r.lo == null ? "—" : `[${f(r.lo, 4)}, ${f(r.hi, 4)}]`, r.basis])),

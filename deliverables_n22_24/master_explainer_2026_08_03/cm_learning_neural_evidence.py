@@ -40,6 +40,10 @@ PINNED = {
         "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json",
         "5225e424b4ca109b468f7fd9f673c86b83b8d51cf484c543d00a1c306f17047e",
     ),
+    "c6": (
+        "docs/recognition/learning_milestone_c6_packed_source_anf_results.json",
+        "ec398dcb6eddcbc534f0a27c176c8f535fe49441b8ddae2c8a923e59ede3dfa6",
+    ),
     "post": (
         "docs/recognition/runs/post-benchmark-neural-eligibility-development-20260903-001/assessment.json",
         "40bd8e37a475090496beaf88d17ce31442e57190060d2b94b46dac650be3e8df",
@@ -140,6 +144,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     c3 = _read_pinned("c3")
     c4 = _read_pinned("c4")
     c5 = _read_pinned("c5")
+    c6 = _read_pinned("c6")
     ladder = build_evidence()
 
     if post.get("status") != "complete_no_training" or post.get("decision", {}).get("selector_fitted"):
@@ -164,6 +169,14 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "production_routing_permitted": False,
     }:
         raise ValueError("Query-ladder fail-closed decision changed")
+    if (
+        c6.get("status") != "complete"
+        or c6.get("semantic_mismatches") != 0
+        or c6.get("verification", {}).get("status") != "pass"
+        or c6.get("verification", {}).get("semantic_mismatches") != 0
+        or c6.get("criteria", {}).get("production_promotion") is not False
+    ):
+        raise ValueError("C6 exact-core evidence or promotion boundary changed")
 
     numbers: dict[str, dict] = {}
 
@@ -201,6 +214,32 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     number("c5_slow_min", min(c5_slowdowns), "x1", PINNED["c5"][0], "min(cost_ratios.*.safe_learned_over_exact_anf)")
     number("c5_slow_max", max(c5_slowdowns), "x1", PINNED["c5"][0], "max(cost_ratios.*.safe_learned_over_exact_anf)")
     number("c5_exact_reference", 1.0, "x1", PINNED["c5"][0], "definition of safe_learned_over_exact_anf ratio", "Exact ANF is the denominator and therefore the 1.0x reference.")
+
+    c6_methods = c6["method_summary"]
+    for split in ("test", "confirmatory"):
+        baseline = c6_methods[f"truth_vector_anf/{split}"]
+        packed = c6_methods[f"cached_packed_source_anf/{split}"]
+        for field in ("accuracy", "canonical_partition_accuracy", "semantic_mismatches"):
+            if packed[field] != (0 if field == "semantic_mismatches" else 1.0):
+                raise ValueError(f"C6 cached packed {split} exactness changed: {field}")
+        number(
+            f"c6.{split}.median_speedup",
+            baseline["median_total_ns"] / packed["median_total_ns"],
+            "x6", PINNED["c6"][0],
+            f"method_summary.truth_vector_anf/{split}.median_total_ns / method_summary.cached_packed_source_anf/{split}.median_total_ns",
+            "Exact truth-vector ANF time divided by exact cached packed source-ANF time; above 1 favors the packed core.",
+        )
+        number(
+            f"c6.{split}.p95_speedup",
+            baseline["p95_total_ns"] / packed["p95_total_ns"],
+            "x6", PINNED["c6"][0],
+            f"method_summary.truth_vector_anf/{split}.p95_total_ns / method_summary.cached_packed_source_anf/{split}.p95_total_ns",
+            "Exact truth-vector ANF p95 divided by exact cached packed source-ANF p95; above 1 favors the packed core.",
+        )
+    number("c6.dataset_rows", c6["dataset_rows"], "int", PINNED["c6"][0], "dataset_rows")
+    number("c6.test_cases", c6_methods["cached_packed_source_anf/test"]["cases"], "int", PINNED["c6"][0], "method_summary.cached_packed_source_anf/test.cases")
+    number("c6.confirmatory_cases", c6_methods["cached_packed_source_anf/confirmatory"]["cases"], "int", PINNED["c6"][0], "method_summary.cached_packed_source_anf/confirmatory.cases")
+    number("c6.semantic_mismatches", c6["semantic_mismatches"], "int", PINNED["c6"][0], "semantic_mismatches")
     for key, value, source, field in (
         ("params_matrix_mlp", c["models"]["matrix_mlp_parameters"], PINNED["c"][0], "models.matrix_mlp_parameters"),
         ("params_matrix_cnn", c["models"]["matrix_cnn_parameters"], PINNED["c"][0], "models.matrix_cnn_parameters"),
@@ -267,8 +306,11 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("C3", "B,F", "natural decomposition", "Natural decompositions with held-out confirmation", "natural GNN and decoder", "structural linear", "Balanced accuracy was modest and accepted-positive recall was low.", "negative", "docs/recognition/LEARNING_MILESTONE_C3_NATURAL_DECOMPOSITION_2026_08_29.md"),
         ("C4", "B,C", "direct cut ranking", "Natural cut candidates", "cut-ranking GNN", "exact ranking/control", "Confirmation ranking improved, but test transfer and accepted coverage did not hold.", "negative", "docs/recognition/LEARNING_MILESTONE_C4_DIRECT_CUT_RANKING_2026_08_29.md"),
         ("C5", "B,C", "variable conditioned cuts", "Variable-width natural cuts", "conditioned GNN", "exact ANF control", "Equivariance stayed exact; learned safe path was slower and recall remained low.", "retained", "docs/recognition/LEARNING_MILESTONE_C5_VARIABLE_CONDITIONED_CUT_2026_08_29.md"),
-        ("C6–C12", "B,C", "screening, bounds and completion", "Successive natural candidate cohorts", "exact structural screens plus learned ranking probes", "analytical and exact controls", "The work shifted from classifier quality to whether global-best completion could be avoided; it could not.", "superseded", "docs/recognition/LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md"),
-        ("C13–C18", "C,D", "backend/candidate decision surfaces", "Held-out and exact-screened cohorts", "small policies and structural features", "fixed exact backends", "Signals appeared on restricted surfaces but did not survive stronger exact baselines or charged economics.", "negative", "docs/recognition/LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md"),
+        ("C6", "B,C", "packed exact source-ANF core", "Held-out test and confirmatory natural-source cohorts", "cached packed exact OR-convolution", "truth-vector exact ANF", "The exact packed core improved median and p95 timing with perfect exact/canonical accuracy; the learned hybrid and production route did not advance.", "retained", "docs/recognition/LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md"),
+        ("C7–C12", "B,C", "screening, bounds and completion", "Successive natural candidate cohorts", "exact structural screens plus learned ranking probes", "analytical and exact controls", "Later work shifted to whether global-best completion could be avoided; it could not.", "superseded", "docs/recognition/LEARNING_MILESTONE_C12_ADAPTIVE_EXACT_DISPATCHER_2026_08_30.md"),
+        ("C13–C15", "C,D", "backend/candidate decision surfaces", "Held-out candidate cohorts", "small policies and structural features", "fixed exact backends", "Signals appeared on restricted surfaces but did not survive stronger exact baselines or charged economics.", "negative", "docs/recognition/LEARNING_MILESTONE_C15_EXACT_CM_GF2_2026_08_30.md"),
+        ("C16", "C,D", "exact-screened GF(2) tail", "Frozen natural-source and dense-control cases", "exact structural screen plus exhaustive exact fallback", "exhaustive explicit-CM GF(2) search", "The task-equivalent screened whole path preserved the exact best artifact and improved aggregate timing on Windows and Linux; a slower individual case keeps production promotion disabled.", "retained", "docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md"),
+        ("C17–C18", "C,D", "GF(2) routing and transfer", "Independent exact GF(2) cohorts", "task dispatch and structural features", "fixed exact backends", "The C16 exact-screening screen remained useful, but learned routing and broad transfer did not earn promotion.", "negative", "docs/recognition/LEARNING_MILESTONE_C18_INDEPENDENT_GF2_TRANSFER_2026_08_31.md"),
         ("C19–C22", "B,C", "global-best certificates", "Natural candidate universes", "ranking and completion policies", "global completion search", "C21 exposed the completion barrier; C22 retained the certificate boundary.", "blocked", "docs/recognition/LEARNING_MILESTONE_C21_TASK_MATCHED_GF2_METHOD_TABLE_2026_08_31.md"),
         ("C23–C29", "D,E", "prepared/runtime policies", "Prepared exact evaluation surfaces", "rules, predictors and shadow policies", "fixed and oracle exact arms", "Headroom narrowed as task contracts and baselines became more exact.", "negative", "docs/recognition/LEARNING_MILESTONE_C29_VARIANCE_LOCALIZATION_2026_09_01.md"),
         ("C30–C36", "D,E", "context and repeated-query routing", "Natural repeated-query cohorts", "prepared policies and shadow evaluation", "current bigint/native exact portfolio", "The final exposed portfolio selected one fixed exact method, leaving no decision to learn.", "retained", "docs/recognition/LEARNING_MILESTONE_C36_WIDE_NATURAL_REPEATED_QUERY_2026_09_01.md"),
@@ -283,8 +325,11 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "AB": "docs/recognition/learning_milestones_ab_results.json",
         "C": PINNED["c"][0], "C2": PINNED["c2"][0], "C3": PINNED["c3"][0],
         "C4": PINNED["c4"][0], "C5": PINNED["c5"][0],
-        "C6–C12": "docs/recognition/learning_milestone_c12_adaptive_dispatcher_results.json",
-        "C13–C18": "docs/recognition/learning_milestone_c18_independent_gf2_transfer_results.json",
+        "C6": PINNED["c6"][0],
+        "C7–C12": "docs/recognition/learning_milestone_c12_adaptive_dispatcher_results.json",
+        "C13–C15": "docs/recognition/learning_milestone_c15_exact_cm_gf2_results.json",
+        "C16": "docs/recognition/learning_milestone_c16_exact_screened_gf2_results.json",
+        "C17–C18": "docs/recognition/learning_milestone_c18_independent_gf2_transfer_results.json",
         "C19–C22": "docs/recognition/learning_milestone_c21_task_matched_gf2_method_table_results.json",
         "C23–C29": "docs/recognition/learning_milestone_c29_variance_localization_results.json",
         "C30–C36": "docs/recognition/learning_milestone_c36_wide_natural_repeated_query_results.json",
@@ -331,7 +376,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     evidence = {
         "schema": "cm-learning-neural-website-evidence/v1",
         "status": "verified_read_only_no_training",
-        "updated": "2026-09-09",
+        "updated": "2026-09-10",
         "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
         "excluded_missing_artifacts": [
             {
@@ -352,6 +397,12 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
             {"id": "F", "name": "CM representation learning", "role": "Learn embeddings over CM structure", "verdict": "Research-only until a downstream task, ablation and economic gate exist."},
         ],
         "timeline": timeline,
+        "c6": {
+            "report": _href("docs/recognition/LEARNING_MILESTONE_C6_PACKED_SOURCE_ANF_2026_08_30.md"),
+            "artifact": _href(PINNED["c6"][0]),
+            "verification": _href(c6["verification"]["path"]),
+            "decision": "Packed exact core advanced; learned hybrid unpromoted; production routing unchanged.",
+        },
         "milestone_sources": milestone_sources,
         "quality": quality_rows,
         "models": [

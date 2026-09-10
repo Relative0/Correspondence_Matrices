@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — data and downloads</title>
+<meta name="description" content="Reviewed, commit-pinned CM evidence, result tables, audit records, verifiers and tests with SHA-256 checksums.">
+<meta property="og:title" content="Correspondence Matrices — data and downloads">
+<meta property="og:description" content="Immutable evidence files behind the published CM findings.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section class="sec">
+    <h1>Data and downloads</h1>
+    <p>This source template is populated by the site builder. <a href="data-downloads.html">Open the generated page</a>.</p>
+  </section>
+</main>
+<script>
+const IS_SOURCE_TEMPLATE = /(?:^|\/)cm_downloads_template\.html$/i.test(location.pathname);
+if (IS_SOURCE_TEMPLATE) location.replace("data-downloads.html");
+const DATA = IS_SOURCE_TEMPLATE ? { _numbers: {} } : /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+<script>
+if (!IS_SOURCE_TEMPLATE) {
+const E = DATA.e24_downloads;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({
+  brand: "Correspondence Matrices <span>· data & downloads</span>",
+  links: [["index.html", "Full knowledge base"], ["layperson.html", "Simple One-Pager"],
+          ["investor.html", "Investor overview"], ["expert.html", "Technical Summary"], ["usecases.html", "CM Use Cases"],
+          ["feature-model-evidence.html", "Results & audit"], ["learning-neural-evidence.html", "Learning & neural"]],
+}));
+
+const formatBytes = value => value < 1024 ? `${value} B`
+  : value < 1024 * 1024 ? `${(value / 1024).toFixed(1)} KiB`
+  : `${(value / (1024 * 1024)).toFixed(1)} MiB`;
+
+function artifactTable(records, label) {
+  const table = h("table", { class: "download-table", "aria-label": label });
+  table.append(h("thead", {}, [h("tr", {}, ["Artifact", "Role and contract", "Host / split", "Integrity", "Reuse review", "Links"].map(text => h("th", { scope: "col", text })))]));
+  const body = h("tbody");
+  records.forEach(record => body.append(h("tr", {}, [
+    h("td", {}, [h("strong", { text: record.name }), h("code", { text: record.path })]),
+    h("td", {}, [h("strong", { text: record.role }), document.createTextNode(` — ${record.contract}`)]),
+    h("td", { text: record.scope }),
+    h("td", {}, [h("span", { text: formatBytes(record.bytes) }), h("code", { text: `SHA-256 ${record.sha256}` })]),
+    h("td", {}, [h("span", { text: record.license }), h("span", { text: record.privacy })]),
+    h("td", {}, [h("a", { href: record.view, text: "View" }), document.createTextNode(" · "), h("a", { href: record.raw, download: record.name, text: "Raw" })]),
+  ])));
+  table.append(body);
+  return h("div", { class: "download-scroll", tabindex: "0", role: "region", "aria-label": label }, [table]);
+}
+
+app.append(h("header", { class: "page" }, [
+  h("p", { class: "eyebrow", text: `Reviewed evidence · ${E.reviewed}` }),
+  h("h1", { text: "Data & downloads" }),
+  h("p", { class: "lede", text: "The result files, audit records, verifiers and tests behind the published findings—linked to one immutable reviewed commit." }),
+  h("p", { class: "meta", text: `${E.artifact_count} explicitly reviewed files · commit ${E.revision}` }),
+]));
+
+{
+  const s = section("scope", "Publication contract", "Pinned evidence, visible boundaries",
+    "Every View and Raw link below targets the reviewed commit, not a moving branch. The latest repository is offered separately and may contain newer, unaudited work.");
+  s.append(tiles([
+    ["Reviewed commit", E.revision.slice(0, 12), "immutable source for every listed artifact"],
+    ["Reviewed files", String(E.artifact_count), "explicit allowlist; no directory dumps"],
+    ["Candidate inventory", String(E.candidate_artifact_count), "complete inventory remains downloadable for audit"],
+    ["Evidence sets", String(E.sets.length), "audit, results, verifiers and tests"],
+    ["Checksums", "SHA-256", "computed from the LF-normalized Git content"],
+  ]));
+  s.append(banner("warn", "Reuse and privacy boundary", [E.license_status, E.privacy_status]));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: `${E.repository}/tree/${E.revision}`, text: "Browse the reviewed commit" }),
+    h("a", { href: E.latest_repository, text: "Open the latest repository (may be newer)" }),
+  ]));
+  app.append(s);
+}
+
+E.sets.forEach(group => {
+  const s = section(group.id, "Reviewed evidence set", group.title, group.description);
+  s.append(artifactTable(group.artifacts, `${group.title} downloadable artifacts`));
+  s.append(h("p", { class: "meta", text: `${group.artifacts.length} files. “Raw” downloads the exact reviewed Git content; “View” opens the same revision with repository context.` }));
+  app.append(s);
+});
+
+app.append(h("footer", { class: "footer" }, [
+  h("p", { text: `Download index reviewed ${E.reviewed} at ${E.revision}.` }),
+  h("p", {}, [h("a", { href: "index.html", text: "Return to the knowledge base" })]),
+]));
+}
+</script>
+</body>
+</html>

@@ -79,9 +79,9 @@ app.append(tiles([
   ["CM vs a plain CSE kernel", f(DATA.e1_kernel_vs_cse.rows[0].value, 3),
     "local synthetic kernel, {{kernel.local.pct}} faster; EPFL " +
       f(DATA.e1_kernel_vs_cse.rows[1].value, 3) + "; {{kernel.pod.count}} Linux synthetic replications"],
-  ["CM vs a flattened CSE kernel", f(DATA.e2_kernel_vs_cse_flat.rows[1].value, 4),
-    "local synthetic kernel; EPFL " + f(DATA.e2_kernel_vs_cse_flat.rows[2].value, 4) +
-      " with its clustered interval spanning parity"],
+  ["CM vs a flattened CSE kernel", P("{{symv3.bare.overall}}"),
+    "current B2/B4 V3 bare kernel; 95% CI {{symv3.bare.overall.lo}}–{{symv3.bare.overall.hi}}; below 1 favors CM. " +
+      "Historical B1/E3 {{flat.local}} remains in the comparison chart"],
   ["Whole-call boundary", "BitSet",
     "leads at every semantic support measured, up to live_k = {{wrap.max_k}}"],
   ["Preparation cost", T("prep.min") + "–" + T("prep.max"),
@@ -92,23 +92,27 @@ app.append(evidenceBoundary());
 app.append(featureModelAuditUpdate());
 app.append(learningNeuralUpdate());
 app.append(currentResearchDisposition("master"));
-app.append(banner("note", "Latest public-repository evidence · 2026-08-30", [
+app.append(banner("note", "Exact-screening evidence · reviewed 2026-09-10", [
   P("<b>C16 exact-screened CM/GF(2) tail:</b> the screened and exhaustive paths returned the same best exact artifact for " +
     "{{recognition.c16.source_cases}}/{{recognition.c16.source_cases}} source cases and " +
     "{{recognition.c16.controls}}/{{recognition.c16.controls}} controls. Across " +
-    "{{recognition.c16.rows}} balanced local timing rows, the screened whole path measured " +
-    "{{recognition.c16.whole_path_speedup}} faster; the minimum individual case was " +
-    "{{recognition.c16.minimum_case_speedup}}, so production promotion remains disabled. " +
-    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md\">Read the C16 report and its exact boundary</a>."),
+    "{{recognition.c16.rows}} balanced local Windows timing rows, the screened whole path measured " +
+    "{{recognition.c16.whole_path_speedup}} faster; its minimum individual case was " +
+    "{{recognition.c16.minimum_case_speedup}}. The independent Linux confirmation measured " +
+    "{{recognition.c16.linux_whole_path_speedup}} whole-path and {{recognition.c16.linux_p95_speedup}} p95 speedups " +
+    "across {{recognition.c16.linux_cases}} cases and {{recognition.c16.linux_rows}} rows, with " +
+    "{{recognition.c16.linux_semantic_mismatches}} semantic and {{recognition.c16.linux_artifact_mismatches}} artifact mismatches. " +
+    "Production promotion remains disabled. " +
+    "<a href=\"../../docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md\">Read the C16 report and exact boundary</a>."),
   "<b>Comparative-program status:</b> the P6 corpus freeze and P7 offline/input gates advanced after the persistence work, " +
     "but they do not support a new comparative timing claim. " +
-    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/COMPARATIVE-PLAN-EXECUTION-STATUS-20260829.md\">Read the current execution status</a>.",
+    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/ff7511b401b0008ef3bff0f426f24c59a74c84f5/docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/COMPARATIVE-PLAN-EXECUTION-STATUS-20260829.md\">Read the current execution status</a>.",
   "<b>Fresh-process structural reload is now verified:</b> CM, structural CSE, direct CNF and a portable <code>dd.autoref</code> ROBDD control " +
     "reproduced both exact bounded relations in 256/256 counterbalanced cells using separate supervised build and reload/query processes. " +
     "Native CUDD BDD, CUDD ZDD and d4 d-DNNF persistence remain explicit refusals; this is not a performance, RSS, full-model or independent-replication claim.",
   "The companion provenance audit records 48 generated task controls and <b>zero observed natural sessions</b>. " +
     "Public PROFilE endpoint configurations are useful candidate inputs, but do not contain documented event order. " +
-    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md\">Read the fresh-process evidence, admissions and exact claim boundary</a>.",
+    "<a href=\"https://github.com/Relative0/Correspondence_Matrices/blob/ff7511b401b0008ef3bff0f426f24c59a74c84f5/docs/research/FRESH-PROCESS-PERSISTENCE-PROGRESS-2026-08-29.md\">Read the fresh-process evidence, admissions and exact claim boundary</a>.",
 ]));
 app.append(currentEvidenceUpdate("master"));
 

@@ -39,6 +39,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from cm_downloads_evidence import build_downloads_evidence
 from cm_feature_model_evidence import build_feature_model_evidence
 from cm_learning_neural_evidence import build_learning_neural_evidence
 
@@ -165,6 +166,7 @@ P_LATE_EVIDENCE = HERE / "website_audit_2026-08-27" / "ACCEPTED-LATE-EVIDENCE.js
 P_CONTENT = HERE / "cm_master_content_2026_08_03.json"
 P_USE_CASE_CATALOG = HERE / "use_case_benchmarks_2026-08-27" / "CM-USE-CASE-BENCHMARK-CATALOG.json"
 P_C16_RESULTS = REPO / "docs" / "recognition" / "learning_milestone_c16_exact_screened_gf2_results.json"
+P_C16_LINUX_RESULTS = REPO / "docs" / "recognition" / "c16_linux_confirmation" / "RUNPOD_C16_PACKAGE_V2_FINAL_VERIFICATION_20260831.json"
 P_C38_ADJUDICATION = REPO / "docs" / "recognition" / "c38_linux_confirmation" / "C38_CROSS_MACHINE_ADJUDICATION_20260903.json"
 P_C38_FINAL = REPO / "docs" / "recognition" / "c38_linux_confirmation" / "RUNPOD_C38_FINAL_VERIFICATION_20260903.json"
 P_ARCHITECTURE_ANALYSIS = REPO / "docs" / "recognition" / "architecture_comparison_execution_retry_20260903" / "ANALYSIS.json"
@@ -238,6 +240,7 @@ late_evidence = load_json(P_LATE_EVIDENCE)
 content = load_json(P_CONTENT)
 use_case_catalog = load_json(P_USE_CASE_CATALOG)
 c16_results = load_json(P_C16_RESULTS)
+c16_linux_results = load_json(P_C16_LINUX_RESULTS)
 c38_adjudication = load_json(P_C38_ADJUDICATION)
 c38_final = load_json(P_C38_FINAL)
 architecture_analysis = load_json(P_ARCHITECTURE_ANALYSIS)
@@ -284,13 +287,38 @@ num("recognition.c16.controls", c16_results["verification"]["controls_replayed"]
 num("recognition.c16.rows", c16_results["verification"]["measurement_rows_checked"], "int",
     "%s :: verification.measurement_rows_checked" % rel(P_C16_RESULTS))
 num("recognition.c16.whole_path_speedup",
-    c16_results["summary"]["speedup"]["screened_whole_path_over_exhaustive"], "x3",
+    c16_results["summary"]["speedup"]["screened_whole_path_over_exhaustive"], "x6",
     "%s :: summary.speedup.screened_whole_path_over_exhaustive" % rel(P_C16_RESULTS),
     "local, task-equivalent whole path; timing is machine-specific")
 num("recognition.c16.minimum_case_speedup",
-    c16_results["summary"]["speedup"]["minimum_case_speedup"], "x3",
+    c16_results["summary"]["speedup"]["minimum_case_speedup"], "x6",
     "%s :: summary.speedup.minimum_case_speedup" % rel(P_C16_RESULTS),
     "minimum individual local case; below parity")
+if (
+    c16_linux_results.get("status") != "pass"
+    or not c16_linux_results.get("complete")
+    or not c16_linux_results.get("scientific_confirmation_complete")
+    or not c16_linux_results.get("second_machine_gate")
+):
+    raise SystemExit("C16 Linux confirmation is incomplete")
+if c16_linux_results.get("semantic_mismatches") != 0 or c16_linux_results.get("artifact_mismatches") != 0:
+    raise SystemExit("C16 Linux confirmation contains mismatches")
+num("recognition.c16.linux_cases", c16_linux_results["cases"], "int",
+    "%s :: cases" % rel(P_C16_LINUX_RESULTS))
+num("recognition.c16.linux_rows", c16_linux_results["measurement_rows"], "int",
+    "%s :: measurement_rows" % rel(P_C16_LINUX_RESULTS))
+num("recognition.c16.linux_whole_path_speedup",
+    c16_linux_results["speedup"]["screened_whole_path_over_exhaustive"], "x6",
+    "%s :: speedup.screened_whole_path_over_exhaustive" % rel(P_C16_LINUX_RESULTS),
+    "Linux second-machine, task-equivalent whole path")
+num("recognition.c16.linux_p95_speedup",
+    c16_linux_results["speedup"]["screened_whole_path_p95"], "x6",
+    "%s :: speedup.screened_whole_path_p95" % rel(P_C16_LINUX_RESULTS),
+    "Linux second-machine p95 whole-path speedup")
+num("recognition.c16.linux_semantic_mismatches", c16_linux_results["semantic_mismatches"], "int",
+    "%s :: semantic_mismatches" % rel(P_C16_LINUX_RESULTS))
+num("recognition.c16.linux_artifact_mismatches", c16_linux_results["artifact_mismatches"], "int",
+    "%s :: artifact_mismatches" % rel(P_C16_LINUX_RESULTS))
 
 
 # ================================================================= E1
@@ -1585,6 +1613,10 @@ D["e22_learning_neural"], learning_neural_numbers = build_learning_neural_eviden
 for key, record in learning_neural_numbers.items():
     num(key, record["value"], record["fmt"], record["prov"], record["note"])
 
+# ---------------------------------------------------------------- reviewed downloads (immutable links, no artifact copies)
+
+D["e24_downloads"] = build_downloads_evidence()
+
 # ================================================================= E21
 # Current-source exact, non-neural architecture evidence (2026-09-03/04).
 # This is a task map, not a replacement for the frozen 2026-08-03 campaign or
@@ -2074,6 +2106,7 @@ PAGES = [
     ("cm_usecases_template.html", "usecases.html"),
     ("cm_feature_model_template.html", "feature-model-evidence.html"),
     ("cm_learning_neural_template.html", "learning-neural-evidence.html"),
+    ("cm_downloads_template.html", "data-downloads.html"),
 ]
 
 out_json = HERE / "cm_master_data_2026_08_03.json"

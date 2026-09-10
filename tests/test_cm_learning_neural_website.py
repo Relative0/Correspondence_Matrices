@@ -100,7 +100,7 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         self.assertIn("all 16 paired q64 blocks", " ".join(actions["benchmark"]))
 
     def test_new_read_only_integrity_gates_are_visible(self):
-        self.assertEqual(self.evidence["updated"], "2026-09-09")
+        self.assertEqual(self.evidence["updated"], "2026-09-10")
         self.assertIn("Raw q64 evidence verifier", self.template)
         self.assertIn("Neural memory repeatability gate", self.template)
         self.assertIn("cm_query_ladder_decision_surface.py", self.template)
@@ -109,6 +109,26 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
             link["label"] == "Decision-surface and memory-evaluation boundary"
             for link in self.evidence["links"]
         ))
+
+    def test_c6_positive_exact_core_is_separate_from_learned_routing(self):
+        c6 = json.loads(
+            (ROOT / "docs" / "recognition" / "learning_milestone_c6_packed_source_anf_results.json")
+            .read_text(encoding="utf-8")
+        )
+        methods = c6["method_summary"]
+        expected = {
+            "ln.c6.test.median_speedup": methods["truth_vector_anf/test"]["median_total_ns"] / methods["cached_packed_source_anf/test"]["median_total_ns"],
+            "ln.c6.test.p95_speedup": methods["truth_vector_anf/test"]["p95_total_ns"] / methods["cached_packed_source_anf/test"]["p95_total_ns"],
+            "ln.c6.confirmatory.median_speedup": methods["truth_vector_anf/confirmatory"]["median_total_ns"] / methods["cached_packed_source_anf/confirmatory"]["median_total_ns"],
+            "ln.c6.confirmatory.p95_speedup": methods["truth_vector_anf/confirmatory"]["p95_total_ns"] / methods["cached_packed_source_anf/confirmatory"]["p95_total_ns"],
+        }
+        for token, value in expected.items():
+            self.assertEqual(self.numbers[token]["value"], value)
+            self.assertEqual(self.numbers[token]["fmt"], "x6")
+        self.assertEqual(self.numbers["ln.c6.semantic_mismatches"]["value"], 0)
+        self.assertFalse(c6["criteria"]["production_promotion"])
+        self.assertIn("C6 · positive exact-core result", self.template)
+        self.assertIn("learned hybrid remained unpromoted", self.template)
 
     def test_source_blind_contract_is_visible(self):
         self.assertEqual(self.numbers["ln.freeze_cases"]["value"], 72)
