@@ -29,6 +29,20 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             self.assertEqual(self.data['_numbers'][key]['value'], record['value'], key)
             self.assertEqual(self.data['_numbers'][key]['prov'], record['prov'], key)
 
+    def test_new_continuation_keeps_incomplete_values_unplotted_and_rejects_source_drift(self):
+        panels = {p['id']:p for p in self.evidence['panels']}
+        for key in ('projected-count-new','additional-public-count','pipe-consumer-new','preparation-reuse-new'):
+            self.assertIn(key, panels)
+            for row in panels[key]['rows']:
+                if row['status'] != 'complete':
+                    self.assertTrue(row['reason'])
+                    for metric in panels[key]['metrics']: self.assertNotIn(metric, row)
+        source = ROOT/self.evidence['sources']['next-research-summary']['path']
+        real_read_bytes = Path.read_bytes
+        with mock.patch.object(Path,'read_bytes',lambda path: real_read_bytes(path)+(b' ' if path==source else b'')):
+            with self.assertRaisesRegex(ValueError,'Unsealed or changed website source'):
+                self.module.build_latest_results()
+
     def test_every_current_source_download_has_exact_bytes_and_hash(self):
         for name, payload in self.files.items():
             self.assertEqual((SITE/name).read_bytes(), payload, name)
@@ -135,7 +149,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location('cm_release_test', ROOT/'scripts/cm_website_release_verify.py')
         release = importlib.util.module_from_spec(spec); spec.loader.exec_module(release)
         self.assertEqual(release.verify(SITE)['status'], 'verified_for_publication')
-        with tempfile.TemporaryDirectory(prefix='stale-site-test-', dir=ROOT/'build') as temporary:
+        with tempfile.TemporaryDirectory(prefix='stale-site-test-') as temporary:
             path = Path(temporary)
             (path/'index.html').write_bytes(b'old cached website')
             with self.assertRaisesRegex(ValueError, 'Stale generated page: index.html'):
@@ -146,7 +160,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
     def test_generated_output_is_atomic_and_identical_output_does_not_touch_disk(self):
         tree = ast.parse((SITE/'cm_master_build_2026_08_03.py').read_text(encoding='utf-8'))
         function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'write_generated')
-        with tempfile.TemporaryDirectory(prefix='generated-output-test-', dir=ROOT/'build') as temporary:
+        with tempfile.TemporaryDirectory(prefix='generated-output-test-') as temporary:
             directory = Path(temporary)
             context = dict(Path=Path, tempfile=tempfile, os=os, time=time, HERE=directory)
             exec(compile(ast.Module(body=[function], type_ignores=[]), '<write_generated>', 'exec'), context)

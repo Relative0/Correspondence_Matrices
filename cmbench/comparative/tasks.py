@@ -29,6 +29,9 @@ from .contracts import (
 
 
 BACKENDS = ("cm", "cse", "cnf", "sat")
+# Explicit additions are kept out of historical frozen backend schedules.
+SCALAR_BACKENDS = ("bucket_count", "array_count", "factorized_count", "independent_count", "affine_count")
+SCALAR_TASKS = ("exact_count", "sat_status", "partial_context", "version_history")
 LIFECYCLES = ("fresh_engine", "resident_engine")
 TASKS = (
     "exact_count",
@@ -113,7 +116,8 @@ def task_contract(
     queries: int,
     expected_sha256: str,
 ) -> dict[str, Any]:
-    require(task in TASKS and backend in BACKENDS and lifecycle in LIFECYCLES, "contract mode")
+    require(task in TASKS and backend in BACKENDS + SCALAR_BACKENDS and lifecycle in LIFECYCLES, "contract mode")
+    require(backend not in SCALAR_BACKENDS or task in SCALAR_TASKS, "scalar backend does not implement this output contract")
     require(type(k) is int and 1 <= k <= 8, "task pilot width must be 1..8")
     kind = ARTIFACTS[task]
     variables = _variables(k)
@@ -205,7 +209,8 @@ def execute_task(
     clock: Callable[[], int] = time.perf_counter_ns,
 ) -> dict[str, Any]:
     normalized_trace = validate_trace(scenario, task, trace)
-    require(backend in BACKENDS and lifecycle in LIFECYCLES, "execution mode")
+    require(backend in BACKENDS + SCALAR_BACKENDS and lifecycle in LIFECYCLES, "execution mode")
+    require(backend not in SCALAR_BACKENDS or task in SCALAR_TASKS, "scalar backend does not implement this output contract")
     normalized_contract = validate_contract(contract)
     require(normalized_contract["task"] == task and normalized_contract["lifecycle"] == lifecycle and
             normalized_contract["queries"] == len(normalized_trace) and
@@ -225,6 +230,7 @@ def execute_task(
 
     counts = _counters()
     retained: sessions.Engine | None = None
+    scalar_session = None
 
     def evaluate(version: int, assumptions: list[int], vector: bool) -> int | bool:
         nonlocal retained
@@ -245,8 +251,15 @@ def execute_task(
     started = clock()
     rows: list[dict[str, Any]] = []
     try:
+        if backend in SCALAR_BACKENDS:
+            from .scalar_tasks import ScalarTaskSession
+            scalar_session = ScalarTaskSession(scenario, backend, lifecycle, counts)
         for index, event in enumerate(normalized_trace):
-            if task == "exact_count":
+            if scalar_session is not None:
+                answer = scalar_session.count(event['version'], event.get('assumptions', []))
+                if task == 'exact_count': rows.append({**event, 'count':answer})
+                else: rows.append({'query':index, **event, 'satisfiable':bool(answer)})
+            elif task == "exact_count":
                 bits = int(evaluate(event["version"], [], True))
                 rows.append({**event, "count": bits.bit_count()})
             elif task == "equivalence_delta":
@@ -270,6 +283,8 @@ def execute_task(
                 require(type(answer) is bool, "nonboolean status")
                 rows.append({"query": index, **event, "satisfiable": answer})
     finally:
+        if scalar_session is not None:
+            scalar_session.close()
         if retained is not None:
             retained.close()
     task_total = clock() - started
@@ -316,7 +331,7 @@ def validate_task_result(
 ) -> dict[str, Any]:
     validated = validate_result(result, contract)
     if expected_backend is not None:
-        require(expected_backend in BACKENDS and result.get("arm") == expected_backend, "planned backend mismatch")
+        require(expected_backend in BACKENDS + SCALAR_BACKENDS and result.get("arm") == expected_backend, "planned backend mismatch")
     if expected_case_id is not None:
         require(result.get("case_id") == expected_case_id, "planned case mismatch")
     identity = result.get("identity")

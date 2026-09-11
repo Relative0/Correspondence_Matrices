@@ -52,5 +52,13 @@ jobs:
         run: 'python -m pip install --disable-pip-version-check --only-binary=:all: -r requirements-research-ci.txt'
       - name: Validate dependency compatibility
         run: python -m pip check
+      - name: Verify explicit count, projection, cache and streaming APIs
+        run: >-
+          python -B -m pytest -q -p no:cacheprovider
+          tests/test_packed_mask_construction.py tests/test_packed_queries.py
+          tests/test_packed_stream_io.py tests/test_scalar_research.py
+          tests/test_bucket_counts.py tests/test_bucket_numpy.py
+          tests/test_projected_counts.py tests/test_scalar_task_integration.py
+          tests/test_h6_freeze_portability.py
       - name: Verify current code and the immutable extracted snapshot
         run: python -B scripts/cm_research_check.py --report tmp/research-ci-check.json

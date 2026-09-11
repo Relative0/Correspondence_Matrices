@@ -1,0 +1,1276 @@
+........................................................................ [  4%]
+........................................................................ [  8%]
+...............F..FF.........FF..FFF.....FFFsF..FF..F.................F. [ 12%]
+........EEE..................................... [ 15%]
+..................................................................... [ 19%]
+..............FF..F..............s......FF........F. [ 22%]
+..sF.............FF.................F...F................... [ 25%]
+..................................................F................. [ 29%]
+........................................................................ [ 33%]
+.............................................................. [ 37%]
+........................................... [ 40%]
+F........................................... [ 42%]
+........................F...................................................................................... [ 49%]
+........................F......................... [ 51%]
+.................................... [ 54%]
+...................................................F................ [ 57%]
+..........................................................F............. [ 62%]
+........................................................................ [ 66%]
+.......................F...............F.....FF..EEE....EEE.......EEEEEE [ 70%]
+E....................................................................... [ 74%]
+........................................................................ [ 78%]
+............................EEEEEE.................................. [ 82%]
+......................................................................................... [ 87%]
+........................................................ [ 91%]
+................................................................. [ 95%]
+...............................EEE.............EEEEE.EE...EE.E...... [ 98%]
+............F.....                                                       [100%]
+==================================== ERRORS ====================================
+______ ERROR at setup of test_all_four_lanes_match_their_exact_artifacts _______
+tests/test_cm_comparative_architecture_refresh_harness.py:23: in functional_result
+    result = harness.run_functional_validation(
+cmbench/comparative/architecture_refresh_harness.py:751: in run_functional_validation
+    load_native_slot_library(Path(native_library_path))
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+_____________ ERROR at setup of test_result_mutations_fail_closed ______________
+tests/test_cm_comparative_architecture_refresh_harness.py:23: in functional_result
+    result = harness.run_functional_validation(
+cmbench/comparative/architecture_refresh_harness.py:751: in run_functional_validation
+    load_native_slot_library(Path(native_library_path))
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+_____ ERROR at setup of test_native_plan_cannot_validate_nonnative_result ______
+tests/test_cm_comparative_architecture_refresh_harness.py:23: in functional_result
+    result = harness.run_functional_validation(
+cmbench/comparative/architecture_refresh_harness.py:751: in run_functional_validation
+    load_native_slot_library(Path(native_library_path))
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+_ ERROR at setup of NaturalCutRankingTests.test_direct_decoder_recovers_bounded_obvious_cut _
+tests/test_natural_cut_ranking.py:39: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalCutRankingTests.test_models_forward_train_and_safe_roundtrip _
+tests/test_natural_cut_ranking.py:39: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalCutRankingTests.test_targets_and_pairs_preserve_canonical_orientation _
+tests/test_natural_cut_ranking.py:39: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalDatasetAndModelTests.test_dataset_is_natural_balanced_circuit_disjoint_and_exact _
+tests/test_natural_decomposition.py:81: in setUpClass
+    cls.documents, cls.provenance = make_natural_decomposition_documents(DEFAULT_SCOUT)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalDatasetAndModelTests.test_models_forward_and_training_roundtrip _
+tests/test_natural_decomposition.py:81: in setUpClass
+    cls.documents, cls.provenance = make_natural_decomposition_documents(DEFAULT_SCOUT)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalDatasetAndModelTests.test_structure_matched_pairs_are_exact_and_balanced _
+tests/test_natural_decomposition.py:81: in setUpClass
+    cls.documents, cls.provenance = make_natural_decomposition_documents(DEFAULT_SCOUT)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalVariableCutTests.test_shared_variable_head_is_exactly_equivariant_for_nonanchor_swap _
+tests/test_natural_variable_cut.py:48: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NaturalVariableCutTests.test_source_symbolic_partition_is_exact_and_overapprox_is_sound _
+tests/test_natural_variable_cut.py:48: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+__ ERROR at setup of NaturalVariableCutTests.test_training_and_safe_roundtrip __
+tests/test_natural_variable_cut.py:48: in setUpClass
+    documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of NeuralReassessmentTests.test_artifact_replay_and_tamper_detection _
+tests/test_neural_reassessment.py:27: in setUpClass
+    cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench/recognition/neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json'
+_ ERROR at setup of NeuralReassessmentTests.test_current_exact_economics_stop_training _
+tests/test_neural_reassessment.py:27: in setUpClass
+    cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench/recognition/neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json'
+_ ERROR at setup of NeuralReassessmentTests.test_stale_or_incomplete_label_portfolios_are_rejected _
+tests/test_neural_reassessment.py:27: in setUpClass
+    cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench/recognition/neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json'
+_ ERROR at setup of NeuralReassessmentTests.test_tampered_exact_label_source_fails_closed _
+tests/test_neural_reassessment.py:27: in setUpClass
+    cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench/recognition/neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json'
+___ ERROR at setup of test_retry_002_recomputes_22_task_and_cohort_surfaces ____
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+_______ ERROR at setup of test_strongest_surface_is_only_a_gross_signal ________
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+__ ERROR at setup of test_major_exact_surfaces_remain_below_development_gate ___
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+________ ERROR at setup of test_tampered_evidence_bindings_fail_closed _________
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+_ ERROR at setup of test_tampered_permissions_labels_and_candidates_fail_closed _
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+___ ERROR at setup of test_report_states_signal_without_authorizing_training ___
+tests/test_post_benchmark_neural_gate.py:17: in current_inputs
+    return gate.load_default_inputs()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:127: in load_default_inputs
+    name: read_json(path)
+          ^^^^^^^^^^^^^^^
+cmbench/recognition/post_benchmark_neural_gate.py:107: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json'
+_ ERROR at setup of SourceAnfHybridTests.test_cache_and_budget_fallback_preserve_exact_partition _
+tests/test_source_anf_hybrid.py:38: in setUpClass
+    cls.documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of SourceAnfHybridTests.test_packed_source_matches_set_source_and_truth_on_frozen_cases _
+tests/test_source_anf_hybrid.py:38: in setUpClass
+    cls.documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of SourceAnfHybridTests.test_subset_transform_and_or_convolution_are_exact _
+tests/test_source_anf_hybrid.py:38: in setUpClass
+    cls.documents, _provenance = make_matched_natural_documents(DEFAULT_SCOUT)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_matched_data.py:88: in make_matched_natural_documents
+    base, base_provenance = make_natural_decomposition_documents(scout_path, seed=seed, check=check)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/natural_decomposition_data.py:66: in make_natural_decomposition_documents
+    scout = json.loads(scout_path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/source_scouts/natural-decomposition-epfl-20260829-001.json'
+_ ERROR at setup of test_consumes_only_completed_independently_verified_benchmark _
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+_ ERROR at setup of test_consumes_query_ladder_handoff_without_replaying_benchmark _
+tests/test_version_history_learning_protocol.py:22: in verified_query_ladder
+    return protocol.load_verified_query_ladder_result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:287: in load_verified_query_ladder_result
+    _require(
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: query-ladder analysis evidence binding
+_ ERROR at setup of test_source_blind_features_exclude_identity_label_and_timing _
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+_ ERROR at setup of test_salted_source_group_splits_are_isolated_but_too_small _
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+_ ERROR at setup of test_analytical_controls_time_full_extraction_without_exact_execution _
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+__ ERROR at setup of test_training_and_advice_stay_disabled_after_gross_gate ___
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+_________ ERROR at setup of test_missing_or_unverified_input_abstains __________
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+_ ERROR at setup of test_tampered_split_assignment_and_economics_are_rejected __
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+__________ ERROR at setup of test_abstention_preserves_exact_fallback __________
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+___________ ERROR at setup of test_assessment_validation_and_report ____________
+tests/test_version_history_learning_protocol.py:17: in verified_bundle
+    return protocol.load_verified_benchmark_artifact()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/version_history_learning_protocol.py:209: in load_verified_benchmark_artifact
+    _require(file_sha256(path) == expected, f"drifted benchmark evidence: {name}")
+cmbench/recognition/version_history_learning_protocol.py:102: in _require
+    raise ValueError(message)
+E   ValueError: drifted benchmark evidence: analysis
+=================================== FAILURES ===================================
+__________ test_initial_c38_attempt_is_a_reconciled_no_create_failure __________
+tests/test_c38_linux_replication.py:47: in test_initial_c38_attempt_is_a_reconciled_no_create_failure
+    assert reconciliation["initial_run_sha256"] == sha256(INITIAL / "RUN.json")
+E   AssertionError: assert '5e0fac09ffb4...548ada7fe2ec7' == '21f01e5c36e2...67a680d20643d'
+E     
+E     - 21f01e5c36e24c6a037e8ea6d0cc9a1bb4079b91b1b398542d167a680d20643d
+E     + 5e0fac09ffb4b7814b56d4f5d462a530e3b752d6ba705fe1d4d548ada7fe2ec7
+____________ test_c38_on_pod_verification_replays_byte_identically _____________
+tests/test_c38_linux_replication.py:112: in test_c38_on_pod_verification_replays_byte_identically
+    replayed_c37, replayed_c38 = replay_verifiers(manifest)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/crse_verify_c38_retrieval.py:53: in replay_verifiers
+    raise RuntimeError(f"C38 package source drifted: {row['source']}")
+E   RuntimeError: C38 package source drifted: bitset_backend.py
+_______ C7LinuxConfirmationTests.test_portable_workload_replays_exactly ________
+tests/test_c7_linux_confirmation.py:36: in test_portable_workload_replays_exactly
+    self.assertEqual(hashlib.sha256(DATASET.read_bytes()).hexdigest(), EXPECTED_DATASET_SHA256)
+                                    ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/yosys-source-anf-confirmation-20260830-002/dataset.json'
+_________ test_generated_package_is_exactly_bound_and_non_authorizing __________
+tests/test_cm_architecture_comparison_package.py:43: in test_generated_package_is_exactly_bound_and_non_authorizing
+    assert source.stat().st_size == row["bytes"]
+E   AssertionError: assert 38615 == 38464
+E    +  where 38615 = os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359).st_size
+E    +    where os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359) = stat()
+E    +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat
+_____ test_attempt_001_is_closed_before_measurement_and_bound_to_evidence ______
+tests/test_cm_architecture_comparison_package.py:76: in test_attempt_001_is_closed_before_measurement_and_bound_to_evidence
+    assert status["run_record_sha256"] == _sha256(run / "RUN.json")
+E   AssertionError: assert '34707985c697...4174bae08fffc' == '206fd4c9b504...cc3ae4222bd91'
+E     
+E     - 206fd4c9b50418c65f5b84c34a95df7c6856cac4afdf5653fcfcc3ae4222bd91
+E     + 34707985c69752d88e41ae436a0c84b5886e03c5870c8a4a29f4174bae08fffc
+________ test_cross_machine_package_is_source_exact_and_non_authorizing ________
+tests/test_cm_architecture_query_ladder_cross_machine_package.py:71: in test_cross_machine_package_is_source_exact_and_non_authorizing
+    assert source.stat().st_size == row["bytes"]
+E   AssertionError: assert 38615 == 38464
+E    +  where 38615 = os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359).st_size
+E    +    where os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359) = stat()
+E    +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat
+_____ test_cross_machine_request_binds_package_controller_and_prior_result _____
+tests/test_cm_architecture_query_ladder_cross_machine_package.py:136: in test_cross_machine_request_binds_package_controller_and_prior_result
+    assert request["prior_run_sha256"] == _sha256(PRIOR_ROOT / "RUN.json")
+E   AssertionError: assert '625b8723d987...b7619eaa79c7f' == '0bf6a3dc3ec0...b8ee4f5023cf5'
+E     
+E     - 0bf6a3dc3ec015e699ca153e4e7edf4b11e85b09a14942d58a9b8ee4f5023cf5
+E     + 625b8723d987d48427d07e89a367b9c090a0cdbdaa08158a0aab7619eaa79c7f
+_ test_cross_machine_controller_compiles_and_accepts_only_the_exact_authorization _
+tests/test_cm_architecture_query_ladder_cross_machine_package.py:156: in test_cross_machine_controller_compiles_and_accepts_only_the_exact_authorization
+    authorization = controller.require_authorization()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/runpod_architecture_query_ladder_cross_machine_controller.py:338: in require_authorization
+    raise RuntimeError("cross-machine query-ladder authorization artifact mismatch")
+E   RuntimeError: cross-machine query-ladder authorization artifact mismatch
+_______________ test_every_query_count_is_an_exact_distinct_cell _______________
+tests/test_cm_architecture_query_ladder_followup.py:33: in test_every_query_count_is_an_exact_distinct_cell
+    native = followup.load_native_slot_library(native_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+______ test_isolated_process_cleanup_does_not_collect_the_inherited_heap _______
+tests/test_cm_architecture_query_ladder_followup.py:65: in test_isolated_process_cleanup_does_not_collect_the_inherited_heap
+    native = followup.load_native_slot_library(native_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+________ test_followup_freeze_preserves_parent_cases_and_counterbalance ________
+tests/test_cm_architecture_query_ladder_followup.py:85: in test_followup_freeze_preserves_parent_cases_and_counterbalance
+    freeze = build_followup_freeze(
+cmbench/comparative/architecture_query_ladder_freeze.py:61: in build_followup_freeze
+    verify_parent_freeze(parent_freeze, root)
+cmbench/comparative/architecture_comparison_freeze.py:537: in verify_freeze
+    _require(
+cmbench/comparative/architecture_comparison_freeze.py:71: in _require
+    raise ValueError(message)
+E   ValueError: freeze verification
+_______ test_attempt_001_package_is_internally_bound_and_now_historical ________
+tests/test_cm_architecture_query_ladder_package.py:47: in test_attempt_001_package_is_internally_bound_and_now_historical
+    assert changed_after_attempt == {
+E   AssertionError: assert {'bitset_back...eeze.py', ...} == {'cmbench/com..._campaign.py'}
+E     
+E     Extra items in the left set:
+E     'cmbench/comparative/tasks.py'
+E     'cm_ir.py'
+E     'cm_normalize.py'
+E     'cmbench/expr/eval.py'
+E     'cmbench/__init__.py'...
+E     
+E     ...Full output truncated (4 lines hidden), use '-vv' to show
+_____ test_attempt_001_is_closed_incomplete_and_bound_to_retained_evidence _____
+tests/test_cm_architecture_query_ladder_package.py:128: in test_attempt_001_is_closed_incomplete_and_bound_to_retained_evidence
+    assert status["evidence"]["run_sha256"] == _sha256(run / "RUN.json")
+E   AssertionError: assert '45a0a29f9c85...8951e967d7c69' == '38e9255bd394...e45e7f6195656'
+E     
+E     - 38e9255bd3946a20ec08a108397658c44e64a16b461cc7bfc19e45e7f6195656
+E     + 45a0a29f9c8503588226077abf1d3cce4b7352707e8bb7551ae8951e967d7c69
+___________ test_retry_002_evidence_is_complete_exact_and_cleaned_up ___________
+tests/test_cm_architecture_query_ladder_retry_002_analysis.py:60: in test_retry_002_evidence_is_complete_exact_and_cleaned_up
+    assert analysis["inputs"]["controller_sha256"] == _sha256(CONTROLLER)
+E   AssertionError: assert '625b8723d987...b7619eaa79c7f' == '0bf6a3dc3ec0...b8ee4f5023cf5'
+E     
+E     - 0bf6a3dc3ec015e699ca153e4e7edf4b11e85b09a14942d58a9b8ee4f5023cf5
+E     + 625b8723d987d48427d07e89a367b9c090a0cdbdaa08158a0aab7619eaa79c7f
+____________ test_retry_package_is_source_exact_and_non_authorizing ____________
+tests/test_cm_architecture_query_ladder_retry_002_package.py:48: in test_retry_package_is_source_exact_and_non_authorizing
+    assert source.stat().st_size == row["bytes"]
+E   AssertionError: assert 38615 == 38464
+E    +  where 38615 = os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359).st_size
+E    +    where os.stat_result(st_mode=33188, st_ino=2148771629, st_dev=66, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789147359, st_mtime=1789147359, st_ctime=1789147359) = stat()
+E    +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat
+______ test_functional_smoke_exercises_every_admitted_arm_without_timing _______
+tests/test_cm_comparative_architecture_comparison_campaign.py:63: in test_functional_smoke_exercises_every_admitted_arm_without_timing
+    result = campaign.functional_smoke(ROOT, frozen, oracles, native)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/architecture_comparison_campaign.py:1040: in functional_smoke
+    native = load_native_slot_library(Path(native_library_path))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+________ test_all_selected_unchanged_operations_match_the_stored_oracle ________
+tests/test_cm_comparative_h6_fresh_process_memory_gate.py:41: in test_all_selected_unchanged_operations_match_the_stored_oracle
+    native = load_native_slot_library(ROOT / gate.NATIVE_LIBRARY)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/c37_native_exact_confirmation/frozen_native_v3/cm_fused_slots.dll: invalid ELF header
+__________ test_real_worker_handshake_covers_every_arm_and_lifecycle ___________
+tests/test_cm_comparative_h6_fresh_process_memory_gate.py:76: in test_real_worker_handshake_covers_every_arm_and_lifecycle
+    row = gate.run_child_cell(
+cmbench/comparative/h6_fresh_process_memory_gate.py:776: in run_child_cell
+    ready = reader.get(phase_timeout_seconds)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/h6_fresh_process_memory_gate.py:730: in get
+    raise RuntimeError(f"{value.get('error_type')}: {value.get('error')}")
+E   RuntimeError: OSError: /workspace/cm-packed-continuation/docs/recognition/c37_native_exact_confirmation/frozen_native_v3/cm_fused_slots.dll: invalid ELF header
+______ test_candidate_freeze_is_deterministic_and_blind_to_memory_values _______
+tests/test_cm_comparative_h6_representation_estimator_candidate.py:12: in test_candidate_freeze_is_deterministic_and_blind_to_memory_values
+    first = candidate.build_freeze(ROOT)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/h6_representation_estimator_candidate.py:78: in build_freeze
+    h6.validate_freeze(parent_freeze, root)
+cmbench/comparative/h6_fresh_process_memory_gate.py:321: in validate_freeze
+    _require(canonical_bytes(replay) == canonical_bytes(freeze), "H6 freeze replay")
+cmbench/comparative/h6_fresh_process_memory_gate.py:110: in _require
+    raise ValueError(message)
+E   ValueError: H6 freeze replay
+________________ test_all_portfolio_arms_match_one_exposed_case ________________
+tests/test_cm_comparative_native_portfolio.py:43: in test_all_portfolio_arms_match_one_exposed_case
+    library = load_native_slot_library(LIBRARY)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+__________ test_retained_native_portfolio_artifact_replays_read_only ___________
+tests/test_cm_comparative_native_portfolio.py:70: in test_retained_native_portfolio_artifact_replays_read_only
+    result = verify_run(RUN)
+             ^^^^^^^^^^^^^^^
+scripts/crse_native_portfolio_development_verify.py:139: in verify_run
+    manifest = load(run_dir / "manifest.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/crse_native_portfolio_development_verify.py:48: in load
+    return json.loads(path.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/native-portfolio-development-20260903-001/manifest.json'
+_ ComparativeNativeScoutTests.test_pinned_d4_is_identified_as_static_elf_without_ldd _
+tests/test_cm_comparative_native_scout.py:197: in test_pinned_d4_is_identified_as_static_elf_without_ldd
+    self.assertEqual(scout.sha256_file(binary), scout.D4_SHA256)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/cm_comparative_native_scout.py:61: in sha256_file
+    with path.open("rb") as handle:
+         ^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/external/d4v2/scripts/d4ScriptsCompetition/bin/d4'
+_______________ test_native_slots_match_all_exposed_c36_queries ________________
+tests/test_cm_comparative_native_slots.py:40: in test_native_slots_match_all_exposed_c36_queries
+    library = load_native_slot_library(library_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/comparative/gf2_native_slots.py:226: in load_native_slot_library
+    handle = ctypes.CDLL(str(resolved))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:361: in __init__
+    self._handle = self._load_library(name, mode, handle, winmode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/ctypes/__init__.py:403: in _load_library
+    return _dlopen(name, mode)
+           ^^^^^^^^^^^^^^^^^^^
+E   OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header
+_ ComparativeNativeTransportTests.test_historical_v6_manifest_is_immutable_and_live_source_drift_is_explicit _
+tests/test_cm_comparative_native_transport.py:73: in test_historical_v6_manifest_is_immutable_and_live_source_drift_is_explicit
+    data = (ROOT / row["source"]).read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/external/d4v2/scripts/d4ScriptsCompetition/bin/d4'
+_ ComparativeNativeTransportTests.test_host_preflight_amendment_preserves_zero_create_refusal _
+tests/test_cm_comparative_native_transport.py:969: in test_host_preflight_amendment_preserves_zero_create_refusal
+    self.assertTrue(host_preflight.V6_OUTPUT.is_dir())
+E   AssertionError: False is not true
+_ ComparativeNativeTransportTests.test_v6_focused_sources_run_in_an_isolated_directory _
+tests/test_cm_comparative_native_transport.py:547: in test_v6_focused_sources_run_in_an_isolated_directory
+    shutil.copy2(ROOT / row["source"], target)
+/usr/local/lib/python3.13/shutil.py:468: in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+/usr/local/lib/python3.13/shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/external/d4v2/scripts/d4ScriptsCompetition/bin/d4'
+_ ComparativeP7PackageTests.test_frozen_sources_are_unique_safe_project_files __
+tests/test_cm_comparative_p7_package.py:32: in test_frozen_sources_are_unique_safe_project_files
+    self.assertTrue(all((ROOT / value).is_file() for value in paths))
+E   AssertionError: False is not true
+_ EPFLContextPilotTests.test_completed_repeat_passes_independent_reaggregation _
+tests/test_cm_epfl_context_pilot.py:43: in test_completed_repeat_passes_independent_reaggregation
+    result = pilot_audit.audit(RUN2)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/cm_epfl_context_pilot_audit.py:44: in audit
+    raise AssertionError(f"checksum mismatch for {name}")
+E   AssertionError: checksum mismatch for raw.csv
+___ W5FreezeTests.test_all_derived_freezes_validate_and_bind_campaign_hashes ___
+tests/test_cm_p7_w5_freeze.py:60: in test_all_derived_freezes_validate_and_bind_campaign_hashes
+    self.assertTrue(verify_sources(freeze, ROOT)["verified"])
+E   AssertionError: False is not true
+_ test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit _
+tests/test_cm_runpod_corpus_offline.py:48: in test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit
+    assert mismatches == [
+E   AssertionError: assert ['bitset_back...rlib.py', ...] == ['bitset_back...nch/enums.py']
+E     
+E     At index 2 diff: 'cm_build.py' != 'cm_exprlib.py'
+E     Left contains 41 more items, first extra item: 'cm_ir.py'
+E     Use -v to get more diff
+________________________ test_exact_v2_bundle_verifies _________________________
+tests/test_cm_runpod_w8_logikbench_conversion.py:34: in test_exact_v2_bundle_verifies
+    assert verifier.verify() == {
+           ^^^^^^^^^^^^^^^^^
+docs/audits/2026-08-25-cm-deep-performance/remaining-work/maximal-safe-20260827-192909/continuation-20260829-125214/verify_w8_logikbench_conversion_upload_v2.py:62: in verify
+    data = source.read_bytes()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/external/logikbench-confirmation-20260830/LICENSE'
+___ ExactDispatcherTests.test_c14_task_policy_abstention_and_global_disable ____
+tests/test_exact_dispatcher.py:193: in test_c14_task_policy_abstention_and_global_disable
+    self.assertTrue(linux.abstained)
+E   AssertionError: False is not true
+_________ test_generated_chart_data_is_current_and_pages_reference_it __________
+tests/test_generated_public_chart_data.py:20: in test_generated_chart_data_is_current_and_pages_reference_it
+    assert generated.read_text(encoding="utf-8") == module.render_javascript()
+E   assert '// Generated... ]\n  }\n};\n' == '// Generated... ]\n  }\n};\n'
+E     
+E     Skipping 819 identical leading characters in diff, use -v to show
+E     Skipping 426 identical trailing characters in diff, use -v to show
+E     - ision": "d15cb618f4eb99b6621e4ab24773a00f03ae484e",
+E     + ision": "d2643523b22b0d94c151bef635aaaabc722129fa",
+E         "sources": {
+E           "CM_FABLE_BENCHMARKS_2026-07-21.md": {...
+E     
+E     ...Full output truncated (29 lines hidden), use '-vv' to show
+_ test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit _
+tests/test_linux_one_pass_confirmation.py:39: in test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit
+    assert mismatches == ["bitset_backend.py", "cm_exprlib.py"]
+E   AssertionError: assert ['bitset_back...expr/eval.py'] == ['bitset_back...m_exprlib.py']
+E     
+E     Left contains 4 more items, first extra item: 'cm_ir.py'
+E     Use -v to get more diff
+_______ test_native_portfolio_closure_stops_training_and_prospective_use _______
+tests/test_native_portfolio_reassessment.py:16: in test_native_portfolio_closure_stops_training_and_prospective_use
+    result = build_assessment()
+             ^^^^^^^^^^^^^^^^^^
+cmbench/recognition/native_portfolio_reassessment.py:71: in build_assessment
+    prior, native, native_verification = _load_inputs()
+                                         ^^^^^^^^^^^^^^
+cmbench/recognition/native_portfolio_reassessment.py:55: in _load_inputs
+    prior_verification = verify_prior_reassessment(PRIOR_RUN)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:438: in verify_development_artifact
+    manifest = read_json(run / "manifest.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/manifest.json'
+__________ test_confirmed_library_activates_only_with_matching_sha256 __________
+tests/test_native_restriction_backend.py:82: in test_confirmed_library_activates_only_with_matching_sha256
+    assert engine.status.active is True
+E   AssertionError: assert False is True
+E    +  where False = NativeRestrictionStatus(requested=True, active=False, backend='python_r2', fallback_reason='library_load_or_abi_failure', library_sha256=None, abi_version=None).active
+E    +    where NativeRestrictionStatus(requested=True, active=False, backend='python_r2', fallback_reason='library_load_or_abi_failure', library_sha256=None, abi_version=None) = <cmbench.backends.native_restriction.ExactRestrictionEngine object at 0x79626c11da70>.status
+________ test_confirmed_multi_root_union_activates_and_preserves_order _________
+tests/test_native_restriction_backend.py:101: in test_confirmed_multi_root_union_activates_and_preserves_order
+    assert engine.status.active is True
+E   AssertionError: assert False is True
+E    +  where False = NativeRestrictionStatus(requested=True, active=False, backend='python_r2', fallback_reason='library_load_or_abi_failure', library_sha256=None, abi_version=None).active
+E    +    where NativeRestrictionStatus(requested=True, active=False, backend='python_r2', fallback_reason='library_load_or_abi_failure', library_sha256=None, abi_version=None) = <cmbench.backends.native_restriction.ExactMultiRootRestrictionEngine object at 0x79628d654690>.status
+______ YosysSourceAnfTests.test_bounded_run_writes_complete_artifact_set _______
+tests/test_yosys_source_anf.py:75: in test_bounded_run_writes_complete_artifact_set
+    result = run_yosys_source_anf_experiment(
+cmbench/recognition/yosys_source_anf_experiment.py:279: in run_yosys_source_anf_experiment
+    retained = verify_retained_c6(base)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench/recognition/yosys_source_anf_experiment.py:84: in verify_retained_c6
+    manifest = json.loads((base / "manifest.json").read_text(encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/cm-packed-continuation/docs/recognition/runs/natural-source-anf-hybrid-20260830-004/manifest.json'
+=============================== warnings summary ===============================
+tests/test_cm_comparative_fresh_persistence.py::FreshPersistenceTests::test_bdd_artifacts_are_canonical_across_fresh_builds
+  /usr/local/lib/python3.13/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <function BDD.__del__ at 0x79628ed494e0>
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/importlib/metadata/__init__.py", line 746, in children
+      return self.zip_children()
+             ~~~~~~~~~~~~~~~~~^^
+    File "/usr/local/lib/python3.13/importlib/metadata/__init__.py", line 750, in zip_children
+      zip_path = zipfile.Path(self.root)
+    File "/usr/local/lib/python3.13/zipfile/_path/__init__.py", line 319, in __init__
+      self.root = FastLookup.make(root)
+                  ~~~~~~~~~~~~~~~^^^^^^
+    File "/usr/local/lib/python3.13/zipfile/_path/__init__.py", line 156, in make
+      return cls(source)
+    File "/usr/local/lib/python3.13/zipfile/_path/__init__.py", line 91, in __init__
+      super().__init__(*args, **kwargs)
+      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    File "/usr/local/lib/python3.13/zipfile/__init__.py", line 1389, in __init__
+      self.fp = io.open(file, filemode)
+                ~~~~~~~^^^^^^^^^^^^^^^^
+  FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/lib/python313.zip'
+  
+  During handling of the above exception, another exception occurred:
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/site-packages/dd/bdd.py", line 280, in __del__
+      raise AssertionError(
+      ...<7 lines>...
+          f'{stack_str}')
+  AssertionError: There are nodes still referenced upon shutdown. Details:
+  {1: 3, 3: 5, 6: 1, 7: 1}
+  {1: (6, None, None), 3: (5, -1, 1), 6: (0, -3, 3), 7: (0, 3, 1)}
+  {'x0': 0, 'x1': 1, 'x2': 2, 'x3': 3, 'x4': 4, 'x5': 5}
+  {}
+  <class 'dd.bdd.BDD'>
+  [FrameInfo(frame=<frame at 0x79626cc21800, file '/usr/local/lib/python3.13/site-packages/dd/bdd.py', line 279, code __del__>, filename='/usr/local/lib/python3.13/site-packages/dd/bdd.py', lineno=278, function='__del__', code_context=['        stack = inspect.stack()\n'], index=0, positions=Positions(lineno=278, end_lineno=278, col_offset=16, end_col_offset=31)),
+   FrameInfo(frame=<frame at 0x79626ccdb880, file '/usr/local/lib/python3.13/contextlib.py', line 450, code __exit__>, filename='/usr/local/lib/python3.13/contextlib.py', lineno=450, function='__exit__', code_context=['    def __exit__(self, exctype, excinst, exctb):\n'], index=0, positions=Positions(lineno=450, end_lineno=450, col_offset=0, end_col_offset=0)),
+   FrameInfo(frame=<frame at 0x79626c3c06c0, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 745, code children>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=745, function='children', code_context=['        with suppress(Exception):\n'], index=0, positions=Positions(lineno=745, end_lineno=745, col_offset=13, end_col_offset=32)),
+   FrameInfo(frame=<frame at 0x79626cbe2020, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 789, code __init__>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=789, function='__init__', code_context=['        for child in path.children():\n'], index=0, positions=Positions(lineno=789, end_lineno=789, col_offset=21, end_col_offset=36)),
+   FrameInfo(frame=<frame at 0x79626ce7a800, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 767, code lookup>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=767, function='lookup', code_context=['        return Lookup(self)\n'], index=0, positions=Positions(lineno=767, end_lineno=767, col_offset=15, end_col_offset=27)),
+   FrameInfo(frame=<frame at 0x79626ce7b100, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 757, code search>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=757, function='search', code_context=['        return self.lookup(self.mtime).search(name)\n'], index=0, positions=Positions(lineno=757, end_lineno=757, col_offset=15, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79626cd9d150, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 891, code <genexpr>>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=891, function='<genexpr>', code_context=['            path.search(prepared) for path in map(FastPath, paths)\n'], index=0, positions=Positions(lineno=891, end_lineno=891, col_offset=12, end_col_offset=33)),
+   FrameInfo(frame=<frame at 0x79626ccdbc40, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 407, code from_name>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=407, function='from_name', code_context=['            return next(iter(cls.discover(name=name)))\n'], index=0, positions=Positions(lineno=407, end_lineno=407, col_offset=19, end_col_offset=54)),
+   FrameInfo(frame=<frame at 0x79626ce7a500, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 960, code distribution>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=960, function='distribution', code_context=['    return Distribution.from_name(distribution_name)\n'], index=0, positions=Positions(lineno=960, end_lineno=960, col_offset=11, end_col_offset=52)),
+   FrameInfo(frame=<frame at 0x79626ce7ae00, file '/usr/local/lib/python3.13/importlib/metadata/__init__.py', line 987, code version>, filename='/usr/local/lib/python3.13/importlib/metadata/__init__.py', lineno=987, function='version', code_context=['    return distribution(distribution_name).version\n'], index=0, positions=Positions(lineno=987, end_lineno=987, col_offset=11, end_col_offset=42)),
+   FrameInfo(frame=<frame at 0x79626cbe2bd0, file '/workspace/cm-packed-continuation/cmbench/comparative/fresh_persistence.py', line 84, code _module_identity>, filename='/workspace/cm-packed-continuation/cmbench/comparative/fresh_persistence.py', lineno=84, function='_module_identity', code_context=['        version = importlib.metadata.version(distribution)\n'], index=0, positions=Positions(lineno=84, end_lineno=84, col_offset=18, end_col_offset=58)),
+   FrameInfo(frame=<frame at 0x79626cc215a0, file '/workspace/cm-packed-continuation/cmbench/comparative/fresh_persistence.py', line 116, code capability_inventory>, filename='/workspace/cm-packed-continuation/cmbench/comparative/fresh_persistence.py', lineno=116, function='capability_inventory', code_context=['    autoref = _module_identity("dd", "dd.autoref")\n'], index=0, positions=Positions(lineno=116, end_lineno=116, col_offset=14, end_col_offset=50)),
+   FrameInfo(frame=<frame at 0x79626cecee60, file '/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence.py', line 112, code test_bdd_artifacts_are_canonical_across_fresh_builds>, filename='/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence.py', lineno=112, function='test_bdd_artifacts_are_canonical_across_fresh_builds', code_context=['        inventory = fresh.capability_inventory()\n'], index=0, positions=Positions(lineno=112, end_lineno=112, col_offset=20, end_col_offset=48)),
+   FrameInfo(frame=<frame at 0x79626c4f9540, file '/usr/local/lib/python3.13/unittest/case.py', line 606, code _callTestMethod>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=606, function='_callTestMethod', code_context=['        if method() is not None:\n'], index=0, positions=Positions(lineno=606, end_lineno=606, col_offset=11, end_col_offset=19)),
+   FrameInfo(frame=<frame at 0x79626cbe2f00, file '/usr/local/lib/python3.13/unittest/case.py', line 651, code run>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=651, function='run', code_context=['                        self._callTestMethod(testMethod)\n'], index=0, positions=Positions(lineno=651, end_lineno=651, col_offset=24, end_col_offset=56)),
+   FrameInfo(frame=<frame at 0x79626c4f9620, file '/usr/local/lib/python3.13/unittest/case.py', line 707, code __call__>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=707, function='__call__', code_context=['        return self.run(*args, **kwds)\n'], index=0, positions=Positions(lineno=707, end_lineno=707, col_offset=15, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79626ccdbe20, file '/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', line 351, code runtest>, filename='/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', lineno=351, function='runtest', code_context=['                testcase(result=self)\n'], index=0, positions=Positions(lineno=351, end_lineno=351, col_offset=16, end_col_offset=37)),
+   FrameInfo(frame=<frame at 0x79626c3c3510, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 178, code pytest_runtest_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=178, function='pytest_runtest_call', code_context=['        item.runtest()\n'], index=0, positions=Positions(lineno=178, end_lineno=178, col_offset=8, end_col_offset=22)),
+   FrameInfo(frame=<frame at 0x79626c538bc0, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626ccdb100, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f9700, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79626c4f97e0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 246, code <lambda>>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=246, function='<lambda>', code_context=['        lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise\n'], index=0, positions=Positions(lineno=246, end_lineno=246, col_offset=16, end_col_offset=47)),
+   FrameInfo(frame=<frame at 0x79626cc216d0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 344, code from_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=344, function='from_call', code_context=['            result: TResult | None = func()\n'], index=0, positions=Positions(lineno=344, end_lineno=344, col_offset=37, end_col_offset=43)),
+   FrameInfo(frame=<frame at 0x79626cbe3010, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 245, code call_and_report>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=245, function='call_and_report', code_context=['    call = CallInfo.from_call(\n'], index=0, positions=Positions(lineno=245, end_lineno=247, col_offset=11, end_col_offset=5)),
+   FrameInfo(frame=<frame at 0x79626cbe3120, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 136, code runtestprotocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=136, function='runtestprotocol', code_context=['            reports.append(call_and_report(item, "call", log))\n'], index=0, positions=Positions(lineno=136, end_lineno=136, col_offset=27, end_col_offset=61)),
+   FrameInfo(frame=<frame at 0x79626c4f98c0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 117, code pytest_runtest_protocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=117, function='pytest_runtest_protocol', code_context=['    runtestprotocol(item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=117, end_lineno=117, col_offset=4, end_col_offset=44)),
+   FrameInfo(frame=<frame at 0x79626c538d30, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x7962970f26b0, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f99a0, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79627560a110, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 367, code pytest_runtestloop>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=367, function='pytest_runtestloop', code_context=['        item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=367, end_lineno=367, col_offset=8, end_col_offset=78)),
+   FrameInfo(frame=<frame at 0x79626c538ea0, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c040, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f9a80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628de5ec20, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 343, code _main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=343, function='_main', code_context=['    config.hook.pytest_runtestloop(session=session)\n'], index=0, positions=Positions(lineno=343, end_lineno=343, col_offset=4, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cf7dea0, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 289, code wrap_session>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=289, function='wrap_session', code_context=['            session.exitstatus = doit(config, session) or 0\n'], index=0, positions=Positions(lineno=289, end_lineno=289, col_offset=33, end_col_offset=54)),
+   FrameInfo(frame=<frame at 0x79628d3db400, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 336, code pytest_cmdline_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=336, function='pytest_cmdline_main', code_context=['    return wrap_session(config, _main)\n'], index=0, positions=Positions(lineno=336, end_lineno=336, col_offset=11, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79628cfa8770, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cfb5b70, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79628cf72f80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628cf9d340, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 175, code main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=175, function='main', code_context=['                ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)\n'], index=0, positions=Positions(lineno=175, end_lineno=175, col_offset=38, end_col_offset=84)),
+   FrameInfo(frame=<frame at 0x79628cf73060, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 201, code console_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=201, function='console_main', code_context=['        code = main()\n'], index=0, positions=Positions(lineno=201, end_lineno=201, col_offset=15, end_col_offset=21)),
+   FrameInfo(frame=<frame at 0x79628d3db4c0, file '/usr/local/lib/python3.13/site-packages/pytest/__main__.py', line 9, code <module>>, filename='/usr/local/lib/python3.13/site-packages/pytest/__main__.py', lineno=9, function='<module>', code_context=['    raise SystemExit(pytest.console_main())\n'], index=0, positions=Positions(lineno=9, end_lineno=9, col_offset=21, end_col_offset=42)),
+   FrameInfo(frame=<frame at 0x79628cf4e340, file '<frozen runpy>', line 88, code _run_code>, filename='<frozen runpy>', lineno=88, function='_run_code', code_context=None, index=None, positions=Positions(lineno=88, end_lineno=88, col_offset=4, end_col_offset=27)),
+   FrameInfo(frame=<frame at 0x79628cf4bbc0, file '<frozen runpy>', line 203, code _run_module_as_main>, filename='<frozen runpy>', lineno=203, function='_run_module_as_main', code_context=None, index=None, positions=Positions(lineno=203, end_lineno=204, col_offset=11, end_col_offset=42))]
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/test_cm_comparative_fresh_persistence_pilot.py::FreshPersistencePilotTests::test_functional_profile_bounds_arms_cases_and_blocks
+  /usr/local/lib/python3.13/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: 'dd.cudd.BDD.__dealloc__'
+  
+  Traceback (most recent call last):
+    File "/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py", line 62, in pairs
+      def pairs(items):
+      
+  AssertionError: Still 4 nodes referenced upon shutdown.
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/test_cm_comparative_fresh_persistence_pilot.py::FreshPersistencePilotTests::test_functional_profile_bounds_arms_cases_and_blocks
+  /usr/local/lib/python3.13/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <function BDD.__del__ at 0x79628ed494e0>
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/site-packages/dd/bdd.py", line 280, in __del__
+      raise AssertionError(
+      ...<7 lines>...
+          f'{stack_str}')
+  AssertionError: There are nodes still referenced upon shutdown. Details:
+  {1: 3, 3: 5, 6: 1, 7: 1}
+  {1: (6, None, None), 3: (5, -1, 1), 6: (0, -3, 3), 7: (0, 3, 1)}
+  {'x0': 0, 'x1': 1, 'x2': 2, 'x3': 3, 'x4': 4, 'x5': 5}
+  {}
+  <class 'dd.bdd.BDD'>
+  [FrameInfo(frame=<frame at 0x79626cc20d50, file '/usr/local/lib/python3.13/site-packages/dd/bdd.py', line 279, code __del__>, filename='/usr/local/lib/python3.13/site-packages/dd/bdd.py', lineno=278, function='__del__', code_context=['        stack = inspect.stack()\n'], index=0, positions=Positions(lineno=278, end_lineno=278, col_offset=16, end_col_offset=31)),
+   FrameInfo(frame=<frame at 0x79626c4fb760, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 62, code pairs>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=62, function='pairs', code_context=['    def pairs(items):\n'], index=0, positions=Positions(lineno=62, end_lineno=62, col_offset=0, end_col_offset=0)),
+   FrameInfo(frame=<frame at 0x79626ccd6140, file '/usr/local/lib/python3.13/json/decoder.py', line 361, code raw_decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=361, function='raw_decode', code_context=['            obj, end = self.scan_once(s, idx)\n'], index=0, positions=Positions(lineno=361, end_lineno=361, col_offset=23, end_col_offset=45)),
+   FrameInfo(frame=<frame at 0x79626ccd7d40, file '/usr/local/lib/python3.13/json/decoder.py', line 345, code decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=345, function='decode', code_context=['        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n'], index=0, positions=Positions(lineno=345, end_lineno=345, col_offset=19, end_col_offset=57)),
+   FrameInfo(frame=<frame at 0x79626ccd6f40, file '/usr/local/lib/python3.13/json/__init__.py', line 365, code loads>, filename='/usr/local/lib/python3.13/json/__init__.py', lineno=365, function='loads', code_context=['    return cls(**kw).decode(s)\n'], index=0, positions=Positions(lineno=365, end_lineno=365, col_offset=11, end_col_offset=30)),
+   FrameInfo(frame=<frame at 0x79626c4fbe60, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 72, code strict_json>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=72, function='strict_json', code_context=['    return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)\n'], index=0, positions=Positions(lineno=72, end_lineno=72, col_offset=11, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796275728ac0, file '/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', line 110, code historical_scenarios>, filename='/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', lineno=110, function='historical_scenarios', code_context=['    candidates = [base.strict_json(line) for line in raw.splitlines()]\n'], index=0, positions=Positions(lineno=110, end_lineno=110, col_offset=18, end_col_offset=40)),
+   FrameInfo(frame=<frame at 0x796263d283a0, file '/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', line 66, code cohort>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', lineno=66, function='cohort', code_context=['    default, default_ledger = sessions.historical_scenarios(root)\n'], index=0, positions=Positions(lineno=66, end_lineno=66, col_offset=30, end_col_offset=65)),
+   FrameInfo(frame=<frame at 0x79626c951c40, file '/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', line 123, code build_bundle>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', lineno=123, function='build_bundle', code_context=['    scenarios, selection = bridge.cohort(root)\n'], index=0, positions=Positions(lineno=123, end_lineno=123, col_offset=27, end_col_offset=46)),
+   FrameInfo(frame=<frame at 0x79626c68c7c0, file '/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', line 38, code test_functional_profile_bounds_arms_cases_and_blocks>, filename='/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', lineno=38, function='test_functional_profile_bounds_arms_cases_and_blocks', code_context=['        plan, oracles = pilot.build_bundle(\n'], index=0, positions=Positions(lineno=38, end_lineno=40, col_offset=24, end_col_offset=9)),
+   FrameInfo(frame=<frame at 0x796263d5c040, file '/usr/local/lib/python3.13/unittest/case.py', line 606, code _callTestMethod>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=606, function='_callTestMethod', code_context=['        if method() is not None:\n'], index=0, positions=Positions(lineno=606, end_lineno=606, col_offset=11, end_col_offset=19)),
+   FrameInfo(frame=<frame at 0x79626cbe0260, file '/usr/local/lib/python3.13/unittest/case.py', line 651, code run>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=651, function='run', code_context=['                        self._callTestMethod(testMethod)\n'], index=0, positions=Positions(lineno=651, end_lineno=651, col_offset=24, end_col_offset=56)),
+   FrameInfo(frame=<frame at 0x796263d5c120, file '/usr/local/lib/python3.13/unittest/case.py', line 707, code __call__>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=707, function='__call__', code_context=['        return self.run(*args, **kwds)\n'], index=0, positions=Positions(lineno=707, end_lineno=707, col_offset=15, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79626c68c220, file '/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', line 351, code runtest>, filename='/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', lineno=351, function='runtest', code_context=['                testcase(result=self)\n'], index=0, positions=Positions(lineno=351, end_lineno=351, col_offset=16, end_col_offset=37)),
+   FrameInfo(frame=<frame at 0x79626cd9fe00, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 178, code pytest_runtest_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=178, function='pytest_runtest_call', code_context=['        item.runtest()\n'], index=0, positions=Positions(lineno=178, end_lineno=178, col_offset=8, end_col_offset=22)),
+   FrameInfo(frame=<frame at 0x79626c539010, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c400, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c200, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x796263d5c2e0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 246, code <lambda>>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=246, function='<lambda>', code_context=['        lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise\n'], index=0, positions=Positions(lineno=246, end_lineno=246, col_offset=16, end_col_offset=47)),
+   FrameInfo(frame=<frame at 0x79627573a050, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 344, code from_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=344, function='from_call', code_context=['            result: TResult | None = func()\n'], index=0, positions=Positions(lineno=344, end_lineno=344, col_offset=37, end_col_offset=43)),
+   FrameInfo(frame=<frame at 0x79626cbe09d0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 245, code call_and_report>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=245, function='call_and_report', code_context=['    call = CallInfo.from_call(\n'], index=0, positions=Positions(lineno=245, end_lineno=247, col_offset=11, end_col_offset=5)),
+   FrameInfo(frame=<frame at 0x79626cbe2460, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 136, code runtestprotocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=136, function='runtestprotocol', code_context=['            reports.append(call_and_report(item, "call", log))\n'], index=0, positions=Positions(lineno=136, end_lineno=136, col_offset=27, end_col_offset=61)),
+   FrameInfo(frame=<frame at 0x796263d5c3c0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 117, code pytest_runtest_protocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=117, function='pytest_runtest_protocol', code_context=['    runtestprotocol(item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=117, end_lineno=117, col_offset=4, end_col_offset=44)),
+   FrameInfo(frame=<frame at 0x79626c539180, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c4f0, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c4a0, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79627560a110, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 367, code pytest_runtestloop>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=367, function='pytest_runtestloop', code_context=['        item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=367, end_lineno=367, col_offset=8, end_col_offset=78)),
+   FrameInfo(frame=<frame at 0x79626c538ea0, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c040, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f9a80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628de5ec20, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 343, code _main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=343, function='_main', code_context=['    config.hook.pytest_runtestloop(session=session)\n'], index=0, positions=Positions(lineno=343, end_lineno=343, col_offset=4, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cf7dea0, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 289, code wrap_session>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=289, function='wrap_session', code_context=['            session.exitstatus = doit(config, session) or 0\n'], index=0, positions=Positions(lineno=289, end_lineno=289, col_offset=33, end_col_offset=54)),
+   FrameInfo(frame=<frame at 0x79628d3db400, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 336, code pytest_cmdline_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=336, function='pytest_cmdline_main', code_context=['    return wrap_session(config, _main)\n'], index=0, positions=Positions(lineno=336, end_lineno=336, col_offset=11, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79628cfa8770, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cfb5b70, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79628cf72f80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628cf9d340, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 175, code main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=175, function='main', code_context=['                ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)\n'], index=0, positions=Positions(lineno=175, end_lineno=175, col_offset=38, end_col_offset=84)),
+   FrameInfo(frame=<frame at 0x79628cf73060, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 201, code console_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=201, function='console_main', code_context=['        code = main()\n'], index=0, positions=Positions(lineno=201, end_lineno=201, col_offset=15, end_col_offset=21)),
+   FrameInfo(frame=<frame at 0x79628d3db4c0, file '/usr/local/lib/python3.13/site-packages/pytest/__main__.py', line 9, code <module>>, filename='/usr/local/lib/python3.13/site-packages/pytest/__main__.py', lineno=9, function='<module>', code_context=['    raise SystemExit(pytest.console_main())\n'], index=0, positions=Positions(lineno=9, end_lineno=9, col_offset=21, end_col_offset=42)),
+   FrameInfo(frame=<frame at 0x79628cf4e340, file '<frozen runpy>', line 88, code _run_code>, filename='<frozen runpy>', lineno=88, function='_run_code', code_context=None, index=None, positions=Positions(lineno=88, end_lineno=88, col_offset=4, end_col_offset=27)),
+   FrameInfo(frame=<frame at 0x79628cf4bbc0, file '<frozen runpy>', line 203, code _run_module_as_main>, filename='<frozen runpy>', lineno=203, function='_run_module_as_main', code_context=None, index=None, positions=Positions(lineno=203, end_lineno=204, col_offset=11, end_col_offset=42))]
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/test_cm_comparative_fresh_persistence_pilot.py::FreshPersistencePilotTests::test_functional_profile_bounds_arms_cases_and_blocks
+  /usr/local/lib/python3.13/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <function BDD.__del__ at 0x79628ed494e0>
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/site-packages/dd/bdd.py", line 280, in __del__
+      raise AssertionError(
+      ...<7 lines>...
+          f'{stack_str}')
+  AssertionError: There are nodes still referenced upon shutdown. Details:
+  {1: 3, 3: 5, 6: 1, 7: 1}
+  {1: (6, None, None), 3: (5, -1, 1), 6: (0, -3, 3), 7: (0, 3, 1)}
+  {'x0': 0, 'x1': 1, 'x2': 2, 'x3': 3, 'x4': 4, 'x5': 5}
+  {}
+  <class 'dd.bdd.BDD'>
+  [FrameInfo(frame=<frame at 0x79626cc21a60, file '/usr/local/lib/python3.13/site-packages/dd/bdd.py', line 279, code __del__>, filename='/usr/local/lib/python3.13/site-packages/dd/bdd.py', lineno=278, function='__del__', code_context=['        stack = inspect.stack()\n'], index=0, positions=Positions(lineno=278, end_lineno=278, col_offset=16, end_col_offset=31)),
+   FrameInfo(frame=<frame at 0x79626c4fb760, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 62, code pairs>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=62, function='pairs', code_context=['    def pairs(items):\n'], index=0, positions=Positions(lineno=62, end_lineno=62, col_offset=0, end_col_offset=0)),
+   FrameInfo(frame=<frame at 0x79626ccd6140, file '/usr/local/lib/python3.13/json/decoder.py', line 361, code raw_decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=361, function='raw_decode', code_context=['            obj, end = self.scan_once(s, idx)\n'], index=0, positions=Positions(lineno=361, end_lineno=361, col_offset=23, end_col_offset=45)),
+   FrameInfo(frame=<frame at 0x79626ccd7d40, file '/usr/local/lib/python3.13/json/decoder.py', line 345, code decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=345, function='decode', code_context=['        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n'], index=0, positions=Positions(lineno=345, end_lineno=345, col_offset=19, end_col_offset=57)),
+   FrameInfo(frame=<frame at 0x79626ccd6f40, file '/usr/local/lib/python3.13/json/__init__.py', line 365, code loads>, filename='/usr/local/lib/python3.13/json/__init__.py', lineno=365, function='loads', code_context=['    return cls(**kw).decode(s)\n'], index=0, positions=Positions(lineno=365, end_lineno=365, col_offset=11, end_col_offset=30)),
+   FrameInfo(frame=<frame at 0x79626c4fbe60, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 72, code strict_json>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=72, function='strict_json', code_context=['    return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)\n'], index=0, positions=Positions(lineno=72, end_lineno=72, col_offset=11, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796275728ac0, file '/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', line 110, code historical_scenarios>, filename='/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', lineno=110, function='historical_scenarios', code_context=['    candidates = [base.strict_json(line) for line in raw.splitlines()]\n'], index=0, positions=Positions(lineno=110, end_lineno=110, col_offset=18, end_col_offset=40)),
+   FrameInfo(frame=<frame at 0x796263d283a0, file '/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', line 66, code cohort>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', lineno=66, function='cohort', code_context=['    default, default_ledger = sessions.historical_scenarios(root)\n'], index=0, positions=Positions(lineno=66, end_lineno=66, col_offset=30, end_col_offset=65)),
+   FrameInfo(frame=<frame at 0x79626c951c40, file '/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', line 123, code build_bundle>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', lineno=123, function='build_bundle', code_context=['    scenarios, selection = bridge.cohort(root)\n'], index=0, positions=Positions(lineno=123, end_lineno=123, col_offset=27, end_col_offset=46)),
+   FrameInfo(frame=<frame at 0x79626c68c7c0, file '/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', line 38, code test_functional_profile_bounds_arms_cases_and_blocks>, filename='/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', lineno=38, function='test_functional_profile_bounds_arms_cases_and_blocks', code_context=['        plan, oracles = pilot.build_bundle(\n'], index=0, positions=Positions(lineno=38, end_lineno=40, col_offset=24, end_col_offset=9)),
+   FrameInfo(frame=<frame at 0x796263d5c040, file '/usr/local/lib/python3.13/unittest/case.py', line 606, code _callTestMethod>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=606, function='_callTestMethod', code_context=['        if method() is not None:\n'], index=0, positions=Positions(lineno=606, end_lineno=606, col_offset=11, end_col_offset=19)),
+   FrameInfo(frame=<frame at 0x79626cbe0260, file '/usr/local/lib/python3.13/unittest/case.py', line 651, code run>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=651, function='run', code_context=['                        self._callTestMethod(testMethod)\n'], index=0, positions=Positions(lineno=651, end_lineno=651, col_offset=24, end_col_offset=56)),
+   FrameInfo(frame=<frame at 0x796263d5c120, file '/usr/local/lib/python3.13/unittest/case.py', line 707, code __call__>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=707, function='__call__', code_context=['        return self.run(*args, **kwds)\n'], index=0, positions=Positions(lineno=707, end_lineno=707, col_offset=15, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79626c68c220, file '/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', line 351, code runtest>, filename='/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', lineno=351, function='runtest', code_context=['                testcase(result=self)\n'], index=0, positions=Positions(lineno=351, end_lineno=351, col_offset=16, end_col_offset=37)),
+   FrameInfo(frame=<frame at 0x79626cd9fe00, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 178, code pytest_runtest_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=178, function='pytest_runtest_call', code_context=['        item.runtest()\n'], index=0, positions=Positions(lineno=178, end_lineno=178, col_offset=8, end_col_offset=22)),
+   FrameInfo(frame=<frame at 0x79626c539010, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c400, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c200, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x796263d5c2e0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 246, code <lambda>>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=246, function='<lambda>', code_context=['        lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise\n'], index=0, positions=Positions(lineno=246, end_lineno=246, col_offset=16, end_col_offset=47)),
+   FrameInfo(frame=<frame at 0x79627573a050, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 344, code from_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=344, function='from_call', code_context=['            result: TResult | None = func()\n'], index=0, positions=Positions(lineno=344, end_lineno=344, col_offset=37, end_col_offset=43)),
+   FrameInfo(frame=<frame at 0x79626cbe09d0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 245, code call_and_report>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=245, function='call_and_report', code_context=['    call = CallInfo.from_call(\n'], index=0, positions=Positions(lineno=245, end_lineno=247, col_offset=11, end_col_offset=5)),
+   FrameInfo(frame=<frame at 0x79626cbe2460, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 136, code runtestprotocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=136, function='runtestprotocol', code_context=['            reports.append(call_and_report(item, "call", log))\n'], index=0, positions=Positions(lineno=136, end_lineno=136, col_offset=27, end_col_offset=61)),
+   FrameInfo(frame=<frame at 0x796263d5c3c0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 117, code pytest_runtest_protocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=117, function='pytest_runtest_protocol', code_context=['    runtestprotocol(item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=117, end_lineno=117, col_offset=4, end_col_offset=44)),
+   FrameInfo(frame=<frame at 0x79626c539180, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c4f0, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c4a0, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79627560a110, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 367, code pytest_runtestloop>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=367, function='pytest_runtestloop', code_context=['        item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=367, end_lineno=367, col_offset=8, end_col_offset=78)),
+   FrameInfo(frame=<frame at 0x79626c538ea0, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c040, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f9a80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628de5ec20, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 343, code _main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=343, function='_main', code_context=['    config.hook.pytest_runtestloop(session=session)\n'], index=0, positions=Positions(lineno=343, end_lineno=343, col_offset=4, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cf7dea0, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 289, code wrap_session>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=289, function='wrap_session', code_context=['            session.exitstatus = doit(config, session) or 0\n'], index=0, positions=Positions(lineno=289, end_lineno=289, col_offset=33, end_col_offset=54)),
+   FrameInfo(frame=<frame at 0x79628d3db400, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 336, code pytest_cmdline_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=336, function='pytest_cmdline_main', code_context=['    return wrap_session(config, _main)\n'], index=0, positions=Positions(lineno=336, end_lineno=336, col_offset=11, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79628cfa8770, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cfb5b70, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79628cf72f80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628cf9d340, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 175, code main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=175, function='main', code_context=['                ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)\n'], index=0, positions=Positions(lineno=175, end_lineno=175, col_offset=38, end_col_offset=84)),
+   FrameInfo(frame=<frame at 0x79628cf73060, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 201, code console_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=201, function='console_main', code_context=['        code = main()\n'], index=0, positions=Positions(lineno=201, end_lineno=201, col_offset=15, end_col_offset=21)),
+   FrameInfo(frame=<frame at 0x79628d3db4c0, file '/usr/local/lib/python3.13/site-packages/pytest/__main__.py', line 9, code <module>>, filename='/usr/local/lib/python3.13/site-packages/pytest/__main__.py', lineno=9, function='<module>', code_context=['    raise SystemExit(pytest.console_main())\n'], index=0, positions=Positions(lineno=9, end_lineno=9, col_offset=21, end_col_offset=42)),
+   FrameInfo(frame=<frame at 0x79628cf4e340, file '<frozen runpy>', line 88, code _run_code>, filename='<frozen runpy>', lineno=88, function='_run_code', code_context=None, index=None, positions=Positions(lineno=88, end_lineno=88, col_offset=4, end_col_offset=27)),
+   FrameInfo(frame=<frame at 0x79628cf4bbc0, file '<frozen runpy>', line 203, code _run_module_as_main>, filename='<frozen runpy>', lineno=203, function='_run_module_as_main', code_context=None, index=None, positions=Positions(lineno=203, end_lineno=204, col_offset=11, end_col_offset=42))]
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+tests/test_cm_comparative_fresh_persistence_pilot.py::FreshPersistencePilotTests::test_functional_profile_bounds_arms_cases_and_blocks
+  /usr/local/lib/python3.13/site-packages/_pytest/unraisableexception.py:67: PytestUnraisableExceptionWarning: Exception ignored in: <function BDD.__del__ at 0x79628ed494e0>
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/site-packages/dd/bdd.py", line 280, in __del__
+      raise AssertionError(
+      ...<7 lines>...
+          f'{stack_str}')
+  AssertionError: There are nodes still referenced upon shutdown. Details:
+  {1: 3, 3: 5, 6: 1, 7: 1}
+  {1: (6, None, None), 3: (5, -1, 1), 6: (0, -3, 3), 7: (0, 3, 1)}
+  {'x0': 0, 'x1': 1, 'x2': 2, 'x3': 3, 'x4': 4, 'x5': 5}
+  {}
+  <class 'dd.bdd.BDD'>
+  [FrameInfo(frame=<frame at 0x796275738c20, file '/usr/local/lib/python3.13/site-packages/dd/bdd.py', line 279, code __del__>, filename='/usr/local/lib/python3.13/site-packages/dd/bdd.py', lineno=278, function='__del__', code_context=['        stack = inspect.stack()\n'], index=0, positions=Positions(lineno=278, end_lineno=278, col_offset=16, end_col_offset=31)),
+   FrameInfo(frame=<frame at 0x79626c4fb760, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 62, code pairs>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=62, function='pairs', code_context=['    def pairs(items):\n'], index=0, positions=Positions(lineno=62, end_lineno=62, col_offset=0, end_col_offset=0)),
+   FrameInfo(frame=<frame at 0x79626ccd6140, file '/usr/local/lib/python3.13/json/decoder.py', line 361, code raw_decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=361, function='raw_decode', code_context=['            obj, end = self.scan_once(s, idx)\n'], index=0, positions=Positions(lineno=361, end_lineno=361, col_offset=23, end_col_offset=45)),
+   FrameInfo(frame=<frame at 0x79626ccd7d40, file '/usr/local/lib/python3.13/json/decoder.py', line 345, code decode>, filename='/usr/local/lib/python3.13/json/decoder.py', lineno=345, function='decode', code_context=['        obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n'], index=0, positions=Positions(lineno=345, end_lineno=345, col_offset=19, end_col_offset=57)),
+   FrameInfo(frame=<frame at 0x79626ccd6f40, file '/usr/local/lib/python3.13/json/__init__.py', line 365, code loads>, filename='/usr/local/lib/python3.13/json/__init__.py', lineno=365, function='loads', code_context=['    return cls(**kw).decode(s)\n'], index=0, positions=Positions(lineno=365, end_lineno=365, col_offset=11, end_col_offset=30)),
+   FrameInfo(frame=<frame at 0x79626c4fbe60, file '/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', line 72, code strict_json>, filename='/workspace/cm-packed-continuation/scripts/cm_measurement_verify.py', lineno=72, function='strict_json', code_context=['    return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)\n'], index=0, positions=Positions(lineno=72, end_lineno=72, col_offset=11, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796275728ac0, file '/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', line 110, code historical_scenarios>, filename='/workspace/cm-packed-continuation/scripts/cm_session_contracts.py', lineno=110, function='historical_scenarios', code_context=['    candidates = [base.strict_json(line) for line in raw.splitlines()]\n'], index=0, positions=Positions(lineno=110, end_lineno=110, col_offset=18, end_col_offset=40)),
+   FrameInfo(frame=<frame at 0x796263d283a0, file '/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', line 66, code cohort>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_real_task_bridge.py', lineno=66, function='cohort', code_context=['    default, default_ledger = sessions.historical_scenarios(root)\n'], index=0, positions=Positions(lineno=66, end_lineno=66, col_offset=30, end_col_offset=65)),
+   FrameInfo(frame=<frame at 0x79626c951c40, file '/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', line 123, code build_bundle>, filename='/workspace/cm-packed-continuation/scripts/cm_comparative_fresh_persistence_pilot.py', lineno=123, function='build_bundle', code_context=['    scenarios, selection = bridge.cohort(root)\n'], index=0, positions=Positions(lineno=123, end_lineno=123, col_offset=27, end_col_offset=46)),
+   FrameInfo(frame=<frame at 0x79626c68c7c0, file '/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', line 38, code test_functional_profile_bounds_arms_cases_and_blocks>, filename='/workspace/cm-packed-continuation/tests/test_cm_comparative_fresh_persistence_pilot.py', lineno=38, function='test_functional_profile_bounds_arms_cases_and_blocks', code_context=['        plan, oracles = pilot.build_bundle(\n'], index=0, positions=Positions(lineno=38, end_lineno=40, col_offset=24, end_col_offset=9)),
+   FrameInfo(frame=<frame at 0x796263d5c040, file '/usr/local/lib/python3.13/unittest/case.py', line 606, code _callTestMethod>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=606, function='_callTestMethod', code_context=['        if method() is not None:\n'], index=0, positions=Positions(lineno=606, end_lineno=606, col_offset=11, end_col_offset=19)),
+   FrameInfo(frame=<frame at 0x79626cbe0260, file '/usr/local/lib/python3.13/unittest/case.py', line 651, code run>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=651, function='run', code_context=['                        self._callTestMethod(testMethod)\n'], index=0, positions=Positions(lineno=651, end_lineno=651, col_offset=24, end_col_offset=56)),
+   FrameInfo(frame=<frame at 0x796263d5c120, file '/usr/local/lib/python3.13/unittest/case.py', line 707, code __call__>, filename='/usr/local/lib/python3.13/unittest/case.py', lineno=707, function='__call__', code_context=['        return self.run(*args, **kwds)\n'], index=0, positions=Positions(lineno=707, end_lineno=707, col_offset=15, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79626c68c220, file '/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', line 351, code runtest>, filename='/usr/local/lib/python3.13/site-packages/_pytest/unittest.py', lineno=351, function='runtest', code_context=['                testcase(result=self)\n'], index=0, positions=Positions(lineno=351, end_lineno=351, col_offset=16, end_col_offset=37)),
+   FrameInfo(frame=<frame at 0x79626cd9fe00, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 178, code pytest_runtest_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=178, function='pytest_runtest_call', code_context=['        item.runtest()\n'], index=0, positions=Positions(lineno=178, end_lineno=178, col_offset=8, end_col_offset=22)),
+   FrameInfo(frame=<frame at 0x79626c539010, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c400, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c200, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x796263d5c2e0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 246, code <lambda>>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=246, function='<lambda>', code_context=['        lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise\n'], index=0, positions=Positions(lineno=246, end_lineno=246, col_offset=16, end_col_offset=47)),
+   FrameInfo(frame=<frame at 0x79627573a050, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 344, code from_call>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=344, function='from_call', code_context=['            result: TResult | None = func()\n'], index=0, positions=Positions(lineno=344, end_lineno=344, col_offset=37, end_col_offset=43)),
+   FrameInfo(frame=<frame at 0x79626cbe09d0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 245, code call_and_report>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=245, function='call_and_report', code_context=['    call = CallInfo.from_call(\n'], index=0, positions=Positions(lineno=245, end_lineno=247, col_offset=11, end_col_offset=5)),
+   FrameInfo(frame=<frame at 0x79626cbe2460, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 136, code runtestprotocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=136, function='runtestprotocol', code_context=['            reports.append(call_and_report(item, "call", log))\n'], index=0, positions=Positions(lineno=136, end_lineno=136, col_offset=27, end_col_offset=61)),
+   FrameInfo(frame=<frame at 0x796263d5c3c0, file '/usr/local/lib/python3.13/site-packages/_pytest/runner.py', line 117, code pytest_runtest_protocol>, filename='/usr/local/lib/python3.13/site-packages/_pytest/runner.py', lineno=117, function='pytest_runtest_protocol', code_context=['    runtestprotocol(item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=117, end_lineno=117, col_offset=4, end_col_offset=44)),
+   FrameInfo(frame=<frame at 0x79626c539180, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c4f0, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x796263d5c4a0, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79627560a110, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 367, code pytest_runtestloop>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=367, function='pytest_runtestloop', code_context=['        item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n'], index=0, positions=Positions(lineno=367, end_lineno=367, col_offset=8, end_col_offset=78)),
+   FrameInfo(frame=<frame at 0x79626c538ea0, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79626c68c040, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79626c4f9a80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628de5ec20, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 343, code _main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=343, function='_main', code_context=['    config.hook.pytest_runtestloop(session=session)\n'], index=0, positions=Positions(lineno=343, end_lineno=343, col_offset=4, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cf7dea0, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 289, code wrap_session>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=289, function='wrap_session', code_context=['            session.exitstatus = doit(config, session) or 0\n'], index=0, positions=Positions(lineno=289, end_lineno=289, col_offset=33, end_col_offset=54)),
+   FrameInfo(frame=<frame at 0x79628d3db400, file '/usr/local/lib/python3.13/site-packages/_pytest/main.py', line 336, code pytest_cmdline_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/main.py', lineno=336, function='pytest_cmdline_main', code_context=['    return wrap_session(config, _main)\n'], index=0, positions=Positions(lineno=336, end_lineno=336, col_offset=11, end_col_offset=38)),
+   FrameInfo(frame=<frame at 0x79628cfa8770, file '/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', line 121, code _multicall>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_callers.py', lineno=121, function='_multicall', code_context=['                    res = hook_impl.function(*args)\n'], index=0, positions=Positions(lineno=121, end_lineno=121, col_offset=26, end_col_offset=51)),
+   FrameInfo(frame=<frame at 0x79628cfb5b70, file '/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', line 120, code _hookexec>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_manager.py', lineno=120, function='_hookexec', code_context=['        return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n'], index=0, positions=Positions(lineno=120, end_lineno=120, col_offset=15, end_col_offset=76)),
+   FrameInfo(frame=<frame at 0x79628cf72f80, file '/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', line 512, code __call__>, filename='/usr/local/lib/python3.13/site-packages/pluggy/_hooks.py', lineno=512, function='__call__', code_context=['        return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n'], index=0, positions=Positions(lineno=512, end_lineno=512, col_offset=15, end_col_offset=85)),
+   FrameInfo(frame=<frame at 0x79628cf9d340, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 175, code main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=175, function='main', code_context=['                ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)\n'], index=0, positions=Positions(lineno=175, end_lineno=175, col_offset=38, end_col_offset=84)),
+   FrameInfo(frame=<frame at 0x79628cf73060, file '/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', line 201, code console_main>, filename='/usr/local/lib/python3.13/site-packages/_pytest/config/__init__.py', lineno=201, function='console_main', code_context=['        code = main()\n'], index=0, positions=Positions(lineno=201, end_lineno=201, col_offset=15, end_col_offset=21)),
+   FrameInfo(frame=<frame at 0x79628d3db4c0, file '/usr/local/lib/python3.13/site-packages/pytest/__main__.py', line 9, code <module>>, filename='/usr/local/lib/python3.13/site-packages/pytest/__main__.py', lineno=9, function='<module>', code_context=['    raise SystemExit(pytest.console_main())\n'], index=0, positions=Positions(lineno=9, end_lineno=9, col_offset=21, end_col_offset=42)),
+   FrameInfo(frame=<frame at 0x79628cf4e340, file '<frozen runpy>', line 88, code _run_code>, filename='<frozen runpy>', lineno=88, function='_run_code', code_context=None, index=None, positions=Positions(lineno=88, end_lineno=88, col_offset=4, end_col_offset=27)),
+   FrameInfo(frame=<frame at 0x79628cf4bbc0, file '<frozen runpy>', line 203, code _run_module_as_main>, filename='<frozen runpy>', lineno=203, function='_run_module_as_main', code_context=None, index=None, positions=Positions(lineno=203, end_lineno=204, col_offset=11, end_col_offset=42))]
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnraisableExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------ generated xml file: /workspace/cm-packed-evidence/FINAL-TESTS.xml -------
+=========================== short test summary info ============================
+FAILED tests/test_c38_linux_replication.py::test_initial_c38_attempt_is_a_reconciled_no_create_failure
+FAILED tests/test_c38_linux_replication.py::test_c38_on_pod_verification_replays_byte_identically
+FAILED tests/test_c7_linux_confirmation.py::C7LinuxConfirmationTests::test_portable_workload_replays_exactly
+FAILED tests/test_cm_architecture_comparison_package.py::test_generated_package_is_exactly_bound_and_non_authorizing
+FAILED tests/test_cm_architecture_comparison_package.py::test_attempt_001_is_closed_before_measurement_and_bound_to_evidence
+FAILED tests/test_cm_architecture_query_ladder_cross_machine_package.py::test_cross_machine_package_is_source_exact_and_non_authorizing
+FAILED tests/test_cm_architecture_query_ladder_cross_machine_package.py::test_cross_machine_request_binds_package_controller_and_prior_result
+FAILED tests/test_cm_architecture_query_ladder_cross_machine_package.py::test_cross_machine_controller_compiles_and_accepts_only_the_exact_authorization
+FAILED tests/test_cm_architecture_query_ladder_followup.py::test_every_query_count_is_an_exact_distinct_cell
+FAILED tests/test_cm_architecture_query_ladder_followup.py::test_isolated_process_cleanup_does_not_collect_the_inherited_heap
+FAILED tests/test_cm_architecture_query_ladder_followup.py::test_followup_freeze_preserves_parent_cases_and_counterbalance
+FAILED tests/test_cm_architecture_query_ladder_package.py::test_attempt_001_package_is_internally_bound_and_now_historical
+FAILED tests/test_cm_architecture_query_ladder_package.py::test_attempt_001_is_closed_incomplete_and_bound_to_retained_evidence
+FAILED tests/test_cm_architecture_query_ladder_retry_002_analysis.py::test_retry_002_evidence_is_complete_exact_and_cleaned_up
+FAILED tests/test_cm_architecture_query_ladder_retry_002_package.py::test_retry_package_is_source_exact_and_non_authorizing
+FAILED tests/test_cm_comparative_architecture_comparison_campaign.py::test_functional_smoke_exercises_every_admitted_arm_without_timing
+FAILED tests/test_cm_comparative_h6_fresh_process_memory_gate.py::test_all_selected_unchanged_operations_match_the_stored_oracle
+FAILED tests/test_cm_comparative_h6_fresh_process_memory_gate.py::test_real_worker_handshake_covers_every_arm_and_lifecycle
+FAILED tests/test_cm_comparative_h6_representation_estimator_candidate.py::test_candidate_freeze_is_deterministic_and_blind_to_memory_values
+FAILED tests/test_cm_comparative_native_portfolio.py::test_all_portfolio_arms_match_one_exposed_case
+FAILED tests/test_cm_comparative_native_portfolio.py::test_retained_native_portfolio_artifact_replays_read_only
+FAILED tests/test_cm_comparative_native_scout.py::ComparativeNativeScoutTests::test_pinned_d4_is_identified_as_static_elf_without_ldd
+FAILED tests/test_cm_comparative_native_slots.py::test_native_slots_match_all_exposed_c36_queries
+FAILED tests/test_cm_comparative_native_transport.py::ComparativeNativeTransportTests::test_historical_v6_manifest_is_immutable_and_live_source_drift_is_explicit
+FAILED tests/test_cm_comparative_native_transport.py::ComparativeNativeTransportTests::test_host_preflight_amendment_preserves_zero_create_refusal
+FAILED tests/test_cm_comparative_native_transport.py::ComparativeNativeTransportTests::test_v6_focused_sources_run_in_an_isolated_directory
+FAILED tests/test_cm_comparative_p7_package.py::ComparativeP7PackageTests::test_frozen_sources_are_unique_safe_project_files
+FAILED tests/test_cm_epfl_context_pilot.py::EPFLContextPilotTests::test_completed_repeat_passes_independent_reaggregation
+FAILED tests/test_cm_p7_w5_freeze.py::W5FreezeTests::test_all_derived_freezes_validate_and_bind_campaign_hashes
+FAILED tests/test_cm_runpod_corpus_offline.py::test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit
+FAILED tests/test_cm_runpod_w8_logikbench_conversion.py::test_exact_v2_bundle_verifies
+FAILED tests/test_exact_dispatcher.py::ExactDispatcherTests::test_c14_task_policy_abstention_and_global_disable
+FAILED tests/test_generated_public_chart_data.py::test_generated_chart_data_is_current_and_pages_reference_it
+FAILED tests/test_linux_one_pass_confirmation.py::test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit
+FAILED tests/test_native_portfolio_reassessment.py::test_native_portfolio_closure_stops_training_and_prospective_use
+FAILED tests/test_native_restriction_backend.py::test_confirmed_library_activates_only_with_matching_sha256
+FAILED tests/test_native_restriction_backend.py::test_confirmed_multi_root_union_activates_and_preserves_order
+FAILED tests/test_yosys_source_anf.py::YosysSourceAnfTests::test_bounded_run_writes_complete_artifact_set
+ERROR tests/test_cm_comparative_architecture_refresh_harness.py::test_all_four_lanes_match_their_exact_artifacts
+ERROR tests/test_cm_comparative_architecture_refresh_harness.py::test_result_mutations_fail_closed
+ERROR tests/test_cm_comparative_architecture_refresh_harness.py::test_native_plan_cannot_validate_nonnative_result
+ERROR tests/test_natural_cut_ranking.py::NaturalCutRankingTests::test_direct_decoder_recovers_bounded_obvious_cut
+ERROR tests/test_natural_cut_ranking.py::NaturalCutRankingTests::test_models_forward_train_and_safe_roundtrip
+ERROR tests/test_natural_cut_ranking.py::NaturalCutRankingTests::test_targets_and_pairs_preserve_canonical_orientation
+ERROR tests/test_natural_decomposition.py::NaturalDatasetAndModelTests::test_dataset_is_natural_balanced_circuit_disjoint_and_exact
+ERROR tests/test_natural_decomposition.py::NaturalDatasetAndModelTests::test_models_forward_and_training_roundtrip
+ERROR tests/test_natural_decomposition.py::NaturalDatasetAndModelTests::test_structure_matched_pairs_are_exact_and_balanced
+ERROR tests/test_natural_variable_cut.py::NaturalVariableCutTests::test_shared_variable_head_is_exactly_equivariant_for_nonanchor_swap
+ERROR tests/test_natural_variable_cut.py::NaturalVariableCutTests::test_source_symbolic_partition_is_exact_and_overapprox_is_sound
+ERROR tests/test_natural_variable_cut.py::NaturalVariableCutTests::test_training_and_safe_roundtrip
+ERROR tests/test_neural_reassessment.py::NeuralReassessmentTests::test_artifact_replay_and_tamper_detection
+ERROR tests/test_neural_reassessment.py::NeuralReassessmentTests::test_current_exact_economics_stop_training
+ERROR tests/test_neural_reassessment.py::NeuralReassessmentTests::test_stale_or_incomplete_label_portfolios_are_rejected
+ERROR tests/test_neural_reassessment.py::NeuralReassessmentTests::test_tampered_exact_label_source_fails_closed
+ERROR tests/test_post_benchmark_neural_gate.py::test_retry_002_recomputes_22_task_and_cohort_surfaces
+ERROR tests/test_post_benchmark_neural_gate.py::test_strongest_surface_is_only_a_gross_signal
+ERROR tests/test_post_benchmark_neural_gate.py::test_major_exact_surfaces_remain_below_development_gate
+ERROR tests/test_post_benchmark_neural_gate.py::test_tampered_evidence_bindings_fail_closed
+ERROR tests/test_post_benchmark_neural_gate.py::test_tampered_permissions_labels_and_candidates_fail_closed
+ERROR tests/test_post_benchmark_neural_gate.py::test_report_states_signal_without_authorizing_training
+ERROR tests/test_source_anf_hybrid.py::SourceAnfHybridTests::test_cache_and_budget_fallback_preserve_exact_partition
+ERROR tests/test_source_anf_hybrid.py::SourceAnfHybridTests::test_packed_source_matches_set_source_and_truth_on_frozen_cases
+ERROR tests/test_source_anf_hybrid.py::SourceAnfHybridTests::test_subset_transform_and_or_convolution_are_exact
+ERROR tests/test_version_history_learning_protocol.py::test_consumes_only_completed_independently_verified_benchmark
+ERROR tests/test_version_history_learning_protocol.py::test_consumes_query_ladder_handoff_without_replaying_benchmark
+ERROR tests/test_version_history_learning_protocol.py::test_source_blind_features_exclude_identity_label_and_timing
+ERROR tests/test_version_history_learning_protocol.py::test_salted_source_group_splits_are_isolated_but_too_small
+ERROR tests/test_version_history_learning_protocol.py::test_analytical_controls_time_full_extraction_without_exact_execution
+ERROR tests/test_version_history_learning_protocol.py::test_training_and_advice_stay_disabled_after_gross_gate
+ERROR tests/test_version_history_learning_protocol.py::test_missing_or_unverified_input_abstains
+ERROR tests/test_version_history_learning_protocol.py::test_tampered_split_assignment_and_economics_are_rejected
+ERROR tests/test_version_history_learning_protocol.py::test_abstention_preserves_exact_fallback
+ERROR tests/test_version_history_learning_protocol.py::test_assessment_validation_and_report
+38 failed, 1647 passed, 3 skipped, 5 warnings, 35 errors, 1175 subtests passed in 176.82s (0:02:56)

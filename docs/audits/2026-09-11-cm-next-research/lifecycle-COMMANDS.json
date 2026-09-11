@@ -1,0 +1,52 @@
+[
+  {
+    "name": "lifecycle-exactness",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_packed_stream_io.py",
+      "tests/test_packed_queries.py",
+      "tests/test_scalar_task_integration.py",
+      "tests/test_cm_comparative_tasks.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/LIFECYCLE-TESTS.xml"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "pipe-consumption",
+    "args": [
+      "-m",
+      "scripts.cm_next_lifecycle_campaign",
+      "pipes",
+      "--output",
+      "/workspace/cm-packed-evidence/pipes"
+    ],
+    "timeout": 900
+  },
+  {
+    "name": "cache-lifetime-soak",
+    "args": [
+      "-m",
+      "scripts.cm_next_lifecycle_campaign",
+      "soak",
+      "--output",
+      "/workspace/cm-packed-evidence/SOAK.json"
+    ],
+    "timeout": 180
+  },
+  {
+    "name": "preparation-reuse",
+    "args": [
+      "-m",
+      "scripts.cm_next_lifecycle_campaign",
+      "preparation",
+      "--output",
+      "/workspace/cm-packed-evidence/preparation"
+    ],
+    "timeout": 900
+  }
+]

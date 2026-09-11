@@ -48,7 +48,7 @@ app.append(latestResultsUpdate());
 app.append(h("div", { class: "page latest-jump-links" }, E.panels.map(p => h("a", { href: "#"+p.id, text: p.title }))));
 E.panels.forEach(panel => app.append(latestResultPanel(panel)));
 app.append(section("next-work", "Current disposition", "What remains to be established",
-  "The implementations and scheduled retries are complete. Broader claims need real consumer request traces, an explicit output/projection contract or a newly admitted workload. The shared mask change is implemented; scalar, cache and streaming APIs remain explicit options. No automatic selector or failed native-batch candidate was promoted."));
+  E.continuation_disposition));
 app.append(h("p", { class: "page" }, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Download the complete chart-ready snapshot" })]));
 app.append(pageFooter("Current results reviewed "+E.reviewed));
 }

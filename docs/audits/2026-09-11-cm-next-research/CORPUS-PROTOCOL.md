@@ -1,0 +1,15 @@
+# Prospective additional CNF and projection corpus
+
+Recorded before retrieving the additional public files or observing their counts/timings. Source repository: SoftVarE-Group/feature-model-benchmark, fixed commit `afa60ee2c836e7bdc4068e0f4f128ea31158d2ad`, the same upstream snapshot as the earlier study.
+
+For every domain/system directory under `feature_models/dimacs`, choose the smallest `.dimacs` blob, breaking ties by path. Exclude all domain/system directories present in the preceding bucket audit's CORPUS.json. Sort the remaining representatives by blob size then path and select the first 12. Retain every selected candidate and every parse/admission refusal. Admit complete files only, at most 64 KiB, 512 declared variables, 3,000 clauses and at least one variable. Never replace a refused candidate with a later favorable one.
+
+These are additional public systems from the same upstream family, not production traces or a representative sample of software configuration. Two explicit output contracts are measured: all declared-variable model counts; and distinct assignments to the even-positioned declared variables after existentially quantifying the others. The latter is a deliberately selected variable projection, not a claim to recover the original software feature-product count from an undocumented conversion.
+
+Preparation, query and complete resident costs use 32 fixed requests per case: unrestricted and up to three distinct fixed variables, using seed 2026091193 plus the candidate's position. Whole-basis fixed assignments include both counted and hidden variables. All query values and workload text are frozen before timing. Nine paired repetitions alternate method order; query latencies remain diagnostic samples, not estimated production p99 guarantees. Both natural and dynamic native CUDD controls remain present.
+
+Python natural/min-fill, array min-fill and projected elimination use width 14, 262,144 peak cells, 262,144 work and two million ordering checks; array conversion has its separate 262,144-entry bound. Do not raise limits after seeing refusals. Each method/case runs in a separate child process with a 120-second timeout, 2 GiB address-space cap and single-threaded libraries. Exact reference verification runs outside timing.
+
+Synthetic development uses 8/12 visible variables. Confirmation uses 24/48 visible variables, recorded here before execution. One auxiliary per feature with clauses `(p_i OR h_i)` gives multiple witnesses and exactly `2**m` projected assignments. Adding adjacent feature exclusions gives Fibonacci(m+2) projected assignments. A shared-hidden-variable star at visible widths 24/48 is a deliberate projection-width refusal control. Analytic counts and independent exhaustive small cases supplement CUDD.
+
+Retain source hashes, upstream license, full schedules, all arm outputs, refusal/timeout reasons and source/host identities. Comparisons within this selection rule support only these declared tasks; earlier datasets remain consumed diagnostics.

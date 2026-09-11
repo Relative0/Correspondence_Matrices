@@ -6,9 +6,15 @@ receipts, cloud bundles and credentials are outside this publication surface.
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import re
 from pathlib import Path
+
+_next_spec = importlib.util.spec_from_file_location('cm_next_results_evidence', Path(__file__).with_name('cm_next_results_evidence.py'))
+_next_module = importlib.util.module_from_spec(_next_spec)
+_next_spec.loader.exec_module(_next_module)
+append_next_results = _next_module.append_next_results
 
 ROOT = Path(__file__).resolve().parents[2]
 REVIEWED = '2026-09-11'
@@ -18,6 +24,7 @@ AUDITS = {
     'cloud': ('2026-09-11-cm-runpod-continuation', '8b3ecb37c6baccbd99610e566c334cae3edfdf7003938deaaeed551fb6f16e93'),
     'scalar': ('2026-09-11-cm-scalar-research', '3f2667a8c8dda1bcbafeef71662bba9c61ae6b6c8d96178801b2a724595c8a48'),
     'bucket': ('2026-09-11-cm-bucket-counts', 'ca698d98296905f81f8bf06f95e2997fd84925acf833ab9d9daef88bfd9a506f'),
+    'next': ('2026-09-11-cm-next-research', 'aecf0d003d970ae72eb7b529479c2a60f29fffe713d672aee3b24ef2f167308b'),
 }
 LABELS = {
     'cse': 'Structural CSE', 'cse_flat': 'Structural CSE-flat', 'direct': 'Direct BitSet',
@@ -242,7 +249,9 @@ def build_latest_results():
     number('batch.speedup', native['query_counts']['96']['fully_charged_sum_speedup'], 'x3', 'native-batch-final-gate', 'query_counts.96.fully_charged_sum_speedup')
     number('bucket.outputs', verification['total_timed_outputs'], 'int', 'bucket-final-verification', 'total_timed_outputs')
     number('bucket.cells', verification['total_cells'], 'int', 'bucket-final-verification', 'total_cells')
+    disposition = append_next_results(source, panel, number)
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
+                    continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},
                     public_cnf_ids=[c['id'] for c in bucket_fixtures if c['cohort'] == 'public full CNF'],
                     final_bucket_junit_records=verification['attempts'][-1]['junit_tests'],

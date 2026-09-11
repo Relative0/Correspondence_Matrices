@@ -1,0 +1,33 @@
+[
+  {
+    "name": "new-exactness",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_projected_counts.py",
+      "tests/test_bucket_counts.py",
+      "tests/test_bucket_numpy.py",
+      "tests/test_next_count_campaign.py",
+      "tests/test_scalar_task_integration.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/NEW-TESTS.xml"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "count-campaign",
+    "args": [
+      "-m",
+      "scripts.cm_next_count_campaign",
+      "run",
+      "--cohort",
+      "public",
+      "--output",
+      "/workspace/cm-packed-evidence/counts"
+    ],
+    "timeout": 2400
+  }
+]

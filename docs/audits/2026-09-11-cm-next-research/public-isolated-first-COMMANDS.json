@@ -1,0 +1,31 @@
+[
+  {
+    "name": "portability-fix",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_h6_freeze_portability.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/workspace/pytest-h6-final",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/H6-TESTS.xml"
+    ],
+    "timeout": 60
+  },
+  {
+    "name": "isolated-methods",
+    "args": [
+      "-m",
+      "scripts.cm_next_count_isolated",
+      "run",
+      "--part",
+      "first",
+      "--output",
+      "/workspace/cm-packed-evidence/isolated-counts"
+    ],
+    "timeout": 1850
+  }
+]

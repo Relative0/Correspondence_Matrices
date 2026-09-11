@@ -949,6 +949,12 @@ function latestResultsUpdate() {
     ["Count-study verification", T("latest.bucket.outputs"), "Exact cold/warm outputs checked; {{latest.bucket.cells}} scheduled entries include explicit refusals"],
   ]));
   s.append(h("p", { text: "These are separate tasks and hosts, not one overall speed ranking. Full-CNF counts include all declared variables and are not projected product counts. Older graphs remain dated to the latest accepted measurement of their particular contract." }));
+  s.append(tiles([
+    ["Verified pipe transfers", T("latest.next.pipe_rows"), "A separate reader checked every complete output or cancelled prefix"],
+    ["Concurrent exact queries", T("latest.next.soak_queries"), "Four threads over {{latest.next.soak_seconds}} seconds; retained-cache payload stayed within its bound"],
+    ["Final regression replay", T("latest.next.final_passed_tests") + " passed", "{{latest.next.final_failed_or_error_tests}} historical/platform failures remain; {{latest.next.new_regressions}} new regressions against the published checkout"],
+  ]));
+  s.append(h("p", { text: E.continuation_disposition }));
   s.append(h("div", { class: "benchmark-downloads" }, [
     h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
     h("a", { href: "data-downloads.html#september-11", text: "Download the current numerical evidence" }),
@@ -970,7 +976,9 @@ function latestResultPanel(panel) {
   };
   const cases = [...new Set(panel.rows.map(r => r.case))];
   const qs = [...new Set(panel.rows.map(r => r.q))].sort((a, b) => a-b);
-  const metricLabels = { cold_ms: "Complete session (ms)", warm_ms: "Prepared query batch (ms)", peak_mib: "Process peak (MiB)" };
+  const metricLabels = { cold_ms: "Complete session (ms)", warm_ms: "Prepared query batch (ms)", peak_mib: "Process peak (MiB)",
+    reader_first_ms: "First reader chunk returned (ms)", rss_upper_mib: "Producer + reader peak upper bound (MiB)",
+    call_ms: "Measured call (ms)", initial_inclusive_ms: "Call plus initial plan construction (ms)" };
   const caseSelect = makeSelect("case", "Case", cases.map(x => [x, x]), panel.default_case);
   const querySelect = makeSelect("queries", "Queries", qs.map(x => [x, String(x)]), panel.default_q);
   const metricSelect = makeSelect("metric", "Measurement", panel.metrics.map(x => [x, metricLabels[x]]), panel.metrics[0]);
@@ -979,7 +987,7 @@ function latestResultPanel(panel) {
     const metric = metricSelect.value;
     const selected = panel.rows.filter(r => r.case === caseSelect.value && r.q === Number(querySelect.value));
     const measured = selected.filter(r => r.status === "complete" && Number.isFinite(r[metric]));
-    const unit = metric === "peak_mib" ? "MiB" : "ms";
+    const unit = metric.endsWith("_mib") ? "MiB" : "ms";
     const id = `fig-latest-${panel.id}`;
     document.getElementById(id+"-analysis")?.remove();
     if (!selected.length) {
@@ -995,7 +1003,7 @@ function latestResultPanel(panel) {
       xTitle: `${unit}, logarithmic axis · lower is better`, fmtVal: v => f(v, 6)+" "+unit }) : null;
     const dataTable = table(["Method", "Measurement", "Status"], selected.map(r => [r.label,
       r.status === "complete" && Number.isFinite(r[metric]) ? f(r[metric], 6)+" "+unit : "Not measured",
-      r.status === "refused" ? "Refused: "+r.reason : "Exact output verified"]));
+      r.status === "complete" ? "Exact output verified" : (r.status === "refused" ? "Refused: " : "Incomplete: ")+r.reason]));
     dataTable.querySelectorAll("tbody tr").forEach((tr, i) => {
       const r = selected[i]; tr.dataset.case = r.case; tr.dataset.method = r.method;
       tr.dataset.q = String(r.q); tr.dataset.metric = metric; tr.dataset.status = r.status;
