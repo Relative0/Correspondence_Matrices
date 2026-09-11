@@ -1,0 +1,39 @@
+{
+  "schema": "cm-frontiers-protocol/v1",
+  "frozen_before_timing": true,
+  "methods": [
+    "bucket_natural",
+    "bucket_min_fill",
+    "array_min_fill",
+    "cudd_natural",
+    "cudd_dynamic"
+  ],
+  "cases": [
+    "independent-01",
+    "independent-02",
+    "independent-03",
+    "independent-07",
+    "independent-08",
+    "independent-09"
+  ],
+  "mode": "projected",
+  "contexts_per_case": 8,
+  "contexts_kind": "generated_control",
+  "seed": 2026091201,
+  "repeats": 3,
+  "order": "case order; method order forward, reverse, forward across repeats",
+  "child_timeout_s": 30,
+  "child_memory_bytes": 2147483648,
+  "global_timeout_s": 3000,
+  "oracle": "All completed methods compared exactly; independent control requires CUDD and bucket agreement. Single-family results remain unverified.",
+  "no_oracle_gating": true,
+  "setup": "included in total; every repeat starts a fresh isolated process",
+  "bucket_limits": {
+    "max_width": 14,
+    "max_cells": 262144,
+    "max_work": 262144,
+    "max_order_checks": 2000000
+  },
+  "miter_solver": "PySAT Glucose3 and Minisat22; independent UNSAT agreement; 30 seconds each",
+  "source_commit": "d7b94d1941266daddc3bb2a7cda8277e1d6595b0"
+}

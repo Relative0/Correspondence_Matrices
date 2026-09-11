@@ -955,9 +955,45 @@ function latestResultsUpdate() {
     ["Final regression replay", T("latest.next.final_passed_tests") + " passed", "{{latest.next.final_failed_or_error_tests}} historical/platform failures remain; {{latest.next.new_regressions}} new regressions against the published checkout"],
   ]));
   s.append(h("p", { text: E.continuation_disposition }));
+  s.append(h("p", {}, [h("a", { href: "latest-results.html#evidence-frontiers", text: "New: original feature mappings, independent workloads and restored historical tests" })]));
   s.append(h("div", { class: "benchmark-downloads" }, [
     h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
     h("a", { href: "data-downloads.html#september-11", text: "Download the current numerical evidence" }),
+  ]));
+  return s;
+}
+
+function frontierResultsUpdate() {
+  const E = DATA.e25_latest_results;
+  const F = E.frontiers;
+  const s = section("evidence-frontiers", `Evidence reviewed ${F.reviewed}`,
+    "What the new evidence establishes", F.disposition);
+  s.append(tiles([
+    ["Concrete-feature contracts", `${F.models.filter(r => r.concrete_feature_equivalence === true).length} of ${F.models.length}`, "Checked against original feature models; unsupported formats remain refused"],
+    ["Historical tests recovered", String(F.fixtures.recovered_failure_ids), `${F.fixtures.restored_files} missing fixture files restored with their retained hashes`],
+    ["Natural consumer sessions", String(F.consumer.natural_sessions_admitted), "Local capture is ready; independently documented use is still required"],
+  ]));
+  s.append(h("h3", { text: "Which variables represent configurations?" }));
+  s.append(h("p", { text: F.mapping_note }));
+  const judgment = value => value === true ? "Equivalent" : value === false ? "Counterexample" : "Refused";
+  s.append(table(["Model", "Original features", "Concrete features", "Unmatched CNF axes", "Original-feature configurations", "Concrete selections"],
+    F.models.map(r => [r.name, r.original_features ?? "—", r.concrete_features ?? "—", r.unmatched_variables?.length ?? "—",
+      judgment(r.original_feature_equivalence), judgment(r.concrete_feature_equivalence)])));
+  s.append(h("p", { text: "Fiasco and uClibc differ when the abstract root is counted. Their concrete-feature selections agree after that explicitly marked root is eliminated. The earlier even-position projection timings keep their original scope; these proofs do not relabel those timings as product counts." }));
+  s.append(h("h3", { text: "Broader independent workloads" }));
+  s.append(h("p", { text: F.independent_note }));
+  s.append(table(["Case", "Application family", "Projected variables", "Outcome across scheduled runs"], F.independent_admissions.map(r => {
+    const counts = {};
+    F.independent_methods.filter(m => m.case === r.id).forEach(m => Object.entries(m.statuses).forEach(([k,v]) => { counts[k] = (counts[k] || 0) + v; }));
+    const outcome = r.status === "refused" ? "Refused: " + r.reason :
+      ["complete", "refused", "timeout", "failed"].filter(k => counts[k]).map(k => `${counts[k]} ${k}`).join("; ");
+    return [r.id, r.family, r.projected_variables?.length ?? "Not declared", outcome];
+  })));
+  s.append(h("p", { text: F.consumer.note }));
+  s.append(h("p", { text: F.regression.note }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: E.sources["frontier-research-summary"].href, download: "frontier-research-summary.json", text: "Download every mapping, refusal, diagnostic result and remaining test failure" }),
+    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_CONSUMER_CAPTURE.md", text: "Consumer capture and fixture restoration instructions" }),
   ]));
   return s;
 }

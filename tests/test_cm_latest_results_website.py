@@ -55,7 +55,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
     def test_full_site_snapshot_covers_the_same_data_as_every_page(self):
         for name, expected in self.module.site_snapshots(self.data).items():
             self.assertEqual((SITE/name).read_bytes(), expected, name)
-        self.assertEqual(json.loads((SITE/'results/2026-09-11/full-site-data.json').read_text(encoding='utf-8')), self.data)
+        self.assertEqual(json.loads((SITE/f'results/{self.module.REVIEWED}/full-site-data.json').read_text(encoding='utf-8')), self.data)
 
     def test_final_indexed_affine_attempt_controls_current_values(self):
         source = self.evidence['sources']['affine-final-indexed']
@@ -93,7 +93,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         for figure, record in inventory.items():
             expected = hashlib.sha256(json.dumps({k:self.data[k] for k in record['datasets']}, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
             self.assertEqual(record['data_sha256'], expected, figure)
-            self.assertEqual(record['reviewed'], '2026-09-11')
+            self.assertEqual(record['reviewed'], self.module.REVIEWED)
             if record['status'] == 'latest_accepted_for_this_contract': self.assertTrue(record['sources'])
         repeats = [r for r in self.data['e2_kernel_vs_cse_flat']['rows'] if r['group'] == 'repeat']
         self.assertEqual(len(repeats), 3)
@@ -121,7 +121,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         for page in ('index','layperson','investor','expert','usecases','feature-model-evidence','learning-neural-evidence','data-downloads','latest-results'):
             text = (SITE/(page+'.html')).read_text(encoding='utf-8')
             self.assertIn('app.append(latestResultsUpdate());', text, page)
-            self.assertIn('"reviewed":"2026-09-11"', text, page)
+            self.assertIn('"reviewed":"'+self.module.REVIEWED+'"', text, page)
             self.assertIn('["latest-results.html", "Latest results"]', text, page)
 
     def test_new_pages_are_exact_template_expansions(self):
@@ -132,6 +132,21 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             expected = (SITE/template).read_text(encoding='utf-8').replace('/*__CM_CSS__*/', css).replace('/*__CM_LIB__*/', library).replace('/*__CM_DATA__*/null', data)
             actual = (SITE/page).read_text(encoding='utf-8')
             self.assertEqual(hashlib.sha256(actual.encode()).hexdigest(), hashlib.sha256(expected.encode()).hexdigest(), page)
+
+    def test_frontier_contracts_do_not_relabel_old_timings_or_promote_unverified_counts(self):
+        frontier = self.evidence['frontiers']
+        self.assertEqual(sum(m['concrete_feature_equivalence'] is True for m in frontier['models']), 8)
+        self.assertEqual(sum(m['original_feature_equivalence'] is False for m in frontier['models']), 2)
+        self.assertEqual(frontier['consumer']['natural_sessions_admitted'], 0)
+        self.assertFalse(any(row['independently_cross_checked'] for row in frontier['independent_methods']))
+        self.assertEqual(sum(frontier['independent_status_counts'].values()), 90)
+        self.assertTrue(all(panel['measured'] == '2026-09-11' for panel in self.evidence['panels']))
+        self.assertIn('app.append(frontierResultsUpdate());', (SITE/'latest-results.html').read_text(encoding='utf-8'))
+        source = ROOT/self.evidence['sources']['frontier-research-summary']['path']
+        real_read_bytes = Path.read_bytes
+        with mock.patch.object(Path, 'read_bytes', lambda path: real_read_bytes(path)+(b' ' if path==source else b'')):
+            with self.assertRaisesRegex(ValueError, 'Unsealed or changed website source'):
+                self.module.build_latest_results()
 
     def test_latest_repeat_headline_and_each_interval_equal_their_actual_audits(self):
         rows = [r for r in self.data['e2_kernel_vs_cse_flat']['rows'] if r['group'] == 'repeat']

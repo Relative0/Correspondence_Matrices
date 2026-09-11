@@ -6,7 +6,7 @@
 <title>Correspondence Matrices — latest measured results</title>
 <meta name="description" content="Current exact-counting, streaming, cache and packed-input measurements, including native controls, regressions and source data.">
 <meta property="og:title" content="Correspondence Matrices — latest measured results">
-<meta property="og:description" content="Explore every measured case and query boundary from the September 11 research.">
+<meta property="og:description" content="Current measured cases, projection semantics, independent workloads and restored-fixture checks.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="og.png">
 <style>/*__CM_CSS__*/</style>
@@ -34,7 +34,7 @@ app.replaceChildren();
 document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· latest results</span>",
   links: [["index.html", "Knowledge base"], ["#bucket-count", "Full-CNF counts"], ["#affine-count", "Affine counts"], ["#streaming", "File output"], ["#native-batch", "Completed batch gate"]] }));
 app.append(h("header", { class: "page" }, [
-  h("p", { class: "eyebrow", text: `Measured and reviewed ${E.reviewed}` }),
+  h("p", { class: "eyebrow", text: `Reviewed ${E.reviewed} · each study retains its measurement date` }),
   h("h1", { text: "Latest measured results" }),
   h("p", { class: "lede", text: "Explore each workload, query count and timing boundary. Every point, table value and download comes from the same checked result source. Refusals and unfavorable comparisons stay visible." }),
 ]));
@@ -45,6 +45,7 @@ app.append(h("nav", { class: "page latest-jump-links", "aria-label": "Audience g
   h("a", { href: "usecases.html", text: "Application guide" }),
 ]));
 app.append(latestResultsUpdate());
+app.append(frontierResultsUpdate());
 app.append(h("div", { class: "page latest-jump-links" }, E.panels.map(p => h("a", { href: "#"+p.id, text: p.title }))));
 E.panels.forEach(panel => app.append(latestResultPanel(panel)));
 app.append(section("next-work", "Current disposition", "What remains to be established",

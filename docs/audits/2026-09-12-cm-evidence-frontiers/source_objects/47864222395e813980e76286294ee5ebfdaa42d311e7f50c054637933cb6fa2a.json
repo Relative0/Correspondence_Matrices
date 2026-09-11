@@ -1,0 +1,28 @@
+[
+  {
+    "name": "native-build",
+    "args": [
+      "scripts/build_cm_fused_slots.py"
+    ],
+    "timeout": 30
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--continue-on-collection-errors",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/workspace/cm-pytest",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/FULL-TESTS.xml"
+    ],
+    "timeout": 2400,
+    "allow_failure": true
+  }
+]

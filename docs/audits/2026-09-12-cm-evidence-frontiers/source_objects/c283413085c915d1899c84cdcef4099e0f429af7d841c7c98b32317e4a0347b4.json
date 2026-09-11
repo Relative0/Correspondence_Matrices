@@ -1,0 +1,58 @@
+[
+  {
+    "name": "fixture-restoration",
+    "args": [
+      "scripts/restore_cm_historical_fixtures.py",
+      "--restore"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "native-build",
+    "args": [
+      "scripts/build_cm_fused_slots.py"
+    ],
+    "timeout": 30
+  },
+  {
+    "name": "sxfm-verification",
+    "args": [
+      "-m",
+      "scripts.cm_frontier_mapping_verify",
+      "--output",
+      "/workspace/cm-packed-evidence/sxfm"
+    ],
+    "timeout": 300
+  },
+  {
+    "name": "concrete-verification",
+    "args": [
+      "-m",
+      "scripts.cm_frontier_mapping_verify",
+      "--kind",
+      "concrete",
+      "--output",
+      "/workspace/cm-packed-evidence/concrete"
+    ],
+    "timeout": 150
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--continue-on-collection-errors",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/workspace/cm-pytest",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/FULL-TESTS.xml"
+    ],
+    "timeout": 2400,
+    "allow_failure": true
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "mapping-tests",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_feature_mapping.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "timeout": 30
+  },
+  {
+    "name": "research",
+    "args": [
+      "-m",
+      "scripts.cm_frontier_campaign",
+      "run",
+      "--output",
+      "/workspace/cm-packed-evidence/research"
+    ],
+    "timeout": 3000
+  }
+]

@@ -17,7 +17,7 @@ _next_spec.loader.exec_module(_next_module)
 append_next_results = _next_module.append_next_results
 
 ROOT = Path(__file__).resolve().parents[2]
-REVIEWED = '2026-09-11'
+REVIEWED = '2026-09-12'
 AUDITS = {
     'performance': ('2026-09-11-cm-performance', '7a4be6eee0e50523d2c68571b34d4627778b0366e325f97fdc0721f102490dc2'),
     'continuation': ('2026-09-11-cm-continuation', '5d50a22b3f24dc8542f35bc1e9d9103e83fcb597444ec9e4c1799d778ecdbebb'),
@@ -25,6 +25,7 @@ AUDITS = {
     'scalar': ('2026-09-11-cm-scalar-research', '3f2667a8c8dda1bcbafeef71662bba9c61ae6b6c8d96178801b2a724595c8a48'),
     'bucket': ('2026-09-11-cm-bucket-counts', 'ca698d98296905f81f8bf06f95e2997fd84925acf833ab9d9daef88bfd9a506f'),
     'next': ('2026-09-11-cm-next-research', 'aecf0d003d970ae72eb7b529479c2a60f29fffe713d672aee3b24ef2f167308b'),
+    'frontiers': ('2026-09-12-cm-evidence-frontiers', '78e9e12d848aaf24c22696e7c56d261695206a8a98265a17f22e79b841c79442'),
 }
 LABELS = {
     'cse': 'Structural CSE', 'cse_flat': 'Structural CSE-flat', 'direct': 'Direct BitSet',
@@ -114,10 +115,10 @@ def build_latest_results():
         entry = entries.get(relative, entries.get(path.relative_to(ROOT).as_posix()))
         if entry is None or digest(payload) != (entry if isinstance(entry, str) else entry['sha256']):
             raise ValueError('Unsealed or changed website source: '+str(path))
-        href = f'results/2026-09-11/{key}.json'
+        href = f'results/{name[:10]}/{key}.json'
         sources[key] = dict(path=path.relative_to(ROOT).as_posix(), href=href,
                             sha256=digest(payload), bytes=len(payload), role=role,
-                            audit_seal=expected, measured=REVIEWED)
+                            audit_seal=expected, measured=name[:10])
         files[href] = payload
         return json.loads(payload)
 
@@ -131,7 +132,7 @@ def build_latest_results():
             raise ValueError('Missing default result cell: '+key)
         panels.append(dict(id=key, title=title, contract=contract, scope=scope, note=note,
                            rows=rows, default_case=default_case, default_q=default_q,
-                           metrics=metrics or ['cold_ms', 'warm_ms'], measured=REVIEWED))
+                           metrics=metrics or ['cold_ms', 'warm_ms'], measured=sources[rows[0]['source']]['measured']))
 
     def row(r, source_key):
         item = dict(case=r['case'], q=r.get('q', 1), method=r['method'],
@@ -152,7 +153,7 @@ def build_latest_results():
         case = r['case']+(' / restricted' if r['restricted'] else '')
         for version in ('baseline', 'candidate'):
             mask_rows.append(dict(case=case, q=r['q'], method=r['backend']+'_'+version,
-                label=LABELS.get(r['backend'], r['backend'])+(' · original' if version == 'baseline' else ' · current'),
+                label=LABELS.get(r['backend'], r['backend'])+(' Â· original' if version == 'baseline' else ' Â· current'),
                 status='complete', cold_ms=r['total_ns'][version]/1e6, warm_ms=r['warm_ns'][version]/1e6,
                 source='packed-mask-confirmation', selector=f"case={r['case']}; q={r['q']}; restricted={r['restricted']}; backend={r['backend']}; {version}"))
     panel('packed-masks', 'Packed input construction', 'Complete Boolean output; fully charged resident requests',
@@ -250,7 +251,19 @@ def build_latest_results():
     number('bucket.outputs', verification['total_timed_outputs'], 'int', 'bucket-final-verification', 'total_timed_outputs')
     number('bucket.cells', verification['total_cells'], 'int', 'bucket-final-verification', 'total_cells')
     disposition = append_next_results(source, panel, number)
+    frontiers = source('frontier-research-summary', 'frontiers', 'PUBLIC-RESULTS.json',
+                       'current projection semantics, independent workload admissions and restored-fixture regression')
+    if frontiers['status'] != 'verified_with_explicit_limitations':
+        raise ValueError('Frontier research has not been verified')
+    number('next.final_passed_tests', frontiers['regression']['counts']['passed'], 'int',
+           'frontier-research-summary', 'regression.counts.passed')
+    number('next.final_failed_or_error_tests', frontiers['fixtures']['remaining_failure_ids'], 'int',
+           'frontier-research-summary', 'fixtures.remaining_failure_ids')
+    number('next.new_regressions', len(frontiers['regression']['new_failure_ids']), 'int',
+           'frontier-research-summary', 'regression.new_failure_ids.length')
+    disposition = frontiers['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
+                    frontiers=frontiers,
                     continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},
                     public_cnf_ids=[c['id'] for c in bucket_fixtures if c['cohort'] == 'public full CNF'],
