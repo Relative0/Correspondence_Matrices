@@ -26,6 +26,7 @@ AUDITS = {
     'bucket': ('2026-09-11-cm-bucket-counts', 'ca698d98296905f81f8bf06f95e2997fd84925acf833ab9d9daef88bfd9a506f'),
     'next': ('2026-09-11-cm-next-research', 'aecf0d003d970ae72eb7b529479c2a60f29fffe713d672aee3b24ef2f167308b'),
     'frontiers': ('2026-09-12-cm-evidence-frontiers', '78e9e12d848aaf24c22696e7c56d261695206a8a98265a17f22e79b841c79442'),
+    'applications': ('2026-09-12-cm-application-evidence', '1ded06d3d710203ed050c8f729edfb71653f09fe339234af2ee5352fc8ed47e7'),
 }
 LABELS = {
     'cse': 'Structural CSE', 'cse_flat': 'Structural CSE-flat', 'direct': 'Direct BitSet',
@@ -251,16 +252,45 @@ def build_latest_results():
     number('bucket.outputs', verification['total_timed_outputs'], 'int', 'bucket-final-verification', 'total_timed_outputs')
     number('bucket.cells', verification['total_cells'], 'int', 'bucket-final-verification', 'total_cells')
     disposition = append_next_results(source, panel, number)
-    frontiers = source('frontier-research-summary', 'frontiers', 'PUBLIC-RESULTS.json',
-                       'current projection semantics, independent workload admissions and restored-fixture regression')
+    source('frontier-research-summary', 'frontiers', 'PUBLIC-RESULTS.json',
+           'prior frontier study; superseded where the application study repeats the same contract')
+    frontiers = source('application-research-summary', 'applications', 'PUBLIC-RESULTS.json',
+                       'current concrete-feature counts, independent oracle checks, actual video source and fixture regression')
+    sources['application-research-summary']['measured'] = frontiers['measured_utc']
     if frontiers['status'] != 'verified_with_explicit_limitations':
         raise ValueError('Frontier research has not been verified')
     number('next.final_passed_tests', frontiers['regression']['counts']['passed'], 'int',
-           'frontier-research-summary', 'regression.counts.passed')
+           'application-research-summary', 'regression.counts.passed')
     number('next.final_failed_or_error_tests', frontiers['fixtures']['remaining_failure_ids'], 'int',
-           'frontier-research-summary', 'fixtures.remaining_failure_ids')
+           'application-research-summary', 'fixtures.remaining_failure_ids')
     number('next.new_regressions', len(frontiers['regression']['new_failure_ids']), 'int',
-           'frontier-research-summary', 'regression.new_failure_ids.length')
+           'application-research-summary', 'regression.new_failure_ids.length')
+    method_labels = {'bucket_min_fill': 'Python min-fill', 'array_min_fill': 'Exact arrays, min-fill',
+                     'cudd_natural': 'CUDD natural order', 'cudd_dynamic': 'CUDD dynamic order',
+                     'simplified_bucket': 'Condition + simplify + Python bucket'}
+    for kind, title, default in (
+            ('feature', 'Counts of concrete feature selections', 'additional-02'),
+            ('independent', 'Independent application projected counts', 'independent-01')):
+        rows = []
+        for record in frontiers[kind+'_methods']:
+            result = dict(case=record['case'], q=8, method=record['method'],
+                          label=method_labels[record['method']], status=record['status'],
+                          source='application-research-summary',
+                          selector=f"{kind}_methods[case={record['case']};method={record['method']}] (median of three repetitions)")
+            if record['status'] == 'complete':
+                if not record['independently_cross_checked']:
+                    raise ValueError('Unverified application timing')
+                result.update(cold_ms=record['median_total_ms'])
+            else:
+                result['reason'] = record['reason']
+            rows.append(result)
+        panel('application-'+kind, title, 'Exact projected count; eight generated application-derived contexts',
+              'Linux RunPod; three fresh-process repetitions; 15-second worker limit; 2 GiB address-space limit',
+              frontiers[kind+'_note']+' Each plotted output matches independent nonprobabilistic Ganak counts. '
+              'Only complete three-repetition results are plotted. Setup, cold requests and cleanup are charged; '
+              'the simplifier recompiles every request. Different hosts and earlier deadlines are not paired speedup comparisons.',
+              rows, default, 8, metrics=['cold_ms'])
+        panels[-1]['measured'] = frontiers['measured_utc']
     disposition = frontiers['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
                     frontiers=frontiers,

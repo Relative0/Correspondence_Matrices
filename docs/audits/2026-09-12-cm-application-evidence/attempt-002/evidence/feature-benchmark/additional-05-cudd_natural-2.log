@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/cm-packed-continuation/scripts/cm_application_studies.py", line 110, in <module>
+    else:worker(args)
+         ~~~~~~^^^^^^
+  File "/workspace/cm-packed-continuation/scripts/cm_application_studies.py", line 59, in worker
+    else:query,stats=runner(case,'projected',args.method)
+                     ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cm-packed-continuation/scripts/cm_next_count_campaign.py", line 90, in runner
+    if method.startswith('cudd'): return native_runner(case, projected, method == 'cudd_dynamic')
+                                         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cm-packed-continuation/scripts/cm_next_count_campaign.py", line 73, in native_runner
+    root &= term
+  File "dd/cudd.pyx", line 3102, in dd.cudd.Function.__and__
+  File "dd/cudd.pyx", line 2599, in dd.cudd.wrap
+    f.init(node, bdd)
+  File "dd/cudd.pyx", line 2820, in dd.cudd.Function.init
+    raise ValueError(
+ValueError: `DdNode *node` is `NULL` pointer.

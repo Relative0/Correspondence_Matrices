@@ -62,6 +62,10 @@ jobs:
           tests/test_h6_freeze_portability.py
           tests/test_feature_mapping.py tests/test_sxfm_semantics.py
           tests/test_consumer_capture.py tests/test_historical_fixture_restoration.py
+          tests/test_projected_simplify.py tests/test_attributed_feature_projection.py
+          tests/test_application_fixture_restoration.py tests/test_presentation_capture.py
           tests/test_generated_public_chart_data.py
+      - name: Verify sealed application evidence and source identities
+        run: python -B scripts/verify_cm_application_evidence.py
       - name: Verify current code and the immutable extracted snapshot
         run: python -B scripts/cm_research_check.py --report tmp/research-ci-check.json

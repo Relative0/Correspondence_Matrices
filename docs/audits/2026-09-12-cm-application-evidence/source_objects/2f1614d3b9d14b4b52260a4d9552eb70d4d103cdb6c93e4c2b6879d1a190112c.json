@@ -1,0 +1,39 @@
+{
+  "schema": "cm-application-study/v1",
+  "frozen_before_timing": true,
+  "feature_cases": [
+    "additional-01",
+    "additional-02",
+    "additional-03",
+    "additional-04",
+    "additional-05",
+    "additional-06",
+    "additional-07",
+    "additional-08",
+    "additional-09"
+  ],
+  "case_selection": "all nine previously paired original feature models; no outcome-based replacements",
+  "feature_contexts": "eight generated controls; seed 2026091202 plus original case position; assignments only to concrete features",
+  "independent_contexts": "all six previously admitted independent cases and their unchanged eight contexts",
+  "methods": [
+    "bucket_min_fill",
+    "array_min_fill",
+    "cudd_natural",
+    "cudd_dynamic",
+    "simplified_bucket"
+  ],
+  "repeats": 3,
+  "worker_deadline_s": 15,
+  "oracle_feature_context_deadline_s": 20,
+  "worker_address_space_bytes": 2147483648,
+  "timing": "fresh process per method/repetition; setup plus eight cold queries plus cleanup; warm queries separately retained",
+  "candidate": "per-request conditioning, unit propagation, hidden pure literals, bounded hidden-variable resolution; all cost charged",
+  "simplification_bounds": {
+    "max_resolution_pairs": 64,
+    "max_resolvent_width": 12,
+    "max_eliminations": 128,
+    "max_work": 4000000
+  },
+  "interpretation": "generated application-derived queries, not naturally observed request traces; refused/failed/timed-out cells retained",
+  "prior_qif_correctness_probe": "observed before this candidate study; all 16 QIF values independently matched; this study is not a pristine replication of that oracle probe"
+}

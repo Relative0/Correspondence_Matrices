@@ -1,0 +1,238 @@
+c o Ganak SHA1: 0b4881b40126fb5ae8a1b7c9fdd4878afa25b051
+c o Arjun SHA1: 0b4881b40126fb5ae8a1b7c9fdd4878afa25b051
+c o SBVA SHA1: 0b4881b40126fb5ae8a1b7c9fdd4878afa25b051
+c o CMS SHA1: 0b4881b40126fb5ae8a1b7c9fdd4878afa25b051
+c o ApproxMC SHA1: 0b4881b40126fb5ae8a1b7c9fdd4878afa25b051
+c o Using ideas by JM Lagniez, and Pierre Marquis
+c o     from paper: Improving Model Counting [..] IJCAI 2016
+c o Using VMTF, picosat, CaDiCaL, and CadiBack code by Armin Biere
+c o CMS is MIT licensed
+c o Using code from 'When Boolean Satisfiability Meets Gauss-E. in a Simplex Way'
+c o       by C.-S. Han and J.-H. Roland Jiang in CAV 2012. Fixes by M. Soos
+c o Using CCAnr from 'CCAnr: A Conf. Checking Based Local Search Solver [...]'
+c o       by Shaowei Cai, Chuan Luo, and Kaile Su, SAT 2015
+c o Using Oracle code from 'Integrating Tree Decompositions [...]'
+c o       by Tuukka Korhonen and Matti Jarvisalo, CP 2021
+c o Using Graph library by Tuukka Korhonen and Matti Jarvisalo
+c o Using Flowcutter by Ben Strasser
+c o Ganak compilation env CMAKE_CXX_COMPILER = /usr/bin/c++ | CMAKE_CXX_FLAGS =  -fno-stack-protector -mpopcnt -msse4.2 -mpclmul -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wnull-dereference -Wdouble-promotion -Wshadow -Wformat=2 -Wextra-semi -pedantic | COMPILE_DEFINES =  -DNDEBUG -D_FORTIFY_SOURCE=0 -DUSE_ZLIB | BUILD_SHARED_LIBS = OFF | ZLIB_FOUND = TRUE | ENABLE_ASSERTIONS = OFF | 
+c o called with: /workspace/cm-packed-continuation/build/application-ganak/ganak --prob 0 --mode 0 --fast /workspace/cm-packed-evidence/oracle-extension/independent-08-6.cnf
+c o CNF projection set size: 45
+c o --> Executing strategy token: clean-cls
+c o --> Executing strategy token: must-scc-vrepl
+c o [scc] new: 481 BP 0M T: 0.00
+c o [vrep] vars 415 lits 13089 rem-bin-cls 1792 rem-long-cls 0 BP 0M T: 0.00
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o [0m[arjun-simp] probing all sampling variables[0m
+c o --> Executing strategy token: must-scc-vrepl
+c o [scc] new: 36 BP 0M T: 0.00
+c o [vrep] vars 36 lits 783 rem-bin-cls 206 rem-long-cls 12 BP 0M T: 0.00
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o [0m[arjun-simp] Removed set       : 23 new size: 22[0m
+c o [0m[arjun-simp] Removed eq lits: 2 new size: 20[0m
+c o [0m[arjun-simp] probe removed: 25 perc: 55.56 T: 0.01[0m
+c o [0m[arjun-simp] Removed eq lits: 0 new size: 20[0m
+c o [0m[arjun-simp] Removed set       : 0 new size: 20[0m
+c o [0m[arjun-simp] get-empties removed: 0 perc: 0.00 total empties now: 0 T: 0.00[0m
+c o [0m[arjun-simp] CMS::simplify() with no BVE, intree probe...[0m
+c o --> Executing strategy token: str-impl
+c [impl-str] lit bin: 0 set-var: 0 T: 0.00 T-out: N T-r: 99.60% w-visit: 4452
+c o --> Executing strategy token: intree-probe
+c o [scc] new: 0 BP 0M T: 0.00
+c o [vrep] vars 0 lits 0 rem-bin-cls 0 rem-long-cls 0 BP 0M T: 0.00
+c o [intree] Set 2 vars hyper-added: 0 trans-irred: 0 trans-red: 0 T: 0.00 T-out: N T-r: 0.15%
+c o Executing OCC strategy token(s): 'occ-ternary-res,occ-backw-sub,
+c o [occ] mem usage for occur      0 MB
+c o [occ] Linked in IRRED BIN by default: 1343
+c o [occ] Linked in RED   BIN by default: 0
+c o [occ] mem usage for occur      0 MB
+c o Mem for watch alloc    : 0           MB (3.68      %)
+c o Mem for watch array    : 0           MB (1.13      %)
+c o Executing OCC strategy token: occ-ternary-res
+c o [occ-ternary-res] Ternary res-tri: 1091 res-bin: 0 sub: 125 str: 184 T: 0.00 T-out: N T-r: 78.63%
+c o Executing OCC strategy token: occ-backw-sub
+c o [occ-backw-sub-long-w-long] rem cl: 3 tried: 5337/5337 (100.0%) T: 0.00 T-out: N T-r: 95.18%
+c o --> Executing strategy token: distill-litrem
+c [distill-litrem] useful: 24/6286/4243 lits-rem: 24 0-depth-assigns: 0 T: 0.01 T-out: Y
+c o --> Executing strategy token: must-distill-cls
+c o [distill-long-irred] cls tried: 4219/4219 T: 0.01 T-out: N T-r: 67.63%
+c o [distill-long-irred] cls tried: 3982/3982 T: 0.01 T-out: N T-r: 61.80%
+c o --> Executing strategy token: distill-bins
+c o [distill-bin] useful: 59/830/1600 lits-rem: 0 cl-rem: 58 0-depth-assigns: 1 T: 0.00 T-out: Y
+c o --> Executing strategy token: oracle-vivif-veryfast
+c o --> Executing strategy token: must-renumber
+c o [oracle-bin] potential pairs: 5878 T: 0.0
+c o --> Executing strategy token: must-scc-vrepl
+c o [scc] new: 129 BP 0M T: 0.00
+c o [vrep] vars 128 lits 4476 rem-bin-cls 784 rem-long-cls 188 BP 0M T: 0.00
+c o [oracle-vivif] lits-rem: 2122 learnt-units: 22 T-out: N T-remain: 54.8% T: 0.14
+c o [oracle-bin] bin-added: 1065 equiv-added: 89 T-out: N T-remain: 59.49% T: 0.08
+c o [oracle-vivif] cache usefulness: 89% total T: 0.23
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1000
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o --> Executing strategy token: scc-vrepl
+c o [scc] new: 0 BP 0M T: 0.00
+c o --> Executing strategy token: sub-impl
+c o [impl-sub] bin: 519 T: 0.00 T-out: N w-visit: 4452
+c o --> Executing strategy token: breakid
+c o Executing OCC strategy token(s): 'occ-backw-sub-str,occ-clean-implicit,occ-bve,occ-bva,occ-ternary-res,occ-xor,
+c o [occ] mem usage for occur      0 MB
+c o [occ] Linked in IRRED BIN by default: 1669
+c o [occ] Linked in RED   BIN by default: 499
+c o [occ] mem usage for occur      0 MB
+c o Mem for watch alloc    : 0           MB (3.13      %)
+c o Mem for watch array    : 0           MB (0.78      %)
+c o Executing OCC strategy token: occ-backw-sub-str
+c o [occ-backw-sub-str-long-w-bins] subs: 0 str: 0 tried: 2168 0-depth ass: 0 T: 0.00 T-out: N T-r: 86.93%
+c o [occ-backw-sub-long-w-long] rem cl: 160 tried: 3712/3712 (100.0%) T: 0.00 T-out: N T-r: 97.71%
+c o [occ-backw-sub-str-long-w-long] sub: 0 str: 0 tried: 11136/3712 (300.0)  T: 0.00 T-out: N T-r: 86.68%
+c o Executing OCC strategy token: occ-clean-implicit
+c o Executing OCC strategy token: occ-bve
+c o Executing OCC strategy token: occ-bva
+c o Executing OCC strategy token: occ-ternary-res
+c o [occ-ternary-res] Ternary res-tri: 527 res-bin: 0 sub: 65 str: 48 T: 0.00 T-out: N T-r: 89.22%
+c o Executing OCC strategy token: occ-xor
+c o --> Executing strategy token: card-find
+c o --> Executing strategy token: cl-consolidate
+c o Not consolidating memory.
+c o --> Executing strategy token: scc-vrepl
+c o [scc] new: 11 BP 0M T: 0.00
+c o [vrep] vars 9 lits 302 rem-bin-cls 70 rem-long-cls 48 BP 0M T: 0.00
+c o --> Executing strategy token: renumber
+c o --> Executing strategy token: louvain-comms
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1000
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o [0m[arjun-simp] Removed set       : 4 new size: 16[0m
+c o [0m[arjun-simp] CMS::simplify() with no BVE finished. T: 0.2606[0m
+c o [0mWARNING: Turning off gates, because the sampling size is small, so we can just do it. Size: 16[0m
+c o --> Executing strategy token: must-scc-vrepl
+c o [scc] new: 0 BP 0M T: 0.00
+c o [vrep] vars 0 lits 0 rem-bin-cls 0 rem-long-cls 0 BP 0M T: 0.00
+c o --> Executing strategy token: clean-cls
+c o --> Executing strategy token: sub-impl
+c o [impl-sub] bin: 0 T: 0.00 T-out: N w-visit: 4452
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1000
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o --> Executing strategy token: must-scc-vrepl
+c o [scc] new: 0 BP 0M T: 0.00
+c o [vrep] vars 0 lits 0 rem-bin-cls 0 rem-long-cls 0 BP 0M T: 0.00
+c o --> Executing strategy token: clean-cls
+c o --> Executing strategy token: sub-impl
+c o [impl-sub] bin: 0 T: 0.00 T-out: N w-visit: 4452
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1000
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o [0m[arjun-simp] Removed eq lits: 3 new size: 13[0m
+c o [0m[arjun-simp] Removed set       : 0 new size: 13[0m
+c o [0m[arjun-simp] get-empties removed: 0 perc: 0.00 total empties now: 0 T: 0.00[0m
+c o [0m[arjun-simp] probing all sampling variables[0m
+c o [0m[arjun-simp] Removed set       : 0 new size: 13[0m
+c o [0m[arjun-simp] Removed eq lits: 0 new size: 13[0m
+c o [0m[arjun-simp] probe removed: 0 perc: 0.00 T: 0.00[0m
+c o [0m[arjun-simp] Removed eq lits: 0 new size: 13[0m
+c o [0m[arjun-simp] Removed set       : 0 new size: 13[0m
+c o [0m[arjun-simp] get-empties removed: 0 perc: 0.00 total empties now: 0 T: 0.00[0m
+c o [0m[arjun] simplification finished  removed: 32 perc: 71.11 T: 0.28[0m
+c o [0m[arjun] Duplicating CNF...[0m
+c o [0m[arjun] Duplicated CNF. T: 0.00[0m
+c o [0m[arjun] CMS::simplify() with *only* BVE...[0m
+c o Executing OCC strategy token(s): 'occ-bve,
+c o [occ] mem usage for occur      0 MB
+c o [occ] Linked in IRRED BIN by default: 3931
+c o [occ] Linked in RED   BIN by default: 499
+c o [occ] mem usage for occur      0 MB
+c o Mem for watch alloc    : 0           MB (4.99      %)
+c o Mem for watch array    : 0           MB (1.92      %)
+c o Executing OCC strategy token: occ-bve
+c o [occ-empty-res] Empty resolvent elimed: 194 T: 0.00 T-out: N
+c o [occ-bve] turning off picosat-based irreg gate detection, added lits:  7033
+c o [occ-bve] iter v-elim 1540
+c o cl_inc_rate=0.60, var_dec_rate=2.20 (grow=0)
+c o Reduced to 1284 vars, 6258 cls (grow=0)
+c o [occ-bve] iter v-elim 73
+c o cl_inc_rate=1.02, var_dec_rate=1.06 (grow=3)
+c o Reduced to 1211 vars, 6377 cls (grow=3)
+c o [occ-bve] iter v-elim 0
+c o cl_inc_rate=1.00, var_dec_rate=1.00 (grow=4)
+c o Reduced to 1211 vars, 6377 cls (grow=4)
+c o [occ-bve] iter v-elim 8
+c o cl_inc_rate=1.01, var_dec_rate=1.01 (grow=6)
+c o Reduced to 1203 vars, 6409 cls (grow=6)
+c o [occ-bve] iter v-elim 11
+c o cl_inc_rate=1.01, var_dec_rate=1.01 (grow=9)
+c o Reduced to 1192 vars, 6465 cls (grow=9)
+c o [occ-bve] iter v-elim 23
+c o cl_inc_rate=1.02, var_dec_rate=1.02 (grow=13)
+c o Reduced to 1169 vars, 6625 cls (grow=13)
+c o x n vars       : 1169
+c o #try to eliminate: 11202
+c o #var-elim        :  1655
+c o #T-o: N
+c o #T-r: 99.56%
+c o #T  : 0.09
+c o [occur] 0.00 is overhead
+c o [occur] link-in T: 0.00 cleanup T: 0.00
+c o [occ-xor-bve] elimed: 0 T: 0.00 T-out: N
+c o [consolidate] mini T: 0.00
+c o global_timeout_multiplier: 0.1000
+c o [branch] rebuilding order heap for all branchings. Current branching: vsids
+c o [0m[arjun] CMS::simplify() with *only* BVE finished. T: 0.0965[0m
+c o [0m[arjun] Adding fixed clauses time: 0.0002[0m
+c o [0m[backward FAST] Start unknown size: 13[0m
+c o [0m[31m[arjun] backward round finished. U:  I: 9 T: 0.01[0m
+c o [0m[arjun] run_minimize finished T: 0.38[0m
+c o WARNING. Not performing puura.  Number of sampling variables: 9 vs 10 and  --puura is: 1 components may be disconnected, which will interfere with proper TD weight calculation
+c o Arjun T: 0.38
+c o Found 2 disconnected component(s)
+c o [par] Using non-parallel counting
+c o ind size: 9 nvars: 2225
+c o opt ind size: 13 ind size: 9 nvars: 2225
+c o Sampling set size: 9
+c o Opt sampling set size: 13
+c o Bin irred/red            2852          0
+c o Long irred cls/tri        354       5960
+c o Long red cls/tri            0          0
+c o [rst-cube] Num restarts: 0 orig cubes this rst: 1 final cubes this rst: 1 total orig cubes: 1 total final cubes: 1
+c o total time so far: 0.42
+c o decisions K                    0         -- Kdec/s:     34.72    
+c o conflicts                      171          -- confl/s:    6654.21  
+c o rem lits triedK/rem lits remK  0         0         
+c o shrink tried/useful%/lits rem  170       22.3529   201       
+c o avg clsz/rem lits avg/finalavg 10.3801   8.7719    8.7719   
+c o rdbs/low lbd/rem               0     0      0     
+c o looks/look-computes            0/0
+c o sat call/sat/unsat/confl/rst  260   246   14    147   0     
+c o buddy called /unsat ratio           0     / 0.0000 
+c o buddy avg num bin/long cls/vs  0.0000 / 0.0000 / 0.0000
+c o buddy max num bin/long cls/vs  0     / 0     / 0    
+c o orig cubes/lit-r avg/exten avg 1     / 0.00  / 0.00 
+c o cubes orig/symm/final          1     / 0     / 1    
+c o cubes resolved/flp-removed     0     / 0    
+c o tot restarts                   0    
+c o comp sortsK/avg sz             0     / 3.40000000
+c o comps recordK/non-reset ratio  0 / 0.99
+c o vivif: try/cls/clviv/litsravg  0         0         0         0.00      
+c o toplev subs runs/bins/long-cls 0         0         0         0         0         
+c o toplevel probes/fail/bprop     0         0         0         
+c o Mem used                       0.02 GB
+c o cache pollutions call/removed  77/172
+c o cache entries K                0
+c o MB cache                       4.157
+c o cache K (lookup/ stores/ hits/ dels) 0      0      0      0       -- Klookup/s:  27.38    
+c o cache miss rate                0.457
+c o avg hit/store num vars 28.888 / 381.615
+c o 
+c o intermediate count: 25
+c o Total time [Arjun+GANAK]: 0.42
+s SATISFIABLE
+c s type pmc
+c s log10-estimate 1.39794001e+00
+c s exact arb int 25
+c s pac guarantees epsilon: 0 delta: 0

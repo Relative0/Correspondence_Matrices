@@ -989,11 +989,23 @@ function frontierResultsUpdate() {
       ["complete", "refused", "timeout", "failed"].filter(k => counts[k]).map(k => `${counts[k]} ${k}`).join("; ");
     return [r.id, r.family, r.projected_variables?.length ?? "Not declared", outcome];
   })));
+  s.append(h("h3", { text: "Independent exact counts and bounded simplification" }));
+  s.append(h("p", { text: F.feature_note }));
+  s.append(h("p", { text: `${F.oracle.timed_outputs_matched} completed timed outputs matched Ganak; ${F.oracle.exhaustive_controls} exhaustive controls passed. Ganak completed ${F.oracle.feature_contexts_completed} of 72 initial feature queries. Solver agreement is not a certified proof.` }));
+  s.append(table(["Follow-up case", "Exact-count outcomes"], [...new Set(F.oracle_extension.queries.map(r => r.case))].map(id => {
+    const outcomes = {};
+    F.oracle_extension.queries.filter(r => r.case === id).forEach(r => { outcomes[r.status] = (outcomes[r.status] || 0) + 1; });
+    return [id, Object.entries(outcomes).map(([k,v]) => `${v} ${k.replaceAll("_", " ")}`).join("; ")];
+  })));
+  s.append(h("p", { text: F.oracle_extension.protocol }));
+  s.append(h("p", { text: F.oracle_extension.synthesis_verification_note }));
+  s.append(h("h3", { text: "What the completed video builds establish" }));
   s.append(h("p", { text: F.consumer.note }));
+  s.append(h("p", { text: F.fixtures.note }));
   s.append(h("p", { text: F.regression.note }));
   s.append(h("div", { class: "benchmark-downloads" }, [
-    h("a", { href: E.sources["frontier-research-summary"].href, download: "frontier-research-summary.json", text: "Download every mapping, refusal, diagnostic result and remaining test failure" }),
-    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_CONSUMER_CAPTURE.md", text: "Consumer capture and fixture restoration instructions" }),
+    h("a", { href: E.sources["application-research-summary"].href, download: "application-research-summary.json", text: "Download the current mappings, counts, failed attempts and regression results" }),
+    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_APPLICATION_RESEARCH.md", text: "Actual video capture and additional fixture restoration instructions" }),
   ]));
   return s;
 }

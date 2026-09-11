@@ -1,0 +1,30 @@
+[
+  {
+    "name": "mechanism-tests",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_projected_simplify.py",
+      "tests/test_attributed_feature_projection.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/MECHANISM-TESTS.xml"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "feature-benchmark",
+    "args": [
+      "-m",
+      "scripts.cm_application_studies",
+      "bench",
+      "--kind",
+      "feature",
+      "--output",
+      "/workspace/cm-packed-evidence/feature-benchmark"
+    ],
+    "timeout": 2400
+  }
+]
