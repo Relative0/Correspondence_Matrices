@@ -72,7 +72,7 @@ app.append(latestResultsUpdate());
     "These files are shipped with the website. Their checksums identify the same source summaries used to build its graphs; new results are never linked to an older commit where they do not exist.");
   s.append(h("p", {}, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Complete chart-ready snapshot (all cases and refusals)" })]));
   s.append(h("p", {}, [h("a", { href: "results/2026-09-11/full-site-data.json", download: "full-site-data.json", text: "All website data, including every earlier study chart and numerical token" })]));
-  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/chart-freshness.json", download: "chart-freshness.json", text: "Chart inventory, measurement dates and source checksums" })]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/chart-freshness.json", download: "chart-freshness.json", text: "Chart inventory, measurement dates and source checksums" }), " Older text-source checksums normalize CRLF to LF, as labelled in the inventory. Current downloadable evidence checksums verify the exact file bytes."]));
   const records = Object.entries(current.sources).map(([key, source]) => ({
     name: key+".json", path: source.path, role: source.role, contract: "See the named task and timing boundary in Latest results",
     scope: "Measured "+source.measured, bytes: source.bytes, sha256: source.sha256,

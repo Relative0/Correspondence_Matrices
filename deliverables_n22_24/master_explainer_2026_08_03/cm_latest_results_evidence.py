@@ -58,7 +58,14 @@ def build_chart_freshness(site, data):
                 for item in data[key].get('provenance', []) if isinstance(data[key], dict) else []:
                     if isinstance(item, str):
                         path = ROOT/item.split(' :: ')[0]
-                        if path.is_file(): sources.append(dict(path=path.relative_to(ROOT).as_posix(), sha256=digest(path.read_bytes())))
+                        if path.is_file():
+                            # Git may check these older text sources out with CRLF
+                            # on Windows and LF on Linux. Hash their text content
+                            # consistently; sealed current downloads below still
+                            # require exact, unmodified artifact bytes.
+                            sources.append(dict(path=path.relative_to(ROOT).as_posix(),
+                                sha256=digest(path.read_bytes().replace(b'\r\n', b'\n')),
+                                hash_mode='text_lf_line_endings'))
             dates = [f'{y}-{m}-{d}' for src in sources for y, m, d in re.findall(r'(2026)[-_]?(\d{2})[-_]?(\d{2})', src['path'])]
             definition = name in ('assignmentGrowth', 'frontierMap', 'roadmap', 'auditLadder')
             if not sources and not definition: raise ValueError('Figure lacks a concrete evidence file: '+figure_id)

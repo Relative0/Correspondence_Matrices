@@ -84,6 +84,25 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         repeats = [r for r in self.data['e2_kernel_vs_cse_flat']['rows'] if r['group'] == 'repeat']
         self.assertEqual(len(repeats), 3)
 
+    def test_historical_source_identity_survives_checkout_line_endings_but_detects_edits(self):
+        real_read_bytes = Path.read_bytes
+        sources = {ROOT/source['path'] for figure in self.data['_freshness']['figures'].values() for source in figure['sources']}
+        def line_endings(path, crlf):
+            payload = real_read_bytes(path)
+            if path in sources:
+                payload = payload.replace(b'\r\n', b'\n')
+                if crlf: payload = payload.replace(b'\n', b'\r\n')
+            return payload
+        for crlf in (False, True):
+            with mock.patch.object(Path, 'read_bytes', lambda path: line_endings(path, crlf)):
+                self.assertEqual(self.module.build_chart_freshness(SITE, self.data), self.data['_freshness'])
+        changed = next(iter(sources))
+        with mock.patch.object(Path, 'read_bytes', lambda path: real_read_bytes(path) + (b' altered evidence' if path == changed else b'')):
+            self.assertNotEqual(self.module.build_chart_freshness(SITE, self.data), self.data['_freshness'])
+        for figure in self.data['_freshness']['figures'].values():
+            for source in figure['sources']:
+                self.assertEqual(source['hash_mode'], 'text_lf_line_endings')
+
     def test_all_nine_routes_include_current_results(self):
         for page in ('index','layperson','investor','expert','usecases','feature-model-evidence','learning-neural-evidence','data-downloads','latest-results'):
             text = (SITE/(page+'.html')).read_text(encoding='utf-8')
