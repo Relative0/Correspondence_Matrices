@@ -33,15 +33,19 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 import re
 import statistics
 import sys
+import tempfile
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from cm_downloads_evidence import build_downloads_evidence
 from cm_feature_model_evidence import build_feature_model_evidence
 from cm_learning_neural_evidence import build_learning_neural_evidence
+from cm_latest_results_evidence import build_latest_results, build_chart_freshness, site_snapshots
 
 HERE = Path(__file__).resolve().parent
 DELIV = HERE.parent
@@ -529,6 +533,10 @@ num("symv3.repeat.max", max(_sym_repeat_values), "ratio4",
     "%s :: max statistical_inference.headline.paired_formula_cluster_geomean" % rel(P_RERUN))
 num("symv3.repeat.geomean", geomean(_sym_repeat_values), "ratio4",
     "%s :: geomean of three fresh headline paired_formula_cluster_geomean values" % rel(P_RERUN))
+
+for suffix, field in (("latest", "paired_formula_cluster_geomean"), ("latest.lo", "paired_formula_cluster_bootstrap_ci95_low"), ("latest.hi", "paired_formula_cluster_bootstrap_ci95_high")):
+    num("symv3.repeat."+suffix, sym_repeat_audits[-1]["statistical_inference"]["headline"][field], "ratio4",
+        rel(P_SYM_REPEAT_AUDITS[-1])+" :: statistical_inference.headline."+field)
 
 _memo_bx1b2 = [pod["acceptance"]["bx1_b2"]["candidate_over_baseline_geomean"]
                 for pod in memo_runpod_audit["pods"]]
@@ -1616,6 +1624,9 @@ for key, record in learning_neural_numbers.items():
 # ---------------------------------------------------------------- reviewed downloads (immutable links, no artifact copies)
 
 D["e24_downloads"] = build_downloads_evidence()
+D["e25_latest_results"], latest_numbers, latest_downloads = build_latest_results()
+for key, record in latest_numbers.items():
+    num(key, record["value"], record["fmt"], record["prov"])
 
 # ================================================================= E21
 # Current-source exact, non-neural architecture evidence (2026-09-03/04).
@@ -2107,18 +2118,61 @@ PAGES = [
     ("cm_feature_model_template.html", "feature-model-evidence.html"),
     ("cm_learning_neural_template.html", "learning-neural-evidence.html"),
     ("cm_downloads_template.html", "data-downloads.html"),
+    ("cm_latest_results_template.html", "latest-results.html"),
 ]
+for index, (audit, path) in enumerate(zip(sym_repeat_audits, P_SYM_REPEAT_AUDITS), 1):
+    estimate = audit["statistical_inference"]["headline"]
+    D["e2_kernel_vs_cse_flat"]["rows"].append({
+        "label": "B2/B4 same-host repeat %d · 2026-08-26" % index,
+        "scope": "Fresh exactly counterbalanced rerun; same Windows host and task",
+        "value": estimate["paired_formula_cluster_geomean"],
+        "lo": estimate["paired_formula_cluster_bootstrap_ci95_low"],
+        "hi": estimate["paired_formula_cluster_bootstrap_ci95_high"],
+        "basis": "within-run formula-cluster bootstrap; repetitions are not independent hosts",
+        "group": "repeat",
+    })
+    D["e2_kernel_vs_cse_flat"]["provenance"].append(rel(path)+" :: statistical_inference.headline")
+
+D["_freshness"] = build_chart_freshness(HERE, D)
+latest_downloads.update(site_snapshots(D))
+
+
+def write_generated(path, payload):
+    """Replace a complete output, without truncating a page being served."""
+    path = path.resolve()
+    if not path.is_relative_to(HERE.resolve()):
+        raise ValueError("Generated output escapes the website directory")
+    if path.is_file() and path.read_bytes() == payload:
+        return
+    with tempfile.NamedTemporaryFile(dir=path.parent, prefix=path.name+".", suffix=".tmp", delete=False) as fh:
+        temporary = Path(fh.name)
+        fh.write(payload)
+    try:
+        for attempt in range(5):
+            try:
+                os.replace(temporary, path)
+                break
+            except PermissionError:
+                if attempt == 4:
+                    raise
+                # Windows readers/indexers can briefly deny replacement.
+                time.sleep(0.1 * (attempt + 1))
+    finally:
+        temporary.unlink(missing_ok=True)
+
 
 out_json = HERE / "cm_master_data_2026_08_03.json"
-with out_json.open("w", encoding="utf-8", newline="\n") as fh:
-    json.dump(D, fh, indent=2, ensure_ascii=False)
-    fh.write("\n")
+write_generated(out_json, (json.dumps(D, indent=2, ensure_ascii=False)+"\n").encode("utf-8"))
 
 css = (HERE / "cm_master_shared.css").read_text(encoding="utf-8")
 lib = (HERE / "cm_master_shared.js").read_text(encoding="utf-8")
 payload = json.dumps(D, separators=(",", ":"), ensure_ascii=False)
 
 written = []
+for relative, data in latest_downloads.items():
+    target = HERE / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    write_generated(target, data)
 for tpl_name, out_name in PAGES:
     tpl = HERE / tpl_name
     if not tpl.exists():
@@ -2129,7 +2183,7 @@ for tpl_name, out_name in PAGES:
     html = html.replace("/*__CM_LIB__*/", lib)
     html = html.replace("/*__CM_DATA__*/null", payload)
     out = HERE / out_name
-    out.write_text(html, encoding="utf-8", newline="\n")
+    write_generated(out, html.encode("utf-8"))
     written.append((out_name, out.stat().st_size))
 
 # ---------------------------------------------------------------- report

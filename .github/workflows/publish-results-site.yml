@@ -37,11 +37,16 @@ jobs:
           cp "$site_dir/feature-model-evidence.html" _site/
           cp "$site_dir/learning-neural-evidence.html" _site/
           cp "$site_dir/data-downloads.html" _site/
+          cp "$site_dir/latest-results.html" _site/
+          cp -R "$site_dir/results" _site/results
           cp "$site_dir/og.png" _site/
           # Publish the neural homepage together with its directly linked sources.
           python3 scripts/cm_neural_site_export.py --output build/neural-pages-export --target https://relative0.github.io/Correspondence_Matrices/neural/
           cp -R build/neural-pages-export/_site _site/neural
           touch _site/.nojekyll
+
+      - name: Reject stale graphs, pages and source downloads
+        run: python3 scripts/cm_website_release_verify.py --site _site --output _site/website-release-manifest.json
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

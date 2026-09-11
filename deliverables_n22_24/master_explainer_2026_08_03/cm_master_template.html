@@ -53,7 +53,7 @@ app.append(h("header", { class: "page" }, [
   h("p", { class: "lede", html: P(C.page.lede) }),
   h("p", { class: "lede", style: "font-size:15px", html: P(C.page.standfirst) }),
   h("p", { class: "meta", html:
-    `Evidence: comprehensive benchmark refresh of 3 August 2026 (B1–B7, BX1–BX2) · ` +
+    `Evidence reviewed through 11 September 2026; original full-vector campaign: 3 August 2026 (B1–B7, BX1–BX2) · ` +
     `evidence revision <code>${M.evidence_revision.slice(0, 7)}</code>, campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>. ` +
     P(C.page.honesty) }),
 ]));
@@ -79,14 +79,15 @@ app.append(tiles([
   ["CM vs a plain CSE kernel", f(DATA.e1_kernel_vs_cse.rows[0].value, 3),
     "local synthetic kernel, {{kernel.local.pct}} faster; EPFL " +
       f(DATA.e1_kernel_vs_cse.rows[1].value, 3) + "; {{kernel.pod.count}} Linux synthetic replications"],
-  ["CM vs a flattened CSE kernel", P("{{symv3.bare.overall}}"),
-    "current B2/B4 V3 bare kernel; 95% CI {{symv3.bare.overall.lo}}–{{symv3.bare.overall.hi}}; below 1 favors CM. " +
-      "Historical B1/E3 {{flat.local}} remains in the comparison chart"],
+  ["CM vs a flattened CSE kernel", P("{{symv3.repeat.latest}}"),
+    "latest same-host B2/B4 V3 repetition (August 26); 95% CI {{symv3.repeat.latest.lo}}–{{symv3.repeat.latest.hi}}. " +
+      "Primary study {{symv3.bare.overall}} and all repetitions remain in the comparison chart"],
   ["Whole-call boundary", "BitSet",
-    "leads at every semantic support measured, up to live_k = {{wrap.max_k}}"],
+    "led the dated legacy wrapper comparison through live_k = {{wrap.max_k}}; newer output contracts have separate results"],
   ["Preparation cost", T("prep.min") + "–" + T("prep.max"),
-    "the top remaining optimisation surface, and the reason reuse count decides everything"],
+    "legacy preparation range; the latest mask, binding and scalar-plan measurements are reported separately"],
 ]));
+app.append(latestResultsUpdate());
 app.append(projectStatePanel());
 app.append(evidenceBoundary());
 app.append(featureModelAuditUpdate());
@@ -410,11 +411,11 @@ app.append(banner("note", "How to read this page", [
   /* --- scope limits -------------------------------------------------- */
   s.append(h("h3", { text: "What this evidence does not cover" }));
   s.append(h("ul", { html:
-    "<li>One synthetic generator and one external circuit family. The external corpus is AND/INV form, " +
+    "<li>The August 3 kernel campaign used one synthetic generator and one external circuit family. The external corpus is AND/INV form, " +
     "which is exactly the case where CM's merging mechanism predicts parity — informative, but not a " +
     "sample of all real workloads.</li>" +
-    "<li>No BDD-hard or deliberately order-sensitive formula families were measured. The corpora here are " +
-    "small for CUDD, which is why dynamic reordering never triggered.</li>" +
+    "<li>The August 3 corpora were small for CUDD and dynamic reordering never triggered. The September 11 " +
+    "full-CNF count study now measures natural, dynamic and grouped orders; its results and refusals are in Latest results.</li>" +
     "<li>Bounded direct kernels above live_k = " + T("guard.k") + " completed exactly, but the supported " +
     "public wrapper refused every case; this is not an above-guard public speed claim.</li>" +
     "<li>No real deployed workload has been measured. Reuse counts — the variable that decides whether " +

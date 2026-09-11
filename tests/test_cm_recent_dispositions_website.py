@@ -101,7 +101,7 @@ class RecentDispositionsWebsiteTests(unittest.TestCase):
             self.assertIn("Research disposition · ${E.as_of}", page, name)
             self.assertIn(phrase, page, name)
             self.assertIn("Controlling summary", page, name)
-            self.assertIn("Production behavior remains unchanged", page, name)
+            self.assertTrue("These September 4/8 gates remain closed" in page, name)
 
     def test_missing_neural_machine_artifacts_are_explicitly_excluded(self):
         neural = self.data["e22_learning_neural"]

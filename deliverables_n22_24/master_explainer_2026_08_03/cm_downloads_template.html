@@ -59,11 +59,29 @@ function artifactTable(records, label) {
 }
 
 app.append(h("header", { class: "page" }, [
-  h("p", { class: "eyebrow", text: `Reviewed evidence · ${E.reviewed}` }),
+  h("p", { class: "eyebrow", text: `Website reviewed · ${DATA._freshness.reviewed}` }),
   h("h1", { text: "Data & downloads" }),
-  h("p", { class: "lede", text: "The result files, audit records, verifiers and tests behind the published findings—linked to one immutable reviewed commit." }),
-  h("p", { class: "meta", text: `${E.artifact_count} explicitly reviewed files · commit ${E.revision}` }),
+  h("p", { class: "lede", text: "The September 11 result summaries are included with this site and checked against their sealed research sources. Earlier evidence sets retain their original immutable commit links." }),
+  h("p", { class: "meta", text: `${E.artifact_count} earlier commit-pinned files, plus the current source summaries below · commit ${E.revision}` }),
 ]));
+app.append(latestResultsUpdate());
+
+{
+  const current = DATA.e25_latest_results;
+  const s = section("september-11", `Current results · ${current.reviewed}`, "Download the exact data behind the latest graphs",
+    "These files are shipped with the website. Their checksums identify the same source summaries used to build its graphs; new results are never linked to an older commit where they do not exist.");
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Complete chart-ready snapshot (all cases and refusals)" })]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/full-site-data.json", download: "full-site-data.json", text: "All website data, including every earlier study chart and numerical token" })]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/chart-freshness.json", download: "chart-freshness.json", text: "Chart inventory, measurement dates and source checksums" })]));
+  const records = Object.entries(current.sources).map(([key, source]) => ({
+    name: key+".json", path: source.path, role: source.role, contract: "See the named task and timing boundary in Latest results",
+    scope: "Measured "+source.measured, bytes: source.bytes, sha256: source.sha256,
+    license: "Research evidence; upstream/project rights remain as documented", privacy: "Selected numerical evidence; no operational cloud bundle",
+    view: source.href, raw: source.href,
+  }));
+  s.append(artifactTable(records, "September 11 source summaries"));
+  app.append(s);
+}
 
 {
   const s = section("scope", "Publication contract", "Pinned evidence, visible boundaries",
@@ -91,7 +109,7 @@ E.sets.forEach(group => {
 });
 
 app.append(h("footer", { class: "footer" }, [
-  h("p", { text: `Download index reviewed ${E.reviewed} at ${E.revision}.` }),
+  h("p", { text: `Earlier commit-pinned download index reviewed ${E.reviewed} at ${E.revision}.` }),
   h("p", {}, [h("a", { href: "index.html", text: "Return to the knowledge base" })]),
 ]));
 }

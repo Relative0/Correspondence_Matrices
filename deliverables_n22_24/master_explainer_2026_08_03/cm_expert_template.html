@@ -53,6 +53,7 @@ app.append(h("header", { class: "page" }, [
     `pods Linux/AMD EPYC cpu3c, all terminated · campaign spend ${FMT.usd(M.cost_usd)} of $${M.cost_cap_usd.toFixed(2)} cap · ` +
     `tests ${M.tests}` }),
 ]));
+app.append(latestResultsUpdate());
 
 app.append(banner("note", "Reading conventions enforced throughout", [
   "<b>live_k on every workload axis</b>, never nominal namespace size — verified, not assumed. " +
@@ -369,12 +370,12 @@ app.append(currentEvidenceUpdate("expert"));
 
   s.append(h("h3", { text: "Scope limits" }));
   s.append(h("ul", { html: P(
-    "<li>One synthetic generator and one external circuit family. The external corpus is AND/INV form — " +
+    "<li>The August 3 kernel campaign used one synthetic generator and one external circuit family. The external corpus is AND/INV form — " +
     "precisely the case where the merging mechanism predicts parity. Informative as a mechanism test; not a " +
     "sample of all real workloads.</li>" +
-    "<li>No BDD-hard or deliberately order-sensitive families measured. At {{bx2.max_nodes}} nodes and " +
-    "below, dynamic reordering never triggers, so the order question is answered only where ordering barely " +
-    "matters.</li>" +
+    "<li>In the August 3 order study, dynamic reordering never triggered at {{bx2.max_nodes}} nodes and below. " +
+    "The September 11 full-CNF count study separately measures natural, dynamic and grouped orders, including " +
+    "ordering-sensitive cases and explicit refusals; see Latest results.</li>" +
     "<li>Bounded direct kernels above live_k = {{guard.k}} completed exactly, but the supported public wrapper " +
     "refused every case. This is feasibility evidence, not an above-guard public speed claim.</li>" +
     "<li>No real deployed workload measured. Reuse counts — the decision variable for the entire cost " +

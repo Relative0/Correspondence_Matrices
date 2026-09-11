@@ -17,6 +17,7 @@ const REPOSITORY_BLOB_ROOT = `https://github.com/Relative0/Correspondence_Matric
 const SITE_SOURCE_ROOT = "deliverables_n22_24/master_explainer_2026_08_03/";
 function hostedEvidenceHref(href) {
   if (typeof href !== "string" || typeof location === "undefined") return href;
+  if (href.startsWith("results/")) return href;
   if (location.hostname === "relative0.github.io" && location.pathname === "/Correspondence_Matrices/learning-neural-evidence.html" && href.startsWith("../../")) return "neural/evidence/" + href.slice(6);
   if (location.hostname !== "relative0.github.io" || !location.pathname.startsWith("/Correspondence_Matrices/")) return href;
   if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(href) || /\.html(?:[?#].*)?$/i.test(href)) return href;
@@ -32,7 +33,10 @@ const el = (t, a = {}, kids = []) => {
 const h = (t, a = {}, kids = []) => {
   const n = document.createElement(t);
   for (const k in a) {
-    if (k === "html") n.innerHTML = a[k];
+    if (k === "html") {
+      n.innerHTML = a[k];
+      n.querySelectorAll("a[href]").forEach(link => link.setAttribute("href", hostedEvidenceHref(link.getAttribute("href"))));
+    }
     else if (k === "text") n.textContent = a[k];
     else if (t === "a" && k === "href") n.setAttribute(k, hostedEvidenceHref(a[k]));
     else n.setAttribute(k, a[k]);
@@ -178,7 +182,17 @@ function logTicks(lo, hi) {
 
 /* ---------------------------------------------------------------- card */
 function card(o) {
+  const freshness = DATA._freshness?.figures[o.id];
+  if (freshness) {
+    o = { ...o, scope: `${o.scope || ""} · ${freshness.measured ? "measured "+freshness.measured : "definition / authored plan"} · reviewed ${freshness.reviewed}`,
+      caption: (o.caption || "")+" "+freshness.note };
+  }
   const c = h("section", { class: "card", id: o.id });
+  if (freshness) {
+    c.dataset.evidenceReviewed = freshness.reviewed;
+    c.dataset.evidenceMeasured = freshness.measured || "definition";
+    c.dataset.evidenceSha256 = freshness.data_sha256;
+  }
   if (o.scope) c.append(h("p", { class: "scope", text: o.scope }));
   c.append(h(o.h || "h2", { text: o.title }));
   if (o.caption) c.append(h("p", { class: "caption caption-preview", html: P(o.caption) }));
@@ -320,7 +334,7 @@ function forest(rows, opt) {
 
   rows.forEach((r, i) => {
     const cy = padT + i * rowH + rowH / 2;
-    const col = r.group === "current" ? S4 : r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
+    const col = (r.group === "current" || r.group === "repeat") ? S4 : r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
     g.append(el("text", { x: padL - 12, y: cy + 4, class: "lab", "text-anchor": "end" },
                         [document.createTextNode(r.label)]));
     if (r.lo !== null && r.lo !== undefined) {
@@ -606,6 +620,7 @@ function dotLog(rows, cfg) {
     r.points.forEach(p => {
       if (!(p.v > 0)) return;
       const c = el("circle", { cx: x(p.v), cy, r: 5, fill: p.color, stroke: "var(--surface-1)", "stroke-width": 2 });
+      if (p.evidence) for (const [key, value] of Object.entries(p.evidence)) c.dataset[key] = String(value);
       bindTip(c, `<b>${r.label} · ${p.label}</b><span class="r">${cfg.fmtVal ? cfg.fmtVal(p.v) : us(p.v)}</span>` +
         (p.tip ? `<br><span class="r">${p.tip}</span>` : ""));
       g.append(c);
@@ -694,6 +709,9 @@ function heatGrid(cfg) {
 
 /* ================================================== page furniture */
 function topbar(cfg) {
+  if (!(cfg.links || []).some(([href]) => href === "latest-results.html")) {
+    cfg = { ...cfg, links: [["latest-results.html", "Latest results"], ...(cfg.links || [])] };
+  }
   if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
   }
@@ -824,6 +842,7 @@ function featureModelAuditUpdate() {
     "The audit documents {{fm.gaps}} measurement and independence gaps ({{fm.high_gaps}} high priority). Cold/warm timing, version-delta work, memory and serialization are not fully matched. These results do not establish production or domain dominance.",
   ]));
   s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html#bucket-count", text: "September 11: full-CNF count results and graphs" }),
     h("a", { href: "feature-model-evidence.html", text: "Read the results, qualifications and evidence" }),
     h("a", { href: "feature-model-evidence.html#gaps", text: "Review every measurement gap" }),
     h("a", { href: "feature-model-evidence.html#downloads", text: "Reuse the data and audit tools" }),
@@ -884,15 +903,15 @@ function currentResearchDisposition(audience = "master") {
     grid.append(card);
   });
   s.append(grid);
-  s.append(banner("warn", "Production behavior remains unchanged", [
-    "No recent disposition enabled a runtime selector, changed a production default or route, or permitted a RunPod request. Negative and stopped results are boundary evidence, not positive performance claims.",
+  s.append(banner("warn", "These September 4/8 gates remain closed", [
+    "These particular studies did not change production behavior or enable a runtime selector. The separate September 11 studies implemented a shared mask-construction improvement and opt-in query APIs; see Latest results. Negative and stopped gates are retained with their original scope.",
   ]));
   return s;
 }
 
 function currentEvidenceUpdate(audience = "master") {
   const c = DATA._content.current_update;
-  const s = section("latest-evidence", "Evidence update · 2026-08-26/27", c.title,
+  const s = section("latest-evidence", "Earlier task-specific evidence · 2026-08-26/27", c.title,
     audience === "layperson" ? c.lay_lede : c.lede);
   const grid = h("div", { class: "evidence-update-grid" });
   c.items.filter(item => item.audiences.includes(audience)).forEach(item => {
@@ -916,6 +935,91 @@ function currentEvidenceUpdate(audience = "master") {
     s.append(d);
   }
   return s;
+}
+
+function latestResultsUpdate() {
+  const E = DATA.e25_latest_results;
+  const s = section("results-september-11", `Results reviewed ${E.reviewed}`,
+    "Current implementations, measured gains and remaining limits",
+    "Packed input construction is improved; bounded caches, file streaming and exact scalar counters are implemented. Their benefits depend on the requested output and workload. The latest graphs retain native controls, regressions and resource refusals.");
+  s.append(tiles([
+    ["Overlapping CNF · eight queries", T("latest.bucket.current_ms") + " ms", "Exact arrays; Python control {{latest.bucket.before_ms}} ms on the same public printer model and host"],
+    ["Affine count · eight queries", T("latest.affine.current_ms") + " ms", "Current indexed Python; original {{latest.affine.before_ms}} ms on the same public 1,800-variable matrix"],
+    ["Native batch gate", T("latest.batch.speedup"), "q96; below the frozen 1.10× requirement, so no promotion"],
+    ["Count-study verification", T("latest.bucket.outputs"), "Exact cold/warm outputs checked; {{latest.bucket.cells}} scheduled entries include explicit refusals"],
+  ]));
+  s.append(h("p", { text: "These are separate tasks and hosts, not one overall speed ranking. Full-CNF counts include all declared variables and are not projected product counts. Older graphs remain dated to the latest accepted measurement of their particular contract." }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
+    h("a", { href: "data-downloads.html#september-11", text: "Download the current numerical evidence" }),
+  ]));
+  return s;
+}
+
+function latestResultPanel(panel) {
+  const E = DATA.e25_latest_results;
+  const sectionNode = section(panel.id, `Measured ${panel.measured} · ${panel.scope}`, panel.title, panel.contract);
+  const controls = h("div", { class: "latest-controls" });
+  const makeSelect = (suffix, label, options, selected) => {
+    const id = `latest-${panel.id}-${suffix}`;
+    const select = h("select", { id, "aria-label": label });
+    options.forEach(([value, text]) => select.append(h("option", { value: String(value), text })));
+    select.value = String(selected);
+    controls.append(h("label", { for: id }, [document.createTextNode(label), select]));
+    return select;
+  };
+  const cases = [...new Set(panel.rows.map(r => r.case))];
+  const qs = [...new Set(panel.rows.map(r => r.q))].sort((a, b) => a-b);
+  const metricLabels = { cold_ms: "Complete session (ms)", warm_ms: "Prepared query batch (ms)", peak_mib: "Process peak (MiB)" };
+  const caseSelect = makeSelect("case", "Case", cases.map(x => [x, x]), panel.default_case);
+  const querySelect = makeSelect("queries", "Queries", qs.map(x => [x, String(x)]), panel.default_q);
+  const metricSelect = makeSelect("metric", "Measurement", panel.metrics.map(x => [x, metricLabels[x]]), panel.metrics[0]);
+  const chart = h("div", { class: "latest-result-chart", "aria-live": "polite" });
+  function render() {
+    const metric = metricSelect.value;
+    const selected = panel.rows.filter(r => r.case === caseSelect.value && r.q === Number(querySelect.value));
+    const measured = selected.filter(r => r.status === "complete" && Number.isFinite(r[metric]));
+    const unit = metric === "peak_mib" ? "MiB" : "ms";
+    const id = `fig-latest-${panel.id}`;
+    document.getElementById(id+"-analysis")?.remove();
+    if (!selected.length) {
+      chart.replaceChildren(h("p", { text: "This query count was not scheduled for this case; no value is inferred." }));
+      return;
+    }
+    const svg = measured.length ? dotLog(measured.map(r => ({ label: r.label,
+      points: [{ v: r[metric], color: r.method.includes("legacy") || r.method.endsWith("baseline") ? S3 : S1,
+        label: metricLabels[metric], tip: r.selector,
+        evidence: { case: r.case, q: r.q, method: r.method, metric, value: r[metric], source: r.source } }],
+      right: f(r[metric], 3),
+    })), { padL: 265, width: 880, title: `${panel.title}: ${metricLabels[metric]}; lower is better`,
+      xTitle: `${unit}, logarithmic axis · lower is better`, fmtVal: v => f(v, 6)+" "+unit }) : null;
+    const dataTable = table(["Method", "Measurement", "Status"], selected.map(r => [r.label,
+      r.status === "complete" && Number.isFinite(r[metric]) ? f(r[metric], 6)+" "+unit : "Not measured",
+      r.status === "refused" ? "Refused: "+r.reason : "Exact output verified"]));
+    dataTable.querySelectorAll("tbody tr").forEach((tr, i) => {
+      const r = selected[i]; tr.dataset.case = r.case; tr.dataset.method = r.method;
+      tr.dataset.q = String(r.q); tr.dataset.metric = metric; tr.dataset.status = r.status;
+      if (r.status === "complete" && Number.isFinite(r[metric])) tr.dataset.value = String(r[metric]);
+    });
+    const element = card({ id, scope: `${panel.scope} · ${caseSelect.value} · q${querySelect.value}`,
+      title: `${metricLabels[metric]} · lower is better`, caption: panel.note, svg, table: dataTable,
+      prov: [...new Set(selected.map(r => E.sources[r.source].path+" :: "+r.selector))],
+      note: "Every point and table cell uses the same source record. Not measured and refused entries have no plotted value. Original implementations appear only as explicitly labelled ablation controls." });
+    const plotRegion = element.querySelector(".figwrap");
+    if (plotRegion) {
+      plotRegion.setAttribute("tabindex", "0"); plotRegion.setAttribute("role", "region");
+      plotRegion.setAttribute("aria-label", "Scrollable graph; exact values are also in Table view");
+    }
+    element.dataset.reviewed = E.reviewed; element.dataset.resultPanel = panel.id;
+    chart.replaceChildren(element);
+  }
+  [caseSelect, querySelect, metricSelect].forEach(control => control.addEventListener("change", render));
+  sectionNode.append(controls,
+    h("p", { class: "latest-scroll-hint", text: "Scroll the graph sideways to see all points, or open Table view for the exact values." }), chart); render();
+  const sourceKeys = [...new Set(panel.rows.map(r => r.source))];
+  sectionNode.append(h("div", { class: "benchmark-downloads" }, sourceKeys.map(key =>
+    h("a", { href: E.sources[key].href, text: "Source summary · "+key, download: key+".json" }))));
+  return sectionNode;
 }
 
 function opportunityMap(items) {
@@ -1392,8 +1496,8 @@ FIG.flatForest = () => {
   const m = d.materiality;
   return card({
     id: "fig-flat",
-    scope: "Accepted B1/E3, EPFL and pod evidence plus current B2/B4 V3 · bare CM kernel ÷ sharing-aware CSE-flat kernel",
-    title: "Current B2/B4 bare CM/CSE-flat ratio is 0.8906; below 1 favors CM",
+    scope: "Accepted B1/E3, EPFL and pod evidence plus the August 25 B2/B4 V3 primary study · bare CM kernel ÷ sharing-aware CSE-flat kernel",
+    title: "B2/B4 bare CM/CSE-flat: primary study and all three later repetitions",
     caption: `B1/E3 and EPFL remain parity evidence for their workloads. The later, exactly counterbalanced ` +
       `B2/B4 V3 study (${T("symv3.formulas")} formulas, ${T("symv3.rows")} timing rows) measured ${T("symv3.bare.overall")} ` +
       `[${T("symv3.bare.overall.lo")}, ${T("symv3.bare.overall.hi")}] overall and ` +
@@ -1402,7 +1506,7 @@ FIG.flatForest = () => {
       `${T("symv3.repeat.max")} (run geomean ${T("symv3.repeat.geomean")}), showing that the formula-only ` +
       `interval does not measure run-level variation. This remains a modest bare-program structural win on ` +
       `B2/B4, not a universal CM advantage. The historical B1/E3 point (${T("flat.local")}) is retained as a distinct workload, not used as the headline.`,
-    legend: [[S4, "current B2/B4 V3"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
+    legend: [[S4, "B2/B4 V3 primary and repetitions"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
     svg: forest(d.rows, {
       domain: pad(d.rows.flatMap(r => [r.value, r.lo, r.hi]).concat([1.0]), 0.01), ref: 1.0,
       xTitle: "bare CM kernel ÷ CSE-flat kernel (geometric mean; below 1 favors CM)",
@@ -1992,11 +2096,9 @@ FIG.frontierMap = () => {
   const items = DATA._content.frontier.items;
   return card({
     id: "fig-frontier-map",
-    scope: "10 open questions · grouped by evidence state, not ranked by optimism",
-    title: "The frontier is mostly measurement work, with two formal gaps and one unmapped boundary",
-    caption: "Four questions already have partial or negative evidence; three cheap measurements are explicitly " +
-      "next; two capabilities exist without demonstrated practical value; one boundary has not been explored. " +
-      "That is a sharper research programme than a generic list of future work.",
+    scope: "Research questions reviewed September 11 · grouped by evidence state",
+    title: "Completed implementations shift the next work to consumer and contract validation",
+    caption: "Packed setup, scalar counts, bounded caches and file streaming are now implemented and measured. Remaining claims need real request traces or a newly admitted contract; earlier failed gates remain closed.",
     visual: frontierLanes(items),
     table: table(["question", "evidence state", "downside case"],
       items.map(it => [it.visual_label || it.title, it.status.replace(/-/g, " "), P(it.downside)]), "wrap"),
@@ -2010,10 +2112,8 @@ FIG.roadmap = () => {
   return card({
     id: "fig-roadmap",
     scope: "publication roadmap · priority order and qualitative effort category",
-    title: "The first four decisions are low-cost measurements; formal proof comes last",
-    caption: "The order is deliberate: measure whether reuse exists, find where setup time goes, validate routing, " +
-      "and study cache behaviour before funding heavier workload implementations or formal equivalence work. " +
-      "The graph encodes authored effort categories, not benchmark timings.",
+    title: "Next steps start with consumer evidence and reuse of completed implementations",
+    caption: "The graph shows authored effort categories, not measured performance. Current work starts with actual consumers and request lifetimes; completed experiments are not queued for another identical rerun.",
     svg: hBars(rows.map(r => ({
       label: r.priority + " · " + r.experiment, value: r.cost_level, color: r.cost_level === 1 ? S1 : r.cost_level === 2 ? S2 : S3,
       tip: `${r.decision} · ${r.what_it_settles}`,

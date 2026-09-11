@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — latest measured results</title>
+<meta name="description" content="Current exact-counting, streaming, cache and packed-input measurements, including native controls, regressions and source data.">
+<meta property="og:title" content="Correspondence Matrices — latest measured results">
+<meta property="og:description" content="Explore every measured case and query boundary from the September 11 research.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section class="sec">
+    <h1>Latest measured results</h1>
+    <p>This source template is populated by the site builder. <a href="latest-results.html">Open the generated page</a>.</p>
+  </section>
+</main>
+<script>
+const IS_SOURCE_TEMPLATE = /(?:^|\/)cm_latest_results_template\.html$/i.test(location.pathname);
+if (IS_SOURCE_TEMPLATE) location.replace("latest-results.html");
+const DATA = IS_SOURCE_TEMPLATE ? { _numbers: {} } : /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+<script>
+if (!IS_SOURCE_TEMPLATE) {
+const E = DATA.e25_latest_results;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· latest results</span>",
+  links: [["index.html", "Knowledge base"], ["#bucket-count", "Full-CNF counts"], ["#affine-count", "Affine counts"], ["#streaming", "File output"], ["#native-batch", "Completed batch gate"]] }));
+app.append(h("header", { class: "page" }, [
+  h("p", { class: "eyebrow", text: `Measured and reviewed ${E.reviewed}` }),
+  h("h1", { text: "Latest measured results" }),
+  h("p", { class: "lede", text: "Explore each workload, query count and timing boundary. Every point, table value and download comes from the same checked result source. Refusals and unfavorable comparisons stay visible." }),
+]));
+app.append(h("nav", { class: "page latest-jump-links", "aria-label": "Audience guides" }, [
+  h("a", { href: "layperson.html", text: "Plain-language guide" }),
+  h("a", { href: "investor.html", text: "Investment evidence" }),
+  h("a", { href: "expert.html", text: "Technical detail" }),
+  h("a", { href: "usecases.html", text: "Application guide" }),
+]));
+app.append(latestResultsUpdate());
+app.append(h("div", { class: "page latest-jump-links" }, E.panels.map(p => h("a", { href: "#"+p.id, text: p.title }))));
+E.panels.forEach(panel => app.append(latestResultPanel(panel)));
+app.append(section("next-work", "Current disposition", "What remains to be established",
+  "The implementations and scheduled retries are complete. Broader claims need real consumer request traces, an explicit output/projection contract or a newly admitted workload. The shared mask change is implemented; scalar, cache and streaming APIs remain explicit options. No automatic selector or failed native-batch candidate was promoted."));
+app.append(h("p", { class: "page" }, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Download the complete chart-ready snapshot" })]));
+app.append(pageFooter("Current results reviewed "+E.reviewed));
+}
+</script>
+</body>
+</html>

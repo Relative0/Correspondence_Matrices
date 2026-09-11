@@ -63,9 +63,11 @@ def export(destination: Path, target_url: str = TARGET):
     if page.count(marker) != 1:
         raise ValueError("Unexpected shared link helper")
     page = page.replace(marker, marker + '\n  if (typeof href === "string" && href.startsWith("../../")) return "evidence/" + href.slice(6);')
-    companions = ("index", "layperson", "investor", "expert", "usecases", "feature-model-evidence", "data-downloads")
+    companions = ("index", "layperson", "investor", "expert", "usecases", "feature-model-evidence", "data-downloads", "latest-results")
     for name in companions:
-        page = page.replace(f'"{name}.html"', f'"{MAIN}{name}.html"')
+        # Companion section links must leave the nested export too.
+        pattern = r'(["\'])(' + re.escape(name) + r'\.html(?:[?#][^"\']*)?)\1'
+        page = re.sub(pattern, lambda match: match[1]+MAIN+match[2]+match[1], page)
     if re.search(r"[A-Za-z]:\\\\|/Users/|/home/", page):
         raise ValueError("Machine-local path in generated page")
     destination.mkdir(parents=True)

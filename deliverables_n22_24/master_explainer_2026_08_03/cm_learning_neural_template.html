@@ -73,6 +73,8 @@ app.append(h("header", { class: "page" }, [
   h("p", { class: "meta", text: `Evidence updated ${E.updated}. This browser page reads embedded saved data; it does not fetch artifacts, run benchmarks, fit selectors, or train models.` }),
 ]));
 
+app.append(latestResultsUpdate());
+
 {
   const s = section("dashboard", "Decision dashboard", "The useful answer, before the experiment history",
     "The current program has a narrow diagnostic signal, several valuable negative results, and no learned execution authority. Every number below is bound to saved evidence.");

@@ -11,20 +11,20 @@
     "title": "Correspondence Matrices: a structural layer for Boolean computation",
     "lede": "What Boolean computation is, which tool solves which problem, what a Correspondence Matrix actually is, what the refreshed evidence shows, and what is still genuinely unsolved — written in layers, so you can stop at whatever depth you need.",
     "standfirst": "This is the complete evidence version. A simple one-pager, investor brief, technical summary, and dedicated use-case guide provide faster routes through the same evidence boundaries.",
-    "honesty": "Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated follow-up through 2026-09-08, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn."
+    "honesty": "Results are reviewed through 2026-09-11. Each graph keeps its actual measurement date, output contract, host and source. Current scalar counts and complete-file output have separate comparisons; they do not replace older bare-kernel experiments with a different task. Withdrawn claims remain labelled in the corrections ledger."
   },
   "project_state": {
     "items": [
       {
         "label": "Validated now",
-        "title": "Correct output and a competitive kernel",
-        "summary": "CM matched sharing-aware CSE-flat across the accepted B1/E3 and EPFL parity scopes. The later exactly counterbalanced B2/B4 V3 study measured bare CM at {{symv3.bare.overall}} [{{symv3.bare.overall.lo}}, {{symv3.bare.overall.hi}}] overall, while the public wrapper remained {{symv3.wrapper.overall}} against CSE-flat.",
+        "title": "Exact outputs and measured task-specific improvements",
+        "summary": "A shared packed-mask constructor reduces cold input setup for CM, CSE and direct BitSet. New exact scalar counters and bounded file streaming avoid unnecessary expansion when their output contract permits it. Native comparisons, small-input regressions and refusals remain visible in Latest results.",
         "kind": "measured"
       },
       {
         "label": "Structural wedge",
-        "title": "Identity, persistence and transforms",
-        "summary": "Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic reuse and one independently maintained local caller have now been measured; deployed-production workflow value is still unvalidated.",
+        "title": "Explicit reuse and query facilities",
+        "summary": "Bounded positional caches, independent/factorized/affine/CNF count plans and cancellation-aware streaming are implemented and tested. Their synthetic or public-input benchmarks do not establish production request lifetimes or an automatic routing policy.",
         "kind": "implemented"
       },
       {
@@ -35,7 +35,7 @@
       }
     ],
     "boundaries": [
-      "Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3 and EPFL, but {{symv3.bare.overall}} [{{symv3.bare.overall.lo}}, {{symv3.bare.overall.hi}}] for bare CM on current B2/B4 V3.",
+      "Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3 and EPFL, but {{symv3.bare.overall}} [{{symv3.bare.overall.lo}}, {{symv3.bare.overall.hi}}] for bare CM on the August 25 B2/B4 V3 primary study.",
       "Whole call: BitSet led at every measured semantic support through live_k={{wrap.max_k}} in the legacy wrapper campaign; this is not a ranking of the later feature-model tasks.",
       "Economics: one independently maintained local caller has been profiled and did not activate H2/H3 materiality; deployed-production reuse counts and end-to-end economics have not been measured.",
       "External scope: EPFL hardware expressions and bounded neighborhoods of official feature models, not deployed workflows. Feature-model timing conclusions remain provisional under the separate measurement audit.",
@@ -79,47 +79,74 @@
         "title": "Cache, family, and context reuse: measured synthetically",
         "summary": "The flag called persistent cache was measured as a process-local, synthetic all-hit cache. Cached whole-call CM still took {{cache.whole.min}}–{{cache.whole.max}} BitSet time. With {{cache.evals}} cached evaluations, execution-only CM still took {{cache.exec.k16}} at k=16, {{cache.exec.k12}} at k=12, {{cache.exec.k8}} at k=8, and {{cache.exec.k4}} at k=4.",
         "detail": "Related-family high-reuse cells remained {{family.bitset.min}}–{{family.bitset.max}} slower than BitSet. Across the synthetic partial-context grid, cached CM was {{context.speedup.min}}–{{context.speedup.max}} faster than uncached CM. The n=16, 500-context cells were hypothesis-generating near-parity points: {{context.f25.ratio}}, {{context.f5.ratio}}, and {{context.f75.ratio}} CM/BitSet at fixed fractions 0.25/0.50/0.75. They used only {{context.trials}} trials and no native CUDD restriction comparator. No byte-LRU, durable cache, production working set, hit distribution, RSS plateau, or production cache policy is validated.",
-        "audiences": ["master", "expert", "investor", "layperson"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor",
+          "layperson"
+        ]
       },
       {
         "id": "late-trace",
         "title": "Metrics tracing: bounded diagnostic only",
         "summary": "Full-rate V1 and V2 capture were rejected at median whole-call ratios {{trace.v1.ratio}} and {{trace.v2.ratio}}. Deterministic one-in-{{trace.sample_every}} V3 sampling was retained opt-in at {{trace.v3.ratio}}, with {{trace.mismatches}} exact mismatches, {{trace.drops}} drops, and {{trace.io_errors}} I/O errors.",
         "detail": "The per-emitted-event gate failed. Sampling loses exact access order, and the anonymous metrics schema contains neither replayable expressions nor raw contexts. Synthetic single, family, and context traces passed mechanics, schema, privacy, exactness, and logical replay-summary checks; no real workload was found.",
-        "audiences": ["master", "expert", "investor"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor"
+        ]
       },
       {
         "id": "late-workload",
         "title": "Workload intake: valid template, deliberately not ready",
         "summary": "The strict owner-declared manifest validates structurally but reports not ready, with {{workload.blockers}} explicit blockers. It is a template, not a captured workload.",
         "detail": "Real cache, edit/version, partial-context, selector, and native economics remain blocked on a named application and caller, artifact and output-order contract, budgets, lifecycle, capture duration, and separate metrics, expression, context, and upload approvals.",
-        "audiences": ["master", "expert", "investor", "layperson"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor",
+          "layperson"
+        ]
       },
       {
         "id": "late-dependency",
         "title": "Native dependency feasibility: resolution stopped before algorithms",
         "summary": "Three authorized disposable CPU attempts cost {{dependency.cost}} cumulatively and ended with {{dependency.postflight_pods}} pods. The final attempt built the pinned pure-Python astutils wheel, then failed closed because dd 0.6.0 requires source-only PLY 3.10 and that source build was not authorized.",
         "detail": "Numba, dd.cudd, CUDD restriction, and native performance were never reached. They are untested, not failed. No dependency was integrated and no native or SIMD performance claim exists.",
-        "audiences": ["master", "expert", "investor"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor"
+        ]
       },
       {
         "id": "late-memory",
         "title": "Temporary memory: refusal works; the estimator is not conservative",
         "summary": "Direct output, benchmark, and remote surfaces have different output guards and no default temporary limit. In {{memory.cases}} bounded dense cases, the current estimate sat below median tracemalloc peak by {{memory.multiple.min}}–{{memory.multiple.max}}; typed refusal still occurred before materialisation in {{memory.refusals}}/{{memory.cases}} cases.",
         "detail": "tracemalloc is not an RSS or native-memory upper bound, so these cases do not calibrate a universal multiplier. No default changed. Proposed {{memory.proposed.benchmark_mib}} MiB benchmark/remote and {{memory.proposed.direct_mib}} MiB direct profiles remain a future approval decision after estimator and compatibility work; they are not current settings.",
-        "audiences": ["master", "expert", "investor", "layperson"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor",
+          "layperson"
+        ]
       },
       {
         "id": "late-reliability",
         "title": "Audit reliability and current validation",
         "summary": "DP-R3 consolidated {{dpr3.helpers.before}} duplicate exact-file SHA-256 helpers into {{dpr3.helpers.after}} streaming helper with compatibility and source-snapshot coverage. Its tiny exact smoke passed integration but failed timing gates at {{dpr3.smoke.ratio}}; this is maintainability work, not a performance improvement.",
         "detail": "The newest repository validation is {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests in the full suite. Test counts describe validation state, never benchmark evidence.",
-        "audiences": ["master", "expert", "investor"]
+        "audiences": [
+          "master",
+          "expert",
+          "investor"
+        ]
       }
     ]
   },
   "current_research_disposition": {
-    "title": "Current research disposition",
+    "title": "September 4/8 research gates: current disposition",
     "master_lede": "Recent profile-first studies produced useful boundary evidence, not new product claims. Valid measurements, failed gates, stopped corpora, and zero-candidate outcomes are retained together.",
     "lay_lede": "Several promising ideas were tested and did not earn a product change. That is useful: it narrows where CM may matter without pretending that a negative result is a win.",
     "investor_lede": "The latest gates reduce technical uncertainty while leaving the commercial thesis unproven. No result below changed defaults, routing, or production behavior.",
@@ -132,7 +159,12 @@
         "lay_summary": "A valid profile found no large enough key-building or matrix-layout bottleneck to justify redesigning either one.",
         "investor_summary": "The profile closed two speculative optimization routes without implementation spend: no component qualified and no candidate was built.",
         "detail": "All {{recent.h2h3.rows}} retry rows passed the decision checks. Key creation was the largest aggregate component at {{recent.h2h3.largest_share}}, still below the frozen threshold and without the required prevalence/cohort support.",
-        "audiences": ["master", "layperson", "investor", "expert"]
+        "audiences": [
+          "master",
+          "layperson",
+          "investor",
+          "expert"
+        ]
       },
       {
         "id": "h6",
@@ -141,7 +173,12 @@
         "lay_summary": "Memory can now be measured more reliably, but the first rule for choosing a representation predicted the important ordering incorrectly, so it was rejected.",
         "investor_summary": "Measurement infrastructure improved; the routing candidate did not clear its holdout gate and produced no product feature.",
         "detail": "Calibration completed {{recent.h6.rows}} rows across {{recent.h6.cells}} logical cells, with {{recent.h6.stable_signal}} stable-signal prevalence and {{recent.h6.discrimination}} arm discrimination. The estimator ordered {{recent.h6.ordered_pairs}}/{{recent.h6.material_pairs}} materially separated holdout arm pairs correctly, failing the preregistered gate.",
-        "audiences": ["master", "layperson", "investor", "expert"]
+        "audiences": [
+          "master",
+          "layperson",
+          "investor",
+          "expert"
+        ]
       },
       {
         "id": "independent_workflow",
@@ -150,7 +187,12 @@
         "lay_summary": "One real, independently existing local caller was profiled. It worked correctly, but none of the suspected costs was large or common enough to justify a new implementation.",
         "investor_summary": "A caller-backed local test reduced selection bias but did not validate production economics or unlock a candidate.",
         "detail": "The independent replay verified {{recent.workflow.profile_rows}} profile rows and {{recent.workflow.memory_rows}} fresh-process memory rows. Key creation was again the largest aggregate component at {{recent.workflow.largest_share}}; zero components passed the complete gate.",
-        "audiences": ["master", "layperson", "investor", "expert"]
+        "audiences": [
+          "master",
+          "layperson",
+          "investor",
+          "expert"
+        ]
       },
       {
         "id": "incremental",
@@ -159,7 +201,12 @@
         "lay_summary": "Reusing pieces was faster than starting from scratch, but the repository's existing cache was faster and smaller, and the strongest comparison still won overall.",
         "investor_summary": "The incumbent internal cache dominated the new prototype on the promotion criteria, avoiding a higher-memory implementation path.",
         "detail": "Incremental update/cold CM was {{recent.incremental.vs_cold}}, but incremental/current-cache was {{recent.incremental.vs_cache}} and retained memory was {{recent.incremental.memory}} the current cache. At q64, incremental total/CSE-flat was {{recent.incremental.q64_cse}}.",
-        "audiences": ["master", "layperson", "investor", "expert"]
+        "audiences": [
+          "master",
+          "layperson",
+          "investor",
+          "expert"
+        ]
       },
       {
         "id": "hardware",
@@ -168,7 +215,12 @@
         "lay_summary": "The hardware-history data was not strong enough to run the proposed speed experiment, so the study stopped before synthesis or timing instead of choosing friendlier examples afterward.",
         "investor_summary": "H9 remains gated by corpus quality. No cloud spend or implementation work was justified from an inadmissible confirmation cohort.",
         "detail": "The first confirmation audit changed only {{recent.hardware.changed_seeds}}/{{recent.hardware.comparable_seeds}} stable seeds ({{recent.hardware.change_fraction}}). The corrected selector exposed {{recent.hardware.blackparrot_transitions}} BlackParrot transitions as development evidence, while the second confirmation history scanned {{recent.hardware.confirmation_scanned}} commits and admitted {{recent.hardware.confirmation_transitions}} transitions. No Yosys, timing, selector, or routing claim follows.",
-        "audiences": ["master", "layperson", "investor", "expert"]
+        "audiences": [
+          "master",
+          "layperson",
+          "investor",
+          "expert"
+        ]
       }
     ]
   },
@@ -489,7 +541,7 @@
         "superpower": "Identifies repeated subexpressions, computes each once, and — with sharing-aware flattening — collapses chains of the same operator into single wide operations without duplicating shared work.",
         "cost": "Preparation is not free, and the compiled program only pays off if you evaluate it more than once.",
         "analogy": "Doing your working out on paper once and then reading off the answers, instead of redoing the arithmetic each time.",
-        "measured": "This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about {{kernel.local.pct}} faster. Against sharing-aware CSE-flat, B1/E3 and EPFL measured parity, while current B2/B4 V3 measured bare CM at {{symv3.bare.overall}} overall and {{symv3.bare.k16}} at k=16.",
+        "measured": "This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about {{kernel.local.pct}} faster. Against sharing-aware CSE-flat, B1/E3 and EPFL measured parity, while the August 25 B2/B4 V3 primary study measured bare CM at {{symv3.bare.overall}} overall and {{symv3.bare.k16}} at k=16.",
         "lay_name": "A compiled evaluator",
         "lay_role": "the working-out-once approach",
         "lay_question": "If I do the working-out once and keep it, how fast is it after that?"
@@ -501,7 +553,7 @@
         "superpower": "Treats the operator itself as the object. It gives every expression a canonical key, keeps a persistent compiled cache, serialises, and knows which variables actually matter before it evaluates anything.",
         "cost": "Compilation costs roughly {{prep.min}}–{{prep.max}} what the CSE baseline's does, and the end-to-end call carries {{wrap.ovh.min}}–{{wrap.ovh.max}} of fixed overhead. Both must be amortised by reuse.",
         "analogy": "A build system rather than a compiler. The value is in knowing what you already built and being able to reuse it — not in the raw speed of any single build.",
-        "measured": "Workload-dependent against CSE-flat: parity on B1/E3 and EPFL, but a modest bare-program advantage on current B2/B4 V3. The public wrapper was still {{symv3.wrapper.overall}} [{{symv3.wrapper.overall.lo}}, {{symv3.wrapper.overall.hi}}] overall, so no end-to-end speed moat is established. Structural keys, caching, and serialisation remain separate differentiators.",
+        "measured": "Workload-dependent against CSE-flat: parity on B1/E3 and EPFL, but a modest bare-program advantage on the August 25 B2/B4 V3 primary study. The public wrapper was still {{symv3.wrapper.overall}} [{{symv3.wrapper.overall.lo}}, {{symv3.wrapper.overall.hi}}] overall, so no end-to-end speed moat is established. Structural keys, caching, and serialisation remain separate differentiators.",
         "lay_name": "CM",
         "lay_role": "the build system",
         "lay_question": "Have I seen this rule before, what is it made of, and can I store it and reuse it?"
@@ -883,7 +935,7 @@
             {
               "cond": "a sharing-aware flattened CSE",
               "then": "measure the actual workload and timing boundary",
-              "why": "EPFL measured {{flat.epfl}}; current B2/B4 V3 bare CM measured {{symv3.bare.overall}}, while its wrapper measured {{symv3.wrapper.overall}}"
+              "why": "EPFL measured {{flat.epfl}}; the August 25 B2/B4 V3 primary study bare CM measured {{symv3.bare.overall}}, while its wrapper measured {{symv3.wrapper.overall}}"
             }
           ]
         },
@@ -1062,14 +1114,13 @@
     }
   ],
   "frontier": {
-    "lede": "The 2026-08-03 campaign established parity against CSE-flat on B1/E3 and EPFL. The accepted 2026-08-25 V3 correction narrowed that conclusion: current B2/B4 measured a workload-specific bare CM advantage, while the public wrapper remained slower. Three fresh same-host repetitions ranged from {{symv3.repeat.min}} to {{symv3.repeat.max}}, confirming the direction while exposing run-level variation that a within-run formula interval cannot measure. A later three-pod preparation confirmation passed, while a genuinely held-out i10 feature selector failed and the simple k=16 rule transferred well. The remaining questions are therefore about preparation, boundary cost, reuse, and choosing by workload rather than declaring one universal kernel ratio.",
+    "lede": "The September 11 work implemented and tested packed input construction, bounded cache reuse, complete-file streaming and exact scalar counting. It also completed the native batching experiment, which missed its fixed materiality gate. New full-CNF and affine comparisons retain strong native controls. Remaining work is admission of real consumers, request lifetimes and explicitly defined output contracts; the earlier failed profile and routing gates remain closed.",
     "lay": [
-      "It is worth being clear about what kind of problem is left. “Is CM faster?” has no workload-free answer: B1/E3 and EPFL measured parity at the kernel, current B2/B4 V3 measured a modest bare CM lead, and the public wrapper remained slower. The remaining questions are about total cost, choosing, and capabilities that exist on paper but have never been shown to pay.",
-      "Three of them are cheap to answer and would move the picture immediately. Three more are the experiments that would actually test whether the structural idea is worth anything beyond re-running the same expression. Two are engineering and formal gaps. And two are honest boundary questions — regions the measurements simply do not cover.",
-      "The preparation replication and first untouched selector transfer test are complete. Synthetic cache, family, context, and tracing studies now narrow the hypotheses, and a strict workload manifest makes the missing input concrete. The next useful work starts with owner-declared real traffic; dependency-gated native comparators come only if that traffic justifies them."
+      "Several concrete improvements are now implemented and measured. They are useful for different jobs: returning every answer, streaming those answers to a file, or returning only an exact count. One speedup cannot describe all three.",
+      "The next application question is which of these jobs a real consumer needs, how often it repeats, and how much memory it can retain. A public model or synthetic request sequence does not establish that service behaviour."
     ],
     "technical": [
-      "The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Preparation remains the leading raw optimisation surface; cache, family, context, selector, and native economics require a real workload and the strongest applicable incumbent.",
+      "The new Latest results panels use final indexed affine measurements and the final same-host bucket/array/native panel. Corrected process VmHWM measurements supersede inherited-rusage comparisons. Original versions are retained only in labelled ablations. Prior B1/E3, EPFL and B2/B4 kernel studies retain their dates and contracts; they are not current measurements of the new scalar APIs.",
       "Several items below are marked <em>partially answered</em>. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism."
     ],
     "items": [
@@ -1090,13 +1141,13 @@
       },
       {
         "id": "fr-prep",
-        "title": "Preparation is profiled — and remains the top optimisation surface",
+        "title": "Preparation improvements are implemented; new bottlenecks need a trace",
         "status": "partially-answered",
         "visual_label": "Reduce preparation",
-        "lay_statement": "Before CM can answer anything it does a one-time setup step costing roughly {{prep.min}}–{{prep.max}} what the simple alternative's setup costs. The deep audit traced that work and removed one redundant compilation memo safely. That improvement then reproduced on {{memo.pods}} Linux machines; a more ambitious compact-ordering idea was exact but much slower and was removed.",
-        "technical_statement": "Preparation costs {{be.syn.prep}} plain-CSE prep on the synthetic corpus, {{be.epflcse.prep}} on the external corpus against the same baseline, and {{be.epfl.prep}} against CSE-flat, with a per-case range of {{b3.prep_ratio.min}}–{{b3.prep_ratio.max}} across the compile-scaling cases. The 2026-08-25 deep audit measured a distributed profile led by interning, lowering, live-support work, structural hashing, rewrite, and canonicalisation. It removed the redundant identity memo only from the sharing-aware builder path, with exact ordered-DAG and packed-output gates. Three independent Runpod CPU flavors then measured candidate/baseline preparation at {{memo.bx1b2.min}}–{{memo.bx1b2.max}} on BX1+B2 and {{memo.epfl.min}}–{{memo.epfl.max}} on EPFL, with {{memo.mismatches}} exact mismatches, cost {{memo.cost}}, and {{memo.postflight_pods}} postflight pods. The subsequent exact rational compact-order prototype preserved all {{dpr1.rows}} smoke outputs but cost {{dpr1.time}} time and {{dpr1.peak}} traced peak memory; it was rejected and reverted.",
+        "lay_statement": "The packed-mask constructor and indexed affine fixed-name validation now reduce measured setup/binding costs. These general engineering changes also benefit non-CM controls.",
+        "technical_statement": "Cold and prepared query windows are separate in the September 11 panels. Array counting can move the bottleneck back into plan construction. Admit a real query lifetime before changing shared caches, persistence or routing.",
         "why_it_matters": "Break-even is the preparation premium divided by the per-evaluation kernel gain, so preparation sets how large every finite break-even count is. Halving it roughly halves those counts and widens the band of workloads where compiling pays. It does not, however, rescue the never-break-even population — a formula is classified “never” exactly when the per-evaluation gain is not positive, which is a property of the comparison, not of the setup cost.",
-        "what_would_change_the_picture": "The small one-memo improvement is now cross-host confirmed. Any further preparation change needs a different measured mechanism from the rejected compact-order prototype, paired exact evidence on representative and high-sharing cases, and benefit large enough to repay compatibility and maintenance risk.",
+        "what_would_change_the_picture": "An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.",
         "sources": [
           "deliverables_n22_24/CM_GAP_POST_ACCEPTANCE_OPTIMIZATION_DECISION_2026-08-03.md §7 ranked next tests, item 3; §8 ranked optimizations, item 1",
           "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_2026-08-03.md rows 8 and 9",
@@ -1109,13 +1160,13 @@
       },
       {
         "id": "fr-cache",
-        "title": "The process-local cache has synthetic all-hit evidence, not a production policy",
+        "title": "Bounded cache ownership is tested; production policy is unvalidated",
         "status": "partially-answered",
         "visual_label": "Capture real cache traffic",
-        "lay_statement": "The cache has now been tested under a deliberately easy all-hit pattern. It helped CM compared with running CM cold, but cached CM still took longer than BitSet. That answers the stale ‘never studied’ statement without proving that a durable cache would help a real application.",
-        "technical_statement": "The flag historically called persistent cache is process-local. Synthetic all-hit whole-call CM remained {{cache.whole.min}}–{{cache.whole.max}} behind BitSet, and {{cache.evals}}-evaluation execution-only ratios remained {{cache.exec.k16}} at k=16 through {{cache.exec.k4}} at k=4. No byte-LRU, durable store, production access order, working-set distribution, hit curve, eviction churn, invalidation lifecycle, RSS plateau, or production cache policy has been validated. Sampled metrics traces cannot supply exact access order for offline policy replay.",
+        "lay_statement": "The positional cache now has bounded retention and changing-name, phase and pressure measurements. Same-name reuse can still favor the existing LRU.",
+        "technical_statement": "Latest results contains the controlling Linux replay for all cache cases. The earlier process-local all-hit study measures another cache contract and remains dated evidence; neither establishes deployed request lifetimes.",
         "why_it_matters": "Without a universal kernel advantage, reuse is one of the remaining potential differentiators. The synthetic result narrows the claim to a real workload-distribution question.",
-        "what_would_change_the_picture": "A named owner-approved workload with artifact bytes, compile and lookup cost, exact bounded access order where separately approved, process boundaries, lifecycle and cache budgets could compare no cache, entry-LRU, byte-LRU, and cost-aware admission. Until then no production cache-policy change is justified.",
+        "what_would_change_the_picture": "An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.",
         "sources": [
           "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_process_local_summary.csv",
           "docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/cache_reuse50_summary.csv",
@@ -1205,13 +1256,13 @@
       },
       {
         "id": "fr-bddhard",
-        "title": "The decision-diagram comparison has only been run where ordering barely matters",
+        "title": "Full-CNF counts now test meaningful CUDD ordering differences",
         "status": "partially-answered",
         "visual_label": "Test BDD-hard families",
-        "lay_statement": "The order in which a decision diagram tests its variables can change its size dramatically — for some functions, catastrophically. The expressions measured here are all easy in that respect, so the comparison against decision diagrams has been made only in the region where their hardest failure mode never appears.",
-        "technical_statement": "The order-search question is closed with data: best-of-ten order search yielded {{bx2.node_saving.min_pct}}–{{bx2.node_saving.max_pct}} smaller graphs at {{bx2.search_x.min}}–{{bx2.search_x.max}} the single-build cost, and dynamic reordering never triggered — node ratio exactly {{bx2.reorder_ratio}} — because at {{bx2.max_nodes}} nodes and below the trigger threshold is never reached. That last fact <em>is</em> the limitation. What remains open is a controlled study over standard parameterised families with known behaviour — easy and reducible, parity-like, multiplexer, arithmetic and circuit-derived, and deliberately order-sensitive — reporting for each: fixed order, explicitly stated alternative orders, best-of-k with the full search cost, the dynamic-reordering method and its total cost, and node count, peak memory, build time and each downstream query kept separate.",
+        "lay_statement": "The September 11 full-CNF panel measures natural and dynamic CUDD alongside Python and exact-array bucket counting. Ordering now changes both preparation and prepared-query cost materially.",
+        "technical_statement": "Ten of eleven admitted full public CNFs fit bucket limits. Both native orders, input-width/work refusals and array regressions are retained. These count all declared CNF variables, not projected feature products. No universal decision-diagram or bucket winner follows.",
         "why_it_matters": "Comparing a packed evaluator against decision diagrams only on diagram-friendly inputs risks reading a favourable extraction ratio as a general property. On genuinely hard families the packed path may become infeasible before the diagram does.",
-        "what_would_change_the_picture": "<b>If it succeeds</b> — a controlled sweep across friendly, hard and order-sensitive families with search and reordering costs quoted separately — the result is a defensible boundary atlas showing where each representation is feasible at all. <b>If it goes against CM</b> — diagram compactness holds on hard families while the packed path becomes infeasible because the explicit output is exponential in live support — the honest conclusion is that CM's operating region is strictly bounded by explicit-output size, and every comparison here must be scoped to workloads where a packed truth vector is the required artifact.",
+        "what_would_change_the_picture": "An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.",
         "sources": [
           "deliverables_n22_24/CM_BENCHMARK_REFRESH_CLAIM_MAP_ADDENDUM_2026-08-03.md row 14 revisited",
           "deliverables_n22_24/bx2_cudd_orders_2026_08_03/",
@@ -1221,13 +1272,13 @@
       },
       {
         "id": "fr-aboveguard",
-        "title": "Above the guard limit, bounded kernels work but the public boundary still refuses",
+        "title": "Scalar and streaming APIs extend the explicit contract choices",
         "status": "partially-answered",
         "visual_label": "Map the guard boundary",
-        "lay_statement": "The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. A bounded follow-up did run the underlying exact kernels from {{guard.followup.min_k}} through {{guard.followup.max_k}}: all {{guard.followup.cases}} cases completed with {{guard.followup.mismatches}} wrong answers and {{guard.followup.timeouts}} timeouts. The public wrapper still refused every case, so this proves a small feasibility band, not permission to raise the limit or a CM speed win.",
-        "technical_statement": "The original guard remains correct: {{guard.wrong}} wrong decisions and {{guard.oversized}} oversized outputs across {{guard.trials}} earlier trials. The bounded subprocess follow-up then exercised exact direct kernels for live_k={{guard.followup.min_k}}–{{guard.followup.max_k}} under a 64 MiB estimate cap, 512 MiB RSS cap, 45-second timeout and three repetitions: {{guard.followup.cases}}/{{guard.followup.cases}} completed, with {{guard.followup.mismatches}} mismatches, {{guard.followup.timeouts}} timeouts and {{guard.followup.wrapper_non_refusals}} wrapper non-refusals. This closes the claim that nothing above the guard has been measured, but it did not compare equivalent whole-call CM and BitSet artifacts or justify a production policy change.",
+        "lay_statement": "Exact counts can avoid a complete truth vector; streaming can deliver it in bounded chunks. Both now have implementations and larger-input validation.",
+        "technical_statement": "The complete-output guard and unavoidable output size are separate from scalar plan width/work limits. New facilities use explicit resource admission and private query state; they do not silently raise the existing wrapper limit.",
         "why_it_matters": "The evidence now separates three facts: bounded direct kernels are feasible just above the line, complete output still grows exponentially, and the supported public API intentionally refuses that region.",
-        "what_would_change_the_picture": "A caller-backed, memory-safe study would need equivalent whole-call artifacts, paired CM/BitSet timings, retained and temporary memory, and a pre-allocated refusal policy. Only then could the public guard be reconsidered; a direct-kernel feasibility result alone is insufficient.",
+        "what_would_change_the_picture": "An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.",
         "sources": [
           "deliverables_n22_24/b4_sweep_2026_08_03/",
           "deliverables_n22_24/b2_wrapper_2026_08_03/",
@@ -1249,19 +1300,19 @@
       },
       {
         "priority": 2,
-        "experiment": "Harden temporary-memory estimators",
-        "decision": "Fail-closed safety",
+        "experiment": "Admit a memory-pressure workload",
+        "decision": "Applicability before estimation",
         "cost_level": 2,
         "cost_label": "Medium",
-        "what_it_settles": "Whether representation-specific estimates can support a compatible default policy; no default changes during estimator work."
+        "what_it_settles": "Whether a real concurrent request trace exposes useful memory-policy headroom; the earlier estimator gate remains closed."
       },
       {
         "priority": 3,
-        "experiment": "Reduce measured preparation allocations",
-        "decision": "Raw optimisation",
+        "experiment": "Reuse completed scalar plans",
+        "decision": "Consumer integration",
         "cost_level": 2,
         "cost_label": "Medium",
-        "what_it_settles": "Whether another exact, representative, cross-host preparation improvement exists after the one-memo change."
+        "what_it_settles": "Whether actual query lifetimes amortize preparation for the implemented factorized, affine or bounded-CNF plan."
       },
       {
         "priority": 4,
@@ -1538,7 +1589,7 @@
       "stage": "Audit-tool consolidation and current validation",
       "date": "2026-08-27",
       "what_was_checked": "Whether exact-file provenance hashing could be consolidated without coupling distinct timing and corpus contracts, and whether the resulting repository remained green.",
-      "outcome": "{{dpr3.helpers.before}} duplicate SHA-256 helpers became {{dpr3.helpers.after}} streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Current validation: {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests full-suite."
+      "outcome": "{{dpr3.helpers.before}} duplicate SHA-256 helpers became {{dpr3.helpers.after}} streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Validation in the August 27 run: {{tests.focused}} focused tests and {{tests.full}} tests plus {{tests.full.subtests}} subtests full-suite."
     }
   ],
   "glossary": [
@@ -1768,7 +1819,7 @@
       "term": "kernel",
       "group": "workload-and-timing",
       "lay": "The computation proper, with the setup and teardown stripped away. Two systems can have identical kernels and very different end-to-end costs.",
-      "technical": "The steady-state execution of the compiled program with environment and program prebuilt. At this boundary CM/CSE-flat measured parity on B1/E3 and EPFL, but a workload-specific CM advantage on current B2/B4 V3."
+      "technical": "The steady-state execution of the compiled program with environment and program prebuilt. At this boundary CM/CSE-flat measured parity on B1/E3 and EPFL, but a workload-specific CM advantage on the August 25 B2/B4 V3 primary study."
     },
     {
       "term": "wrapper overhead",

@@ -74,9 +74,9 @@ class MasterWebsiteEvidenceTests(unittest.TestCase):
         text = (SITE / "index.html").read_text(encoding="utf-8")
         self.assertIn("local synthetic kernel, {{kernel.local.pct}} faster; EPFL", text)
         self.assertIn("Linux synthetic replications", text)
-        self.assertIn('P("{{symv3.bare.overall}}")', text)
-        self.assertIn("current B2/B4 V3 bare kernel", text)
-        self.assertIn("Historical B1/E3 {{flat.local}} remains in the comparison chart", text)
+        self.assertIn('P("{{symv3.repeat.latest}}")', text)
+        self.assertIn("latest same-host B2/B4 V3 repetition (August 26)", text)
+        self.assertIn("Primary study {{symv3.bare.overall}} and all repetitions remain in the comparison chart", text)
         self.assertNotIn("replicated on real circuits and on {{kernel.pod.count}}", text)
 
     def test_master_links_latest_public_repository_evidence(self):
