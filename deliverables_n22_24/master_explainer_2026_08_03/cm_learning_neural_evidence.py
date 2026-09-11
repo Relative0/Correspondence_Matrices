@@ -19,6 +19,14 @@ if str(ROOT) not in sys.path:
 from cmbench.recognition import query_ladder_development_experiment as development
 
 PINNED = {
+    "q64_raw_replay": (
+        "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/STDLIB_SUMMARY_REPLAY.json",
+        "d547a18c66ab497b53e47d8351ad71ce02f81c72cdd5d2e28bf7f2acb7d0fd96",
+    ),
+    "c16_linux_verification": (
+        "docs/recognition/c16_linux_confirmation/RUNPOD_C16_PACKAGE_V2_FINAL_VERIFICATION_20260831.json",
+        "895f29f1dba93c761197abd1e075e6bcf9573cb80dd021efbb7881ca853ccc9c",
+    ),
     "batch_verification": (
         "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json",
         "6c6253d85c24deb98bd8d9a9b2baaec92c0bb37f38cc0509585b00cefddf086f",
@@ -167,6 +175,23 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     q64_result = _read_pinned("q64_result")
     q64_evidence = _read_pinned("q64_evidence")
     q64_verification = _read_pinned("q64_surface_verification")
+    raw_replay = _read_pinned("q64_raw_replay")
+    c16_linux = _read_pinned("c16_linux_verification")
+    if (raw_replay.get("status") != "verified_complete"
+        or raw_replay.get("mismatch_count") != 0
+        or c16_linux.get("status") != "pass"
+        or c16_linux.get("semantic_mismatches") != 0
+        or c16_linux.get("artifact_mismatches") != 0):
+        raise ValueError("Positive confirmation or raw q64 replay changed")
+    raw_links = []
+    q64_directory = Path(PINNED["q64_result"][0]).parent
+    for host, record in raw_replay["hosts"].items():
+        for filename, field in (("RAW.jsonl", "raw_file_sha256"), ("INDEPENDENT_VERIFICATION.json", "independent_verification_file_sha256")):
+            relative = (q64_directory / host / filename).as_posix()
+            if _sha256(ROOT / relative) != record[field]:
+                raise ValueError(f"Raw q64 source changed: {relative}")
+            raw_links.append((f"q64 {host}: {filename}", relative))
+        raw_links.append((f"q64 {host}: charged costs", (q64_directory / host / "CHARGED_COSTS.json").as_posix()))
     batch = _read_pinned("batch_verification")
     batch_freeze = _read_pinned("batch_freeze")
     batch_check = batch.get("verification", {})
@@ -494,6 +519,8 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("Frozen q64 final report", "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md"),
         ("Frozen q64 normalized evidence", PINNED["q64_evidence"][0]),
         ("Frozen q64 independent surface verification", PINNED["q64_surface_verification"][0]),
+        ("q64 independent raw-data summary replay", PINNED["q64_raw_replay"][0]),
+        ("C16 final Linux confirmation verification", PINNED["c16_linux_verification"][0]),
         ("Native batching and exact API follow-up report", "docs/audits/2026-09-11-cm-continuation/REPORT.md"),
         ("Native batching independent verification", PINNED["batch_verification"][0]),
         ("Native batching raw paired measurements", "docs/audits/2026-09-11-cm-continuation/native-run/RAW.jsonl"),
@@ -501,6 +528,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("Remaining exact-side research gates", "docs/research/CM_REMAINING_RESEARCH_GATES_2026_09_11.md"),
     ]
 
+    links.extend(raw_links)
     milestone_sources = []
     for milestone, report_name, artifact_name in MILESTONE_SOURCES:
         artifact_relative = f"docs/recognition/{artifact_name}"
@@ -548,6 +576,11 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
             "decision": "Packed exact core advanced; learned hybrid unpromoted; production routing unchanged.",
         },
         "milestone_sources": milestone_sources,
+        "c16": {
+            "report": _href("docs/recognition/LEARNING_MILESTONE_C16_EXACT_SCREENED_GF2_2026_08_30.md"),
+            "artifact": _href("docs/recognition/learning_milestone_c16_exact_screened_gf2_results.json"),
+            "verification": _href(PINNED["c16_linux_verification"][0]),
+        },
         "quality": quality_rows,
         "models": [
             {"family": "Matrix MLP", "parameters": "ln.params_matrix_mlp", "input": "dense fixed CM tensor → binary label", "exactness": "prediction only; exact checker retained", "lesson": "Strong narrow splits did not establish stable transfer."},

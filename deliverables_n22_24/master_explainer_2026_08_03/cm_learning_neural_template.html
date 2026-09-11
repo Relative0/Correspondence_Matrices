@@ -48,6 +48,24 @@ function evidenceTable(headers, rows, label) {
   return h("div", { class: "ln-scroll", tabindex: "0", role: "region", "aria-label": label }, [table]);
 }
 
+function positiveRatioGraphic(title, rows, boundary) {
+  const maximum = Math.ceil(Math.max(1, ...rows.map(([, key]) => TV(key))));
+  const figure = h("figure", { class: "ln-figure", "aria-label": title });
+  figure.append(h("h4", { text: title }));
+  rows.forEach(([label, key]) => {
+    const value = TV(key);
+    figure.append(h("div", { class: "ln-bullet-row", "data-evidence-token": key, "data-evidence-value": String(value) }, [
+      h("div", { class: "ln-bullet-head" }, [h("strong", { text: label }), h("span", { text: T(key) })]),
+      h("div", { class: "ln-bullet-track", "aria-hidden": "true" }, [
+        h("span", { class: "ln-bullet-fill", style: `width:${100 * value / maximum}%` }),
+        h("span", { class: "ln-bullet-neutral", style: `left:${100 / maximum}%` }),
+      ]),
+    ]));
+  });
+  figure.append(h("figcaption", { text: `Linear scale: 0–${maximum}×. Reference line: 1× (equal cost). Above 1 favors the exact candidate. ${boundary}` }));
+  return figure;
+}
+
 app.append(h("header", { class: "page" }, [
   h("p", { class: "eyebrow", text: "Saved evidence · no runtime experiment" }),
   h("h1", { text: "Learning & neural evidence" }),
@@ -170,6 +188,12 @@ app.append(h("header", { class: "page" }, [
     h("article", { class: "ln-result" }, [
       h("p", { class: "eyebrow", text: "C6 · positive exact-core result" }),
       h("h3", { text: "Packed source-ANF advanced" }),
+      positiveRatioGraphic("C6 · exact cached packed core versus truth-vector ANF", [
+        ["Test · median ratio", "ln.c6.test.median_speedup"],
+        ["Test · p95 ratio", "ln.c6.test.p95_speedup"],
+        ["Inspected confirmation · median ratio", "ln.c6.confirmatory.median_speedup"],
+        ["Inspected confirmation · p95 ratio", "ln.c6.confirmatory.p95_speedup"],
+      ], "Ratios of each method's median or p95 total time, not percentiles of paired speedups. Historical development evidence, not a new prospective test or a learned-route win."),
       h("p", { html: P("Held-out test: {{ln.c6.test.median_speedup}} median and {{ln.c6.test.p95_speedup}} p95. Confirmation: {{ln.c6.confirmatory.median_speedup}} median and {{ln.c6.confirmatory.p95_speedup}} p95 versus truth-vector exact ANF; above 1 favors the packed core.") }),
       h("p", { html: P("Across all {{ln.c6.dataset_rows}} dataset cases, accuracy and canonical-partition accuracy were 1.0 with {{ln.c6.semantic_mismatches}} semantic mismatches. The learned hybrid remained unpromoted.") }),
       h("p", {}, [h("a", { href: E.c6.report, text: "C6 report" }), document.createTextNode(" · "), h("a", { href: E.c6.artifact, text: "Results JSON" }), document.createTextNode(" · "), h("a", { href: E.c6.verification, text: "Independent verification" })]),
@@ -177,8 +201,13 @@ app.append(h("header", { class: "page" }, [
     h("article", { class: "ln-result" }, [
       h("p", { class: "eyebrow", text: "C16 · positive exact-screening result" }),
       h("h3", { text: "Whole-path speedup repeated on Linux" }),
+      positiveRatioGraphic("C16 · exact screening versus exhaustive completion", [
+        ["Windows · whole path", "recognition.c16.whole_path_speedup"],
+        ["Linux · whole path", "recognition.c16.linux_whole_path_speedup"],
+      ], "Each ratio uses its own host's summed case-median total times. Absolute timings are not compared across hosts. A local case regression keeps production promotion disabled."),
       h("p", { html: P("Windows measured {{recognition.c16.whole_path_speedup}}. The second-machine Linux confirmation measured {{recognition.c16.linux_whole_path_speedup}} overall and {{recognition.c16.linux_p95_speedup}} at p95 across {{recognition.c16.linux_cases}} cases and {{recognition.c16.linux_rows}} timing rows.") }),
       h("p", { html: P("Both runs preserved the exhaustive best exact artifact with {{recognition.c16.linux_semantic_mismatches}} semantic and {{recognition.c16.linux_artifact_mismatches}} artifact mismatches on Linux. The local minimum was {{recognition.c16.minimum_case_speedup}}, so production promotion remains disabled.") }),
+      h("p", {}, [h("a", { href: E.c16.report, text: "C16 report" }), document.createTextNode(" · "), h("a", { href: E.c16.artifact, text: "Results and retained failures" }), document.createTextNode(" · "), h("a", { href: E.c16.verification, text: "Final Linux confirmation" })]),
     ]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "C5 · useful negative result" }), h("h3", { text: "Symmetry retained; economics failed" }), c5Graphic, h("p", { text: "Variable-renaming equivariance and exact reconstruction survived, but recall, a global certificate and cost did not." })]),
     h("article", { class: "ln-result" }, [h("p", { class: "eyebrow", text: "Frozen q64 result" }), h("h3", { html: `${T("ln.label_stable")} stable · ${T("ln.label_abstain")} abstain` }), h("p", { class: "ln-result-value", html: `${T("ln.split_development_fit")} / ${T("ln.split_development_validation")} / ${T("ln.split_development_audit")}` }), h("p", { html: `The split allocation remained intact, ${T("ln.prior_overlap")} prior alpha-structural groups overlapped, no prospective cases were consumed, and no model was fitted.` }), h("p", {}, [h("a", { href: E.q64.report, text: "Final two-host report" }), document.createTextNode(" · "), h("a", { href: E.q64.surface_verification, text: "Independent verification" })])]),
