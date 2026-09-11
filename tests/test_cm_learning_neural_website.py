@@ -31,18 +31,52 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         self.assertEqual(self.data["e22_learning_neural"], self.evidence)
         for key, value in self.numbers.items():
             self.assertEqual(self.data["_numbers"][key], value, key)
-        self.assertEqual(self.evidence["status"], "verified_read_only_no_training")
+        self.assertEqual(self.evidence["status"], "verified_read_only_scientific_no_go")
 
     def test_decision_fails_closed(self):
         self.assertIn("No selector or neural route is promoted", self.evidence["decision"])
         self.assertEqual(len(self.evidence["tasks"]), 6)
         self.assertGreaterEqual(len(self.evidence["timeline"]), 15)
-        self.assertEqual(self.numbers["ln.label_disagree"]["value"], 1)
+        self.assertEqual(self.numbers["ln.label_stable"]["value"], 18)
+        self.assertEqual(self.numbers["ln.label_abstain"]["value"], 54)
+        self.assertEqual(self.numbers["ln.label_disagree"]["value"], 0)
+        self.assertEqual(self.numbers["ln.surface_coverage"]["value"], 25.0)
+        self.assertEqual(self.numbers["ln.surface_material_arms"]["value"], 1)
         self.assertEqual(self.numbers["ln.economic_gate"]["value"], 1.10)
-        self.assertTrue(all(item["status"] == "missing" for item in self.evidence["charged_costs"]))
+        self.assertTrue(all(item["status"] == "measured" for item in self.evidence["charged_costs"]))
+        self.assertEqual(self.evidence["q64"]["material_winner"], "native_fused_slots")
+        self.assertEqual(self.evidence["q64"]["verifier_exit_code"], 2)
+        self.assertLess(self.numbers["ln.windows_q64_fully_charged"]["value"], 1.0)
+        self.assertLess(self.numbers["ln.linux_q64_fully_charged"]["value"], 1.0)
         self.assertEqual(len(self.evidence["excluded_missing_artifacts"]), 2)
         for token in ("ln.initial_cases", "ln.word_headroom", "ln.bigint_headroom", "ln.bigint_labels", "ln.native_headroom"):
             self.assertNotIn(token, self.numbers)
+
+    def test_latest_exact_batch_followup_is_a_separate_no_go(self):
+        batch = self.evidence["exact_followup"]
+        self.assertEqual(batch["status"], "local_gate_failed_no_go")
+        self.assertFalse(batch["gates"]["primary_sum_speedup_at_least_1_10"])
+        self.assertEqual(self.numbers["ln.batch_rows"]["value"], 2592)
+        self.assertEqual(self.numbers["ln.batch_cases"]["value"], 36)
+        self.assertAlmostEqual(self.numbers["ln.batch_q96_speedup"]["value"], 1.0781378542984128)
+        self.assertLess(self.numbers["ln.batch_q96_speedup"]["value"], self.numbers["ln.batch_gate"]["value"])
+        self.assertIn("excludes separately recorded process/library startup", batch["boundary"])
+        self.assertIn("not the sum-based gate statistic", self.template)
+        self.assertIn("Batching is exact, but the gain is too small to advance", self.page)
+
+    def test_batch_promotion_drift_is_refused(self):
+        from unittest.mock import patch
+        original = self.module._read_pinned
+
+        def drift(key):
+            value = original(key)
+            if key == "batch_verification":
+                value["verified_material_reduction_claim_permitted"] = True
+            return value
+
+        with patch.object(self.module, "_read_pinned", side_effect=drift):
+            with self.assertRaisesRegex(ValueError, "Native batch no-go"):
+                self.module.build_learning_neural_evidence(SITE)
 
     def test_page_exposes_required_sections_and_interactions(self):
         for anchor in ("dashboard", "status", "tasks", "timeline", "representations", "quality", "exact-controls", "economics", "provenance", "certificate", "next-work"):
@@ -51,7 +85,7 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
             self.assertIn(control, self.template)
         for graphic in ("ln-bullet-track", "ln-agreement-bar", "ln-c5-graphic", "ln-split-bar", "ln-cost-ledger"):
             self.assertIn(graphic, self.template)
-        for token in ("ln.gcc_gross", "ln.clang_gross", "ln.economic_gate", "ln.c5_slow_min", "ln.freeze_cases"):
+        for token in ("ln.windows_q64_gross", "ln.linux_q64_gross", "ln.windows_q64_fully_charged", "ln.linux_q64_fully_charged", "ln.economic_gate", "ln.c5_slow_min", "ln.freeze_cases"):
             self.assertIn(token, self.template)
         self.assertIn("prefers-reduced-motion", self.page)
         self.assertIn("Unsupported numbers excluded", self.page)
@@ -97,18 +131,40 @@ class LearningNeuralWebsiteTests(unittest.TestCase):
         self.assertTrue(all(actions.values()))
         self.assertIn("Do not train", " ".join(actions["prohibited"]))
         self.assertIn("raw 16-block timings", " ".join(actions["now"]))
-        self.assertIn("all 16 paired q64 blocks", " ".join(actions["benchmark"]))
+        self.assertIn("genuinely different workload", " ".join(actions["benchmark"]))
 
     def test_new_read_only_integrity_gates_are_visible(self):
-        self.assertEqual(self.evidence["updated"], "2026-09-10")
+        self.assertEqual(self.evidence["updated"], "2026-09-11")
         self.assertIn("Raw q64 evidence verifier", self.template)
-        self.assertIn("Neural memory repeatability gate", self.template)
+        self.assertIn("Selector or neural candidate", self.template)
         self.assertIn("cm_query_ladder_decision_surface.py", self.template)
+        self.assertIn("cm_memory_learning_evidence.py", self.template)
         self.assertIn("crse_audit_h6_freeze_portability.py", self.template)
         self.assertTrue(any(
             link["label"] == "Decision-surface and memory-evaluation boundary"
             for link in self.evidence["links"]
         ))
+
+    def test_completed_q64_artifacts_are_pinned_and_visible(self):
+        expected = {
+            "q64_result": "4ffb3452e29a2be3ec570cf1c4ec9d8dc3dc0c020eda71591596d175293bc28b",
+            "q64_evidence": "ff06e9b0ae278e7b26eba894e54248c0bb2b4f8af7c02db76a87e5df5f5f280e",
+            "q64_surface_verification": "d9f9bd27642237fb09102c7258f15d8c352f0b76793a190dc81fd9255b3b2c8c",
+        }
+        for key, digest in expected.items():
+            relative, pinned = self.module.PINNED[key]
+            self.assertEqual(pinned, digest)
+            payload = (ROOT / relative).read_bytes().replace(b"\r\n", b"\n")
+            self.assertEqual(hashlib.sha256(payload).hexdigest(), digest)
+        for stale in (
+            "fully charged same-host routing costs are absent",
+            "every required same-host p95 routing-cost field is still null",
+            "The separate source-blind cohort has no timings",
+            "72 groups, still unconsumed",
+        ):
+            self.assertNotIn(stale, self.page)
+        self.assertIn("verified scientific no-go", self.page)
+        self.assertIn("54 abstain", self.page)
 
     def test_c6_positive_exact_core_is_separate_from_learned_routing(self):
         c6 = json.loads(

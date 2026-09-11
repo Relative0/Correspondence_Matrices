@@ -3146,9 +3146,9 @@
   },
   "e22_learning_neural": {
     "schema": "cm-learning-neural-website-evidence/v1",
-    "status": "verified_read_only_no_training",
-    "updated": "2026-09-10",
-    "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
+    "status": "verified_read_only_scientific_no_go",
+    "updated": "2026-09-11",
+    "decision": "No selector or neural route is promoted. The verified two-host q64 gate abstained: 54 of 72 cases lacked a stable material winner, the sole material winner was already the best fixed exact arm, and fully charged routing was slower than that fixed arm on both hosts.",
     "excluded_missing_artifacts": [
       {
         "path": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json",
@@ -3182,7 +3182,7 @@
         "id": "D",
         "name": "Exact backend selection",
         "role": "Choose among task-identical exact arms",
-        "verdict": "Current exposed portfolios are fixed-winner or evidence-incomplete."
+        "verdict": "The completed frozen q64 surface had one material winner, 25% coverage, and sub-1.0 fully charged speedup."
       },
       {
         "id": "E",
@@ -3477,6 +3477,20 @@
         "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
         "report": "../../docs/research/CM_VERSION_HISTORY_LEARNING_PROTOCOL_2026_09_04.md",
         "artifact": "../../docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json"
+      },
+      {
+        "milestone": "Frozen q64 result",
+        "task": "D,E",
+        "question": "source-blind exact backend surface",
+        "cohort": "72 frozen source groups on two physical hosts",
+        "method": "eight task-identical exact arms; no learner fitted",
+        "baselines": "best fixed exact arm and per-case oracle",
+        "result": "The measurement completed, but only native_fused_slots won materially on 18/72 groups and fully charged speedup was below 1.0 on both hosts.",
+        "exactness": "Exact outputs/checks retained; learned advice never replaces exact verification.",
+        "status": "negative",
+        "continuation": "Continue only if the next frozen gate closes the stated evidence and economics gap.",
+        "report": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md",
+        "artifact": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json"
       }
     ],
     "c6": {
@@ -4032,46 +4046,112 @@
     ],
     "hosts": [
       {
-        "id": "gcc_epyc_9655",
-        "label": "GCC / EPYC 9655",
-        "prefix": "gcc",
+        "id": "windows-physical-001",
+        "label": "Windows / MSVC physical host",
+        "prefix": "windows_q64",
         "best_fixed": "native_fused_slots"
       },
       {
-        "id": "clang_epyc_9575f",
-        "label": "Clang / EPYC 9575F",
-        "prefix": "clang",
+        "id": "physical-002",
+        "label": "Linux / GCC physical host",
+        "prefix": "linux_q64",
         "best_fixed": "native_fused_slots"
       }
     ],
+    "exact_followup": {
+      "status": "local_gate_failed_no_go",
+      "disposition": "exact_batch_no_go_for_this_workload",
+      "gates": {
+        "primary_batch_case_win_fraction_at_least_0_75": true,
+        "primary_cluster_ci_low_above_1_0": true,
+        "primary_sum_speedup_at_least_1_10": false,
+        "q32_sum_speedup_at_least_1_0": true
+      },
+      "report": "../../docs/audits/2026-09-11-cm-continuation/REPORT.md",
+      "verification": "../../docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json",
+      "query_counts": [
+        8,
+        32,
+        96
+      ],
+      "boundary": "Exact native batching, not a learned selector. One Windows host; fully charged resident-request cost includes cleanup but excludes separately recorded process/library startup. No second-host escalation or production promotion."
+    },
+    "q64": {
+      "status": "verified_complete_scientific_no_go",
+      "report": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md",
+      "normalized_evidence": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json",
+      "surface_verification": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json",
+      "material_winner": "native_fused_slots",
+      "verifier_exit_code": 2
+    },
     "ladder_blockers": [
-      "oracle_labels_not_stable_across_hosts",
-      "learning_protocol_not_frozen_before_labels",
-      "learning_split_not_frozen_before_labels",
-      "fully_charged_cost_vector_incomplete",
-      "same_host_recognition_timing_missing",
-      "benchmark_claim_boundary_forbids_learning"
+      "insufficient_source_groups_per_label",
+      "fewer_than_two_material_winner_arms",
+      "decision_surface_coverage_below_0_80",
+      "decision_surface_split_coverage_below_0_80",
+      "charged_headroom_below_1_10:windows-physical-001",
+      "charged_headroom_below_1_10:physical-002"
     ],
     "charged_costs": [
       {
         "key": "feature_extraction_and_control",
         "label": "feature extraction and control",
-        "status": "missing"
+        "status": "measured",
+        "host_values": [
+          {
+            "label": "Windows / MSVC physical host",
+            "value": "ln.windows_q64_cost_feature_extraction_and_control"
+          },
+          {
+            "label": "Linux / GCC physical host",
+            "value": "ln.linux_q64_cost_feature_extraction_and_control"
+          }
+        ]
       },
       {
         "key": "model_inference",
         "label": "model inference",
-        "status": "missing"
+        "status": "measured",
+        "host_values": [
+          {
+            "label": "Windows / MSVC physical host",
+            "value": "ln.windows_q64_cost_model_inference"
+          },
+          {
+            "label": "Linux / GCC physical host",
+            "value": "ln.linux_q64_cost_model_inference"
+          }
+        ]
       },
       {
         "key": "exact_verification",
         "label": "exact verification",
-        "status": "missing"
+        "status": "measured",
+        "host_values": [
+          {
+            "label": "Windows / MSVC physical host",
+            "value": "ln.windows_q64_cost_exact_verification"
+          },
+          {
+            "label": "Linux / GCC physical host",
+            "value": "ln.linux_q64_cost_exact_verification"
+          }
+        ]
       },
       {
         "key": "expected_fallback",
         "label": "expected fallback",
-        "status": "missing"
+        "status": "measured",
+        "host_values": [
+          {
+            "label": "Windows / MSVC physical host",
+            "value": "ln.windows_q64_cost_expected_fallback"
+          },
+          {
+            "label": "Linux / GCC physical host",
+            "value": "ln.linux_q64_cost_expected_fallback"
+          }
+        ]
       }
     ],
     "source_blind": {
@@ -4123,21 +4203,22 @@
     ],
     "next_actions": {
       "now": [
-        "Replay pinned verifiers and website evidence tests.",
-        "Validate any future q64 package from all raw 16-block timings; reconstruct labels, economics and the v2 handoff rather than trusting aggregates.",
+        "Replay the completed q64 package from all raw 16-block timings and keep its scientific no-go visible.",
+        "Reduce the cost and regret of the best fixed exact path without fitting against the consumed 72-case label table.",
+        "The independently frozen native batching follow-up is complete and no-go. Do not rerun it on a second host or drop cleanup to rescue its failed gate.",
+        "Connect the optional bounded-cache, count/existence or streaming APIs to a real consumer contract; require a distinct mechanism and a fresh workload for another performance claim.",
         "Use the split-isolated memory evaluator and its precommitted three-seed neural wrapper for synthetic guardrail testing while keeping exposed H6 cases out of training.",
         "Audit the historical H6 freeze for byte-exact or LF/CRLF-equivalent bindings without altering its strict validator.",
-        "Keep candidate code disabled until a freeze-bound handoff is eligible."
+        "Keep candidate code disabled; the completed freeze-bound handoff abstained."
       ],
       "benchmark": [
-        "Run the frozen exact cohort on two distinct physical machines.",
-        "Retain every case, arm and all 16 paired q64 blocks, including ties, refusals and unfavorable rows.",
-        "Generate joint cross-host labels under the precommitted materiality and abstention policy.",
-        "Measure every charged p95 component on each decision-bearing host.",
-        "Return a source-closed, independently verified handoff with all refusals retained."
+        "Admit a genuinely different workload before constructing another learning cohort.",
+        "Freeze its source groups, exact arms, controls, schedule, label policy and charged-cost policy before timing.",
+        "Retain all paired blocks, failures, refusals, unfavorable rows and same-host costs on two physical machines.",
+        "Require independent raw replay and a fully charged gate before any fit is considered."
       ],
       "prohibited": [
-        "Do not train or fit on the already inspected historical cohort.",
+        "Do not train, fit or tune against the consumed 72-case q64 cohort.",
         "Do not read validation, audit or prospective labels before their gate permits it.",
         "Do not combine absolute timings across hosts or runs.",
         "Do not enable advice, production routing or a learned exactness bypass."
@@ -4187,9 +4268,51 @@
       {
         "label": "Source-blind independent verification",
         "href": "../../docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json"
+      },
+      {
+        "label": "Frozen q64 final report",
+        "href": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md"
+      },
+      {
+        "label": "Frozen q64 normalized evidence",
+        "href": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json"
+      },
+      {
+        "label": "Frozen q64 independent surface verification",
+        "href": "../../docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json"
+      },
+      {
+        "label": "Native batching and exact API follow-up report",
+        "href": "../../docs/audits/2026-09-11-cm-continuation/REPORT.md"
+      },
+      {
+        "label": "Native batching independent verification",
+        "href": "../../docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json"
+      },
+      {
+        "label": "Native batching raw paired measurements",
+        "href": "../../docs/audits/2026-09-11-cm-continuation/native-run/RAW.jsonl"
+      },
+      {
+        "label": "Exact-side research dispositions",
+        "href": "../../docs/research/CM_CONTINUATION_RESEARCH_DISPOSITIONS_2026_09_11.md"
+      },
+      {
+        "label": "Remaining exact-side research gates",
+        "href": "../../docs/research/CM_REMAINING_RESEARCH_GATES_2026_09_11.md"
       }
     ],
     "identities": [
+      {
+        "role": "batch_verification",
+        "path": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json",
+        "sha256": "6c6253d85c24deb98bd8d9a9b2baaec92c0bb37f38cc0509585b00cefddf086f"
+      },
+      {
+        "role": "batch_freeze",
+        "path": "docs/audits/2026-09-11-cm-continuation/native-freeze-v2/FREEZE.json",
+        "sha256": "2ea4f9cad40b2538803413872ccf3bc89039dbf95edde6c07493d644592a5110"
+      },
       {
         "role": "c",
         "path": "docs/recognition/learning_milestone_c_results.json",
@@ -4239,6 +4362,21 @@
         "role": "freeze_verification",
         "path": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json",
         "sha256": "a205649db2b9b4e6a74ad74949437dc98ed428a89d4cc9cde5a692ddb9617c7e"
+      },
+      {
+        "role": "q64_result",
+        "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json",
+        "sha256": "4ffb3452e29a2be3ec570cf1c4ec9d8dc3dc0c020eda71591596d175293bc28b"
+      },
+      {
+        "role": "q64_evidence",
+        "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json",
+        "sha256": "ff06e9b0ae278e7b26eba894e54248c0bb2b4f8af7c02db76a87e5df5f5f280e"
+      },
+      {
+        "role": "q64_surface_verification",
+        "path": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json",
+        "sha256": "d9f9bd27642237fb09102c7258f15d8c352f0b76793a190dc81fd9255b3b2c8c"
       }
     ]
   },
@@ -8677,6 +8815,102 @@
       "prov": "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-deep-artifact-audit-2026-08-27/clustered-statistics.json :: 16.endpoint_cm_over_cudd_extraction",
       "note": "Saved feature-model cohort only; performance remains provisional."
     },
+    "ln.batch_rows": {
+      "value": 2592,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: verification.observed_rows",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.batch_cases": {
+      "value": 36,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-freeze-v2/FREEZE.json :: cohort.case_count",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.batch_blocks": {
+      "value": 12,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-freeze-v2/FREEZE.json :: measurement_contract.blocks",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.batch_gate": {
+      "value": 1.1,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-freeze-v2/FREEZE.json :: materiality_contract.minimum_primary_sum_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.batch_q8_speedup": {
+      "value": 0.9864208573108753,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.8.fully_charged_sum_speedup",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q8_wins": {
+      "value": 17,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.8.batch_case_win_fraction * cohort.case_count",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q8_ci_low": {
+      "value": 0.9564359729027321,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.8.case_cluster_bootstrap_ci95[0]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q8_ci_high": {
+      "value": 1.0194149483548094,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.8.case_cluster_bootstrap_ci95[1]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q32_speedup": {
+      "value": 1.0154448362675712,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.32.fully_charged_sum_speedup",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q32_wins": {
+      "value": 24,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.32.batch_case_win_fraction * cohort.case_count",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q32_ci_low": {
+      "value": 0.992746940469191,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.32.case_cluster_bootstrap_ci95[0]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q32_ci_high": {
+      "value": 1.0399791760072727,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.32.case_cluster_bootstrap_ci95[1]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q96_speedup": {
+      "value": 1.0781378542984128,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.96.fully_charged_sum_speedup",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q96_wins": {
+      "value": 32,
+      "fmt": "int",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.96.batch_case_win_fraction * cohort.case_count",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q96_ci_low": {
+      "value": 1.0585240214549891,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.96.case_cluster_bootstrap_ci95[0]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
+    "ln.batch_q96_ci_high": {
+      "value": 1.1004032088432725,
+      "fmt": "x3",
+      "prov": "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json :: query_counts.96.case_cluster_bootstrap_ci95[1]",
+      "note": "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio."
+    },
     "ln.version_cases": {
       "value": 3,
       "fmt": "int",
@@ -8929,70 +9163,160 @@
       "prov": "docs/recognition/learning_milestone_c5_variable_conditioned_cut_results.json :: models[variable_cut_gnn].parameters",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.gcc_fixed_ns": {
-      "value": 141549155.0,
+    "ln.windows_q64_fixed_ns": {
+      "value": 302540750.0,
       "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: sum(q64 per-case medians for best fixed arm)",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.windows-physical-001.best_fixed_sum_ns",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.gcc_oracle_ns": {
-      "value": 127998459.5,
+    "ln.windows_q64_oracle_ns": {
+      "value": 262115600.0,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.windows-physical-001.oracle_sum_ns",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.windows_q64_gross": {
+      "value": 1.1542264176569421,
+      "fmt": "x6",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.windows-physical-001.gross_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.windows_q64_fully_charged": {
+      "value": 0.9493409163839316,
+      "fmt": "x6",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.windows-physical-001.fully_charged_speedup",
+      "note": "Best fixed divided by oracle plus every same-host charged p95 cost; below 1 means routing is slower than the best fixed arm."
+    },
+    "ln.windows_q64_rows": {
+      "value": 9216,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: hosts.windows-physical-001.completed_cells",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.windows_q64_cost_exact_verification": {
+      "value": 219.29861111111111,
       "fmt": "num1",
-      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: sum(q64 per-case per-arm oracle medians)",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[windows-physical-001].p95_costs_ns_per_case.exact_verification",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.gcc_gross": {
-      "value": 1.1058660827085969,
-      "fmt": "x9",
-      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: best_fixed_sum_ns / oracle_sum_ns",
-      "note": "Saved development evidence; not a production-routing claim."
-    },
-    "ln.gcc_rows": {
-      "value": 6912,
-      "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_followup_retry_002_execution_20260904/runpod-architecture-query-ladder-execute-002/evidence/run-output/architecture-query-ladder-linux-gcc-20260904-002/raw_measurements.jsonl :: q64_rows",
-      "note": "Saved development evidence; not a production-routing claim."
-    },
-    "ln.clang_fixed_ns": {
-      "value": 127877156.0,
-      "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: sum(q64 per-case medians for best fixed arm)",
-      "note": "Saved development evidence; not a production-routing claim."
-    },
-    "ln.clang_oracle_ns": {
-      "value": 114731375.5,
+    "ln.windows_q64_cost_expected_fallback": {
+      "value": 561794.9708333345,
       "fmt": "num1",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: sum(q64 per-case per-arm oracle medians)",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[windows-physical-001].p95_costs_ns_per_case.expected_fallback",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.clang_gross": {
-      "value": 1.1145787753586203,
-      "fmt": "x9",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: best_fixed_sum_ns / oracle_sum_ns",
+    "ln.windows_q64_cost_feature_extraction_and_control": {
+      "value": 186325.29722222223,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[windows-physical-001].p95_costs_ns_per_case.feature_extraction_and_control",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.clang_rows": {
-      "value": 6912,
+    "ln.windows_q64_cost_model_inference": {
+      "value": 37347.13055555556,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[windows-physical-001].p95_costs_ns_per_case.model_inference",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.windows_q64_cost_total": {
+      "value": 785686.6972222234,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: sum(replications[windows-physical-001].p95_costs_ns_per_case.*)",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_fixed_ns": {
+      "value": 234625301.0,
       "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/runpod-architecture-query-ladder-cross-machine-execute-001/evidence/run-output/architecture-query-ladder-linux-clang-20260904-003/raw_measurements.jsonl :: q64_rows",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.physical-002.best_fixed_sum_ns",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_oracle_ns": {
+      "value": 204450521.0,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.physical-002.oracle_sum_ns",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_gross": {
+      "value": 1.1475896459075299,
+      "fmt": "x6",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.physical-002.gross_speedup",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_fully_charged": {
+      "value": 0.9779720285307208,
+      "fmt": "x6",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json :: economics_by_host.physical-002.fully_charged_speedup",
+      "note": "Best fixed divided by oracle plus every same-host charged p95 cost; below 1 means routing is slower than the best fixed arm."
+    },
+    "ln.linux_q64_rows": {
+      "value": 9216,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: hosts.physical-002.completed_cells",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_cost_exact_verification": {
+      "value": 76.26016666666666,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[physical-002].p95_costs_ns_per_case.exact_verification",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_cost_expected_fallback": {
+      "value": 419189.34934375086,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[physical-002].p95_costs_ns_per_case.expected_fallback",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_cost_feature_extraction_and_control": {
+      "value": 60415.50397222222,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[physical-002].p95_costs_ns_per_case.feature_extraction_and_control",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_cost_model_inference": {
+      "value": 12812.099680555555,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: replications[physical-002].p95_costs_ns_per_case.model_inference",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.linux_q64_cost_total": {
+      "value": 492493.2131631953,
+      "fmt": "num1",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json :: sum(replications[physical-002].p95_costs_ns_per_case.*)",
       "note": "Saved development evidence; not a production-routing claim."
     },
     "ln.ladder_cases": {
-      "value": 54,
+      "value": 72,
       "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.complete_cases",
+      "prov": "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/FREEZE.json :: cohort.case_count",
       "note": "Saved development evidence; not a production-routing claim."
     },
-    "ln.label_agree": {
-      "value": 53,
+    "ln.label_stable": {
+      "value": 18,
       "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.label_agreement_cases",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: surface.source_groups_per_label.*",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.label_abstain": {
+      "value": 54,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: surface.abstentions",
       "note": "Saved development evidence; not a production-routing claim."
     },
     "ln.label_disagree": {
+      "value": 0,
+      "fmt": "int",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: surface.cross_host_winner_disagreements",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.surface_coverage": {
+      "value": 25.0,
+      "fmt": "pct0",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: surface.non_abstain_coverage",
+      "note": "Saved development evidence; not a production-routing claim."
+    },
+    "ln.surface_material_arms": {
       "value": 1,
       "fmt": "int",
-      "prov": "docs/recognition/architecture_query_ladder_cross_machine_execution_20260904/CROSS_MACHINE_ANALYSIS.json :: cross_host.label_disagreement_cases",
+      "prov": "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json :: surface.material_winner_arms",
       "note": "Saved development evidence; not a production-routing claim."
     },
     "ln.quality_0_value": {

@@ -38,6 +38,9 @@ jobs:
           cp "$site_dir/learning-neural-evidence.html" _site/
           cp "$site_dir/data-downloads.html" _site/
           cp "$site_dir/og.png" _site/
+          # Publish the neural homepage together with its directly linked sources.
+          python3 scripts/cm_neural_site_export.py --output build/neural-pages-export --target https://relative0.github.io/Correspondence_Matrices/neural/
+          cp -R build/neural-pages-export/_site _site/neural
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages

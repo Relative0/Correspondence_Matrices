@@ -16,10 +16,17 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from cmbench.recognition.query_ladder_learning_evidence import build_evidence
 from cmbench.recognition import query_ladder_development_experiment as development
 
 PINNED = {
+    "batch_verification": (
+        "docs/audits/2026-09-11-cm-continuation/native-run/INDEPENDENT_VERIFICATION.json",
+        "6c6253d85c24deb98bd8d9a9b2baaec92c0bb37f38cc0509585b00cefddf086f",
+    ),
+    "batch_freeze": (
+        "docs/audits/2026-09-11-cm-continuation/native-freeze-v2/FREEZE.json",
+        "2ea4f9cad40b2538803413872ccf3bc89039dbf95edde6c07493d644592a5110",
+    ),
     "c": (
         "docs/recognition/learning_milestone_c_results.json",
         "f9ee8df9dc6e500624cd50f396c4520028409c0394647066633baa1a0f7f44d5",
@@ -59,6 +66,18 @@ PINNED = {
     "freeze_verification": (
         "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json",
         "a205649db2b9b4e6a74ad74949437dc98ed428a89d4cc9cde5a692ddb9617c7e",
+    ),
+    "q64_result": (
+        "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/CONTINUATION_RESULT_AFTER_SECOND_HOST.json",
+        "4ffb3452e29a2be3ec570cf1c4ec9d8dc3dc0c020eda71591596d175293bc28b",
+    ),
+    "q64_evidence": (
+        "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/NORMALIZED_EVIDENCE.json",
+        "ff06e9b0ae278e7b26eba894e54248c0bb2b4f8af7c02db76a87e5df5f5f280e",
+    ),
+    "q64_surface_verification": (
+        "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/SURFACE_INDEPENDENT_VERIFICATION.json",
+        "d9f9bd27642237fb09102c7258f15d8c352f0b76793a190dc81fd9255b3b2c8c",
     ),
 }
 
@@ -145,7 +164,29 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     c4 = _read_pinned("c4")
     c5 = _read_pinned("c5")
     c6 = _read_pinned("c6")
-    ladder = build_evidence()
+    q64_result = _read_pinned("q64_result")
+    q64_evidence = _read_pinned("q64_evidence")
+    q64_verification = _read_pinned("q64_surface_verification")
+    batch = _read_pinned("batch_verification")
+    batch_freeze = _read_pinned("batch_freeze")
+    batch_check = batch.get("verification", {})
+    if (
+        batch.get("status") != "local_gate_failed_no_go"
+        or batch.get("disposition") != "exact_batch_no_go_for_this_workload"
+        or batch.get("verified_material_reduction_claim_permitted") is not False
+        or batch.get("freeze_file_sha256") != PINNED["batch_freeze"][1]
+        or batch_check.get("verified_complete") is not True
+        or batch_check.get("observed_rows") != batch_check.get("expected_rows")
+        or any(batch_check.get(key) != 0 for key in (
+            "schedule_mismatches", "semantic_mismatches", "timing_mismatches"
+        ))
+        or batch.get("gates", {}).get("primary_sum_speedup_at_least_1_10") is not False
+    ):
+        raise ValueError("Native batch no-go or independent verification changed")
+    for filename, field in (("RAW.jsonl", "raw_file_sha256"), ("RESULT.json", "result_file_sha256")):
+        path = ROOT / "docs/audits/2026-09-11-cm-continuation/native-run" / filename
+        if _sha256(path) != batch[field]:
+            raise ValueError(f"Native batch verified source changed: {filename}")
 
     if post.get("status") != "complete_no_training" or post.get("decision", {}).get("selector_fitted"):
         raise ValueError("Post-benchmark neural boundary changed")
@@ -157,18 +198,60 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         raise ValueError("Source-blind freeze has consumed prohibited evidence")
     if freeze_verification.get("status") != "verified_source_blind_freeze_no_labels":
         raise ValueError("Source-blind freeze is not independently verified")
-    if ladder.get("status") != "verified_gross_only_training_abstained":
-        raise ValueError("Query-ladder evidence is not verified and abstained")
-    if ladder["decision"] != {
-        "development_training_eligible": False,
-        "training_performed": False,
-        "prospective_data_consumed": False,
-        "advice_enabled": False,
-        "complete_abstention": True,
-        "exact_fallback": "unchanged exact path",
-        "production_routing_permitted": False,
-    }:
-        raise ValueError("Query-ladder fail-closed decision changed")
+    if (
+        q64_result.get("status") != "verified_complete_scientific_no_go"
+        or q64_result.get("measurement_validity", {}).get("status")
+        != "valid_two_distinct_physical_hosts"
+        or q64_result.get("candidate") != {
+            "candidate_result": "not_run_because_frozen_readiness_gate_abstained",
+            "development_training_eligible": False,
+            "fitter_invoked": False,
+            "implementation_candidate_eligible": False,
+            "models_trained": 0,
+        }
+        or q64_result.get("claim_boundary") != {
+            "advice_enabled": False,
+            "production_routing_permitted": False,
+            "production_status": "unchanged_disabled",
+            "prospective_cases_consumed": 0,
+        }
+        or q64_result.get("final_verifier", {}).get("status") != "abstained"
+        or q64_result.get("final_verifier", {}).get("exit_code") != 2
+    ):
+        raise ValueError("Completed q64 scientific no-go boundary changed")
+    if (
+        q64_evidence.get("schema")
+        != "crse-query-ladder-decision-surface-evidence/v1"
+        or q64_evidence.get("status") != "verified_complete"
+        or q64_evidence.get("freeze_file_sha256") != PINNED["freeze"][1]
+        or len(q64_evidence.get("replications", ())) != 2
+        or q64_evidence.get("prospective_cases_consumed") != 0
+        or q64_evidence.get("claim_boundary") != {
+            "development_training_eligibility_permitted": True,
+            "prospective_consumption_permitted": False,
+            "production_routing_permitted": False,
+        }
+        or q64_result.get("artifacts", {}).get("normalized_evidence_file_sha256")
+        != PINNED["q64_evidence"][1]
+    ):
+        raise ValueError("Normalized q64 evidence boundary changed")
+    surface = q64_result["surface"]
+    if (
+        q64_verification.get("status") != "verified_complete"
+        or q64_result.get("artifacts", {}).get(
+            "surface_independent_verification_file_sha256"
+        )
+        != PINNED["q64_surface_verification"][1]
+        or q64_verification.get("coverage") != surface.get("non_abstain_coverage")
+        or q64_verification.get("coverage_by_split")
+        != surface.get("non_abstain_coverage_by_split")
+        or q64_verification.get("abstentions") != surface.get("abstentions")
+        or q64_verification.get("source_groups_per_label")
+        != surface.get("source_groups_per_label")
+        or q64_verification.get("models_trained") != 0
+        or q64_verification.get("prospective_cases_consumed") != 0
+    ):
+        raise ValueError("Independent q64 surface verification changed")
     if (
         c6.get("status") != "complete"
         or c6.get("semantic_mismatches") != 0
@@ -191,6 +274,23 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     post_path = PINNED["post"][0]
     protocol_path = PINNED["protocol"][0]
     freeze_path = PINNED["freeze"][0]
+    q64_result_path = PINNED["q64_result"][0]
+    q64_evidence_path = PINNED["q64_evidence"][0]
+    q64_verification_path = PINNED["q64_surface_verification"][0]
+    batch_path = PINNED["batch_verification"][0]
+    number("batch_rows", batch_check["observed_rows"], "int", batch_path, "verification.observed_rows")
+    number("batch_cases", batch_freeze["cohort"]["case_count"], "int", PINNED["batch_freeze"][0], "cohort.case_count")
+    number("batch_blocks", batch_freeze["measurement_contract"]["blocks"], "int", PINNED["batch_freeze"][0], "measurement_contract.blocks")
+    number("batch_gate", batch_freeze["materiality_contract"]["minimum_primary_sum_speedup"], "x3", PINNED["batch_freeze"][0], "materiality_contract.minimum_primary_sum_speedup")
+    for queries in (8, 32, 96):
+        row = batch["query_counts"][str(queries)]
+        for suffix, value, fmt, field in (
+            ("speedup", row["fully_charged_sum_speedup"], "x3", "fully_charged_sum_speedup"),
+            ("wins", round(row["batch_case_win_fraction"] * batch_freeze["cohort"]["case_count"]), "int", "batch_case_win_fraction * cohort.case_count"),
+            ("ci_low", row["case_cluster_bootstrap_ci95"][0], "x3", "case_cluster_bootstrap_ci95[0]"),
+            ("ci_high", row["case_cluster_bootstrap_ci95"][1], "x3", "case_cluster_bootstrap_ci95[1]"),
+        ):
+            number(f"batch_q{queries}_{suffix}", value, fmt, batch_path, f"query_counts.{queries}.{field}", "One Windows host; resident request includes cleanup, excludes process/library startup. CI describes case geometric mean, not sum ratio.")
 
     number("version_cases", post["strongest_surface"]["complete_cases"], "int", post_path, "strongest_surface.complete_cases")
     number("version_gross", post["strongest_surface"]["gross_headroom_speedup"], "x9", post_path, "strongest_surface.gross_headroom_speedup")
@@ -256,17 +356,51 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
     ):
         number(key, value, "int", source, field)
 
+    replications = {
+        row["replication_id"]: row for row in q64_evidence["replications"]
+    }
     host_rows = []
-    for host_id, host in ladder["hosts"].items():
-        prefix = "gcc" if host_id.startswith("gcc") else "clang"
-        number(f"{prefix}_fixed_ns", host["best_fixed_sum_ns"], "int", host["raw_path"], "sum(q64 per-case medians for best fixed arm)")
-        number(f"{prefix}_oracle_ns", host["oracle_sum_ns"], "num1", host["raw_path"], "sum(q64 per-case per-arm oracle medians)")
-        number(f"{prefix}_gross", host["gross_speedup"], "x9", host["raw_path"], "best_fixed_sum_ns / oracle_sum_ns")
-        number(f"{prefix}_rows", host["q64_rows"], "int", host["raw_path"], "q64_rows")
-        host_rows.append({"id": host_id, "label": "GCC / EPYC 9655" if prefix == "gcc" else "Clang / EPYC 9575F", "prefix": prefix, "best_fixed": host["best_fixed_method"]})
-    number("ladder_cases", ladder["cross_host"]["complete_cases"], "int", ladder["input_bindings"]["cross_analysis_path"], "cross_host.complete_cases")
-    number("label_agree", ladder["cross_host"]["label_agreement_cases"], "int", ladder["input_bindings"]["cross_analysis_path"], "cross_host.label_agreement_cases")
-    number("label_disagree", ladder["cross_host"]["label_disagreement_cases"], "int", ladder["input_bindings"]["cross_analysis_path"], "cross_host.label_disagreement_cases")
+    for host_id, label, prefix in (
+        ("windows-physical-001", "Windows / MSVC physical host", "windows_q64"),
+        ("physical-002", "Linux / GCC physical host", "linux_q64"),
+    ):
+        host = q64_result["hosts"][host_id]
+        economics = q64_verification["economics_by_host"][host_id]
+        summary_economics = surface["economics_by_host"][host_id]
+        replication = replications[host_id]
+        if (
+            host["completed_cells"] != host["expected_cells"]
+            or host["failures"] != 0
+            or host["refusals"] != 0
+            or host["timeouts"] != 0
+            or replication["verification_status"] != "verified_complete"
+            or not replication["p95_costs_measured_same_host"]
+            or economics["gross_speedup"] != summary_economics["gross_speedup"]
+            or economics["fully_charged_speedup"]
+            != summary_economics["fully_charged_speedup"]
+        ):
+            raise ValueError(f"Completed q64 host boundary changed: {host_id}")
+        number(f"{prefix}_fixed_ns", economics["best_fixed_sum_ns"], "int", q64_verification_path, f"economics_by_host.{host_id}.best_fixed_sum_ns")
+        number(f"{prefix}_oracle_ns", economics["oracle_sum_ns"], "int", q64_verification_path, f"economics_by_host.{host_id}.oracle_sum_ns")
+        number(f"{prefix}_gross", economics["gross_speedup"], "x6", q64_verification_path, f"economics_by_host.{host_id}.gross_speedup")
+        number(f"{prefix}_fully_charged", economics["fully_charged_speedup"], "x6", q64_verification_path, f"economics_by_host.{host_id}.fully_charged_speedup", "Best fixed divided by oracle plus every same-host charged p95 cost; below 1 means routing is slower than the best fixed arm.")
+        number(f"{prefix}_rows", host["completed_cells"], "int", q64_result_path, f"hosts.{host_id}.completed_cells")
+        for cost_name, cost_value in replication["p95_costs_ns_per_case"].items():
+            number(f"{prefix}_cost_{cost_name}", cost_value, "num1", q64_evidence_path, f"replications[{host_id}].p95_costs_ns_per_case.{cost_name}")
+        total_cost = sum(replication["p95_costs_ns_per_case"].values())
+        number(f"{prefix}_cost_total", total_cost, "num1", q64_evidence_path, f"sum(replications[{host_id}].p95_costs_ns_per_case.*)")
+        host_rows.append({
+            "id": host_id,
+            "label": label,
+            "prefix": prefix,
+            "best_fixed": economics["best_fixed_arm"],
+        })
+    number("ladder_cases", len(freeze["cohort"]["cases"]), "int", freeze_path, "cohort.case_count")
+    number("label_stable", sum(surface["source_groups_per_label"].values()), "int", q64_result_path, "surface.source_groups_per_label.*")
+    number("label_abstain", surface["abstentions"], "int", q64_result_path, "surface.abstentions")
+    number("label_disagree", surface["cross_host_winner_disagreements"], "int", q64_result_path, "surface.cross_host_winner_disagreements")
+    number("surface_coverage", 100 * surface["non_abstain_coverage"], "pct0", q64_result_path, "surface.non_abstain_coverage")
+    number("surface_material_arms", len(surface["material_winner_arms"]), "int", q64_result_path, "surface.material_winner_arms")
 
     quality_rows = []
 
@@ -320,6 +454,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("Reassessment", "A–F", "neural eligibility", "All exposed development evidence", "evidence synthesis; no fitting", "current exact portfolios", "No training: advice off, complete abstention, exact fallback unchanged.", "retained", "docs/research/CM_NEURAL_ARCHITECTURE_REASSESSMENT_2026_09_02.md"),
         ("Post-benchmark", "B–E", "new decision surfaces", "Verified architecture comparison", "gross/charged economics audit", "task-identical fixed and oracle arms", "A small version-history gross signal remained development-only and cost-incomplete.", "retained", "docs/research/CM_POST_BENCHMARK_NEURAL_ELIGIBILITY_2026_09_03.md"),
         ("Current protocol", "D,E", "source-blind future gate", "Frozen source-group cohort", "label-free features; fit not authorized", "majority and analytical controls", "Freeze verified with no timings, labels, models, prospective data or cloud work.", "development-only", "docs/research/CM_VERSION_HISTORY_LEARNING_PROTOCOL_2026_09_04.md"),
+        ("Frozen q64 result", "D,E", "source-blind exact backend surface", "72 frozen source groups on two physical hosts", "eight task-identical exact arms; no learner fitted", "best fixed exact arm and per-case oracle", "The measurement completed, but only native_fused_slots won materially on 18/72 groups and fully charged speedup was below 1.0 on both hosts.", "negative", "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md"),
     ]
     artifacts = {
         "AB": "docs/recognition/learning_milestones_ab_results.json",
@@ -338,6 +473,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "E1–E2": "docs/recognition/learning_milestone_e2_sat_guidance_results.json",
         "Reassessment": "docs/research/CM_NEURAL_ARCHITECTURE_REASSESSMENT_2026_09_02.md", "Post-benchmark": PINNED["post"][0],
         "Current protocol": PINNED["freeze"][0],
+        "Frozen q64 result": PINNED["q64_result"][0],
     }
     timeline = []
     for milestone, task, question, cohort, method, baselines, result, status, report in reports:
@@ -355,6 +491,14 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         ("Decision-surface and memory-evaluation boundary", "docs/research/CM_LEARNING_DECISION_SURFACE_AND_MEMORY_EVALUATION_2026_09_09.md"),
         ("Source-blind freeze manifest", "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/MANIFEST.json"),
         ("Source-blind independent verification", "docs/recognition/runs/query-ladder-source-blind-learning-freeze-20260904-001/INDEPENDENT_VERIFICATION.json"),
+        ("Frozen q64 final report", "docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md"),
+        ("Frozen q64 normalized evidence", PINNED["q64_evidence"][0]),
+        ("Frozen q64 independent surface verification", PINNED["q64_surface_verification"][0]),
+        ("Native batching and exact API follow-up report", "docs/audits/2026-09-11-cm-continuation/REPORT.md"),
+        ("Native batching independent verification", PINNED["batch_verification"][0]),
+        ("Native batching raw paired measurements", "docs/audits/2026-09-11-cm-continuation/native-run/RAW.jsonl"),
+        ("Exact-side research dispositions", "docs/research/CM_CONTINUATION_RESEARCH_DISPOSITIONS_2026_09_11.md"),
+        ("Remaining exact-side research gates", "docs/research/CM_REMAINING_RESEARCH_GATES_2026_09_11.md"),
     ]
 
     milestone_sources = []
@@ -375,9 +519,9 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
 
     evidence = {
         "schema": "cm-learning-neural-website-evidence/v1",
-        "status": "verified_read_only_no_training",
-        "updated": "2026-09-10",
-        "decision": "No selector or neural route is promoted. Advice remains off; every case abstains to the unchanged exact fallback.",
+        "status": "verified_read_only_scientific_no_go",
+        "updated": "2026-09-11",
+        "decision": "No selector or neural route is promoted. The verified two-host q64 gate abstained: 54 of 72 cases lacked a stable material winner, the sole material winner was already the best fixed exact arm, and fully charged routing was slower than that fixed arm on both hosts.",
         "excluded_missing_artifacts": [
             {
                 "path": "docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/assessment.json",
@@ -392,7 +536,7 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
             {"id": "A", "name": "Exact answers / relations", "role": "Predict a complete exact Boolean object", "verdict": "Do not replace the exact output and checker."},
             {"id": "B", "name": "Decomposition / cuts", "role": "Propose useful exact decompositions", "verdict": "Current learned proposals do not avoid certified global work."},
             {"id": "C", "name": "Partition ranking", "role": "Order exact candidate search", "verdict": "Blocked on a sound early-termination certificate."},
-            {"id": "D", "name": "Exact backend selection", "role": "Choose among task-identical exact arms", "verdict": "Current exposed portfolios are fixed-winner or evidence-incomplete."},
+            {"id": "D", "name": "Exact backend selection", "role": "Choose among task-identical exact arms", "verdict": "The completed frozen q64 surface had one material winner, 25% coverage, and sub-1.0 fully charged speedup."},
             {"id": "E", "name": "Runtime / cost prediction", "role": "Predict exact execution cost", "verdict": "Analytical controls remain stronger; all routing costs must be charged."},
             {"id": "F", "name": "CM representation learning", "role": "Learn embeddings over CM structure", "verdict": "Research-only until a downstream task, ablation and economic gate exist."},
         ],
@@ -423,14 +567,43 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
             {"family": "Trees and rules", "parameters": None, "input": "structural/cost features → abstain or exact arm", "exactness": "abstaining advice plus exact fallback", "lesson": "Analytical recognition generally dominated fitted cost policies."},
         ],
         "hosts": host_rows,
-        "ladder_blockers": ladder["blockers"],
+        "exact_followup": {
+            "status": batch["status"],
+            "disposition": batch["disposition"],
+            "gates": batch["gates"],
+            "report": _href("docs/audits/2026-09-11-cm-continuation/REPORT.md"),
+            "verification": _href(batch_path),
+            "query_counts": [8, 32, 96],
+            "boundary": "Exact native batching, not a learned selector. One Windows host; fully charged resident-request cost includes cleanup but excludes separately recorded process/library startup. No second-host escalation or production promotion.",
+        },
+        "q64": {
+            "status": q64_result["status"],
+            "report": _href("docs/recognition/runs/query-ladder-q64-execution-20260909-220154-004/FINAL_REPORT_AFTER_SECOND_HOST.md"),
+            "normalized_evidence": _href(PINNED["q64_evidence"][0]),
+            "surface_verification": _href(PINNED["q64_surface_verification"][0]),
+            "material_winner": surface["material_winner_arms"][0],
+            "verifier_exit_code": q64_result["final_verifier"]["exit_code"],
+        },
+        "ladder_blockers": q64_result["final_verifier"]["blockers"],
         "charged_costs": [
             {
                 "key": key,
                 "label": key.replace("_", " "),
-                "status": "missing" if value is None else "measured",
+                "status": "measured",
+                "host_values": [
+                    {
+                        "label": host["label"],
+                        "value": f"ln.{host['prefix']}_cost_{key}",
+                    }
+                    for host in host_rows
+                ],
             }
-            for key, value in ladder["cost_accounting"]["required_costs_ns_per_case"].items()
+            for key in (
+                "feature_extraction_and_control",
+                "model_inference",
+                "exact_verification",
+                "expected_fallback",
+            )
         ],
         "source_blind": {
             "features": freeze["model_input_contract"]["feature_names"],
@@ -441,21 +614,22 @@ def build_learning_neural_evidence(site: Path) -> tuple[dict, dict]:
         "certificate": protocol["c5_certificate_investigation"]["evaluation"]["required_properties"],
         "next_actions": {
             "now": [
-                "Replay pinned verifiers and website evidence tests.",
-                "Validate any future q64 package from all raw 16-block timings; reconstruct labels, economics and the v2 handoff rather than trusting aggregates.",
+                "Replay the completed q64 package from all raw 16-block timings and keep its scientific no-go visible.",
+                "Reduce the cost and regret of the best fixed exact path without fitting against the consumed 72-case label table.",
+                "The independently frozen native batching follow-up is complete and no-go. Do not rerun it on a second host or drop cleanup to rescue its failed gate.",
+                "Connect the optional bounded-cache, count/existence or streaming APIs to a real consumer contract; require a distinct mechanism and a fresh workload for another performance claim.",
                 "Use the split-isolated memory evaluator and its precommitted three-seed neural wrapper for synthetic guardrail testing while keeping exposed H6 cases out of training.",
                 "Audit the historical H6 freeze for byte-exact or LF/CRLF-equivalent bindings without altering its strict validator.",
-                "Keep candidate code disabled until a freeze-bound handoff is eligible.",
+                "Keep candidate code disabled; the completed freeze-bound handoff abstained.",
             ],
             "benchmark": [
-                "Run the frozen exact cohort on two distinct physical machines.",
-                "Retain every case, arm and all 16 paired q64 blocks, including ties, refusals and unfavorable rows.",
-                "Generate joint cross-host labels under the precommitted materiality and abstention policy.",
-                "Measure every charged p95 component on each decision-bearing host.",
-                "Return a source-closed, independently verified handoff with all refusals retained.",
+                "Admit a genuinely different workload before constructing another learning cohort.",
+                "Freeze its source groups, exact arms, controls, schedule, label policy and charged-cost policy before timing.",
+                "Retain all paired blocks, failures, refusals, unfavorable rows and same-host costs on two physical machines.",
+                "Require independent raw replay and a fully charged gate before any fit is considered.",
             ],
             "prohibited": [
-                "Do not train or fit on the already inspected historical cohort.",
+                "Do not train, fit or tune against the consumed 72-case q64 cohort.",
                 "Do not read validation, audit or prospective labels before their gate permits it.",
                 "Do not combine absolute timings across hosts or runs.",
                 "Do not enable advice, production routing or a learned exactness bypass.",

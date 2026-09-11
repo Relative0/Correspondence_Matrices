@@ -17,6 +17,7 @@ const REPOSITORY_BLOB_ROOT = `https://github.com/Relative0/Correspondence_Matric
 const SITE_SOURCE_ROOT = "deliverables_n22_24/master_explainer_2026_08_03/";
 function hostedEvidenceHref(href) {
   if (typeof href !== "string" || typeof location === "undefined") return href;
+  if (location.hostname === "relative0.github.io" && location.pathname === "/Correspondence_Matrices/learning-neural-evidence.html" && href.startsWith("../../")) return "neural/evidence/" + href.slice(6);
   if (location.hostname !== "relative0.github.io" || !location.pathname.startsWith("/Correspondence_Matrices/")) return href;
   if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(href) || /\.html(?:[?#].*)?$/i.test(href)) return href;
   const resolved = new URL(href, "https://repository.invalid/" + SITE_SOURCE_ROOT);
@@ -832,13 +833,13 @@ function featureModelAuditUpdate() {
 
 function learningNeuralUpdate() {
   const s = section("learning-neural-update", "Learning evidence · reviewed 2026-09-10",
-    "The packed exact core advanced; no learned route is promoted",
-    "C6 found a positive exact-core use case while the broader learning decision remains complete abstention with the exact fallback unchanged.");
+    "The frozen q64 gate completed—and closed the current learned route",
+    "C6 retains a positive exact-core result, while the independently replayed two-host q64 surface is a verified scientific no-go for fitting on the current cohort.");
   s.append(banner("note", "C6 exact-core result", [
     "Against truth-vector exact ANF, cached packed source-ANF measured {{ln.c6.test.median_speedup}} median and {{ln.c6.test.p95_speedup}} p95 speedups on the held-out test split, then {{ln.c6.confirmatory.median_speedup}} median and {{ln.c6.confirmatory.p95_speedup}} p95 on confirmation. All {{ln.c6.dataset_rows}} cases retained exact and canonical accuracy with {{ln.c6.semantic_mismatches}} semantic mismatches. The packed core advanced; the learned hybrid and production routing did not.",
   ]));
-  s.append(banner("note", "Evidence before enthusiasm", [
-    "The strongest new query-ladder surface has gross headroom on two machines, but labels disagree on one case and the fully charged cost vector is missing. A separately frozen source-blind cohort has no timings, labels or fitted models.",
+  s.append(banner("warn", "Completed q64 decision", [
+    "The 72-case source-blind surface completed all 18,432 timed cells with zero cross-host winner disagreements. Only 18 cases had a stable material label, all for native_fused_slots; 54 abstained. Fully charged speedup was {{ln.windows_q64_fully_charged}} on Windows and {{ln.linux_q64_fully_charged}} on Linux, below the 1.10× gate and below the fixed exact path.",
   ]));
   s.append(h("div", { class: "benchmark-downloads" }, [
     h("a", { href: "learning-neural-evidence.html", text: "Explore the full learning timeline" }),
