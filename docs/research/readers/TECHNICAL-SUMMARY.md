@@ -240,7 +240,7 @@ A comparison is only meaningful within a role, and only when both sides produced
 
 ## Current frontier
 
-The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Preparation remains the leading raw optimisation surface; cache, family, context, selector, and native economics require a real workload and the strongest applicable incumbent.
+The new Latest results panels use final indexed affine measurements and the final same-host bucket/array/native panel. Corrected process VmHWM measurements supersede inherited-rusage comparisons. Original versions are retained only in labelled ablations. Prior B1/E3, EPFL and B2/B4 kernel studies retain their dates and contracts; they are not current measurements of the new scalar APIs.
 
 Several items below are marked *partially answered*. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism.
 

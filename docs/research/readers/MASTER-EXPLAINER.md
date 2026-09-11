@@ -18,11 +18,11 @@ This is the complete evidence version. A simple one-pager, investor brief, techn
 
 ### Honesty
 
-Every figure on this site comes from the 2026-08-03 benchmark campaign, the accepted 2026-08-25 correction, or a dated follow-up through 2026-09-08, and carries the file and field it was read from. Numbers that earlier versions of this project published and later withdrew appear in one place only — the corrections ledger — labelled as withdrawn.
+Results are reviewed through 2026-09-11. Each graph keeps its actual measurement date, output contract, host and source. Current scalar counts and complete-file output have separate comparisons; they do not replace older bare-kernel experiments with a different task. Withdrawn claims remain labelled in the corrections ledger.
 
 ## Project state
 
-### Correct output and a competitive kernel
+### Exact outputs and measured task-specific improvements
 
 #### Label
 
@@ -30,9 +30,9 @@ Validated now
 
 #### Summary
 
-CM matched sharing-aware CSE-flat across the accepted B1/E3 and EPFL parity scopes. The later exactly counterbalanced B2/B4 V3 study measured bare CM at 0.8906 [0.8741, 0.9073] overall, while the public wrapper remained 3.0941 against CSE-flat.
+A shared packed-mask constructor reduces cold input setup for CM, CSE and direct BitSet. New exact scalar counters and bounded file streaming avoid unnecessary expansion when their output contract permits it. Native comparisons, small-input regressions and refusals remain visible in Latest results.
 
-### Identity, persistence and transforms
+### Explicit reuse and query facilities
 
 #### Label
 
@@ -40,7 +40,7 @@ Structural wedge
 
 #### Summary
 
-Expression-identity keys, process-local compiled caching, serialisation and operator transformations are implemented. Synthetic reuse and one independently maintained local caller have now been measured; deployed-production workflow value is still unvalidated.
+Bounded positional caches, independent/factorized/affine/CNF count plans and cancellation-aware streaming are implemented and tested. Their synthetic or public-input benchmarks do not establish production request lifetimes or an automatic routing policy.
 
 ### Measure production reuse economics
 
@@ -54,7 +54,7 @@ One maintained local video-contract caller did not activate the frozen H2/H3 mat
 
 ### Boundaries
 
-Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3 and EPFL, but 0.8906 [0.8741, 0.9073] for bare CM on current B2/B4 V3.
+Strong baseline: the CM/CSE-flat result is workload-specific — parity on B1/E3 and EPFL, but 0.8906 [0.8741, 0.9073] for bare CM on the August 25 B2/B4 V3 primary study.
 
 Whole call: BitSet led at every measured semantic support through live_k=16 in the legacy wrapper campaign; this is not a ranking of the later feature-model tasks.
 
@@ -242,7 +242,7 @@ investor
 
 ## Current research disposition
 
-Current research disposition
+September 4/8 research gates: current disposition
 
 ### Master lede
 
@@ -1150,7 +1150,7 @@ Doing your working out on paper once and then reading off the answers, instead o
 
 ##### Measured
 
-This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about 11% faster. Against sharing-aware CSE-flat, B1/E3 and EPFL measured parity, while current B2/B4 V3 measured bare CM at 0.8906 overall and 0.9612 at k=16.
+This is the baseline the whole project is measured against. Against a plain CSE with no flattening, CM runs about 11% faster. Against sharing-aware CSE-flat, B1/E3 and EPFL measured parity, while the August 25 B2/B4 V3 primary study measured bare CM at 0.8906 overall and 0.9612 at k=16.
 
 ##### Lay name
 
@@ -1188,7 +1188,7 @@ A build system rather than a compiler. The value is in knowing what you already 
 
 ##### Measured
 
-Workload-dependent against CSE-flat: parity on B1/E3 and EPFL, but a modest bare-program advantage on current B2/B4 V3. The public wrapper was still 3.0941 [2.8831, 3.3108] overall, so no end-to-end speed moat is established. Structural keys, caching, and serialisation remain separate differentiators.
+Workload-dependent against CSE-flat: parity on B1/E3 and EPFL, but a modest bare-program advantage on the August 25 B2/B4 V3 primary study. The public wrapper was still 3.0941 [2.8831, 3.3108] overall, so no end-to-end speed moat is established. Structural keys, caching, and serialisation remain separate differentiators.
 
 ##### Lay name
 
@@ -1872,7 +1872,7 @@ measure the actual workload and timing boundary
 
 ###### Why
 
-EPFL measured 0.9998; current B2/B4 V3 bare CM measured 0.8906, while its wrapper measured 3.0941
+EPFL measured 0.9998; the August 25 B2/B4 V3 primary study bare CM measured 0.8906, while its wrapper measured 3.0941
 
 ##### Item 5
 
@@ -2318,19 +2318,17 @@ benchmark refresh B6, 2026-08-03
 
 ## Frontier
 
-The 2026-08-03 campaign established parity against CSE-flat on B1/E3 and EPFL. The accepted 2026-08-25 V3 correction narrowed that conclusion: current B2/B4 measured a workload-specific bare CM advantage, while the public wrapper remained slower. Three fresh same-host repetitions ranged from 0.9049 to 0.9090, confirming the direction while exposing run-level variation that a within-run formula interval cannot measure. A later three-pod preparation confirmation passed, while a genuinely held-out i10 feature selector failed and the simple k=16 rule transferred well. The remaining questions are therefore about preparation, boundary cost, reuse, and choosing by workload rather than declaring one universal kernel ratio.
+The September 11 work implemented and tested packed input construction, bounded cache reuse, complete-file streaming and exact scalar counting. It also completed the native batching experiment, which missed its fixed materiality gate. New full-CNF and affine comparisons retain strong native controls. Remaining work is admission of real consumers, request lifetimes and explicitly defined output contracts; the earlier failed profile and routing gates remain closed.
 
 ### Plain-language explanation
 
-It is worth being clear about what kind of problem is left. “Is CM faster?” has no workload-free answer: B1/E3 and EPFL measured parity at the kernel, current B2/B4 V3 measured a modest bare CM lead, and the public wrapper remained slower. The remaining questions are about total cost, choosing, and capabilities that exist on paper but have never been shown to pay.
+Several concrete improvements are now implemented and measured. They are useful for different jobs: returning every answer, streaming those answers to a file, or returning only an exact count. One speedup cannot describe all three.
 
-Three of them are cheap to answer and would move the picture immediately. Three more are the experiments that would actually test whether the structural idea is worth anything beyond re-running the same expression. Two are engineering and formal gaps. And two are honest boundary questions — regions the measurements simply do not cover.
-
-The preparation replication and first untouched selector transfer test are complete. Synthetic cache, family, context, and tracing studies now narrow the hypotheses, and a strict workload manifest makes the missing input concrete. The next useful work starts with owner-declared real traffic; dependency-gated native comparators come only if that traffic justifies them.
+The next application question is which of these jobs a real consumer needs, how often it repeats, and how much memory it can retain. A public model or synthetic request sequence does not establish that service behaviour.
 
 ### Technical detail
 
-The B1/E3 CM-versus-CSE-flat residual remains below its pre-registered materiality bar and is not an optimisation target. V3's separate B2/B4 bare-program result is accepted as workload-specific, not universal. Preparation remains the leading raw optimisation surface; cache, family, context, selector, and native economics require a real workload and the strongest applicable incumbent.
+The new Latest results panels use final indexed affine measurements and the final same-host bucket/array/native panel. Corrected process VmHWM measurements supersede inherited-rusage comparisons. Original versions are retained only in labelled ablations. Prior B1/E3, EPFL and B2/B4 kernel studies retain their dates and contracts; they are not current measurements of the new scalar APIs.
 
 Several items below are marked *partially answered*. That means a preliminary experiment exists and produced a result — often a negative or CM-versus-CM one — that does not meet the success criterion the project wrote for it. Those are reported as they stand rather than upgraded by optimism.
 
@@ -2370,7 +2368,7 @@ deliverables_n22_24/CM_GAP_EPFL_VALIDATION_2026-08-03.md — scope of what the e
 
 If real systems turn out to re-evaluate rarely, the setup premium never amortises in practice — CM becomes a correct structural layer with no cost argument on real workloads at all.
 
-### Preparation is profiled — and remains the top optimisation surface
+### Preparation improvements are implemented; new bottlenecks need a trace
 
 #### Status
 
@@ -2382,11 +2380,11 @@ Reduce preparation
 
 #### Lay statement
 
-Before CM can answer anything it does a one-time setup step costing roughly 4.1×–4.4× what the simple alternative's setup costs. The deep audit traced that work and removed one redundant compilation memo safely. That improvement then reproduced on 3 Linux machines; a more ambitious compact-ordering idea was exact but much slower and was removed.
+The packed-mask constructor and indexed affine fixed-name validation now reduce measured setup/binding costs. These general engineering changes also benefit non-CM controls.
 
 #### Technical statement
 
-Preparation costs 4.40× plain-CSE prep on the synthetic corpus, 4.21× on the external corpus against the same baseline, and 4.11× against CSE-flat, with a per-case range of 2.2×–7.9× across the compile-scaling cases. The 2026-08-25 deep audit measured a distributed profile led by interning, lowering, live-support work, structural hashing, rewrite, and canonicalisation. It removed the redundant identity memo only from the sharing-aware builder path, with exact ordered-DAG and packed-output gates. Three independent Runpod CPU flavors then measured candidate/baseline preparation at 0.9721–0.9788 on BX1+B2 and 0.9694–0.9769 on EPFL, with 0 exact mismatches, cost $0.0028, and 0 postflight pods. The subsequent exact rational compact-order prototype preserved all 25 smoke outputs but cost 1.8317 time and 1.2440 traced peak memory; it was rejected and reverted.
+Cold and prepared query windows are separate in the September 11 panels. Array counting can move the bottleneck back into plan construction. Admit a real query lifetime before changing shared caches, persistence or routing.
 
 #### Why it matters
 
@@ -2394,7 +2392,7 @@ Break-even is the preparation premium divided by the per-evaluation kernel gain,
 
 #### What would change the picture
 
-The small one-memo improvement is now cross-host confirmed. Any further preparation change needs a different measured mechanism from the rejected compact-order prototype, paired exact evidence on representative and high-sharing cases, and benefit large enough to repay compatibility and maintenance risk.
+An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.
 
 #### Sources
 
@@ -2414,7 +2412,7 @@ docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_
 
 If the cost is spread thinly across several stages with no dominant one, the setup premium is intrinsic to building a reusable, storable structure — and CM is a high-reuse-only layer whose case rests entirely on what it stores, not on cost.
 
-### The process-local cache has synthetic all-hit evidence, not a production policy
+### Bounded cache ownership is tested; production policy is unvalidated
 
 #### Status
 
@@ -2426,11 +2424,11 @@ Capture real cache traffic
 
 #### Lay statement
 
-The cache has now been tested under a deliberately easy all-hit pattern. It helped CM compared with running CM cold, but cached CM still took longer than BitSet. That answers the stale ‘never studied’ statement without proving that a durable cache would help a real application.
+The positional cache now has bounded retention and changing-name, phase and pressure measurements. Same-name reuse can still favor the existing LRU.
 
 #### Technical statement
 
-The flag historically called persistent cache is process-local. Synthetic all-hit whole-call CM remained 3.13×–12.84× behind BitSet, and 50-evaluation execution-only ratios remained 2.80× at k=16 through 11.18× at k=4. No byte-LRU, durable store, production access order, working-set distribution, hit curve, eviction churn, invalidation lifecycle, RSS plateau, or production cache policy has been validated. Sampled metrics traces cannot supply exact access order for offline policy replay.
+Latest results contains the controlling Linux replay for all cache cases. The earlier process-local all-hit study measures another cache contract and remains dated evidence; neither establishes deployed request lifetimes.
 
 #### Why it matters
 
@@ -2438,7 +2436,7 @@ Without a universal kernel advantage, reuse is one of the remaining potential di
 
 #### What would change the picture
 
-A named owner-approved workload with artifact bytes, compile and lookup cost, exact bounded access order where separately approved, process boundaries, lifecycle and cache budgets could compare no cache, entry-LRU, byte-LRU, and cost-aware admission. Until then no production cache-policy change is justified.
+An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.
 
 #### Sources
 
@@ -2642,7 +2640,7 @@ CM slide deck (frozen at V4), “Three CM-Value Experiments” card 3 — framin
 
 If no task is found where the operator transformations are cheaper or better, the formalism stays a correct but unused feature and the public claim reduces to a well-engineered structural representation with a well-tested output path.
 
-### The decision-diagram comparison has only been run where ordering barely matters
+### Full-CNF counts now test meaningful CUDD ordering differences
 
 #### Status
 
@@ -2654,11 +2652,11 @@ Test BDD-hard families
 
 #### Lay statement
 
-The order in which a decision diagram tests its variables can change its size dramatically — for some functions, catastrophically. The expressions measured here are all easy in that respect, so the comparison against decision diagrams has been made only in the region where their hardest failure mode never appears.
+The September 11 full-CNF panel measures natural and dynamic CUDD alongside Python and exact-array bucket counting. Ordering now changes both preparation and prepared-query cost materially.
 
 #### Technical statement
 
-The order-search question is closed with data: best-of-ten order search yielded 21%–30% smaller graphs at 8.5×–9.9× the single-build cost, and dynamic reordering never triggered — node ratio exactly 1.00 — because at 78 nodes and below the trigger threshold is never reached. That last fact *is* the limitation. What remains open is a controlled study over standard parameterised families with known behaviour — easy and reducible, parity-like, multiplexer, arithmetic and circuit-derived, and deliberately order-sensitive — reporting for each: fixed order, explicitly stated alternative orders, best-of-k with the full search cost, the dynamic-reordering method and its total cost, and node count, peak memory, build time and each downstream query kept separate.
+Ten of eleven admitted full public CNFs fit bucket limits. Both native orders, input-width/work refusals and array regressions are retained. These count all declared CNF variables, not projected feature products. No universal decision-diagram or bucket winner follows.
 
 #### Why it matters
 
@@ -2666,7 +2664,7 @@ Comparing a packed evaluator against decision diagrams only on diagram-friendly 
 
 #### What would change the picture
 
-**If it succeeds** — a controlled sweep across friendly, hard and order-sensitive families with search and reordering costs quoted separately — the result is a defensible boundary atlas showing where each representation is feasible at all. **If it goes against CM** — diagram compactness holds on hard families while the packed path becomes infeasible because the explicit output is exponential in live support — the honest conclusion is that CM's operating region is strictly bounded by explicit-output size, and every comparison here must be scoped to workloads where a packed truth vector is the required artifact.
+An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.
 
 #### Sources
 
@@ -2680,7 +2678,7 @@ CM slide deck (frozen at V4), ongoing caveats — framing only
 
 If decision diagrams stay compact on genuinely hard functions while the explicit-output path becomes infeasible, CM's operating region is strictly bounded by output size, and every comparison here must be scoped to workloads where an explicit answer table is what you actually need.
 
-### Above the guard limit, bounded kernels work but the public boundary still refuses
+### Scalar and streaming APIs extend the explicit contract choices
 
 #### Status
 
@@ -2692,11 +2690,11 @@ Map the guard boundary
 
 #### Lay statement
 
-The system refuses to produce an explicit answer table above sixteen live variables, because the table doubles in size with every variable after that. A bounded follow-up did run the underlying exact kernels from 17 through 20: all 16 cases completed with 0 wrong answers and 0 timeouts. The public wrapper still refused every case, so this proves a small feasibility band, not permission to raise the limit or a CM speed win.
+Exact counts can avoid a complete truth vector; streaming can deliver it in bounded chunks. Both now have implementations and larger-input validation.
 
 #### Technical statement
 
-The original guard remains correct: 0 wrong decisions and 0 oversized outputs across 3,000 earlier trials. The bounded subprocess follow-up then exercised exact direct kernels for live_k=17–20 under a 64 MiB estimate cap, 512 MiB RSS cap, 45-second timeout and three repetitions: 16/16 completed, with 0 mismatches, 0 timeouts and 0 wrapper non-refusals. This closes the claim that nothing above the guard has been measured, but it did not compare equivalent whole-call CM and BitSet artifacts or justify a production policy change.
+The complete-output guard and unavoidable output size are separate from scalar plan width/work limits. New facilities use explicit resource admission and private query state; they do not silently raise the existing wrapper limit.
 
 #### Why it matters
 
@@ -2704,7 +2702,7 @@ The evidence now separates three facts: bounded direct kernels are feasible just
 
 #### What would change the picture
 
-A caller-backed, memory-safe study would need equivalent whole-call artifacts, paired CM/BitSet timings, retained and temporary memory, and a pre-allocated refusal policy. Only then could the public guard be reconsidered; a direct-kernel feasibility result alone is insufficient.
+An independently admitted consumer, declared output contract and measured request lifetime would justify the next comparison. Repeat closed candidates only with a materially different mechanism or workload.
 
 #### Sources
 
@@ -2758,11 +2756,11 @@ Whether deployed systems repeat logic often enough for preparation to amortise.
 
 ##### Experiment
 
-Harden temporary-memory estimators
+Admit a memory-pressure workload
 
 ##### Decision
 
-Fail-closed safety
+Applicability before estimation
 
 ##### Cost level
 
@@ -2774,7 +2772,7 @@ Medium
 
 ##### What it settles
 
-Whether representation-specific estimates can support a compatible default policy; no default changes during estimator work.
+Whether a real concurrent request trace exposes useful memory-policy headroom; the earlier estimator gate remains closed.
 
 #### Item 3
 
@@ -2784,11 +2782,11 @@ Whether representation-specific estimates can support a compatible default polic
 
 ##### Experiment
 
-Reduce measured preparation allocations
+Reuse completed scalar plans
 
 ##### Decision
 
-Raw optimisation
+Consumer integration
 
 ##### Cost level
 
@@ -2800,7 +2798,7 @@ Medium
 
 ##### What it settles
 
-Whether another exact, representative, cross-host preparation improvement exists after the one-memo change.
+Whether actual query lifetimes amortize preparation for the implemented factorized, affine or bounded-CNF plan.
 
 #### Item 4
 
@@ -3456,7 +3454,7 @@ Whether exact-file provenance hashing could be consolidated without coupling dis
 
 #### Outcome
 
-3 duplicate SHA-256 helpers became 1 streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Current validation: 84 focused tests and 391 tests plus 4 subtests full-suite.
+3 duplicate SHA-256 helpers became 1 streaming helper. Exactness/integration passed but the tiny smoke failed timing gates, so no performance claim is made. Validation in the August 27 run: 84 focused tests and 391 tests plus 4 subtests full-suite.
 
 ## Glossary
 
@@ -3990,7 +3988,7 @@ The computation proper, with the setup and teardown stripped away. Two systems c
 
 #### Technical detail
 
-The steady-state execution of the compiled program with environment and program prebuilt. At this boundary CM/CSE-flat measured parity on B1/E3 and EPFL, but a workload-specific CM advantage on current B2/B4 V3.
+The steady-state execution of the compiled program with environment and program prebuilt. At this boundary CM/CSE-flat measured parity on B1/E3 and EPFL, but a workload-specific CM advantage on the August 25 B2/B4 V3 primary study.
 
 ### wrapper overhead
 
@@ -5158,8 +5156,6 @@ CM must match the native engine on every accepted test, preserve hit-policy beha
 
 Values below retain the source field and any qualification used by the website.
 
-- `b3.prep_ratio.max` = 7.9×. Source: `deliverables_n22_24/b3_scaling_2026_08_03/CM_b3_scaling_summary_2026_08_03.csv :: max(prep_ratio_cm_vs_cse)`.
-- `b3.prep_ratio.min` = 2.2×. Source: `deliverables_n22_24/b3_scaling_2026_08_03/CM_b3_scaling_summary_2026_08_03.csv :: min(prep_ratio_cm_vs_cse)`.
 - `b4.ambient_ns` = 16, 20, 24. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_headline_summary_2026_08_03.csv :: distinct ambient_n`.
 - `b4.geomean.max` = 1.80×. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_headline_summary_2026_08_03.csv :: max(paired_ratio_geomean)`.
 - `b4.geomean.min` = 1.29×. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_headline_summary_2026_08_03.csv :: min(paired_ratio_geomean)`.
@@ -5213,9 +5209,6 @@ Values below retain the source field and any qualification used by the website.
 - `cudd.rows` = 192. Source: `deliverables_n22_24/b5_cudd_2026_08_03_run5/cm_b5_cudd_matched_results_2026_08_03.json :: len(rows)`.
 - `dependency.cost` = $0.0019. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_dependency_feasibility_run3/dependency_runpod_audit_run3_2026_08_26.json :: total_cost_usd`.
 - `dependency.postflight_pods` = 0. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/campaign-20260826-154541/runpod_run3_postflight_inventory.json :: pod_count`.
-- `dpr1.peak` = 1.2440. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].peak_bytes_ratio_geomean`.
-- `dpr1.rows` = 25. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].rows`.
-- `dpr1.time` = 1.8317. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/dpr1_smoke_summary.json :: summaries[group=all].candidate_over_baseline_geomean`.
 - `dpr3.helpers.after` = 1. Source: `deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: provenance_consolidation.streaming_helpers_after`.
 - `dpr3.helpers.before` = 3. Source: `deliverables_n22_24/master_explainer_2026_08_03/website_audit_2026-08-27/ACCEPTED-LATE-EVIDENCE.json :: provenance_consolidation.duplicate_helpers_before`.
 - `dpr3.smoke.ratio` = 1.0402. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/dpr3_trace_overhead_smoke_summary.json :: ratio_median`.
@@ -5233,12 +5226,8 @@ Values below retain the source field and any qualification used by the website.
 - `fm.delta_cases` = 120. Source: `deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/configuration-fm-deep-source-audit-2026-08-27/summary.json :: delta_case_pairs_reconstructed_from_source`. Saved feature-model cohort only; performance remains provisional.
 - `guard.depth8.max_pct` = 93%. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_guard_summary_2026_08_03.csv :: max(declined_rate) at depth=8`.
 - `guard.depth8.min_pct` = 0%. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_guard_summary_2026_08_03.csv :: min(declined_rate) at depth=8`.
-- `guard.followup.cases` = 16. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.completed_cases`.
 - `guard.followup.max_k` = 20. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_raw.csv :: max(live_k)`.
 - `guard.followup.min_k` = 17. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_raw.csv :: min(live_k)`.
-- `guard.followup.mismatches` = 0. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.mismatch_count`.
-- `guard.followup.timeouts` = 0. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.timeout_count`.
-- `guard.followup.wrapper_non_refusals` = 0. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038/above_guard_audit.json :: acceptance.wrapper_non_refusal_count`.
 - `guard.k` = 16. Source: `deliverables_n22_24/cm_b4_guard_family_sweep_2026_08_03.py :: max_full_output_vars (the explicit-output guard; the same driver's wrong-guard predicate is `live_k <= 16`)`.
 - `guard.oversized` = 0. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_guard_summary_2026_08_03.csv :: sum(oversized_output_count)`.
 - `guard.trials` = 3,000. Source: `deliverables_n22_24/b4_sweep_2026_08_03/CM_b4_guard_summary_2026_08_03.csv :: sum(trials) over 15 cells`.
@@ -5265,14 +5254,6 @@ Values below retain the source field and any qualification used by the website.
 - `kernel.pod.min` = 0.877. Source: `deliverables_n22_24/b6_pod_replication_2026_08_03/b6_analysis_2026_08_03.json :: pod_to_pod.geomean_min`.
 - `kernel.pod.spread` = 0.011. Source: `deliverables_n22_24/b6_pod_replication_2026_08_03/b6_analysis_2026_08_03.json :: pod_to_pod.geomean_spread`.
 - `mech.instr_ratio` = 1.000. Source: `deliverables_n22_24/epfl_run_2026_08_03/cm_gap_epfl_analysis_2026_08_03.json :: instr_ratio_cm_cse_flat_geomean`.
-- `memo.bx1b2.max` = 0.9788. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: max pods[].acceptance.bx1_b2.candidate_over_baseline_geomean`.
-- `memo.bx1b2.min` = 0.9721. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: min pods[].acceptance.bx1_b2.candidate_over_baseline_geomean`.
-- `memo.cost` = $0.0028. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: total_cost_usd`.
-- `memo.epfl.max` = 0.9769. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: max pods[].acceptance.epfl.candidate_over_baseline_geomean`.
-- `memo.epfl.min` = 0.9694. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: min pods[].acceptance.epfl.candidate_over_baseline_geomean`.
-- `memo.mismatches` = 0. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: total canonical_failures and packed_failures across both scopes and every pod`.
-- `memo.pods` = 3. Source: `deliverables_n22_24/memo_runpod_2026_08_26/memo_runpod_audit_2026_08_26.json :: len(pods)`.
-- `memo.postflight_pods` = 0. Source: `deliverables_n22_24/memo_runpod_2026_08_26/postflight_runpod_inventory.json :: pod_count`.
 - `memory.cases` = 4. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: len(cases)`.
 - `memory.multiple.max` = 38.73×. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: max(cases[].peak_over_estimated_temporary_median)`.
 - `memory.multiple.min` = 3.51×. Source: `docs/audits/2026-08-25-cm-deep-performance/remaining-work/three-lane-20260827-011536/DP-R2-OUTPUT-BUDGET-PROBE.json :: min(cases[].peak_over_estimated_temporary_median)`.
@@ -5306,8 +5287,6 @@ Values below retain the source field and any qualification used by the website.
 - `symv3.bare.overall` = 0.8906. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_geomean`.
 - `symv3.bare.overall.hi` = 0.9073. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high`.
 - `symv3.bare.overall.lo` = 0.8741. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_current_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low`.
-- `symv3.repeat.max` = 0.9090. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: max statistical_inference.headline.paired_formula_cluster_geomean`.
-- `symv3.repeat.min` = 0.9049. Source: `docs/audits/2026-08-25-cm-deep-performance/reruns/campaign-20260826-132038 :: min statistical_inference.headline.paired_formula_cluster_geomean`.
 - `symv3.wrapper.overall` = 3.0941. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_geomean`.
 - `symv3.wrapper.overall.hi` = 3.3108. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_high`.
 - `symv3.wrapper.overall.lo` = 2.8831. Source: `deliverables_n22_24/corrections_2026_08_25/symmetric/audited_v3_inference.csv :: overall/all/all/cm_wrapper_over_cse_flat_current.paired_formula_cluster_bootstrap_ci95_low`.
