@@ -5,7 +5,7 @@ import os
 import time
 import importlib.util
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import subprocess
 import tempfile
 import unittest
@@ -171,6 +171,49 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             self.assertEqual(row['hi'], record['paired_formula_cluster_bootstrap_ci95_high'])
         for suffix, field in (('latest','value'),('latest.lo','lo'),('latest.hi','hi')):
             self.assertEqual(self.data['_numbers']['symv3.repeat.'+suffix]['value'], rows[-1][field])
+
+    def test_final_closure_preserves_historical_scope_and_balanced_candidate_results(self):
+        latest = self.evidence['completion']
+        oracle = self.evidence['frontiers']['closure_oracle']
+        self.assertEqual((oracle['feature_cross_checked'], oracle['independent_cross_checked']), (72, 48))
+        self.assertTrue(all(row['independently_cross_checked'] for row in oracle['entries']))
+        earlier = json.loads(self.files[self.evidence['sources']['count-closures-summary']['href']])
+        self.assertEqual(earlier['closure_oracle']['feature_cross_checked'], 71)
+        closure = latest['independent_count']
+        row = next(r for r in oracle['entries'] if (r['case'], r['context_index']) == ('additional-09', 7))
+        self.assertEqual(row['exact_value'], closure['total'])
+        self.assertFalse(closure['proof_certificate_produced'])
+        self.assertEqual((closure['terminal_leaves'], closure['partition_assignments_checked']), (34, 1024))
+        historical = latest['historical']
+        self.assertEqual((historical['passed'], historical['total'], historical['new_local_passes']), (21, 21, 10))
+        self.assertEqual(len({r['test'] for r in historical['rows']}), 21)
+        self.assertEqual(sum('3.13.15' in r['runtime'] for r in historical['rows']), 3)
+        self.assertIn('not a rerun', historical['note'])
+        candidate = latest['component']
+        self.assertEqual((candidate['cells'], candidate['outputs_checked']), (180, 1344))
+        self.assertEqual(len(candidate['case_table']), 7)
+        self.assertTrue(any(r['peak_rss_ratio'] > 1 for r in candidate['case_table']))
+        self.assertEqual(sum(r['parent_wall_reduction_percent'] < .1 for r in candidate['case_table']), 2)
+        self.assertEqual(latest['remaining']['required_execution'], [])
+        self.assertFalse(latest['remaining']['production_default_changed'])
+        source = ROOT/self.evidence['sources']['component-historical-closure']['path']
+        real_read_bytes = Path.read_bytes
+        with mock.patch.object(Path, 'read_bytes', lambda path: real_read_bytes(path)+(b' ' if path == source else b'')):
+            with self.assertRaisesRegex(ValueError, 'Unsealed or changed website source'):
+                self.module.build_latest_results()
+
+    def test_legacy_pod_labels_are_distinct_on_windows_and_linux(self):
+        tree = ast.parse((SITE/'cm_master_build_2026_08_03.py').read_text(encoding='utf-8'))
+        function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'pod_run_name')
+        for path_class in (PurePosixPath, PureWindowsPath):
+            context = dict(Path=path_class)
+            exec(compile(ast.Module(body=[function], type_ignores=[]), '<pod_run_name>', 'exec'), context)
+            for path in ('b6_replication/pod3_example', 'b6_replication\\pod3_example'):
+                self.assertEqual(context['pod_run_name'](path), 'pod3_example')
+        pods = self.data['e5_pods']['pods']
+        self.assertEqual(len({row['label'] for row in pods}), len(pods))
+        for row in pods:
+            self.assertEqual(row['label'], row['dir'].rsplit('/', 1)[-1].split('_')[0])
 
     def test_release_gate_verifies_current_site_and_rejects_a_stale_page(self):
         spec = importlib.util.spec_from_file_location('cm_release_test', ROOT/'scripts/cm_website_release_verify.py')

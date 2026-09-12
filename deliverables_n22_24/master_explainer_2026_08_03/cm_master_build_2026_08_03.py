@@ -64,6 +64,10 @@ def rel(p: Path) -> str:
     return p.relative_to(REPO).as_posix()
 
 
+def pod_run_name(pod_dir: str) -> str:
+    return Path(pod_dir.replace("\\", "/")).name
+
+
 def load_json(p: Path):
     with p.open("r", encoding="utf-8") as fh:
         return json.load(fh)
@@ -350,7 +354,7 @@ e1_rows = [
     },
 ]
 for pod in b6_ana["pods"]:
-    name = Path(pod["pod_dir"]).name
+    name = pod_run_name(pod["pod_dir"])
     e1_rows.append({
         "label": "Pod %s" % name.split("_")[0],
         "scope": "Linux / AMD EPYC · %s · numpy %s" % (pod["platform"].split("-x86_64")[0], pod["numpy"]),
@@ -460,7 +464,7 @@ e2_rows = [
     },
 ]
 for pod in b6_ana["pods"]:
-    name = Path(pod["pod_dir"]).name
+    name = pod_run_name(pod["pod_dir"])
     e2_rows.append({
         "label": "Pod %s" % name.split("_")[0],
         "scope": "Linux / AMD EPYC",
@@ -700,7 +704,7 @@ num("epfl.corpus_sha", manifest["corpora_sha256"]["epfl_corpus"][:12], "text",
 D["e5_pods"] = {
     "pods": [
         {
-            "label": Path(p["pod_dir"]).name.split("_")[0],
+            "label": pod_run_name(p["pod_dir"]).split("_")[0],
             "dir": p["pod_dir"].replace("\\", "/"),
             "blocked": p["blocked_geomean"],
             "lo": p["ci95"][0],
@@ -1129,7 +1133,7 @@ sched = [
 ]
 for p in b6_ana["pods"]:
     sched.append({
-        "source": "Pod %s (B6)" % Path(p["pod_dir"]).name.split("_")[0],
+        "source": "Pod %s (B6)" % pod_run_name(p["pod_dir"]).split("_")[0],
         "blocked": p["blocked_geomean"], "rr": p["rr_geomean"], "arm": "CM / plain CSE",
     })
 for s in sched:

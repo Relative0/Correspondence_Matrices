@@ -19,6 +19,7 @@ append_next_results = _next_module.append_next_results
 ROOT = Path(__file__).resolve().parents[2]
 REVIEWED = '2026-09-12'
 AUDITS = {
+    'completion': ('2026-09-12-cm-final-public-evidence', '7007425b9da34218ef6e7a1f27c1f2d160b1048e4762a1831fd90351a091d7e8'),
     'closures': ('2026-09-12-cm-count-closures', 'df889ae125afc114917460a32ede7e82f6145d7dfb559dacbc6b72f3258d5548'),
     'performance': ('2026-09-11-cm-performance', '7a4be6eee0e50523d2c68571b34d4627778b0366e325f97fdc0721f102490dc2'),
     'continuation': ('2026-09-11-cm-continuation', '5d50a22b3f24dc8542f35bc1e9d9103e83fcb597444ec9e4c1799d778ecdbebb'),
@@ -320,9 +321,28 @@ def build_latest_results():
               rows, default, 8, metrics=['cold_ms'])
         if kind == 'feature':
             panels[-1]['case_labels'] = {r['id']:r['name'] for r in frontiers['models']}
-    disposition = frontiers['disposition']
+    completion = source('component-historical-closure', 'completion', 'PUBLIC-RESULTS.json',
+                        'latest single-pass development comparison, independent count agreement and historical snapshot closure')
+    closure = completion['independent_count']
+    pending = [r for r in frontiers['closure_oracle']['entries']
+               if (r['case'], r['context_index']) == (closure['case'], closure['context_index'])]
+    if len(pending) != 1 or pending[0]['exact_value'] != closure['total']:
+        raise ValueError('Independent closure does not match the original exact count')
+    pending[0]['counters'] = closure['methods']
+    pending[0]['independently_cross_checked'] = True
+    pending[0]['confirmation_source'] = 'component-historical-closure'
+    for kind in ('feature', 'independent'):
+        frontiers['closure_oracle'][kind+'_cross_checked'] = sum(
+            r['independently_cross_checked'] for r in frontiers['closure_oracle']['entries'] if r['kind'] == kind)
+    frontiers['closure_oracle']['note'] = (
+        'All 120 fixed admitted contexts now have independent agreement. The final Decisionmaking context '
+        'uses 34 disjoint terminal cubes, 36 Ganak leaf calls including two retained timeouts, and 99 controls. '
+        'Independent enumeration checked unique coverage of all 1,024 assignments to ten counted split axes. '
+        'This adaptive exposed-instance agreement is not a proof certificate; no further count retry is required.')
+    frontiers['disposition'] = completion['disposition']
+    disposition = completion['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
-                    frontiers=frontiers,
+                    frontiers=frontiers, completion=completion,
                     continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},
                     public_cnf_ids=[c['id'] for c in bucket_fixtures if c['cohort'] == 'public full CNF'],

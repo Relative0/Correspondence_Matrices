@@ -1,0 +1,393 @@
+{
+  "component": {
+    "arms": {
+      "candidate": {
+        "all_cell_parent_wall_s": 179.045325341,
+        "cell_statuses": {
+          "complete": 21,
+          "refused": 24
+        },
+        "completed_cases": [
+          "additional-01",
+          "additional-02",
+          "additional-03",
+          "additional-04",
+          "additional-05",
+          "additional-06",
+          "additional-08"
+        ],
+        "completed_cold_queries": 168,
+        "completed_warm_queries": 168,
+        "median_parent_wall_ms_by_status": {
+          "complete": 615.442126,
+          "refused": 6224.5307185
+        },
+        "refusal_reasons": {
+          "component node count exceeds limit": 6,
+          "component work exceeds limit": 18
+        }
+      },
+      "candidate_diagnostics": {
+        "all_cell_parent_wall_s": 201.827326197,
+        "cell_statuses": {
+          "complete": 21,
+          "refused": 24
+        },
+        "completed_cases": [
+          "additional-01",
+          "additional-02",
+          "additional-03",
+          "additional-04",
+          "additional-05",
+          "additional-06",
+          "additional-08"
+        ],
+        "completed_cold_queries": 168,
+        "completed_warm_queries": 168,
+        "median_parent_wall_ms_by_status": {
+          "complete": 665.706476,
+          "refused": 7226.5468165
+        },
+        "refusal_reasons": {
+          "component node count exceeds limit": 6,
+          "component work exceeds limit": 18
+        }
+      },
+      "instrumented_reference": {
+        "all_cell_parent_wall_s": 282.270833583,
+        "cell_statuses": {
+          "complete": 21,
+          "refused": 24
+        },
+        "completed_cases": [
+          "additional-01",
+          "additional-02",
+          "additional-03",
+          "additional-04",
+          "additional-05",
+          "additional-06",
+          "additional-08"
+        ],
+        "completed_cold_queries": 168,
+        "completed_warm_queries": 168,
+        "median_parent_wall_ms_by_status": {
+          "complete": 765.599358,
+          "refused": 10455.6880095
+        },
+        "refusal_reasons": {
+          "component node count exceeds limit": 6,
+          "component work exceeds limit": 18
+        }
+      },
+      "original": {
+        "all_cell_parent_wall_s": 240.904075896,
+        "cell_statuses": {
+          "complete": 21,
+          "refused": 24
+        },
+        "completed_cases": [
+          "additional-01",
+          "additional-02",
+          "additional-03",
+          "additional-04",
+          "additional-05",
+          "additional-06",
+          "additional-08"
+        ],
+        "completed_cold_queries": 168,
+        "completed_warm_queries": 168,
+        "median_parent_wall_ms_by_status": {
+          "complete": 715.612426,
+          "refused": 8805.1234195
+        },
+        "refusal_reasons": {
+          "component node count exceeds limit": 6,
+          "component work exceeds limit": 18
+        }
+      }
+    },
+    "case_table": [
+      {
+        "candidate_ms": 26.556307,
+        "case": "additional-01",
+        "old_ms": 32.272974,
+        "paired_time_reduction_percent": 18.36464409797125,
+        "parent_wall_reduction_percent": 0.024503663920727448,
+        "peak_rss_ratio": 0.9987737584304108
+      },
+      {
+        "candidate_ms": 45.501161,
+        "case": "additional-02",
+        "old_ms": 52.356497,
+        "paired_time_reduction_percent": 13.69376564669711,
+        "parent_wall_reduction_percent": 0.0036963477352491836,
+        "peak_rss_ratio": 1.0536175710594315
+      },
+      {
+        "candidate_ms": 182.409632,
+        "case": "additional-03",
+        "old_ms": 219.379223,
+        "paired_time_reduction_percent": 16.76810687228434,
+        "parent_wall_reduction_percent": 13.980333173538906,
+        "peak_rss_ratio": 1.057920899070672
+      },
+      {
+        "candidate_ms": 1305.202163,
+        "case": "additional-04",
+        "old_ms": 1763.630574,
+        "paired_time_reduction_percent": 25.101818406660247,
+        "parent_wall_reduction_percent": 22.27171273582531,
+        "peak_rss_ratio": 0.999766736645673
+      },
+      {
+        "candidate_ms": 427.080262,
+        "case": "additional-05",
+        "old_ms": 566.823561,
+        "paired_time_reduction_percent": 25.222026344641456,
+        "parent_wall_reduction_percent": 21.233355555289535,
+        "peak_rss_ratio": 0.9500777000777001
+      },
+      {
+        "candidate_ms": 141.454124,
+        "case": "additional-06",
+        "old_ms": 182.117668,
+        "paired_time_reduction_percent": 22.342055796585313,
+        "parent_wall_reduction_percent": 15.045877416701902,
+        "peak_rss_ratio": 1.00010216591745
+      },
+      {
+        "candidate_ms": 1804.514089,
+        "case": "additional-08",
+        "old_ms": 2298.637957,
+        "paired_time_reduction_percent": 21.7995515444256,
+        "parent_wall_reduction_percent": 21.584865775758498,
+        "peak_rss_ratio": 1.0768482490272373
+      }
+    ],
+    "cells": 180,
+    "clock_overhead_percent": 12.724152843762116,
+    "lifecycle_reduction_range_percent": [
+      13.69376564669711,
+      25.222026344641456
+    ],
+    "note": "Single-host exposed development study: 15 cases, four arms, three repeats. The candidate combines clause satisfaction and residual construction in one scan. Exact projected semantics, fresh per-query caches and conservative work accounting are preserved. Seven cases complete in every arm; two still hit node caps and six hit work caps. No prospective validation or production promotion.",
+    "outputs_checked": 1344,
+    "repeats": 3,
+    "timing_note": "Lifecycle includes setup, cold calls and cleanup; parent wall time also includes process/input startup, journal IO and warm replay. Reductions are medians of paired ratios, not ratios of the displayed medians. End-to-end gains are below 0.1% on the two smallest cases. Peak RSS does not improve uniformly. Refused cases have no speed ratio."
+  },
+  "disposition": "All 120 fixed admitted contexts now have agreement between independently implemented counters, and all 21 original historical test IDs have passing restored snapshots. The single-pass component candidate reduces counting lifecycle time on seven completed development cases, but coverage remains 7/15. Production defaults remain unchanged.",
+  "historical": {
+    "cleanup_verified": true,
+    "local_elapsed_s": 77.26456760000292,
+    "local_runtime": "Windows 10.0.19045 x64; Python 3.13.5; NumPy 2.3.2",
+    "new_local_passes": 10,
+    "note": "These are passing restored historical snapshots, not a rerun or reclassification of the broad current-code suite. Three earlier passes used Linux Python 3.13.15 for source compatibility, not the original Python 3.13.5 runtime. All ten new local checks passed with unchanged 60-second, 2 GiB Job Object and 32-process limits; interpreter identity and descendant cleanup were verified.",
+    "passed": 21,
+    "previous_passes": 11,
+    "rows": [
+      {
+        "phase": "new_execution",
+        "runtime": "Linux Python 3.13.15 restored-source compatibility replay",
+        "status": "passed",
+        "test": "tests/test_c38_linux_replication.py::test_c38_on_pod_verification_replays_byte_identically"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Windows 10.0.19045, Python 3.13.5, unchanged original package assertion",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_comparison_package.py::test_generated_package_is_exactly_bound_and_non_authorizing"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Windows 10.0.19045, Python 3.13.5, unchanged original package assertion",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_cross_machine_package.py::test_cross_machine_package_is_source_exact_and_non_authorizing"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_followup.py::test_every_query_count_is_an_exact_distinct_cell"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_followup.py::test_isolated_process_cleanup_does_not_collect_the_inherited_heap"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Linux Python 3.13.15 restored-source compatibility replay",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_followup.py::test_followup_freeze_preserves_parent_cases_and_counterbalance"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Windows 10.0.19045, Python 3.13.5, unchanged original package assertion",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_package.py::test_attempt_001_package_is_internally_bound_and_now_historical"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Windows 10.0.19045, Python 3.13.5, unchanged original package assertion",
+        "status": "passed",
+        "test": "tests/test_cm_architecture_query_ladder_retry_002_package.py::test_retry_package_is_source_exact_and_non_authorizing"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_architecture_comparison_campaign.py::test_functional_smoke_exercises_every_admitted_arm_without_timing"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_architecture_refresh_harness.py::test_all_four_lanes_match_their_exact_artifacts"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_architecture_refresh_harness.py::test_result_mutations_fail_closed"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_architecture_refresh_harness.py::test_native_plan_cannot_validate_nonnative_result"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_h6_fresh_process_memory_gate.py::test_all_selected_unchanged_operations_match_the_stored_oracle"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_h6_fresh_process_memory_gate.py::test_real_worker_handshake_covers_every_arm_and_lifecycle"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Linux Python 3.13.15 restored-source compatibility replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_h6_representation_estimator_candidate.py::test_candidate_freeze_is_deterministic_and_blind_to_memory_values"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_native_portfolio.py::test_all_portfolio_arms_match_one_exposed_case"
+      },
+      {
+        "phase": "new_execution",
+        "runtime": "Windows Python 3.13.5; original interpreter identity at recorded path",
+        "status": "passed",
+        "test": "tests/test_cm_comparative_native_portfolio.py::test_retained_native_portfolio_artifact_replays_read_only"
+      },
+      {
+        "phase": "preserved_not_repeated",
+        "runtime": "Previously retained historical preparation pass",
+        "status": "passed_previous_preparation",
+        "test": "tests/test_cm_comparative_native_transport.py::ComparativeNativeTransportTests::test_historical_v6_manifest_is_immutable_and_live_source_drift_is_explicit"
+      },
+      {
+        "phase": "preserved_not_repeated",
+        "runtime": "Previously retained historical preparation pass",
+        "status": "passed_previous_preparation",
+        "test": "tests/test_cm_runpod_corpus_offline.py::test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit"
+      },
+      {
+        "phase": "preserved_not_repeated",
+        "runtime": "Previously retained historical preparation pass",
+        "status": "passed_previous_preparation",
+        "test": "tests/test_linux_one_pass_confirmation.py::test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit"
+      },
+      {
+        "phase": "local_windows_execution",
+        "runtime": "Windows 10.0.19045 x64, Python 3.13.5, NumPy 2.3.2; local frozen snapshot replay",
+        "status": "passed",
+        "test": "tests/test_native_portfolio_reassessment.py::test_native_portfolio_closure_stops_training_and_prospective_use"
+      }
+    ],
+    "total": 21
+  },
+  "independent_count": {
+    "adaptive_exposed_development": true,
+    "case": "additional-09",
+    "context_index": 7,
+    "controls_checked": 99,
+    "hidden_axes_split": false,
+    "methods": [
+      "d4",
+      "Ganak disjoint projected decomposition"
+    ],
+    "now_independently_agreed_contexts": 120,
+    "partition_assignments_checked": 1024,
+    "prior_completed_counts_reused": true,
+    "prior_independently_agreed_contexts": 119,
+    "proof_certificate_produced": false,
+    "published_evidence_unchanged": true,
+    "raw_leaf_solver_calls_checked": 36,
+    "raw_logs_and_cnf_hashes_verified": true,
+    "retained_timeouts": 2,
+    "status": "independent_exact_count_confirmed",
+    "terminal_leaves": 34,
+    "total": "5258021342267097931021088174763889312881000371897345385842594726515612094958755180192482713403392"
+  },
+  "input_provenance": {
+    "inputs/execution-COMPONENT-ANALYSIS.json": {
+      "bytes": 13771,
+      "original_audit_seal": "30d309367d64cb08fb10ab0cdd77f018fa513ba727116b5c96ed929c5814c015",
+      "original_path": "docs/audits/2026-09-12-cm-component-execution/COMPONENT-ANALYSIS.json",
+      "path": "COMPONENT-ANALYSIS.json",
+      "sha256": "ca949bc6ce654a9aafcd2fefc140317b35cc86dbcb69aac2c2e4e12de688d6e8"
+    },
+    "inputs/execution-COMPONENT-INTERPRETATION.json": {
+      "bytes": 2421,
+      "original_audit_seal": "30d309367d64cb08fb10ab0cdd77f018fa513ba727116b5c96ed929c5814c015",
+      "original_path": "docs/audits/2026-09-12-cm-component-execution/COMPONENT-INTERPRETATION.json",
+      "path": "COMPONENT-INTERPRETATION.json",
+      "sha256": "410e88be50d61f836d658570d2c8764e6765f9c0835a6f881e70b7e8fd396bef"
+    },
+    "inputs/execution-INDEPENDENT-COUNT-CLOSURE.json": {
+      "bytes": 792,
+      "original_audit_seal": "30d309367d64cb08fb10ab0cdd77f018fa513ba727116b5c96ed929c5814c015",
+      "original_path": "docs/audits/2026-09-12-cm-component-execution/INDEPENDENT-COUNT-CLOSURE.json",
+      "path": "INDEPENDENT-COUNT-CLOSURE.json",
+      "sha256": "f966a5a27771951713bed8c156a03f94162677979fa4cf3b2b9d33d9543ea2da"
+    },
+    "inputs/windows-HISTORICAL-STATUS.json": {
+      "bytes": 12671,
+      "original_audit_seal": "b296e0c1d8ab1efda45538e07df88ae66e895e3174af303272bc1b5d70bf8b8a",
+      "original_path": "docs/audits/2026-09-12-cm-local-windows-replay/HISTORICAL-STATUS.json",
+      "path": "HISTORICAL-STATUS.json",
+      "sha256": "fa6ee25e0ea5ae529c42f9217bb36521f1f464738e927481ae9b3f495c954f85"
+    },
+    "inputs/windows-VERIFICATION.json": {
+      "bytes": 291,
+      "original_audit_seal": "b296e0c1d8ab1efda45538e07df88ae66e895e3174af303272bc1b5d70bf8b8a",
+      "original_path": "docs/audits/2026-09-12-cm-local-windows-replay/VERIFICATION.json",
+      "path": "VERIFICATION.json",
+      "sha256": "569a336b43e5459e20aaf137b9cef27e91c8d41e425b6c32aeb3c0668d41cfe1"
+    }
+  },
+  "remaining": {
+    "agreement_is_proof_certificate": false,
+    "conditional": [
+      "Capture backend use only when an independently needed consumer job exists; presentation-only video builds do not establish backend demand.",
+      "If broader performance claims are needed, freeze fresh independent workloads before collecting prospective validation evidence.",
+      "If a real workload needs one of the eight refused cases, use retained phase/work counters to choose one bounded algorithm change, then freeze a new paired protocol.",
+      "Unsupported original feature mappings remain explicit refusals; revisit them only when that application contract is needed."
+    ],
+    "natural_consumer_sessions": 0,
+    "production_default_changed": false,
+    "recommendation": "No further count retries or historical replays are required. Stop repeated measurements on these exposed cases.",
+    "required_execution": []
+  },
+  "reviewed": "2026-09-12",
+  "schema": "cm-final-public-evidence/v1",
+  "status": "verified_with_explicit_limitations"
+}

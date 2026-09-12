@@ -952,7 +952,12 @@ function latestResultsUpdate() {
   s.append(tiles([
     ["Verified pipe transfers", T("latest.next.pipe_rows"), "A separate reader checked every complete output or cancelled prefix"],
     ["Concurrent exact queries", T("latest.next.soak_queries"), "Four threads over {{latest.next.soak_seconds}} seconds; retained-cache payload stayed within its bound"],
-    ["Final regression replay", T("latest.next.final_passed_tests") + " passed", "{{latest.next.final_failed_or_error_tests}} historical/platform failures remain; {{latest.next.new_regressions}} new regressions against the published checkout"],
+    ["Earlier broad regression replay", T("latest.next.final_passed_tests") + " passed", "Recorded {{latest.next.final_failed_or_error_tests}} historical/platform issues; {{latest.next.new_regressions}} new regressions. Subsequent restored-snapshot closure is reported below."],
+  ]));
+  s.append(tiles([
+    ["Independent count agreement", `${E.completion.independent_count.now_independently_agreed_contexts}/120`, "All fixed admitted contexts; independently implemented agreement is not a proof certificate"],
+    ["Historical snapshot checks", `${E.completion.historical.passed}/${E.completion.historical.total}`, "All original IDs have passing restored snapshots; the broad current-code suite was not rerun"],
+    ["Single-pass candidate coverage", "7/15", "Counting lifecycle reduced 13.7–25.2% on completed development cases; eight cases still reach resource caps"],
   ]));
   s.append(h("p", { text: E.continuation_disposition }));
   s.append(h("p", {}, [h("a", { href: "latest-results.html#evidence-frontiers", text: "New: original feature mappings, independent workloads and restored historical tests" })]));
@@ -966,11 +971,12 @@ function latestResultsUpdate() {
 function frontierResultsUpdate() {
   const E = DATA.e25_latest_results;
   const F = E.frontiers;
+  const C = E.completion;
   const s = section("evidence-frontiers", `Evidence reviewed ${F.reviewed}`,
     "What the new evidence establishes", F.disposition);
   s.append(tiles([
     ["Concrete-feature contracts", `${F.models.filter(r => r.concrete_feature_equivalence === true).length} of ${F.models.length}`, "Checked against original feature models; unsupported formats remain refused"],
-    ["Historical tests recovered", String(F.fixtures.recovered_failure_ids), `${F.fixtures.restored_files} missing fixture files restored with their retained hashes`],
+    ["Historical snapshot checks", `${C.historical.passed}/${C.historical.total}`, "Original assertions passed in restored snapshots; earlier broad-suite results remain retained"],
     ["Natural consumer sessions", String(F.consumer.natural_sessions_admitted), "Local capture is ready; independently documented use is still required"],
   ]));
   s.append(h("h3", { text: "Which variables represent configurations?" }));
@@ -980,7 +986,7 @@ function frontierResultsUpdate() {
     F.models.map(r => [r.name, r.original_features ?? "—", r.concrete_features ?? "—", r.unmatched_variables?.length ?? "—",
       judgment(r.original_feature_equivalence), judgment(r.concrete_feature_equivalence)])));
   s.append(h("p", { text: "Fiasco and uClibc differ when the abstract root is counted. Their concrete-feature selections agree after that explicitly marked root is eliminated. The earlier even-position projection timings keep their original scope; these proofs do not relabel those timings as product counts." }));
-  s.append(h("h3", { text: "Broader independent workloads" }));
+  s.append(h("h3", { text: "Earlier component study: independent workloads" }));
   s.append(h("p", { text: F.component_study.note }));
   s.append(table(["Case", "Application family", "Projected variables", "Outcome across scheduled runs"], F.independent_admissions.map(r => {
     const counts = {};
@@ -991,22 +997,36 @@ function frontierResultsUpdate() {
   })));
   s.append(h("h3", { text: "Completed exact counts and independent agreement" }));
   const O = F.closure_oracle;
-  s.append(h("p", { text: `All ${O.feature_completed} feature and ${O.independent_completed} independent contexts have completed exact counts. Independent counters agree on ${O.feature_cross_checked} of 72 feature and ${O.independent_cross_checked} of 48 independent contexts. ${O.controls_passed} d4 controls passed. ${F.component_study.timed_outputs_checked} completed timed outputs in the new component study matched Ganak or d4.` }));
+  s.append(h("p", { text: `All ${O.feature_completed} feature and ${O.independent_completed} independent contexts have completed exact counts. Independent counters agree on ${O.feature_cross_checked} of 72 feature and ${O.independent_cross_checked} of 48 independent contexts. ${O.controls_passed} earlier d4 controls passed. The earlier three-method component study checked ${F.component_study.timed_outputs_checked} completed timed outputs; the later four-arm single-pass study checked ${C.component.outputs_checked.toLocaleString()} completed cold/warm outputs.` }));
   s.append(table(["Case", "Completed contexts", "Independently cross-checked", "Counters"], [...new Set(O.entries.map(r => r.case))].map(id => {
     const rows = O.entries.filter(r => r.case === id);
     const name = F.models.find(r => r.id === id)?.name;
     return [name ? `${name} (${id})` : id, String(rows.length), String(rows.filter(r => r.independently_cross_checked).length), [...new Set(rows.flatMap(r => r.counters))].join(", ")];
   })));
   s.append(h("p", { text: O.note }));
+  s.append(h("h3", { text: "Latest component comparison: one clause scan" }));
+  s.append(h("p", { text: C.component.note }));
+  s.append(table(["Case", "Original lifecycle (ms)", "Candidate lifecycle (ms)", "Paired lifecycle reduction", "Paired parent-wall reduction", "Peak RSS ratio"], C.component.case_table.map(r => [
+    F.models.find(m => m.id === r.case)?.name + ` (${r.case})`, r.old_ms.toFixed(2), r.candidate_ms.toFixed(2),
+    r.paired_time_reduction_percent.toFixed(1) + "%", r.parent_wall_reduction_percent < 0.1 ? "<0.1%" : r.parent_wall_reduction_percent.toFixed(1) + "%", r.peak_rss_ratio.toFixed(3) + "×",
+  ])));
+  s.append(h("p", { text: C.component.timing_note }));
+  s.append(h("p", { text: `${C.component.cells} scheduled cells across four arms retain all completed runs and refusals. Clock-enabled candidate runs added ${C.component.clock_overhead_percent.toFixed(1)}% aggregate parent-wall overhead. The candidate remains a development result; production defaults are unchanged.` }));
+  s.append(h("h3", { text: "Historical replay is complete" }));
+  s.append(h("p", { text: `${C.historical.new_local_passes} final local checks passed on ${C.historical.local_runtime}. Preparation, preflight and execution took ${C.historical.local_elapsed_s.toFixed(1)} seconds. ${C.historical.note}` }));
   s.append(h("h3", { text: "Restored fixtures and corrected source origin" }));
   s.append(h("p", { text: "The retained EPFL int2float input exactly matches its declared upstream revision. The earlier mismatch came from normalizing line endings on only one side of the comparison. The original file and old audit remain unchanged." }));
   s.append(h("h3", { text: "What the completed video builds establish" }));
   s.append(h("p", { text: F.consumer.note }));
-  s.append(h("p", { text: F.fixtures.note }));
-  s.append(h("p", { text: F.regression.note }));
+  s.append(h("p", { text: "Earlier fixture-restoration report (retained): " + F.fixtures.note }));
+  s.append(h("p", { text: "Earlier broad regression report (retained, not rerun): " + F.regression.note }));
+  s.append(h("h3", { text: "Is more work needed?" }));
+  s.append(h("p", { text: C.remaining.recommendation }));
+  s.append(h("ul", {}, C.remaining.conditional.map(text => h("li", { text }))));
   s.append(h("div", { class: "benchmark-downloads" }, [
-    h("a", { href: E.sources["count-closures-summary"].href, download: "count-closures-summary.json", text: "Download the current mappings, counts, failed attempts and regression results" }),
-    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_COUNT_CLOSURES.md", text: "Count methods, fixture restoration and remaining research" }),
+    h("a", { href: E.sources["component-historical-closure"].href, download: "component-historical-closure.json", text: "Download the latest component comparison and completed count/test closures" }),
+    h("a", { href: E.sources["count-closures-summary"].href, download: "count-closures-summary.json", text: "Download the earlier mappings, counts, failed attempts and broad regression results" }),
+    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_COMPONENT_AND_HISTORICAL_CLOSURE.md", text: "Completed work, evidence limits and conditional next steps" }),
   ]));
   s.querySelectorAll(":scope > table").forEach(element => {
     const wrapper = h("div", { class: "tablewrap" });
