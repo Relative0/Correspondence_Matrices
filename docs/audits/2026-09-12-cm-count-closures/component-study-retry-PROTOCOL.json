@@ -1,0 +1,52 @@
+{
+  "purpose": "Prospectively bounded residual-component representation; no deployment or default promotion",
+  "cases": "All unchanged nine concrete-feature cases and all six admitted independent cases",
+  "methods": [
+    "component_count",
+    "array_min_fill",
+    "cudd_dynamic"
+  ],
+  "repeats": 3,
+  "order": "forward, reverse, forward within each case",
+  "contexts": "All eight unchanged contexts; cold session and internal warm-output equality",
+  "limit_s_per_worker": 15,
+  "address_space_limit_bytes": 2147483648,
+  "correctness_gate": "1280 exhaustive randomized comparisons with and without caching, plus hidden-witness, free-axis, wide-clause, invalid-contract and refusal checks",
+  "measurement": "Setup plus all cold requests plus cleanup; candidate has a fresh memo table for every request; no warm caching claim",
+  "admission": "Report all outcomes. Plot only complete three-repetition sessions whose every exact output matches an independent counter. Never substitute zero for failure.",
+  "sources": [
+    "cmbench/comparative/component_counts.py",
+    "tests/test_component_counts.py",
+    "scripts/cm_component_count_study.py"
+  ],
+  "commands": [
+    {
+      "name": "component-tests",
+      "args": [
+        "-m",
+        "pytest",
+        "tests/test_component_counts.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml",
+        "/workspace/cm-packed-evidence/COMPONENT-TESTS.xml"
+      ],
+      "timeout": 120
+    },
+    {
+      "name": "component-study",
+      "args": [
+        "-m",
+        "scripts.cm_component_count_study",
+        "run",
+        "--output",
+        "/workspace/cm-packed-evidence/component-study"
+      ],
+      "timeout": 2400
+    }
+  ],
+  "controller": "scripts/runpod_closure_research_controller_v2.py",
+  "remote": "scripts/cm_closure_research_remote_v2.py",
+  "retry_reason": "attempt-003 failed at public fetch after 300 seconds; no correctness tests or measurements ran; extend only fetch timeout to 600 seconds"
+}

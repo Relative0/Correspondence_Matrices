@@ -1,0 +1,73 @@
+[
+  {
+    "name": "restore-prior",
+    "args": [
+      "scripts/restore_cm_historical_fixtures.py",
+      "--restore"
+    ],
+    "timeout": 60
+  },
+  {
+    "name": "restore-application",
+    "args": [
+      "scripts/restore_cm_application_fixtures.py",
+      "--restore",
+      "--download-d4",
+      "--output",
+      "/workspace/cm-packed-evidence/APPLICATION-FIXTURES.json"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "restore-closure",
+    "args": [
+      "scripts/restore_cm_closure_fixtures.py",
+      "--restore",
+      "--download",
+      "--output",
+      "/workspace/cm-packed-evidence/CLOSURE-FIXTURES.json"
+    ],
+    "timeout": 300
+  },
+  {
+    "name": "native-build",
+    "args": [
+      "scripts/build_cm_fused_slots.py"
+    ],
+    "timeout": 30
+  },
+  {
+    "name": "focused",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_component_counts.py",
+      "tests/test_closure_fixture_restoration.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/FOCUSED-TESTS.xml"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--continue-on-collection-errors",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/workspace/cm-pytest",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/FULL-TESTS.xml"
+    ],
+    "timeout": 2000,
+    "allow_failure": true
+  }
+]

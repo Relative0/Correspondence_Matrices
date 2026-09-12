@@ -19,6 +19,7 @@ append_next_results = _next_module.append_next_results
 ROOT = Path(__file__).resolve().parents[2]
 REVIEWED = '2026-09-12'
 AUDITS = {
+    'closures': ('2026-09-12-cm-count-closures', 'df889ae125afc114917460a32ede7e82f6145d7dfb559dacbc6b72f3258d5548'),
     'performance': ('2026-09-11-cm-performance', '7a4be6eee0e50523d2c68571b34d4627778b0366e325f97fdc0721f102490dc2'),
     'continuation': ('2026-09-11-cm-continuation', '5d50a22b3f24dc8542f35bc1e9d9103e83fcb597444ec9e4c1799d778ecdbebb'),
     'cloud': ('2026-09-11-cm-runpod-continuation', '8b3ecb37c6baccbd99610e566c334cae3edfdf7003938deaaeed551fb6f16e93'),
@@ -254,17 +255,20 @@ def build_latest_results():
     disposition = append_next_results(source, panel, number)
     source('frontier-research-summary', 'frontiers', 'PUBLIC-RESULTS.json',
            'prior frontier study; superseded where the application study repeats the same contract')
-    frontiers = source('application-research-summary', 'applications', 'PUBLIC-RESULTS.json',
-                       'current concrete-feature counts, independent oracle checks, actual video source and fixture regression')
-    sources['application-research-summary']['measured'] = frontiers['measured_utc']
+    applications = source('application-research-summary', 'applications', 'PUBLIC-RESULTS.json',
+                       'earlier September 11 five-method timings, mappings and actual video evidence')
+    sources['application-research-summary']['measured'] = applications['measured_utc']
+    frontiers = source('count-closures-summary', 'closures', 'PUBLIC-RESULTS.json',
+                       'current exact counts, component benchmarks, restored fixtures and corrected EPFL origin')
+    sources['count-closures-summary']['measured'] = frontiers['latest_research_utc']
     if frontiers['status'] != 'verified_with_explicit_limitations':
         raise ValueError('Frontier research has not been verified')
     number('next.final_passed_tests', frontiers['regression']['counts']['passed'], 'int',
-           'application-research-summary', 'regression.counts.passed')
+           'count-closures-summary', 'regression.counts.passed')
     number('next.final_failed_or_error_tests', frontiers['fixtures']['remaining_failure_ids'], 'int',
-           'application-research-summary', 'fixtures.remaining_failure_ids')
+           'count-closures-summary', 'fixtures.remaining_failure_ids')
     number('next.new_regressions', len(frontiers['regression']['new_failure_ids']), 'int',
-           'application-research-summary', 'regression.new_failure_ids.length')
+           'count-closures-summary', 'regression.new_failure_ids.length')
     method_labels = {'bucket_min_fill': 'Python min-fill', 'array_min_fill': 'Exact arrays, min-fill',
                      'cudd_natural': 'CUDD natural order', 'cudd_dynamic': 'CUDD dynamic order',
                      'simplified_bucket': 'Condition + simplify + Python bucket'}
@@ -272,7 +276,7 @@ def build_latest_results():
             ('feature', 'Counts of concrete feature selections', 'additional-02'),
             ('independent', 'Independent application projected counts', 'independent-01')):
         rows = []
-        for record in frontiers[kind+'_methods']:
+        for record in applications[kind+'_methods']:
             result = dict(case=record['case'], q=8, method=record['method'],
                           label=method_labels[record['method']], status=record['status'],
                           source='application-research-summary',
@@ -284,13 +288,38 @@ def build_latest_results():
             else:
                 result['reason'] = record['reason']
             rows.append(result)
-        panel('application-'+kind, title, 'Exact projected count; eight generated application-derived contexts',
+        panel('application-'+kind, 'Earlier five-method study: '+title, 'Exact projected count; eight generated application-derived contexts',
               'Linux RunPod; three fresh-process repetitions; 15-second worker limit; 2 GiB address-space limit',
-              frontiers[kind+'_note']+' Each plotted output matches independent nonprobabilistic Ganak counts. '
+              applications[kind+'_note']+' Each plotted output matches independent nonprobabilistic Ganak counts. '
               'Only complete three-repetition results are plotted. Setup, cold requests and cleanup are charged; '
               'the simplifier recompiles every request. Different hosts and earlier deadlines are not paired speedup comparisons.',
               rows, default, 8, metrics=['cold_ms'])
-        panels[-1]['measured'] = frontiers['measured_utc']
+        panels[-1]['measured'] = applications['measured_utc']
+        if kind == 'feature':
+            panels[-1]['case_labels'] = {r['id']:r['name'] for r in applications['models']}
+    for kind, title, default in (
+            ('feature', 'Component counting: concrete feature selections', 'additional-02'),
+            ('independent', 'Component counting: independent applications', 'independent-01')):
+        rows = []
+        for record in frontiers['component_study'][kind]['methods']:
+            result = dict(case=record['case'], q=8, method=record['method'],
+                          label='Component counting' if record['method'] == 'component_count' else method_labels[record['method']],
+                          status=record['status'], source='count-closures-summary',
+                          selector=f"component_study.{kind}.methods[case={record['case']};method={record['method']}] (median of three repetitions)")
+            if record['status'] == 'complete':
+                if not record['independently_cross_checked']:
+                    raise ValueError('Unverified component timing')
+                result['cold_ms'] = record['median_total_ms']
+            else:
+                result['reason'] = record['reason']
+            rows.append(result)
+        panel('component-'+kind, title, 'Exact projected count; eight application-derived contexts',
+              'Linux RunPod; three fresh-process repetitions; 15-second worker limit; 2 GiB address-space limit',
+              frontiers['component_study']['note']+' Only complete three-repetition results are plotted. '
+              'These three methods share a host and schedule; earlier five-method timings remain separately dated.',
+              rows, default, 8, metrics=['cold_ms'])
+        if kind == 'feature':
+            panels[-1]['case_labels'] = {r['id']:r['name'] for r in frontiers['models']}
     disposition = frontiers['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
                     frontiers=frontiers,

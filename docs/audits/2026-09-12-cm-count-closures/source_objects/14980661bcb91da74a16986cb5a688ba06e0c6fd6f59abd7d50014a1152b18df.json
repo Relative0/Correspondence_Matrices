@@ -1,0 +1,27 @@
+[
+  {
+    "name": "component-tests",
+    "args": [
+      "-m",
+      "pytest",
+      "tests/test_component_counts.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml",
+      "/workspace/cm-packed-evidence/COMPONENT-TESTS.xml"
+    ],
+    "timeout": 120
+  },
+  {
+    "name": "component-study",
+    "args": [
+      "-m",
+      "scripts.cm_component_count_study",
+      "run",
+      "--output",
+      "/workspace/cm-packed-evidence/component-study"
+    ],
+    "timeout": 2400
+  }
+]

@@ -32,7 +32,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
     def test_new_continuation_keeps_incomplete_values_unplotted_and_rejects_source_drift(self):
         panels = {p['id']:p for p in self.evidence['panels']}
         for key in ('projected-count-new','additional-public-count','pipe-consumer-new','preparation-reuse-new',
-                    'application-feature','application-independent'):
+                    'application-feature','application-independent','component-feature','component-independent'):
             self.assertIn(key, panels)
             for row in panels[key]['rows']:
                 if row['status'] != 'complete':
@@ -144,9 +144,17 @@ class LatestResultsWebsiteTests(unittest.TestCase):
                          {('independent-01','cudd_dynamic'),('independent-02','cudd_dynamic')})
         self.assertEqual(frontier['oracle']['timed_outputs_matched'], 336)
         self.assertEqual(sum(frontier['independent_status_counts'].values()), 90)
-        self.assertTrue(all(panel['measured'] == '2026-09-11' for panel in self.evidence['panels']))
+        for panel in self.evidence['panels']:
+            self.assertEqual(panel['measured'], '2026-09-12' if panel['id'].startswith('component-') else '2026-09-11')
+        oracle = frontier['closure_oracle']
+        self.assertEqual((oracle['feature_completed'], oracle['independent_completed']), (72, 48))
+        self.assertEqual(len(oracle['entries']), 120)
+        for kind in ('feature', 'independent'):
+            self.assertEqual(oracle[kind+'_cross_checked'], sum(r['independently_cross_checked'] for r in oracle['entries'] if r['kind'] == kind))
+        self.assertTrue(frontier['epfl_origin']['rows'][0]['retained_exact'])
+        self.assertFalse(frontier['regression']['new_failure_ids'])
         self.assertIn('app.append(frontierResultsUpdate());', (SITE/'latest-results.html').read_text(encoding='utf-8'))
-        source = ROOT/self.evidence['sources']['application-research-summary']['path']
+        source = ROOT/self.evidence['sources']['count-closures-summary']['path']
         real_read_bytes = Path.read_bytes
         with mock.patch.object(Path, 'read_bytes', lambda path: real_read_bytes(path)+(b' ' if path==source else b'')):
             with self.assertRaisesRegex(ValueError, 'Unsealed or changed website source'):

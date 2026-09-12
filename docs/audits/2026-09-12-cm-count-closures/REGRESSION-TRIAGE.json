@@ -1,0 +1,159 @@
+{
+  "status": "classified_observed_failures",
+  "categories": {
+    "historical replay or source identity": 9,
+    "specific missing historical backend": 3,
+    "Windows native binary on Linux": 9
+  },
+  "inference_scope": "Categories describe observed failure messages, not proof that every downstream issue has the same cause.",
+  "tests_changed": false,
+  "rows": [
+    {
+      "test": "tests.test_c38_linux_replication::test_c38_on_pod_verification_replays_byte_identically",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "RuntimeError: C38 package source drifted: bitset_backend.py",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_architecture_comparison_package::test_generated_package_is_exactly_bound_and_non_authorizing",
+      "kind": "failure",
+      "category": "specific missing historical backend",
+      "observed_message": "AssertionError: assert 38615 == 38464\n +  where 38615 = os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071).st_size\n +    where os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071) = stat()\n +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat",
+      "next_evidence": "Locate the 38,464-byte backend with SHA-256 4b80a27fa4de67bf35fb13d76ea9d6cd679bfb6dafc8b554741f4987c49bcbdc; the recorded bounded search found no copy."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_cross_machine_package::test_cross_machine_package_is_source_exact_and_non_authorizing",
+      "kind": "failure",
+      "category": "specific missing historical backend",
+      "observed_message": "AssertionError: assert 38615 == 38464\n +  where 38615 = os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071).st_size\n +    where os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071) = stat()\n +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat",
+      "next_evidence": "Locate the 38,464-byte backend with SHA-256 4b80a27fa4de67bf35fb13d76ea9d6cd679bfb6dafc8b554741f4987c49bcbdc; the recorded bounded search found no copy."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_followup::test_every_query_count_is_an_exact_distinct_cell",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_followup::test_isolated_process_cleanup_does_not_collect_the_inherited_heap",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_followup::test_followup_freeze_preserves_parent_cases_and_counterbalance",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "ValueError: freeze verification",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_package::test_attempt_001_package_is_internally_bound_and_now_historical",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "AssertionError: assert {'bitset_back...eeze.py', ...} == {'cmbench/com..._campaign.py'}\n  \n  Extra items in the left set:\n  'cm_ir.py'\n  'cm_normalize.py'\n  'cmbench/__init__.py'\n  'cmbench/expr/eval.py'\n  'bitset_backend.py'...\n  \n  ...Full output truncated (3 lines hidden), use '-vv' to show",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_architecture_query_ladder_retry_002_package::test_retry_package_is_source_exact_and_non_authorizing",
+      "kind": "failure",
+      "category": "specific missing historical backend",
+      "observed_message": "AssertionError: assert 38615 == 38464\n +  where 38615 = os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071).st_size\n +    where os.stat_result(st_mode=33188, st_ino=27932787306, st_dev=157, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789197350, st_mtime=1789197071, st_ctime=1789197071) = stat()\n +      where stat = PosixPath('/workspace/cm-packed-continuation/bitset_backend.py').stat",
+      "next_evidence": "Locate the 38,464-byte backend with SHA-256 4b80a27fa4de67bf35fb13d76ea9d6cd679bfb6dafc8b554741f4987c49bcbdc; the recorded bounded search found no copy."
+    },
+    {
+      "test": "tests.test_cm_comparative_architecture_comparison_campaign::test_functional_smoke_exercises_every_admitted_arm_without_timing",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_architecture_refresh_harness::test_all_four_lanes_match_their_exact_artifacts",
+      "kind": "error",
+      "category": "Windows native binary on Linux",
+      "observed_message": "failed on setup with \"OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header\"",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_architecture_refresh_harness::test_result_mutations_fail_closed",
+      "kind": "error",
+      "category": "Windows native binary on Linux",
+      "observed_message": "failed on setup with \"OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header\"",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_architecture_refresh_harness::test_native_plan_cannot_validate_nonnative_result",
+      "kind": "error",
+      "category": "Windows native binary on Linux",
+      "observed_message": "failed on setup with \"OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header\"",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_h6_fresh_process_memory_gate::test_all_selected_unchanged_operations_match_the_stored_oracle",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "OSError: /workspace/cm-packed-continuation/docs/recognition/c37_native_exact_confirmation/frozen_native_v3/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_h6_fresh_process_memory_gate::test_real_worker_handshake_covers_every_arm_and_lifecycle",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "RuntimeError: OSError: /workspace/cm-packed-continuation/docs/recognition/c37_native_exact_confirmation/frozen_native_v3/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_h6_representation_estimator_candidate::test_candidate_freeze_is_deterministic_and_blind_to_memory_values",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "ValueError: H6 freeze replay",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_comparative_native_portfolio::test_all_portfolio_arms_match_one_exposed_case",
+      "kind": "failure",
+      "category": "Windows native binary on Linux",
+      "observed_message": "OSError: /workspace/cm-packed-continuation/docs/recognition/runs/native-fused-slot-development-20260902-002/native/cm_fused_slots.dll: invalid ELF header",
+      "next_evidence": "Replay with the recorded Windows runtime, or define a separate Linux native-build study with new identities. Do not substitute a Linux library under the old DLL hash."
+    },
+    {
+      "test": "tests.test_cm_comparative_native_portfolio::test_retained_native_portfolio_artifact_replays_read_only",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "RuntimeError: native portfolio verification failed: {'artifact_mismatches': 0, 'source_mismatches': 92, 'interpreter_mismatches': 1, 'native_mismatches': 0, 'dataset_mismatches': 0, 'structure_mismatches': 0, 'schedule_mismatches': 0, 'correctness_mismatches': 0, 'timing_mismatches': 0, 'native_identity_mismatches': 0, 'summary_mismatches': 0, 'decision_mismatches': 0}",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_comparative_native_transport.ComparativeNativeTransportTests::test_historical_v6_manifest_is_immutable_and_live_source_drift_is_explicit",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "AssertionError: Lists differ: ['bit[32 chars], 'cm_ir.py', 'cm_normalize.py', 'cmbench/__in[469 chars].py'] != ['bit[32 chars], 'cmbench/comparative/arms.py', 'cmbench/comp[310 chars].py']\n\nFirst differing element 2:\n'cm_ir.py'\n'cmbench/comparative/arms.py'\n\nFirst list contains 6 additional elements.\nFirst extra element 11:\n'scripts/cm_native_contracts.py'\n\nDiff is 730 characters long. Set self.maxDiff to None to see it.",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_cm_runpod_corpus_offline::test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "AssertionError: assert ['bitset_back...rlib.py', ...] == ['bitset_back...nch/enums.py']\n  \n  At index 2 diff: 'cm_build.py' != 'cm_exprlib.py'\n  Left contains 41 more items, first extra item: 'cm_ir.py'\n  Use -v to get more diff",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_linux_one_pass_confirmation::test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "AssertionError: assert ['bitset_back...expr/eval.py'] == ['bitset_back...m_exprlib.py']\n  \n  Left contains 4 more items, first extra item: 'cm_ir.py'\n  Use -v to get more diff",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    },
+    {
+      "test": "tests.test_native_portfolio_reassessment::test_native_portfolio_closure_stops_training_and_prospective_use",
+      "kind": "failure",
+      "category": "historical replay or source identity",
+      "observed_message": "ValueError: neural reassessment replay mismatch",
+      "next_evidence": "Recover the exact historical source/interpreter closure and rerun its unchanged verifier; retain current code separately."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "purpose": "Independent checks for exactly seven remaining single-counter values; exploratory follow-up selected after prior results, no timing ranking",
+  "d4": {"case":"independent-03", "context_indices":[0,1,2,4,5,7], "limit_s":240, "address_space_limit_bytes":6442450944},
+  "ganak": {"case":"additional-09", "context_indices":[7], "limit_s":120, "address_space_limit_bytes":6442450944, "reason":"prior 2 GiB invocation ended in std::bad_alloc; integer nonprobabilistic invocation and query unchanged"},
+  "sources":["scripts/cm_d4_closure_oracle.py", "scripts/cm_closure_oracle_retry.py"],
+  "controller":"scripts/runpod_closure_research_controller_v2.py",
+  "remote":"scripts/cm_closure_research_remote_v2.py",
+  "commands":[{"name":"oracle-retry", "args":["-m","scripts.cm_closure_oracle_retry","--output","/workspace/cm-packed-evidence/oracle-retry"], "timeout":1800}]
+}

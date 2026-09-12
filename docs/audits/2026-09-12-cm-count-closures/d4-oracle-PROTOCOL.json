@@ -1,0 +1,11 @@
+{
+  "purpose": "Independent exact projected-count check; no timing ranking",
+  "selected_cases": ["additional-09", "independent-03"],
+  "contexts": "All eight unchanged contexts of each case, in retained order",
+  "limit_s_per_query": 90,
+  "address_space_limit_bytes": 6442450944,
+  "controls": "33 retained exhaustive controls plus wide-free exact integer, empty projection SAT and UNSAT controls; all must pass first",
+  "encoding": "Original CNF with fixed units plus a fresh forced-true selected sentinel, preserving exact projected counts even for an empty selected set",
+  "sources": ["scripts/cm_d4_closure_oracle.py"],
+  "commands": [{"name": "d4-oracle", "args": ["-m", "scripts.cm_d4_closure_oracle", "--output", "/workspace/cm-packed-evidence/d4-oracle"], "timeout": 2100}]
+}

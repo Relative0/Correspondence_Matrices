@@ -981,32 +981,38 @@ function frontierResultsUpdate() {
       judgment(r.original_feature_equivalence), judgment(r.concrete_feature_equivalence)])));
   s.append(h("p", { text: "Fiasco and uClibc differ when the abstract root is counted. Their concrete-feature selections agree after that explicitly marked root is eliminated. The earlier even-position projection timings keep their original scope; these proofs do not relabel those timings as product counts." }));
   s.append(h("h3", { text: "Broader independent workloads" }));
-  s.append(h("p", { text: F.independent_note }));
+  s.append(h("p", { text: F.component_study.note }));
   s.append(table(["Case", "Application family", "Projected variables", "Outcome across scheduled runs"], F.independent_admissions.map(r => {
     const counts = {};
-    F.independent_methods.filter(m => m.case === r.id).forEach(m => Object.entries(m.statuses).forEach(([k,v]) => { counts[k] = (counts[k] || 0) + v; }));
+    F.component_study.independent.methods.filter(m => m.case === r.id).forEach(m => Object.entries(m.statuses).forEach(([k,v]) => { counts[k] = (counts[k] || 0) + v; }));
     const outcome = r.status === "refused" ? "Refused: " + r.reason :
       ["complete", "refused", "timeout", "failed"].filter(k => counts[k]).map(k => `${counts[k]} ${k}`).join("; ");
     return [r.id, r.family, r.projected_variables?.length ?? "Not declared", outcome];
   })));
-  s.append(h("h3", { text: "Independent exact counts and bounded simplification" }));
-  s.append(h("p", { text: F.feature_note }));
-  s.append(h("p", { text: `${F.oracle.timed_outputs_matched} completed timed outputs matched Ganak; ${F.oracle.exhaustive_controls} exhaustive controls passed. Ganak completed ${F.oracle.feature_contexts_completed} of 72 initial feature queries. Solver agreement is not a certified proof.` }));
-  s.append(table(["Follow-up case", "Exact-count outcomes"], [...new Set(F.oracle_extension.queries.map(r => r.case))].map(id => {
-    const outcomes = {};
-    F.oracle_extension.queries.filter(r => r.case === id).forEach(r => { outcomes[r.status] = (outcomes[r.status] || 0) + 1; });
-    return [id, Object.entries(outcomes).map(([k,v]) => `${v} ${k.replaceAll("_", " ")}`).join("; ")];
+  s.append(h("h3", { text: "Completed exact counts and independent agreement" }));
+  const O = F.closure_oracle;
+  s.append(h("p", { text: `All ${O.feature_completed} feature and ${O.independent_completed} independent contexts have completed exact counts. Independent counters agree on ${O.feature_cross_checked} of 72 feature and ${O.independent_cross_checked} of 48 independent contexts. ${O.controls_passed} d4 controls passed. ${F.component_study.timed_outputs_checked} completed timed outputs in the new component study matched Ganak or d4.` }));
+  s.append(table(["Case", "Completed contexts", "Independently cross-checked", "Counters"], [...new Set(O.entries.map(r => r.case))].map(id => {
+    const rows = O.entries.filter(r => r.case === id);
+    const name = F.models.find(r => r.id === id)?.name;
+    return [name ? `${name} (${id})` : id, String(rows.length), String(rows.filter(r => r.independently_cross_checked).length), [...new Set(rows.flatMap(r => r.counters))].join(", ")];
   })));
-  s.append(h("p", { text: F.oracle_extension.protocol }));
-  s.append(h("p", { text: F.oracle_extension.synthesis_verification_note }));
+  s.append(h("p", { text: O.note }));
+  s.append(h("h3", { text: "Restored fixtures and corrected source origin" }));
+  s.append(h("p", { text: "The retained EPFL int2float input exactly matches its declared upstream revision. The earlier mismatch came from normalizing line endings on only one side of the comparison. The original file and old audit remain unchanged." }));
   s.append(h("h3", { text: "What the completed video builds establish" }));
   s.append(h("p", { text: F.consumer.note }));
   s.append(h("p", { text: F.fixtures.note }));
   s.append(h("p", { text: F.regression.note }));
   s.append(h("div", { class: "benchmark-downloads" }, [
-    h("a", { href: E.sources["application-research-summary"].href, download: "application-research-summary.json", text: "Download the current mappings, counts, failed attempts and regression results" }),
-    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_APPLICATION_RESEARCH.md", text: "Actual video capture and additional fixture restoration instructions" }),
+    h("a", { href: E.sources["count-closures-summary"].href, download: "count-closures-summary.json", text: "Download the current mappings, counts, failed attempts and regression results" }),
+    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_COUNT_CLOSURES.md", text: "Count methods, fixture restoration and remaining research" }),
   ]));
+  s.querySelectorAll(":scope > table").forEach(element => {
+    const wrapper = h("div", { class: "tablewrap" });
+    element.replaceWith(wrapper);
+    wrapper.append(element);
+  });
   return s;
 }
 
@@ -1027,7 +1033,7 @@ function latestResultPanel(panel) {
   const metricLabels = { cold_ms: "Complete session (ms)", warm_ms: "Prepared query batch (ms)", peak_mib: "Process peak (MiB)",
     reader_first_ms: "First reader chunk returned (ms)", rss_upper_mib: "Producer + reader peak upper bound (MiB)",
     call_ms: "Measured call (ms)", initial_inclusive_ms: "Call plus initial plan construction (ms)" };
-  const caseSelect = makeSelect("case", "Case", cases.map(x => [x, x]), panel.default_case);
+  const caseSelect = makeSelect("case", "Case", cases.map(x => [x, panel.case_labels?.[x] ? `${panel.case_labels[x]} (${x})` : x]), panel.default_case);
   const querySelect = makeSelect("queries", "Queries", qs.map(x => [x, String(x)]), panel.default_q);
   const metricSelect = makeSelect("metric", "Measurement", panel.metrics.map(x => [x, metricLabels[x]]), panel.metrics[0]);
   const chart = h("div", { class: "latest-result-chart", "aria-live": "polite" });

@@ -1,0 +1,91 @@
+{
+  "purpose": "Exact dependency and receipt restoration; unchanged historical expected hashes and tests; retain all failures",
+  "sources": [
+    "cmbench/comparative/component_counts.py",
+    "scripts/cm_d4_closure_oracle.py",
+    "scripts/cm_ganak_closure_oracle.py",
+    "scripts/cm_component_count_study.py",
+    "scripts/restore_cm_closure_fixtures.py",
+    "tests/test_component_counts.py",
+    "tests/test_closure_fixture_restoration.py",
+    ".gitattributes",
+    "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json",
+    "docs/recognition/architecture_comparison_execution_retry_20260903/runpod-architecture-comparison-retry-002/RUN.json",
+    "deliverables_n22_24/master_explainer_2026_08_03/use_case_benchmarks_2026-08-27/runs/hardware-epfl-context-pilot-2026-08-27-run2/raw.csv"
+  ],
+  "commands": [
+    {
+      "name": "restore-prior",
+      "args": [
+        "scripts/restore_cm_historical_fixtures.py",
+        "--restore"
+      ],
+      "timeout": 60
+    },
+    {
+      "name": "restore-application",
+      "args": [
+        "scripts/restore_cm_application_fixtures.py",
+        "--restore",
+        "--download-d4",
+        "--output",
+        "/workspace/cm-packed-evidence/APPLICATION-FIXTURES.json"
+      ],
+      "timeout": 120
+    },
+    {
+      "name": "restore-closure",
+      "args": [
+        "scripts/restore_cm_closure_fixtures.py",
+        "--restore",
+        "--download",
+        "--output",
+        "/workspace/cm-packed-evidence/CLOSURE-FIXTURES.json"
+      ],
+      "timeout": 300
+    },
+    {
+      "name": "native-build",
+      "args": [
+        "scripts/build_cm_fused_slots.py"
+      ],
+      "timeout": 30
+    },
+    {
+      "name": "focused",
+      "args": [
+        "-m",
+        "pytest",
+        "tests/test_component_counts.py",
+        "tests/test_closure_fixture_restoration.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml",
+        "/workspace/cm-packed-evidence/FOCUSED-TESTS.xml"
+      ],
+      "timeout": 120
+    },
+    {
+      "name": "full-regression",
+      "args": [
+        "-m",
+        "pytest",
+        "tests",
+        "-q",
+        "--tb=short",
+        "--continue-on-collection-errors",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp",
+        "/workspace/cm-pytest",
+        "--junitxml",
+        "/workspace/cm-packed-evidence/FULL-TESTS.xml"
+      ],
+      "timeout": 2000,
+      "allow_failure": true
+    }
+  ],
+  "controller": "scripts/runpod_closure_research_controller_v2.py",
+  "remote": "scripts/cm_closure_research_remote_v2.py"
+}
