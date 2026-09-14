@@ -49,6 +49,50 @@ def cm_transpose(t: int) -> int:
     return (t & 0b1001) | ((t & 0b0010) << 1) | ((t & 0b0100) >> 1)
 
 
+def cm_swap_rows(t: int) -> int:
+    """Swap the positive/negative states of the row operand."""
+    t = int(t) & MASK
+    return (((t & 0b0011) << 2) | ((t & 0b1100) >> 2)) & MASK
+
+
+def cm_swap_columns(t: int) -> int:
+    """Swap the positive/negative states of the column operand."""
+    t = int(t) & MASK
+    b11 = (t >> 3) & 1
+    b10 = (t >> 2) & 1
+    b01 = (t >> 1) & 1
+    b00 = t & 1
+    return ((b10 << 3) | (b11 << 2) | (b00 << 1) | b01) & MASK
+
+
+def cm_align_signed_operands(
+    t: int,
+    *,
+    swapped: bool = False,
+    negate_first: bool = False,
+    negate_second: bool = False,
+) -> int:
+    """Express a token over a fixed ``(row, column)`` operand frame.
+
+    ``t`` initially represents ``f(first, second)``. With ``swapped=False``,
+    the source operands are the row and column operands respectively. With
+    ``swapped=True``, the source operands are column then row. Negation flags
+    describe the source operands before they are aligned to the target frame.
+    """
+    aligned = cm_transpose(t) if swapped else (int(t) & MASK)
+    if swapped:
+        if negate_first:
+            aligned = cm_swap_columns(aligned)
+        if negate_second:
+            aligned = cm_swap_rows(aligned)
+    else:
+        if negate_first:
+            aligned = cm_swap_rows(aligned)
+        if negate_second:
+            aligned = cm_swap_columns(aligned)
+    return aligned
+
+
 def cm_rot90(t: int) -> int:
     """Rotate 90° clockwise: (11)->(12)->(22)->(21)->(11)."""
     t = int(t) & MASK
@@ -129,6 +173,9 @@ __all__ = [
     "MASK",
     "cm_not",
     "cm_transpose",
+    "cm_swap_rows",
+    "cm_swap_columns",
+    "cm_align_signed_operands",
     "cm_rot90",
     "cm_rot180",
     "cm_rot270",
