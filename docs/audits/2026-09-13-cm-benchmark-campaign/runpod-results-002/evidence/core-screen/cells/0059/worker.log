@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/workspace/cm-benchmark/cmbench/backends/native_count.py", line 52, in run_ganak
+    completed = subprocess.run(
+        command, check=False, capture_output=True, text=True, encoding="utf-8",
+        errors="replace", timeout=timeout_seconds,
+    )
+  File "/usr/local/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/subprocess.py", line 1222, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/subprocess.py", line 2155, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/subprocess.py", line 1269, in _check_timeout
+    raise TimeoutExpired(
+    ...<2 lines>...
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '('ganak', '--verb', '0', '--prob', '0', '--appmct', '-1', '--threads', '1', '/workspace/cm-benchmark/inputs/sat_and_counting/105-861af74cee55.cnf')' timed out after 60 seconds
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 409, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 398, in main
+    worker(args.request)
+    ~~~~~~^^^^^^^^^^^^^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 230, in worker
+    write_new(request["result_path"], execute(request))
+                                      ~~~~~~~^^^^^^^^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 188, in execute
+    native = run_ganak(path, mode="projected", executable=os.environ.get("CM_GANAK", "ganak"),
+                       timeout_seconds=CELL_SECONDS)
+  File "/workspace/cm-benchmark/cmbench/backends/native_count.py", line 57, in run_ganak
+    raise TimeoutError("Ganak exact-count deadline exceeded") from exc
+TimeoutError: Ganak exact-count deadline exceeded

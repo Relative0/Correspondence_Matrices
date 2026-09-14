@@ -1,0 +1,49 @@
+{
+  "caveats": [
+    "GPU is not expected to accelerate current algorithms; this SKU is selected for its advertised CPU/RAM envelope.",
+    "Usable RAM, cgroup memory.max, CPU affinity/quota, price, region, and availability must be rechecked immediately before any authorized creation.",
+    "The authenticated CPU-only catalog was not queried because secret access is not authorized."
+  ],
+  "checked_utc": "2026-09-13T18:55:31.685914Z",
+  "estimate": {
+    "compute_hours": 16,
+    "compute_usd": 8.0,
+    "egress_usd": 0,
+    "includes": [
+      "setup",
+      "idle",
+      "benchmark",
+      "retrieval",
+      "one-hour cleanup reserve"
+    ],
+    "storage_usd_prorated": 0.06666666666666667,
+    "total_usd": 8.066666666666666
+  },
+  "offer": {
+    "advertised_ram_gb": 125,
+    "advertised_vcpus": 16,
+    "availability": "not account-verified",
+    "cloud": "Pods on-demand; Community/Secure class must be confirmed in console",
+    "compute_usd_per_hour": 0.5,
+    "gpu": "RTX 3090",
+    "gpu_vram_gb": 24,
+    "preferred_region": "AP-JP-1",
+    "region_fallback": "availability priority; record assigned data center before work"
+  },
+  "proposal_not_authorization": {
+    "cleanup_reserve_hours": 1,
+    "dollar_cap_usd": 50,
+    "max_concurrent_pods": 1,
+    "total_pod_hours": 16
+  },
+  "schema": "cm-runpod-public-quote/v1",
+  "source": "https://www.runpod.io/pricing",
+  "source_kind": "official public rate card",
+  "storage": {
+    "gb": 30,
+    "network_volume_gb": 0,
+    "persistent_after_stop": false,
+    "rate_usd_per_gb_month": 0.1,
+    "type": "container disk"
+  }
+}

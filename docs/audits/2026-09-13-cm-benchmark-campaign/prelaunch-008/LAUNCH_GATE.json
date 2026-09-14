@@ -1,0 +1,75 @@
+{
+  "admitted_inputs": 641,
+  "blockers": [
+    {
+      "detail": "price/spec snapshot is public; current account availability, assigned region, CPU quota and memory.max require a pre-create check",
+      "kind": "runpod_placement_unverified"
+    },
+    {
+      "detail": "no paid creation or upload is authorized",
+      "kind": "authorization_missing"
+    }
+  ],
+  "campaign_id": "cm-mega-prelaunch-20260914-008",
+  "frozen_scope_limitations": {
+    "corpus_quota_shortfalls": {
+      "affine": 187,
+      "feature_models": 390,
+      "hardware": 570,
+      "sat_and_counting": 12
+    },
+    "effect": "explicit not-run; excluded from paid schedule unless a new pre-outcome manifest is reviewed",
+    "excluded_adapters": [
+      {
+        "adapter": "bitmaps.croaring",
+        "reason": "excluded_before_screen:missing",
+        "state": "not_run"
+      },
+      {
+        "adapter": "exact_count.cudd_arbitrary_precision",
+        "reason": "excluded_before_screen:present_unverified",
+        "state": "not_run"
+      },
+      {
+        "adapter": "gf2.m4ri",
+        "reason": "excluded_before_screen:present_unverified",
+        "state": "not_run"
+      },
+      {
+        "adapter": "hardware.abc_equivalence",
+        "reason": "excluded_before_screen:missing",
+        "state": "not_run"
+      },
+      {
+        "adapter": "hardware.yosys_transform",
+        "reason": "excluded_before_screen:missing",
+        "state": "not_run"
+      },
+      {
+        "adapter": "policies.native_services",
+        "reason": "excluded_before_screen:missing",
+        "state": "not_run"
+      },
+      {
+        "adapter": "weighted_inference",
+        "reason": "excluded_before_screen:missing",
+        "state": "not_run"
+      }
+    ]
+  },
+  "future_authorization_scope": {
+    "action": "create at most one RunPod Pod and upload only the files listed in UPLOAD_MANIFEST.json after all non-authorization blockers are cleared and the quote is refreshed",
+    "bundle_identity": "resolved by sibling UPLOAD_MANIFEST.json",
+    "cleanup_reserve_hours": 1,
+    "maximum_total_pod_hours": 16,
+    "maximum_usd": 50,
+    "status": "proposal_only_do_not_execute"
+  },
+  "local_package_verified": true,
+  "not_run_base_cases": 1159,
+  "paid_launch_authorized": false,
+  "paid_launch_ready": false,
+  "planned_base_cases": 1241,
+  "schema": "cm-benchmark-launch-gate/v1",
+  "upload_authorized": false
+}

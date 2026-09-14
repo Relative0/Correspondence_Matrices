@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-09-14T05:50:45.1405173Z",
+  "diagnostic_sha256": "b19510bd8a6632f31ef250b264fb78638d17e24e8c430c5518cd0b199ea0ebcd",
+  "report_sha256": "2df16402427dd6f0f4f0092a9f3dc2e4f53cc8b2ca75bc2d6439c314c8536380",
+  "schema": "cm-benchmark-successor-admission-d4-verification/v1",
+  "source_compile": {
+    "command": ".venv\\Scripts\\python.exe -m py_compile cmbench\\biology_bnet.py cmbench\\campaign_prelaunch.py cmbench\\backends\\native_count.py scripts\\cm_benchmark_successor_diagnostic.py",
+    "status": "passed"
+  },
+  "tests": {
+    "command": ".venv\\Scripts\\python.exe -m pytest -q tests\\test_cm_native_count_adapter.py tests\\test_cm_benchmark_prelaunch.py tests\\test_cm_campaign_new_adapters.py tests\\test_cm_benchmark_core_screen.py -p no:cacheprovider --basetemp work\\pytest-admission-d4-002",
+    "duration_seconds": 3.66,
+    "failed": 0,
+    "passed": 27,
+    "status": "passed"
+  },
+  "verification_boundary": {
+    "native_linux_postfix_replay": "not_run",
+    "reason": "Docker daemon unavailable; installed WSL environment lacks Python, g++, CMake, and Ninja"
+  }
+}

@@ -45,13 +45,19 @@ def test_safe_paths_refuse_traversal_secrets_and_windows_absolute_paths():
 
 
 def test_source_identity_marks_dirty_or_untracked_files_and_hashes_exact_bytes():
-    record = source_identity(ROOT, ["cmbench/campaign_prelaunch.py"])
-    assert record["schema"] == "cm-benchmark-source-identity/v1"
-    assert record["workspace_dirty_in_scope"] is True
-    assert record["files"][0]["git_state"] in {
-        "untracked", "tracked_modified", "tracked_staged", "tracked_staged_and_modified",
-    }
-    assert record["files"][0]["sha256"] == sha256_file(ROOT / "cmbench/campaign_prelaunch.py")
+    with tempfile.NamedTemporaryFile(
+        dir=ROOT, prefix="cm-source-identity-test-", suffix=".txt", delete=False
+    ) as handle:
+        handle.write(b"exact source identity fixture\n")
+        temporary = Path(handle.name)
+    try:
+        record = source_identity(ROOT, [temporary.name])
+        assert record["schema"] == "cm-benchmark-source-identity/v1"
+        assert record["workspace_dirty_in_scope"] is True
+        assert record["files"][0]["git_state"] == "untracked"
+        assert record["files"][0]["sha256"] == sha256_file(temporary)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def test_dimacs_admission_checks_hash_license_and_semantics(tmp_path: Path):

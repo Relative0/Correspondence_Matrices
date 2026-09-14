@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 409, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 398, in main
+    worker(args.request)
+    ~~~~~~^^^^^^^^^^^^^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 230, in worker
+    write_new(request["result_path"], execute(request))
+                                      ~~~~~~~^^^^^^^^^
+  File "/workspace/cm-benchmark/scripts/cm_benchmark_core_screen.py", line 194, in execute
+    if arm == "bnet_cm_scalar" else aeon_fixed_point_count(path))
+                                    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/workspace/cm-benchmark/cmbench/biology_bnet.py", line 192, in aeon_fixed_point_count
+    raise ValueError("Boolean network has undeclared regulator")
+ValueError: Boolean network has undeclared regulator

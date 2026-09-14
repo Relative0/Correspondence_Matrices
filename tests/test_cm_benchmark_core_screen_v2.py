@@ -16,10 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "docs/audits/2026-09-13-cm-benchmark-campaign"
 SUCCESSOR_ADMISSION = BASE / "prelaunch-008/ADMISSION_LEDGER.json"
 SUCCESSOR_BUNDLE_MANIFEST = BASE / "successor-prelaunch-001/UPLOAD_MANIFEST.json"
+SUCCESSOR_INPUT = BASE / "input-freeze-009/admitted/biology/006-efd67e1cd585.bnet"
 
 
 @pytest.mark.skipif(
-    not SUCCESSOR_ADMISSION.exists(),
+    not SUCCESSOR_ADMISSION.exists() or not SUCCESSOR_INPUT.exists(),
     reason="frozen campaign evidence is excluded from the source-only integration",
 )
 def test_successor_plan_contains_only_unresolved_admissible_lanes(tmp_path: Path) -> None:
