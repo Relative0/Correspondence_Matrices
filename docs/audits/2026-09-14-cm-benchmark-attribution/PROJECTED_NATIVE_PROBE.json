@@ -1,0 +1,71 @@
+{
+  "schema": "cm-projected-native-probe/v1",
+  "binary_sha256": "c43a7d7c6d1e2ba438ee72541ceb15bc81b414bff5aa22038a9f6baa9f82bb61",
+  "scope": "synthetic correctness/protocol evidence, not performance or CM attribution",
+  "cases": [
+    {
+      "case": "plain_exact_free_axes",
+      "input": "p cnf 3 1\n1 0\n",
+      "input_sha256": "74e917203dcef0c02d02eb1979f1968fc086b1c074682526de22aa895b018706",
+      "expected_projected_or_exact_count": 4,
+      "returncode": 0,
+      "stdout": "c o Total time [Arjun+GANAK]: 0.00\ns SATISFIABLE\nc s type mc\nc s log10-estimate 6.02059991e-01\nc s exact arb int 4\nc s pac guarantees epsilon: 0 delta: 0\n",
+      "stderr": "",
+      "interpretation": "clear unweighted semantic control"
+    },
+    {
+      "case": "invalid_independent_support_hint",
+      "input": "c ind 1 0\np cnf 3 1\n1 0\n",
+      "input_sha256": "0f6dc35929ca71b27ea791a26e05573f3aa2bc286803248ffe3348f53b377a88",
+      "expected_projected_or_exact_count": null,
+      "returncode": 0,
+      "stdout": "c o Total time [Arjun+GANAK]: 0.00\ns SATISFIABLE\nc s type mc\nc s log10-estimate 0.00000000e+00\nc s exact arb int 1\nc s pac guarantees epsilon: 0 delta: 0\n",
+      "stderr": "",
+      "interpretation": "adversarial ambiguity probe; no valid support promise"
+    },
+    {
+      "case": "visible_hidden_multiplicity",
+      "input": "c p show 1 0\np cnf 3 1\n2 3 0\n",
+      "input_sha256": "2a1893c774dfa08ff067f21a87545093dbc66d2ce752028dcb50332f1b1736a4",
+      "expected_projected_or_exact_count": 2,
+      "returncode": 0,
+      "stdout": "c o Total time [Arjun+GANAK]: 0.00\ns SATISFIABLE\nc s type mc\nc s log10-estimate 3.01029996e-01\nc s exact arb int 2\nc s pac guarantees epsilon: 0 delta: 0\n",
+      "stderr": "",
+      "interpretation": "clear unweighted semantic control",
+      "successor_wrapper_count": 2
+    },
+    {
+      "case": "projection_vs_support",
+      "input": "c ind 2 3 0\nc p show 1 0\np cnf 3 1\n2 3 0\n",
+      "input_sha256": "bc78f2a896a5f75c19d4e1fa8507874665df37be8be4434beaa7dd77ddf34329",
+      "expected_projected_or_exact_count": null,
+      "returncode": 255,
+      "stdout": "ERROR: 'c ind' and 'c p show' cannot be used together\n",
+      "stderr": "",
+      "interpretation": "adversarial ambiguity probe; no valid support promise",
+      "successor_wrapper_count": 2
+    },
+    {
+      "case": "empty_projection_sat",
+      "input": "c p show 0\np cnf 1 1\n1 0\n",
+      "input_sha256": "f16096471c648eea2c80d1617a73f0f082ae8c92907271b7108673735db9a954",
+      "expected_projected_or_exact_count": 1,
+      "returncode": 0,
+      "stdout": "c o Total time [Arjun+GANAK]: 0.00\ns SATISFIABLE\nc s type mc\nc s log10-estimate 0.00000000e+00\nc s exact arb int 1\nc s pac guarantees epsilon: 0 delta: 0\n",
+      "stderr": "",
+      "interpretation": "clear unweighted semantic control",
+      "successor_wrapper_count": 1
+    },
+    {
+      "case": "empty_projection_unsat",
+      "input": "c p show 0\np cnf 1 2\n1 0\n-1 0\n",
+      "input_sha256": "3427297d42d27b70b032099e039c712e4514b22c1df2a438b892fe5782808c48",
+      "expected_projected_or_exact_count": 0,
+      "returncode": 0,
+      "stdout": "c o Total time [Arjun+GANAK]: 0.00\ns UNSATISFIABLE\nc s type mc\nc s log10-estimate -inf\nc s exact arb int 0\nc s pac guarantees epsilon: 0 delta: 0\n",
+      "stderr": "",
+      "interpretation": "clear unweighted semantic control",
+      "successor_wrapper_count": 0
+    }
+  ]
+}
