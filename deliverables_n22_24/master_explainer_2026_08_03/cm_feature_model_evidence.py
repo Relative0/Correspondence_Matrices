@@ -14,6 +14,8 @@ from pathlib import Path
 
 
 BENCHMARK_DIR = "use_case_benchmarks_2026-08-27"
+FAIR_RESULT = "results/2026-09-13/fair-feature-model-lifecycle.json"
+FAIR_RESULT_SHA256 = "f55eb7afc97df25fa1286afea430062f5af161dd19608e157711eca428823842"
 RUNS = {
     "pilot": ("configuration-fm-history-pilot-full40-2026-08-27", "3e4d896f47ceccc976b1119c21d6a6de27e4e49c65469c98e61e1ee90bf44529"),
     "core": ("configuration-fm-history-shootout-cudd-full40-2026-08-27", "b8fcc64188274d522339e429d29fa9214911750e93f4d25fe3b67c2b5ec2b6f0"),
@@ -50,6 +52,14 @@ def verify_run(run: Path, expected_manifest_sha256: str) -> int:
 
 
 def build_feature_model_evidence(site: Path) -> tuple[dict, dict]:
+    fair_payload = (site / FAIR_RESULT).read_bytes()
+    if hashlib.sha256(fair_payload).hexdigest() != FAIR_RESULT_SHA256:
+        raise ValueError("Fair feature-model website evidence changed")
+    fair = json.loads(fair_payload)
+    fair["href"] = FAIR_RESULT
+    fair["sha256"] = FAIR_RESULT_SHA256
+    if fair["status"] != "accepted_corrected_run" or fair["coverage"]["completed_cells"] != fair["coverage"]["scheduled_cells"]:
+        raise ValueError("Fair feature-model website evidence failed review invariants")
     base = site / BENCHMARK_DIR
     run_paths = {key: base / "runs" / name for key, (name, _) in RUNS.items()}
     identities = []
@@ -137,6 +147,12 @@ def build_feature_model_evidence(site: Path) -> tuple[dict, dict]:
            "measurement-summary.json", "16.point_queries")
     number("valid_pct", 100 * sizes["16"]["valid_point_queries"] / sizes["16"]["point_queries"],
            "pct2", "measurement", "measurement-summary.json", "100 * 16.valid_point_queries / 16.point_queries")
+    fair_prov = f"{fair['href']} :: coverage"
+    fair_note = "Accepted corrected Linux lifecycle run; sparse exposed cohort."
+    numbers["fm.fair_cells"] = {"value": fair["coverage"]["completed_cells"], "fmt": "int", "prov": fair_prov, "note": fair_note}
+    numbers["fm.fair_workers"] = {"value": fair["coverage"]["fresh_workers"], "fmt": "int", "prov": fair_prov, "note": fair_note}
+    numbers["fm.fair_slices"] = {"value": fair["coverage"]["saved_slices"], "fmt": "int", "prov": fair_prov, "note": fair_note}
+    numbers["fm.fair_structures"] = {"value": fair["coverage"]["independently_replayed_distinct_structures"], "fmt": "int", "prov": fair_prov, "note": fair_note}
 
     rows = []
     for k in sorted(map(int, clusters)):
@@ -193,13 +209,14 @@ def build_feature_model_evidence(site: Path) -> tuple[dict, dict]:
 
     return ({
         "schema": "cm-feature-model-website-evidence/v1",
-        "audit_date": "2026-08-27", "website_update_date": "2026-08-28",
+        "audit_date": "2026-08-27", "website_update_date": "2026-09-13",
         "correctness_status": "passed_for_saved_bounded_relations",
         "performance_status": "provisional_measurement_gaps_open",
         "independence": "Separate implementations, not external third-party certification",
         "automatic_latest_run_selection": False,
         "histories": sorted(clusters["16"]["endpoint_cm_over_cnf"]["per_history"]),
         "runs": identities, "rows": rows, "gaps": gaps, "links": links,
+        "fair_lifecycle": fair,
         "forbidden_rankings": ["cold_d4_over_warm_popcount", "asymmetric_version_delta_warm_kernel", "raw_bytes_as_intrinsic_compactness"],
         "source_qualification": {
             "historical_joint_witnesses_missing": source["historical_joint_witnesses_were_missing"],

@@ -1,0 +1,90 @@
+{
+  "schema": "cm-fair-feature-model-lifecycle/v1",
+  "measured": "2026-09-13",
+  "status": "accepted_corrected_run",
+  "environment": "Linux cloud worker",
+  "coverage": {
+    "completed_cells": 1050,
+    "scheduled_cells": 1050,
+    "fresh_workers": 2100,
+    "saved_slices": 42,
+    "histories": 7,
+    "widths": [8, 12, 16],
+    "independently_replayed_distinct_structures": 166,
+    "linux_contract_tests": 4,
+    "empty_worker_diagnostic_logs": 2100
+  },
+  "duration": {
+    "accepted_study_seconds": 354.70,
+    "accepted_study_minutes": 5.91
+  },
+  "ratio_definition": "Baseline time divided by CM time; above 1 favors CM and below 1 favors the baseline.",
+  "equal_history_geomeans": [
+    {
+      "baseline": "cse",
+      "label": "Structural CSE",
+      "cold_first_output": 0.7917,
+      "warm_recomputation": 1.3560,
+      "fresh_reload": 0.9992,
+      "build_save_reload_cleanup": 0.8826
+    },
+    {
+      "baseline": "cnf",
+      "label": "Direct CNF",
+      "cold_first_output": 0.0055,
+      "warm_recomputation": 0.6477,
+      "fresh_reload": 0.0089,
+      "build_save_reload_cleanup": 0.0086
+    },
+    {
+      "baseline": "cudd_fixed",
+      "label": "CUDD fixed order",
+      "cold_first_output": 1.2839,
+      "warm_recomputation": 0.3952,
+      "fresh_reload": 1.6357,
+      "build_save_reload_cleanup": 1.4463
+    },
+    {
+      "baseline": "cudd_sift",
+      "label": "CUDD sifted order",
+      "cold_first_output": 1.2918,
+      "warm_recomputation": 0.3978,
+      "fresh_reload": 1.6358,
+      "build_save_reload_cleanup": 1.4514
+    }
+  ],
+  "memory_and_artifacts": [
+    {"arm": "cm", "build_worker_rss_highwater_median_kib": 40384, "serialized_bundle_bytes": [388, 5186]},
+    {"arm": "cse", "build_worker_rss_highwater_median_kib": 36526, "serialized_bundle_bytes": [406, 5115]},
+    {"arm": "cnf", "build_worker_rss_highwater_median_kib": 24616, "serialized_bundle_bytes": [204, 2885]},
+    {"arm": "cudd_fixed", "build_worker_rss_highwater_median_kib": 44916, "serialized_bundle_bytes": [279, 504]},
+    {"arm": "cudd_sift", "build_worker_rss_highwater_median_kib": 44940, "serialized_bundle_bytes": [278, 503]}
+  ],
+  "scope": {
+    "common_output": "The same complete truth vector for every arm.",
+    "input_boundary": "Frozen conditioned residual CNF JSON; full-model parsing, witness search and conditioning are excluded equally.",
+    "schedule": "Five counterbalanced fresh build/reload blocks and five unbatched warm recomputations per worker.",
+    "artifact_contract": "Structure and explicit variable universe, never cached answers.",
+    "limitations": [
+      "Exposed historical slices rather than held-out confirmation.",
+      "Thirty-two slices have one satisfying assignment; the other ten have two or four.",
+      "Most paired revisions are unchanged.",
+      "OS file-cache state is uncontrolled.",
+      "d4 scalar counting, full-model execution, meaningful revision reuse and real consumer traces remain separate studies.",
+      "The result does not close every M01-M13 qualification or justify changing production defaults."
+    ]
+  },
+  "cost_and_cleanup": {
+    "conservative_estimated_total_usd": 0.04688,
+    "reserved_usd": 2.00,
+    "authorized_ceiling_usd": 5.00,
+    "owned_pods_remaining": 0
+  },
+  "provenance": {
+    "audit": "docs/audits/2026-09-13-cm-fair-feature-model",
+    "final_manifest_sha256": "419fd4659b78082e663310953632feb67e109b77238de3396393d41554424d1d",
+    "report_sha256": "612304e29b30883a95c983129ca64d7d28049227b3cac5025cc15414d49d2f33",
+    "verification_sha256": "69c0692cfb41294f7e686b807e3d793071b74d06be1f7d6c94169a2901fcb30b",
+    "protocol_sha256": "0cfcf53d91e5e89e77f77a4c706852deab850423646635977462e6b132168930"
+  }
+}

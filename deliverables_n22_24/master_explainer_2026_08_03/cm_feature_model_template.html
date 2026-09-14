@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Correspondence Matrices — feature-model results and independence audit</title>
-<meta name="description" content="Saved real feature-model results, independent correctness checks, measurement gaps, qualified comparisons, raw data and reproducible audit tools.">
+<meta name="description" content="Fair Linux feature-model lifecycle results, saved historical evidence, independent correctness checks, limitations and downloadable data.">
 <meta property="og:title" content="Correspondence Matrices — feature-model results and audit">
-<meta property="og:description" content="Correctness checked; performance provisional. Explore the bounded results, evidence limits and reproducible artifacts.">
+<meta property="og:description" content="A completed 1,050-cell Linux lifecycle comparison, with historical evidence, limits and reproducible artifacts.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="og.png">
@@ -34,7 +34,7 @@ document.body.prepend(topbar({
   links: [["index.html", "Full knowledge base"], ["layperson.html", "Simple One-Pager"],
           ["expert.html", "Technical Summary"], ["investor.html", "Investor overview"],
           ["usecases.html", "CM Use Cases"],
-          ["#summary", "Results & audit"], ["#comparisons", "Comparisons"],
+          ["#summary", "Results & audit"], ["#fair-lifecycle", "Fair lifecycle"], ["#comparisons", "Historical comparisons"],
           ["#gaps", "Measurement gaps"], ["#downloads", "Data & tools"]],
 }));
 
@@ -46,10 +46,11 @@ function evidenceTable(headers, rows, label) {
   return h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": label }, [t]);
 }
 const interval = stats => stats.cluster_bootstrap_ci95.map(x => f(x, 3)).join("–");
+const FAIR = E.fair_lifecycle;
 
 app.append(h("header", { class: "page" }, [
-  h("h1", { text: "Feature-model results: what passed, what remains provisional" }),
-  h("p", { class: "lede", text: "Real configuration models now provide concrete evidence for bounded Boolean tasks. Independently checked answers are a stronger result than before—but they do not repair unequal timing, memory or artifact contracts." }),
+  h("h1", { text: "Feature-model results: a completed fair lifecycle comparison" }),
+  h("p", { class: "lede", text: "A corrected Linux study completed every scheduled cell under matched output and lifecycle obligations. The result separates cold, warm and reload behavior; the earlier historical comparisons remain available with their original limits." }),
   h("p", { class: "meta", text: `Audit: ${E.audit_date} · Website updated: ${E.website_update_date}. This page displays saved experiments; it does not run benchmarks in your browser.` }),
 ]));
 app.append(latestResultsUpdate());
@@ -68,6 +69,32 @@ app.append(latestResultsUpdate());
     "No general CM dominance, production reuse savings, whole-model scalability or global version equivalence follows. Do not use cold d4 divided by warm popcount as a speedup, unequal version-delta work as a warm-kernel ranking, or raw file bytes as intrinsic representation compactness.",
     "Earlier acquisition-limited pilot notes are historical. The selected full cohort subsequently completed; the later audit and its exact run identities below govern this page. Newer trials from another task are not automatically included.",
   ]));
+  app.append(s);
+}
+
+{
+  const s = section("fair-lifecycle", "Fair Linux lifecycle successor", "1,050 of 1,050 cells completed",
+    "The accepted corrected run used 2,100 fresh workers across 42 saved slices from seven histories at widths 8, 12 and 16. Every cold, warm and reloaded output matched an independent exhaustive scalar oracle.");
+  s.append(tiles([
+    ["Completed cells", T("fm.fair_cells") + " / " + T("fm.fair_cells"), "all scheduled cells accepted"],
+    ["Fresh workers", T("fm.fair_workers"), "all diagnostic logs empty"],
+    ["Saved slices", T("fm.fair_slices"), "seven histories · widths 8, 12 and 16"],
+    ["Replayed structures", T("fm.fair_structures"), "independently checked"],
+  ]));
+  s.append(h("p", { text: FAIR.ratio_definition }));
+  s.append(evidenceTable(["Baseline", "Cold first output", "Warm recomputation", "Fresh reload", "Build/save/reload/cleanup"], FAIR.equal_history_geomeans.map(row => [
+    row.label, f(row.cold_first_output, 4), f(row.warm_recomputation, 4),
+    f(row.fresh_reload, 4), f(row.build_save_reload_cleanup, 4),
+  ]), "Fair lifecycle baseline-time divided by CM-time ratios"));
+  s.append(banner("note", "The lifecycle boundary changes the conclusion", [
+    "CM warm recomputation was 1.36× as fast as structural CSE, while CSE was 1.26× as fast on cold first output; fresh reload was approximately equal. Direct CNF and both CUDD variants beat CM warm. CM beat both CUDD variants on charged cold, reload and full lifecycle obligations.",
+    "The accepted study took 354.70 seconds (5.91 minutes). The conservative total cloud estimate was $0.04688, and all owned pods were deleted.",
+  ]));
+  s.append(banner("warn", "Sparse bounded cohort", [
+    "Thirty-two slices have one satisfying assignment; the other ten have two or four. Most paired revisions are unchanged. These are exposed historical slices, not held-out confirmation.",
+    "Full-model parsing, witness search and conditioning are excluded equally. OS file-cache state is uncontrolled. d4 scalar counting, meaningful revision reuse and real consumer traces remain separate studies; production defaults do not change from this result.",
+  ]));
+  s.append(h("p", {}, [h("a", { href: FAIR.href, download: "fair-feature-model-lifecycle.json", text: "Download the reviewed fair-lifecycle evidence" }), document.createTextNode(" · SHA-256 "), h("code", { text: FAIR.sha256 })]));
   app.append(s);
 }
 
@@ -207,8 +234,8 @@ app.append(latestResultsUpdate());
   app.append(s);
 }
 
-app.append(banner("note", "Next measurement gate", [
-  "Freeze the chosen implementation under a new run identity. Match cold/warm, fresh/shared, fixed/group-sifted, count/output and load/reuse tasks; retain ordering configuration, host-load metadata, failures and actual artifacts. More datasets should extend those repaired comparisons, not hide these limitations.",
+app.append(banner("note", "Next evidence gate", [
+  "The matched Linux lifecycle run is complete. Further compute should wait for a materially different workload: real consumer request traces, meaningful revision reuse, held-out models, full-model execution or the separate d4 scalar-count contract.",
 ]));
 app.append(pageFooter("Feature-model audit scope only. Correctness passes are not performance certification or claims of production dominance.", true));
 </script>

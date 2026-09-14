@@ -67,6 +67,10 @@ class FeatureModelWebsiteTests(unittest.TestCase):
         self.assertEqual(self.numbers["fm.assignments"]["value"], 5591040)
         self.assertEqual(self.numbers["fm.delta_cases"]["value"], 120)
         self.assertEqual(self.numbers["fm.tests"]["value"], 22)
+        fair = self.evidence["fair_lifecycle"]
+        self.assertEqual(fair["coverage"]["completed_cells"], 1050)
+        self.assertEqual(fair["coverage"]["fresh_workers"], 2100)
+        self.assertEqual(fair["equal_history_geomeans"][0]["warm_recomputation"], 1.3560)
 
     def test_all_generated_pages_are_current_exact_template_expansions(self):
         css = (SITE / "cm_master_shared.css").read_text(encoding="utf-8")
@@ -104,7 +108,7 @@ class FeatureModelWebsiteTests(unittest.TestCase):
             if template not in {"cm_feature_model_template.html", "cm_learning_neural_template.html"}:
                 self.assertIn("app.append(featureModelAuditUpdate());", (SITE / template).read_text(encoding="utf-8"))
         page = (SITE / "cm_feature_model_template.html").read_text(encoding="utf-8")
-        for anchor in ("summary", "correctness", "comparisons", "coverage", "artifacts", "gaps", "scope", "downloads"):
+        for anchor in ("summary", "fair-lifecycle", "correctness", "comparisons", "coverage", "artifacts", "gaps", "scope", "downloads"):
             self.assertIn(f'section("{anchor}"', page)
         self.assertIn("E.gaps.forEach", page)
         self.assertIn("E.links.forEach", page)
@@ -123,6 +127,7 @@ class FeatureModelWebsiteTests(unittest.TestCase):
         targets = [link["href"] for link in self.evidence["links"]]
         targets += [run["checksum_href"] for run in self.evidence["runs"]]
         targets += [gap["source_href"] for gap in self.evidence["gaps"]]
+        targets.append(self.evidence["fair_lifecycle"]["href"])
         for relative in targets:
             self.assertTrue((SITE / relative).is_file(), relative)
             self.assertTrue((SITE / relative).resolve().is_relative_to(SITE.resolve()), relative)

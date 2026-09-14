@@ -17,7 +17,9 @@ _next_spec.loader.exec_module(_next_module)
 append_next_results = _next_module.append_next_results
 
 ROOT = Path(__file__).resolve().parents[2]
-REVIEWED = '2026-09-12'
+REVIEWED = '2026-09-13'
+FAIR_RESULT = Path(__file__).resolve().parent/'results/2026-09-13/fair-feature-model-lifecycle.json'
+FAIR_RESULT_SHA256 = 'f55eb7afc97df25fa1286afea430062f5af161dd19608e157711eca428823842'
 AUDITS = {
     'completion': ('2026-09-12-cm-final-public-evidence', '7007425b9da34218ef6e7a1f27c1f2d160b1048e4762a1831fd90351a091d7e8'),
     'closures': ('2026-09-12-cm-count-closures', 'df889ae125afc114917460a32ede7e82f6145d7dfb559dacbc6b72f3258d5548'),
@@ -103,7 +105,15 @@ def site_snapshots(data):
 
 
 def build_latest_results():
-    sources, files, manifests = {}, {}, {}
+    fair_payload = FAIR_RESULT.read_bytes()
+    if digest(fair_payload) != FAIR_RESULT_SHA256:
+        raise ValueError('Fair feature-model website evidence changed')
+    fair = json.loads(fair_payload)
+    fair['href'] = 'results/2026-09-13/fair-feature-model-lifecycle.json'
+    fair['sha256'] = FAIR_RESULT_SHA256
+    if fair['status'] != 'accepted_corrected_run' or fair['coverage']['completed_cells'] != fair['coverage']['scheduled_cells']:
+        raise ValueError('Fair feature-model website evidence failed review invariants')
+    sources, files, manifests = {}, {fair['href']: fair_payload}, {}
 
     def source(key, audit, relative, role):
         name, expected = AUDITS[audit]
@@ -342,6 +352,7 @@ def build_latest_results():
     frontiers['disposition'] = completion['disposition']
     disposition = completion['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
+                    fair_feature_model=fair,
                     frontiers=frontiers, completion=completion,
                     continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},

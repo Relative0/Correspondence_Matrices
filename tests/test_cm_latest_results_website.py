@@ -25,9 +25,22 @@ class LatestResultsWebsiteTests(unittest.TestCase):
 
     def test_current_payload_equals_sealed_sources(self):
         self.assertEqual(self.data['e25_latest_results'], self.evidence)
+        self.assertEqual(self.evidence['reviewed'], '2026-09-13')
         for key, record in self.numbers.items():
             self.assertEqual(self.data['_numbers'][key]['value'], record['value'], key)
             self.assertEqual(self.data['_numbers'][key]['prov'], record['prov'], key)
+
+    def test_fair_feature_model_successor_is_published_with_exact_identity(self):
+        fair = self.evidence['fair_feature_model']
+        payload = (SITE/fair['href']).read_bytes()
+        self.assertEqual(hashlib.sha256(payload).hexdigest(), fair['sha256'])
+        self.assertEqual(fair['coverage']['completed_cells'], fair['coverage']['scheduled_cells'])
+        self.assertEqual(fair['coverage']['independently_replayed_distinct_structures'], 166)
+        self.assertEqual([row['baseline'] for row in fair['equal_history_geomeans']],
+                         ['cse', 'cnf', 'cudd_fixed', 'cudd_sift'])
+        page = (SITE/'latest-results.html').read_text(encoding='utf-8')
+        self.assertIn('section("fair-feature-model"', page)
+        self.assertIn('feature-model-evidence.html#fair-lifecycle', page)
 
     def test_new_continuation_keeps_incomplete_values_unplotted_and_rejects_source_drift(self):
         panels = {p['id']:p for p in self.evidence['panels']}
