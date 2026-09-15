@@ -6,7 +6,7 @@ This isolated worktree starts at the current integrated baseline:
 
 `main == origin/main == e35f352a2036db403f5e28ecca2f61550d1db0c7`
 
-It contains two deliberately selected, still-uncommitted change groups:
+It contains three deliberately selected change groups:
 
 1. The maintained Windows pytest profile copied byte-for-byte from
    `tmp/cm-consolidation-20260914` (one tracked workflow edit and 15 new files).
@@ -14,10 +14,15 @@ It contains two deliberately selected, still-uncommitted change groups:
    root worktree, then reviewed as a semantic delta from current `main`. The
    consolidation contains one targeted legacy-metrics compatibility correction
    described below; the protected source remains unchanged.
+3. A bounded, byte-verified research corpus absent from `main`: the complete
+   `docs/audits/2026-09-11-cm-performance`, `paper_program/01_audit`, and
+   `paper_program/02_literature` directories required by the mathematics-first
+   research prompt.
 
 No root `.gitattributes`, `.gitignore`, publication workflow, website source,
-generated website output, paper-workbench file, audit package, cache, or build
-output was copied. No commit or push has been made.
+generated website output, unrelated audit package, cache, or build output was
+copied. The selected changes are recorded as three local commits on
+`codex/cm-final-consolidation-20260916`; none has been pushed.
 
 ## Compiler review
 
@@ -68,17 +73,22 @@ e71e1a6fdb57a3ff8653a17462e523aa4918121b74f7e638c25fc72261e8f235  tests/test_cm_
 - Compiler/backend/output-budget/measurement/partial-context affected suites:
   146 passed and 102 subtests passed; the same selection passed again after the
   compatibility correction (6.94 seconds in the final run).
-- `git diff --check`: passed for every tracked file in this consolidation.
+- `git diff --check`: passed for the reviewed compiler and compiler-test delta.
+  The complete snapshot retains byte-exact historical logs and audit documents;
+  their pre-existing trailing spaces, Markdown hard breaks, and terminal blank
+  lines mean a whole-snapshot `git diff --check` is intentionally not clean.
 
 The first profile-test invocation failed only because the new worktree lacked a
 `tmp/` parent for `--basetemp`. Creating that workspace-local directory and
 repeating the same test selection passed all four tests. This reproduces the
 environmental temp-path constraint already documented by the profile audit.
 
-## Research baseline
+## Research snapshot
 
 The local branch `codex/cm-research-baseline-20260916` points exactly to the clean
 integrated commit `e35f352a2036db403f5e28ecca2f61550d1db0c7`. It intentionally
-excludes every uncommitted change in this consolidation. A Codex-managed worktree
-created from that branch should start detached at this commit; the task must still
-verify its HEAD and status before research.
+excludes the consolidation. The research task should instead start from
+`codex/cm-final-consolidation-20260916`, whose committed snapshot includes the
+pytest profile, reviewed compiler changes, and required research evidence. A
+Codex-managed worktree should start detached at that branch's HEAD; the task must
+still verify its HEAD and status before research.
