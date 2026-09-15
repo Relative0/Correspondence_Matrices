@@ -1,0 +1,1761 @@
+[
+  {
+    "cell": {
+      "case": "balanced-k8",
+      "task": "restriction",
+      "arm": "cse_packed",
+      "q": 64,
+      "id": "restriction__balanced-k8__cse_packed__q64",
+      "treatment": "resident_imports_cold_session; q64 compile-once within session"
+    },
+    "status": "ok",
+    "source": {
+      "helper_sha256": "47ca5daf1d402e7c2c7e30140727699f0a67eb996f30d3688f219e803a666bd5",
+      "input_sha256": "d40e8863a8a004a6dee6fd7cc6f014055c38465d74db6a38dda4e1c9307b0dad"
+    },
+    "runtime_preload": {
+      "wall_ns": 1220314100,
+      "cpu_ns": 1234375000
+    },
+    "uninstrumented": [
+      {
+        "wall_ns": 1317900,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 0
+      },
+      {
+        "wall_ns": 1153400,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 1
+      },
+      {
+        "wall_ns": 1209000,
+        "cpu_ns": 15625000,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 2
+      },
+      {
+        "wall_ns": 1107200,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 3
+      },
+      {
+        "wall_ns": 1053300,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 4
+      }
+    ],
+    "phase_pass": [
+      {
+        "wall_ns": 1816000,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 539000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 29.680616740088105,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 71900,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.959251101321586,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 159900,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 8.805066079295154,
+            "cpu_percent_caller": null
+          },
+          "structural_cse_lowering": {
+            "wall_ns": 96200,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 5.297356828193832,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 13000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.7158590308370044,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 219000,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 12.059471365638766,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 296400,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 16.3215859030837,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 97900,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 5.390969162995595,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 3600,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.19823788546255505,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 4300,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.236784140969163,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 44700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 2.461453744493392,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 270100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 14.873348017621145,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      },
+      {
+        "wall_ns": 1659200,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 359000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 21.636933461909354,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 60400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.6403085824493733,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 152500,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 9.191176470588236,
+            "cpu_percent_caller": null
+          },
+          "structural_cse_lowering": {
+            "wall_ns": 81400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 4.905978784956606,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 10500,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.6328351012536162,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 323200,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 19.47926711668274,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 304800,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 18.37029893924783,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 101700,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 6.129459980713597,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 2900,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.17478302796528447,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 3300,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.1988910318225651,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 7800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.470106075216972,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 251700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 15.169961427193828,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      },
+      {
+        "wall_ns": 1660600,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 368800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 22.208840178248824,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 56800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.4204504396001445,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 166900,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 10.050584126219439,
+            "cpu_percent_caller": null
+          },
+          "structural_cse_lowering": {
+            "wall_ns": 78000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 4.697097434662171,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 13700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.825003010959894,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 278400,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 16.76502468987113,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 332300,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 20.010839455618452,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 97300,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 5.859327953751656,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 2500,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.1505479947007106,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 3200,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.19270143321690955,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 6800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.4094905455859328,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 255900,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 15.410092737564735,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      }
+    ],
+    "summary": {
+      "wall_median_ns": 1153400,
+      "cpu_median_ns": 0,
+      "phase_dilation": 1.4397433674354083
+    },
+    "profile": {
+      "caller_wall_ns": 1991700,
+      "hot_helpers": [
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 423,
+          "function": "_eval_prepared_flat",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 0.00024050000000000002,
+          "cumulative_wall_s": 0.0002543,
+          "mean_self_wall_s": 3.7578125000000003e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 599,
+          "function": "compile_expr_cse",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.0001957,
+          "cumulative_wall_s": 0.00030710000000000004,
+          "mean_self_wall_s": 0.0001957
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 215,
+          "function": "task_operation",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.00016680000000000002,
+          "cumulative_wall_s": 0.0019596,
+          "mean_self_wall_s": 0.00016680000000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _io.open>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.00014680000000000002,
+          "cumulative_wall_s": 0.00019250000000000002,
+          "mean_self_wall_s": 0.00014680000000000002
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 374,
+          "function": "_bind_flat_program",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 0.00010570000000000001,
+          "cumulative_wall_s": 0.0001383,
+          "mean_self_wall_s": 1.6515625000000001e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 82,
+          "function": "call",
+          "primitive_calls": 264,
+          "total_calls": 264,
+          "self_wall_s": 9.970000000000001e-05,
+          "cumulative_wall_s": 0.0017280000000000002,
+          "mean_self_wall_s": 3.776515151515152e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 246,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 9.43e-05,
+          "cumulative_wall_s": 0.0001575,
+          "mean_self_wall_s": 1.4734375e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\cmbench\\comparative\\sympy_cm_claim_cleanup.py",
+          "line": 46,
+          "function": "parse_expression",
+          "primitive_calls": 1,
+          "total_calls": 28,
+          "self_wall_s": 8.77e-05,
+          "cumulative_wall_s": 0.00013230000000000002,
+          "mean_self_wall_s": 3.132142857142857e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 144,
+          "function": "primitive_prepare",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 8.690000000000001e-05,
+          "cumulative_wall_s": 0.0002414,
+          "mean_self_wall_s": 1.3578125000000002e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 246,
+          "function": "<genexpr>",
+          "primitive_calls": 448,
+          "total_calls": 448,
+          "self_wall_s": 6.32e-05,
+          "cumulative_wall_s": 6.32e-05,
+          "mean_self_wall_s": 1.410714285714286e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 249,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 4.6200000000000005e-05,
+          "cumulative_wall_s": 7.570000000000001e-05,
+          "mean_self_wall_s": 7.218750000000001e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 4.4000000000000006e-05,
+          "cumulative_wall_s": 4.89e-05,
+          "mean_self_wall_s": 4.4000000000000006e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\json\\decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 3.7300000000000005e-05,
+          "cumulative_wall_s": 3.7300000000000005e-05,
+          "mean_self_wall_s": 3.7300000000000005e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 178,
+          "total_calls": 178,
+          "self_wall_s": 3.54e-05,
+          "cumulative_wall_s": 3.54e-05,
+          "mean_self_wall_s": 1.9887640449438203e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 212,
+          "total_calls": 212,
+          "self_wall_s": 3.3100000000000005e-05,
+          "cumulative_wall_s": 4.63e-05,
+          "mean_self_wall_s": 1.5613207547169814e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 389,
+          "function": "execute",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 3.1400000000000004e-05,
+          "cumulative_wall_s": 0.0019968,
+          "mean_self_wall_s": 3.1400000000000004e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 199,
+          "total_calls": 199,
+          "self_wall_s": 2.9900000000000002e-05,
+          "cumulative_wall_s": 2.9900000000000002e-05,
+          "mean_self_wall_s": 1.5025125628140705e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 419,
+          "function": "evaluate",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 2.7000000000000002e-05,
+          "cumulative_wall_s": 0.0002813,
+          "mean_self_wall_s": 4.2187500000000004e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 2.5600000000000002e-05,
+          "cumulative_wall_s": 2.5600000000000002e-05,
+          "mean_self_wall_s": 2.5600000000000002e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method '__exit__' of '_io._IOBase' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 2.51e-05,
+          "cumulative_wall_s": 2.51e-05,
+          "mean_self_wall_s": 2.51e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 247,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 2.1400000000000002e-05,
+          "cumulative_wall_s": 0.0002628,
+          "mean_self_wall_s": 3.3437500000000003e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 150,
+          "total_calls": 150,
+          "self_wall_s": 1.7800000000000002e-05,
+          "cumulative_wall_s": 1.7800000000000002e-05,
+          "mean_self_wall_s": 1.1866666666666668e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 1.52e-05,
+          "cumulative_wall_s": 1.52e-05,
+          "mean_self_wall_s": 2.375e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.id>",
+          "primitive_calls": 112,
+          "total_calls": 112,
+          "self_wall_s": 1.4000000000000001e-05,
+          "cumulative_wall_s": 1.4000000000000001e-05,
+          "mean_self_wall_s": 1.2500000000000002e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'copy' of 'list' objects>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 1.3800000000000002e-05,
+          "cumulative_wall_s": 1.3800000000000002e-05,
+          "mean_self_wall_s": 2.1562500000000003e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'to_bytes' of 'int' objects>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 1.3100000000000002e-05,
+          "cumulative_wall_s": 1.3100000000000002e-05,
+          "mean_self_wall_s": 2.0468750000000003e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 312,
+          "function": "<genexpr>",
+          "primitive_calls": 65,
+          "total_calls": 65,
+          "self_wall_s": 1.1000000000000001e-05,
+          "cumulative_wall_s": 1.66e-05,
+          "mean_self_wall_s": 1.6923076923076925e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 16,
+          "function": "_build_bitset_env_cached",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 1.09e-05,
+          "cumulative_wall_s": 1.11e-05,
+          "mean_self_wall_s": 1.09e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 204,
+          "function": "contexts",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 1.0500000000000001e-05,
+          "cumulative_wall_s": 1.0500000000000001e-05,
+          "mean_self_wall_s": 1.0500000000000001e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 252,
+          "function": "_last_use_releases",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 1.04e-05,
+          "cumulative_wall_s": 1.3500000000000001e-05,
+          "mean_self_wall_s": 1.04e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 413,
+          "function": "__init__",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 9.4e-06,
+          "cumulative_wall_s": 9.4e-06,
+          "mean_self_wall_s": 1.46875e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 56,
+          "total_calls": 56,
+          "self_wall_s": 9.3e-06,
+          "cumulative_wall_s": 9.3e-06,
+          "mean_self_wall_s": 1.660714285714286e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 156,
+          "function": "<lambda>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 9.2e-06,
+          "cumulative_wall_s": 0.00031630000000000004,
+          "mean_self_wall_s": 9.2e-06
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.max>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 8.900000000000001e-06,
+          "cumulative_wall_s": 8.900000000000001e-06,
+          "mean_self_wall_s": 1.3906250000000002e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'items' of 'dict' objects>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 8.8e-06,
+          "cumulative_wall_s": 8.8e-06,
+          "mean_self_wall_s": 1.375e-07
+        }
+      ]
+    },
+    "memory_pass": {
+      "current_traced_bytes": 32746,
+      "peak_traced_bytes": 71167,
+      "net_traced_bytes": 32682,
+      "cumulative_allocated_bytes": null,
+      "native_rss_bytes": null,
+      "semantics": "Python-traced allocations still reachable after result return; cache retention included; native allocations incomplete",
+      "top_net_growth": [
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "bytes": 18975,
+          "objects": 226
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "bytes": 6480,
+          "objects": 102
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\json\\decoder.py",
+          "bytes": 5848,
+          "objects": 84
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\tracemalloc.py",
+          "bytes": 840,
+          "objects": 5
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\cmbench\\comparative\\sympy_cm_claim_cleanup.py",
+          "bytes": 360,
+          "objects": 3
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\pathlib\\_local.py",
+          "bytes": 179,
+          "objects": 2
+        }
+      ]
+    },
+    "structure": [
+      {
+        "source_dag_nodes": 28,
+        "source_dag_edges": 27,
+        "source_occurrences": 28,
+        "identity_sharing_factor": 1.0,
+        "cm_nodes": 18,
+        "cm_support_sizes": [
+          8,
+          6,
+          3,
+          1,
+          1,
+          1,
+          3,
+          3,
+          2,
+          1,
+          1,
+          2,
+          1,
+          1,
+          5,
+          2,
+          1,
+          1
+        ],
+        "cm_support_total": 43,
+        "live_variables": 8,
+        "requested_basis": 8,
+        "cse_program": {
+          "flat_instructions": 10,
+          "loads": 8,
+          "argument_edges": 19,
+          "executed_word_ops": 12,
+          "executed_bigint_ops": 15,
+          "peak_live_word_buffers": 4
+        },
+        "cm_program": {
+          "flat_instructions": 10,
+          "loads": 8,
+          "argument_edges": 19,
+          "executed_word_ops": 12,
+          "executed_bigint_ops": 15,
+          "peak_live_word_buffers": 4
+        }
+      }
+    ],
+    "inseparable": {
+      "allocation_release_in_kernel_ns": null,
+      "cache_lookup_ns": null,
+      "cache_validation_ns": null,
+      "process_startup_ns": null,
+      "json_source_read_ns": null
+    },
+    "correctness": {
+      "every_sample_exact": true,
+      "oracle": "independent scalar exhaustive outside timed cell"
+    },
+    "uninstrumented_arm_orders": [
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ]
+    ],
+    "runtime_preload_scope": "once per matched task/case/query group; not additive across group arms",
+    "worker_caller_wall_ns": 1836500500,
+    "parent_cpu_ns": 15625000,
+    "worker_caller_scope": "all matched arms/repeats and phase/profile/memory/structure passes plus process; NOT a one-call latency or additive across arms"
+  },
+  {
+    "cell": {
+      "case": "balanced-k8",
+      "task": "restriction",
+      "arm": "cm_packed",
+      "q": 64,
+      "id": "restriction__balanced-k8__cm_packed__q64",
+      "treatment": "resident_imports_cold_session; q64 compile-once within session"
+    },
+    "status": "ok",
+    "source": {
+      "helper_sha256": "47ca5daf1d402e7c2c7e30140727699f0a67eb996f30d3688f219e803a666bd5",
+      "input_sha256": "d40e8863a8a004a6dee6fd7cc6f014055c38465d74db6a38dda4e1c9307b0dad"
+    },
+    "runtime_preload": {
+      "wall_ns": 1220314100,
+      "cpu_ns": 1234375000
+    },
+    "uninstrumented": [
+      {
+        "wall_ns": 1555800,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 0
+      },
+      {
+        "wall_ns": 1080000,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 1
+      },
+      {
+        "wall_ns": 1528100,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 2
+      },
+      {
+        "wall_ns": 1135900,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 3
+      },
+      {
+        "wall_ns": 1074300,
+        "cpu_ns": 0,
+        "phases": {},
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        },
+        "repetition": 4
+      }
+    ],
+    "phase_pass": [
+      {
+        "wall_ns": 2023900,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 543400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 26.849152626117892,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 71900,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.5525470626019073,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 150400,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 7.43119719353723,
+            "cpu_percent_caller": null
+          },
+          "cm_representation_compile": {
+            "wall_ns": 260800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 12.886012154750729,
+            "cpu_percent_caller": null
+          },
+          "lowering": {
+            "wall_ns": 45700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 2.258016700429863,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 15600,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.7707890706062552,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 226400,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 11.18632343495232,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 301100,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 14.877217253816887,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 100000,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 4.940955580809328,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 3700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.18281535648994515,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 4200,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.2075201343939918,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 22500,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 1.111715005682099,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 278200,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 13.745738425811552,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      },
+      {
+        "wall_ns": 1688600,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 293400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 17.375340518772948,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 59100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.4999407793438353,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 156400,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 9.262110624185716,
+            "cpu_percent_caller": null
+          },
+          "cm_representation_compile": {
+            "wall_ns": 253700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 15.024280469027596,
+            "cpu_percent_caller": null
+          },
+          "lowering": {
+            "wall_ns": 38000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 2.2503849342650715,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 11700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.6928816771289826,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 217200,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 12.862726519009831,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 288700,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 17.097003434798058,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 97200,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 5.756247779225394,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 3100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.18358403411109794,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 3400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.20135023096055904,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 9700,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.574440364799242,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 257000,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 15.219708634371669,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      },
+      {
+        "wall_ns": 1638500,
+        "cpu_ns": 0,
+        "phases": {
+          "input_document_loading_json_decode": {
+            "wall_ns": 322400,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 19.676533414708576,
+            "cpu_percent_caller": null
+          },
+          "input_parse": {
+            "wall_ns": 58500,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 3.570338724443088,
+            "cpu_percent_caller": null
+          },
+          "variable_basis_mapping": {
+            "wall_ns": 143100,
+            "cpu_ns": 0,
+            "calls": 65,
+            "wall_percent_caller": 8.733597802868477,
+            "cpu_percent_caller": null
+          },
+          "cm_representation_compile": {
+            "wall_ns": 215600,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 13.158376563930425,
+            "cpu_percent_caller": null
+          },
+          "lowering": {
+            "wall_ns": 36200,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 2.2093378089716205,
+            "cpu_percent_caller": null
+          },
+          "restriction_context_construction": {
+            "wall_ns": 12100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.7384803173634422,
+            "cpu_percent_caller": null
+          },
+          "mask_context_binding": {
+            "wall_ns": 212500,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 12.969179127250534,
+            "cpu_percent_caller": null
+          },
+          "execution_kernel": {
+            "wall_ns": 285400,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 17.418370460787305,
+            "cpu_percent_caller": null
+          },
+          "packed_conversion": {
+            "wall_ns": 95100,
+            "cpu_ns": 0,
+            "calls": 64,
+            "wall_percent_caller": 5.804089105889533,
+            "cpu_percent_caller": null
+          },
+          "correctness_guard": {
+            "wall_ns": 2600,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.15868172108635947,
+            "cpu_percent_caller": null
+          },
+          "output_delivery": {
+            "wall_ns": 3100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.18919743667989014,
+            "cpu_percent_caller": null
+          },
+          "delivery_digest": {
+            "wall_ns": 7100,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 0.4333231614281355,
+            "cpu_percent_caller": null
+          },
+          "unresolved_python_bookkeeping": {
+            "wall_ns": 244800,
+            "cpu_ns": 0,
+            "calls": 1,
+            "wall_percent_caller": 14.940494354592616,
+            "cpu_percent_caller": null
+          }
+        },
+        "result": {
+          "correct": true,
+          "output_bytes": 512,
+          "output_sha256": "b745d1f8e29980ed0621c4fd84b29f3b9d94a520ef1b8a55e1b137f93a6b3b9b",
+          "contexts_unique": 4,
+          "query_count": 64
+        }
+      }
+    ],
+    "summary": {
+      "wall_median_ns": 1135900,
+      "cpu_median_ns": 0,
+      "phase_dilation": 1.4865745224051412
+    },
+    "profile": {
+      "caller_wall_ns": 2467900,
+      "hot_helpers": [
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 423,
+          "function": "_eval_prepared_flat",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 0.00021840000000000002,
+          "cumulative_wall_s": 0.00023140000000000001,
+          "mean_self_wall_s": 3.4125000000000004e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 215,
+          "function": "task_operation",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.0001611,
+          "cumulative_wall_s": 0.0024366,
+          "mean_self_wall_s": 0.0001611
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _io.open>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.0001297,
+          "cumulative_wall_s": 0.0001711,
+          "mean_self_wall_s": 0.0001297
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 1051,
+          "function": "_shared_assoc_uids",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 0.000124,
+          "cumulative_wall_s": 0.00021490000000000002,
+          "mean_self_wall_s": 0.000124
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 374,
+          "function": "_bind_flat_program",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 0.000105,
+          "cumulative_wall_s": 0.0001385,
+          "mean_self_wall_s": 1.640625e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 82,
+          "function": "call",
+          "primitive_calls": 265,
+          "total_calls": 265,
+          "self_wall_s": 9.410000000000001e-05,
+          "cumulative_wall_s": 0.0022098,
+          "mean_self_wall_s": 3.5509433962264153e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 246,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 8.94e-05,
+          "cumulative_wall_s": 0.0001466,
+          "mean_self_wall_s": 1.396875e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\cmbench\\comparative\\sympy_cm_claim_cleanup.py",
+          "line": 46,
+          "function": "parse_expression",
+          "primitive_calls": 1,
+          "total_calls": 28,
+          "self_wall_s": 8.81e-05,
+          "cumulative_wall_s": 0.0001365,
+          "mean_self_wall_s": 3.1464285714285716e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 144,
+          "function": "primitive_prepare",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 8.76e-05,
+          "cumulative_wall_s": 0.00024200000000000003,
+          "mean_self_wall_s": 1.36875e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 1154,
+          "function": "_build_rec",
+          "primitive_calls": 1,
+          "total_calls": 21,
+          "self_wall_s": 6.900000000000001e-05,
+          "cumulative_wall_s": 0.00048760000000000003,
+          "mean_self_wall_s": 3.285714285714286e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 635,
+          "function": "_intern",
+          "primitive_calls": 19,
+          "total_calls": 19,
+          "self_wall_s": 6.71e-05,
+          "cumulative_wall_s": 0.0001415,
+          "mean_self_wall_s": 3.5315789473684214e-06
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 279,
+          "total_calls": 279,
+          "self_wall_s": 5.7400000000000006e-05,
+          "cumulative_wall_s": 5.7400000000000006e-05,
+          "mean_self_wall_s": 2.0573476702508963e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 246,
+          "function": "<genexpr>",
+          "primitive_calls": 448,
+          "total_calls": 448,
+          "self_wall_s": 5.72e-05,
+          "cumulative_wall_s": 5.72e-05,
+          "mean_self_wall_s": 1.2767857142857143e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 329,
+          "function": "compile_flat",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 5.4600000000000006e-05,
+          "cumulative_wall_s": 0.00011080000000000001,
+          "mean_self_wall_s": 5.4600000000000006e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'read' of '_io.TextIOWrapper' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 5.0900000000000004e-05,
+          "cumulative_wall_s": 5.5900000000000004e-05,
+          "mean_self_wall_s": 5.0900000000000004e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 249,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 4.61e-05,
+          "cumulative_wall_s": 7.280000000000001e-05,
+          "mean_self_wall_s": 7.203125e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 326,
+          "total_calls": 326,
+          "self_wall_s": 4.5400000000000006e-05,
+          "cumulative_wall_s": 6.1000000000000005e-05,
+          "mean_self_wall_s": 1.392638036809816e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 84,
+          "total_calls": 84,
+          "self_wall_s": 4.24e-05,
+          "cumulative_wall_s": 8.170000000000001e-05,
+          "mean_self_wall_s": 5.047619047619048e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\json\\decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 3.7800000000000004e-05,
+          "cumulative_wall_s": 3.7800000000000004e-05,
+          "mean_self_wall_s": 3.7800000000000004e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.id>",
+          "primitive_calls": 288,
+          "total_calls": 288,
+          "self_wall_s": 3.5600000000000005e-05,
+          "cumulative_wall_s": 3.5600000000000005e-05,
+          "mean_self_wall_s": 1.2361111111111112e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 775,
+          "function": "make_and",
+          "primitive_calls": 4,
+          "total_calls": 4,
+          "self_wall_s": 3.5000000000000004e-05,
+          "cumulative_wall_s": 0.000156,
+          "mean_self_wall_s": 8.750000000000001e-06
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 227,
+          "total_calls": 227,
+          "self_wall_s": 3.3e-05,
+          "cumulative_wall_s": 3.3e-05,
+          "mean_self_wall_s": 1.4537444933920705e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 389,
+          "function": "execute",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 3.04e-05,
+          "cumulative_wall_s": 0.0024727,
+          "mean_self_wall_s": 3.04e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "line": 419,
+          "function": "evaluate",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 2.83e-05,
+          "cumulative_wall_s": 0.0002597,
+          "mean_self_wall_s": 4.421875e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 740,
+          "function": "_canonicalize_commutative_args",
+          "primitive_calls": 8,
+          "total_calls": 8,
+          "self_wall_s": 2.7000000000000002e-05,
+          "cumulative_wall_s": 4.75e-05,
+          "mean_self_wall_s": 3.3750000000000003e-06
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 445,
+          "function": "_var_sort_key",
+          "primitive_calls": 33,
+          "total_calls": 33,
+          "self_wall_s": 2.6000000000000002e-05,
+          "cumulative_wall_s": 3.69e-05,
+          "mean_self_wall_s": 7.878787878787879e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method '__exit__' of '_io._IOBase' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 2.4800000000000003e-05,
+          "cumulative_wall_s": 2.4800000000000003e-05,
+          "mean_self_wall_s": 2.4800000000000003e-05
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_wall_s": 2.39e-05,
+          "cumulative_wall_s": 2.39e-05,
+          "mean_self_wall_s": 2.39e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "line": 247,
+          "function": "<lambda>",
+          "primitive_calls": 64,
+          "total_calls": 64,
+          "self_wall_s": 2.1000000000000002e-05,
+          "cumulative_wall_s": 0.000263,
+          "mean_self_wall_s": 3.2812500000000003e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 895,
+          "function": "make_xor",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_wall_s": 2.05e-05,
+          "cumulative_wall_s": 7.99e-05,
+          "mean_self_wall_s": 1.025e-05
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 575,
+          "function": "_node_uid",
+          "primitive_calls": 42,
+          "total_calls": 42,
+          "self_wall_s": 2.02e-05,
+          "cumulative_wall_s": 3.3600000000000004e-05,
+          "mean_self_wall_s": 4.80952380952381e-07
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 162,
+          "total_calls": 162,
+          "self_wall_s": 2e-05,
+          "cumulative_wall_s": 2e-05,
+          "mean_self_wall_s": 1.234567901234568e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 455,
+          "function": "_sorted_unique_vars",
+          "primitive_calls": 9,
+          "total_calls": 9,
+          "self_wall_s": 1.6800000000000002e-05,
+          "cumulative_wall_s": 7.44e-05,
+          "mean_self_wall_s": 1.8666666666666669e-06
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 92,
+          "total_calls": 92,
+          "self_wall_s": 1.56e-05,
+          "cumulative_wall_s": 1.56e-05,
+          "mean_self_wall_s": 1.6956521739130436e-07
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "line": 836,
+          "function": "make_or",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_wall_s": 1.3500000000000001e-05,
+          "cumulative_wall_s": 7.15e-05,
+          "mean_self_wall_s": 6.750000000000001e-06
+        }
+      ]
+    },
+    "memory_pass": {
+      "current_traced_bytes": 32570,
+      "peak_traced_bytes": 70887,
+      "net_traced_bytes": 32570,
+      "cumulative_allocated_bytes": null,
+      "native_rss_bytes": null,
+      "semantics": "Python-traced allocations still reachable after result return; cache retention included; native allocations incomplete",
+      "top_net_growth": [
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\docs\\audits\\2026-09-15-cm-time-attribution-deep-dive\\task_diagnostics.py",
+          "bytes": 19031,
+          "objects": 227
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\json\\decoder.py",
+          "bytes": 5848,
+          "objects": 84
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\bitset_backend.py",
+          "bytes": 4512,
+          "objects": 70
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-time-attribution-20260915\\cm_ir.py",
+          "bytes": 1904,
+          "objects": 32
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\tracemalloc.py",
+          "bytes": 680,
+          "objects": 3
+        },
+        {
+          "file": "C:\\Users\\brian\\Documents\\CM_Computation\\cmbench\\comparative\\sympy_cm_claim_cleanup.py",
+          "bytes": 360,
+          "objects": 3
+        },
+        {
+          "file": "C:\\Users\\brian\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\pathlib\\_local.py",
+          "bytes": 179,
+          "objects": 2
+        },
+        {
+          "file": "<string>",
+          "bytes": 56,
+          "objects": 1
+        }
+      ]
+    },
+    "structure": [
+      {
+        "source_dag_nodes": 28,
+        "source_dag_edges": 27,
+        "source_occurrences": 28,
+        "identity_sharing_factor": 1.0,
+        "cm_nodes": 18,
+        "cm_support_sizes": [
+          8,
+          6,
+          3,
+          1,
+          1,
+          1,
+          3,
+          3,
+          2,
+          1,
+          1,
+          2,
+          1,
+          1,
+          5,
+          2,
+          1,
+          1
+        ],
+        "cm_support_total": 43,
+        "live_variables": 8,
+        "requested_basis": 8,
+        "cse_program": {
+          "flat_instructions": 10,
+          "loads": 8,
+          "argument_edges": 19,
+          "executed_word_ops": 12,
+          "executed_bigint_ops": 15,
+          "peak_live_word_buffers": 4
+        },
+        "cm_program": {
+          "flat_instructions": 10,
+          "loads": 8,
+          "argument_edges": 19,
+          "executed_word_ops": 12,
+          "executed_bigint_ops": 15,
+          "peak_live_word_buffers": 4
+        }
+      }
+    ],
+    "inseparable": {
+      "allocation_release_in_kernel_ns": null,
+      "cache_lookup_ns": null,
+      "cache_validation_ns": null,
+      "process_startup_ns": null,
+      "json_source_read_ns": null
+    },
+    "correctness": {
+      "every_sample_exact": true,
+      "oracle": "independent scalar exhaustive outside timed cell"
+    },
+    "uninstrumented_arm_orders": [
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ],
+      [
+        "cse_packed",
+        "cm_packed"
+      ]
+    ],
+    "runtime_preload_scope": "once per matched task/case/query group; not additive across group arms",
+    "worker_caller_wall_ns": 1836500500,
+    "parent_cpu_ns": 15625000,
+    "worker_caller_scope": "all matched arms/repeats and phase/profile/memory/structure passes plus process; NOT a one-call latency or additive across arms"
+  }
+]
