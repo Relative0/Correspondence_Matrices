@@ -1,0 +1,106 @@
+{
+  "base_commit": "e334de594262059cc18cf37eaab56b0f79e94843",
+  "configuration_audit": {
+    "complete_profile_in_existing_ci": false,
+    "existing_ci": ".github/workflows/research-checks.yml",
+    "existing_ci_scope": "focused explicit cross-platform list; Python 3.13; minimal pinned dependencies; 15-minute timeout",
+    "existing_root_pytest_configuration": false
+  },
+  "evidence": {
+    "historical_replay": {
+      "lf_canonical_sha256": "7d9a08e7c72daf650bc62126b89d6d1c8f342887ac806be57f508a8309ec77db",
+      "local_raw_bytes": 24624,
+      "local_raw_sha256": "ca2c338725d5f0edf29ae9a231abbd12f915da9b184847b9a23a5261c6b08d35",
+      "path": "docs/audits/2026-09-14-cm-benchmark-attribution/TEST_COMPARISON.json",
+      "records": 76,
+      "verifier": {
+        "claim_artifacts_verified": 40,
+        "manifest_entries_verified": 85,
+        "statistical_sources_verified": 47,
+        "status": "passed"
+      }
+    },
+    "optional_refusals": {
+      "path": "docs/audits/2026-09-15-cm-overnight-local-portfolio/TEST_RESULTS.json",
+      "raw_bytes": 17746,
+      "raw_sha256": "5913b7ae8538f4abbeae6468441e2aa26be40ad4668f1a81885c604cb1d0e9df",
+      "verifier": {
+        "checked_files": 19,
+        "failures": [],
+        "status": "passed"
+      }
+    }
+  },
+  "environment": {
+    "os": "Windows",
+    "python": "3.13.5",
+    "pytest": "9.1.1"
+  },
+  "focused_ci_local_check": {
+    "exact_attempt": {
+      "errors": 25,
+      "failed": 1,
+      "log": "docs/audits/2026-09-15-cm-windows-pytest-profile/focused-ci-tests.log",
+      "passed": 222,
+      "reason": "managed host denied pytest default temporary root; chart raw-byte identity also differed"
+    },
+    "workspace_temp_retry": {
+      "errors": 0,
+      "failed": 1,
+      "failure": "tests/test_generated_public_chart_data.py::test_generated_chart_data_is_current_and_pages_reference_it",
+      "log": "docs/audits/2026-09-15-cm-windows-pytest-profile/focused-ci-tests-workspace-temp.log",
+      "passed": 247,
+      "reason": "pre-existing CRLF versus LF raw-byte source identity",
+      "skipped": 1
+    }
+  },
+  "profile": "windows-supported",
+  "profile_checks": {
+    "collection": {
+      "active_supported": 1834,
+      "historical_replay_deselected": 76,
+      "optional_modules_ignored": 9,
+      "status": "passed",
+      "total_before_deselection": 1910
+    },
+    "inventory_verify": "passed",
+    "profile_contract_tests": {
+      "passed": 4,
+      "status": "passed"
+    },
+    "py_compile": "passed",
+    "unprofiled_historical_collection": "passed"
+  },
+  "prohibited_actions": {
+    "benchmarks_started": false,
+    "commit_created": false,
+    "dependencies_installed": false,
+    "historical_evidence_rewritten": false,
+    "push_performed": false
+  },
+  "schema": "cm-windows-pytest-profile-audit/v1",
+  "supported_run": {
+    "active_supported": 1834,
+    "deselected": 76,
+    "duration_seconds": 3492.45,
+    "errors": 0,
+    "failed": 0,
+    "junit": "docs/audits/2026-09-15-cm-windows-pytest-profile/windows-supported.xml",
+    "log": "docs/audits/2026-09-15-cm-windows-pytest-profile/windows-supported.log",
+    "passed": 1826,
+    "skipped": 8,
+    "status": "passed",
+    "subtests_passed": 1157,
+    "warnings": 4
+  },
+  "timing_observations": [
+    {
+      "seconds": 1708.623,
+      "test": "tests.test_h6_freeze_portability::test_real_h6_freeze_is_semantically_portable_without_rewriting"
+    },
+    {
+      "seconds": 1326.944,
+      "test": "tests.test_native_batch_freeze_roundtrip::test_freeze_and_oracles_survive_sorted_json_roundtrip"
+    }
+  ]
+}

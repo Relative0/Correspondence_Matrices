@@ -1,0 +1,23 @@
+{
+  "categories": {
+    "active_supported": "All tests under tests/ after the exact optional/refusal modules and historical replay test IDs are removed.",
+    "historical_replay": "Exact nonpassing test IDs from the immutable September 14 baseline. These remain available to the unprofiled suite and are never rewritten by this profile.",
+    "optional_dependency_or_platform_refusal": "Modules explicitly refused or fully skipped by the September 15 isolated Windows audit because an optional dependency or platform facility was unavailable."
+  },
+  "evidence": {
+    "historical_replay": {
+      "expected_records": 76,
+      "json_field": "current_nonpassing",
+      "path": "docs/audits/2026-09-14-cm-benchmark-attribution/TEST_COMPARISON.json",
+      "sha256_lf": "7d9a08e7c72daf650bc62126b89d6d1c8f342887ac806be57f508a8309ec77db"
+    },
+    "optional_refusals": {
+      "expected_all_skipped_modules": 1,
+      "expected_collection_refusal_modules": 8,
+      "path": "docs/audits/2026-09-15-cm-overnight-local-portfolio/TEST_RESULTS.json",
+      "sha256": "5913b7ae8538f4abbeae6468441e2aa26be40ad4668f1a81885c604cb1d0e9df"
+    }
+  },
+  "profile": "windows-supported",
+  "schema": "cm-windows-pytest-profile/v1"
+}
