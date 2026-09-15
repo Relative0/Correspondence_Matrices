@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.684" timestamp="2026-09-15T02:54:28.116015+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_linux_one_pass_confirmation" name="test_frozen_linux_confirmation_package_and_scalar_oracle" time="0.002"><failure message="ValueError: frozen Linux case artifact hash mismatch">def test_frozen_linux_confirmation_package_and_scalar_oracle() -&gt; None:
+&gt;       cases, document = load_cases(FROZEN / "natural_normalization_cases.json")
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_linux_one_pass_confirmation.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/linux_confirmation/natural_normalization_cases.json')
+
+    def load_cases(path: Path) -&gt; tuple[list[dict[str, Any]], dict[str, Any]]:
+        if sha256_file(path) != EXPECTED_CASES_SHA256:
+&gt;           raise ValueError("frozen Linux case artifact hash mismatch")
+E           ValueError: frozen Linux case artifact hash mismatch
+
+scripts\crse_linux_one_pass_confirmation.py:72: ValueError</failure></testcase><testcase classname="tests.test_linux_one_pass_confirmation" name="test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit" time="0.006"><failure message="AssertionError: assert ['bitset_back...it__.py', ...] == ['bitset_back...m_exprlib.py']&#10;  &#10;  Left contains 11 more items, first extra item: 'cm_expr_serde.py'&#10;  Use -v to get more diff">def test_historical_linux_manifest_is_immutable_and_live_source_drift_is_explicit() -&gt; None:
+        manifest = json.loads((FROZEN / "linux_one_pass_upload_manifest.json").read_text(encoding="utf-8"))
+    
+        assert manifest["authorization_status"] == "pending"
+        assert manifest["file_count"] == len(manifest["files"]) == 16
+        assert manifest["bytes"] == sum(row["bytes"] for row in manifest["files"])
+        mismatches = []
+        for row in manifest["files"]:
+            path = ROOT / row["source"]
+            if path.stat().st_size != row["bytes"] or sha256_file(path) != row["sha256"]:
+                mismatches.append(row["source"])
+&gt;       assert mismatches == ["bitset_backend.py", "cm_exprlib.py"]
+E       AssertionError: assert ['bitset_back...it__.py', ...] == ['bitset_back...m_exprlib.py']
+E         
+E         Left contains 11 more items, first extra item: 'cm_expr_serde.py'
+E         Use -v to get more diff
+
+tests\test_linux_one_pass_confirmation.py:39: AssertionError</failure></testcase></testsuite></testsuites>

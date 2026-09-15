@@ -1,0 +1,27 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+______ test_candidate_freeze_is_deterministic_and_blind_to_memory_values ______
+
+    def test_candidate_freeze_is_deterministic_and_blind_to_memory_values():
+>       first = candidate.build_freeze(ROOT)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_cm_comparative_h6_representation_estimator_candidate.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\h6_representation_estimator_candidate.py:78: in build_freeze
+    h6.validate_freeze(parent_freeze, root)
+cmbench\comparative\h6_fresh_process_memory_gate.py:321: in validate_freeze
+    _require(canonical_bytes(replay) == canonical_bytes(freeze), "H6 freeze replay")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'H6 freeze replay'
+
+    def _require(condition: Any, message: str) -> None:
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: H6 freeze replay
+
+cmbench\comparative\h6_fresh_process_memory_gate.py:110: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_comparative_h6_representation_estimator_candidate.py::test_candidate_freeze_is_deterministic_and_blind_to_memory_values
+1 failed, 3 passed in 5.95s

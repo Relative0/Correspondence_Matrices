@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="4" time="0.995" timestamp="2026-09-15T02:59:19.733677+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_architecture_comparison_package" name="test_generated_package_is_exactly_bound_and_non_authorizing" time="0.023"><failure message="AssertionError: assert 38615 == 38464&#10; +  where 38615 = os.stat_result(st_mode=33206, st_ino=3377699724718937, st_dev=17005674527478952702, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789415803, st_mtime=1789395358, st_ctime=1789395358).st_size&#10; +    where os.stat_result(st_mode=33206, st_ino=3377699724718937, st_dev=17005674527478952702, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789415803, st_mtime=1789395358, st_ctime=1789395358) = stat()&#10; +      where stat = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/bitset_backend.py').stat">def test_generated_package_is_exactly_bound_and_non_authorizing():
+        manifest = _load(HERE / "UPLOAD_MANIFEST.json")
+        contract = _load(HERE / "EXECUTION_CONTRACT.json")
+        validation = _load(HERE / "LOCAL_PACKAGE_VALIDATION.json")
+        request = _load(HERE / "RUNPOD_RETRY_002_AUTHORIZATION_REQUEST_20260903.json")
+    
+        assert manifest["authorization_status"] == "upload_not_authorized_exact_approval_pending"
+        assert manifest["file_count"] == len(manifest["files"])
+        assert manifest["bytes"] == sum(row["bytes"] for row in manifest["files"])
+        freeze = _load(ROOT / "docs/recognition/architecture_comparison_freeze_20260903/FREEZE.json")
+        assert {row["path"] for row in freeze["source_closure"]} &lt;= {
+            row["source"] for row in manifest["files"]
+        }
+        for row in manifest["files"]:
+            source = ROOT.joinpath(*Path(row["source"]).parts)
+&gt;           assert source.stat().st_size == row["bytes"]
+E           AssertionError: assert 38615 == 38464
+E            +  where 38615 = os.stat_result(st_mode=33206, st_ino=3377699724718937, st_dev=17005674527478952702, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789415803, st_mtime=1789395358, st_ctime=1789395358).st_size
+E            +    where os.stat_result(st_mode=33206, st_ino=3377699724718937, st_dev=17005674527478952702, st_nlink=1, st_uid=0, st_gid=0, st_size=38615, st_atime=1789415803, st_mtime=1789395358, st_ctime=1789395358) = stat()
+E            +      where stat = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/bitset_backend.py').stat
+
+tests\test_cm_architecture_comparison_package.py:43: AssertionError</failure></testcase><testcase classname="tests.test_cm_architecture_comparison_package" name="test_attempt_001_is_closed_before_measurement_and_bound_to_evidence" time="0.052"><failure message="AssertionError: assert 'd81d2c9f4d76...e79d9f9f809af' == 'f1b85874addc...986268367a0e7'&#10;  &#10;  - f1b85874addc8fd624294582fb06279839225cb997414af4445986268367a0e7&#10;  + d81d2c9f4d76b50650aa2a713771e492f159535a66af03684c1e79d9f9f809af">def test_attempt_001_is_closed_before_measurement_and_bound_to_evidence():
+        first = ROOT / "docs/recognition/architecture_comparison_execution_20260903"
+        status = _load(first / "ATTEMPT_001_STATUS.json")
+        run = first / "runpod-architecture-comparison-execute-001"
+        assert status["status"] == "closed_incomplete_premeasurement"
+        assert status["scientific_result"] == {
+            "decision_bearing_result_produced": False,
+            "independent_verification_run": False,
+            "performance_interpretation_permitted": False,
+            "timed_rows_produced": 0,
+        }
+        assert status["cleanup"]["automatic_replacement_created"] is False
+        assert status["cleanup"]["owned_pod_absent"] is True
+        assert status["run_record_sha256"] == _sha256(run / "RUN.json")
+&gt;       assert status["failure"]["stderr_sha256"] == _sha256(
+            run / "evidence/run-output/architecture-comparison-campaign.stderr.txt"
+        )
+E       AssertionError: assert 'd81d2c9f4d76...e79d9f9f809af' == 'f1b85874addc...986268367a0e7'
+E         
+E         - f1b85874addc8fd624294582fb06279839225cb997414af4445986268367a0e7
+E         + d81d2c9f4d76b50650aa2a713771e492f159535a66af03684c1e79d9f9f809af
+
+tests\test_cm_architecture_comparison_package.py:77: AssertionError</failure></testcase><testcase classname="tests.test_cm_architecture_comparison_package" name="test_declared_refusal_count_matches_the_frozen_schedule" time="0.014" /><testcase classname="tests.test_cm_architecture_comparison_package" name="test_controller_remote_program_compiles_and_exact_authorization_is_bound" time="0.336"><failure message="RuntimeError: architecture comparison authorization artifact mismatch">def test_controller_remote_program_compiles_and_exact_authorization_is_bound():
+        controller = _controller()
+        compile(controller.base.REMOTE_CODE, "&lt;architecture-comparison-remote&gt;", "exec")
+        compile(controller.INSTALL_CODE, "&lt;architecture-comparison-install&gt;", "exec")
+        assert "architecture-comparison-campaign" in controller.base.REMOTE_CODE
+        assert "architecture-comparison-verification" in controller.base.REMOTE_CODE
+        assert "--max-seconds', '420'" in controller.base.REMOTE_CODE
+        assert controller.RESULT_CAP_BYTES == 48 &lt;&lt; 20
+        assert controller.AUTHORIZATION.exists()
+&gt;       authorization = controller.require_authorization()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_cm_architecture_comparison_package.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def require_authorization() -&gt; dict:
+        authorization = load(AUTHORIZATION)
+        manifest = load(MANIFEST)
+        validation = load(LOCAL_VALIDATION)
+        request = load(REQUEST)
+        expected = {
+            "schema": "cm-runpod-architecture-comparison-retry-002-exact-payload-authorization/v1",
+            "authorized": True,
+            "user_total_ceiling_usd": 0.05,
+            "controller_total_ceiling_usd": 0.05,
+            "one_create": True,
+            "no_replacement": True,
+            "source_files": manifest["file_count"],
+            "source_bytes": manifest["bytes"],
+            "planned_rows": TOTAL_ROWS,
+            "lane_rows": LANE_ROWS,
+            "https_ports": ["8080/http"],
+            "vcpu_count": 2,
+            "minimum_ram_gb": 4,
+            "container_disk_gb": 12,
+            "pod_volume_gb": 0,
+            "network_volume": False,
+            "cleanup_seconds": 600,
+            "reconciliation_seconds": 720,
+            "rate_cap_usd_per_hour": 0.25,
+            "total_cost_cap_usd": 0.05,
+            "same_pod_payload_attempt_limit": 6,
+            "health_checks_before_upload": 2,
+            "result_cap_bytes": RESULT_CAP_BYTES,
+            "compiler": "cc",
+            "image": IMAGE,
+            "local_isolated_validation": "pass",
+            "local_validation_pythonpath_injected": False,
+            "credentials_recorded_or_uploaded": False,
+            "prior_attempt_authorization_reused": False,
+            "training": False,
+            "selector_fit": False,
+            "website_update": False,
+            "production_write": False,
+        }
+        if any(authorization.get(key) != value for key, value in expected.items()):
+            raise RuntimeError("architecture comparison authorization scope mismatch")
+        hashes = {
+            "upload_manifest_sha256": sha256(MANIFEST),
+            "protocol_sha256": sha256(PROTOCOL),
+            "execution_contract_sha256": sha256(CONTRACT),
+            "local_validation_sha256": sha256(LOCAL_VALIDATION),
+            "authorization_request_sha256": sha256(REQUEST),
+            "controller_sha256": sha256(Path(__file__)),
+        }
+        if (
+            any(authorization.get(key) != value for key, value in hashes.items())
+            or authorization.get("transport_sources") != transport_source_identities()
+            or any(request.get(key) != value for key, value in hashes.items() if key != "authorization_request_sha256")
+            or request.get("transport_sources") != transport_source_identities()
+            or validation.get("status") != "pass"
+            or validation.get("manifest_sha256") != sha256(MANIFEST)
+            or validation.get("pythonpath_injected") is not False
+            or validation.get("parent_freeze_verification_passed") is not True
+            or validation.get("timing_evidence_produced") is not False
+            or validation.get("decision_bearing_result_produced") is not False
+        ):
+&gt;           raise RuntimeError("architecture comparison authorization artifact mismatch")
+E           RuntimeError: architecture comparison authorization artifact mismatch
+
+scripts\runpod_architecture_comparison_controller.py:253: RuntimeError</failure></testcase></testsuite></testsuites>

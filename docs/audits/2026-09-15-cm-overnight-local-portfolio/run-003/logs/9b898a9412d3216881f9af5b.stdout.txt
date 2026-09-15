@@ -1,0 +1,21 @@
+F..                                                                      [100%]
+================================== FAILURES ===================================
+__________ test_retry_002_evidence_is_complete_exact_and_cleaned_up ___________
+
+    def test_retry_002_evidence_is_complete_exact_and_cleaned_up() -> None:
+        analysis = _load(ANALYSIS)
+        verification = _load(RUN / "independent_verification.json")
+        controller = _load(CONTROLLER)
+        post_inventory = _load(POST_INVENTORY)
+    
+        assert analysis["status"] == "verified_interpretation_complete"
+>       assert analysis["inputs"]["results_sha256"] == _sha256(RUN / "results.json")
+E       AssertionError: assert '4a2b2330fa89...7bf54510c80eb' == '75c55df254e1...1deab13db0755'
+E         
+E         - 75c55df254e1751420f9e583b342f9627c08679759bb5f7a96f1deab13db0755
+E         + 4a2b2330fa894075b57a48439e2a6461604284737407f53a8a57bf54510c80eb
+
+tests\test_cm_architecture_query_ladder_retry_002_analysis.py:53: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_architecture_query_ladder_retry_002_analysis.py::test_retry_002_evidence_is_complete_exact_and_cleaned_up
+1 failed, 2 passed in 1.21s

@@ -1,0 +1,34 @@
+..F.                                                                     [100%]
+================================== FAILURES ===================================
+_______ test_followup_freeze_preserves_parent_cases_and_counterbalance ________
+
+    def test_followup_freeze_preserves_parent_cases_and_counterbalance() -> None:
+>       freeze = build_followup_freeze(
+            project_root=ROOT,
+            source_checkpoint="0" * 40,
+            parent_freeze_path=PARENT_FREEZE.relative_to(ROOT).as_posix(),
+            parent_analysis_path=(
+                ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json"
+            ).relative_to(ROOT).as_posix(),
+            oracles_path=ORACLES.relative_to(ROOT).as_posix(),
+        )
+
+tests\test_cm_architecture_query_ladder_followup.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\architecture_query_ladder_freeze.py:61: in build_followup_freeze
+    verify_parent_freeze(parent_freeze, root)
+cmbench\comparative\architecture_comparison_freeze.py:537: in verify_freeze
+    _require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'freeze verification'
+
+    def _require(condition: Any, message: str) -> None:
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: freeze verification
+
+cmbench\comparative\architecture_comparison_freeze.py:71: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_architecture_query_ladder_followup.py::test_followup_freeze_preserves_parent_cases_and_counterbalance
+1 failed, 3 passed in 11.25s

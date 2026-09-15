@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="1.385" timestamp="2026-09-15T02:52:15.929177+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_p7_w5_freeze.W5FreezeTests" name="test_all_derived_freezes_validate_and_bind_campaign_hashes" time="0.532"><failure message="AssertionError: False is not true">self = &lt;test_cm_p7_w5_freeze.W5FreezeTests testMethod=test_all_derived_freezes_validate_and_bind_campaign_hashes&gt;
+
+    def test_all_derived_freezes_validate_and_bind_campaign_hashes(self):
+        from cmbench.comparative.corpus_freeze import validate_freeze, verify_sources
+    
+        campaign = json.loads((PACKAGE / "campaign.json").read_text(encoding="utf-8"))
+        for row in campaign["definitions"]:
+            freeze = json.loads(
+                (PACKAGE / row["partition_id"] / "freeze.json").read_text(encoding="utf-8")
+            )
+            validate_freeze(freeze)
+            self.assertEqual(freeze["freeze_sha256"], row["freeze_sha256"])
+&gt;           self.assertTrue(verify_sources(freeze, ROOT)["verified"])
+E           AssertionError: False is not true
+
+tests\test_cm_p7_w5_freeze.py:60: AssertionError</failure></testcase><testcase classname="tests.test_cm_p7_w5_freeze.W5FreezeTests" name="test_balanced_partition_is_complete_and_timing_independent" time="0.272" /><testcase classname="tests.test_cm_p7_w5_freeze.W5FreezeTests" name="test_frozen_package_contract" time="0.003" /></testsuite></testsuites>

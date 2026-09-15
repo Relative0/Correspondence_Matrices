@@ -1,0 +1,28 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_normalization_experiment_slice_is_exact_and_bounded ___________
+
+    def test_normalization_experiment_slice_is_exact_and_bounded() -> None:
+        config = NormalizationConfig(case_count=8, rounds=1)
+>       cases, selection, document = load_cases(config)
+                                     ^^^^^^^^^^^^^^^^^^
+
+tests\test_normalization_experiment.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\normalization_experiment.py:92: in load_cases
+    cases, selection = load_natural_cases(natural_config)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = NaturalRuleConfig(case_count=8, min_support=9, max_support=12, rounds=1, min_reuses=32, min_estimated_nodes=8, max_seconds=120.0)
+
+    def load_natural_cases(config: NaturalRuleConfig) -> tuple[list[ProfitabilityCone], dict[str, Any]]:
+        config.validate()
+        if sha256_file(EPFL_CORPUS) != EPFL_CORPUS_SHA256:
+>           raise ValueError("frozen EPFL corpus hash mismatch")
+E           ValueError: frozen EPFL corpus hash mismatch
+
+cmbench\recognition\natural_rule_experiment.py:117: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_normalization_experiment.py::test_normalization_experiment_slice_is_exact_and_bounded
+1 failed in 0.87s

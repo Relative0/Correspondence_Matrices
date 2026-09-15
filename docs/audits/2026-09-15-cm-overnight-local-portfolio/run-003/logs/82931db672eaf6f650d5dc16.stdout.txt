@@ -1,0 +1,50 @@
+F......                                                                  [100%]
+================================== FAILURES ===================================
+________________________ test_exact_v2_bundle_verifies ________________________
+
+modules = (<module 'runpod_w8_logikbench_conversion_controller_v1' from 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-co...ining-work\\maximal-safe-20260827-192909\\continuation-20260829-125214\\verify_w8_logikbench_conversion_upload_v2.py'>)
+
+    def test_exact_v2_bundle_verifies(modules):
+        _controller, _preflight, verifier = modules
+>       assert verifier.verify() == {
+               ^^^^^^^^^^^^^^^^^
+            "verified": True,
+            "manifest_sha256": "5365b4362fc42790bf7107c6b8da29ec61b79faf8d69ac40bcfeb77a87640354",
+            "bundle_sha256": "1b3796d6ded0f6d1b0d6266c5e783f1b0687aae9c7ecfdac901ad625c6e6ff95",
+            "bundle_bytes": 204586,
+            "source_files": 159,
+            "source_bytes": 617274,
+            "static_candidate_clusters": 70,
+            "contains_credentials": False,
+            "performance_measurement": False,
+        }
+
+tests\test_cm_runpod_w8_logikbench_conversion.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\continuation-20260829-125214\verify_w8_logikbench_conversion_upload_v2.py:62: in verify
+    data = source.read_bytes()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/external/logikbench-confirmation-20260830/LICENSE')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\external\\logikbench-confirmation-20260830\\LICENSE'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_runpod_w8_logikbench_conversion.py::test_exact_v2_bundle_verifies
+1 failed, 6 passed in 1.14s

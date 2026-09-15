@@ -1,0 +1,42 @@
+....FF                                                                   [100%]
+================================== FAILURES ===================================
+_ NaturalRuleProfitabilityTests.test_natural_selection_is_sealed_and_bounded __
+
+self = <test_rule_profitability.NaturalRuleProfitabilityTests testMethod=test_natural_selection_is_sealed_and_bounded>
+
+    def test_natural_selection_is_sealed_and_bounded(self):
+        config = NaturalRuleConfig(case_count=8, rounds=1, max_seconds=30)
+>       cases, manifest = load_natural_cases(config)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rule_profitability.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = NaturalRuleConfig(case_count=8, min_support=9, max_support=12, rounds=1, min_reuses=32, min_estimated_nodes=8, max_seconds=30)
+
+    def load_natural_cases(config: NaturalRuleConfig) -> tuple[list[ProfitabilityCone], dict[str, Any]]:
+        config.validate()
+        if sha256_file(EPFL_CORPUS) != EPFL_CORPUS_SHA256:
+>           raise ValueError("frozen EPFL corpus hash mismatch")
+E           ValueError: frozen EPFL corpus hash mismatch
+
+cmbench\recognition\natural_rule_experiment.py:117: ValueError
+_ NaturalRuleProfitabilityTests.test_small_natural_run_is_independently_verifiable _
+
+self = <test_rule_profitability.NaturalRuleProfitabilityTests testMethod=test_small_natural_run_is_independently_verifiable>
+
+    def test_small_natural_run_is_independently_verifiable(self):
+        config = NaturalRuleConfig(case_count=8, rounds=1, max_seconds=30)
+        with tempfile.TemporaryDirectory() as temp:
+            run = Path(temp) / "run"
+            result = run_natural_rule_experiment(config, run, progress=lambda _message: None)
+>           self.assertEqual(result["status"], "complete")
+E           AssertionError: 'failed' != 'complete'
+E           - failed
+E           + complete
+
+tests\test_rule_profitability.py:84: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_rule_profitability.py::NaturalRuleProfitabilityTests::test_natural_selection_is_sealed_and_bounded
+FAILED tests/test_rule_profitability.py::NaturalRuleProfitabilityTests::test_small_natural_run_is_independently_verifiable
+2 failed, 4 passed in 2.37s

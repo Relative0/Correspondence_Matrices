@@ -1,0 +1,46 @@
+F.F                                                                      [100%]
+================================== FAILURES ===================================
+_________ test_counterbalanced_schedule_has_exact_frozen_cardinality __________
+
+    def test_counterbalanced_schedule_has_exact_frozen_cardinality():
+>       frozen = q64.load_verified_parent(q64.ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_query_ladder_q64_execution.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\query_ladder_q64_execution.py:126: in load_verified_parent
+    _require(file_sha256(path) == PARENT_FILE_SHA256, "parent FREEZE.json byte identity")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'parent FREEZE.json byte identity'
+
+    def _require(condition: Any, message: str) -> None:
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: parent FREEZE.json byte identity
+
+cmbench\recognition\query_ladder_q64_execution.py:92: ValueError
+___________ test_raw_verifier_fails_closed_on_a_zero_or_missing_row ___________
+
+    def test_raw_verifier_fails_closed_on_a_zero_or_missing_row():
+>       frozen = q64.load_verified_parent(q64.ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_query_ladder_q64_execution.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\query_ladder_q64_execution.py:126: in load_verified_parent
+    _require(file_sha256(path) == PARENT_FILE_SHA256, "parent FREEZE.json byte identity")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'parent FREEZE.json byte identity'
+
+    def _require(condition: Any, message: str) -> None:
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: parent FREEZE.json byte identity
+
+cmbench\recognition\query_ladder_q64_execution.py:92: ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_query_ladder_q64_execution.py::test_counterbalanced_schedule_has_exact_frozen_cardinality
+FAILED tests/test_query_ladder_q64_execution.py::test_raw_verifier_fails_closed_on_a_zero_or_missing_row
+2 failed, 1 passed in 1.20s

@@ -1,0 +1,38 @@
+.F.............                                                          [100%]
+================================== FAILURES ===================================
+_ test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit _
+
+    def test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit():
+        manifest = _manifest()
+        assert manifest["authorization_status"] == "pending"
+        assert len(manifest["files"]) == 71
+        assert manifest["bytes"] == 1_680_864
+        assert len({row["target"] for row in manifest["files"]}) == 71
+        assert not any(".env" in row["source"].lower() for row in manifest["files"])
+        assert hashlib.sha256(controller.MANIFEST_PATH.read_bytes()).hexdigest() == (
+            "9149a41912e8b909fb8ae8871a9b72356a5f35a5cb3938a8034e2cbe51aa1e11"
+        )
+        mismatches = []
+        for row in manifest["files"]:
+            source = controller.base.ROOT / row["source"]
+            data = source.read_bytes()
+            if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
+                mismatches.append(row["source"])
+>       assert mismatches == [
+            "bitset_backend.py",
+            "cm_bench.py",
+            "cm_exprlib.py",
+            "cmbench/backends/robdd_dd.py",
+            "cmbench/config.py",
+            "cmbench/enums.py",
+        ]
+E       AssertionError: assert ['bitset_back...erde.py', ...] == ['bitset_back...nch/enums.py']
+E         
+E         At index 2 diff: 'cm_build.py' != 'cm_exprlib.py'
+E         Left contains 32 more items, first extra item: 'cm_exprlib.py'
+E         Use -v to get more diff
+
+tests\test_cm_runpod_corpus_offline.py:48: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_runpod_corpus_offline.py::test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit
+1 failed, 14 passed in 1.06s

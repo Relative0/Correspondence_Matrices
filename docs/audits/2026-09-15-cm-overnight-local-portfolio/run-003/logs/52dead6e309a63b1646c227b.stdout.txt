@@ -1,0 +1,17 @@
+.F.                                                                  [100%]
+================================== FAILURES ===================================
+_ ComparativeP7PackageTests.test_frozen_sources_are_unique_safe_project_files _
+
+self = <test_cm_comparative_p7_package.ComparativeP7PackageTests testMethod=test_frozen_sources_are_unique_safe_project_files>
+
+    def test_frozen_sources_are_unique_safe_project_files(self):
+        freeze = json.loads(FREEZE.read_text(encoding="utf-8"))
+        paths = package._freeze_sources(freeze)
+        self.assertEqual(len(paths), 57)
+>       self.assertTrue(all((ROOT / value).is_file() for value in paths))
+E       AssertionError: False is not true
+
+tests\test_cm_comparative_p7_package.py:32: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_comparative_p7_package.py::ComparativeP7PackageTests::test_frozen_sources_are_unique_safe_project_files
+1 failed, 2 passed, 4 subtests passed in 1.34s

@@ -1,0 +1,21 @@
+....F                                                    [100%]
+================================== FAILURES ===================================
+_ ProvedRuleExperimentTests.test_small_run_is_exact_and_independently_verifiable _
+
+self = <test_recognition_rules.ProvedRuleExperimentTests testMethod=test_small_run_is_exact_and_independently_verifiable>
+
+    def test_small_run_is_exact_and_independently_verifiable(self):
+        config = RuleExperimentConfig(data_seed=91, batch_sizes=(1, 8), rounds=1,
+                                      epfl_limit=2, negative_controls=4, max_seconds=30)
+        with tempfile.TemporaryDirectory() as temp:
+            run = Path(temp) / "run"
+            result = run_rule_experiment(config, run, progress=lambda _message: None)
+>           self.assertEqual(result["status"], "complete")
+E           AssertionError: 'failed' != 'complete'
+E           - failed
+E           + complete
+
+tests\test_recognition_rules.py:101: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_recognition_rules.py::ProvedRuleExperimentTests::test_small_run_is_exact_and_independently_verifiable
+1 failed, 4 passed, 16 subtests passed in 1.33s

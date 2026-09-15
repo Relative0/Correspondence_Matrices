@@ -1,0 +1,41 @@
+.....F.F                 [100%]
+================================== FAILURES ===================================
+_ MilestoneDExperimentTests.test_epfl_d_slice_excludes_milestone_c_and_is_exact _
+
+self = <test_recognition_computation.MilestoneDExperimentTests testMethod=test_epfl_d_slice_excludes_milestone_c_and_is_exact>
+
+    def test_epfl_d_slice_excludes_milestone_c_and_is_exact(self):
+>       cases, manifest = load_epfl_d_cases(4)
+                          ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_recognition_computation.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+limit = 4
+
+    def load_epfl_d_cases(limit: int) -> tuple[list[ComputationCase], dict[str, Any]]:
+        if sha256_file(EPFL_CORPUS) != EPFL_CORPUS_SHA256:
+>           raise ValueError("frozen EPFL corpus hash mismatch")
+E           ValueError: frozen EPFL corpus hash mismatch
+
+cmbench\recognition\computation_experiment.py:601: ValueError
+_ MilestoneDExperimentTests.test_small_complete_pipeline_retains_exact_artifacts _
+
+self = <test_recognition_computation.MilestoneDExperimentTests testMethod=test_small_complete_pipeline_retains_exact_artifacts>
+
+    def test_small_complete_pipeline_retains_exact_artifacts(self):
+        config = ComputationConfig(data_seed=71, parent_counts=(2, 1, 1, 1),
+                                   rounds=1, epfl_limit=2, max_seconds=60)
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "run"
+            result = run_computation_experiment(config, output, progress=lambda _message: None)
+>           self.assertEqual(result["status"], "complete")
+E           AssertionError: 'failed' != 'complete'
+E           - failed
+E           + complete
+
+tests\test_recognition_computation.py:131: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_recognition_computation.py::MilestoneDExperimentTests::test_epfl_d_slice_excludes_milestone_c_and_is_exact
+FAILED tests/test_recognition_computation.py::MilestoneDExperimentTests::test_small_complete_pipeline_retains_exact_artifacts
+2 failed, 6 passed, 120 subtests passed in 1.40s

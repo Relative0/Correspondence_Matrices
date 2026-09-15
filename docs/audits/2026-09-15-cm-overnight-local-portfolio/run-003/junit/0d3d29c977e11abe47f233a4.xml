@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="5.782" timestamp="2026-09-15T02:50:40.389051+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_comparative_h6_representation_estimator_candidate" name="test_candidate_freeze_is_deterministic_and_blind_to_memory_values" time="5.078"><failure message="ValueError: H6 freeze replay">def test_candidate_freeze_is_deterministic_and_blind_to_memory_values():
+&gt;       first = candidate.build_freeze(ROOT)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_cm_comparative_h6_representation_estimator_candidate.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\h6_representation_estimator_candidate.py:78: in build_freeze
+    h6.validate_freeze(parent_freeze, root)
+cmbench\comparative\h6_fresh_process_memory_gate.py:321: in validate_freeze
+    _require(canonical_bytes(replay) == canonical_bytes(freeze), "H6 freeze replay")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'H6 freeze replay'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: H6 freeze replay
+
+cmbench\comparative\h6_fresh_process_memory_gate.py:110: ValueError</failure></testcase><testcase classname="tests.test_cm_comparative_h6_representation_estimator_candidate" name="test_upper_envelope_covers_every_training_cell_and_is_nonnegative" time="0.001" /><testcase classname="tests.test_cm_comparative_h6_representation_estimator_candidate" name="test_cell_aggregation_keeps_all_arms_queries_and_replicates" time="0.002" /><testcase classname="tests.test_cm_comparative_h6_representation_estimator_candidate" name="test_protocol_forbids_second_candidate_and_production_activation" time="0.001" /></testsuite></testsuites>

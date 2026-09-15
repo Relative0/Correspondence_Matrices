@@ -1,0 +1,3 @@
+# Superseded smoke attempt
+
+This attempt executed three affine test-module cells successfully and verified their cleanup, log and JUnit capture. It was stopped before unattended execution because controller concurrency needed an explicit exclusive lock and the preparation step needed executed-source snapshots in addition to recorded hashes. The old controller bytes were not snapshotted, so this attempt is excluded from reproducible campaign evidence. Its plan, state, ledger and measured outputs remain preserved for traceability. `run-002` is the successor; no `run-001` measurement is imported into it.

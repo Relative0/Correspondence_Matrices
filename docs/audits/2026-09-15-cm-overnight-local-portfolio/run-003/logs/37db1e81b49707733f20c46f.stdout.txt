@@ -1,0 +1,28 @@
+.F                                                                       [100%]
+================================== FAILURES ===================================
+_ EPFLContextPilotTests.test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs _
+
+self = <test_cm_epfl_context_pilot.EPFLContextPilotTests testMethod=test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs>
+
+    def test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs(self):
+        record = next(
+>           item for item in pilot.load_records()
+                             ^^^^^^^^^^^^^^^^^^^^
+            if item["synt_support_size"] != item["sem_support_size"]
+        )
+
+tests\test_cm_epfl_context_pilot.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+limit = 0
+
+    def load_records(limit: int = 0) -> list[dict]:
+        actual = sha256_file(CORPUS)
+        if actual != EXPECTED_CORPUS_SHA256:
+>           raise SystemExit(f"corpus SHA-256 mismatch: {actual}")
+E           SystemExit: corpus SHA-256 mismatch: a834c98d04ceb00b0017d1c93816596c8da4d1cbc6409045103e17f31a226744
+
+deliverables_n22_24\master_explainer_2026_08_03\use_case_benchmarks_2026-08-27\cm_epfl_context_pilot.py:61: SystemExit
+=========================== short test summary info ===========================
+FAILED tests/test_cm_epfl_context_pilot.py::EPFLContextPilotTests::test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs
+1 failed, 1 passed in 0.94s

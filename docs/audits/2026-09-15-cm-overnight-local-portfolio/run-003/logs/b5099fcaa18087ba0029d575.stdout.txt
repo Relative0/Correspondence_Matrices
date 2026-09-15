@@ -1,0 +1,36 @@
+F.                                                                       [100%]
+================================== FAILURES ===================================
+_______ C7LinuxConfirmationTests.test_portable_workload_replays_exactly _______
+
+self = <test_c7_linux_confirmation.C7LinuxConfirmationTests testMethod=test_portable_workload_replays_exactly>
+
+    def test_portable_workload_replays_exactly(self):
+>       self.assertEqual(hashlib.sha256(DATASET.read_bytes()).hexdigest(), EXPECTED_DATASET_SHA256)
+                                        ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_c7_linux_confirmation.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/yosys-source-anf-confirmation-20260830-002/dataset.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\yosys-source-anf-confirmation-20260830-002\\dataset.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/test_c7_linux_confirmation.py::C7LinuxConfirmationTests::test_portable_workload_replays_exactly
+1 failed, 1 passed in 0.79s

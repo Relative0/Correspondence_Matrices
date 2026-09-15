@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="0.981" timestamp="2026-09-15T02:56:09.491063+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_query_ladder_q64_execution" name="test_counterbalanced_schedule_has_exact_frozen_cardinality" time="0.006"><failure message="ValueError: parent FREEZE.json byte identity">def test_counterbalanced_schedule_has_exact_frozen_cardinality():
+&gt;       frozen = q64.load_verified_parent(q64.ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_query_ladder_q64_execution.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\query_ladder_q64_execution.py:126: in load_verified_parent
+    _require(file_sha256(path) == PARENT_FILE_SHA256, "parent FREEZE.json byte identity")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'parent FREEZE.json byte identity'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: parent FREEZE.json byte identity
+
+cmbench\recognition\query_ladder_q64_execution.py:92: ValueError</failure></testcase><testcase classname="tests.test_query_ladder_q64_execution" name="test_standard_library_oracle_handles_all_boolean_operators" time="0.001" /><testcase classname="tests.test_query_ladder_q64_execution" name="test_raw_verifier_fails_closed_on_a_zero_or_missing_row" time="0.007"><failure message="ValueError: parent FREEZE.json byte identity">def test_raw_verifier_fails_closed_on_a_zero_or_missing_row():
+&gt;       frozen = q64.load_verified_parent(q64.ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_query_ladder_q64_execution.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\query_ladder_q64_execution.py:126: in load_verified_parent
+    _require(file_sha256(path) == PARENT_FILE_SHA256, "parent FREEZE.json byte identity")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'parent FREEZE.json byte identity'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: parent FREEZE.json byte identity
+
+cmbench\recognition\query_ladder_q64_execution.py:92: ValueError</failure></testcase></testsuite></testsuites>

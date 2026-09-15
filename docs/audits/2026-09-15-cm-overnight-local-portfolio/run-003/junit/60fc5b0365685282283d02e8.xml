@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="10.930" timestamp="2026-09-15T02:59:25.479151+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_architecture_query_ladder_followup" name="test_every_query_count_is_an_exact_distinct_cell" time="9.560" /><testcase classname="tests.test_cm_architecture_query_ladder_followup" name="test_isolated_process_cleanup_does_not_collect_the_inherited_heap" time="0.004" /><testcase classname="tests.test_cm_architecture_query_ladder_followup" name="test_followup_freeze_preserves_parent_cases_and_counterbalance" time="0.365"><failure message="ValueError: freeze verification">def test_followup_freeze_preserves_parent_cases_and_counterbalance() -&gt; None:
+&gt;       freeze = build_followup_freeze(
+            project_root=ROOT,
+            source_checkpoint="0" * 40,
+            parent_freeze_path=PARENT_FREEZE.relative_to(ROOT).as_posix(),
+            parent_analysis_path=(
+                ROOT / "docs/recognition/architecture_comparison_execution_retry_20260903/ANALYSIS.json"
+            ).relative_to(ROOT).as_posix(),
+            oracles_path=ORACLES.relative_to(ROOT).as_posix(),
+        )
+
+tests\test_cm_architecture_query_ladder_followup.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\comparative\architecture_query_ladder_freeze.py:61: in build_followup_freeze
+    verify_parent_freeze(parent_freeze, root)
+cmbench\comparative\architecture_comparison_freeze.py:537: in verify_freeze
+    _require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'freeze verification'
+
+    def _require(condition: Any, message: str) -&gt; None:
+        if not condition:
+&gt;           raise ValueError(message)
+E           ValueError: freeze verification
+
+cmbench\comparative\architecture_comparison_freeze.py:71: ValueError</failure></testcase><testcase classname="tests.test_cm_architecture_query_ladder_followup" name="test_isolated_memory_path_fails_closed_off_linux" time="0.005" /></testsuite></testsuites>

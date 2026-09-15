@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="6" time="2.272" timestamp="2026-09-15T02:56:42.735941+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_rule_profitability.ProfitabilityGateTests" name="test_gate_uses_only_task_reuse_and_upstream_size" time="0.001" /><testcase classname="tests.test_rule_profitability.ProfitabilityGateTests" name="test_register_still_preserves_all_tracks" time="0.004" /><testcase classname="tests.test_rule_profitability.ProfitabilityGateTests" name="test_small_run_is_exact_and_independently_verifiable" time="1.500" /><testcase classname="tests.test_rule_profitability.ProfitabilityGateTests" name="test_versions_cover_add_remove_and_revert" time="0.013" /><testcase classname="tests.test_rule_profitability.NaturalRuleProfitabilityTests" name="test_natural_selection_is_sealed_and_bounded" time="0.002"><failure message="ValueError: frozen EPFL corpus hash mismatch">self = &lt;test_rule_profitability.NaturalRuleProfitabilityTests testMethod=test_natural_selection_is_sealed_and_bounded&gt;
+
+    def test_natural_selection_is_sealed_and_bounded(self):
+        config = NaturalRuleConfig(case_count=8, rounds=1, max_seconds=30)
+&gt;       cases, manifest = load_natural_cases(config)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rule_profitability.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = NaturalRuleConfig(case_count=8, min_support=9, max_support=12, rounds=1, min_reuses=32, min_estimated_nodes=8, max_seconds=30)
+
+    def load_natural_cases(config: NaturalRuleConfig) -&gt; tuple[list[ProfitabilityCone], dict[str, Any]]:
+        config.validate()
+        if sha256_file(EPFL_CORPUS) != EPFL_CORPUS_SHA256:
+&gt;           raise ValueError("frozen EPFL corpus hash mismatch")
+E           ValueError: frozen EPFL corpus hash mismatch
+
+cmbench\recognition\natural_rule_experiment.py:117: ValueError</failure></testcase><testcase classname="tests.test_rule_profitability.NaturalRuleProfitabilityTests" name="test_small_natural_run_is_independently_verifiable" time="0.061"><failure message="AssertionError: 'failed' != 'complete'&#10;- failed&#10;+ complete">self = &lt;test_rule_profitability.NaturalRuleProfitabilityTests testMethod=test_small_natural_run_is_independently_verifiable&gt;
+
+    def test_small_natural_run_is_independently_verifiable(self):
+        config = NaturalRuleConfig(case_count=8, rounds=1, max_seconds=30)
+        with tempfile.TemporaryDirectory() as temp:
+            run = Path(temp) / "run"
+            result = run_natural_rule_experiment(config, run, progress=lambda _message: None)
+&gt;           self.assertEqual(result["status"], "complete")
+E           AssertionError: 'failed' != 'complete'
+E           - failed
+E           + complete
+
+tests\test_rule_profitability.py:84: AssertionError</failure></testcase></testsuite></testsuites>

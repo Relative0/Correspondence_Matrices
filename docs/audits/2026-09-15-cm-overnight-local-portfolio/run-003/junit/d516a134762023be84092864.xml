@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.770" timestamp="2026-09-15T02:54:38.408414+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_native_portfolio_reassessment" name="test_native_portfolio_closure_stops_training_and_prospective_use" time="0.001"><failure message="FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\neural-architecture-reassessment-development-20260902-001\\manifest.json'">def test_native_portfolio_closure_stops_training_and_prospective_use() -&gt; None:
+&gt;       result = build_assessment()
+                 ^^^^^^^^^^^^^^^^^^
+
+tests\test_native_portfolio_reassessment.py:16: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\native_portfolio_reassessment.py:71: in build_assessment
+    prior, native, native_verification = _load_inputs()
+                                         ^^^^^^^^^^^^^^
+cmbench\recognition\native_portfolio_reassessment.py:55: in _load_inputs
+    prior_verification = verify_prior_reassessment(PRIOR_RUN)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:438: in verify_development_artifact
+    manifest = read_json(run / "manifest.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/neural-architecture-reassessment-development-20260902-001/manifest.json')
+follow_symlinks = True
+
+    def stat(self, *, follow_symlinks=True):
+        """
+        Return the result of the stat() system call on this path, like
+        os.stat() does.
+        """
+&gt;       return os.stat(self, follow_symlinks=follow_symlinks)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\neural-architecture-reassessment-development-20260902-001\\manifest.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:515: FileNotFoundError</failure></testcase><testcase classname="tests.test_native_portfolio_reassessment" name="test_retained_native_portfolio_reassessment_replays" time="0.001" /></testsuite></testsuites>

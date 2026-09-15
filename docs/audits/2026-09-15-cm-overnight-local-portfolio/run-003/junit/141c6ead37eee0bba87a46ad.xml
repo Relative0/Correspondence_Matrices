@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="11" failures="0" skipped="0" tests="11" time="1.115" timestamp="2026-09-15T02:53:40.311695+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_adaptive_one_pass_preserves_exact_partition" time="0.002"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c11_holdout_is_balanced_and_disjoint_from_c7" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c12_holdout_is_balanced_and_disjoint_from_prior_source_data" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c13_budget_boundaries_prefix_reuse_and_measurement_switch" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c13_generated_expressions_match_independent_truth_through_four_variables" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c14_compiled_shadow_preserves_exact_result" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_c14_task_policy_abstention_and_global_disable" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_features_are_bounded_and_o1_subset_agrees" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_frozen_policy_validates_and_selects_without_labels" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_greedy_tree_is_deterministic_and_selects_expected_regions" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase><testcase classname="tests.test_exact_dispatcher.ExactDispatcherTests" name="test_staged_guard_preserves_exact_set_or_packed_partition" time="0.001"><error message="failed on setup with &quot;ValueError: changed Yosys human source fixture: LICENSE.txt&quot;">cls = &lt;class 'test_exact_dispatcher.ExactDispatcherTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.documents, _provenance = make_yosys_human_documents()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exact_dispatcher.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</error></testcase></testsuite></testsuites>

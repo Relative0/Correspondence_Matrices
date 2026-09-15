@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="17" time="0.606" timestamp="2026-09-15T02:50:56.911257+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_built_wheel_metadata_is_checked" time="0.010" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_cudd_export_preserves_manager_and_shared_dag" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_dependency_lock_refuses_ambiguous_or_unbounded_locations" time="0.007" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_dimacs_zero_width_and_empty_clause_are_unambiguous" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_fetch_requires_exact_payload_identity" time="0.010" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_frozen_dependency_lock_is_exact_and_bounded" time="0.001" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_native_worker_has_explicit_nonperformance_measurement_fence" time="0.002" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_non_linux_refusal_writes_bounded_evidence_without_setup" time="0.028" /><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_pinned_d4_is_identified_as_static_elf_without_ldd" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\external\\d4v2\\scripts\\d4ScriptsCompetition\\bin\\d4'">self = &lt;test_cm_comparative_native_scout.ComparativeNativeScoutTests testMethod=test_pinned_d4_is_identified_as_static_elf_without_ldd&gt;
+
+    def test_pinned_d4_is_identified_as_static_elf_without_ldd(self):
+        binary = scout.ROOT / scout.D4
+&gt;       self.assertEqual(scout.sha256_file(binary), scout.D4_SHA256)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_cm_comparative_native_scout.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\cm_comparative_native_scout.py:61: in sha256_file
+    with path.open("rb") as handle:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/external/d4v2/scripts/d4ScriptsCompetition/bin/d4')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\external\\d4v2\\scripts\\d4ScriptsCompetition\\bin\\d4'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.test_cm_comparative_native_scout.ComparativeNativeScoutTests" name="test_zero_width_cudd_skips_meaningless_reorder" time="0.001" /></testsuite></testsuites>

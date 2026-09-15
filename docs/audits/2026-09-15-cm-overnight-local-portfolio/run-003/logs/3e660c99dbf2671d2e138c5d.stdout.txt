@@ -1,0 +1,23 @@
+F..                                                                      [100%]
+================================== FAILURES ===================================
+__ W5FreezeTests.test_all_derived_freezes_validate_and_bind_campaign_hashes ___
+
+self = <test_cm_p7_w5_freeze.W5FreezeTests testMethod=test_all_derived_freezes_validate_and_bind_campaign_hashes>
+
+    def test_all_derived_freezes_validate_and_bind_campaign_hashes(self):
+        from cmbench.comparative.corpus_freeze import validate_freeze, verify_sources
+    
+        campaign = json.loads((PACKAGE / "campaign.json").read_text(encoding="utf-8"))
+        for row in campaign["definitions"]:
+            freeze = json.loads(
+                (PACKAGE / row["partition_id"] / "freeze.json").read_text(encoding="utf-8")
+            )
+            validate_freeze(freeze)
+            self.assertEqual(freeze["freeze_sha256"], row["freeze_sha256"])
+>           self.assertTrue(verify_sources(freeze, ROOT)["verified"])
+E           AssertionError: False is not true
+
+tests\test_cm_p7_w5_freeze.py:60: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_cm_p7_w5_freeze.py::W5FreezeTests::test_all_derived_freezes_validate_and_bind_campaign_hashes
+1 failed, 2 passed in 1.53s

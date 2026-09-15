@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.761" timestamp="2026-09-15T03:00:36.517125+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_epfl_context_pilot.EPFLContextPilotTests" name="test_completed_repeat_passes_independent_reaggregation" time="0.045" /><testcase classname="tests.test_cm_epfl_context_pilot.EPFLContextPilotTests" name="test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs" time="0.004"><failure message="SystemExit: corpus SHA-256 mismatch: a834c98d04ceb00b0017d1c93816596c8da4d1cbc6409045103e17f31a226744">self = &lt;test_cm_epfl_context_pilot.EPFLContextPilotTests testMethod=test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs&gt;
+
+    def test_contexts_preserve_syntactic_axes_and_fix_only_semantic_inputs(self):
+        record = next(
+&gt;           item for item in pilot.load_records()
+                             ^^^^^^^^^^^^^^^^^^^^
+            if item["synt_support_size"] != item["sem_support_size"]
+        )
+
+tests\test_cm_epfl_context_pilot.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+limit = 0
+
+    def load_records(limit: int = 0) -&gt; list[dict]:
+        actual = sha256_file(CORPUS)
+        if actual != EXPECTED_CORPUS_SHA256:
+&gt;           raise SystemExit(f"corpus SHA-256 mismatch: {actual}")
+E           SystemExit: corpus SHA-256 mismatch: a834c98d04ceb00b0017d1c93816596c8da4d1cbc6409045103e17f31a226744
+
+deliverables_n22_24\master_explainer_2026_08_03\use_case_benchmarks_2026-08-27\cm_epfl_context_pilot.py:61: SystemExit</failure></testcase></testsuite></testsuites>

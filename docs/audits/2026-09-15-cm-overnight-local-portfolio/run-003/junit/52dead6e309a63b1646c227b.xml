@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="1.183" timestamp="2026-09-15T02:51:05.342488+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_comparative_p7_package.ComparativeP7PackageTests" name="test_dependency_closure_includes_known_runtime_imports" time="0.544" /><testcase classname="tests.test_cm_comparative_p7_package.ComparativeP7PackageTests" name="test_frozen_sources_are_unique_safe_project_files" time="0.033"><failure message="AssertionError: False is not true">self = &lt;test_cm_comparative_p7_package.ComparativeP7PackageTests testMethod=test_frozen_sources_are_unique_safe_project_files&gt;
+
+    def test_frozen_sources_are_unique_safe_project_files(self):
+        freeze = json.loads(FREEZE.read_text(encoding="utf-8"))
+        paths = package._freeze_sources(freeze)
+        self.assertEqual(len(paths), 57)
+&gt;       self.assertTrue(all((ROOT / value).is_file() for value in paths))
+E       AssertionError: False is not true
+
+tests\test_cm_comparative_p7_package.py:32: AssertionError</failure></testcase><testcase classname="tests.test_cm_comparative_p7_package.ComparativeP7PackageTests" name="test_secret_like_and_escaping_paths_are_refused" time="0.002" /></testsuite></testsuites>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="15" time="0.989" timestamp="2026-09-15T02:52:35.012980+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_frozen_remote_program_has_only_the_corpus_command" time="0.004" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit" time="0.083"><failure message="AssertionError: assert ['bitset_back...erde.py', ...] == ['bitset_back...nch/enums.py']&#10;  &#10;  At index 2 diff: 'cm_build.py' != 'cm_exprlib.py'&#10;  Left contains 32 more items, first extra item: 'cm_exprlib.py'&#10;  Use -v to get more diff">def test_historical_upload_manifest_is_immutable_and_live_source_drift_is_explicit():
+        manifest = _manifest()
+        assert manifest["authorization_status"] == "pending"
+        assert len(manifest["files"]) == 71
+        assert manifest["bytes"] == 1_680_864
+        assert len({row["target"] for row in manifest["files"]}) == 71
+        assert not any(".env" in row["source"].lower() for row in manifest["files"])
+        assert hashlib.sha256(controller.MANIFEST_PATH.read_bytes()).hexdigest() == (
+            "9149a41912e8b909fb8ae8871a9b72356a5f35a5cb3938a8034e2cbe51aa1e11"
+        )
+        mismatches = []
+        for row in manifest["files"]:
+            source = controller.base.ROOT / row["source"]
+            data = source.read_bytes()
+            if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
+                mismatches.append(row["source"])
+&gt;       assert mismatches == [
+            "bitset_backend.py",
+            "cm_bench.py",
+            "cm_exprlib.py",
+            "cmbench/backends/robdd_dd.py",
+            "cmbench/config.py",
+            "cmbench/enums.py",
+        ]
+E       AssertionError: assert ['bitset_back...erde.py', ...] == ['bitset_back...nch/enums.py']
+E         
+E         At index 2 diff: 'cm_build.py' != 'cm_exprlib.py'
+E         Left contains 32 more items, first extra item: 'cm_exprlib.py'
+E         Use -v to get more diff
+
+tests\test_cm_runpod_corpus_offline.py:48: AssertionError</failure></testcase><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_historical_bundle_rebuild_refuses_live_source_drift" time="0.002" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_payload_fits_transport_cap_and_bootstrap_accepts_exact_schema" time="0.003" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_create_request_retains_zero_volume_and_resource_caps" time="0.002" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_prior_three_allocations_are_locally_reconciled" time="0.007" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.06-0.03-True]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.25-0.03-True]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.250001-0.03-False]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.06-0.029999-False]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.25-0.11-True]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.25-0.12-False]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_budget_includes_prior_reserve_and_storage[0.25-0.13-False]" time="0.001" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_controller_atomic_write_refuses_overwrite" time="0.032" /><testcase classname="tests.test_cm_runpod_corpus_offline" name="test_controller_requires_hash_bound_exact_authorization" time="0.011" /></testsuite></testsuites>

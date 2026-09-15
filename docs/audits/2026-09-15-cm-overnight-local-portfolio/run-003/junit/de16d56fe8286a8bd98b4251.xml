@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="0" skipped="0" tests="4" time="0.532" timestamp="2026-09-15T02:54:51.007014+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_neural_reassessment.NeuralReassessmentTests" name="test_artifact_replay_and_tamper_detection" time="0.002"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'&quot;">cls = &lt;class 'test_neural_reassessment.NeuralReassessmentTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_neural_reassessment.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench\recognition\neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json')
+follow_symlinks = True
+
+    def stat(self, *, follow_symlinks=True):
+        """
+        Return the result of the stat() system call on this path, like
+        os.stat() does.
+        """
+&gt;       return os.stat(self, follow_symlinks=follow_symlinks)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:515: FileNotFoundError</error></testcase><testcase classname="tests.test_neural_reassessment.NeuralReassessmentTests" name="test_current_exact_economics_stop_training" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'&quot;">cls = &lt;class 'test_neural_reassessment.NeuralReassessmentTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_neural_reassessment.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench\recognition\neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json')
+follow_symlinks = True
+
+    def stat(self, *, follow_symlinks=True):
+        """
+        Return the result of the stat() system call on this path, like
+        os.stat() does.
+        """
+&gt;       return os.stat(self, follow_symlinks=follow_symlinks)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:515: FileNotFoundError</error></testcase><testcase classname="tests.test_neural_reassessment.NeuralReassessmentTests" name="test_stale_or_incomplete_label_portfolios_are_rejected" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'&quot;">cls = &lt;class 'test_neural_reassessment.NeuralReassessmentTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_neural_reassessment.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench\recognition\neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json')
+follow_symlinks = True
+
+    def stat(self, *, follow_symlinks=True):
+        """
+        Return the result of the stat() system call on this path, like
+        os.stat() does.
+        """
+&gt;       return os.stat(self, follow_symlinks=follow_symlinks)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:515: FileNotFoundError</error></testcase><testcase classname="tests.test_neural_reassessment.NeuralReassessmentTests" name="test_tampered_exact_label_source_fails_closed" time="0.001"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'&quot;">cls = &lt;class 'test_neural_reassessment.NeuralReassessmentTests'&gt;
+
+    @classmethod
+    def setUpClass(cls):
+&gt;       cls.restricted, cls.engine, cls.historical = load_default_assessment_inputs()
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_neural_reassessment.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\neural_reassessment.py:352: in load_default_assessment_inputs
+    restricted = load_verified_run(
+cmbench\recognition\neural_reassessment.py:107: in load_verified_run
+    results = read_json(results_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\neural_reassessment.py:59: in read_json
+    size = path.stat().st_size
+           ^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/restricted-evaluator-development-20260902-003/results.json')
+follow_symlinks = True
+
+    def stat(self, *, follow_symlinks=True):
+        """
+        Return the result of the stat() system call on this path, like
+        os.stat() does.
+        """
+&gt;       return os.stat(self, follow_symlinks=follow_symlinks)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\restricted-evaluator-development-20260902-003\\results.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:515: FileNotFoundError</error></testcase></testsuite></testsuites>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.623" timestamp="2026-09-15T02:50:03.441135+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_c7_linux_confirmation.C7LinuxConfirmationTests" name="test_portable_workload_replays_exactly" time="0.001"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\yosys-source-anf-confirmation-20260830-002\\dataset.json'">self = &lt;test_c7_linux_confirmation.C7LinuxConfirmationTests testMethod=test_portable_workload_replays_exactly&gt;
+
+    def test_portable_workload_replays_exactly(self):
+&gt;       self.assertEqual(hashlib.sha256(DATASET.read_bytes()).hexdigest(), EXPECTED_DATASET_SHA256)
+                                        ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_c7_linux_confirmation.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/docs/recognition/runs/yosys-source-anf-confirmation-20260830-002/dataset.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\docs\\recognition\\runs\\yosys-source-anf-confirmation-20260830-002\\dataset.json'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.test_c7_linux_confirmation.C7LinuxConfirmationTests" name="test_upload_manifest_is_exact_and_minimal" time="0.042" /></testsuite></testsuites>

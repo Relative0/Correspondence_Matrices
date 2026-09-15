@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="4" time="0.675" timestamp="2026-09-15T02:50:01.904634+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_c38_linux_replication" name="test_initial_c38_attempt_is_a_reconciled_no_create_failure" time="0.003" /><testcase classname="tests.test_c38_linux_replication" name="test_c38_retry_controller_is_bound_and_watchdog_compatible" time="0.189"><failure message="AssertionError: assert 'b154f0463c88...36c02d9950cf6' == '8ca70145d67e...de5d98a3bc083'&#10;  &#10;  - 8ca70145d67ee25c2bb701c48e23cbb8a1da7c0c07fbea59a46de5d98a3bc083&#10;  + b154f0463c88da2facfa420a7c16691d5d0b6702d826dbf83d836c02d9950cf6">def test_c38_retry_controller_is_bound_and_watchdog_compatible() -&gt; None:
+        controller = load_retry_controller()
+        request = load(HERE / "RUNPOD_C38_TRANSPORT_RETRY_001_REQUEST_20260903.json")
+        authorization = load(
+            HERE / "RUNPOD_C38_TRANSPORT_RETRY_001_AUTHORIZED_2026_09_03.json"
+        )
+        controller_path = HERE / "runpod_c38_linux_controller_retry_001.py"
+        request_path = HERE / "RUNPOD_C38_TRANSPORT_RETRY_001_REQUEST_20260903.json"
+    
+        state = controller.build_watchdog_state(1000.0, "012345abcdef")
+        inherited_watchdog = inspect.getsource(controller.shared.watchdog)
+        assert controller.OUT.name == "runpod-c38-linux-execute-002"
+        assert state == {
+            "name": "cm-c7-linux-012345abcdef",
+            "created_epoch": 1000.0,
+            "cleanup_epoch": 1000.0 + controller.shared.CLEANUP_AT,
+            "horizon_epoch": 1000.0 + controller.shared.HORIZON,
+        }
+        assert 'r"cm-c7-linux-[a-f0-9]{12}"' in inherited_watchdog
+        with pytest.raises(ValueError):
+            controller.build_watchdog_state(math.nan, "012345abcdef")
+        with pytest.raises(ValueError):
+            controller.build_watchdog_state(1000.0, "not-a-nonce")
+        assert request["authorization_granted"] is False
+        assert request["scientific_payload_changed"] is False
+        assert request["authorized_create_consumed_before_retry"] is False
+        assert authorization["authorized"] is True
+        assert authorization["one_create"] is True
+        assert authorization["no_replacement"] is True
+&gt;       assert authorization["controller_sha256"] == sha256(controller_path)
+E       AssertionError: assert 'b154f0463c88...36c02d9950cf6' == '8ca70145d67e...de5d98a3bc083'
+E         
+E         - 8ca70145d67ee25c2bb701c48e23cbb8a1da7c0c07fbea59a46de5d98a3bc083
+E         + b154f0463c88da2facfa420a7c16691d5d0b6702d826dbf83d836c02d9950cf6
+
+tests\test_c38_linux_replication.py:79: AssertionError</failure></testcase><testcase classname="tests.test_c38_linux_replication" name="test_c38_retrieval_and_cross_machine_decision_are_fail_closed" time="0.015" /><testcase classname="tests.test_c38_linux_replication" name="test_c38_on_pod_verification_replays_byte_identically" time="0.008"><failure message="RuntimeError: C38 package source drifted: bitset_backend.py">def test_c38_on_pod_verification_replays_byte_identically() -&gt; None:
+        manifest = load(HERE / "c38_linux_upload_manifest.json")
+&gt;       replayed_c37, replayed_c38 = replay_verifiers(manifest)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_c38_linux_replication.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+manifest = {'authorization_status': 'upload_not_authorized_exact_approval_pending', 'bytes': 1797840, 'commands': [['python', '-B...ation_verify.py', '--run-dir', 'run-output/c38-c37-native-linux-gcc-20260903-001']], 'created_date': '2026-09-03', ...}
+
+    def replay_verifiers(manifest: dict[str, Any]) -&gt; tuple[dict[str, Any], dict[str, Any]]:
+        with tempfile.TemporaryDirectory(prefix="cm-c38-post-retrieval-") as temporary:
+            package = Path(temporary) / "package"
+            for row in manifest["files"]:
+                source = ROOT / row["source"]
+                if (
+                    not source.is_file()
+                    or source.stat().st_size != row["bytes"]
+                    or sha256(source) != row["sha256"]
+                ):
+&gt;                   raise RuntimeError(f"C38 package source drifted: {row['source']}")
+E                   RuntimeError: C38 package source drifted: bitset_backend.py
+
+scripts\crse_verify_c38_retrieval.py:53: RuntimeError</failure></testcase></testsuite></testsuites>

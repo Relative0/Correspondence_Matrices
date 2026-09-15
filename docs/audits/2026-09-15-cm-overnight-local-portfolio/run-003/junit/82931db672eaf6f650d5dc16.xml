@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="1.062" timestamp="2026-09-15T03:00:42.776766+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_exact_v2_bundle_verifies" time="0.296"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\external\\logikbench-confirmation-20260830\\LICENSE'">modules = (&lt;module 'runpod_w8_logikbench_conversion_controller_v1' from 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-co...ining-work\\maximal-safe-20260827-192909\\continuation-20260829-125214\\verify_w8_logikbench_conversion_upload_v2.py'&gt;)
+
+    def test_exact_v2_bundle_verifies(modules):
+        _controller, _preflight, verifier = modules
+&gt;       assert verifier.verify() == {
+               ^^^^^^^^^^^^^^^^^
+            "verified": True,
+            "manifest_sha256": "5365b4362fc42790bf7107c6b8da29ec61b79faf8d69ac40bcfeb77a87640354",
+            "bundle_sha256": "1b3796d6ded0f6d1b0d6266c5e783f1b0687aae9c7ecfdac901ad625c6e6ff95",
+            "bundle_bytes": 204586,
+            "source_files": 159,
+            "source_bytes": 617274,
+            "static_candidate_clusters": 70,
+            "contains_credentials": False,
+            "performance_measurement": False,
+        }
+
+tests\test_cm_runpod_w8_logikbench_conversion.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+docs\audits\2026-08-25-cm-deep-performance\remaining-work\maximal-safe-20260827-192909\continuation-20260829-125214\verify_w8_logikbench_conversion_upload_v2.py:62: in verify
+    data = source.read_bytes()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-consolidation-20260914/external/logikbench-confirmation-20260830/LICENSE')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-consolidation-20260914\\external\\logikbench-confirmation-20260830\\LICENSE'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_authorization_hashes_and_scope_are_frozen" time="0.006" /><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_create_payload_has_exact_resource_and_transport_bounds" time="0.014" /><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_local_cost_bound_counts_each_pod_once" time="0.012" /><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_remote_program_and_worker_preserve_no_performance_claim" time="0.001" /><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_frozen_program_hashes_have_not_changed" time="0.002" /><testcase classname="tests.test_cm_runpod_w8_logikbench_conversion" name="test_v3_worker_retained_byte_state_is_in_main_loop" time="0.260" /></testsuite></testsuites>

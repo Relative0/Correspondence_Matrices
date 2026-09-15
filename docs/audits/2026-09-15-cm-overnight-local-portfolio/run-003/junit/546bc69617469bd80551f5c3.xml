@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="128" time="1.292" timestamp="2026-09-15T02:56:12.079271+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_recognition_computation.TaskComputationBackendTests" name="test_affine_mux_and_majority_candidates_are_exact" time="0.005" /><testcase classname="tests.test_recognition_computation.TaskComputationBackendTests" name="test_all_exact_backends_match_independent_task_contracts" time="0.109" /><testcase classname="tests.test_recognition_computation.TaskComputationBackendTests" name="test_explicit_cm_is_construction_not_cm_ir_alias" time="0.001" /><testcase classname="tests.test_recognition_computation.TaskCostPolicyTests" name="test_fit_save_reload_and_tamper_rejection" time="0.013" /><testcase classname="tests.test_recognition_computation.TaskCostPolicyTests" name="test_learned_bypass_does_not_call_policy" time="0.002" /><testcase classname="tests.test_recognition_computation.MilestoneDExperimentTests" name="test_epfl_d_slice_excludes_milestone_c_and_is_exact" time="0.002"><failure message="ValueError: frozen EPFL corpus hash mismatch">self = &lt;test_recognition_computation.MilestoneDExperimentTests testMethod=test_epfl_d_slice_excludes_milestone_c_and_is_exact&gt;
+
+    def test_epfl_d_slice_excludes_milestone_c_and_is_exact(self):
+&gt;       cases, manifest = load_epfl_d_cases(4)
+                          ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_recognition_computation.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+limit = 4
+
+    def load_epfl_d_cases(limit: int) -&gt; tuple[list[ComputationCase], dict[str, Any]]:
+        if sha256_file(EPFL_CORPUS) != EPFL_CORPUS_SHA256:
+&gt;           raise ValueError("frozen EPFL corpus hash mismatch")
+E           ValueError: frozen EPFL corpus hash mismatch
+
+cmbench\recognition\computation_experiment.py:601: ValueError</failure></testcase><testcase classname="tests.test_recognition_computation.MilestoneDExperimentTests" name="test_register_and_machine_summary_preserve_full_agenda" time="0.004" /><testcase classname="tests.test_recognition_computation.MilestoneDExperimentTests" name="test_small_complete_pipeline_retains_exact_artifacts" time="0.308"><failure message="AssertionError: 'failed' != 'complete'&#10;- failed&#10;+ complete">self = &lt;test_recognition_computation.MilestoneDExperimentTests testMethod=test_small_complete_pipeline_retains_exact_artifacts&gt;
+
+    def test_small_complete_pipeline_retains_exact_artifacts(self):
+        config = ComputationConfig(data_seed=71, parent_counts=(2, 1, 1, 1),
+                                   rounds=1, epfl_limit=2, max_seconds=60)
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "run"
+            result = run_computation_experiment(config, output, progress=lambda _message: None)
+&gt;           self.assertEqual(result["status"], "complete")
+E           AssertionError: 'failed' != 'complete'
+E           - failed
+E           + complete
+
+tests\test_recognition_computation.py:131: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="1.232" timestamp="2026-09-15T02:53:27.871460+07:00" hostname="DESKTOP-QD8TM7N"><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_all_rules_match_commuted_forms_and_are_exact" time="0.017" /><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_artifact_truth_rows_and_strict_reload" time="0.055" /><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_changed_cone_add_remove_revert_and_serialized_reload" time="0.016" /><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_near_matches_overlap_and_cycle_guard" time="0.006" /><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_noop_bypass_and_full_scan_control" time="0.006" /><testcase classname="tests.test_d10_rule_engine.D10RuleEngineTests" name="test_source_backed_dataset_and_smoke_experiment" time="0.008"><failure message="ValueError: changed Yosys human source fixture: LICENSE.txt">self = &lt;test_d10_rule_engine.D10RuleEngineTests testMethod=test_source_backed_dataset_and_smoke_experiment&gt;
+
+    def test_source_backed_dataset_and_smoke_experiment(self):
+&gt;       cases, provenance = make_d10_cases()
+                            ^^^^^^^^^^^^^^^^
+
+tests\test_d10_rule_engine.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cmbench\recognition\d10_rule_experiment.py:77: in make_d10_cases
+    rows, provenance = make_yosys_composed_holdout()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cmbench\recognition\yosys_composed_holdout_data.py:164: in make_yosys_composed_holdout
+    c7, c7_provenance = make_yosys_human_documents()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def make_yosys_human_documents() -&gt; tuple[list[dict], dict]:
+        source = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+        if (source.get("schema") != "crse-yosys-human-source-fixture/v1"
+                or source.get("upstream_commit") != SOURCE_COMMIT or source.get("license") != "ISC"):
+            raise ValueError("invalid Yosys human source manifest")
+        for row in source["files"]:
+            path = FIXTURE_ROOT / row["fixture_path"]
+            if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+&gt;               raise ValueError(f"changed Yosys human source fixture: {row['fixture_path']}")
+E               ValueError: changed Yosys human source fixture: LICENSE.txt
+
+cmbench\recognition\yosys_human_decomposition_data.py:255: ValueError</failure></testcase></testsuite></testsuites>
