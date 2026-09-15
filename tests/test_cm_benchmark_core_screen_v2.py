@@ -7,22 +7,13 @@ import subprocess
 import sys
 import zipfile
 
-import pytest
-
 from cmbench.biology_bnet import parse_bnet, require_closed_bnet
 
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "docs/audits/2026-09-13-cm-benchmark-campaign"
-SUCCESSOR_ADMISSION = BASE / "prelaunch-008/ADMISSION_LEDGER.json"
-SUCCESSOR_BUNDLE_MANIFEST = BASE / "successor-prelaunch-001/UPLOAD_MANIFEST.json"
-SUCCESSOR_INPUT = BASE / "input-freeze-009/admitted/biology/006-efd67e1cd585.bnet"
 
 
-@pytest.mark.skipif(
-    not SUCCESSOR_ADMISSION.exists() or not SUCCESSOR_INPUT.exists(),
-    reason="frozen campaign evidence is excluded from the source-only integration",
-)
 def test_successor_plan_contains_only_unresolved_admissible_lanes(tmp_path: Path) -> None:
     output = tmp_path / "PLAN.json"
     completed = subprocess.run(
@@ -88,10 +79,6 @@ def test_successor_plan_contains_only_unresolved_admissible_lanes(tmp_path: Path
         assert case["metadata"]["closed_under_declared_targets"] is True
 
 
-@pytest.mark.skipif(
-    not SUCCESSOR_BUNDLE_MANIFEST.exists(),
-    reason="frozen source bundle is preserved outside the source-only integration",
-)
 def test_successor_upload_bundle_matches_frozen_manifest() -> None:
     folder = BASE / "successor-prelaunch-001"
     manifest_path = folder / "UPLOAD_MANIFEST.json"

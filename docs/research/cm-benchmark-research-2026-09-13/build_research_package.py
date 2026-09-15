@@ -257,7 +257,7 @@ def main() -> None:
                    "cmbench/comparative/contracts.py", "cmbench/tracing/workload_manifest.py",
                    "docs/research/CM_SCALAR_QUERY_APIS_2026_09_11.md",
                    "docs/audits/2026-09-11-cm-next-research/REPORT.md",
-                   "deliverables_n22_24/master_explainer_2026_08_03/results/2026-09-12/frontier-research-summary.json",
+                   "docs/audits/2026-09-12-cm-evidence-frontiers/PUBLIC-RESULTS-FINAL.json",
                    "docs/audits/2026-09-13-cm-fair-feature-model/PREPARATION.json"]
     historical = dict(schema="cm-historical-sympy-audit/v1", raw_file=path.relative_to(ROOT).as_posix(),
                       raw_sha256=sha(path), groups=groups,

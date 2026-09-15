@@ -12,13 +12,8 @@ from scripts import cm_benchmark_core_screen as screen
 
 ROOT = Path(__file__).resolve().parents[1]
 ADMISSION = ROOT / "docs/audits/2026-09-13-cm-benchmark-campaign/prelaunch-008/ADMISSION_LEDGER.json"
-EVIDENCE_REQUIRED = pytest.mark.skipif(
-    not ADMISSION.exists(),
-    reason="frozen campaign evidence is excluded from the source-only integration",
-)
 
 
-@EVIDENCE_REQUIRED
 def test_frozen_plan_is_deterministic_balanced_and_pre_outcome():
     first = screen.build_plan(ADMISSION)
     second = screen.build_plan(ADMISSION)
@@ -46,7 +41,6 @@ def test_frozen_plan_is_deterministic_balanced_and_pre_outcome():
     assert all(row["metadata"]["declared_support_variables"] == 0 for row in exact)
 
 
-@EVIDENCE_REQUIRED
 def test_plan_digest_and_cell_identity_fail_closed():
     plan = screen.build_plan(ADMISSION)
     changed = copy.deepcopy(plan)

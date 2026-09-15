@@ -1,16 +1,10 @@
 import base64
 import json
 
-import pytest
-
 from scripts import cm_benchmark_runpod_results_controller as controller
 from scripts import cm_benchmark_runpod_results_controller_v2 as retry_controller
 
 
-@pytest.mark.skipif(
-    not controller.MANIFEST.exists() or not controller.CORE_PLAN.exists(),
-    reason="frozen campaign controls are excluded from the source-only integration",
-)
 def test_results_payload_injects_exact_runner_and_plan():
     manifest = json.loads(controller.MANIFEST.read_text(encoding="utf-8"))
     remote = controller.render_remote()
@@ -38,10 +32,6 @@ def test_results_controller_has_one_fixed_output_and_no_automatic_replacement():
     assert source.count("client.post(V1 + \"/pods\"") == 1
 
 
-@pytest.mark.skipif(
-    not retry_controller.MANIFEST.exists(),
-    reason="frozen retry manifest is excluded from the source-only integration",
-)
 def test_retry_payload_moves_large_controls_out_of_create_request():
     manifest = json.loads(retry_controller.MANIFEST.read_text(encoding="utf-8"))
     payload = retry_controller.create_payload("test-results-retry", manifest, "token", 1_000.0)

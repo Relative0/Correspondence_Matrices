@@ -13,23 +13,12 @@ import json
 import math
 import time
 from collections.abc import Mapping, Sequence
-from contextvars import ContextVar
 from typing import Any, Callable
 
 
 SCHEMA = "cm-sympy-claim-cleanup/v1"
 CONTRACT_SCHEMA = "cm-sympy-task-contract/v1"
 RESULT_SCHEMA = "cm-sympy-task-result/v1"
-TIMING_SCHEMA = "cm-sympy-worker-timing/v2"
-TIMING_INCLUSIONS = {
-    "runtime_preload": "excluded_from_execution_delivery_included_in_full_worker",
-    "input_preparation": "both_expression_parses_and_supplied_assignment_generation",
-    "execution_artifact": "arm_preparation_execution_artifact_packing_and_quality_delivery",
-    "result_assembly": "legacy_result_row_assembly",
-    "execution_delivery": "sum_of_nonoverlapping_execution_artifact_and_result_assembly",
-    "independent_validation": "excluded_from_execution_delivery_included_in_full_worker",
-    "full_worker": "request_entry_through_result_assembly",
-}
 ASSIGNMENT_GENERATOR = "affine_xorshift_rows/v1"
 PACKING = "assignment_msb_first_values_little_bit_packed/v1"
 MAX_VARIABLES = 8
@@ -229,19 +218,10 @@ def validate_contract(contract: Mapping[str, Any]) -> None:
         raise ValueError("contract validation")
 
 
-_WORKER_CLOCK: ContextVar[Callable[[], int]] = ContextVar(
-    "cm_sympy_worker_clock", default=time.perf_counter_ns
-)
-
-
-def _clock_ns() -> int:
-    return int(_WORKER_CLOCK.get()())
-
-
 def _stage(function: Callable[[], Any]) -> tuple[Any, int]:
-    started = _clock_ns()
+    started = time.perf_counter_ns()
     value = function()
-    return value, _clock_ns() - started
+    return value, time.perf_counter_ns() - started
 
 
 def _sympy_expression(expr: Any, n_vars: int) -> Any:
@@ -520,7 +500,7 @@ def _result(
     validation: Mapping[str, Any],
     quality: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    total = _clock_ns() - task_started_ns
+    total = time.perf_counter_ns() - task_started_ns
     row = {
         "schema": RESULT_SCHEMA,
         "contract_sha256": sha256_json(contract),
@@ -539,37 +519,6 @@ def _result(
     return row
 
 
-def validate_worker_timing(timing: Mapping[str, Any]) -> None:
-    """Validate the additive v2 worker timing envelope and its accounting."""
-    fields = {
-        "schema", "inclusions", "input_preparation_ns", "execution_artifact_ns",
-        "result_assembly_ns", "execution_delivery_ns",
-        "independent_validation_ns", "residual_ns", "full_worker_ns",
-    }
-    if not isinstance(timing, Mapping) or set(timing) != fields:
-        raise ValueError("worker timing fields")
-    if timing["schema"] != TIMING_SCHEMA:
-        raise ValueError("worker timing schema")
-    if timing["inclusions"] != TIMING_INCLUSIONS:
-        raise ValueError("worker timing inclusions")
-    numeric = fields - {"schema", "inclusions"}
-    if any(type(timing[name]) is not int or timing[name] < 0 for name in numeric):
-        raise ValueError("worker timing values")
-    if timing["execution_delivery_ns"] != (
-        timing["execution_artifact_ns"] + timing["result_assembly_ns"]
-    ):
-        raise ValueError("worker execution/delivery accounting")
-    classified = (
-        timing["input_preparation_ns"]
-        + timing["execution_artifact_ns"]
-        + timing["independent_validation_ns"]
-        + timing["result_assembly_ns"]
-        + timing["residual_ns"]
-    )
-    if timing["full_worker_ns"] != classified:
-        raise ValueError("worker total accounting")
-
-
 def _preload_compared_runtimes() -> None:
     """Load every arm's runtime before task timing; caller timing retains it."""
     import numpy  # noqa: F401
@@ -580,9 +529,8 @@ def _preload_compared_runtimes() -> None:
     from pysat.solvers import Solver  # noqa: F401
 
 
-def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
-    """Execute one isolated comparison cell under the active worker clock."""
-    worker_started = _clock_ns()
+def execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
+    """Execute one isolated comparison cell and validate outside its timer."""
     required = {"contract", "case", "arm", "repetition", "assignment_generator"}
     if not isinstance(request, Mapping) or set(request) != required:
         raise ValueError("worker request fields")
@@ -590,29 +538,11 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
     validate_contract(contract)
     case = request["case"]
     n_vars = len(contract["variables"])
+    expr = parse_expression(case["expression"])
     arm = request["arm"]
     repetition = request["repetition"]
     _preload_compared_runtimes()
-
-    # Imports are preloaded symmetrically outside execution/delivery. They remain
-    # visible in both the full worker and caller process totals.
-    preparation_started = _clock_ns()
-    expr = parse_expression(case["expression"])
-    right = (
-        parse_expression(case["comparison_expression"])
-        if contract["task"] == "equivalence_status"
-        else None
-    )
-    raw_rows = (
-        assignment_rows(request["assignment_generator"], n_vars)
-        if contract["task"] == "assignment_batch"
-        else None
-    )
-    input_preparation_ns = _clock_ns() - preparation_started
-    started = _clock_ns()
-
-    execution_started = _clock_ns()
-    quality = None
+    started = time.perf_counter_ns()
 
     if contract["task"] == "complete_relation":
         if arm == "sympy_truth_table":
@@ -623,11 +553,18 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
             raise ValueError("unknown complete-relation arm")
         artifact_bytes = pack_values(values)
         digest = sha256_bytes(artifact_bytes)
-        artifact = {"kind": "packed_truth_bits", "bytes": len(artifact_bytes), "sha256": digest}
+        return _result(
+            contract=contract,
+            arm=arm,
+            repetition=repetition,
+            timings=timings,
+            task_started_ns=started,
+            artifact={"kind": "packed_truth_bits", "bytes": len(artifact_bytes), "sha256": digest},
+            validation={"matches_oracle": digest == contract["artifact"]["semantic_sha256"]},
+        )
 
-    elif contract["task"] == "assignment_batch":
-        if raw_rows is None:
-            raise RuntimeError("assignment preparation missing")
+    if contract["task"] == "assignment_batch":
+        raw_rows = assignment_rows(request["assignment_generator"], n_vars)
         if arm == "sympy_lambdify_cse_off":
             values, timings = _sympy_batch(expr, n_vars, raw_rows, cse=False)
         elif arm == "sympy_lambdify_cse_on":
@@ -638,9 +575,20 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
             raise ValueError("unknown assignment arm")
         artifact_bytes = pack_values(values)
         digest = sha256_bytes(artifact_bytes)
-        artifact = {"kind": "packed_assignment_bits", "bytes": len(artifact_bytes), "sha256": digest}
+        return _result(
+            contract=contract,
+            arm=arm,
+            repetition=repetition,
+            timings=timings,
+            task_started_ns=started,
+            artifact={"kind": "packed_assignment_bits", "bytes": len(artifact_bytes), "sha256": digest},
+            validation={
+                "assignment_sha256": sha256_bytes(raw_rows),
+                "matches_oracle": digest == contract["artifact"]["semantic_sha256"],
+            },
+        )
 
-    elif contract["task"] == "sat_status":
+    if contract["task"] == "sat_status":
         functions = {
             "sympy_satisfiable": _sympy_sat,
             "cm_packed_sat": _cm_sat,
@@ -649,17 +597,28 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
         if arm not in functions:
             raise ValueError("unknown SAT arm")
         status, witness, timings = functions[arm](expr, n_vars)
+        truth = scalar_truth_values(expr, n_vars)
+        witness_valid = witness is None
+        if witness is not None:
+            row = sum(bit << (n_vars - 1 - index) for index, bit in enumerate(witness))
+            witness_valid = bool(truth[row])
         digest = sha256_json({"value": status})
-        artifact = {
-            "kind": "boolean_status",
-            "bytes": len(canonical_bytes({"value": status})),
-            "sha256": digest,
-            "value": status,
-        }
+        return _result(
+            contract=contract,
+            arm=arm,
+            repetition=repetition,
+            timings=timings,
+            task_started_ns=started,
+            artifact={"kind": "boolean_status", "bytes": len(canonical_bytes({"value": status})), "sha256": digest, "value": status},
+            validation={
+                "witness_present": witness is not None,
+                "witness_valid": witness_valid,
+                "matches_oracle": digest == contract["artifact"]["semantic_sha256"] and witness_valid,
+            },
+        )
 
-    elif contract["task"] == "equivalence_status":
-        if right is None:
-            raise RuntimeError("equivalence preparation missing")
+    if contract["task"] == "equivalence_status":
+        right = parse_expression(case["comparison_expression"])
         functions = {
             "sympy_difference_sat": _sympy_equivalence,
             "cm_packed_equivalence": _cm_equivalence,
@@ -669,14 +628,17 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
             raise ValueError("unknown equivalence arm")
         status, timings = functions[arm](expr, right, n_vars)
         digest = sha256_json({"value": status})
-        artifact = {
-            "kind": "boolean_status",
-            "bytes": len(canonical_bytes({"value": status})),
-            "sha256": digest,
-            "value": status,
-        }
+        return _result(
+            contract=contract,
+            arm=arm,
+            repetition=repetition,
+            timings=timings,
+            task_started_ns=started,
+            artifact={"kind": "boolean_status", "bytes": len(canonical_bytes({"value": status})), "sha256": digest, "value": status},
+            validation={"matches_oracle": digest == contract["artifact"]["semantic_sha256"]},
+        )
 
-    elif contract["task"] == "simplified_expression":
+    if contract["task"] == "simplified_expression":
         form = contract["artifact"]["form"]
         if arm == "sympy_simplify_default":
             simplified, timings = _sympy_simplify(expr, n_vars, form, force=False)
@@ -689,104 +651,25 @@ def _execute_worker(request: Mapping[str, Any]) -> dict[str, Any]:
         import sympy as sp
 
         text = sp.srepr(simplified)
-        artifact = {
-            "kind": "simplified_boolean_expression",
-            "bytes": len(text.encode("utf-8")),
-            "sha256": sha256_bytes(text.encode("utf-8")),
-            "form": form,
-        }
-        # Quality is part of the delivered comparison product for every arm;
-        # semantic evaluation remains in the independent validation phase.
-        quality = expression_quality(simplified)
-
-    else:
-        raise ValueError("unknown task")
-
-    execution_artifact_ns = _clock_ns() - execution_started
-
-    validation_started = _clock_ns()
-    if contract["task"] == "assignment_batch":
-        if raw_rows is None:
-            raise RuntimeError("assignment preparation missing")
-        validation = {
-            "assignment_sha256": sha256_bytes(raw_rows),
-            "matches_oracle": digest == contract["artifact"]["semantic_sha256"],
-        }
-    elif contract["task"] == "sat_status":
-        truth = scalar_truth_values(expr, n_vars)
-        witness_valid = witness is None
-        if witness is not None:
-            row_index = sum(
-                bit << (n_vars - 1 - index) for index, bit in enumerate(witness)
-            )
-            witness_valid = bool(truth[row_index])
-        validation = {
-            "witness_present": witness is not None,
-            "witness_valid": witness_valid,
-            "matches_oracle": (
-                digest == contract["artifact"]["semantic_sha256"] and witness_valid
-            ),
-        }
-    elif contract["task"] == "simplified_expression":
         semantic_digest = packed_digest(_sympy_values(simplified, n_vars))
-        artifact["semantic_sha256"] = semantic_digest
-        validation = {
-            "matches_oracle": semantic_digest == contract["artifact"]["semantic_sha256"]
-        }
-    else:
-        validation = {
-            "matches_oracle": digest == contract["artifact"]["semantic_sha256"]
-        }
-    independent_validation_ns = _clock_ns() - validation_started
+        return _result(
+            contract=contract,
+            arm=arm,
+            repetition=repetition,
+            timings=timings,
+            task_started_ns=started,
+            artifact={
+                "kind": "simplified_boolean_expression",
+                "bytes": len(text.encode("utf-8")),
+                "sha256": sha256_bytes(text.encode("utf-8")),
+                "semantic_sha256": semantic_digest,
+                "form": form,
+            },
+            validation={"matches_oracle": semantic_digest == contract["artifact"]["semantic_sha256"]},
+            quality=expression_quality(simplified),
+        )
 
-    assembly_started = _clock_ns()
-    row = _result(
-        contract=contract,
-        arm=arm,
-        repetition=repetition,
-        timings=timings,
-        task_started_ns=started,
-        artifact=artifact,
-        validation=validation,
-        quality=quality,
-    )
-    result_assembly_ns = _clock_ns() - assembly_started
-    measured_full_worker_ns = _clock_ns() - worker_started
-    classified_ns = (
-        input_preparation_ns
-        + execution_artifact_ns
-        + independent_validation_ns
-        + result_assembly_ns
-    )
-    if measured_full_worker_ns < classified_ns:
-        raise ValueError("worker clock must be monotonic")
-    timing_v2 = {
-        "schema": TIMING_SCHEMA,
-        "inclusions": dict(TIMING_INCLUSIONS),
-        "input_preparation_ns": input_preparation_ns,
-        "execution_artifact_ns": execution_artifact_ns,
-        "result_assembly_ns": result_assembly_ns,
-        "execution_delivery_ns": execution_artifact_ns + result_assembly_ns,
-        "independent_validation_ns": independent_validation_ns,
-        "residual_ns": measured_full_worker_ns - classified_ns,
-        "full_worker_ns": measured_full_worker_ns,
-    }
-    validate_worker_timing(timing_v2)
-    row["timing_v2"] = timing_v2
-    return row
-
-
-def execute_worker(
-    request: Mapping[str, Any], *, clock: Callable[[], int] | None = None
-) -> dict[str, Any]:
-    """Execute one cell with an optional deterministic monotonic clock."""
-    if clock is None:
-        return _execute_worker(request)
-    token = _WORKER_CLOCK.set(clock)
-    try:
-        return _execute_worker(request)
-    finally:
-        _WORKER_CLOCK.reset(token)
+    raise ValueError("unknown task")
 
 
 def validate_inputs(document: Mapping[str, Any]) -> None:

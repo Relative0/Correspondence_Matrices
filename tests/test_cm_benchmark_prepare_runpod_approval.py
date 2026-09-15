@@ -1,24 +1,6 @@
-from pathlib import Path
-
-import pytest
-
 from scripts.cm_benchmark_prepare_runpod_approval import build_request
 
 
-EVIDENCE = (
-    Path(__file__).resolve().parents[1]
-    / "docs/audits/2026-09-13-cm-benchmark-campaign/prelaunch-008/UPLOAD_MANIFEST.json"
-)
-READINESS = (
-    Path(__file__).resolve().parents[1]
-    / "docs/audits/2026-09-13-cm-benchmark-campaign/account-readiness-002/RUNPOD_ACCOUNT_READINESS.json"
-)
-
-
-@pytest.mark.skipif(
-    not EVIDENCE.exists() or not READINESS.exists(),
-    reason="frozen prelaunch bundles are excluded from the source-only integration",
-)
 def test_approval_request_is_exact_and_non_authorizing():
     result = build_request()
     assert result["authorization_granted"] is False
