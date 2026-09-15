@@ -163,6 +163,23 @@ class BitsetBackendTests(unittest.TestCase):
         self.assertEqual(after["hits"], 1)
         self.assertEqual(dict(env1), dict(env2))
 
+    def test_direct_expr_bitset_respects_fixed_variables(self) -> None:
+        expr = Eqv(Var(0), Imp(Var(1), Var(2)))
+        env = build_bitset_env(("x1",))
+        bits = eval_expr_bitset(expr, env, fixed={"x0": 1, "x2": 0})
+        expected = eval_expr_words_bitset(
+            expr, ("x1",), fixed={"x0": 1, "x2": 0}
+        )
+        self.assertEqual(bits, expected)
+
+        constant = eval_expr_bitset(
+            Xor(Var(0), Var(1)), {}, fixed={"x0": 1, "x1": 0}
+        )
+        self.assertEqual(constant, 1)
+
+        with self.assertRaisesRegex(KeyError, "missing live/fixed value"):
+            eval_expr_bitset(expr, env, fixed={"x0": 1})
+
     def test_cm_node_bitset_eval_matches_truth_table_shape_and_values(self) -> None:
         expr = Or(Xor(Var(0), Var(1)), Not(Var(2)))
         node = compile_expr_to_cm_ir(expr)

@@ -62,13 +62,23 @@ def build_bitset_env(vars: Sequence[str]) -> Mapping[str, int]:
     return _build_bitset_env_cached(tuple(vars))
 
 
-def eval_expr_bitset(expr: Expr, env: Mapping[str, int]) -> int:
-    """Evaluate an expression DAG to a packed truth-table bitset with width 2^n."""
-    if not env:
-        return 0
+def eval_expr_bitset(
+    expr: Expr,
+    env: Mapping[str, int],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+) -> int:
+    """Evaluate an expression DAG to a packed truth-table bitset with width 2^n.
+
+    Variables absent from ``env`` must be supplied by ``fixed``.  A fixed true
+    variable receives the full assignment mask and a fixed false variable the
+    zero mask, giving this direct packed arm the same substitution contract as
+    the CM evaluators.
+    """
     n_vars = len(env)
     n_rows = 1 << n_vars
     full_mask = (1 << n_rows) - 1
+    fixed_map = fixed or {}
     # Expr v2 preserves shared subexpressions.  Cache by identity so evaluating a
     # DAG costs O(unique nodes), rather than O(tree unfolding), without paying the
     # recursive structural-hash cost of using frozen dataclass values as keys.
@@ -82,7 +92,13 @@ def eval_expr_bitset(expr: Expr, env: Mapping[str, int]) -> int:
             pass
 
         if isinstance(e, Var):
-            result = env[f"x{e.i}"]
+            name = f"x{e.i}"
+            if name in env:
+                result = env[name]
+            elif name in fixed_map:
+                result = full_mask if int(bool(fixed_map[name])) else 0
+            else:
+                raise KeyError(f"missing live/fixed value for variable {name!r}")
         elif isinstance(e, Not):
             result = (~rec(e.a)) & full_mask
         elif isinstance(e, And):

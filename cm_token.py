@@ -39,6 +39,21 @@ TOK: Dict[str, int] = {
 }
 
 
+def cm_token_value(t: int, row_value: int, column_value: int) -> int:
+    """Query a completed true-first token through the shared LUT endpoint.
+
+    This function is representation-neutral after token production: CM and
+    direct packed evaluators must call the same query when they produce the
+    same four-bit word.
+    """
+    row = int(row_value)
+    column = int(column_value)
+    if row not in (0, 1) or column not in (0, 1):
+        raise ValueError("token query values must each be 0 or 1")
+    shift = (row << 1) | column
+    return (int(t) >> shift) & 1
+
+
 def cm_not(t: int) -> int:
     return (~int(t)) & MASK
 
@@ -171,6 +186,7 @@ def cm_compose(t1: int, t2: int, op: str) -> int:
 __all__ = [
     "TOK",
     "MASK",
+    "cm_token_value",
     "cm_not",
     "cm_transpose",
     "cm_swap_rows",

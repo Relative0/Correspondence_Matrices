@@ -13,16 +13,12 @@ from cm_token import (
     cm_not,
     cm_rot90,
     cm_rot270,
+    cm_token_value,
 )
 
 
 ASSIGNMENTS = ((1, 1), (1, 0), (0, 1), (0, 0))
 OP_CLASSES = (And, Or, Xor, Imp, Eqv)
-
-
-def _token_value(token: int, x: int, y: int) -> int:
-    shift = {(1, 1): 3, (1, 0): 2, (0, 1): 1, (0, 0): 0}[(x, y)]
-    return (token >> shift) & 1
 
 
 def _source_value(
@@ -39,7 +35,7 @@ def _source_value(
         first = 1 - first
     if negate_second:
         second = 1 - second
-    return _token_value(token, first, second)
+    return cm_token_value(token, first, second)
 
 
 def _literal(var: Var, negated: bool):
@@ -56,7 +52,7 @@ def test_signed_token_alignment_is_exhaustive() -> None:
                 negate_second=negate_second,
             )
             for x, y in ASSIGNMENTS:
-                assert _token_value(aligned, x, y) == _source_value(
+                assert cm_token_value(aligned, x, y) == _source_value(
                     token,
                     x,
                     y,
@@ -110,6 +106,7 @@ def test_pair_compiler_fuses_aligned_compound_operators() -> None:
     assert metrics["token_fusions"] == 1
     assert metrics["direct_pair_retabulations"] == 0
     assert 0.0 <= metrics["pairable_ratio"] <= 1.0
+    assert metrics["root_outcome"] == "pure_structural"
 
 
 def test_pair_compiler_retains_four_assignment_fallback() -> None:
@@ -127,6 +124,54 @@ def test_pair_compiler_retains_four_assignment_fallback() -> None:
     assert np.array_equal(pair_matrix, eager_matrix)
     assert metrics["token_fusions"] == 0
     assert metrics["direct_pair_retabulations"] == 1
+    assert metrics["root_outcome"] == "full_retabulation"
+
+
+def test_pair_compiler_reports_hybrid_and_pure_structural_outcomes() -> None:
+    row = Var(0)
+    col = Var(1)
+    structural_child = Imp(row, col)
+    retabulated_child = Xor(And(row, col), row)
+    expr = Or(structural_child, retabulated_child)
+
+    hybrid, hybrid_metrics = compile_expr_to_cm_pair_token(
+        expr, ["x0"], ["x1"], fixed={}, strategy="hybrid"
+    )
+    pure, pure_metrics = compile_expr_to_cm_pair_token(
+        expr, ["x0"], ["x1"], fixed={}, strategy="pure_structural"
+    )
+    retabulated, retabulated_metrics = compile_expr_to_cm_pair_token(
+        expr, ["x0"], ["x1"], fixed={}, strategy="retabulate"
+    )
+
+    assert hybrid is not None
+    assert retabulated is not None
+    assert hybrid.token == retabulated.token
+    assert hybrid_metrics["root_outcome"] == "hybrid_pair"
+    assert hybrid_metrics["root_hybrid_pair"] == 1
+    assert hybrid_metrics["direct_pair_retabulations"] >= 1
+    assert pure is None
+    assert pure_metrics["root_outcome"] == "ordinary_fallback"
+    assert pure_metrics["direct_pair_retabulations"] == 0
+    assert retabulated_metrics["root_outcome"] == "full_retabulation"
+
+
+def test_pair_metrics_separate_occurrences_unique_nodes_and_scans() -> None:
+    signed = Not(Not(Not(Var(0))))
+    shared = Xor(signed, Var(1))
+    expr = Or(shared, shared)
+
+    _compiled, metrics = compile_expr_to_cm_pair_token(
+        expr, ["x0"], ["x1"], fixed={}, strategy="pure_structural"
+    )
+
+    assert metrics["ast_occurrences"] > metrics["unique_object_nodes"]
+    assert metrics["compiler_calls"] > 0
+    assert metrics["nodes_total"] == metrics["compiler_calls"]
+    assert metrics["pairable_ratio"] == (
+        metrics["pair_collapses"] / metrics["compiler_calls"]
+    )
+    assert metrics["negation_nodes_scanned"] >= 3
 
 
 def test_known_operator_tokens_remain_true_first() -> None:
@@ -231,7 +276,7 @@ def test_retabulation_ablation_matches_structural_token() -> None:
     expr = Or(Imp(Not(col), row), Xor(Not(row), col))
 
     structural, structural_metrics = compile_expr_to_cm_pair_token(
-        expr, ["x0"], ["x1"], fixed={}, strategy="structural"
+        expr, ["x0"], ["x1"], fixed={}, strategy="pure_structural"
     )
     retabulated, retabulated_metrics = compile_expr_to_cm_pair_token(
         expr, ["x0"], ["x1"], fixed={}, strategy="retabulate"
@@ -239,10 +284,12 @@ def test_retabulation_ablation_matches_structural_token() -> None:
 
     assert retabulated == structural
     assert structural_metrics["token_fusions"] == 1
+    assert structural_metrics["root_outcome"] == "pure_structural"
     assert retabulated_metrics["token_fusions"] == 0
     assert retabulated_metrics["primitive_pair_tokens"] == 0
     assert retabulated_metrics["direct_pair_retabulations"] == 1
     assert retabulated_metrics["retabulation_only_mode"] == 1
+    assert retabulated_metrics["root_outcome"] == "full_retabulation"
 
 
 def test_dense_pair_api_exposes_retabulation_ablation() -> None:
@@ -273,3 +320,45 @@ def test_token_only_api_rejects_unknown_strategy() -> None:
             fixed={},
             strategy="unknown",  # type: ignore[arg-type]
         )
+
+
+def test_legacy_structural_strategy_is_reported_as_hybrid_alias() -> None:
+    compiled, metrics = compile_expr_to_cm_pair_token(
+        And(Var(0), Var(1)),
+        ["x0"],
+        ["x1"],
+        fixed={},
+        strategy="structural",
+    )
+    assert compiled is not None
+    assert metrics["legacy_strategy_alias"] == 1
+    assert metrics["root_outcome"] == "pure_structural"
+
+
+def test_pair_compiler_rejects_overlapping_axis_layouts() -> None:
+    with np.testing.assert_raises_regex(ValueError, "disjoint row and column"):
+        compile_expr_to_cm_pair_token(
+            And(Var(0), Var(0)), ["x0"], ["x0"], fixed={}
+        )
+
+
+def test_pair_compiler_rejects_duplicate_axis_names() -> None:
+    with np.testing.assert_raises_regex(ValueError, "row layout R contains duplicate"):
+        compile_expr_to_cm_pair_token(
+            And(Var(0), Var(1)), ["x0", "x0"], ["x1"], fixed={}
+        )
+    with np.testing.assert_raises_regex(
+        ValueError, "column layout C contains duplicate"
+    ):
+        compile_expr_to_cm_pair_token(
+            And(Var(0), Var(1)), ["x0"], ["x1", "x1"], fixed={}
+        )
+
+
+def test_repeated_variable_is_not_misclassified_as_a_pair() -> None:
+    compiled, metrics = compile_expr_to_cm_pair_token(
+        Xor(Var(0), Var(0)), ["x0"], ["x1"], fixed={}
+    )
+
+    assert compiled is None
+    assert metrics["pair_collapses"] == 0
