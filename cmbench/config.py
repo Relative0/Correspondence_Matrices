@@ -128,6 +128,7 @@ class BenchmarkConfig:
     family_force_shared_substructure: bool = False
     family_no_robdd: bool = False
     family_robdd_shared_manager: bool = False
+    family_profile_timing: bool = False
 
     large_n_safe: bool = False
     verbose: bool = False
@@ -295,6 +296,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
         family_force_shared_substructure=bool(getattr(args, "family_force_shared_substructure", False)),
         family_no_robdd=bool(getattr(args, "family_no_robdd", False)),
         family_robdd_shared_manager=bool(getattr(args, "family_robdd_shared_manager", False)),
+        family_profile_timing=bool(getattr(args, "family_profile_timing", False)),
         large_n_safe=bool(getattr(args, "large_n_safe", False)),
         verbose=bool(getattr(args, "verbose", False)),
     )

@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import importlib
 import importlib.metadata
+import json
 import random
 import statistics
 import time
@@ -39,6 +40,7 @@ from cmbench.config import BenchmarkConfig, config_from_args
 from cmbench.corpus import load_expression_corpus, require_single_corpus_hash
 from cmbench.context import BenchmarkRunContext, make_context
 from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, OutputStatus
+from cmbench.phase_timing import PhaseRecorder, SCHEMA as FAMILY_TIMING_SCHEMA, active_recorder, phase_call, timed_phase
 from cmbench.backends.robdd_dd import (
     _dd_cudd_available,
     _empty_robdd_dd_result,
@@ -271,6 +273,8 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             vars_all=vars_all,
             diagnostics=diag_f,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            flat_eval=bench_config.cm_flat_eval,
+            words_eval=bench_config.cm_words_eval,
             output_budget=output_budget,
         )
         eval_f = time.perf_counter() - t2
@@ -281,6 +285,8 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
             vars_all=vars_all,
             diagnostics=diag_g,
             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
+            flat_eval=bench_config.cm_flat_eval,
+            words_eval=bench_config.cm_words_eval,
             output_budget=output_budget,
         )
         eval_g = time.perf_counter() - t3
@@ -443,6 +449,7 @@ def _cm_partial_workload(
             fixed=context_map,
             diagnostics=diag,
             hybrid_threshold=config.cm_hybrid_threshold,
+            flat_eval=config.cm_flat_eval,
             words_eval=config.cm_words_eval,
             allow_reduced_output=True,
             max_full_output_vars=config.cm_max_full_output_vars,
@@ -916,6 +923,16 @@ def print_partial_context_summary_table(df_agg):
     return _print_partial_context_summary_table(df_agg)
 
 
+def _family_expand_reduced_for_oracle(actual, output_vars, full_vars):
+    """Expand only a small oracle view; public reduced delivery stays reduced."""
+    ordered = [v for v in full_vars if v in output_vars]
+    axes = [output_vars.index(v) for v in ordered]
+    tensor = actual.reshape((2,) * len(output_vars)).transpose(axes)
+    shape = tuple(2 if v in output_vars else 1 for v in full_vars)
+    return np.broadcast_to(tensor.reshape(shape), (2,) * len(full_vars)).reshape(-1)
+
+
+@timed_phase("cm_family_backend")
 def _cm_family_workload(
     variants: List[Any],
     n_vars: int,
@@ -925,7 +942,22 @@ def _cm_family_workload(
     sample_rng: np.random.Generator,
     config: BenchmarkConfig,
 ) -> Dict[str, Any]:
-    clear_cm_ir_persistent_cache()
+    if len(variants) != len(tt_refs):
+        raise ValueError("family variants and references must have equal lengths")
+    phase_call("cache_lifecycle_reset", clear_cm_ir_persistent_cache)
+    # Bind observers once per family; an uninstrumented variant calls the
+    # original functions directly, without per-phase forwarding or clock reads.
+    compile_ir = compile_expr_to_cm_ir
+    evaluate = materialize_hybrid_no_reinflate
+    convert = bitset_to_bool_array
+    compare = np.array_equal
+    sample_check = sampled_correctness_check
+    if active_recorder() is not None:
+        compile_ir = timed_phase("cm_compile_api")(compile_ir)
+        evaluate = timed_phase("cm_evaluate_api")(evaluate)
+        convert = timed_phase("output_conversion")(convert)
+        compare = timed_phase("correctness_oracle")(compare)
+        sample_check = timed_phase("sampled_correctness_oracle")(sample_check)
     vars_all = [f"x{i}" for i in range(n_vars)]
     total_t0 = time.perf_counter()
     per_variant: List[float] = []
@@ -936,19 +968,24 @@ def _cm_family_workload(
     misses = 0
     materializations: List[Optional[float]] = []
     live_vars_max: List[Optional[float]] = []
+    engines: Counter = Counter()
+    widths: Counter = Counter()
+    statuses: Counter = Counter()
+    cache_profiles: List[Dict[str, Any]] = []
     for expr, tt_ref in zip(variants, tt_refs):
         diag: Dict[str, Any] = {"ir_timing_enabled": 1}
         t0 = time.perf_counter()
         c0 = time.perf_counter()
-        node = compile_expr_to_cm_ir(expr, diagnostics=diag, persistent_cache=persistent_cache, reuse_cache=False)
+        node = compile_ir(expr, diagnostics=diag, persistent_cache=persistent_cache, reuse_cache=False)
         compile_wall = time.perf_counter() - c0
         e0 = time.perf_counter()
-        res = materialize_hybrid_no_reinflate(
+        res = evaluate(
             node,
             vars_all,
             fixed={},
             diagnostics=diag,
             hybrid_threshold=config.cm_hybrid_threshold,
+            flat_eval=config.cm_flat_eval,
             words_eval=config.cm_words_eval,
             allow_reduced_output=bool(n_vars > config.cm_max_full_output_vars),
             max_full_output_vars=config.cm_max_full_output_vars,
@@ -959,6 +996,11 @@ def _cm_family_workload(
         )
         eval_wall = time.perf_counter() - e0
         per_variant.append(time.perf_counter() - t0)
+        engines[diag.get("cached_exec_engine_kind", "numpy_ir")] += 1
+        widths[len(res.output_vars)] += 1
+        statuses[res.status.value] += 1
+        if "ir_cache_profile_v1" in diag:
+            cache_profiles.append(diag["ir_cache_profile_v1"])
         compile_times.append(compile_wall)
         eval_times.append(eval_wall)
         hits += int(diag.get("ir_persistent_cache_hits", 0) or 0)
@@ -966,10 +1008,13 @@ def _cm_family_workload(
         materializations.append(float(diag.get("materializations", diag.get("cm_materializations", 0)) or 0))
         live_vars_max.append(float(diag.get("live_vars_max", diag.get("cm_live_vars_max", 0)) or 0))
         if tt_ref is not None:
-            actual = bitset_to_bool_array(int(res.bits), n_vars) if res.bits is not None else res.tt
-            oks.append(bool(actual is not None and np.array_equal(actual, tt_ref)))
+            actual = convert(int(res.bits), len(res.output_vars)) if res.bits is not None else res.tt
+            if actual is not None and len(res.output_vars) != n_vars:
+                actual = phase_call("oracle_expand_reduced", _family_expand_reduced_for_oracle,
+                                    actual, res.output_vars, vars_all)
+            oks.append(bool(actual is not None and compare(actual, tt_ref)))
         elif int(config.sampled_correctness or 0) > 0:
-            check = sampled_correctness_check(expr, res, n_vars, int(config.sampled_correctness), sample_rng)
+            check = sample_check(expr, res, n_vars, int(config.sampled_correctness), sample_rng)
             oks.append(int(check.get("sampled_correctness_mismatches") or 0) == 0)
         else:
             oks.append(None)
@@ -982,6 +1027,14 @@ def _cm_family_workload(
         f"{prefix}_compile_total_s": float(sum(compile_times)),
         f"{prefix}_eval_total_s": float(sum(eval_times)),
         f"{prefix}_ok_rate": _ok_rate(oks),
+        f"{prefix}_completed_variants": len(per_variant),
+        f"{prefix}_checked_variants": sum(ok is not None for ok in oks),
+        f"{prefix}_correct_variants": sum(ok is True for ok in oks),
+        f"{prefix}_engine_kind": next(iter(engines)) if len(engines) == 1 else "mixed" if engines else "none",
+        f"{prefix}_engine_counts_json": json.dumps(dict(sorted(engines.items()))),
+        f"{prefix}_output_width_counts_json": json.dumps(dict(sorted(widths.items()))),
+        f"{prefix}_output_status_counts_json": json.dumps(dict(sorted(statuses.items()))),
+        **({f"{prefix}_cache_profile_json": json.dumps(cache_profiles)} if cache_profiles else {}),
         f"{prefix}_materializations_total": float(sum(v for v in materializations if v is not None)),
         f"{prefix}_live_vars_max_median": _median_or_none(live_vars_max),
         **(
@@ -1051,6 +1104,58 @@ def time_expression_family_workload(
     sample_rng: np.random.Generator,
     robdd_order_seed: Optional[int],
     config: Optional[BenchmarkConfig] = None,
+    timing: Optional[PhaseRecorder] = None,
+) -> Dict[str, Any]:
+    """Run a family. Supply a recorder to retain phase status even on failure.
+
+    The capture includes backend reset, references, validation and row assembly.
+    Argument construction, process startup and final trace serialization/return
+    are outside it and require an independent caller observation.
+    """
+    config = config or (config_from_args(args) if args is not None else None)
+    if config is None:
+        raise ValueError("config is required when global args is not initialized")
+    recorder = timing if timing is not None else (PhaseRecorder() if config.family_profile_timing else None)
+    kwargs = dict(family_id=family_id, trial=trial, expr_style=expr_style,
+                  variant_style=variant_style, mutation_rate=mutation_rate,
+                  bit_env=bit_env, sample_rng=sample_rng, robdd_order_seed=robdd_order_seed,
+                  config=config)
+    if recorder is None:
+        row = _time_expression_family_workload(n_vars, family, **kwargs)
+    else:
+        with recorder.activate(), recorder.span("family_observed", "before_workload_to_completed_row"):
+            row = _time_expression_family_workload(n_vars, family, **kwargs)
+    row.update(family_timing_schema=FAMILY_TIMING_SCHEMA if recorder else "legacy-uninstrumented",
+               family_contract="explicit_no_reinflate_with_budget",
+               family_cm_flat_requested=bool(config.cm_flat_eval),
+               family_cm_words_requested=bool(config.cm_words_eval))
+    row["family_execution_contract_json"] = json.dumps({
+        "hybrid_threshold": config.cm_hybrid_threshold,
+        "max_output_vars": config.cm_max_full_output_vars,
+        "max_output_bytes": config.cm_max_output_bytes,
+        "max_temporary_bytes": config.cm_max_temporary_bytes,
+        "full_tt_max_n": config.full_tt_max_n,
+        "sampled_correctness": config.sampled_correctness,
+        "direct_environment_supplied": bit_env is not None,
+    }, sort_keys=True)
+    if recorder is not None:
+        row["family_phase_timing_json"] = json.dumps(recorder.snapshot(), sort_keys=True)
+    return row
+
+
+def _time_expression_family_workload(
+    n_vars: int,
+    family: Dict[str, Any],
+    *,
+    family_id: str,
+    trial: int,
+    expr_style: str,
+    variant_style: str,
+    mutation_rate: float,
+    bit_env: Optional[Mapping[str, int]],
+    sample_rng: np.random.Generator,
+    robdd_order_seed: Optional[int],
+    config: Optional[BenchmarkConfig] = None,
 ) -> Dict[str, Any]:
     config = config or (config_from_args(args) if args is not None else None)
     if config is None:
@@ -1058,7 +1163,8 @@ def time_expression_family_workload(
     variants = list(family["variants"])
     full_tt_max_n = int(config.full_tt_max_n)
     build_tt = n_vars <= full_tt_max_n
-    tt_refs = [eval_expr_tt(expr, n_vars).astype(np.uint8).reshape(-1) if build_tt else None for expr in variants]
+    tt_refs = phase_call("reference_construction", lambda: [
+        eval_expr_tt(expr, n_vars).astype(np.uint8).reshape(-1) if build_tt else None for expr in variants])
     row = {
         "n_vars": int(n_vars),
         "trial": int(trial),
@@ -1070,7 +1176,7 @@ def time_expression_family_workload(
             if build_tt
             else ("sampled_assignments" if int(config.sampled_correctness or 0) > 0 else "skipped_large_n")
         ),
-        **expression_family_diagnostics(
+        **phase_call("family_structure_diagnostics", expression_family_diagnostics,
             family,
             n_vars,
             family_id=family_id,
@@ -1091,16 +1197,17 @@ def time_expression_family_workload(
         family_bitset_baseline_kind = family_selection.kind
         env = None
         if family_selection.requires_bigint_env:
-            env = bit_env if bit_env is not None else build_bitset_env(list(names))
+            env = bit_env if bit_env is not None else phase_call("direct_environment", build_bitset_env, list(names))
         times: List[float] = []
         oks: List[Any] = []
         total0 = time.perf_counter()
         for expr, tt_ref in zip(variants, tt_refs):
             t0 = time.perf_counter()
-            bits = family_selection.evaluate_expr(expr, names, bigint_env=env)
+            bits = phase_call("direct_evaluate_api", family_selection.evaluate_expr, expr, names, bigint_env=env)
             times.append(time.perf_counter() - t0)
             if tt_ref is not None:
-                oks.append(bool(np.array_equal(bitset_to_bool_array(int(bits), n_vars), tt_ref)))
+                actual = phase_call("direct_output_conversion", bitset_to_bool_array, int(bits), n_vars)
+                oks.append(bool(phase_call("direct_correctness_oracle", np.array_equal, actual, tt_ref)))
             else:
                 oks.append(None)
         row.update(
@@ -1110,6 +1217,8 @@ def time_expression_family_workload(
                 "family_bitset_per_variant_median_s": _median_or_none(times),
                 "family_bitset_per_variant_mean_s": _mean_or_none(times),
                 "family_bitset_ok_rate": _ok_rate(oks),
+                "family_bitset_completed_variants": len(times),
+                "family_bitset_checked_variants": sum(ok is not None for ok in oks),
             }
         )
     else:
@@ -1158,7 +1267,7 @@ def time_expression_family_workload(
         robdd_backend = None
         total0 = time.perf_counter()
         for i, (expr, tt_ref) in enumerate(zip(variants, tt_refs)):
-            res = run_robdd_dd_backend(
+            res = phase_call("robdd_algorithm_comparison", run_robdd_dd_backend,
                 expr,
                 n_vars,
                 backend_preference=str(config.robdd_dd_backend),
@@ -1302,7 +1411,16 @@ def run_expression_family_bench(
         except Exception:
             return None
 
-    group_cols = ["n_vars", "expr_style", "family_variant_style", "family_size"]
+    group_cols = ["n_vars", "expr_style", "family_variant_style", "family_size",
+                  "family_timing_schema", "family_contract", "family_cm_flat_requested",
+                  "family_execution_contract_json",
+                  "family_cm_words_requested", "family_bitset_baseline_kind",
+                  "family_cm_no_cache_engine_kind", "family_cm_cache_engine_kind",
+                  "family_cm_no_cache_engine_counts_json", "family_cm_cache_engine_counts_json",
+                  "family_cm_no_cache_output_width_counts_json",
+                  "family_cm_cache_output_width_counts_json",
+                  "family_cm_no_cache_output_status_counts_json",
+                  "family_cm_cache_output_status_counts_json"]
     median_cols = [
         "family_reuse_ratio",
         "family_unique_subtree_hashes",
@@ -1326,7 +1444,7 @@ def run_expression_family_bench(
     if "family_robdd_backend" in df.columns:
         agg_spec["family_robdd_backend"] = ("family_robdd_backend", safe_first)
     agg_spec["trials"] = ("trial", "count")
-    df_agg = df.groupby(group_cols).agg(**agg_spec).reset_index() if rows else pd.DataFrame()
+    df_agg = df.groupby(group_cols, dropna=False).agg(**agg_spec).reset_index() if rows else pd.DataFrame()
     return df, df_agg
 
 
@@ -4824,6 +4942,8 @@ def main():
         help="Sample K full assignments and compare original AST evaluation with no-reinflate output projection.",
     )
     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
+    ap.add_argument("--family-profile-timing", action="store_true",
+                    help="Record diagnostic exclusive wall/CPU family phases (default off).")
     ap.add_argument(
         "--corpus-jsonl",
         default="",

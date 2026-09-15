@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-time-attribution-20260915\scripts\verify_cm_count_closures_release.py", line 22, in <module>
+    if __name__=='__main__':print(json.dumps(verify(),indent=2))
+                                             ~~~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-time-attribution-20260915\scripts\verify_cm_count_closures_release.py", line 17, in verify
+    result=verify_sealed(root)
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-time-attribution-20260915\scripts\verify_cm_count_closures.py", line 27, in verify
+    if not path.is_relative_to(root.resolve()) or sha(path)!=digest:raise ValueError('source identity mismatch: '+name)
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: source identity mismatch: cmbench/comparative/component_counts.py

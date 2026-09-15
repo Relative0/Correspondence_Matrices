@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-family-repair-20260915\scripts\cm_research_check.py", line 283, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-family-repair-20260915\scripts\cm_research_check.py", line 269, in main
+    target = report_target(args.report) if args.report else None
+             ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-family-repair-20260915\scripts\cm_research_check.py", line 252, in report_target
+    require(target.suffix == ".json" and any(target.resolve().is_relative_to(root) for root in roots),
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "report must be under project tmp or research verification")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\brian\Documents\CM_Computation\tmp\cm-family-repair-20260915\scripts\cm_research_check.py", line 42, in require
+    raise ValueError(message)
+ValueError: report must be under project tmp or research verification

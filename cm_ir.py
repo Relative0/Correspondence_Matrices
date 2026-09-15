@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from contextlib import contextmanager
+from contextvars import ContextVar
 from functools import wraps
 from dataclasses import dataclass
 from functools import lru_cache
@@ -282,6 +283,11 @@ def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
     return d
 
 
+# An opt-in observer is supplied by the caller. Core compilation has no import
+# dependency on benchmark instrumentation and still works in standalone bundles.
+_IR_PHASE_OBSERVER: ContextVar[Any] = ContextVar("cm_ir_phase_observer", default=None)
+
+
 def compile_expr_to_cm_ir_persistent(
     expr: Expr,
     diagnostics: Optional[Dict[str, Any]] = None,
@@ -320,6 +326,14 @@ def compile_expr_to_cm_ir_persistent(
     _init_ir_compile_diagnostics(diagnostics)
     _init_ir_persistent_cache_diagnostics(diagnostics)
 
+    # Detailed cache work is captured only inside an explicit diagnostic session.
+    # Legacy ir_compile_time_s deliberately keeps its historical boundary below.
+    recorder = _IR_PHASE_OBSERVER.get()
+    initial_keys = set(_PERSISTENT_IR_CACHE) if recorder is not None else None
+    cache_detail = {"root_hits": 0, "subtree_hits": 0, "same_call_hits": 0,
+                    "prior_call_hits": 0, "evictions": 0,
+                    "entries_before": len(_PERSISTENT_IR_CACHE)} if recorder is not None else None
+
     def cache_get(key: str) -> Optional[CMNode]:
         cached = _PERSISTENT_IR_CACHE.get(key)
         if cached is None:
@@ -327,13 +341,25 @@ def compile_expr_to_cm_ir_persistent(
             return None
         _PERSISTENT_IR_CACHE.move_to_end(key)
         _bump(diagnostics, "ir_persistent_cache_hits")
+        if cache_detail is not None:
+            # A subtree-policy traversal can itself stop at its root. Hit
+            # position and cache regime are independent axes.
+            is_root = key == prefix + digest_memo[id(expr)].hex()
+            cache_detail["root_hits" if is_root else "subtree_hits"] += 1
+            cache_detail["prior_call_hits" if key in initial_keys else "same_call_hits"] += 1
         return cached
 
     def cache_put(key: str, node: CMNode) -> CMNode:
+        if cache_detail is not None:
+            # Reinserting an evicted initial key creates a same-call entry.
+            # Keep only keys whose original entry could still be hit.
+            initial_keys.discard(key)
         _PERSISTENT_IR_CACHE[key] = node
         _PERSISTENT_IR_CACHE.move_to_end(key)
         if len(_PERSISTENT_IR_CACHE) > _PERSISTENT_IR_CACHE_MAXSIZE:
             _PERSISTENT_IR_CACHE.popitem(last=False)
+            if cache_detail is not None:
+                cache_detail["evictions"] += 1
         return node
 
     prefix = "s1:" if share_aware_flatten else "s0:"
@@ -342,19 +368,29 @@ def compile_expr_to_cm_ir_persistent(
     digest_memo: Dict[int, bytes] = {}
 
     shared_uids: set = set()
+    digest = _persistent_digest
+    sharing = CMIRBuilder._shared_assoc_uids
+    if recorder is not None:
+        cache_get = recorder.wrap("persistent_cache_lookup_lru", cache_get)
+        cache_put = recorder.wrap("persistent_cache_insert_evict", cache_put)
+        digest = recorder.wrap("persistent_digest", digest)
+        sharing = recorder.wrap("persistent_sharing_eligibility", sharing)
     if share_aware_flatten:
-        _uids, shared_uids = CMIRBuilder._shared_assoc_uids(expr)
+        _uids, shared_uids = sharing(expr)
 
     def compile_root_level() -> CMNode:
-        key = prefix + _persistent_digest(expr, digest_memo).hex()
+        key = prefix + digest(expr, digest_memo).hex()
         cached = cache_get(key)
         if cached is not None:
             return cached
-        return cache_put(key, builder.build(expr))
+        build = builder._build_with_sharing_plan
+        if recorder is not None:
+            build = recorder.wrap("persistent_root_build", build)
+        return cache_put(key, build(expr, _uids, shared_uids))
 
     def compile_subtree_level() -> CMNode:
         def build(e: Expr) -> CMNode:
-            key = prefix + _persistent_digest(e, digest_memo).hex()
+            key = prefix + digest(e, digest_memo).hex()
             cached = cache_get(key)
             if cached is not None:
                 return cached
@@ -388,6 +424,12 @@ def compile_expr_to_cm_ir_persistent(
         node = compile_fn()
     if diagnostics is not None:
         diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
+        if cache_detail is not None:
+            diagnostics["ir_cache_profile_v1"] = {
+                **cache_detail, "policy": "root_only" if shared_uids else "subtree",
+                "entries_after": len(_PERSISTENT_IR_CACHE),
+                "validation": "digest_and_options_only_no_equality_fallback",
+            }
     return node
 
 
@@ -1121,6 +1163,21 @@ class CMIRBuilder:
         shared = {u for u in assoc_uids if fanout.get(u, 0) > 1}
         return uid_by_id, shared
 
+    def _build_with_sharing_plan(self, expr: Expr, uid_by_id: Dict[int, int], shared_uids: set) -> CMNode:
+        """Consume an eligibility prepass synchronously for this exact root.
+
+        The strong root reference pins all source ids. The plan is private,
+        scoped to this call, and never stored in the persistent cache. Calling
+        public build preserves subclass dispatch; a substituted root recomputes
+        its own plan. Restore the prior binding even on failure or reentry.
+        """
+        previous = getattr(self, "_prepared_sharing_plan", None)
+        self._prepared_sharing_plan = (expr, uid_by_id, shared_uids)
+        try:
+            return self.build(expr)
+        finally:
+            self._prepared_sharing_plan = previous
+
     def build(self, expr: Expr) -> CMNode:
         state = self._build_state
         if state is not None:
@@ -1138,7 +1195,11 @@ class CMIRBuilder:
         shared_uids: Optional[set] = None
         no_splice: Optional[set] = None
         if self.share_aware_flatten:
-            uid_by_id, shared_uids = self._shared_assoc_uids(expr)
+            prepared = getattr(self, "_prepared_sharing_plan", None)
+            if prepared is not None and prepared[0] is expr:
+                _, uid_by_id, shared_uids = prepared
+            else:
+                uid_by_id, shared_uids = self._shared_assoc_uids(expr)
             no_splice = set()
             if self.diagnostics is not None:
                 _bump(self.diagnostics, "build_shared_assoc_subexprs", len(shared_uids))
@@ -1315,6 +1376,7 @@ def evaluate_compiled(
     fixed: Optional[Dict[str, int]] = None,
     diagnostics: Optional[Dict[str, Any]] = None,
     hybrid_threshold: int = 7,
+    flat_eval: Optional[bool] = None,
     words_eval: Optional[bool] = None,
     output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
     allow_reduced_output: bool = False,
@@ -1334,6 +1396,7 @@ def evaluate_compiled(
         fixed=fixed,
         diagnostics=diagnostics,
         hybrid_threshold=hybrid_threshold,
+        flat_eval=flat_eval,
         words_eval=words_eval,
         output_budget=output_budget,
         allow_reduced_output=allow_reduced_output,
@@ -2024,70 +2087,16 @@ def materialize_hybrid_no_reinflate(
     (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
     controlled before/after measurements; it does not change result semantics.
     """
-    # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
-    # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
-    # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
+    # One admission/basis plan for packed and fallback paths. The fast return
+    # skips diagnostic delivery; flat_fast_path=False remains a supported control.
     use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
     use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
     from cmbench.backends.bitset_engine import select_cm_node_engine
-    if diagnostics is None and (use_flat or use_words) and flat_fast_path:
-        if hybrid_threshold < 0:
-            raise ValueError("hybrid_threshold must be >= 0")
-        fast_fixed_map = fixed or {}
-        fast_vars_key = tuple(vars_all)
-        fast_live_vars = (
-            node.vars
-            if not fast_fixed_map
-            else tuple(v for v in node.vars if v not in fast_fixed_map)
-        )
-        fast_n = len(fast_vars_key)
-        fast_budget = _effective_output_budget(
-            output_budget,
-            max_full_output_vars=max_full_output_vars,
-            allow_reduced_output=allow_reduced_output,
-        )
-        fast_representation = (
-            "packed_bitset"
-            if len(fast_live_vars) <= hybrid_threshold
-            else "truth_table_uint8"
-        )
-        fast_operation_slots = _cm_node_count(node)
-        fast_decision = require_output_budget(
-            decide_output_budget(
-                fast_budget,
-                estimate_explicit_output(
-                    fast_n,
-                    fast_representation,
-                    operation_slots=fast_operation_slots,
-                ),
-                reduced_estimate=estimate_explicit_output(
-                    len(fast_live_vars),
-                    fast_representation,
-                    operation_slots=fast_operation_slots,
-                ),
-                artifact_name="full no-reinflate output",
-                reduced_artifact_name="reduced no-reinflate output",
-            )
-        )
-        fast_reduced = fast_decision.status is OutputStatus.REDUCED
-        fast_output_vars = fast_live_vars if fast_reduced else fast_vars_key
-        fast_output_k = len(fast_output_vars)
-        if len(fast_live_vars) <= hybrid_threshold:
-            fast_selection = select_cm_node_engine(
-                live_k=fast_output_k,
-                words_requested=use_words,
-                flat_requested=use_flat,
-            )
-            return FinalNoReinflateResult(
-                final_output_representation_code=3 if fast_reduced else 2,
-                bits=fast_selection.evaluate_node(
-                    node, fast_output_vars, fixed=fast_fixed_map
-                ),
-                tt=None,
-                output_vars=fast_output_vars,
-                status=fast_decision.status,
-                budget_decision=fast_decision,
-            )
+    fast_return = diagnostics is None and (use_flat or use_words) and flat_fast_path
+    # Preserve the existing fast-path invalid-threshold precedence over budget
+    # refusal. The generic path has historically checked it after admission.
+    if fast_return and hybrid_threshold < 0:
+        raise ValueError("hybrid_threshold must be >= 0")
 
     profile = diagnostics is not None and bool(diagnostics.get("cached_exec_profile_enabled", 0))
     t_total0 = time.perf_counter() if profile else None
@@ -2162,6 +2171,12 @@ def materialize_hybrid_no_reinflate(
             flat_requested=use_flat,
         )
         bits = selected_engine.evaluate_node(node, output_vars, fixed=fixed_map)
+        if fast_return:
+            return FinalNoReinflateResult(
+                final_output_representation_code=3 if use_reduced_output else 2,
+                bits=bits, tt=None, output_vars=output_vars,
+                status=decision.status, budget_decision=decision,
+            )
         if diagnostics is not None:
             diagnostics["cached_exec_engine_kind"] = selected_engine.kind
             diagnostics["cached_exec_engine_live_k"] = selected_engine.live_k

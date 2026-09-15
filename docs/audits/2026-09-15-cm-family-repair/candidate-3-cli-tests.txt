@@ -1,0 +1,19 @@
+............E........................                                    [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_cli_serializes_schema_provenance_and_preserves_disabled_rows _
+
+self = WindowsPath('C:/Users/brian/Documents/CM_Computation/tmp/cm-family-repair-20260915/tmp/pytest-repair-cli-1')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\brian\\Documents\\CM_Computation\\tmp\\cm-family-repair-20260915\\tmp\\pytest-repair-cli-1'
+
+..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/test_cm_family_repairs.py::test_cli_serializes_schema_provenance_and_preserves_disabled_rows
+36 passed, 1 error in 1.99s

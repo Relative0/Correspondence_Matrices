@@ -1,0 +1,1065 @@
+diff --git a/cm_bench.py b/cm_bench.py
+index fb6eaab1..b81fc677 100644
+--- a/cm_bench.py
++++ b/cm_bench.py
+@@ -3,6 +3,7 @@ import argparse
+ import hashlib
+ import importlib
+ import importlib.metadata
++import json
+ import random
+ import statistics
+ import time
+@@ -39,6 +40,7 @@ from cmbench.config import BenchmarkConfig, config_from_args
+ from cmbench.corpus import load_expression_corpus, require_single_corpus_hash
+ from cmbench.context import BenchmarkRunContext, make_context
+ from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, OutputStatus
++from cmbench.phase_timing import PhaseRecorder, SCHEMA as FAMILY_TIMING_SCHEMA, active_recorder, phase_call, timed_phase
+ from cmbench.backends.robdd_dd import (
+     _dd_cudd_available,
+     _empty_robdd_dd_result,
+@@ -271,6 +273,8 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
+             vars_all=vars_all,
+             diagnostics=diag_f,
+             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
++            flat_eval=bench_config.cm_flat_eval,
++            words_eval=bench_config.cm_words_eval,
+             output_budget=output_budget,
+         )
+         eval_f = time.perf_counter() - t2
+@@ -281,6 +285,8 @@ def cm_equivalence_check(expr_f, expr_g, n: int, *, expected: Optional[bool] = N
+             vars_all=vars_all,
+             diagnostics=diag_g,
+             hybrid_threshold=int(bench_config.cm_hybrid_threshold),
++            flat_eval=bench_config.cm_flat_eval,
++            words_eval=bench_config.cm_words_eval,
+             output_budget=output_budget,
+         )
+         eval_g = time.perf_counter() - t3
+@@ -443,6 +449,7 @@ def _cm_partial_workload(
+             fixed=context_map,
+             diagnostics=diag,
+             hybrid_threshold=config.cm_hybrid_threshold,
++            flat_eval=config.cm_flat_eval,
+             words_eval=config.cm_words_eval,
+             allow_reduced_output=True,
+             max_full_output_vars=config.cm_max_full_output_vars,
+@@ -916,6 +923,16 @@ def print_partial_context_summary_table(df_agg):
+     return _print_partial_context_summary_table(df_agg)
+ 
+ 
++def _family_expand_reduced_for_oracle(actual, output_vars, full_vars):
++    """Expand only a small oracle view; public reduced delivery stays reduced."""
++    ordered = [v for v in full_vars if v in output_vars]
++    axes = [output_vars.index(v) for v in ordered]
++    tensor = actual.reshape((2,) * len(output_vars)).transpose(axes)
++    shape = tuple(2 if v in output_vars else 1 for v in full_vars)
++    return np.broadcast_to(tensor.reshape(shape), (2,) * len(full_vars)).reshape(-1)
++
++
++@timed_phase("cm_family_backend")
+ def _cm_family_workload(
+     variants: List[Any],
+     n_vars: int,
+@@ -925,7 +942,22 @@ def _cm_family_workload(
+     sample_rng: np.random.Generator,
+     config: BenchmarkConfig,
+ ) -> Dict[str, Any]:
+-    clear_cm_ir_persistent_cache()
++    if len(variants) != len(tt_refs):
++        raise ValueError("family variants and references must have equal lengths")
++    phase_call("cache_lifecycle_reset", clear_cm_ir_persistent_cache)
++    # Bind observers once per family; an uninstrumented variant calls the
++    # original functions directly, without per-phase forwarding or clock reads.
++    compile_ir = compile_expr_to_cm_ir
++    evaluate = materialize_hybrid_no_reinflate
++    convert = bitset_to_bool_array
++    compare = np.array_equal
++    sample_check = sampled_correctness_check
++    if active_recorder() is not None:
++        compile_ir = timed_phase("cm_compile_api")(compile_ir)
++        evaluate = timed_phase("cm_evaluate_api")(evaluate)
++        convert = timed_phase("output_conversion")(convert)
++        compare = timed_phase("correctness_oracle")(compare)
++        sample_check = timed_phase("sampled_correctness_oracle")(sample_check)
+     vars_all = [f"x{i}" for i in range(n_vars)]
+     total_t0 = time.perf_counter()
+     per_variant: List[float] = []
+@@ -936,19 +968,24 @@ def _cm_family_workload(
+     misses = 0
+     materializations: List[Optional[float]] = []
+     live_vars_max: List[Optional[float]] = []
++    engines: Counter = Counter()
++    widths: Counter = Counter()
++    statuses: Counter = Counter()
++    cache_profiles: List[Dict[str, Any]] = []
+     for expr, tt_ref in zip(variants, tt_refs):
+         diag: Dict[str, Any] = {"ir_timing_enabled": 1}
+         t0 = time.perf_counter()
+         c0 = time.perf_counter()
+-        node = compile_expr_to_cm_ir(expr, diagnostics=diag, persistent_cache=persistent_cache, reuse_cache=False)
++        node = compile_ir(expr, diagnostics=diag, persistent_cache=persistent_cache, reuse_cache=False)
+         compile_wall = time.perf_counter() - c0
+         e0 = time.perf_counter()
+-        res = materialize_hybrid_no_reinflate(
++        res = evaluate(
+             node,
+             vars_all,
+             fixed={},
+             diagnostics=diag,
+             hybrid_threshold=config.cm_hybrid_threshold,
++            flat_eval=config.cm_flat_eval,
+             words_eval=config.cm_words_eval,
+             allow_reduced_output=bool(n_vars > config.cm_max_full_output_vars),
+             max_full_output_vars=config.cm_max_full_output_vars,
+@@ -959,6 +996,11 @@ def _cm_family_workload(
+         )
+         eval_wall = time.perf_counter() - e0
+         per_variant.append(time.perf_counter() - t0)
++        engines[diag.get("cached_exec_engine_kind", "numpy_ir")] += 1
++        widths[len(res.output_vars)] += 1
++        statuses[res.status.value] += 1
++        if "ir_cache_profile_v1" in diag:
++            cache_profiles.append(diag["ir_cache_profile_v1"])
+         compile_times.append(compile_wall)
+         eval_times.append(eval_wall)
+         hits += int(diag.get("ir_persistent_cache_hits", 0) or 0)
+@@ -966,10 +1008,13 @@ def _cm_family_workload(
+         materializations.append(float(diag.get("materializations", diag.get("cm_materializations", 0)) or 0))
+         live_vars_max.append(float(diag.get("live_vars_max", diag.get("cm_live_vars_max", 0)) or 0))
+         if tt_ref is not None:
+-            actual = bitset_to_bool_array(int(res.bits), n_vars) if res.bits is not None else res.tt
+-            oks.append(bool(actual is not None and np.array_equal(actual, tt_ref)))
++            actual = convert(int(res.bits), len(res.output_vars)) if res.bits is not None else res.tt
++            if actual is not None and len(res.output_vars) != n_vars:
++                actual = phase_call("oracle_expand_reduced", _family_expand_reduced_for_oracle,
++                                    actual, res.output_vars, vars_all)
++            oks.append(bool(actual is not None and compare(actual, tt_ref)))
+         elif int(config.sampled_correctness or 0) > 0:
+-            check = sampled_correctness_check(expr, res, n_vars, int(config.sampled_correctness), sample_rng)
++            check = sample_check(expr, res, n_vars, int(config.sampled_correctness), sample_rng)
+             oks.append(int(check.get("sampled_correctness_mismatches") or 0) == 0)
+         else:
+             oks.append(None)
+@@ -982,6 +1027,14 @@ def _cm_family_workload(
+         f"{prefix}_compile_total_s": float(sum(compile_times)),
+         f"{prefix}_eval_total_s": float(sum(eval_times)),
+         f"{prefix}_ok_rate": _ok_rate(oks),
++        f"{prefix}_completed_variants": len(per_variant),
++        f"{prefix}_checked_variants": sum(ok is not None for ok in oks),
++        f"{prefix}_correct_variants": sum(ok is True for ok in oks),
++        f"{prefix}_engine_kind": next(iter(engines)) if len(engines) == 1 else "mixed" if engines else "none",
++        f"{prefix}_engine_counts_json": json.dumps(dict(sorted(engines.items()))),
++        f"{prefix}_output_width_counts_json": json.dumps(dict(sorted(widths.items()))),
++        f"{prefix}_output_status_counts_json": json.dumps(dict(sorted(statuses.items()))),
++        **({f"{prefix}_cache_profile_json": json.dumps(cache_profiles)} if cache_profiles else {}),
+         f"{prefix}_materializations_total": float(sum(v for v in materializations if v is not None)),
+         f"{prefix}_live_vars_max_median": _median_or_none(live_vars_max),
+         **(
+@@ -1051,6 +1104,58 @@ def time_expression_family_workload(
+     sample_rng: np.random.Generator,
+     robdd_order_seed: Optional[int],
+     config: Optional[BenchmarkConfig] = None,
++    timing: Optional[PhaseRecorder] = None,
++) -> Dict[str, Any]:
++    """Run a family. Supply a recorder to retain phase status even on failure.
++
++    The capture includes backend reset, references, validation and row assembly.
++    Argument construction, process startup and final trace serialization/return
++    are outside it and require an independent caller observation.
++    """
++    config = config or (config_from_args(args) if args is not None else None)
++    if config is None:
++        raise ValueError("config is required when global args is not initialized")
++    recorder = timing if timing is not None else (PhaseRecorder() if config.family_profile_timing else None)
++    kwargs = dict(family_id=family_id, trial=trial, expr_style=expr_style,
++                  variant_style=variant_style, mutation_rate=mutation_rate,
++                  bit_env=bit_env, sample_rng=sample_rng, robdd_order_seed=robdd_order_seed,
++                  config=config)
++    if recorder is None:
++        row = _time_expression_family_workload(n_vars, family, **kwargs)
++    else:
++        with recorder.activate(), recorder.span("family_observed", "before_workload_to_completed_row"):
++            row = _time_expression_family_workload(n_vars, family, **kwargs)
++    row.update(family_timing_schema=FAMILY_TIMING_SCHEMA if recorder else "legacy-uninstrumented",
++               family_contract="explicit_no_reinflate_with_budget",
++               family_cm_flat_requested=bool(config.cm_flat_eval),
++               family_cm_words_requested=bool(config.cm_words_eval))
++    row["family_execution_contract_json"] = json.dumps({
++        "hybrid_threshold": config.cm_hybrid_threshold,
++        "max_output_vars": config.cm_max_full_output_vars,
++        "max_output_bytes": config.cm_max_output_bytes,
++        "max_temporary_bytes": config.cm_max_temporary_bytes,
++        "full_tt_max_n": config.full_tt_max_n,
++        "sampled_correctness": config.sampled_correctness,
++        "direct_environment_supplied": bit_env is not None,
++    }, sort_keys=True)
++    if recorder is not None:
++        row["family_phase_timing_json"] = json.dumps(recorder.snapshot(), sort_keys=True)
++    return row
++
++
++def _time_expression_family_workload(
++    n_vars: int,
++    family: Dict[str, Any],
++    *,
++    family_id: str,
++    trial: int,
++    expr_style: str,
++    variant_style: str,
++    mutation_rate: float,
++    bit_env: Optional[Mapping[str, int]],
++    sample_rng: np.random.Generator,
++    robdd_order_seed: Optional[int],
++    config: Optional[BenchmarkConfig] = None,
+ ) -> Dict[str, Any]:
+     config = config or (config_from_args(args) if args is not None else None)
+     if config is None:
+@@ -1058,7 +1163,8 @@ def time_expression_family_workload(
+     variants = list(family["variants"])
+     full_tt_max_n = int(config.full_tt_max_n)
+     build_tt = n_vars <= full_tt_max_n
+-    tt_refs = [eval_expr_tt(expr, n_vars).astype(np.uint8).reshape(-1) if build_tt else None for expr in variants]
++    tt_refs = phase_call("reference_construction", lambda: [
++        eval_expr_tt(expr, n_vars).astype(np.uint8).reshape(-1) if build_tt else None for expr in variants])
+     row = {
+         "n_vars": int(n_vars),
+         "trial": int(trial),
+@@ -1070,7 +1176,7 @@ def time_expression_family_workload(
+             if build_tt
+             else ("sampled_assignments" if int(config.sampled_correctness or 0) > 0 else "skipped_large_n")
+         ),
+-        **expression_family_diagnostics(
++        **phase_call("family_structure_diagnostics", expression_family_diagnostics,
+             family,
+             n_vars,
+             family_id=family_id,
+@@ -1091,16 +1197,17 @@ def time_expression_family_workload(
+         family_bitset_baseline_kind = family_selection.kind
+         env = None
+         if family_selection.requires_bigint_env:
+-            env = bit_env if bit_env is not None else build_bitset_env(list(names))
++            env = bit_env if bit_env is not None else phase_call("direct_environment", build_bitset_env, list(names))
+         times: List[float] = []
+         oks: List[Any] = []
+         total0 = time.perf_counter()
+         for expr, tt_ref in zip(variants, tt_refs):
+             t0 = time.perf_counter()
+-            bits = family_selection.evaluate_expr(expr, names, bigint_env=env)
++            bits = phase_call("direct_evaluate_api", family_selection.evaluate_expr, expr, names, bigint_env=env)
+             times.append(time.perf_counter() - t0)
+             if tt_ref is not None:
+-                oks.append(bool(np.array_equal(bitset_to_bool_array(int(bits), n_vars), tt_ref)))
++                actual = phase_call("direct_output_conversion", bitset_to_bool_array, int(bits), n_vars)
++                oks.append(bool(phase_call("direct_correctness_oracle", np.array_equal, actual, tt_ref)))
+             else:
+                 oks.append(None)
+         row.update(
+@@ -1110,6 +1217,8 @@ def time_expression_family_workload(
+                 "family_bitset_per_variant_median_s": _median_or_none(times),
+                 "family_bitset_per_variant_mean_s": _mean_or_none(times),
+                 "family_bitset_ok_rate": _ok_rate(oks),
++                "family_bitset_completed_variants": len(times),
++                "family_bitset_checked_variants": sum(ok is not None for ok in oks),
+             }
+         )
+     else:
+@@ -1158,7 +1267,7 @@ def time_expression_family_workload(
+         robdd_backend = None
+         total0 = time.perf_counter()
+         for i, (expr, tt_ref) in enumerate(zip(variants, tt_refs)):
+-            res = run_robdd_dd_backend(
++            res = phase_call("robdd_algorithm_comparison", run_robdd_dd_backend,
+                 expr,
+                 n_vars,
+                 backend_preference=str(config.robdd_dd_backend),
+@@ -1302,7 +1411,16 @@ def run_expression_family_bench(
+         except Exception:
+             return None
+ 
+-    group_cols = ["n_vars", "expr_style", "family_variant_style", "family_size"]
++    group_cols = ["n_vars", "expr_style", "family_variant_style", "family_size",
++                  "family_timing_schema", "family_contract", "family_cm_flat_requested",
++                  "family_execution_contract_json",
++                  "family_cm_words_requested", "family_bitset_baseline_kind",
++                  "family_cm_no_cache_engine_kind", "family_cm_cache_engine_kind",
++                  "family_cm_no_cache_engine_counts_json", "family_cm_cache_engine_counts_json",
++                  "family_cm_no_cache_output_width_counts_json",
++                  "family_cm_cache_output_width_counts_json",
++                  "family_cm_no_cache_output_status_counts_json",
++                  "family_cm_cache_output_status_counts_json"]
+     median_cols = [
+         "family_reuse_ratio",
+         "family_unique_subtree_hashes",
+@@ -1326,7 +1444,7 @@ def run_expression_family_bench(
+     if "family_robdd_backend" in df.columns:
+         agg_spec["family_robdd_backend"] = ("family_robdd_backend", safe_first)
+     agg_spec["trials"] = ("trial", "count")
+-    df_agg = df.groupby(group_cols).agg(**agg_spec).reset_index() if rows else pd.DataFrame()
++    df_agg = df.groupby(group_cols, dropna=False).agg(**agg_spec).reset_index() if rows else pd.DataFrame()
+     return df, df_agg
+ 
+ 
+@@ -4824,6 +4942,8 @@ def main():
+         help="Sample K full assignments and compare original AST evaluation with no-reinflate output projection.",
+     )
+     ap.add_argument("--full-tt-max-n", dest="full_tt_max_n", type=int, default=16)
++    ap.add_argument("--family-profile-timing", action="store_true",
++                    help="Record diagnostic exclusive wall/CPU family phases (default off).")
+     ap.add_argument(
+         "--corpus-jsonl",
+         default="",
+diff --git a/cm_ir.py b/cm_ir.py
+index f9ce70ae..f5761bd5 100644
+--- a/cm_ir.py
++++ b/cm_ir.py
+@@ -2,6 +2,7 @@ from __future__ import annotations
+ 
+ from collections import OrderedDict
+ from contextlib import contextmanager
++from contextvars import ContextVar
+ from functools import wraps
+ from dataclasses import dataclass
+ from functools import lru_cache
+@@ -282,6 +283,11 @@ def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
+     return d
+ 
+ 
++# An opt-in observer is supplied by the caller. Core compilation has no import
++# dependency on benchmark instrumentation and still works in standalone bundles.
++_IR_PHASE_OBSERVER: ContextVar[Any] = ContextVar("cm_ir_phase_observer", default=None)
++
++
+ def compile_expr_to_cm_ir_persistent(
+     expr: Expr,
+     diagnostics: Optional[Dict[str, Any]] = None,
+@@ -320,6 +326,14 @@ def compile_expr_to_cm_ir_persistent(
+     _init_ir_compile_diagnostics(diagnostics)
+     _init_ir_persistent_cache_diagnostics(diagnostics)
+ 
++    # Detailed cache work is captured only inside an explicit diagnostic session.
++    # Legacy ir_compile_time_s deliberately keeps its historical boundary below.
++    recorder = _IR_PHASE_OBSERVER.get()
++    initial_keys = set(_PERSISTENT_IR_CACHE) if recorder is not None else None
++    cache_detail = {"root_hits": 0, "subtree_hits": 0, "same_call_hits": 0,
++                    "prior_call_hits": 0, "evictions": 0,
++                    "entries_before": len(_PERSISTENT_IR_CACHE)} if recorder is not None else None
++
+     def cache_get(key: str) -> Optional[CMNode]:
+         cached = _PERSISTENT_IR_CACHE.get(key)
+         if cached is None:
+@@ -327,13 +341,25 @@ def compile_expr_to_cm_ir_persistent(
+             return None
+         _PERSISTENT_IR_CACHE.move_to_end(key)
+         _bump(diagnostics, "ir_persistent_cache_hits")
++        if cache_detail is not None:
++            # A subtree-policy traversal can itself stop at its root. Hit
++            # position and cache regime are independent axes.
++            is_root = key == prefix + digest_memo[id(expr)].hex()
++            cache_detail["root_hits" if is_root else "subtree_hits"] += 1
++            cache_detail["prior_call_hits" if key in initial_keys else "same_call_hits"] += 1
+         return cached
+ 
+     def cache_put(key: str, node: CMNode) -> CMNode:
++        if cache_detail is not None:
++            # Reinserting an evicted initial key creates a same-call entry.
++            # Keep only keys whose original entry could still be hit.
++            initial_keys.discard(key)
+         _PERSISTENT_IR_CACHE[key] = node
+         _PERSISTENT_IR_CACHE.move_to_end(key)
+         if len(_PERSISTENT_IR_CACHE) > _PERSISTENT_IR_CACHE_MAXSIZE:
+             _PERSISTENT_IR_CACHE.popitem(last=False)
++            if cache_detail is not None:
++                cache_detail["evictions"] += 1
+         return node
+ 
+     prefix = "s1:" if share_aware_flatten else "s0:"
+@@ -342,19 +368,29 @@ def compile_expr_to_cm_ir_persistent(
+     digest_memo: Dict[int, bytes] = {}
+ 
+     shared_uids: set = set()
++    digest = _persistent_digest
++    sharing = CMIRBuilder._shared_assoc_uids
++    if recorder is not None:
++        cache_get = recorder.wrap("persistent_cache_lookup_lru", cache_get)
++        cache_put = recorder.wrap("persistent_cache_insert_evict", cache_put)
++        digest = recorder.wrap("persistent_digest", digest)
++        sharing = recorder.wrap("persistent_sharing_eligibility", sharing)
+     if share_aware_flatten:
+-        _uids, shared_uids = CMIRBuilder._shared_assoc_uids(expr)
++        _uids, shared_uids = sharing(expr)
+ 
+     def compile_root_level() -> CMNode:
+-        key = prefix + _persistent_digest(expr, digest_memo).hex()
++        key = prefix + digest(expr, digest_memo).hex()
+         cached = cache_get(key)
+         if cached is not None:
+             return cached
+-        return cache_put(key, builder.build(expr))
++        build = builder._build_with_sharing_plan
++        if recorder is not None:
++            build = recorder.wrap("persistent_root_build", build)
++        return cache_put(key, build(expr, _uids, shared_uids))
+ 
+     def compile_subtree_level() -> CMNode:
+         def build(e: Expr) -> CMNode:
+-            key = prefix + _persistent_digest(e, digest_memo).hex()
++            key = prefix + digest(e, digest_memo).hex()
+             cached = cache_get(key)
+             if cached is not None:
+                 return cached
+@@ -388,6 +424,12 @@ def compile_expr_to_cm_ir_persistent(
+         node = compile_fn()
+     if diagnostics is not None:
+         diagnostics["ir_persistent_cache_size"] = int(len(_PERSISTENT_IR_CACHE))
++        if cache_detail is not None:
++            diagnostics["ir_cache_profile_v1"] = {
++                **cache_detail, "policy": "root_only" if shared_uids else "subtree",
++                "entries_after": len(_PERSISTENT_IR_CACHE),
++                "validation": "digest_and_options_only_no_equality_fallback",
++            }
+     return node
+ 
+ 
+@@ -1121,6 +1163,21 @@ class CMIRBuilder:
+         shared = {u for u in assoc_uids if fanout.get(u, 0) > 1}
+         return uid_by_id, shared
+ 
++    def _build_with_sharing_plan(self, expr: Expr, uid_by_id: Dict[int, int], shared_uids: set) -> CMNode:
++        """Consume an eligibility prepass synchronously for this exact root.
++
++        The strong root reference pins all source ids. The plan is private,
++        scoped to this call, and never stored in the persistent cache. Calling
++        public build preserves subclass dispatch; a substituted root recomputes
++        its own plan. Restore the prior binding even on failure or reentry.
++        """
++        previous = getattr(self, "_prepared_sharing_plan", None)
++        self._prepared_sharing_plan = (expr, uid_by_id, shared_uids)
++        try:
++            return self.build(expr)
++        finally:
++            self._prepared_sharing_plan = previous
++
+     def build(self, expr: Expr) -> CMNode:
+         state = self._build_state
+         if state is not None:
+@@ -1138,7 +1195,11 @@ class CMIRBuilder:
+         shared_uids: Optional[set] = None
+         no_splice: Optional[set] = None
+         if self.share_aware_flatten:
+-            uid_by_id, shared_uids = self._shared_assoc_uids(expr)
++            prepared = getattr(self, "_prepared_sharing_plan", None)
++            if prepared is not None and prepared[0] is expr:
++                _, uid_by_id, shared_uids = prepared
++            else:
++                uid_by_id, shared_uids = self._shared_assoc_uids(expr)
+             no_splice = set()
+             if self.diagnostics is not None:
+                 _bump(self.diagnostics, "build_shared_assoc_subexprs", len(shared_uids))
+@@ -1315,6 +1376,7 @@ def evaluate_compiled(
+     fixed: Optional[Dict[str, int]] = None,
+     diagnostics: Optional[Dict[str, Any]] = None,
+     hybrid_threshold: int = 7,
++    flat_eval: Optional[bool] = None,
+     words_eval: Optional[bool] = None,
+     output_budget: Optional[OutputBudget] = DEFAULT_OUTPUT_BUDGET,
+     allow_reduced_output: bool = False,
+@@ -1334,6 +1396,7 @@ def evaluate_compiled(
+         fixed=fixed,
+         diagnostics=diagnostics,
+         hybrid_threshold=hybrid_threshold,
++        flat_eval=flat_eval,
+         words_eval=words_eval,
+         output_budget=output_budget,
+         allow_reduced_output=allow_reduced_output,
+@@ -2024,70 +2087,16 @@ def materialize_hybrid_no_reinflate(
+     (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
+     controlled before/after measurements; it does not change result semantics.
+     """
+-    # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
+-    # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
+-    # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
++    # One admission/basis plan for packed and fallback paths. The fast return
++    # skips diagnostic delivery; flat_fast_path=False remains a supported control.
+     use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)
+     use_words = _WORDS_EVAL_DEFAULT if words_eval is None else bool(words_eval)
+     from cmbench.backends.bitset_engine import select_cm_node_engine
+-    if diagnostics is None and (use_flat or use_words) and flat_fast_path:
+-        if hybrid_threshold < 0:
+-            raise ValueError("hybrid_threshold must be >= 0")
+-        fast_fixed_map = fixed or {}
+-        fast_vars_key = tuple(vars_all)
+-        fast_live_vars = (
+-            node.vars
+-            if not fast_fixed_map
+-            else tuple(v for v in node.vars if v not in fast_fixed_map)
+-        )
+-        fast_n = len(fast_vars_key)
+-        fast_budget = _effective_output_budget(
+-            output_budget,
+-            max_full_output_vars=max_full_output_vars,
+-            allow_reduced_output=allow_reduced_output,
+-        )
+-        fast_representation = (
+-            "packed_bitset"
+-            if len(fast_live_vars) <= hybrid_threshold
+-            else "truth_table_uint8"
+-        )
+-        fast_operation_slots = _cm_node_count(node)
+-        fast_decision = require_output_budget(
+-            decide_output_budget(
+-                fast_budget,
+-                estimate_explicit_output(
+-                    fast_n,
+-                    fast_representation,
+-                    operation_slots=fast_operation_slots,
+-                ),
+-                reduced_estimate=estimate_explicit_output(
+-                    len(fast_live_vars),
+-                    fast_representation,
+-                    operation_slots=fast_operation_slots,
+-                ),
+-                artifact_name="full no-reinflate output",
+-                reduced_artifact_name="reduced no-reinflate output",
+-            )
+-        )
+-        fast_reduced = fast_decision.status is OutputStatus.REDUCED
+-        fast_output_vars = fast_live_vars if fast_reduced else fast_vars_key
+-        fast_output_k = len(fast_output_vars)
+-        if len(fast_live_vars) <= hybrid_threshold:
+-            fast_selection = select_cm_node_engine(
+-                live_k=fast_output_k,
+-                words_requested=use_words,
+-                flat_requested=use_flat,
+-            )
+-            return FinalNoReinflateResult(
+-                final_output_representation_code=3 if fast_reduced else 2,
+-                bits=fast_selection.evaluate_node(
+-                    node, fast_output_vars, fixed=fast_fixed_map
+-                ),
+-                tt=None,
+-                output_vars=fast_output_vars,
+-                status=fast_decision.status,
+-                budget_decision=fast_decision,
+-            )
++    fast_return = diagnostics is None and (use_flat or use_words) and flat_fast_path
++    # Preserve the existing fast-path invalid-threshold precedence over budget
++    # refusal. The generic path has historically checked it after admission.
++    if fast_return and hybrid_threshold < 0:
++        raise ValueError("hybrid_threshold must be >= 0")
+ 
+     profile = diagnostics is not None and bool(diagnostics.get("cached_exec_profile_enabled", 0))
+     t_total0 = time.perf_counter() if profile else None
+@@ -2162,6 +2171,12 @@ def materialize_hybrid_no_reinflate(
+             flat_requested=use_flat,
+         )
+         bits = selected_engine.evaluate_node(node, output_vars, fixed=fixed_map)
++        if fast_return:
++            return FinalNoReinflateResult(
++                final_output_representation_code=3 if use_reduced_output else 2,
++                bits=bits, tt=None, output_vars=output_vars,
++                status=decision.status, budget_decision=decision,
++            )
+         if diagnostics is not None:
+             diagnostics["cached_exec_engine_kind"] = selected_engine.kind
+             diagnostics["cached_exec_engine_live_k"] = selected_engine.live_k
+diff --git a/cmbench/config.py b/cmbench/config.py
+index 37a8d44b..55fb6348 100644
+--- a/cmbench/config.py
++++ b/cmbench/config.py
+@@ -128,6 +128,7 @@ class BenchmarkConfig:
+     family_force_shared_substructure: bool = False
+     family_no_robdd: bool = False
+     family_robdd_shared_manager: bool = False
++    family_profile_timing: bool = False
+ 
+     large_n_safe: bool = False
+     verbose: bool = False
+@@ -295,6 +296,7 @@ def config_from_args(args: Any) -> BenchmarkConfig:
+         family_force_shared_substructure=bool(getattr(args, "family_force_shared_substructure", False)),
+         family_no_robdd=bool(getattr(args, "family_no_robdd", False)),
+         family_robdd_shared_manager=bool(getattr(args, "family_robdd_shared_manager", False)),
++        family_profile_timing=bool(getattr(args, "family_profile_timing", False)),
+         large_n_safe=bool(getattr(args, "large_n_safe", False)),
+         verbose=bool(getattr(args, "verbose", False)),
+     )
+diff --git a/cmbench/results/expression_family.py b/cmbench/results/expression_family.py
+index e0eca809..7fda8b7c 100644
+--- a/cmbench/results/expression_family.py
++++ b/cmbench/results/expression_family.py
+@@ -17,6 +17,13 @@ def skipped_family_backend(prefix: str, reason: str = "skipped") -> dict[str, An
+         }
+     if prefix == "family_cm_cache":
+         return {
++            "family_cm_cache_engine_kind": "not_run",
++            "family_cm_cache_engine_counts_json": "{}",
++            "family_cm_cache_output_width_counts_json": "{}",
++            "family_cm_cache_output_status_counts_json": "{}",
++            "family_cm_cache_completed_variants": 0,
++            "family_cm_cache_checked_variants": 0,
++            "family_cm_cache_correct_variants": 0,
+             "family_cm_cache_total_time_s": None,
+             "family_cm_cache_per_variant_median_s": None,
+             "family_cm_cache_compile_total_s": None,
+--- /dev/null
++++ b/cmbench/phase_timing.py
+@@ -0,0 +1,102 @@
++"""Opt-in nested wall/CPU observations; legacy benchmark timers are independent.
++
++Only exclusive spans within one capture partition its observed boundary. Inclusive
++parents, legacy timers, and separately observed API return time must not be summed.
++Recorder overhead remains in the enclosing exclusive span. Never use a captured
++run as an uninstrumented performance sample.
++"""
++from __future__ import annotations
++
++from contextlib import contextmanager
++from contextvars import ContextVar
++from functools import wraps
++import time
++
++
++SCHEMA = "cm-family-phases-v1"
++_ACTIVE: ContextVar["PhaseRecorder | None"] = ContextVar("cm_family_timing", default=None)
++
++
++def active_recorder():
++    """Internal opt-in hook; callers should enter ``PhaseRecorder.activate``."""
++    return _ACTIVE.get()
++
++
++class PhaseRecorder:
++    def __init__(self, *, wall_clock=time.perf_counter_ns, cpu_clock=time.process_time_ns):
++        self.wall_clock = wall_clock
++        self.cpu_clock = cpu_clock
++        self.records: list[dict] = []
++        self._stack: list[dict] = []
++
++    @contextmanager
++    def activate(self):
++        from cm_ir import _IR_PHASE_OBSERVER
++
++        token = _ACTIVE.set(self)
++        ir_token = _IR_PHASE_OBSERVER.set(self)
++        try:
++            yield self
++        finally:
++            _IR_PHASE_OBSERVER.reset(ir_token)
++            _ACTIVE.reset(token)
++
++    def wrap(self, name, function):
++        @wraps(function)
++        def observed(*args, **kwargs):
++            with self.span(name):
++                return function(*args, **kwargs)
++        return observed
++
++    @contextmanager
++    def span(self, name: str, boundary: str = "function_entry_to_return"):
++        record = {
++            "id": len(self.records), "parent": self._stack[-1]["id"] if self._stack else None,
++            "phase": name, "boundary": boundary, "status": "running",
++        }
++        self.records.append(record)
++        self._stack.append(record)
++        wall0, cpu0 = self.wall_clock(), self.cpu_clock()
++        try:
++            yield record
++        except BaseException as exc:
++            record.update(status="error", exception_type=type(exc).__name__)
++            raise
++        else:
++            record["status"] = "ok"
++        finally:
++            cpu1, wall1 = self.cpu_clock(), self.wall_clock()
++            self._stack.pop()
++            wall, cpu = wall1 - wall0, cpu1 - cpu0
++            record.update(
++                wall_ns=wall, cpu_ns=cpu,
++                exclusive_wall_ns=wall - record.pop("_children_wall_ns", 0),
++                exclusive_cpu_ns=cpu - record.pop("_children_cpu_ns", 0),
++                span_kind="inclusive_with_exclusive_partition",
++            )
++            if self._stack:
++                parent = self._stack[-1]
++                parent["_children_wall_ns"] = parent.get("_children_wall_ns", 0) + wall
++                parent["_children_cpu_ns"] = parent.get("_children_cpu_ns", 0) + cpu
++
++    def snapshot(self):
++        if self._stack:
++            raise RuntimeError("cannot serialize an active timing capture")
++        return {"schema": SCHEMA, "instrumented": True, "records": [dict(r) for r in self.records]}
++
++
++def phase_call(name, function, /, *args, **kwargs):
++    recorder = _ACTIVE.get()
++    if recorder is None:
++        return function(*args, **kwargs)
++    with recorder.span(name):
++        return function(*args, **kwargs)
++
++
++def timed_phase(name):
++    def decorate(function):
++        @wraps(function)
++        def wrapped(*args, **kwargs):
++            return phase_call(name, function, *args, **kwargs)
++        return wrapped
++    return decorate
+--- /dev/null
++++ b/tests/test_cm_family_repairs.py
+@@ -0,0 +1,354 @@
++"""Contract checks for family configuration, scoped build plans and phase records."""
++import json
++from unittest.mock import patch
++
++import numpy as np
++import pytest
++
++import cm_bench as bench
++import cm_ir as ir
++from bitset_backend import bitset_to_bool_array, get_flat_program
++from cm_exprlib import And, Imp, Not, Or, Var, Xor
++from cmbench.config import BenchmarkConfig
++from cmbench.expr.eval import eval_expr_assignment
++from cmbench.output_budget import OutputBudget, OutputBudgetExceeded, estimate_explicit_output
++from cmbench.phase_timing import PhaseRecorder, active_recorder
++
++
++def config(**kwargs):
++    return BenchmarkConfig(sizes=(4,), trials=1, seed=2, max_depth=3,
++                           no_dd=True, no_robdd_dd=True, **kwargs)
++
++
++def family():
++    return bench.generate_expression_family(4, np.random.default_rng(2), 3,
++        "mixed_no_constants", family_size=8, variant_style="shared_block_mix",
++        shared_blocks=3, force_shared_substructure=True)
++
++
++def run_family(cfg, **kwargs):
++    return bench.time_expression_family_workload(4, family(), family_id="repair",
++        trial=0, expr_style="mixed_no_constants", variant_style="shared_block_mix",
++        mutation_rate=.15, bit_env=None, sample_rng=np.random.default_rng(4),
++        robdd_order_seed=5, config=cfg, **kwargs)
++
++
++@pytest.mark.parametrize("flat,words,kind", [(False,False,"recursive"),
++    (True,False,"flat"), (False,True,"flat"), (True,True,"flat")])
++def test_family_explicit_config_wins_over_opposite_defaults(flat, words, kind):
++    cfg = config(cm_flat_eval=flat, cm_words_eval=words, cm_use_persistent_cache=True)
++    with ir.evaluation_defaults_scope(flat_eval=not flat, words_eval=not words):
++        row = run_family(cfg)
++        assert ir.get_evaluation_defaults() == (not flat, not words)
++    assert row["family_bitset_baseline_kind"] == "raw_ast_" + kind
++    for prefix in ("family_cm_no_cache", "family_cm_cache"):
++        assert row[prefix + "_engine_kind"] == "cm_node_" + kind
++        assert row[prefix + "_completed_variants"] == 8
++        assert row[prefix + "_checked_variants"] == 8
++        assert row[prefix + "_correct_variants"] == 8
++        assert json.loads(row[prefix + "_output_width_counts_json"]) == {"4": 8}
++    assert "family_phase_timing_json" not in row
++
++
++@pytest.mark.parametrize("flat,words", [(False,False), (True,False), (True,True)])
++def test_partial_and_equivalence_pass_explicit_config(flat, words, monkeypatch):
++    cfg = config(cm_flat_eval=flat, cm_words_eval=words)
++    expr = Xor(Var(0), Var(1))
++    with ir.evaluation_defaults_scope(flat_eval=not flat, words_eval=not words):
++        with patch.object(bench, "materialize_hybrid_no_reinflate", wraps=ir.materialize_hybrid_no_reinflate) as evaluate:
++            bench._cm_partial_workload(expr, 4, [{"x0": 1}], output_mode="remaining-vars",
++                persistent_cache=False, reuse_compiled_ir=False, reference_arrays=[None],
++                sample_rng=np.random.default_rng(2), config=cfg)
++            assert evaluate.call_args.kwargs["flat_eval"] is flat
++            assert evaluate.call_args.kwargs["words_eval"] is words
++        monkeypatch.setattr(bench, "_current_config", lambda: cfg)
++        with patch.object(bench, "evaluate_compiled", wraps=ir.evaluate_compiled) as evaluate:
++            row = bench.cm_equivalence_check(expr, Xor(Var(1), Var(0)), 4, expected=True)
++            assert row["cm_equiv_ok"] is True
++            assert len(evaluate.call_args_list) == 2
++            for call in evaluate.call_args_list:
++                assert call.kwargs["flat_eval"] is flat
++                assert call.kwargs["words_eval"] is words
++
++
++def test_recorder_exclusive_partition_and_failure():
++    wall, cpu = iter([0,10,30,50]), iter([0,2,6,10])
++    trace = PhaseRecorder(wall_clock=lambda: next(wall), cpu_clock=lambda: next(cpu))
++    with pytest.raises(ValueError), trace.activate(), trace.span("outer"):
++        with trace.span("inner"):
++            raise ValueError("expected")
++    assert active_recorder() is None
++    assert ir._IR_PHASE_OBSERVER.get() is None
++    root, child = trace.snapshot()["records"]
++    assert root["exclusive_wall_ns"] == 30
++    assert child["exclusive_wall_ns"] == 20
++    assert root["exclusive_cpu_ns"] + child["exclusive_cpu_ns"] == root["cpu_ns"] == 10
++    assert child["parent"] == root["id"]
++    assert root["status"] == child["status"] == "error"
++
++
++def test_family_capture_has_oracles_and_partition():
++    row = run_family(config(cm_flat_eval=True, cm_use_persistent_cache=True, family_profile_timing=True))
++    records = json.loads(row["family_phase_timing_json"])["records"]
++    assert records[0]["phase"] == "family_observed"
++    for axis in ("wall", "cpu"):
++        assert sum(r[f"exclusive_{axis}_ns"] for r in records) == records[0][f"{axis}_ns"]
++        assert all(r[f"exclusive_{axis}_ns"] >= 0 for r in records)
++    phases = [r["phase"] for r in records]
++    assert phases.count("cm_compile_api") == phases.count("correctness_oracle") == 16
++    assert phases.count("cache_lifecycle_reset") == 2
++    assert "reference_construction" in phases
++    assert "persistent_sharing_eligibility" in phases
++
++
++def test_failure_trace_and_no_silent_reference_truncation():
++    recorder = PhaseRecorder()
++    with recorder.activate(), pytest.raises(ValueError):
++        bench._cm_family_workload([Var(0)], 1, persistent_cache=False, tt_refs=[],
++            sample_rng=np.random.default_rng(0), config=config())
++    assert recorder.snapshot()["records"][0]["status"] == "error"
++    recorder = PhaseRecorder()
++    with pytest.raises(OutputBudgetExceeded):
++        run_family(config(cm_max_output_bytes=0), timing=recorder)
++    assert any(r["phase"] == "cm_evaluate_api" and r["status"] == "error"
++               for r in recorder.snapshot()["records"])
++    assert active_recorder() is None
++
++
++def test_failure_midway_records_consumed_variants(monkeypatch):
++    recorder = PhaseRecorder()
++    original = bench.materialize_hybrid_no_reinflate
++    calls = 0
++    def fail_second(*args, **kwargs):
++        nonlocal calls
++        calls += 1
++        if calls == 2:
++            raise RuntimeError("second variant")
++        return original(*args, **kwargs)
++    monkeypatch.setattr(bench, "materialize_hybrid_no_reinflate", fail_second)
++    with pytest.raises(RuntimeError):
++        run_family(config(cm_flat_eval=True), timing=recorder)
++    evaluations = [r for r in recorder.records if r["phase"] == "cm_evaluate_api"]
++    assert [r["status"] for r in evaluations] == ["ok", "error"]
++    assert len([r for r in recorder.records if r["phase"] == "correctness_oracle"]) == 1
++
++
++def test_reduced_family_oracle_checks_full_semantics():
++    expr = Xor(Var(0),Var(1))
++    reference = scalar(expr,("x0","x1","x2","x3"),{})
++    row = bench._cm_family_workload([expr],4,persistent_cache=False,tt_refs=[reference],
++        sample_rng=np.random.default_rng(2),config=config(cm_flat_eval=True,cm_max_full_output_vars=2))
++    assert row["family_cm_no_cache_correct_variants"] == 1
++    assert json.loads(row["family_cm_no_cache_output_status_counts_json"]) == {"reduced":1}
++    assert json.loads(row["family_cm_no_cache_output_width_counts_json"]) == {"2":1}
++
++
++def test_cli_serializes_schema_provenance_and_preserves_disabled_rows(tmp_path):
++    import csv
++    import subprocess
++    import sys
++    prefix = tmp_path / "family"
++    proc = subprocess.run([sys.executable,"-B","cm_bench.py","--sizes","4","--trials","1",
++        "--max-depth","2","--bench-expression-family","--family-size","2",
++        "--no-dd","--no-sympy","--no-espresso","--no-numba","--family-profile-timing",
++        "--cm-flat-eval","--out",str(prefix)],capture_output=True,text=True,timeout=30)
++    assert proc.returncode == 0, proc.stderr
++    paths = list(tmp_path.glob("*family*csv"))
++    assert len(paths) >= 2
++    records = [row for p in paths for row in csv.DictReader(p.open(newline="",encoding="utf-8"))]
++    assert any(row.get("family_timing_schema") == "cm-family-phases-v1" for row in records)
++    assert any(row.get("family_cm_cache_engine_kind") == "not_run" for row in records)
++    captures = [json.loads(row["family_phase_timing_json"]) for row in records if row.get("family_phase_timing_json")]
++    assert captures and all(c["schema"] == "cm-family-phases-v1" for c in captures)
++
++
++def shared_expr():
++    h = Xor(Xor(Xor(Var(0), Var(1)), Var(2)), Var(3))
++    return And(Xor(h, Var(4)), Xor(h, Var(5)))
++
++
++def test_shared_plan_once_on_miss_and_hit_with_canonical_program():
++    expr = shared_expr()
++    normal = ir.compile_expr_to_cm_ir(expr)
++    ir.clear_cm_ir_persistent_cache()
++    with patch.object(ir.CMIRBuilder, "_shared_assoc_uids", wraps=ir.CMIRBuilder._shared_assoc_uids) as sharing:
++        cold = ir.compile_expr_to_cm_ir_persistent(expr)
++        assert sharing.call_count == 1
++        warm = ir.compile_expr_to_cm_ir_persistent(shared_expr())
++        assert sharing.call_count == 2
++    assert cold is warm
++    assert normal.key == cold.key
++    assert get_flat_program(normal).ops == get_flat_program(cold).ops
++    assert get_flat_program(normal).loads == get_flat_program(cold).loads
++
++
++def test_prepared_plan_preserves_subclass_dispatch_and_exception_cleanup():
++    expr = shared_expr()
++    calls = []
++    class Builder(ir.CMIRBuilder):
++        def build(self, root):
++            calls.append(root)
++            return super().build(root)
++    builder = Builder()
++    plan = builder._shared_assoc_uids(expr)
++    node = builder._build_with_sharing_plan(expr, *plan)
++    assert calls == [expr]
++    assert builder._build_state is builder._prepared_sharing_plan is None
++    assert node.key == ir.compile_expr_to_cm_ir(expr).key
++
++    class Failing(Builder):
++        def _build_rec(self, root, state):
++            raise RuntimeError("expected")
++    builder = Failing()
++    with pytest.raises(RuntimeError):
++        builder._build_with_sharing_plan(expr, *plan)
++    assert builder._build_state is builder._prepared_sharing_plan is None
++
++
++def test_prepared_plan_rejects_substituted_root_and_obeys_options():
++    expr, other = shared_expr(), Or(Var(0), Var(2))
++    class Substitute(ir.CMIRBuilder):
++        def build(self, root):
++            return super().build(other)
++    builder = Substitute()
++    result = builder._build_with_sharing_plan(expr, *builder._shared_assoc_uids(expr))
++    assert result.key == ir.compile_expr_to_cm_ir(other).key
++    builder = ir.CMIRBuilder(share_aware_flatten=False)
++    result = builder._build_with_sharing_plan(expr, *builder._shared_assoc_uids(expr))
++    assert result.key == ir.compile_expr_to_cm_ir(expr, share_aware_flatten=False).key
++
++
++def test_prepared_build_reentry_reuses_outer_state():
++    expr = shared_expr()
++    class Reentrant(ir.CMIRBuilder):
++        entered = False
++        def _build_rec(self, root, state):
++            if root is expr and not self.entered:
++                self.entered = True
++                return self.build(root)
++            return super()._build_rec(root, state)
++    builder = Reentrant()
++    result = builder._build_with_sharing_plan(expr,*builder._shared_assoc_uids(expr))
++    assert result.key == ir.compile_expr_to_cm_ir(expr).key
++    assert builder._build_state is builder._prepared_sharing_plan is None
++
++
++def test_cache_telemetry_does_not_equate_same_call_and_prior_call_hits():
++    ir.clear_cm_ir_persistent_cache()
++    trace = PhaseRecorder()
++    with trace.activate():
++        cold, warm = {}, {}
++        ir.compile_expr_to_cm_ir_persistent(shared_expr(), cold)
++        ir.compile_expr_to_cm_ir_persistent(shared_expr(), warm)
++    assert cold["ir_cache_profile_v1"]["policy"] == "root_only"
++    assert cold["ir_cache_profile_v1"]["root_hits"] == 0
++    assert warm["ir_cache_profile_v1"]["root_hits"] == 1
++    assert warm["ir_cache_profile_v1"]["prior_call_hits"] == 1
++    assert warm["ir_cache_profile_v1"]["same_call_hits"] == 0
++    plain = {}
++    ir.compile_expr_to_cm_ir_persistent(shared_expr(), plain)
++    assert "ir_cache_profile_v1" not in plain
++
++
++def test_subtree_policy_can_hit_the_root():
++    ir.clear_cm_ir_persistent_cache()
++    expr = Or(And(Var(0),Var(1)),Xor(Var(2),Var(3)))
++    trace = PhaseRecorder()
++    with trace.activate():
++        ir.compile_expr_to_cm_ir_persistent(expr)
++        diag = {}
++        ir.compile_expr_to_cm_ir_persistent(expr, diag)
++    detail = diag["ir_cache_profile_v1"]
++    assert detail["policy"] == "subtree"
++    assert detail["root_hits"] == detail["prior_call_hits"] == 1
++    assert detail["subtree_hits"] == detail["same_call_hits"] == 0
++
++
++def test_reinserted_initial_key_has_same_call_origin(monkeypatch):
++    ir.clear_cm_ir_persistent_cache()
++    monkeypatch.setattr(ir,"_PERSISTENT_IR_CACHE_MAXSIZE",3)
++    ir.compile_expr_to_cm_ir_persistent(Var(0))
++    expr = Or(And(Var(2),Var(3)),Xor(Var(0),Var(0)))
++    trace, diag = PhaseRecorder(), {}
++    with trace.activate():
++        node = ir.compile_expr_to_cm_ir_persistent(expr,diag)
++    detail = diag["ir_cache_profile_v1"]
++    assert node.key == ir.compile_expr_to_cm_ir(expr).key
++    assert detail["entries_before"] == 1
++    assert detail["evictions"] > 0
++    assert detail["same_call_hits"] == 1
++    assert detail["prior_call_hits"] == 0
++    ir.clear_cm_ir_persistent_cache()
++
++
++def scalar(expr, names, fixed):
++    return np.array([eval_expr_assignment(expr, {
++        **{v: (row >> (len(names)-1-i)) & 1 for i,v in enumerate(names)}, **fixed})
++        for row in range(1 << len(names))], dtype=np.uint8)
++
++
++@pytest.mark.parametrize("fast", [False,True])
++@pytest.mark.parametrize("mode", ["off","counts","ir","profile"])
++@pytest.mark.parametrize("threshold", [0,16])
++def test_wrapper_fixed_basis_and_fallback_match_scalar(fast, mode, threshold):
++    expr = Imp(And(Var(0), Var(1)), Or(Var(2), Var(3)))
++    node = ir.compile_expr_to_cm_ir(expr)
++    diag = {"off":None,"counts":{},"ir":{"ir_timing_enabled":1},
++            "profile":{"cached_exec_profile_enabled":1}}[mode]
++    # Reuse diagnostics through complete, partial, all-fixed, and restored basis.
++    for fixed in ({}, {"x0":1}, dict(x0=1,x1=1,x2=0,x3=1), {}):
++        names = tuple(v for v in ("x3","x2","x1","x0","x4") if v not in fixed)
++        result = ir.materialize_hybrid_no_reinflate(node, names, fixed=fixed,
++            flat_eval=True, words_eval=False, diagnostics=diag,
++            hybrid_threshold=threshold, flat_fast_path=fast)
++        actual = bitset_to_bool_array(result.bits,len(names)) if result.bits is not None else result.tt
++        assert np.array_equal(actual, scalar(expr,names,fixed))
++        assert result.output_vars == names
++
++
++@pytest.mark.parametrize("fast", [False,True])
++def test_admission_once_for_fallback_and_refuses_before_evaluator(fast):
++    node = ir.compile_expr_to_cm_ir(Xor(Var(0),Var(1)))
++    with patch.object(ir, "decide_output_budget", wraps=ir.decide_output_budget) as decide:
++        ir.materialize_hybrid_no_reinflate(node, ("x0","x1"), hybrid_threshold=0,
++            flat_eval=True, flat_fast_path=fast)
++        assert decide.call_count == 1
++    estimate = estimate_explicit_output(2,"packed_bitset",operation_slots=ir._cm_node_count(node))
++    for field, limit in [("max_output_bytes",estimate.output_bytes),
++                         ("max_temporary_bytes",estimate.temporary_bytes)]:
++        for delta in [-1,0,1]:
++            kwargs = dict(flat_eval=True,flat_fast_path=fast,output_budget=OutputBudget(**{field:limit+delta}))
++            if delta < 0:
++                with pytest.raises(OutputBudgetExceeded):
++                    ir.materialize_hybrid_no_reinflate(node,("x0","x1"),**kwargs)
++            else:
++                assert ir.materialize_hybrid_no_reinflate(node,("x0","x1"),**kwargs).bits == 6
++
++
++def test_words_uses_actual_output_width_and_reduced_width():
++    node = ir.compile_expr_to_cm_ir(Or(Var(0),Var(19)))
++    names = tuple(f"x{i}" for i in range(20))
++    diag = {}
++    result = ir.materialize_hybrid_no_reinflate(node,names,words_eval=True,flat_eval=True,
++        diagnostics=diag,allow_reduced_output=True,max_full_output_vars=16)
++    assert result.output_vars == ("x0","x19")
++    assert result.bits == 14
++    assert diag["cached_exec_engine_kind"] == "cm_node_flat"
++    node = ir.compile_expr_to_cm_ir(Xor(Var(0),Var(1)))
++    result = ir.evaluate_compiled(ir.compile_expr(Xor(Var(0),Var(1))),
++        vars_all=names[:16],flat_eval=False,words_eval=True,diagnostics=diag)
++    assert diag["cached_exec_engine_kind"] == "cm_node_words"
++    assert diag["cached_exec_engine_live_k"] == 16
++    assert result.bits.bit_count() == 32768
++
++
++def test_q64_all_assignments_and_invalid_threshold_precedence():
++    expr = shared_expr()
++    node = ir.compile_expr_to_cm_ir(expr)
++    for row in range(64):
++        fixed = {f"x{i}": (row >> (5-i)) & 1 for i in range(6)}
++        assert ir.materialize_hybrid_no_reinflate(node,(),fixed=fixed,flat_eval=True).bits == int(eval_expr_assignment(expr,fixed))
++    for fast, exception in [(True,ValueError),(False,OutputBudgetExceeded)]:
++        with pytest.raises(exception):
++            ir.materialize_hybrid_no_reinflate(node,node.vars,hybrid_threshold=-1,
++                flat_eval=True,flat_fast_path=fast,output_budget=OutputBudget(max_output_bytes=0))

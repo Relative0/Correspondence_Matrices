@@ -17,6 +17,13 @@ def skipped_family_backend(prefix: str, reason: str = "skipped") -> dict[str, An
         }
     if prefix == "family_cm_cache":
         return {
+            "family_cm_cache_engine_kind": "not_run",
+            "family_cm_cache_engine_counts_json": "{}",
+            "family_cm_cache_output_width_counts_json": "{}",
+            "family_cm_cache_output_status_counts_json": "{}",
+            "family_cm_cache_completed_variants": 0,
+            "family_cm_cache_checked_variants": 0,
+            "family_cm_cache_correct_variants": 0,
             "family_cm_cache_total_time_s": None,
             "family_cm_cache_per_variant_median_s": None,
             "family_cm_cache_compile_total_s": None,

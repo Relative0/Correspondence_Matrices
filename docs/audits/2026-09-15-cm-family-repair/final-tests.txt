@@ -1,0 +1,29 @@
+.................................................................... [ 15%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 65%]
+........................................................................ [ 82%]
+........................................................................ [ 98%]
+...sF.                                                                   [100%]
+================================== FAILURES ===================================
+_________ test_generated_chart_data_is_current_and_pages_reference_it _________
+
+    def test_generated_chart_data_is_current_and_pages_reference_it():
+        module = _module()
+        generated = REPO / "deliverables_n22_24" / "v4audit_public_chart_data_2026_07_24.js"
+>       assert generated.read_text(encoding="utf-8") == module.render_javascript()
+E       assert '// Generated... ]\n  }\n};\n' == '// Generated... ]\n  }\n};\n'
+E         
+E         Skipping 825 identical leading characters in diff, use -v to show
+E         Skipping 426 identical trailing characters in diff, use -v to show
+E         - : "sha256:c98b0da2d4cf8bd274538ab3fe7898ccf2b1c2d13f84b99aab4799f3ce66b237",
+E         + : "sha256:a2a188412606f319b395d845fdccf7564d9b90679dcf1f86a2e6a03e388e4abd",
+E             "source_revision": null,
+E             "sources": {...
+E         
+E         ...Full output truncated (31 lines hidden), use '-vv' to show
+
+tests\test_generated_public_chart_data.py:20: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_generated_public_chart_data.py::test_generated_chart_data_is_current_and_pages_reference_it
+1 failed, 432 passed, 1 skipped, 4 subtests passed in 22.34s
