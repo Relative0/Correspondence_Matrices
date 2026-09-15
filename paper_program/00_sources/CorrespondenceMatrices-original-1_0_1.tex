@@ -1,0 +1,848 @@
+\title{Correspondence Matrices; Algorithms for Propositional Logic.}
+
+      \author{Brian Droncheff \\ \\Email: \href{mailto:Brian@Thinkinginnovative.com}{Brian@Thinkinginnovative.com}}
+\date{}
+
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz-cd}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{scalerel}
+\usepackage{stackengine}
+\usepackage{mathrsfs}
+\usepackage[all]{xy}
+\usepackage{graphicx}
+\usepackage{environ}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{titlesec}     
+\usepackage{changepage}
+\usepackage{parallel,enumitem}
+\usepackage[all]{xy}
+\usepackage{floatrow}
+\usepackage{glossaries}
+\usepackage [autostyle, english = american]{csquotes}
+\usepackage{multicol}
+\usepackage{varwidth}
+
+\usetikzlibrary{calc,intersections}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric,calc,through}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{postulate}[theorem]{Postulate}
+\newtheorem{diagram}[theorem]{Diagram}
+
+
+\newenvironment{proof}[1][Proof]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{question}[1][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{note}[1][Note]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+\newcommand{\noteend}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \fi \nobreak
+      \vrule height0.3em width0.3em depth0.25em\fi}
+\newcommand{\defend}{$\spadesuit$}
+\newcommand{\exend}{$\blacklozenge$}
+\newcommand{\tb}{$\hspace*{.5cm}$}
+\newcommand{\ltb}{$\hspace*{1cm}$}
+\newcommand{\smsp}{$\hspace*{.1cm}$}
+\newcommand{\smnl}{$\\[.25cm]$}
+\newcommand{\dnl}{$\\[.5cm]$}
+\newcommand{\Lim}[1]{\raisebox{0.5ex}{\scalebox{0.8}{$\displaystyle \lim_{#1}\;$}}}
+\newcommand*{\inbk}[1]{$\langle {#1}|{#1} \rangle $}
+\newcommand{\otbk}[1]{$|{#1} \rangle \langle {#1}|$}
+\newcommand*{\inbktwo}[2]{$\langle {#1}|{#2} \rangle $}
+\newcommand{\otbktwo}[2]{$|{#1} \rangle \langle {#2}|$}
+\newcommand*{\otbkthree}[3]{${#1}|[#2]\rangle \langle [#2]|{#3} $}
+\newcommand*{\inbkthree}[3]{$\langle {#1}|[#2]|{#3} \rangle $}
+\newcommand{\rowtens}[2]{$|{#1} \rangle \otimes |{#2} \rangle$}
+\newcommand{\coltens}[2]{$ \langle{#1}| \otimes  \langle{#2}|$}
+\newcommand{\ket}[1]{$|{#1}\rangle$}
+\newcommand{\bra}[1]{$\langle{#1}|$}
+\newcommand{\tit}[1]{$\textit{#1}$}
+\newcommand{\tbf}[1]{$\textbf{#1}$}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=-.35pt] (char) {#1};}}
+\newcommand{\ketrep}[1]{$[|{#1}\rangle]$}
+\newcommand{\brarep}[1]{$[\langle{#1}|]$}
+\newcommand{\ketreparg}[2]{${#1}[|\rangle]{#2}$}
+\newcommand{\brareparg}[2]{${#1}[\langle|]{#2}$}
+\newcommand{\comm}[2]{$ \left[{#1},{#2}\right]={#1}{#2}-{#2}{#1}$}
+\newcommand{\tensormult}[4]{$\begin{bmatrix} #1#3 & #1#4 \\ #2#3 & #2#4 \end{bmatrix}$}
+\newcommand{\tens}[2]{${#1} \otimes {#2}$}
+\newcommand{\twobytwo}[4]{$\begin{bmatrix} {#1} & {#2} \\ {#3} & {#4} \end{bmatrix}$}
+\newcommand{\onebytwo}[2]{$\begin{bmatrix} {#1} ,& {#2} \end{bmatrix}$}
+\newcommand{\onebytwoT}[2]{$\begin{bmatrix} {#1} \\ {#2} \end{bmatrix}^T$}
+\newcommand{\twobyone}[2]{$\begin{bmatrix} {#1} \\ {#2} \end{bmatrix}$}
+\newcommand{\twobyoneT}[2]{$\begin{bmatrix} {#1} & {#2} \end{bmatrix}^T$}
+\newcommand*{\otbkmeasure}[2]{$|{#1} \rangle \langle {#1}|{#2}\rangle$}
+\newcommand*{\otbktwomeasure}[3]{$|{#1} \rangle \langle {#2}|{#3}\rangle$}
+\newcommand{\Lwaveket}[2]{\ket{#1} $\Updownarrow$ \ket{#2}}
+\newcommand{\LwavePket}[4]{${#1}$\ket{#2} $\vee$ ${#3}$\ket{#4}}
+\newcommand{\Lwavebra}[2]{\bra{#1} $\Updownarrow$ \bra{#2}}
+\newcommand{\smsub}[1]{$M_{\scalebox{.9}{${#1}$}}$}
+\newcommand{\tsub}[1]{$\scalebox{.9}{${#1}$}$}
+\newcommand{\matrify}[1]{$[{#1}]$}
+\newcommand{\outerprodtbt}[2]{\matrify{#1} $\otimes$ \matrify{#2}}
+\newcommand{\minus}{\scalebox{0.5}[1.0]{$-$}}
+\newcommand{\bkbector}[2]{${#1}|1\rangle \Updownarrow {#2}|0\rangle$}
+
+%\def\subcap{\mathrel{\ThisStyle{\kern.7pt\stackinset{c}{-.3\LMpt}{b}{.8\LMpt}%
+ % {\scalebox{1.5}[1]{$\SavedStyle\subset$}}%
+ % {\scalebox{1}[1.5]{$\SavedStyle\cap$}}}\kern .3pt}}
+\def\impax{\mathrel{\ThisStyle{\kern 0pt\stackinset{c}{0\LMpt}{b}{3\LMpt}%
+  {\scalebox{1}[1]{$\SavedStyle\Leftrightarrow$}}%
+  {\scalebox{1}[1]{$\SavedStyle\Updownarrow$}}}\kern 0pt}}
+\makeatletter
+\newcommand{\superimpose}[2]{%
+  {\ooalign{$#1\@firstoftwo#2$\cr\hfil$#1\@secondoftwo#2$\hfil\cr}}}
+\makeatother
+\newcommand{\subsetintersection}{\mathpalette\superimpose{{\subset}{\cap}}}
+\newenvironment{pindent}{\begin{adjustwidth}{1cm}{1cm}}{\end{adjustwidth}}
+
+\setlength{\columnsep}{.2cm}
+\setcounter{secnumdepth}{5}
+\begin{document}
+\maketitle
+\begin{abstract}
+\tb This paper gives a new way to represent logical expressions as well as a novel algorithm for the computation of logical expressions in propositional logic. The findings presented show that logical operators can be represented as binary matrices called correspondence matrices (CM's) and furthermore that many logical expressions can be computed by operating on their CM's. The linearity of CM's is proven and it is shown that CM's can be used as measurement operators in a similar fashion as is done in quantum computation. Representing logical operators as matrices allows for the use of matrix transformations and it is found that the negation, rotation and transformation of CM's allow for the transformation of a logical expression in to another. The notion of CM's are generalized in to logical measurement matrices (LM's) which are used to measure relationships between logical expressions. Other operations between logical expressions e.g. `quotienting' and methods for the (de)composition of logical expressions are discussed as well. In finishing it is shown how LM's and their unique CM's can be constructed to compute finite length logical expressions.
+\end{abstract}
+\subsection{Keywords}
+Keywords:
+\begin{center}
+Logic, Propositional Logic, Matrix Operators, Quantum Computation, Logical Calculus, Matrix Mechanics, Circuit Design, Algorithms, Representation Theory, Distributive Algorithms, Parallel Processing.
+\end{center}
+\newpage
+\section{Introduction}
+\tb This paper gives a new way in which to represent and combine propositional logical expressions. Most notably, this paper shows that operators themselves can be represented by binary correspondence matrices (CM's) thus allowing logical expressions to be transformed via matrix transformations, furthermore that logical expressions can be combined based solely on their respective CM's. This new representation may reduce the time complexity of computation, not only due to the ability in which CM's can be combined but because CM's are binary. Direct manipulation of binary values my cut down on the computation and possible issues arising from having non-binary information representations. Also as CM operators can be broken apart both less complex and smaller matrices they give the ability for distributive computation and parallel processing. \smnl
+\tb To immediately see motivating examples: 1. Computation of a two variable logical expression using a CM [\ref{ExEqOne}]; 2. Rotation, Transposition and negation of CM's for computation [\ref{ExEqTwo}]; 3. Quotienting of one logical expression by another [\ref{ExEqThree}]; 4. Combining logical expressions [\ref{ExEqFour}]; 5. Measurement by a LM [\ref{ExEqFive}]; 6. Computation of a four variable logical expression using a CM [\ref{ExEqSix}]; 7. Combining four variable logical expressions [\ref{ExEqSeven}]. As correspondence matrices and the more general logical matrices are structures introduced in this paper, there is very little external material supporting them. Because of this, nearly everything in this paper was developed specifically to justify the derivation and implementation of CM's. Many other interesting faucents of these matrices were discovered in development and are added for completeness. \smnl
+\tb The algorithm presented has been developed in such a fashion as to be used in quantum computation. While quantum correlations have not be explicitly introduced in this paper, there are several ideas developed which have a relationship to postulates of quantum mechanics, mainly that in which the developed correspondence matrices act as a type of measurement matrix. As these correspondence matrices are linear and act similar to measurement matrices in quantum mechanics, they offer a great stepping stone in understanding some of the fundamental concepts in this area.
+\section{Fundamentals}
+\subsection{Basic Logic}
+\tb We will denote a $\textit{logical variable}$ or $\textit{literal}$ to be that which can be assigned or given a value of true or false. The assignment of truth to one or more logical variables is called a $\textit{truth assignment}$. The value of being true is denoted by $T$ or $1$ and that of being false by $F$ or $0$. We can $\textit{operate}$ on one or more logical variables via a $\textit{logical operator}$ or $\textit{binary operator}$ in which the logical variables will be one or two $\textit{operands}$. A $\textit{logical expression} \, \, \mathcal{L}$ is a correctly formatted combination of one or more logical sub-expressions and operators, a logical $\textit{sub-expression}$ itself being a logical expression comprised of one or more logical variables and operators. Through the paper any single letter representing a variable will denote both a logical variable or expression i.e. $X$ may refer to a single literal or, such as $\mathcal{L}$ a logical expression, the context will be evident from the usage. A $\textit{logical operator variable}$ can be given the value of any logical operator. We will denote logical operator variables by greek letters, usually $\Theta$. \smnl 
+\tb We follow propositional logic$^{\cite{PropLogic}}$ let $\neg$ be the negation operator and define the negation rules, $\neg 1 = 0, \, \neg 0 = 1, \, \neg (\mathcal{L}) = \neg \mathcal{L}$ and $\neg (\neg \mathcal{L}) = \mathcal{L}$. The negation of a logical expression is called its $\textit{compliment}$. A non-negated literal $X$ is called an $\textit{atom}$. We will let the conjunction, denoted by the symbol $\wedge$, be a binary operator between two logical variables $X$ and $Y$ written $X \wedge Y$ or $XY$ for short, and the disjunction $\vee$ be a binary operator between $X$ and $Y$ written as $X \vee Y$. The equations denoted throughout the paper will work for both single and finite multi-variable logical expressions. \smnl
+\tb For reasons which will be explained later, the XOR operator will be denoted symbolically by $\Updownarrow$ instead of the more commonly used $\oplus$ symbol. We will start with a few important relations:
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$X \wedge 0 = 0$ & $X \vee 0 = X$ & $X \wedge 1 = X$ & $X \vee 1 = 1$ \\
+\hline
+$X \Updownarrow 1 = \neg X$ & $X \Updownarrow 0 = X$ & $\neg X \Updownarrow 1 = X$ & $\neg X \Updownarrow 0 = \neg X$ \\
+\hline
+\end{tabular}
+\end{center}
+The difference in XOR notation can be seen in the following application of DeMorgans law:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$\neg (X \Updownarrow Y) =  X \Leftrightarrow Y$ & $\neg (X \Leftrightarrow Y) =  X \Updownarrow  Y$ \\
+\hline
+\end{tabular}
+\end{center}
+where $\Leftrightarrow$ is the notation commonly used for the XNOR operator. We will call the representation of a logical expression in which each of its sub-expressions are XOR'ed with one-another the $\textit{XOR decomposition}$. Each sub-expression of the XOR decomposition is called a $\textit{component}$ of the XOR decomposed expression. Likewise the $\textit{XOR composition}$ or $\textit{XOR sum}$ is the composition of a logical expression from components which are XOR'ed together. The XOR decomposition is in algebraic normal form (ANF) whereas the XOR composition does not have to be.
+\subsubsection{Valuations}
+\tb A $\textit{valuation}$ $\mathcal{V}$ is the result of the assignment of truth values to a logical expression or an operator to a logical operator variable. We will denote the valuation of the logical expression $\mathcal{L}$ as $\mathcal{V}(\mathcal{L}) = V$ where $V \in \{T,F\}$ and say that an expression which is not valuated to be $\textit{unevaluated}$. The $\textit{positive valuation}$ $\mathcal{V}(\mathcal{L}) = T$ and the $\textit{negative valuation}$ $\mathcal{V}(\mathcal{L}) = F$ are denoted by $\mathcal{V}^T(\mathcal{L})$ and $\mathcal{V}^F(\mathcal{L})$ respectively. Each $\mathcal{V}^T(\mathcal{L})$ and $\mathcal{V}^F(\mathcal{L})$ correspond to a set of truth assignments which make the expression $\mathcal{L}$ respectively true or false. We say that the logical expression $\mathcal{L}$ has been assigned a truth value or equivalently has a \textit{truth assignment} $V$ if $\mathcal{L} = V$ and denote this truth assignment as $\mathcal{V}_V(\mathcal{L})$. We will let a $\mathcal{V}_T(\mathcal{L})$ be that of a $\textit{positive assignment}$ in which $\mathcal{L} = T$ and that of $\textit{negative assignment}$ denoted by $\mathcal{V}_F(\mathcal{L})$ in which $\mathcal{L} = F$. A positive or negative assignment of a logical expression $\mathcal{L}$ assigns true or false to every non-negated variable ($\textit{atom}$) or sub-expression respectively. \smnl
+\tb As indicated in the name, a logical operator variable $\Theta$ is itself a variable. We can apply a valuation in which we have that $\mathcal{V}(\Theta)$ is in the set of logical operators e.g. $\mathcal{V}(\Theta) = \wedge$. Like a logical expression which has not been assigned or valuated to have a particular truth value, a logical operator variable doesn't have a particular value until assigned or valuated to be a fixed operator. The valuation of a logical expression $\mathcal{L} = X \Theta Y$ has the form $\mathcal{V}(\mathcal{L}) = \mathcal{V}(X)\mathcal{V}(\Theta)\mathcal{V}(Y)$ or for a particular assignment value $V$, $\mathcal{V}_V(X) \Theta \mathcal{V}_V(Y)$. We will overload (abuse) notation for a logical variable operator $\Theta$ and call it a logical operator (as opposed to $\mathcal{V}(\Theta)$) when no confusion arises.\smnl
+\tb We can see from above $\mathcal{V}(\mathcal{L})$, that expressions have a particular valuation depending on their truth assignments, but also that we may have truth assignments being dependent on the expressions valuation. As an example, in one direction: $\mathcal{V}^T(X \wedge Y) \Rightarrow (\mathcal{V}_T(X) \wedge \mathcal{V}_T(Y))$ however it is also true that $(\mathcal{V}_T(X) \wedge \mathcal{V}_T(Y)) \Rightarrow \mathcal{V}^T(X \wedge Y)$. Combining the two expressions above and a similar computation shows that:
+\begin{center}
+ $\mathcal{V}^T(X \wedge Y) \Leftrightarrow (\mathcal{V}_T(X) \wedge \mathcal{V}_T(Y))$ and $\mathcal{V}^T(X \vee Y) \Leftrightarrow (\mathcal{V}_T(X) \vee \mathcal{V}_T(Y))$
+\end{center}
+These equivalences are important in order to be able to distinguish between directly assigning a value (assignment) to  logical variables i.e. $\mathcal{V}_T(X \vee Y)$ giving $X = Y = T$ and a valuation i.e. $\mathcal{V}^T(X \vee Y)$ where only one of $X$ or $Y$ must be true. In a valuation then it is possible that a particular variable may not be forced to have an assignment so as to make the expression true. \smnl
+\tb Concerning negation we have: $\neg \mathcal{V}^V(\mathcal{L}) = \neg (\mathcal{V}(\mathcal{L}) = V) \Leftrightarrow (\mathcal{V}(\mathcal{L}) \neq V)$ however $(\mathcal{V}(\mathcal{L}) \neq V) \Leftrightarrow (\mathcal{V}(\mathcal{L}) = \neg V)$ as $V$ is binary, so $\neg \mathcal{V}^V(\mathcal{L}) \Leftrightarrow \mathcal{V}^{\neg V}(\mathcal{L})$. We also find that $\neg \mathcal{V}^V(\mathcal{L}) \Leftrightarrow \mathcal{V}^V(\neg \mathcal{L})$, hence $\mathcal{V}^{\neg V}(\mathcal{L}) = \mathcal{V}^{V}(\neg \mathcal{L})$ and we have that:
+\begin{center}
+$\neg \mathcal{V}^V(\mathcal{L}) \Leftrightarrow \mathcal{V}^{\neg V}(\mathcal{L}) \Leftrightarrow \mathcal{V}^V(\neg \mathcal{L})$
+\end{center}
+With this equality we can re-write the negative valuation of a logical expression by the positive valuation of that same expressions negation.
+\subsection{Bra-Kets and State Vectors} \label{BraKets}
+\tb To start, let a $\textit{logical state}$ be a negated or non-negated, valuated or unevaluated logical expression e.g. $1,0,X,$ and $\neg X$ are all logical states. We will call a $\textit{logical statevector}$ a matrix consisting of logical states. For example both \matrify{1,0} and \matrify{X,\neg X} are logical statevectors. \smnl
+\tb The notion of a bra and ket$^{\cite{BraKet1},\cite{BraKet2}}$ are ways to represent logical statevectors. Let $\Psi$ be a statevector. We call bra $\Psi$ the $\textit{bra-vector}$ for $\Psi$, denote it is as \bra{\Psi} and represent it by a $1 \times n$ matrix of logical expressions. We call ket $\Psi$ the $\textit{ket-vector}$ for $\Psi$ and denote it as \ket{\Psi} the $n \times 1$ logical matrix. The bra of $\Psi$ is related to ket of $\Psi$ by \bra{\Psi}$^T$ = \ket{\Psi} and both are logical statevectors. The inner product between \bra{\Psi} and \ket{\Psi} is denoted \inbk{\Psi}, the outer product$^{\cite{OuterProd}}$ or tensor product by \ket{\Psi} $\otimes$ \bra{\Psi} $=$ \otbk{\Psi}, and for another statevector \ket{\Lambda} we let \ket{\Psi}\ket{\Lambda} = \ket{\Psi} $\otimes$ \ket{\Lambda}. \smnl
+\tb Let $\Psi_{X}$ be a two element statevector. We denote the respective bra and ket vectors as such:
+\begin{center}
+\bra{\Psi_X} = \onebytwo{X_1}{X_2} and \ket{\Psi_X} = \twobyone{X_1}{X_2}
+\end{center}
+where $X_1 = X$ and $X_2 = \neg X$. We define \ket{\Psi_{\neg X}} = \matrify{X_2,X_1}$^T$ and have the relationship to \ket{\Psi_X} via negation:
+\begin{center}
+$\neg$\ket{\Psi_X} $= \neg [X_1,X_2] = [\neg X_1, \neg X_2] = [X_2,X_1] = $ \ket{\neg\Psi_{X}} = \ket{\Psi_{\neg X}} = \ket{\Psi_X}$_2$
+\end{center}
+In general we find that \ket{\Psi_{X_i}} = $[X_i,\neg X_i]^T$ and $\neg$\ket{\Psi_{X_i}} =\ket{\Psi_{\neg X_i}} = $[\neg X_i,X_i]$. Because of the relationship to the subscript in the bra (and ket) statevector to the state-vector itself i.e. $X$ in \ket{\Psi_X}, we change the notation. The new notation is better suited to propositional logic. In the rest of the paper when no confusion arises we will make the following changes:
+\begin{center}
+\ket{\Psi_{X_i}} = \ket{X_i}
+\end{center}
+For example, \ket{\Psi_{X_1}} = \ket{X_1} = \ket{X} and \ket{\Psi_{X_2}} = \ket{X_2} = \ket{\neg X}. \smnl
+\tb Let \matrify{\Theta} be the 4-element square matrix with elements $\Theta_{ij}$ in which $\mathcal{V}(\Theta_{ij}) \in \{0,1\}$. We will call \matrify{\Theta} an $\textit{operator}$ when it acts upon any other matrix. The action of an operator is called an $\textit{operation}$ and the logical state vectors which are operated on are called $\textit{operands}$. Operations are as follows:
+\begin{center}
+\bra{X}$[\Theta]$ = \onebytwoT{X_i \Theta_{i1}}{X_i \Theta_{i2}} and $[\Theta]$\ket{Y} $=$ \twobyone{\Theta_{1k}Y_{k}}{\Theta_{2k}Y_{k}} where $[\Theta] = \begin{bmatrix}
+\Theta_{11} & \Theta_{12} \\ \Theta_{21} & \Theta_{22} \end{bmatrix}$
+\end{center}
+where \inbkthree{X}{\Theta}{Y} $=X_i \Theta_{ij} Y_j$ which is the Einstein notation$^{\cite{EinsteinNote}}$ for the XOR sum $\Updownarrow_{i,j} X_i \Theta_{ij} Y_j = X_i \Theta_{ij} Y_j = X_1\Theta_{11}Y_1 \Updownarrow \cdots \Updownarrow X_2\Theta_{22}Y_2$. It doesn't matter whether we operate first on \bra{X} or \ket{Y}:
+\begin{center}
+$(\langle X| [\Theta]) |Y \rangle = \langle X| ([\Theta] |Y \rangle ) = X_i \Theta_{ij} Y_j$
+\end{center}
+which is proved simply as we can distribute over XOR. \smnl 
+\tb We can combine logical statevectors over the logical operator $\Phi$ in the following fashion:
+\begin{center}\label{LWaveCombos}
+\ket{X} $\Phi$ \ket{Y} = \twobyone{X \Phi Y}{\neg X \Phi \neg Y}
+\end{center}
+for example \Lwaveket{X}{\neg X} $= [1,1]^T$ and \Lwaveket{X}{X} $= [0,0]^T$.
+\section{Correspondence Matrices (CM's)}
+\tb Correspondence matrices (CM's) are a new way to represent operators in propositional logic. Not only do these representations give a new way to visualize logical expressions, they allow for new types of logical operations. They offer the ability to quotient logical expressions by one-another [\ref{Quotienting}] as well as constraints on ways in which logical expressions can be (de)composed. Possibly the most significant findings are that CM's allow matrix operations to be applied to logical expressions thus allowing the transformation [\ref{CMRelationships}] and computation of logical expressions [\ref{DeComposition}]. Furthermore, correspondence matrices are shown to be linear and can be interpreted as measurement operators [\ref{LMMs}] operating on logical expressions, thus giving a possible use in fields such as quantum computation. \smnl
+\tb The foundation for the development of CM's is the fact that every propositional logical expression can be written as the XOR'ing of some set of logical sub-expressions. In particular, consider the logical expression $\mathcal{L} = X \Theta Y$ which can be written as a conjunction of some XOR combination of one or more elements of the set $\{XY,X\neg Y,\neg XY,\neg X \neg Y\}$:
+\begin{center} \label{CMExpansion}
+$X \Theta Y = \Theta_{11}XY \Updownarrow \Theta_{12}X \neg Y \Updownarrow \Theta_{21} \neg XY \Updownarrow \Theta_{22} \neg X \neg Y = \Theta_{ij}X_iY_j$
+\end{center}
+where $\mathcal{V}(\Theta_{ij}) \in \{0,1\}$ and $X_i\Theta_{ij} = \Theta_{ij}X_i$ by the commutativity of $\wedge$. For each $i,j$ combination $\Theta_{ij}X_iY_j$ is called a $\textit{component}$. For example $X \Rightarrow Y$ can be re-written as the XOR combination of components: $1 \wedge XY \Updownarrow 0 \wedge X \neg Y \Updownarrow 1 \wedge \neg XY \Updownarrow 1 \wedge \neg X \neg Y$ where $\mathcal{V}(\Theta_{11}) = \mathcal{V}(\Theta_{21}) = \mathcal{V}(\Theta_{22}) = 1$ and $\mathcal{V}(\Theta_{12}) = 0$.\smnl
+\tb We can write the expansion of $X \Theta Y$ more succinctly as:  \label{LogicExpansion}
+\begin{center}
+\noindent\fbox{\begin{minipage}[t][3\height][c]{\dimexpr\textwidth-60\fboxsep-2\fboxrule\relax}
+\centering
+$X \Theta Y =$ \inbkthree{X}{\Theta}{Y} $ = X_i\Theta_{ij}Y_j$
+\end{minipage}}
+$$ $$
+\end{center} 
+in which each logical operator $\Theta$ can be uniquely represented as the matrix $[\Theta]$. This uniqueness can be seen by direct computation; that for two logical operators $\Theta_1$ and $\Theta_2$ that $\Theta_1 = \Theta_2$ if and only if $X_i \Theta_{1,ij} Y_j = X_i \Theta_{2,ij} Y_j $.\label{CorrespondenceMatrices} We can build correspondence matrices from the ground up. Similar to the valuation of a logical measurement matrix as seen in \ref{LMMs}, we can valuate a logical state-vector which in the single variable case we get;
+\begin{center}
+\ket{\mathcal{V}_T(X)} = \twobyone{\mathcal{V}_T(X)}{\mathcal{V}_T(\neg X)} = \twobyone{1}{0} = \ket{1} and \ket{\mathcal{V}_F(X)} =  \twobyone{\mathcal{V}_F(X)}{\mathcal{V}_F(\neg X)} = \twobyone{0}{1} = \ket{0}
+\end{center}
+we will call \ket{1} and \ket{0} be the respective $1$ and $0$ $\textit{ket-vectors}$. There are four possible tensor product combination of 1 and 0 ket-vectors;
+\begin{center}
+\otbk{1} $= \begin{bmatrix} 1 & 0\\ 0 & 0\\ \end{bmatrix}$, \otbktwo{1}{0}$ = \begin{bmatrix} 0 & 1\\ 0 & 0\\ \end{bmatrix}$, \otbktwo{0}{1}$ = \begin{bmatrix} 0 & 0\\ 1 & 0\\ \end{bmatrix}$, \otbk{0}$ = \begin{bmatrix} 0 & 0\\ 0 & 1\\ \end{bmatrix}$
+\end{center}
+which are the four CM \textit{basis matrices}, each with a single $\textit{feature}$ or positive entry. The set of basis matrices constitutes a $\textit{basis}$ in which we can create any correspondence matrix. For example, we can derive the CM $[\vee]$ which is the matrix operator of the of logical OR ($\vee$);
+\begin{center}
+\otbktwo{1}{1} $\Updownarrow$ \otbktwo{1}{0} $\Updownarrow$ \otbktwo{0}{1}  $ = \begin{bmatrix} 1 & 0\\ 0 & 0\\ \end{bmatrix} \Updownarrow \begin{bmatrix} 0 & 1\\ 0 & 0\\ \end{bmatrix} \Updownarrow \begin{bmatrix} 0 & 0\\ 1 & 0\\ \end{bmatrix} = [\vee]$
+\end{center}\label{CorrespondenceMatricesFig}
+\begin{figure}[htb] 
+\begin{center}
+\begin{tabular}{|c|c||c|c||c|c||c|c|} 
+\hline
+ Op. & Matrix & Op. & Matrix & Op. & Matrix & Op. & Matrix \\\hline
+ $[\impax]$ & $\begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$ & $[0]$ & $\begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$ & $[\Leftrightarrow]$ & $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ & $[\Updownarrow]$ & $\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$\\\hline
+  $[\wedge]$ & $\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$ & $[\neg \vee]$ & $\begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}$ & $[\Uparrow]$ & $\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$ & $[\Downarrow]$ & $\begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix}$\\\hline
+  $[\Rightarrow]$ & $\begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}$ & $[\Leftarrow]$ & $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$ & $[\vee]$ & $\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ & $[\neg \wedge]$ & $\begin{bmatrix} 0 & 1 \\ 1 & 1 \end{bmatrix}$\\\hline
+  $[R]$ & $\begin{bmatrix} 1 & 0 \\ 1 & 0 \end{bmatrix}$ & $[\neg R]$ & $\begin{bmatrix} 0 & 1 \\ 0 & 1 \end{bmatrix}$ & $[L]$ & $\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}$ & $[\neg L]$ & $\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}$ \\\hline
+\end{tabular}
+\end{center}
+ \caption[Correspondence Matrices]{The set of 16 distinct correspondence matrices}
+\end{figure}
+\tb To see how to find the corresponding logical expression from a correspondence matrix, consider the CM $[\Rightarrow]$ which we use to operatore on vectors \ket{X}$^T$ on the left side and \ket{Y} on the right; \label{ExEqOne}
+\begin{center}
+\scalebox{.9}{%
+\inbkthree{X}{\Rightarrow}{Y} $ = [X,\neg X]\begin{bmatrix} 1 & 0\\ 1 & 1\\ \end{bmatrix}\begin{bmatrix} Y \\ \neg Y \\ \end{bmatrix} = [X \Updownarrow \neg X,\neg X]\begin{bmatrix} Y \\ \neg Y \\ \end{bmatrix} = Y \Updownarrow \neg X \neg Y = X \Rightarrow Y$}
+\end{center}
+\tb As was the case in which, for a logical operator variable $\Theta$ where $\mathcal{V}(\Theta)$ is in the set of logical operators, we will define $\mathcal{V}[\Theta]$ to be in the set of correspondence matrices where $\mathcal{V}$ valuates \matrify{\Theta} index-wise. For short, we will call $[\Theta]$ a CM in that, as $\Theta$ can be fixed to a particular operator, $[\Theta]$ can be fixed to a particular CM. We will say that \matrify{\Theta} is $\textit{commutative}$ if \matrify{\Theta} = \matrify{\Theta}$^T$ and can see that commutativity in CM's corresponds to commutativity in their corresponding logical operator e.g. \matrify{\Leftrightarrow}, \matrify{\Updownarrow}, \matrify{\wedge}, and \matrify{\vee} are all commutative. It is important to mention that operating on the logical bra-ket pairs can be done with disjunctions $\vee$ instead of exclusive disjunctions $\Updownarrow$ in the resulting computation that is; for any logical expression $\mathcal{L}$ we can write $\mathcal{L} = \vee_{i,j}(\Theta_{ij}X_iY_j)$. \smnl
+\tb The reasoning for representing the XOR operator as $\Updownarrow$ as opposed to the more commonly used $\oplus$ can now be seen as $[\Updownarrow]$, the CM corresponding to $\Updownarrow$, is a $90^{\circ}$ rotation (in either direction) of $[\Leftrightarrow]$ which corresponds to $\Leftrightarrow$. Indeed, we can see that $\neg [\Leftrightarrow] = [\Updownarrow] = [\Leftrightarrow]^{90^{\circ}}$. Furthermore we can see that the $\textit{impax}$ CM \matrify{\impax} is the overlap of both the CM's \matrify{\Updownarrow} and \matrify{\Leftrightarrow} both logically as well as symbolically. The impax operator is tautological in that its operation on any two expressions give a tautology, likewise \matrify{0} is contradictory; that is, \inbkthree{X}{\impax}{Y} = 1 and \inbkthree{X}{0}{Y} = 0 respectively. \smnl
+\tb Correspondence matrices are truth tables `rolled up' and as such they are isomorphic to truth tables of logical operators by construction. Because of this isomorphism, if two logical expressions consist of the same variables and variable ordering, we can compare these expressions by comparing their respective CM's. For example, consider $\mathcal{L}_1 = X \vee Y$ and $\mathcal{L}_2 = X \wedge Y$, as they both have the same variables and respective $X$ and $Y$ ordering, we can compare the CM's $[\vee]$ and $[\wedge]$ associated with their respective operators $\vee$ and $\wedge$. In doing so we can see that $[\vee] = [\wedge] \oplus [\Updownarrow]$ and that $X \vee Y = (X \wedge Y) \Updownarrow (X \Updownarrow Y)$.  \smnl
+\tb This ability to compare CM's is useful as we can create a hierarchy of relations based on feature relationship. For example, above we can see that there is a relationship between $\vee$ and $\wedge$ as $[\vee]$ contains all the features in $[\wedge]$. More generally we say that any CM in a decomposition is $\textit{contained}$ in the decomposed CM if it does not have any features not in that which was decomposed. The significance of operator containment is that containment gives a quantifiable constraint on how logical operators can be related to one-another and may limit the search space for possible decompositions.
+\subsection{Correspondence Matrix Relationships} \label{CMRelationships}
+\tb One of the benefits of logical CM's is that, like any matrix, computations can be performed by rotations and transformations. There are some very interesting matrix operations which can help in computing logical expressions; to see this we will denote $[\Theta]^{n^{\circ}}$ as the clockwise rotation of the correspondence matrix $[\Theta]$ where $n \in \{0^{\circ},90^{\circ},180^{\circ},270^{\circ}\}$ and the transpose $^T$ is the usual swapping of the row with the column for each matrix element. Furthermore let $\langle X|[\Theta]^{z}|Y \rangle$ = \inbkthree{X}{\Theta}{Y}$^z$ for any combination of matrix operations $z$.\smnl
+\tb We have the five relation rules, each of which can be proved simply by expanding and showing equality: \smnl
+1. \inbkthree{Y}{\Theta}{X} $ = \langle X|[\Theta]^T|Y \rangle$ = \inbkthree{X}{\Theta}{Y}$^T$ \smnl
+This rule follows from the general property of matrices and demonstrates the ability to transpose a logical expression solely by transposing the CM. As an example $Y \Rightarrow X$ = \inbkthree{Y}{\Rightarrow}{X} $=$ \inbkthree{X}{\Leftarrow}{Y} = $ X \Leftarrow Y$.\smnl  
+2. $\neg$\inbkthree{X}{\Theta}{Y} $ = \langle X|[\neg \Theta]|Y \rangle$ where \matrify{\neg \Theta} = $\neg$\matrify{\Theta} see section \ref{ComplimentOperators}\smnl
+This very powerful result tells us that every CM, hence logical operator, has a corresponding unique negation. As an example $\neg (X \wedge Y)$ = $\neg$\inbkthree{X}{\wedge}{Y} = \inbkthree{X}{\neg \wedge}{Y} $= \neg X \vee \neg Y$. We can prove this by noting that $\neg$\inbkthree{X}{\Theta}{Y} $= \neg (X_i \Theta_{ij} Y_j) =  X_i \neg \Theta_{ij} Y_j$ after applying DeMorgans laws and rewriting the expression in conjunctive normal form (CNF). \label{ExEqTwo}\smnl
+3. \inbkthree{X}{\Theta}{\neg Y} = $\langle X|[\Theta]^{T+90^{\circ}}|Y \rangle$ = \inbkthree{X}{\Theta}{Y}$^{T+90^{\circ}}$\smnl
+where $[\Theta]^{T+90^{\circ}}= [[\Theta]^{T}]^{90^{\circ}}$ that is, the matrix transpose $T$ is applied first and then the clockwise rotation of $90^{\circ}$ is applied. To see an example consider the expression $X \Rightarrow \neg Y$ where $\Theta = \, \Rightarrow$. After applying the computation $[\Rightarrow]^{T+90^{\circ}} = [\Leftarrow]^{90^{\circ}} = [\neg \wedge]$ we have that $X \Rightarrow \neg Y = \neg X \vee \neg Y$.\smnl
+4. \inbkthree{\neg X}{\Theta}{Y} = $\langle X|[\Theta]^{T + 270^{\circ}}|Y \rangle$ = \inbkthree{X}{\Theta}{Y}$^{T+270^{\circ}}$ \smnl
+which is similar to the transformations in rule 3., the difference being that we rotate the expression $270^{\circ}$ clockwise or $90^{\circ}$ counter-clockwise. Note that the $180^{\circ}$ difference in rotations between rule 3. and 4. is equivalent to the negation of both operands as shown in the next rule. \smnl
+5. \inbkthree{\neg X}{\Theta}{\neg Y} = $\langle X|[\Theta]^{180^{\circ}}|Y \rangle$ = \inbkthree{X}{\Theta}{Y}$^{180^{\circ}}$ \smnl
+This rule can be derived by applying both rules 1. and 2. in either order as $[[\Theta]^{T+90^{\circ}}]^{T+270^{\circ}} = [[\Theta]^{T+270^{\circ}}]^{T+90^{\circ}}$ $ = [\Theta]^{180^{\circ}}$. As an example $\neg X \vee \neg Y$ = \inbkthree{\neg X}{\vee}{\neg Y} $=$ \inbkthree{X}{\neg \wedge}{Y}. \smnl
+\tb Concerning these transformation rules we can see that there is consistency over negation and change of variables as, for example, applying rule 4. to \inbkthree{\neg W}{\Theta}{Y} $ = \langle W|[\Theta]|Y \rangle^{T + 270^{\circ}}$, letting $W = \neg X$ and applying rule 4. again we find that $(\langle X|[\Theta]|Y \rangle^{T + 270^{\circ}})^{T + 270^{\circ}}$ = \inbkthree{\neg W}{\Theta}{Y} as we would expect.
+\subsection{CM Properties}
+\subsubsection{Linearity and Decomposition} \label{CMLinearity}
+\tb One of the most useful attributes of the correspondence matrices is that they are linear over $\Updownarrow$. To show this we must show that:
+\begin{center}
+ \inbkthree{X}{\Theta_1 ] \Updownarrow [\Theta_2}{Y} = \inbkthree{X}{\Theta_1}{Y} $\Updownarrow$ \inbkthree{X}{\Theta_2}{Y}
+\end{center}
+We do this by first defining the function $\xi: [\Theta] \rightarrow$ \inbkthree{X}{\Theta}{Y} and showing that $\xi$ is a linear function over $\Updownarrow$, that is that $\xi([\Theta_1 ]\Updownarrow [\Theta_2]) = \xi([\Theta_1]) \Updownarrow \xi([\Theta_2])$. As the left side of the expression can be equivalently written as the XOR sum $X_i \Theta_{1,ij} \Updownarrow \Theta_{2,ij} Y_j$, $i,j \in \{1,2\}$, $\wedge$ distributes over XOR, and for example $X_i = X_i \wedge X_i$, we can distribute $X_i$ and $Y_j$ term by term and find that:
+\begin{center}
+$X_i (\Theta_{1,ij} \Updownarrow \Theta_{2,ij}) Y_j = X_i \Theta_{1,ij} Y_j \Updownarrow X_i \Theta_{2,ij} Y_j= \xi([\Theta_1]) \Updownarrow \xi([\Theta_2])$
+\end{center} 
+We then have that logical operators can be expanded in a linear fashion over XOR. \smnl
+\tb An important result of linearity over $\Updownarrow$ is that any correspondence matrix which has more than a single positive entry can be re-written as a XOR decomposition of basis matrices:
+\begin{center}
+$[\Theta] = \Theta_{11}[\wedge] \Updownarrow \Theta_{12}[\Uparrow] \Updownarrow \Theta_{21}[\Downarrow] \Updownarrow \Theta_{22}[\neg \vee]$
+\end{center}
+This gives that any logical expression $X \Theta Y$ can be represented piece-wise:
+\begin{center}
+\scalebox{.93}{%
+\inbkthree{X}{\Theta}{Y} = \inbkthree{X}{\Theta_{11}}{Y} $\Updownarrow$ \inbkthree{X}{\Theta_{12}}{Y} $\Updownarrow$ \inbkthree{X}{\Theta_{21}}{Y} $\Updownarrow$ \inbkthree{X}{\Theta_{22}}{Y} = $X_i \Theta_{ij} Y_j$ }
+\end{center}
+which is the result as seen in section $\ref{LogicExpansion}$. As an example, the expression $\mathcal{L} = X \vee Y$ can be broken apart to $\mathcal{L}$ = \inbkthree{X}{\vee}{Y} = \inbkthree{X}{\Uparrow}{Y} $\Updownarrow$ \inbkthree{X}{\Downarrow}{Y} $\Updownarrow$ \inbkthree{X}{\wedge}{Y}. As the bra's \bra{X} and ket's \ket{Y} are the same in each XOR'ed bra-ket expression we can find the decomposition (or composition) by looking solely at the correspondence matrices e.g. $[\vee] = [\Uparrow] \Updownarrow [\Downarrow] \Updownarrow [\wedge]$.\smnl
+\tb We go a step further and find that we can decompose a logical expression $\mathcal{L} = X \Theta Y$ in to a combination of sub-expressions operated on by any logical operator $\Phi$. That is, for $\Theta = \Theta_1 \Phi \Theta_2$:
+\begin{center}
+$X \Theta Y$ = \inbkthree{X}{\Theta}{Y} = \inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y} = $(X \Theta_1 Y) \Phi (X \Theta_2 Y)$
+\end{center}
+To see this, as every element $\Theta_{ij}$ in a $[\Theta]$ can be seen to be a combination of binary operands $\Theta_{1,ij}$ and $\Theta_{2,ij}$ operated on by some logical operator $\Phi$ i.e. $\Theta_{ij} = \Theta_{1,ij} \Phi \Theta_{2,ij}$, index-wise we have:
+\begin{center}
+\scalebox{.937}{%
+$ [\Theta] = \begin{bmatrix} \Theta_{1,11} \Phi \Theta_{2,11} & \Theta_{1,12} \Phi \Theta_{2,12} \\ \Theta_{1,21} \Phi \Theta_{2,21} & \Theta_{1,22} \Phi \Theta_{2,22} \end{bmatrix} = \begin{bmatrix} \Theta_{1,11} & \Theta_{1,12} \\ \Theta_{1,21} & \Theta_{1,22} \end{bmatrix} \Phi \begin{bmatrix} \Theta_{2,11} & \Theta_{2,12} \\ \Theta_{2,21} & \Theta_{2,22} \end{bmatrix}$ = \matrify{\Theta_1}$\Phi$\matrify{\Theta_2} }
+%\begin{bmatrix} (\Theta_{1} \Phi \Theta_{2})_{11} & (\Theta_{1} \Phi \Theta_{2})_{12} \\ (\Theta_{1} \Phi \Theta_{2})_{21} & (\Theta_{1} \Phi \Theta_{2})_{22} \end{bmatrix}
+\end{center}
+As \inbkthree{X}{\Theta}{Y} = $X_i\Theta_{ij}Y_j$ and $\Theta_{ij} = \Theta_{1,ij} \Phi \Theta_{2,ij}$, we have \inbkthree{X}{[\Theta_1] \Phi [\Theta_2]}{Y} = $X_i (\Theta_{1,ij} \Phi \Theta_{2,ij}) Y_j$. As $\Theta_{1,ij}$ and $\Theta_{2,ij}$ are themselves logical variables i.e. $\mathcal{V}(\Theta_{1,ij}) \in \{0,1\}$ we have: $\Theta_{1,ij} \Phi \Theta_{2,ij}$ = \inbkthree{\Theta_{1,ij}}{\Phi}{\Theta_{2,ij}} = $(\Theta_{1,ij})_k\Phi_{kl}(\Theta_{2,ij})_l$. As $\Phi_{kl}$ is also a binary variable and $\wedge$ is commutative we can can distribute copies of $X_i$ and $Y_j$ over the binary operators giving the full expression $\mathcal{L}$ = $(X_i (\Theta_{1,ij})_k Y_j) \Phi_{kl} (X_i(\Theta_{2,ij})_l Y_j)$. We can employ rule 2. [\ref{CMRelationships}] such that, for example $(X_i (\Theta_{1,ij})_k Y_j) = (X_i \Theta_{1,ij} Y_j)_k$ and have:
+\begin{center}
+$(X_i \Theta_{1,ij} Y_j)_k \Phi_{kl} (X_i\Theta_{2,ij} Y_j)_l$ = \inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y}
+\end{center}
+which proves the result that any logical expression dependent on any operator $\Theta$ can be decomposed to some expression with sub-expressions dependent on operators $\Theta_1$ and $\Theta_2$ over a fixed operator $\Phi$. \smnl
+\tb There are usually many possible decompositions for any CM. For example, consider the expression $X \Updownarrow Y$ in which, for the operator $\Updownarrow$, we have the two possible decompositions \matrify{\Updownarrow} $= [\Leftrightarrow] \Rightarrow [\Updownarrow]$ and \matrify{\Updownarrow} $= [\Leftrightarrow] \Rightarrow [\Downarrow]$. The ambiguity in this example arises due to the fact that in propositional logic it is ambiguous as to whether a valid statement has the precedent being true or false. All one can say about the validity of a statement is that if it is false (negatively valuated), that the consequent is false while the precedent is true. There however are two operators, $\Leftrightarrow$ and $\Updownarrow$ by which CM's can be decomposed uniquely. That is, letting $\Phi = \, \Updownarrow$ or $\Phi = \, \Leftrightarrow$, then in the expression \matrify{\Theta_1} $ \Phi $ \matrify{\Theta_2} = \matrify{\Theta_3} if we know any two of the $2 \times 2$ CM's \matrify{\Theta_1},\matrify{\Theta_2}, or \matrify{\Theta_3} then the third is unique.
+\subsubsection{Quotient} \label{Quotienting}
+\tb Another useful application of correspondence matrices is the ability to quotient one logical expression by another. Let $\mathcal{L}_1 = X \Theta_1 Y$ and $\mathcal{L}_2 = Y \Theta_2 Z$ be two logical expressions. We say that $\mathcal{L}_1 \setminus \mathcal{L}_2$ is $\mathcal{L}_1$ being $\textit{quotiented}$ by $\mathcal{L}_2$ and that if $\mathcal{L}_1$ and $\mathcal{L}_2$ share the same feature (positive entry), then this feature is quotiented out. This idea of quotienting out features between $\mathcal{L}_1$ and $\mathcal{L}_2$ is simplified as the setminus operator $\setminus \equiv \wedge \neg$ where $\wedge \neg$ is defined to be itself a logical operator where $\mathcal{L}_1$ $\wedge\neg$ $\mathcal{L}_2$  $= \mathcal{L}_1 \wedge \neg(\mathcal{L}_2)$. Letting $\mathcal{L}_1 = X \Theta_1 Y$ and $\mathcal{L}_2 = X \Theta_2 Y$ we have the relationship;
+\begin{center}
+$\mathcal{L}_1 \setminus \mathcal{L}_2 = X \Theta_1 Y \setminus X \Theta_2 Y =$ \inbkthree{X}{\Theta_1}{Y}$\setminus$\inbkthree{X}{\Theta_2}{Y} $ = \langle X|[\Theta_1] \setminus [\Theta_2]|Y \rangle$
+\end{center}
+where
+\begin{center}
+$[\Theta_1] \setminus [\Theta_2] = \begin{bmatrix} \Theta_{1,11} \wedge \neg \Theta_{2,11} & \Theta_{1,12} \wedge \neg \Theta_{2,12} \\ \Theta_{1,21} \wedge \neg \Theta_{2,21} & \Theta_{1,22} \wedge \neg \Theta_{2,22}\end{bmatrix} = [\Theta_1] \wedge \neg [\Theta_2] $
+\end{center}
+This quotient of logical expressions gives a sense of how different one logical expression is to another. Note that we can also perform this computation using the modulo operator:
+\begin{center}
+\matrify{\Theta_1} $\mathit{mod}$ \matrify{\Theta_2} $ = \begin{bmatrix} \Theta_{1,11} \mathit{mod} \, \Theta_{2,11} & \Theta_{1,12} \mathit{mod} \, \Theta_{2,12} \\ \Theta_{1,21} \mathit{mod} \, \Theta_{2,21} & \Theta_{1,22} \mathit{mod} \, \Theta_{2,22} \end{bmatrix}$
+\end{center}
+where we find that $\wedge \neg \equiv mod$. \smnl
+\tb We can verify that $\mathcal{L}_1 \setminus \mathcal{L}_2 = \langle X|[\Theta_1] \setminus [\Theta_2]|Y \rangle$ by first noting that $\mathcal{L}_{1} = \Theta_{1,ij}X_iY_j$ and $\mathcal{L}_2 =\Theta_{2,ij}X_iY_j$ hence $\mathcal{L}_1 \setminus \mathcal{L}_2 = \Theta_{1,ij}X_iY_j \wedge \neg(\Theta_{2,ij}X_iY_j)$. By rule 2. [\ref{CMRelationships}], $\neg(\Theta_{2,ij}X_iY_j) = \neg(\Theta_{2,ij})X_iY_j$ which gives us the full expression: $\Theta_{1,ij}X_iY_j\neg \Theta_{2,ij}$ and gives that: $X_i\Theta_{1,ij}\neg \Theta_{2,ij}Y_j$ = \inbkthree{X}{\Theta_1] \wedge [\neg \Theta_2}{Y}. We then have our result: \begin{center}
+\inbkthree{X}{\Theta_1}{Y} $\wedge$  \inbkthree{X}{\neg \Theta_2}{Y} = $ \langle X|[\Theta_1] \setminus [\Theta_2]|Y \rangle$
+\end{center}
+As an example consider the following quotient of logical expressions $X \vee Y$ by $X \wedge Y$; 
+$(X \vee Y) \setminus (X \wedge Y) = X \Updownarrow Y$ via operations on the bra-ket formulation:
+\begin{center}
+\scalebox{.94}{%
+\inbkthree{X}{\vee}{Y}$\setminus$\inbkthree{X}{\wedge}{Y} = \inbkthree{X}{\vee}{Y}$\wedge \neg$\inbkthree{X}{\wedge}{Y} $= \langle X | [\vee]\wedge[\neg \wedge] | Y \rangle \newline =$ \inbkthree{X}{\Updownarrow}{Y}} \label{ExEqThree}
+\end{center}
+in which we see that $[\vee]\wedge[\neg \wedge] = [\Updownarrow]$ and that $[\vee]$ and $[\wedge]$ have a $[\Updownarrow]$ difference from one another, as seen previously $[\vee] = [\wedge] \Updownarrow [\Updownarrow]$. \smnl
+\tb Quotienting is important as it shows how CM's and their corresponding logical operators are related. Furthermore it gives a way to decompose the logical operator in to other logical operators.
+\subsubsection{Composition}
+\tb We had seen the ability for logical decomposition in $\ref{CMLinearity}$; one may ask then, how we might combine logical expressions? This leads us to one of the biggest findings in the paper; that if the left and right operands are the same for multiple logical expressions, then the expressions can be combined solely by combining their correspondence matrices! \smnl
+\tb Let $X$ and $Y$ be two logical expressions and $\Theta_1, \Theta_2, \Phi$ be logical operators, we find:
+\begin{center}
+\noindent\fbox{\begin{minipage}[t][3\height][c]{\dimexpr\textwidth-40\fboxsep-2\fboxrule\relax}
+\centering
+\inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y} $= \langle X | [\Theta_1] \Phi \, [\Theta_2] | Y \rangle$
+\end{minipage}}
+$$ $$
+\end{center} 
+\tb To derive this, we first transform the left hand side of the expression as follows:
+\begin{center}
+\inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y} $= $ \inbkthree{(X_i \Theta_{1,ij} Y_j)}{ \Phi }{(X_k\Theta_{2,kl} Y_l)} $= (X_i \Theta_{1,ij} Y_{j})_m \Phi_{mn} (X_k \Theta_{2,kl} Y_{l})_n$ 
+\end{center}
+where $m,n \in \{1,2\}$. The trick to combining the terms lies in the observation in which $\neg$\inbkthree{X}{\Theta_p}{Y} $=$ \inbkthree{X}{\neg \Theta_p}{Y}, $p \in \{1,2\}$ by rule 2. [\ref{CMRelationships}]. We then have that \inbkthree{X}{\neg \Theta_p}{Y} $= X_i (\Theta_{p,ij})_2 Y_{j}$ where $(\Theta_{p,ij})_2 = \neg (\Theta_{p,ij})$. Remembering that $\Phi_{mn}, \Theta_{p,ij} \in \{0,1\}$ for all indices and that $\wedge$ is commutative we have:
+\begin{center}
+$ (X_i (\Theta_{1,ij})_m Y_{j}) \Phi_{mn} (X_k (\Theta_{2,kl})_n Y_{l}) =  X_iX_k ((\Theta_{1,ij})_m Y_{j} \Phi_{mn} (\Theta_{2,kl})_n) Y_{j}Y_l \delta_{ik}\delta_{jl}$ \newline
+$X_i ((\Theta_{1,ij})_m \Phi_{mn} (\Theta_{2,ij})_n) Y_{j}$
+\end{center}
+as we can factor out like variables over XOR sums. The resulting expression can be re-written as
+$X_i$\inbkthree{\Theta_{1,ij}}{\Phi}{\Theta_{2,ij}}$Y_j$ $= X_i ( \Theta_{1,ij} \Phi \Theta_{2,ij} ) Y_j$
+in which $\Theta_{1,ij} \Phi \Theta_{2,ij} = (\Theta_{1} \Phi \Theta_{2})_{ij}$, we then have:
+\begin{center}
+ $X_i (\Theta_{1} \Phi \Theta_{2})_{ij} Y_j$ = \inbkthree{X}{[\Theta_1 \Phi \Theta_2]}{Y} = \inbkthree{X}{[\Theta_1] \Phi [\Theta_2]}{Y}
+\end{center}
+hence the result. This completes the proof and shows that, for logical expressions consisting of the same two logical variables as their respective left and right hand operands, combining or decomposing their corresponding logical expressions becomes a matter of operating solely on the operators! \label{DeComposition} \smnl
+\tb To see examples of this amazing result consider the logical expression $\mathcal{L}_1 = (X \Rightarrow Y) \Updownarrow (X \vee Y)$. Writing $\mathcal{L}$ in CM form and performing the computation we find:
+\begin{center}
+$\mathcal{L}_1$ = \inbkthree{X}{\Rightarrow}{Y} $\Updownarrow$ \inbkthree{X}{\vee}{Y} = \inbkthree{X}{[\Rightarrow] \Updownarrow [\vee]}{Y} = \inbkthree{X}{\neg L}{Y} = $\neg X$ \label{ExEqFour}
+\end{center}
+If sub-expressions are not in the same form, applying rules in $[\ref{CMRelationships}]$ will help us get an expression in the proper form in which the bra-ket operands are the same in all the sub-expressions. For example, similar to $\mathcal{L}_1$ above let $\mathcal{L}_2 = (X \Rightarrow \neg Y) \Updownarrow (X \vee Y)$. We use rule 3 to format $(X \Rightarrow \neg Y)$ and find that \inbkthree{X}{\Theta}{\neg Y} = \inbkthree{X}{\Theta}{Y}$^{T+90^{\circ}}$ which operating on the CM we find $[\Rightarrow]^{T+90^{\circ}} = [\neg \wedge]$; the logical expression transformation then gives that \inbkthree{X}{\Rightarrow}{\neg Y} = \inbkthree{X}{\neg \wedge}{Y}. We can then combine operators from the sub-expressions and find:
+\begin{center}
+\inbkthree{X}{\neg \wedge}{Y} $\Updownarrow$ \inbkthree{X}{\vee}{Y} = \inbkthree{X}{[\Rightarrow] \Updownarrow [\vee]}{Y} = \inbkthree{X}{\Leftrightarrow}{Y} = $X \Leftrightarrow Y$
+\end{center}
+\tb For more than two logical variables we can still combine operators, though not all together. To see this consider the expression $\mathcal{L} = (\mathcal{L}_1 \Phi_1 \mathcal{L}_2) \Upsilon (\mathcal{L}_3 \Phi_2 \mathcal{L}_4)$ where $\mathcal{L}_1, \cdots ,\mathcal{L}_4$ are logical sub-expressions bound by the operators $\Phi_1,\Phi_2$ and $\Upsilon$. We can re-write $\mathcal{L}$ in the corresponding CM form and find:
+\begin{center}
+$\mathcal{L} =$ \inbkthree{\mathcal{L}_1}{\Phi_1}{\mathcal{L}_2} $\Upsilon$ \inbkthree{\mathcal{L}_3}{\Phi_2}{\mathcal{L}_4} = $\Upsilon_{rs}$\inbkthree{\mathcal{L}_1}{\Phi_1}{\mathcal{L}_2}$_r$\inbkthree{\mathcal{L}_3}{\Phi_2}{\mathcal{L}_4}$_s$
+\end{center}
+Applying rule 2 we find; \inbkthree{\mathcal{L}_1}{\Phi_1}{\mathcal{L}_2}$_r$ =  $\langle \mathcal{L}_1|[\Phi_1]_r| \mathcal{L}_2 \rangle$ = $(\Phi_{1,ij})_{r}(\mathcal{L}_1)_i(\mathcal{L}_2)_j$ and \inbkthree{\mathcal{L}_3}{\Phi_2}{\mathcal{L}_4}$_s$ = $(\Phi_{2,ij})_{s}(\mathcal{L}_3)_k(\mathcal{L}_4)_l$ where we employ that $(\Phi_{1})_{r,ij} = (\Phi_{1,ij})_{r}$ and that $(\Phi_2)_{s,kl} = (\Phi_{2,kl})_s$ $[\ref{ComplimentOperators}]$. We have the resulting expression:
+\begin{center}
+$\Upsilon_{rs}(\Phi_{1})_{r,ij}(\Phi_{2})_{s,kl}(\mathcal{L}_1)_i(\mathcal{L}_3)_k(\mathcal{L}_2)_j(\mathcal{L}_4)_l$
+\end{center}
+Next, let $\mathcal{L}_1 = W \Theta_1 X$, $\mathcal{L}_2 = Y \Theta_2 Z$, $\mathcal{L}_3 = W \Theta_3 X$, and $\mathcal{L}_4 = Y \Theta_4 Z$, we can combine particular sub-expressions and find equivalent expression representations: ($\mathcal{L}_1)_i(\mathcal{L}_3)_k =$ \inbkthree{W}{\Theta_1}{X}$_i$\inbkthree{W}{\Theta_3}{X}$_k = $ $\langle W|[\Theta_1]_i| X \rangle \langle W|[\Theta_3]_k| X \rangle$ = \inbkthree{W}{[\Theta_1]_i \wedge [\Theta_3]_k}{X} = \inbkthree{W}{[\Theta_1]_i[\Theta_3]_k}{X}. Following the same process for $(\mathcal{L}_2)_j(\mathcal{L}_4)_l$ and combining, we find the full expression:
+\begin{center}
+\noindent\fbox{\begin{minipage}[t][3\height][c]{\dimexpr\textwidth-20\fboxsep-2\fboxrule\relax}
+\centering
+\inbkthree{\Phi_{1,ij}}{\Upsilon}{\Phi_{2,kl}}\inbkthree{W}{[\Theta_1]_i[\Theta_3]_k}{X}\inbkthree{Y}{[\Theta_2]_j[\Theta_4]_l}{Z}
+\end{minipage}}
+\end{center}
+in which \matrify{\Upsilon} takes as operands \bra{\Phi_{1,ij}} and \ket{\Phi_{2,kl}}. One significance is that, depending on the result of operating by \matrify{\Upsilon}, one may not need to perform any further computations. For example, if \inbkthree{\Phi_{1,ij}}{\Upsilon}{\Phi_{2,kl}} $= 0$ then one may permute to the next set of index values. Another significance of the logical expression in the above form shows that we are able to operate on logical operators themselves! We will continue to examine the combining of expressions with 4 or more logical variables in \ref{HigherDimMatrices}. 
+\subsection{Compliment Operators} \label{ComplimentOperators}
+\tb As is seen in figure 1, there are many CM's corresponding to logical operators that are not commonly seen in logic. The success of correspondence matrices lies in that there is a complete set of 16 CM's which correspond to unique logical operators, each of which can be negated and corresponds to in a unique operator. Possibly the most impressive result being that the negation of a logical expression can be found by negating the operator! \smnl
+\tb Proving that the negation of a logical expression $\mathcal{L} = X \Theta Y$ gives rise to a unique negated operator; In one direction, starting with $\neg$\inbkthree{X}{\Theta}{Y} = $(X_a\Theta_{ab}Y_b)_2$ which, by $\ref{CMRelationships}$ is equivalent to $(X_a(\Theta_{ab})_2Y_b)$ = \inbkthree{X}{\neg \Theta}{Y}. In the other direction to prove that $\neg \Theta$ is the compliment of $\Theta$; as $ \langle X|[\Theta]_2|Y \rangle$ = $\langle X|[\impax] \setminus [\Theta]|Y \rangle $ = \inbkthree{X}{\impax}{Y} $\wedge \neg$\inbkthree{X}{\Theta}{Y} $=(X_a \Theta_{ab} Y_b)_2 =$ \inbkthree{X}{\Theta}{Y}$_2$ by $\ref{Quotienting}$. This shows that $\neg$\inbkthree{X}{\Theta}{Y} = \inbkthree{X}{\neg \Theta}{Y}. \smnl
+\tb The negation of any CM \matrify{\Theta} will be called its \textit{compliment} CM and will be denoted by $\neg$\matrify{\Theta} or \matrify{\neg \Theta}, the \textit{compliment operator} to $\Theta$ is denoted by $\neg \Theta$ or $(\Theta)_2$. One can easily verify that $\neg ( \neg [\Theta]) = $\matrify{\Theta}. The compliment operators are shown in figure $\ref{fig:complimentOperators}$ as compliment pairs $ \Theta, \neg \Theta$ where $\Theta$ is compliment to $\neg \Theta$, and $\neg \Theta$ is compliment to $\neg (\neg \Theta) = \Theta$.
+\begin{figure}[htb]
+\begin{center}
+\begin{tabular}{|c|c|c|c|} 
+\hline
+ \multicolumn{4}{c}{Logical and compliment Operators} \\\hline
+ $\impax , 0$ & $\Leftrightarrow , \Updownarrow$ & $\wedge , \neg \wedge$ & $\vee , \neg \vee$ \\\hline
+ $\Rightarrow , \Uparrow$ & $\Leftarrow , \Downarrow$ & $R , \neg R$ & $L , \neg L$ \\\hline
+\end{tabular}
+\end{center}
+ \caption[compliment Operators]{The set of eight operator and compliment operator pairs}
+ \label{fig:complimentOperators}
+\end{figure}
+As $\Theta_{ij}$ represents the element with the index $ij$ in \matrify{\Theta}, we will represent the negation of the $\Theta_{ij}$'th element by $\neg(\Theta_{ij})$ or $(\Theta_{ij})_2$ and as $\neg (\Theta_{ij})$ negates each of the elements $\Theta_{ij}$ in the CM \matrify{\neg \Theta} each of the negated elements are elements of the negated operator; $\neg(\Theta_{ij})=(\neg \Theta_{ij})$. More precisely $(\Theta_{ij})_2 = (\Theta)_{2,ij}$ as negating each $\Theta_{ij} \in [\Theta]$ gives us that $\neg (\Theta_{ij}) \in \neg [\Theta] = [\neg \Theta]$ which consists of the elements $(\neg \Theta)_{ij} = (\Theta)_{2,ij}$. \smnl
+\tb For a familiar example showing an application of DeMorgans law we find that $\neg (X \wedge Y) = \neg$\inbkthree{X}{\wedge}{Y} = \inbkthree{X}{\neg \wedge}{Y} which is the XOR composition of $X_{1}(\neg \wedge_{11}) Y_{1} \Updownarrow X_{1}(\neg \wedge_{12}) Y_{2} \Updownarrow X_{2}(\neg \wedge_{21}) Y_{1} \Updownarrow X_{2}(\neg \wedge_{22}) Y_{2} $. As $(\neg \wedge_{11}) = 0$ and $(\neg \wedge_{12}) = (\neg \wedge_{21}) = (\neg \wedge_{22}) = 1$ we have $ X\neg Y \Updownarrow \neg XY \Updownarrow \neg X\neg Y  = \neg X \vee \neg Y$.
+\section{Measurement} \label{Measurement}
+\tb Measurement is the process in which an action on a system (that which is measured) gives a quality (the resulting measurement) about the system. In the quantum mechanical case it is used to give an amount of an observable such as spin, velocity, or in the case of Schrödinger's cat$^{\cite{ShrodingersCat}}$, life or death. In the logical case measurement reveals the truth of a system, an observable being something such as a valuation of the logical expression being measured.  \smnl 
+\tb In [\ref{CorrespondenceMatrices}] we saw the derivation of $[\Theta]$, a correspondence matrix representation of a logical operator $\Theta$ and how it acts or operates on the bra-ket logical state vectors as operands. The action of CM's as well as the logical matrices (LM's) \matrify{\ref{LMMs}} can be viewed as `measurements'. More precisely, a matrix operates or $\textit{measures}$ one or more operands and the action of operating on or $\textit{measuring}$ operands is called a $\textit{measurement}$. For example, the logical expression $\mathcal{L} = X \Theta Y$ can be seen as the measurement of the logical state-vectors \bra{X} and \ket{Y} by the CM \matrify{\Theta} in the equivalent representation in which $\mathcal{L} =$ \inbkthree{X}{\Theta}{Y}. \smnl
+\tb We will not pursue the quantum computational nature of CM's and LM's in depth, one however should note the similarities between quantum mechanical type measurements and logical measurements. First in that the valuation of a logical expression is a measurement, in particular; a measurement of an expressions truth. Before valuating a logical expression $\mathcal{L}$ we do not know whether it is true or false, we might view this as a superposition$^{\cite{Superposition}}$ of possible valuations. Upon measurement we then have a collapse$^{\cite{Collapse}}$ to one possible valuation. Though probability densities are not incorporated, the action of a linear CM on a pair of logical state-vectors gives a XOR decomposition in which the positive valuation of one component leaves all others negatively valuated. This is a quantization of truth, that is; upon measurement one can not have any logical expression be both true and false simultaneously. We might then view logical operators acting on logical expressions as linear measurements which reduce the possibilities of the computed expression.
+\subsection{Logical Measurement Matrices (LM's)}\label{LMMs} \label{LMMs}
+\tb We can generalize the idea of correspondence matrices to the notion of a `logical measurement matrix' or LM in which we find that CM's are particular valuations of. LM's are also important as seen in section $\ref{Measurement}$ as the action (measurement) of a LM on a set of operands gives information about the operands relationship with one-another. \smnl
+\tb In short, a correspondence matrix is a positive valuation of a logical matrix which is itself a measurement operator. Letting $[\mathcal{M}_{X \Theta Y}] = \Theta_{ij}$\otbktwo{X_i}{Y_j} be a LM of logical expressions $X$ and $Y$ we can find the unique CM $[\Theta]$:
+\begin{center}
+\scalebox{.92}{%
+$[\Theta] = \mathcal{V}_T([\mathcal{M}_{X \Theta Y}])  = \begin{bmatrix}
+\mathcal{V}_T(X) \Theta \mathcal{V}_T(Y) & \mathcal{V}_T(X) \Theta  \mathcal{V}_T(\neg Y)) \\ \mathcal{V}_T(\neg X) \Theta \mathcal{V}_T(Y) & \mathcal{V}_T(\neg X) \Theta \mathcal{V}_T(\neg Y) \end{bmatrix}$ $= \Theta_{ij}[\mathcal{M}_{\mathcal{V}_T(X_i)\mathcal{V}_T(Y_j)}]$ }
+\end{center}
+as $\mathcal{V}_T(X \Theta Y) = \mathcal{V}_T(X) \Theta \mathcal{V}_T(Y)$ is applied element-wise to \matrify{\Theta}. For an example; letting $\Theta = \, \Leftrightarrow$ and applying the positive assignments to all $X$ and $Y$ remembering that for example $\mathcal{V}_T(\neg X) = \neg \mathcal{V}_T(X) = 0$ we have $\mathcal{V}_T([\mathcal{M}_{X \Leftrightarrow Y}]) = [\Leftrightarrow]$.
+\subsubsection{Two Variable LM's} \label{TwoVarLMs}
+\tb Looking more in depth we start by deriving LM's of two variables. Letting \bra{X_i} and \ket{Y_j} be the bra and ket state vectors of the logical expressions $X_i$ and $Y_j$ respectively where $i,j \in \{1,2\}$ we have that corresponding to the logical expression $\mathcal{L} = X_iY_j$ we can $\textit{prepare}$ a unique $\textit{logical matrix}$:
+\begin{center}
+$[\mathcal{M}_{X_iY_j}] = (\langle{X_i}|^T)(|Y_j\rangle^T) = $ \otbktwo{X_i}{Y_j} 
+\end{center}
+which we will also refer to as a $\textit{logical measurement matrix}$ (LM). We say that $[\mathcal{M}_{X_iY_j}]$ operates on or measures \bra{X_i} and \ket{Y_j} by treating them as operands of $[\mathcal{M}_{X_iY_j}]$ and that the measurement is denoted: \inbkthree{X_i}{\mathcal{M}_{X_iY_j}}{Y_j}. Applying the four possibilities for $i$ and $j$ and the corresponding negations i.e. \ket{Y}$_2$ = $\neg$\ket{Y} = \ket{\neg Y} we have the four 2 $\times$ 2 $\textit{logical base matrices}$:
+\begin{center}
+\scalebox{.913}{%
+\matrify{\mathcal{M}_{X_1Y_1}} = \matrify{\mathcal{M}_{XY}}, \matrify{\mathcal{M}_{X_1Y_2}} = \matrify{\mathcal{M}_{X\neg Y}}, \matrify{\mathcal{M}_{X_2Y_1}} = \matrify{\mathcal{M}_{\neg X Y}}, \matrify{\mathcal{M}_{X_2Y_2}} = \matrify{\mathcal{M}_{\neg X \neg Y}} }
+\end{center}
+where;
+\begin{center}
+\scalebox{.932}{%
+$[\mathcal{M}_{XY}] = $\otbktwo{X}{Y} $= \begin{bmatrix} X Y & X  \neg Y\\ \neg X Y & \neg X \neg Y\\ \end{bmatrix}$, $[\mathcal{M}_{\neg X \neg Y}] = $ \otbktwo{{\neg X}}{{\neg Y}} $= \begin{bmatrix} \neg X \neg Y & \neg X  Y \\  X \neg Y & X Y \\ \end{bmatrix}$ } \\ \scalebox{.915}{%
+$[\mathcal{M}_{X\neg Y}] = $ \otbktwo{X}{{\neg Y}} $= \begin{bmatrix} X \neg Y & X Y \\ \neg X \neg Y & \neg X Y \\ \end{bmatrix}$, $[\mathcal{M}_{\neg X Y}] = $ \otbktwo{{\neg X}}{Y} $ = \begin{bmatrix} \neg X Y & \neg X  \neg Y\\ X Y & X \neg Y\\ \end{bmatrix}$}
+\end{center} 
+\tb These four matrices are base matrices as every LM can be written as the XOR sum of some combination of these matrices and each of these four LM's can not be reduced to a XOR sum of a lesser number of matrices. Using the same transformation rules for CM's [\ref{CMRelationships}]we can see the relationship between the above base via translations, rotations, and combinations thereof; for example $[\mathcal{M}_{X Y}]^{T+90^{\circ}} = [\mathcal{M}_{X \neg Y}]$, where the rotation is clockwise.\smnl
+\tb We can generalize the above base LM's and include the logical operator, that is; for $\mathcal{L} = X \Theta Y$ we can build a logical measurement matrix \matrify{\mathcal{M}_{X \Theta Y}} via the XOR sum of base LM's:
+\begin{center}
+\scalebox{.918}{%
+$\Theta_{jk}$\matrify{\mathcal{M}_{X_j Y_k}} = $\Theta_{11}$\matrify{\mathcal{M}_{X_1 Y_1}} $\Updownarrow$ $\Theta_{12}$\matrify{\mathcal{M}_{X_1 Y_2}} $\Updownarrow$ $\Theta_{21}$\matrify{\mathcal{M}_{X_2 Y_1}} $\Updownarrow$ $\Theta_{22}$\matrify{\mathcal{M}_{X_2 Y_2}} = \matrify{\mathcal{M}_{X \Theta Y}}}
+\end{center}
+where $\Theta_{jk}$ is the corresponding element indexed in \matrify{\Theta}. For example, to find the LM $[\mathcal{M}_{X \Leftrightarrow Y}]$ we first note that for \matrify{\Theta} = \matrify{\Leftrightarrow} that $\Leftrightarrow_{11}\, = \, \Leftrightarrow_{22}\, = 1$ and $\Leftrightarrow_{12}\, = \, \Leftrightarrow_{21}\, = 0$ hence we have the XOR sum: \smnl
+$[\mathcal{M}_{X \Leftrightarrow Y}] = \, \Leftrightarrow_{11}$\matrify{\mathcal{M}_{X_1 Y_1}} $\Updownarrow$ $\Leftrightarrow_{12}$\matrify{\mathcal{M}_{X_1 Y_2}} $\Updownarrow$ $\Leftrightarrow_{21}$\matrify{\mathcal{M}_{X_2 Y_1}} $\Updownarrow$ $\Leftrightarrow_{22}$\matrify{\mathcal{M}_{X_2 Y_2}}
+\begin{center}
+\scalebox{.99}{%
+= $[\mathcal{M}_{X_1 Y_1}] \Updownarrow [\mathcal{M}_{X_2 Y_2}] = [\mathcal{M}_{X Y}] \Updownarrow [\mathcal{M}_{\neg X \neg Y}] = $ \twobytwo{X \Leftrightarrow Y}{X \Updownarrow Y}{X \Updownarrow Y}{X \Leftrightarrow Y} }
+\end{center}
+In general we will leave out the terms in which $\Theta_{ij} = 0$. Extending the above example, we could use the LM $[\mathcal{M}_{X \Leftrightarrow Y}]$ to construct the LM $[\mathcal{M}_{X \Rightarrow Y}]$:
+\begin{center}
+\scalebox{1}{%
+$[\mathcal{M}_{X \Leftrightarrow Y}] \Updownarrow$ \matrify{\mathcal{M}_{\neg X Y}} $= [\mathcal{M}_{X \Rightarrow Y}]$ = \twobytwo{X \Rightarrow Y}{\neg X \vee \neg Y}{X \vee Y}{X \Leftarrow Y} }
+\end{center}
+The generalized LM matrix representation is:
+\begin{center}
+\matrify{\mathcal{M}_{X \Theta Y}} $= \Theta_{ij}$\otbktwo{X_i}{Y_j} = \twobytwo{X_i\Theta_{ij}Y_j}{X_i \Theta_{ij}\neg Y_j}{\neg X_i\Theta_{ij}Y_j}{\neg X_i\Theta_{ij} \neg Y_j}
+\end{center}
+\subsubsection{Single Variable LM's}
+\tb In this paper thus far we have seen logical expressions of two and four variables. It is insightful to see how to build LM's of single variables and how multi-variable logical expressions can be built from them as well as the asymmetries introduced from doing so. Similar to multi-variabled logical expressions, LM's can be XOR'ed together so as to remove variables as well as be factored into conjunctions of LM's of a single variable, these facts however are built on the foundation of treating logical expressions as vectors [$\ref{BraKets}$]. \smnl
+\tb To start, we can see that it is simple to $\textit{expand}$ logical expressions of a single variable by other variables and in doing so create a multi-variable logical expression:
+\begin{center}
+$Y = Y(X_1 \Updownarrow \neg X_1) = Y(X_1 \Updownarrow \neg X_1) \cdots (X_n \Updownarrow \neg X_n)$
+\end{center}
+We see however that by expanding a logical variable in terms of other variables we have introduced an asymmetry i.e. $Y = (X \Updownarrow \neg X)Y = Y(X \Updownarrow \neg X)$. That asymmetry in LM's makes a difference can be seen simply as \matrify{\mathcal{M}_{XY}} = \otbktwo{X}{Y} $\neq$ \otbktwo{Y}{X} = \matrify{\mathcal{M}_{YX}}. We can see that the multi-variable expanding of LM's are analogous to the logical expansions above:
+\begin{center}
+\matrify{\mathcal{M}_{XY}} $\Updownarrow$ \matrify{\mathcal{M}_{\neg XY}} = (\Lwaveket{X}{\neg X})\bra{Y} = \otbktwo{T}{Y} = \matrify{\mathcal{M}_{Y_R}} $= \begin{bmatrix} Y & \neg Y \\ Y & \neg Y \end{bmatrix}$
+\end{center}
+and
+\begin{center}
+\matrify{\mathcal{M}_{YX}} $\Updownarrow$ \matrify{\mathcal{M}_{Y \neg X}} = \ket{Y}(\Lwavebra{X}{\neg X}) = \otbktwo{Y}{T} = \matrify{\mathcal{M}_{Y_L}} $= \begin{bmatrix} Y & Y \\ \neg Y & \neg Y \end{bmatrix}$ 
+\end{center}
+where \Lwaveket{X}{\neg X} = \ket{T} = \twobyoneT{1}{1} is the $\textit{tautalogical statevector}$ as it is true in both of its indices. We use the above asymmetric matrices to derive the symmetric LM of a single variable:
+\begin{center}
+\matrify{\mathcal{M}_Y} = \otbk{Y} = (\otbktwo{Y}{T})(\otbktwo{T}{Y}) = \matrify{\mathcal{M}_{Y_L}}\matrify{\mathcal{M}_{Y_R}}
+\end{center}
+It can be proven directly that we can factor two variable expressions in to their asymmetric factors:
+\matrify{\mathcal{M}_{XY}} = (\matrify{\mathcal{M}_{X_{L}}}\matrify{\impax})\matrify{\mathcal{M}_{Y_{R}}} = \matrify{\mathcal{M}_{X_{L}}}\matrify{\mathcal{M}_{Y_{R}}}.
+We generalize this result and find that that for the LM corresponding to the logical expression $X \Theta Y$ we have:
+\begin{center}
+\matrify{\mathcal{M}_{X \Theta Y}} = $\Theta_{ij}$\matrify{\mathcal{M}_{X_i Y_j}} = $\Theta_{ij}$\matrify{\mathcal{M}_{X_{i_L}}}\matrify{\mathcal{M}_{Y_{j_R}}} =  $\Theta_{ij}$\matrify{\mathcal{M}_{X_{L}}}$_i$\matrify{\mathcal{M}_{Y_{R}}}$_j$
+\end{center}
+that \matrify{\mathcal{M}_{X_{i_L}}} = \matrify{\mathcal{M}_{X_{L}}}$_i$ can be seen as negation is applied element-wise. \smnl
+\tb If a LM can be written as a conjunction of multiple LM's which do not share a variable then the matrix is said to be $\textit{seperable}$ and we say that we can separate the LM into $\textit{factors}$. For example \matrify{\mathcal{M}_{X_L}} and \matrify{\mathcal{M}_{Y_R}} are factors of \matrify{\mathcal{M}_{XY}}. The ability to break apart LM's of conjunctive expressions such as $XY$ into factors is useful as it shows that we can break apart some multi-variable LM's in to a conjunction of LM's with a single variable.
+\subsubsection{LM Properties}
+\tb As might be expected we find that the same computations such as LM transformations, quotienting, and composition can be performed on LM's in the same way as was done with CM's. To show these properties first recall that $X_i \Theta_{ij} Y_j$ has an equivalent representation as \inbkthree{X}{\Theta}{Y} [\ref{CorrespondenceMatrices}]. Using this we can apply the equivalent bra-ket LM representations and find:
+\begin{center}\scalebox{.98}{%
+\matrify{\mathcal{M}_{X \Theta Y}} = \twobytwo{X_i \Theta_{ij} Y_j}{X_i \Theta_{ij} \neg Y_j}{\neg X_i \Theta_{ij} Y_j}{\neg X_i \Theta_{ij} \neg Y_j} = \twobytwo{\langle X|[\Theta]|Y \rangle}{\langle X|[\Theta]|\neg Y \rangle}{\langle \neg X|[\Theta]|Y \rangle}{\langle \neg X|[\Theta]| \neg Y \rangle} }
+\end{center}
+We then find, by rule 2. of transforming CM's i.e. $\neg$\inbkthree{X}{\Theta}{Y} = \inbkthree{X}{\neg \Theta}{Y}, that:
+\begin{center}
+$\neg [\mathcal{M}_{X \Theta Y}] = $\twobytwo{ \langle X|[\neg \Theta]|Y \rangle}{ \langle X|[\neg \Theta]|\neg Y \rangle}{ \langle \neg X|[\neg \Theta]|Y \rangle}{ \langle \neg X|[\neg \Theta]| \neg Y \rangle} $= \neg \Theta_{ij}$\otbktwo{X_i}{Y_j} $= [\mathcal{M}_{X (\neg \Theta) Y}]$
+\end{center}
+in which we can see that it doesn't matter if $\neg$ is applied to the whole LM or just to $\Theta$ as $\neg (\Theta_{ij}$\matrify{\mathcal{M}_{X_iY_j}}) $= (\neg \Theta_{ij})$\matrify{\mathcal{M}_{X_iY_j}}. \smnl
+\tb We can then extend the notion of quotienting to logical matrices. To see this take the logical operators $\Theta_1$ and $\Theta_2$ for which we have the respective associated LM's \matrify{\mathcal{M}_{X \Theta_1 Y}} and \matrify{\mathcal{M}_{X \Theta_2 Y}}. We can quotient the LM's and we find that:
+\begin{center}
+\matrify{\mathcal{M}_{X \Theta_1 Y}} $\setminus$ \matrify{\mathcal{M}_{X \Theta_2 Y}} = \matrify{\mathcal{M}_{X (\Theta_1 \setminus \Theta_2) Y}}
+\end{center} 
+This relationship is proven by first remembering that as $\Theta_{ij}$ is a logical variable we have $\neg[\mathcal{M}_{X\Theta Y}] = \neg \Theta_{ij}$\matrify{\impax}$\vee \neg[\mathcal{M}_{X_iY_j}]$. We then find that the quotient \matrify{\mathcal{M}_{X\Theta_1 Y}} $\setminus$ \matrify{\mathcal{M}_{X\Theta_2 Y}} = $\Theta_{1,ij}$\matrify{\mathcal{M}_{X_i Y_j}}$\wedge (\neg \Theta_{2,ij}$\matrify{\impax}$\vee \neg[\mathcal{M}_{X_iY_j}])$ which, as we can distribute over $\wedge$ and $\vee$ and that operations between LM's are performed between corresponding LM indices, we have the equivalent expression $(\Theta_{1,ij} \wedge \neg \Theta_{2,ij})$\matrify{\mathcal{M}_{X_iY_j}}. As $\Theta_{1,ij} \wedge \neg \Theta_{2,ij} = (\Theta_1 \setminus \Theta_2)_{ij}$ the result follows. \smnl
+\tb Similar to the combining of logical expressions by way of combining their respective CM's we can combine logical matrices and find that:
+\begin{center}
+$[M_{X \Theta_1 Y}] \Phi [M_{X \Theta_2 Y}]$ =  \matrify{\mathcal{M}_{X (\Theta_1 \Phi \Theta_2) Y}}
+\end{center}
+To see this \matrify{\mathcal{M}_{X \Theta_1 Y}} $\Phi$ \matrify{\mathcal{M}_{X \Theta_2 Y}} can be written equivalently as:
+ \begin{center}
+ \scalebox{.99}{%
+ \twobytwo{ \langle X|[\Theta_1]|Y \rangle}{ \langle X|[\Theta_1]|\neg Y \rangle}{ \langle \neg X|[\Theta_1]|Y \rangle}{ \langle \neg X|[\Theta_1]| \neg Y \rangle} $\Phi$ \twobytwo{ \langle X|[\Theta_2]|Y \rangle}{ \langle X|[ \Theta_2]|\neg Y \rangle}{ \langle \neg X|[\Theta_2]|Y \rangle}{ \langle \neg X|[\Theta_2]| \neg Y \rangle}  }
+  \end{center}
+We can combine sub-expressions over $\Phi$ as operators can be combined i.e. \inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y} $= \langle X | [\Theta_1] \Phi \, [\Theta_2] | Y \rangle$ [$\ref{CMRelationships}$]; doing this for all indices we find:
+\begin{center}
+ \scalebox{.94}{%
+\twobytwo{\langle X|[\Theta_1] \Phi [\Theta_2]|Y \rangle}{\langle X|[\Theta_1] \Phi [\Theta_2]|\neg Y \rangle}{\langle \neg X|[\Theta_1] \Phi [\Theta_2]|Y \rangle}{\langle \neg X|[\Theta_1] \Phi [\Theta_2]|\neg Y \rangle} = $(\Theta_1 \Phi \Theta_2)_{ij}$\matrify{\mathcal{M}_{X_iY_j}} = \matrify{\mathcal{M}_{X (\Theta_1 \Phi \Theta_2) Y}} }
+\end{center}
+which shows that we can combine LM's which share the same ordered sub-expressions.
+\subsubsection{Measurement using LM's} \label{MeasurementviaLMs}
+\tb As was the case with correspondence matrices, logical matrices are built from the ground up to be measurement operators. Like CM's they measure the relationship between bra-ket state-vector pairs, however instead of returning an expression, the LM measures truth. \smnl
+\tb To see how measurement reveals truth, consider \inbkthree{X_i}{\mathcal{M}_{X \Rightarrow Y}}{Y_j} where $i,j \in \{1,2\}$: \label{ExEqFive}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\inbkthree{X}{\mathcal{M}_{X \Rightarrow Y}}{Y} $= 1$ & \inbkthree{X}{\mathcal{M}_{X \Rightarrow Y}}{\neg Y} $= 0$ \\
+\hline
+\inbkthree{\neg X}{\mathcal{M}_{X \Rightarrow Y}}{Y} $= 1$ & \inbkthree{\neg X}{\mathcal{M}_{X \Rightarrow Y}}{\neg Y} $= 1$ \\
+\hline
+\end{tabular} 
+\end{center}
+ This measurement gives a more general measurement concerning the validity of a logical statement in which we can see that it is not valid to measure a logical statevector \bra{X} as a premise with a conclusion of \ket{\neg Y} no matter the valuation of $X$ and $\neg Y$. \smnl
+\tb Measuring logical state-vectors by a LM shows the logical operator's relationship explicitly:
+\begin{center}
+\inbkthree{X_i}{\mathcal{M}_{X \Theta Y}}{Y_j} = $\Theta_{ij}$\inbktwo{X_i}{X_k}\inbktwo{Y_l}{Y_j}$\delta_{ik}\delta_{lj} = \Theta_{ij}$
+\end{center}
+where $k,l \in \{1,2\}$ and $\delta_{ab}$ is the Kronecker delta where $\delta_{ab} = 1$ if $a = b$ and $0$ otherwise. We can then see that this type of measurement depends fully on the operator $\Theta$. As an example, consider the LM \matrify{\mathcal{M}_{X \Rightarrow Y}} = $\Rightarrow_{kl}$\matrify{\mathcal{M}_{X_kY_l}}, we have:
+\begin{center}
+\inbkthree{X_i}{\mathcal{M}_{X \Rightarrow Y}}{Y_j} = $\Rightarrow_{ij}$ \inbktwo{X_i}{X_k}\inbktwo{Y_l}{Y_j}$\delta_{ik}\delta_{lj} = \, \Rightarrow_{ij}$
+\end{center} 
+by remembering that \matrify{\mathcal{M}_{X_kY_l}} = \otbktwo{X_k}{Y_l} and that as $\Rightarrow_{ij} \, \in \{0,1\}$ we can factor it out. \smnl
+\tb We do not always have the result of the measurement being dependent solely on the logical operator, for example \inbkthree{X}{\mathcal{M}_{X \Theta Y}}{Z} = $\Theta_{ij}$\inbktwo{X}{X_i}\inbktwo{Y_j}{Z} = $\Theta_{1j}(Y_j \Leftrightarrow Z)$. More generally, in measuring the logical expressions $\mathcal{L}_1$ and $\mathcal{L}_2$ by the LM \matrify{\mathcal{M}_{X \Theta Y}} we find that:
+\begin{center}
+$\mathcal{L}$ = \inbkthree{\mathcal{L}_1}{\mathcal{M}_{X \Theta Y}}{\mathcal{L}_2} $= \Theta_{rs}(\mathcal{L}_1 \Leftrightarrow X_r) \wedge (Y_s \Leftrightarrow \mathcal{L}_2)$
+\end{center}
+or equivalently as $\Theta_{rs}$\inbktwo{\mathcal{L}_1}{X_r}$\wedge$\inbktwo{Y_s}{\mathcal{L}_2}. As, for example, the bra-ket \inbktwo{\mathcal{L}_1}{X_r} = $\mathcal{L}_1 X_r \Leftrightarrow \neg \mathcal{L}_1 \neg X_r$ we have that the measured expression $\mathcal{L}_1$ is in a sense `polarized` in respect to $X_r$ that is; $\mathcal{L}$ has a positive valuation depending on both $(\mathcal{L}_1 \Leftrightarrow X_r)$ and $(\mathcal{L}_2 \Leftrightarrow Y_s)$ being positively valuated. Measurement by a LM gives a constraint on how logical sub-expressions can be related so as to allow the overall expression to be positively valuated.
+\section{Higher Dimensional Matrices} \label{HigherDimMatrices}
+\tb We can create higher dimensional correspondence matrices in a manner similar to that of the $2 \times 2$ matrices. With the $2 \times 2$ LM's there were only $2! = 2$ choices to create a logical matrix i.e. for logical expressions $X$ and $Y$, only the LM's \matrify{\mathcal{M}_{XY}} or \matrify{\mathcal{M}_{YX}} are possible. Things become more complex in the higher dimensional case in that for $n$ logical variables there are $n!$ ways to create the $n \times n$ correspondence matrix. This section will derive a way to build higher dimensional LM's and their corresponding CM's.
+\subsection{$4 \times 4$ Matrix Representation} \label{FourVarLMs}
+\tb Previously in section \ref{TwoVarLMs} we found the unique logical matrix $[\mathcal{M}_{AB}]$ corresponding to the logical expression $\mathcal{L} = A \wedge B$. We want embed elements of $[\mathcal{M}_{AB}]$ and the more generalized $[\mathcal{M}_{A \Theta B}]$ in to a larger matrix. To do so we start by defining a projection map $p$ such that:
+\begin{center}
+$p: \, [\mathcal{M}_{AB}] \mapsto [[\mathcal{M}_A] \otimes [\mathcal{M}_B]]$
+\end{center}
+in which $\forall e \in [\mathcal{M}_{AB}]$, $p(e) \in [[\mathcal{M}_A] \otimes [\mathcal{M}_B]]$ where $p(e) = e$. As both $[\mathcal{M}_A]$ and $[\mathcal{M}_B]$ are diagonal matrices, the map $p(e) = e$ gives elements on the diagonal in $[[\mathcal{M}_A] \otimes [\mathcal{M}_B]]$:
+\begin{center}
+\scalebox{.955}{%
+\matrify{\mathcal{M}_{AB}} = \twobytwo{AB}{A\neg B}{\neg A B}{\neg A \neg B} $\overset{\mathit{p}}{\longrightarrow}$ $\begin{bmatrix}
+AB & 0 & 0 & 0 \\ 0 & A \neg B & 0 & 0 \\ 0 & 0 & \neg A B & 0 \\ 0 & 0 & 0 & \neg A \neg B \end{bmatrix}$ = $[[\mathcal{M}_{A}] \otimes [\mathcal{M}_{B}]]$ }
+\end{center}
+We can generalize this result to LM's of the form \matrify{\mathcal{M}_{A \Phi B}} = $\Phi_{tu}[\mathcal{M}_{A_tB_u}]$ where $t,u \in \{1,2\}$ and find that for the logical expression $A \Phi B$:
+\begin{center}
+$\Phi_{tu}$\matrify{\mathcal{M}_{A_tB_u}} $\overset{\mathit{p}}{\longrightarrow}$ $\Phi_{tu}[[\mathcal{M}_{A_t}] \otimes [\mathcal{M}_{B_u}]]$
+\end{center}
+\tb We proceed to build a $4 \times 4$ LM representing a logical expression with four variables via the use of substitution. To do this consider the logical expression $\mathcal{L} = A \wedge B$ from above and let $A = W \Theta_1 X$ and $B = Y \Theta_2 Z$. As we can write $[\mathcal{M}_{W \Theta_1 X}] = \Theta_{1,ij}[\mathcal{M}_{W_i X_j}]$ and $[\mathcal{M}_{Y \Theta_2 Z}] = \Theta_{2,kl}[\mathcal{M}_{Y_k Z_l}]$ we have:
+\begin{center}
+$[[\mathcal{M}_A] \otimes [\mathcal{M}_B]]$ $= [[\mathcal{M}_{W \Theta_1 X}] \otimes [\mathcal{M}_{Y \Theta_2 Z}]] = \Theta_{1,ij}\Theta_{2,kl}$ [\matrify{\mathcal{M}_{W _iX_j}} $\otimes$ \matrify{\mathcal{M}_{Y_kZ_l}}]
+\end{center} 
+which, as was the case with the two variable LM's, the operations $\Theta_{1,ij}$ and $\Theta_{2,kl}$, are binary and can be factored out of the tensor product. We then have that, like \matrify{A \wedge B}, the LM \matrify{\mathcal{M}_{(W \Theta_1 X)\wedge(Y \Theta_2 Z)}} can be represented by a $4 \times 4$ logical matrix. The simplest example of a $4 \times 4$ LM is one in which $\Theta_1 = \Theta_2 = \wedge$ as this constrains the indices $i,j,k,l$ to be $1$. The resulting $4 \times 4$ matrix is:
+\begin{center}\scalebox{.93}{%
+$[[\mathcal{M}_{WX}] \otimes [\mathcal{M}_{YZ}]] = \begin{bmatrix} WXYZ & W X Y \neg Z & W \neg XY Z & W \neg X Y \neg Z \\ W X \neg Y Z & W X \neg Y \neg Z & W \neg X \neg Y Z & W \neg X \neg Y \neg Z \\ \neg W X Y Z & \neg W X Y \neg Z & \neg W \neg X Y Z & \neg W \neg X Y \neg Z \\ \neg W X \neg Y Z & \neg W X \neg Y \neg Z &\neg W \neg X \neg Y Z & \neg W \neg X \neg Y \neg Z  \end{bmatrix}$}
+\end{center}
+which is the LM corresponding to the logical expression $\mathcal{L} = WXYZ$. \smnl
+\tb The $4 \times 4$ LM just constructed is an example of only one of the $2^4 = 16$ possible base matrices for fixed $\Theta_1$ and $\Theta_2$. The more general LM corresponding to the logical expression $\mathcal{L} = (W \Theta_1 X)\Phi(Y \Theta_2 Z)$ is:
+\begin{center}
+$[\mathcal{M}_{(W \Theta_1 X) \Phi (Y \Theta_2 Z)}] \overset{\mathit{p}}{\longrightarrow} \Phi_{rs}[[\mathcal{M}_{W \Theta_1 X}]_r \otimes [\mathcal{M}_{Y \Theta_2 Z}]_s]$
+\end{center}
+for the projection $p$ as defined above. However as, for example, $[\mathcal{M}_{W \Theta_1 X}]_r = (\Theta_{1,ij})_r[W_iX_j]$ as seen by rule two in $\ref{CMRelationships}$ we have the projection:
+\begin{center}
+$[\mathcal{M}_{(W \Theta_1 X) \Phi (Y \Theta_2 Z)}] \overset{\mathit{p}}{\longrightarrow} \Phi_{rs} (\Theta_{1,ij})_r(\Theta_{2,kl})_s[[\mathcal{M}_{W_i X_j}] \otimes [\mathcal{M}_{Y_k Z_l}]]$
+\end{center}
+where each $\Phi_{rs}, \Theta_{1,ij},\Theta_{2,kl} \in \{0,1\}$ and are commutative over conjunctions. We denote $\Phi$ as such to remind us that the sub-expressions $W \Theta_1 X$ and $Y \Theta_2 Z$ are computed first so as to remove ambiguity. \smnl
+\tb Consider the term  $\Phi_{rs} (\Theta_{1,ij})_r(\Theta_{2,kl})_s$ in the above expression, this term has the equivalent representation:
+\begin{center}
+$ \Phi_{rs} ((\Theta_{1,ij})_r(\Theta_{2,kl})_s)$ = \inbkthree{(\Theta_{1,ij})}{\Phi}{(\Theta_{2,kl})}
+\end{center} 
+This shows that we can measure the relationship between operators! This is significant as, for a particular subscript valuation, the action of $[\Phi]$ on both \bra{\Theta_{1,ij}} and \ket{\Theta_{2,kl}} tells us whether the LM $[[\mathcal{M}_{W_i X_j}] \otimes [\mathcal{M}_{Y_k Z_l}]]$ needs to be combined (XOR summed) with the other LM's in which the subscript permutations are such that $\mathcal{V}$(\inbkthree{\Theta_{1,ij}}{\Phi}{\Theta_{2,kl}})$ \neq 0$. All LM's have a representation in which they can be conjoined or $\textit{modified}$ by some CM element e.g. \matrify{M_{X \Theta Y}} = $\Theta_{ij}[\mathcal{M}_{X_iY_j}]$ where $[\mathcal{M}_{X_iY_j}]$ is modified by $\Theta_{ij}$. We will call any expression which modifies a LM a $\textit{modifier}$. 
+\subsubsection{Measurement}\label{HigherDimMeasurement}
+\tb As ordering is important for any logical expression hence all LM's, we must pick a consistent way in which the LM acts upon the left and right hand operands. To do this we first transform \matrify{\mathcal{M}_{(W \Theta_1 X) \Phi (Y \Theta_2 Z)}} in to an equivalent representation. In pursuing this endeavor note the following:
+\begin{center}
+\ket{W}\ket{Y} $= \begin{bmatrix} W |Y \rangle \\ \neg W | Y \rangle \end{bmatrix}$ and \bra{Z}\bra{X} $= \begin{bmatrix}  \langle Z| X \\  \langle Z  |\neg X \end{bmatrix}^T$
+\end{center}
+in which, as conjunction is commutative:
+\begin{center}\scalebox{.97}{%
+\ket{W}\ket{Y} $ \otimes $ \bra{Z}\bra{X} $= \begin{bmatrix} WX |Y \rangle \langle Z| &   W \neg X |Y \rangle \langle Z| \\ \neg W X |Y \rangle \langle Z| & \neg  W \neg X |Y \rangle \langle Z| \end{bmatrix} = |W \rangle  \langle X| \otimes  |Y \rangle \langle Z |$}
+\end{center}
+We find the left hand operand to be (\ket{W}\ket{Y}$)^{T}$ = \bra{Y}\bra{W} and the right hand to be (\bra{Z}\bra{X})$^T$ = \ket{X}\ket{Z} hence the overall measurement of the left and right operands by the LM is:
+\begin{center}
+\bra{Y}\bra{W}$[\mathcal{M}_{(W \Theta_1 X) \Phi (Y \Theta_2 Z)}]$\ket{X}\ket{Z}
+\end{center}
+\tb Finding the correspondence matrices from the logical ones is simply done by taking the positive valuation of each LM \matrify{\ref{LMMs}}. For the $4 \times 4$ matrix above we have;
+\begin{center}
+$\mathcal{V}_T[\mathcal{M}_{(W \Theta_1 X) \Phi (Y \Theta_2 Z)}] \overset{\mathit{p}}{\longrightarrow} \langle \Theta_{1,ij}|[\Phi_{rs}]|\Theta_{2,kl}\rangle[\mathcal{V}_T([\mathcal{M}_{W_i X_j}]) \otimes \mathcal{V}_T([\mathcal{M}_{Y_k Z_l}])]$
+\end{center}
+and find that modifying$\mathcal{V}_T([\mathcal{M}_{W \Theta_1 X}]_r \otimes [\mathcal{M}_{Y \Theta_2 Z}]_s)$ by $\Phi_{rs} \forall r,s$ allows the computation of $4 \times 4$ CM's. As an example of a $4 \times 4$ LM and the corresponding CM, consider the expression $\mathcal{L} = (W \Updownarrow X) \Rightarrow (\neg Y \wedge Z)$. We first find the LM's:
+\begin{center}
+$[\mathcal{M}_{W \Updownarrow X}] = \begin{bmatrix} W \Updownarrow X & W \Leftrightarrow X \\ W \Leftrightarrow X & W \Updownarrow X \end{bmatrix}$ and $[\mathcal{M}_{Y \Downarrow Z}] = \begin{bmatrix} \neg Y Z & \neg Y \neg Z \\ YZ & Y \neg Z \end{bmatrix}$
+\end{center}
+We can build the $4 \times 4$ logical matrix by taking the XOR sum relating to the operator $\Rightarrow$ operating on $[\mathcal{M}_{W \Updownarrow X}]$ and $[\mathcal{M}_{Y \Downarrow Z}]$: \smnl
+\scalebox{.95}{%
+$[\mathcal{M}_{(W \Updownarrow X) \Rightarrow (Y \Downarrow Z)}] = \, \Rightarrow_{rs}[\mathcal{M}_{(W \Updownarrow X)}]_r [\mathcal{M}_{(Y \Downarrow Z)}]_s \overset{\mathit{p}}{\longrightarrow} \, \, \Rightarrow_{rs}[[\mathcal{M}_{(W \Updownarrow X)}]_r \otimes [\mathcal{M}_{(Y \Downarrow Z)}]_s]$ }
+\begin{center}
+= $[[\mathcal{M}_{W \Updownarrow X}] \otimes [\mathcal{M}_{Y \Downarrow Z}]] \Updownarrow [\neg [\mathcal{M}_{W \Updownarrow X}] \otimes [\mathcal{M}_{Y \Downarrow Z}]] \Updownarrow [\neg [\mathcal{M}_{W \Updownarrow X}] \otimes \neg [\mathcal{M}_{Y \Downarrow Z}]]$
+\end{center}
+in which the modifiers $\Rightarrow_{11}\, =\, \Rightarrow_{21}\, =\, \Rightarrow_{22}\, = 1$ and $\Rightarrow_{12}\, = 0$ have been applied and components with $0$-modifiers have been removed. While we can find the CM from a positively valuated LM [\ref{LMMs}], we do not need to do so as a logical expression provides enough information. \smnl
+\tb To see how to construct the CM from the above logical expression we start by writing it in the equivalent form $\mathcal{L}$ = \inbkthree{W}{\Updownarrow}{X} $\Rightarrow$ \inbkthree{Y}{\Downarrow}{Z}. As we have already chosen the order for the variables $W,X,Y,Z$ we only need to compute the $4 \times 4$ matrix from the action of the modifier $\Rightarrow$ on [\matrify{\Updownarrow}$\otimes$\matrify{\Downarrow}]:
+\begin{center}
+$\Rightarrow_{rs}[[\Updownarrow]_r \otimes [\Downarrow]_s] = [[\Updownarrow]_1 \otimes [\Downarrow]_1] \Updownarrow [[\Updownarrow]_2 \otimes [\Downarrow]_1] \Updownarrow [[\Updownarrow]_2 \otimes [\Downarrow]_2] = \neg [[\Updownarrow]_1 \otimes \neg [\Downarrow]_2]$
+\end{center}
+where the right side of the equality is an equivalent computation done by noting that $(W \Updownarrow X) \Rightarrow (Y \wedge \neg Z)$ = $\neg ((W \Updownarrow Z) \wedge \neg (\neg Y \wedge Z))$, we find: \label{ExEqSix}
+\begin{center}
+$\Rightarrow_{rs}[[\Updownarrow]_r \otimes [\Downarrow]_s] = \mathcal{V}_T([\mathcal{M}_{(W \Updownarrow X) \Rightarrow (Y \Downarrow Z)}]) = \begin{bmatrix} 1 & 1 & 0 & 0 \\ 1 & 1 & 1 & 0 \\ 0 & 0 & 1 & 1 \\ 1 & 0 & 1 & 1 \end{bmatrix}$
+\end{center}
+which then measuring the operands \bra{Y}\bra{W} and \ket{X}\ket{Z} gives:
+\begin{center}
+\bra{Y}\bra{W}$\mathcal{V}_T[\mathcal{M}_{(W \Updownarrow X) \Rightarrow (Y \Downarrow Z)}]$\ket{X}\ket{Z} $= (W \Updownarrow X) \Rightarrow (\neg Y \wedge Z)$
+\end{center}
+this makes sense as the CM $\mathcal{V}_T[\mathcal{M}_{(W \Updownarrow X) \Rightarrow (Y \Downarrow Z)}]$ was constructed to measure logical state-vectors corresponding to variables $W,X,Y,Z$ in a particular order. Like combinations of logical expressions with two variables, the true power of the higher dimensional CM's become evident when (de)composing logical expressions. An example of this can be seen in section $\ref{CMComputations}$.
+\subsection{Higher Dimensional Matrices} \label{HigherDimMatrices}
+\tb The ability to represent logical expressions as LM's is not limited to expressions of 4 or less logical variables. To see this, consider the logical expression $\mathcal{L} = ((X_1 \Theta_1 X_2) \Phi_1 (X_3 \Theta_2 X_4)) \Upsilon ((X_5 \Theta_3 X_6) \Phi_2 (X_7 \Theta_4 X_8))$; the corresponding LM is: \smnl
+$\Upsilon_{rs}(\Phi_{1,ij})_r(\Phi_{2,kl})_s(\Theta_{1,ab})_i(\Theta_{2,cd})_j(\Theta_{3,ef})_k(\Theta_{4,gh})_l \newline \tb \tb \tb [[[\mathcal{M}_{(X_{1})_a (X_{2})_b}] \otimes [\mathcal{M}_{(X_{3})_c (X_{4})_d}]] \otimes [[\mathcal{M}_{(X_{5})_e (X_{6})_f}] \otimes [\mathcal{M}_{(X_{7})_g (X_{8})_h}]]] $ \smnl
+While this expression has a lot of indices, it can be reduced to only eight; the same as the number of logical variables. To do this we employ the technique seen in section \ref{ComplimentOperators} such that for any logical operator $\Theta$ we have $(\Theta)_{t,uv} = (\Theta_{uv})_t$ where $t,u,v \in \{0,1\}$. We can rearrange the operators and re-write combinations of operators in bra-ket form, for example as $(\Phi_{1,ij})_r =(\Phi_1)_{r,ij}$ we have $(\Theta_{1,ab})_i (\Phi_1)_{r,ij}(\Theta_{2,cd})_j$ = \inbkthree{\Theta_{1,ab}}{(\Phi_1)_r}{\Theta_{2,cd}}. After employing rule 2 [\ref{CMRelationships}] and finding that, for example, \inbkthree{\Theta_{1,ab}}{(\Phi_1)_r}{\Theta_{2,cd}} = \inbkthree{\Theta_{1,ab}}{\Phi_1}{\Theta_{2,cd}}$_r$ we can rewrite the above expression as: \smnl
+$\langle$\inbkthree{\Theta_{1,ab}}{\Phi_1}{\Theta_{2,cd}}$|[\Upsilon]|$\inbkthree{\Theta_{3,ef}}{\Phi_2}{\Theta_{4,gh}}$\rangle$  $\newline \tb \tb \tb [[[\mathcal{M}_{(X_{1})_a (X_{2})_b}] \otimes [\mathcal{M}_{(X_{3})_c (X_{4})_d}]] \otimes [[\mathcal{M}_{(X_{5})_e (X_{6})_f}] \otimes [\mathcal{M}_{(X_{7})_g (X_{8})_h}]]] $ \smnl
+in which we can see that the modifier for the LM is completely composed of logical operators. While there are $2^8$ possible $16 \times 16$ base LM's which may be XOR'ed together, we may fully remove any LM which has a modifier whose valuation is 0 thus reducing the overall computational time. \smnl
+\tb We build LM's of larger dimension so as to not have each indexed element of a smaller dimensional LM be a large logical expression. Using induction$^{\cite{Induction}}$ we can build larger LMs and show that any logical expression with $2^n$ logical sub-expressions (1) can be represented by a square $2^n \times 2^n$ LM and (2) all non-conjunctive operators can be pulled in to the LM modifier. 
+First, we have shown by demonstration that for $n =1$ and $n = 2$ ([\ref{TwoVarLMs}], and [\ref{FourVarLMs}] respectively) that there are LM's satisfying the criteria (1) and (2) as stated. Assuming we can do this for the logical expression $\mathcal{L}=\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}$ which can be represented by the $2^{n-1} \times 2^{n-1}$ LM $[\mathcal{M}_{\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}}]$, we want to show that by appending another logical expression $X \Theta_{2} Y$ over the operator $\Phi$ we can find a $2^{n} \times 2^{n}$ dimensional LM for $(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}) \Phi (X \Theta_{2} Y)$ in which all non-conjunctive operators can be moved to the modifier. To do this, let $(X \Theta_{2} Y)$ be a logical expression with only two variables $X$ and $Y$; we have the associated $2 \times 2$ LM and projection:
+\begin{center}
+\matrify{\mathcal{M}_{(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}) \Phi (X \Theta_{2} Y)}} $\overset{\mathit{p}}{\longrightarrow} \Phi_{uv}[[\mathcal{M}_{(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2})_u}] \otimes [\mathcal{M}_{(X \Theta_{2} Y)_v}]]$
+\end{center} 
+As $[\mathcal{M}_{(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2})}] = (\Theta_{1})_{ij}[\mathcal{M}_{(\mathcal{L}_{1})_i (\mathcal{L}_{2})_j}]$ and $[\mathcal{M}_{(X \Theta_{2} Y)}] = (\Theta_2)_{kl}[\mathcal{M}_{X_kY_l}]$ with that both $(\Theta_{1,ij})_u$ and $(\Theta_{2,kl})_v$ are binary values, we can factor them out in to the modifier proving (2). We have the result:
+\begin{center}
+\matrify{\mathcal{M}_{(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}) \Phi (X \Theta_{2} Y)}} $\overset{\mathit{p}}{\longrightarrow}$ \inbkthree{\Theta_{1,ij}}{\Phi}{\Theta_{2,kl}}$[[\mathcal{M}_{(\mathcal{L}_{1})_i (\mathcal{L}_{2})_j}] \otimes [\mathcal{M}_{X_kY_l}]]$
+\end{center}
+which as $Dim([\mathcal{M}_{(\mathcal{L}_{1})_i (\mathcal{L}_{2})_j}]) = 2^{n-1} \times 2^{n-1}$ and $Dim([\mathcal{M}_{X_kY_l}]) = 2 \times 2$ we have that $Dim([[\mathcal{M}_{(\mathcal{L}_{1})_i (\mathcal{L}_{2})_j}] \otimes [\mathcal{M}_{X_kY_l}]]) = 2^{n} \times 2^{n}$ thus proving (1).\smnl
+\tb It is not difficult to generalize the above proof to any logical expression of a finite number variables. To do so simply replace any logical variables which one would like removed with a 0 and the connecting binary operator with XOR. For example, to find the logical expression $\mathcal{L} = \mathcal{L}_1$ from $\mathcal{L} = \mathcal{L}_1 \Theta \mathcal{L}_2$ let $\Theta = \Updownarrow$ and $\mathcal{L}_2 = 0$, as $\mathcal{L}_1 \Updownarrow 0 = \mathcal{L}_1$ we have our result. Any finite LM can be constructed in a similar manner, we find that \matrify{\mathcal{M}_{\mathcal{L}_1 \Theta \mathcal{L}_2}} = \matrify{\mathcal{M}_{\mathcal{L}_1 \Updownarrow \, 0}} = \matrify{\mathcal{M}_{\mathcal{L}_1 }}. \smnl
+\tb It is worth mentioning what $2^n \times 2^n$ basis matrices look like. For $n$ logical expressions $\mathcal{L}_1 \cdots \mathcal{L}_n$ we find that for $\mathcal{L} = \mathcal{L}_1\mathcal{L}_2 \cdots \mathcal{L}_n, \, n \geq 1$:
+\begin{center}
+\ket{\mathcal{L}_{1}}$\cdots$\ket{\mathcal{L}_{2i - 1}} = $\bigotimes_{i = 1}^{2n}$\ket{\mathcal{L}_{2i - 1}} and \bra{\mathcal{L}_{2i}}$\cdots$\bra{\mathcal{L}_2} = $\bigotimes_{i = 1}^{2n}$\bra{\mathcal{L}_{2i}}
+\end{center}
+we have the $2^n \times 2^n$ basis LM:\smnl
+\matrify{\mathcal{M}_{\mathcal{L}_1 \cdots \mathcal{L}_n}} $\overset{\mathit{p}}{\longrightarrow}$ 
+\begin{center}
+($\bigotimes_{i = 1}^{2n}$\ket{\mathcal{L}_{2i - 1}})($\bigotimes_{i = 1}^{2n}$\bra{\mathcal{L}_{2i}}) = $\bigotimes_{i = 1}^{2n}$  \ket{\mathcal{L}_{2i - 1}}\bra{\mathcal{L}_{2i}} $= \bigotimes_{i = 1}^{2n}[\mathcal{M}_{\mathcal{L}_{(2i - 1)}\mathcal{L}_{(2i)}}]$
+\end{center}
+This however is only one of the possible $2^n$ basis matrices as there is a single possible non-zero modifier. The reason for this is that all operators between logical expressions are conjunctions. \smnl
+\tb We can measure these LM base matrices in the same way measurement was done for $4 \times 4$ LM's [\ref{ExEqSix}]. To do this, placing $\bigotimes_{i =1}^{2n}$ inside the bra and ket; ($\bigotimes_{i = 1}^{2n}$\ket{\mathcal{L}_{2i - 1}})$^T$ = \bra{\bigotimes_{i = 1}^{2n} \mathcal{L}_{2i-1}} and ($\bigotimes_{i = 1}^{2n}$\bra{\mathcal{L}_{2i}})$^T$ = \ket{\bigotimes_{i = 1}^{2n}\mathcal{L}_{2i}}:
+\begin{center}
+\bra{\bigotimes_{i = 1}^{2n} \mathcal{L}_{2i-1}}$\bigotimes_{i = 1}^{2n}[\mathcal{M}_{\mathcal{L}_{(2i - 1)}\mathcal{L}_{(2i)}}]$\ket{\bigotimes_{i = 1}^{2n}\mathcal{L}_{2i}}
+\end{center}
+\subsection{Multivariable Computational Comparison} \label{MultiVarCompare}
+\tb In this paper two different algorithms for computation have been developed. Both algorithms require the logical expression to be formatted in a particular fashion such that one can consistently measure the relationship between logical expressions [\ref{MeasurementviaLMs}]. The difference between the two algorithms is that one method (first method) does not continually build larger and larger measurement matrices while the other (second method) does. Notice that the order of operator measurement in both the algorithms, this will play an important role in how computation can be performed. \smnl
+\tb To see the difference in the computational methods consider logical expression $\mathcal{L}$ with four variables where $\mathcal{L}$ is written in the form:
+\begin{center}
+$\mathcal{L} = ((W \Theta_1 X) \Phi_1 (Y \Theta_2 Z)) \Upsilon ((W \Theta_3 X) \Phi_2 (Y \Theta_4 Z))$
+\end{center}
+The first method utilizes the ability for composition of logical expressions based on their respective CM's [\ref{DeComposition}]:
+\begin{center}\label{FourVarTwoByTwo}
+$\mathcal{L}$ = \inbkthree{\Phi_{1,ij}}{\Upsilon}{\Phi_{2,kl}}\inbkthree{W}{[\Theta_1]_i[\Theta_3]_k}{X}\inbkthree{Y}{[\Theta_2]_j[\Theta_4]_l}{Z}
+\end{center} 
+This method computes by way of many $2 \times 2$ CM computations and has an advantage in that it allows the measurement on logical operators on both the left and right side of $\Upsilon$ which reveals false modifiers i.e. $\mathcal{V}$(\inbkthree{\Phi_{1,ij}}{\Upsilon}{\Phi_{2,kl}}) $= 0$ thus lessening the number of overall computations.\smnl
+\tb In the second method for combining logical expressions of four variables, we combine the expressions $4 \times 4$ CM's for each $\mathcal{L}_1 = ((W \Theta_1 X) \Phi_1 (Y \Theta_2 Z))$ and $\mathcal{L}_2 = ((W \Theta_3 X) \Phi_2 (Y \Theta_4 Z))$ over $\Upsilon$. The LM representation is:
+\begin{center}
+\scalebox{1}{%
+$\langle$\inbkthree{\Theta_{1,ab}}{\Phi_1}{\Theta_{2,cd}}$|[\Upsilon]|$\inbkthree{\Theta_{3,ab}}{\Phi_2}{\Theta_{4,cd}}$\rangle [[\mathcal{M}_{W_a X_b}] \otimes [\mathcal{M}_{Y_c Z_d}]] $ }
+\end{center}
+To do the computation we make some simplifications; let $\Gamma_1$ = \inbkthree{\Theta_{1,ab}}{\Phi_1}{\Theta_{2,cd}}, $\Gamma_2$ = \inbkthree{\Theta_{3,ab}}{\Phi_2}{\Theta_{4,cd}}, and let $[\Gamma_{n}] = \Gamma_{n} \mathcal{V}_T([[\mathcal{M}_{W_{a}X_{b}}] \otimes [\mathcal{M}_{Y_{c}Z_{d}}]])$ for $n \in \{1,2\}$. We can combine the individual $4 \times 4$ CM matrices $[\Gamma_1]$ and $[\Gamma_2]$ over $\Upsilon$ by the computation:
+\begin{center}
+$[\mathcal{M}] =  \Upsilon_{uv}([\Gamma_1])_u ([\Gamma_2])_v$ = \inbkthree{[\Gamma_1]}{\Upsilon}{[\Gamma_2]} = $[\Gamma_1] \Upsilon [\Gamma_2]$
+\end{center}
+We can then measure the derived matrix $[\mathcal{M}]$ in which we find:
+\begin{center}
+$\mathcal{L}$ = \bra{Y}\bra{W}$[\mathcal{M}]$\ket{X}\ket{Z} 
+\end{center}
+An example can be seen at the end of section \ref{HigherDimMatrices}.
+\subsection{Correspondence Matrix Computations} \label{CMComputations}
+\tb Here we give examples of how we can bring the tools developed throughout paper together. Particularly we demonstrate the transformations needed to combine logical expressions. We will see two examples; the first is how to combine a 2-variable logical expression with a single variable logical expression, the second shows how to combine a 4-variable with a 3-variable logical expression.
+\subsubsection{Two variable logical Computation}
+\tb To combine two logical expressions each with two logical variables or less the expressions must be of the form $\mathcal{L} = \mathcal{L}_1 \Phi \mathcal{L}_2$ where $\mathcal{L}_1 = (X \Theta_1 Y)$ and $\mathcal{L}_2 = (X \Theta_2 Y)$. As found in section \ref{DeComposition}:
+\begin{center}
+$\mathcal{L}= (X \Theta_1 Y) \Phi (X \Theta_2 Y) = X \, \langle \Theta_1| [\Phi] |\Theta_2 \rangle \,Y $
+\end{center}
+where $\langle \Theta_1| [\Phi] |\Theta_2 \rangle$ gives the operator $(\Theta_1 \Phi \Theta_2)$ which corresponds to the CM $[[\Theta]_1 \Phi [\Theta_2]]$. \smnl
+\tb As an example, consider the expression $\mathcal{L} = \neg ((X \wedge \neg Y) \Leftrightarrow \neg X)$ which can be seen to be two logical expressions $(X \wedge \neg Y)$ and $\neg X$ operated on by $\Leftrightarrow$. To get the expression in the needed form we first write it in bra-ket notation: $\neg \langle $\inbkthree{X}{\wedge}{\neg Y}$|$\matrify{\Leftrightarrow}$|$\inbkthree{\neg X}{L}{Y}$\rangle$ which by using the rules [\ref{CMRelationships}] for matrix computations we have that by rule 3; \inbkthree{X}{\wedge}{\neg Y} = \inbkthree{X}{\Uparrow}{Y} and that \inbkthree{\neg X}{L}{Y} becomes \inbkthree{X}{\neg L}{Y} by application of rule 4. We then have that by rule 2. $\neg \langle $\inbkthree{X}{\Uparrow}{Y}$|[\Leftrightarrow]|$\inbkthree{X}{\neg L}{Y}$ \rangle = \langle $\inbkthree{X}{\Uparrow}{Y}$|[\Updownarrow ]|$\inbkthree{X}{\neg L}{Y}$\rangle$. We can continue to combine the inner bra-ket expressions:
+\begin{center}
+\inbkthree{X}{\Uparrow}{Y} $\Updownarrow$ \inbkthree{X}{\neg L}{Y} = \inbkthree{X}{[\Uparrow] \Updownarrow [\neg L]}{Y} $=$ \inbkthree{X}{\neg \wedge}{Y} $= \neg X \vee \neg Y$
+\end{center}
+which shows that $\mathcal{L} = \neg ((X \wedge \neg Y) \Leftrightarrow \neg X) = \neg X \vee \neg Y$
+\subsubsection{Four variable logical Computation}
+\tb To combine two expressions, each with four our less logical variables, the expressions must be of the form:
+\begin{center}
+$\mathcal{L} = \mathcal{L}_1 \Upsilon \mathcal{L}_2$ where $\mathcal{L}_1 = (W \Theta_1 X) \Phi_1 (Y \Theta_2 Z)$ and $\mathcal{L}_2 = (W \Theta_3 X) \Phi_2 (Y \Theta_4 Z)$
+\end{center}
+This paper presented two algorithms by which we may compute $\mathcal{L}$ [\ref{MultiVarCompare}]; we will perform the computation using the second algorithm and utilize higher dimensional matrices. \smnl
+\tb As an example, let $\mathcal{L}_1 = (W \Updownarrow X) \Rightarrow (\neg Y \wedge Z)$ from the example in $\ref{HigherDimMatrices}$ and $\mathcal{L}_2 = \neg ((Y \wedge \neg Z) \Leftrightarrow \neg W)$, say we want to compute $\mathcal{L}_1 \Rightarrow \mathcal{L}_2$. We can write $\mathcal{L}$ in the bra-ket form:
+\begin{center}
+$\mathcal{L} = \langle \langle$\inbkthree{W}{\Updownarrow}{X}$|[\Rightarrow]|$\inbkthree{\neg Y}{\wedge}{Z}$\rangle |[\Rightarrow]|\neg \langle $\inbkthree{Y}{\wedge}{\neg Z}$ \rangle|[\Leftrightarrow]|$\inbkthree{\neg W}{ L}{X}$\rangle \rangle$
+\end{center} 
+We then format $\mathcal{L}$ by applying the transformation rules e.g. \inbkthree{Y}{\wedge}{\neg Z} = \inbkthree{Y}{\Uparrow}{Z} so as to be in the format above. We have that:
+\begin{center}
+$\mathcal{L}$ = $\langle \langle$\inbkthree{W}{\Updownarrow}{X}$|[\Rightarrow]|$\inbkthree{Y}{\Downarrow}{Z}$\rangle |[\Rightarrow]| \langle $\inbkthree{Y}{\Uparrow}{Z}$ \rangle|[\Updownarrow]|$\inbkthree{W}{\neg L}{X}$\rangle \rangle$
+\end{center}
+As $\mathcal{L}$ is in the correct form we make the assignments: \matrify{\Phi_1} = \matrify{\Rightarrow}, \matrify{\Phi_2} = \matrify{\Updownarrow}, \matrify{\Theta_1} = \matrify{\Updownarrow}, \matrify{\Theta_2} = \matrify{\Downarrow}, \matrify{\Theta_3} = \matrify{\neg L}, \matrify{\Theta_4} = \matrify{\Uparrow} and \matrify{\Upsilon} = \matrify{\Rightarrow}. \smnl
+\tb We can compute the above by noting that $\mathcal{L}_ 1 = \langle$\inbkthree{W}{\Updownarrow}{X}$|[\Rightarrow]|$\inbkthree{Y}{\Downarrow}{Z}$\rangle$ and $\mathcal{L}_2 = \langle$\inbkthree{Y}{\Uparrow}{Z}$|[\Updownarrow]|$\inbkthree{W}{\neg L}{X}$\rangle$ can be represented as unique $4 \times 4$ CM's of the form $[\Gamma_{n}] = \Gamma_{n} \mathcal{V}_T([[\mathcal{M}_{W_{i}X_{j}}] \otimes [\mathcal{M}_{Y_{k}Z_{l}}]])$ for $n \in \{1,2\}$.
+% for which the modifiers are  $\Gamma_1$ = \inbkthree{\Updownarrow_{ij}}{\Rightarrow}{\Downarrow_{kl}} and $\Gamma_2$ = \inbkthree{\Uparrow_{ij}}{\Updownarrow}{\neg L_{kl}} see \ref{MultiVarCompare}.
+We then find the respective CM's via the method discussed in \ref{HigherDimMeasurement} by operating directly on the CM's of $\mathcal{L}_1$ and $\mathcal{L}_2$:
+\begin{center}
+\scalebox{.9}{%
+$[\Gamma_1] = [[\Updownarrow]_1 \otimes [\Downarrow]_1] \Updownarrow [[\Updownarrow]_2 \otimes [\Downarrow]_1] \Updownarrow [[\Updownarrow]_2 \otimes [\Downarrow]_2]$, $[\Gamma_2] = [[\Uparrow]_1 \otimes [\neg L]_2] \Updownarrow [[\Uparrow]_2 \otimes [\neg L]_1]$ }
+\end{center}
+We can compute the measurement matrix \matrify{\mathcal{M}} as we have that:
+\begin{center}
+$[\mathcal{M}] = \, \, \Rightarrow_{rs}([\Gamma_1])_r ([\Gamma_2])_s =$ \inbkthree{[\Gamma_1]}{\Rightarrow}{[\Gamma_2]} 
+\end{center}
+which we will compute \matrify{\mathcal{M}} both ways. The first way gives: \smnl
+$\Rightarrow_{rs}([\Gamma_1])_r ([\Gamma_2])_s$ =
+\begin{center}
+
+$[[\Gamma_1]_1 [\Gamma_2]_1] \Updownarrow [[\Gamma_1]_2 [\Gamma_2]_1] \Updownarrow [[\Gamma_1]_2 [\Gamma_2]_2] = \neg [[\Gamma_1]_1 [\Gamma_2]_2] = [\mathcal{M}]$ 
+\end{center}
+\tb The second way to compute \matrify{\mathcal{M}} gives:
+\begin{center}
+\inbkthree{[\Gamma_1]}{\Rightarrow}{[\Gamma_2]} $=[\Gamma_1]\Rightarrow [\Gamma_2] = [\mathcal{M}]$
+\end{center} 
+This shows that $[\mathcal{M}]$ can be computed by the index-wise application of $\Rightarrow$! The $4 \times 4$ CM's are: \label{ExEqSeven}
+\begin{center}
+ \scalebox{1}{%
+ $[\Gamma_1] = \begin{bmatrix} 1 & 1 & 0 & 0 \\ 1 & 1 & 1 & 0 \\ 0 & 0 & 1 & 1 \\ 1 & 0 & 1 & 1 \end{bmatrix}$} \scalebox{1}{%
+ $[\Gamma_2] = \begin{bmatrix} 0 & 1 & 0 & 1 \\ 0 & 0 & 0 & 0 \\ 1 & 0 & 1 & 0 \\ 1 & 1 & 1 & 1 \end{bmatrix}$}, \scalebox{1}{%
+  $[\mathcal{M}] = \begin{bmatrix} 0 & 1 & 1 & 1 \\ 0 & 0 & 0 & 1 \\ 1 & 1 & 1 & 0 \\ 1 & 1 & 1 & 1 \end{bmatrix}$}
+ \end{center}
+To finish the computation we need to measure $[\mathcal{M}]$ by the correct ordering of variables and find:
+\begin{center}
+\bra{Y}\bra{W}$[\mathcal{M}]$\ket{X}\ket{Z} = $\begin{bmatrix} YW \\ \neg  Y W \\ Y\neg W \\ \neg Y \neg W \end{bmatrix}^T \begin{bmatrix} 0 & 1 & 1 & 1 \\ 0 & 0 & 0 & 1 \\ 1 & 1 & 1 & 0 \\ 1 & 1 & 1 & 1 \end{bmatrix}\begin{bmatrix} XZ \\ X \neg Z \\ \neg X Z \\ \neg X \neg Z \end{bmatrix}$
+\end{center}
+\scalebox{.95}{%
+$= (\neg WXZ) \Updownarrow ((W \Rightarrow Y)X \neg Z) \Updownarrow ((W \Rightarrow Y) \neg X Z) \Updownarrow ((Y \Rightarrow W)(\neg X \neg Z)) = \mathcal{L}$ }
+\section{Summary}
+\tb The foundation of this paper is the introduction of the correspondence matrix (CM); a binary matrix which corresponds uniquely to a particular logical operator in propositional logic $[\ref{CorrespondenceMatrices}]$:
+\begin{center}
+\scalebox{.85}{%
+\begin{tabular}{|c|c||c|c||c|c||c|c|} 
+\hline
+ Op. & Matrix & Op. & Matrix & Op. & Matrix & Op. & Matrix \\\hline
+ $[\impax]$ & $\begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}$ & $[0]$ & $\begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$ & $[\Leftrightarrow]$ & $\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ & $[\Updownarrow]$ & $\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$\\\hline
+  $[\wedge]$ & $\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$ & $[\neg \vee]$ & $\begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}$ & $[\Uparrow]$ & $\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$ & $[\Downarrow]$ & $\begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix}$\\\hline
+  $[\Rightarrow]$ & $\begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}$ & $[\Leftarrow]$ & $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$ & $[\vee]$ & $\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ & $[\neg \wedge]$ & $\begin{bmatrix} 0 & 1 \\ 1 & 1 \end{bmatrix}$\\\hline
+  $[R]$ & $\begin{bmatrix} 1 & 0 \\ 1 & 0 \end{bmatrix}$ & $[\neg R]$ & $\begin{bmatrix} 0 & 1 \\ 0 & 1 \end{bmatrix}$ & $[L]$ & $\begin{bmatrix} 1 & 1 \\ 0 & 0 \end{bmatrix}$ & $[\neg L]$ & $\begin{bmatrix} 0 & 0 \\ 1 & 1 \end{bmatrix}$ \\\hline
+\end{tabular} }
+\end{center} \smnl
+By representing logical operators as CM's we have introduced a mathematical framework in which we can not only perform computations on and between logical expressions, but computations on operators themselves! This paper explored many properties applications of CM's; It was found that CM's are linear [\ref{CMLinearity}] leading to the ability to break apart any logical expression in to the XOR decomposition of sub-expressions:
+\begin{center}
+$X \Theta Y =$ \inbkthree{X}{\Theta}{Y} $ = X_i\Theta_{ij}Y_j$
+\end{center}
+as well as decompose logical expressions by decomposing their unique operator's CM representations, furthermore that the decomposition of CM's allows for the decomposition of their corresponding logical operators:
+\begin{center}
+$[\Theta] = \Theta_{11}[\wedge] \Updownarrow \Theta_{12}[\Uparrow] \Updownarrow \Theta_{21}[\Downarrow] \Updownarrow \Theta_{22}[\neg \vee]$
+\end{center}
+We also found that linearity among CM's has allowed for the ability to quotient logical expressions $[\ref{Quotienting}]$:
+\begin{center}
+$X \Theta_1 Y \setminus X \Theta_2 Y = \langle X|[\Theta_1] \setminus [\Theta_2]|Y \rangle = X (\Theta \wedge \neg \Theta_2) Y$
+\end{center}
+where $(\Theta \wedge \neg \Theta_2)$ is the operator corresponding to the CM $[[\Theta_1] \wedge [\neg \Theta_2]]$. \smnl
+\tb We generalized the notion of a CM to that of a logical measurement matrix (LM) of which CM's are positive valuations of $[\ref{LMMs}]$:
+\begin{center}
+$[\Theta] = \mathcal{V}_T([\mathcal{M}_{X \Theta Y}])  = \begin{bmatrix}
+\mathcal{V}_T(X) \Theta \mathcal{V}_T(Y) & \mathcal{V}_T(X) \Theta  \mathcal{V}_T(\neg Y)) \\ \mathcal{V}_T(\neg X) \Theta \mathcal{V}_T(Y) & \mathcal{V}_T(\neg X) \Theta \mathcal{V}_T(\neg Y) \end{bmatrix}$
+\end{center}
+where a LM is a matrix representation or metric of how logical variables are related to one another via a particular logical operator. Like any matrix computations can be performed by rotations, transpositions, and negations of LM's and their positively valuated CM's; for example, the foundational rule 2. $[\ref{CMRelationships}]$:
+\begin{center}
+$\neg (X \Theta Y)$ = $\neg$\inbkthree{X}{\Theta}{Y} $ = \langle X|[\neg \Theta]|Y \rangle$ = $X \neg (\Theta) Y$
+\end{center}
+shows that by operating on matrices we can transform logical expressions. \smnl
+\tb A substantial finding is that we can interpret the relationship between two logical expressions as being the result of a measurement $[\ref{Measurement}]$:
+\begin{center}
+\inbkthree{\mathcal{L}_1}{\mathcal{M}_{X \Theta Y}}{\mathcal{L}_2} $= \Theta_{rs}(\mathcal{L}_1 \Leftrightarrow X_r) \wedge (Y_s \Leftrightarrow \mathcal{L}_2)$
+\end{center}
+where it was found that measuring two logical expressions by a LM tells whether the resulting expression is true or false or under what circumstances the result will be such. If we measure logical expressions via a CM, the resulting `polarized' logical expression is one composed from components shared by both of the measured expressions and features of the operator. \smnl
+\tb This paper showed that by negating CM's of logical operators we create compliment logical operators [\ref{ComplimentOperators}]. Using these complimented or negated operators we are able to give a proof of one of this papers most significant findings; that logical expressions can be computed by combining the operators of sub-expressions:
+\begin{center}
+$(X \Theta_1 Y) \Phi (X \Theta_2 Y)$ = \inbkthree{X}{\Theta_1}{Y} $\Phi$ \inbkthree{X}{\Theta_2}{Y}= \inbkthree{X}{[\Theta_1] \Phi [\Theta_2]}{Y}
+\end{center}
+thus giving that:
+\begin{center}
+$(X \Theta_1 Y) \Phi (X \Theta_2 Y) = X (\Theta_1 \Phi \Theta_2) Y$
+\end{center}
+where $\Theta_1 \Phi \Theta_2$ is the operator corresponding to the CM [\matrify{\Theta_1} $\Phi$ \matrify{\Theta_2}] $[\ref{DeComposition}]$. It was shown that this result was not restricted to two variable logical expressions [\ref{FourVarTwoByTwo}]. \smnl
+\tb We proved that any logical expression $\mathcal{L} = (\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}) \Phi (X \Theta_{2} Y)$ having a finite number of variables can be projected in to some higher dimensional LM:
+\begin{center}
+\matrify{\mathcal{M}_{(\mathcal{L}_{1} \Theta_{1} \mathcal{L}_{2}) \Phi (X \Theta_{2} Y)}} $\overset{\mathit{p}}{\longrightarrow}$ \inbkthree{\Theta_{1,ij}}{\Phi}{\Theta_{2,kl}}$[[\mathcal{M}_{(\mathcal{L}_{1})_i (\mathcal{L}_{2})_j}] \otimes [\mathcal{M}_{X_kY_l}]]$
+\end{center}
+Furthermore that all non-conjunctive operations in LM's which are tensored together can be pulled out in to a matrix modifier [\ref{HigherDimMatrices}]. In doing so we have shown the ability to measure relationships between logical operators, this allowing for deciding which LM's need to be computed. Finally we showed how to derive $2^n \times 2^n$ basis LM's for any $n \in \mathbb{N}$ where $n \geq 1, $: \smnl
+\matrify{\mathcal{M}_{\mathcal{L}_1 \cdots \mathcal{L}_n}} $\overset{\mathit{p}}{\longrightarrow}$ 
+\begin{center}
+($\bigotimes_{i = 1}^{2n}$\ket{\mathcal{L}_{2i - 1}})($\bigotimes_{i = 1}^{2n}$\bra{\mathcal{L}_{2i}}) = $\bigotimes_{i = 1}^{2n}$  \ket{\mathcal{L}_{2i - 1}}\bra{\mathcal{L}_{2i}} $= \bigotimes_{i = 1}^{2n}[\mathcal{M}_{\mathcal{L}_{(2i - 1)}\mathcal{L}_{(2i)}}]$
+\end{center}
+and how to make measurements on these basis LM's:
+\begin{center}
+\bra{\bigotimes_{i = 1}^{2n} \mathcal{L}_{2i-1}}$\bigotimes_{i = 1}^{2n}[\mathcal{M}_{\mathcal{L}_{(2i - 1)}\mathcal{L}_{(2i)}}]$\ket{\bigotimes_{i = 1}^{2n}\mathcal{L}_{2i}}
+\end{center}
+\section{Thanks}
+\tb The author would like to thank all those who make knowledge available to all, free of charge. A special thanks to Wikipedia and Wolfram Alpha. The author would also like to thank the Great Green Arkleseizure, without which this work would not be possible.
+\begin{thebibliography}{9}
+\bibitem{PropLogic} 
+Oggier, Frédérique
+\textit{Propositional Logic}.
+\url{http://www1.spms.ntu.edu.sg/~frederique/dm2.pdf}
+
+\bibitem{BraKet1} 
+Wikipedia contributors.
+\textit{Bra–ket notation}. 
+Wikipedia, The Free Encyclopedia; 2018 Apr 13, 15:58 UTC [cited 2018 Apr 28]
+\url{https://en.wikipedia.org/w/index.php?title=Bra\%E2\%80\%93ket_notation&oldid=836248310}
+
+\bibitem{BraKet2} 
+Redish, Edward F.
+\textit{Dirac notation}.
+\url{https://www.physics.umd.edu/courses/Phys374/fall05/files/DiracNotation.pdf}
+
+\bibitem{OuterProd} 
+Wikipedia contributors.
+\textit{Outer Product}. 
+Wikipedia, The Free Encyclopedia; 2018 May 10, 16:30 UTC [cited 2018 May 20]
+\url{https://en.wikipedia.org/w/index.php?title=Outer_product&oldid=840550121}
+
+\bibitem{EinsteinNote} 
+Stover, Christopher and Weisstein, Eric W.
+\textit{Einstein Summation}.
+From MathWorld--A Wolfram Web Resource.
+\url{http://mathworld.wolfram.com/EinsteinSummation.html}
+
+\bibitem{ShrodingersCat}
+Wikipedia contributors. \textit{Schrödinger's cat}. 
+Wikipedia, The Free Encyclopedia; 2018 May 16, 17:27 UTC [cited 2018 May 20]. \url{https://en.wikipedia.org/w/index.php?title=Schr/%C3/%B6dinger/%27s_cat&oldid=841573463}
+
+\bibitem{Superposition} 
+Looking Glass Universe, 2015.
+\textit{Interference in Quantum Mechanics.}
+Youtube [Accessed May 13th 2018]. 
+\url{https://www.youtube.com/watch?v=tt8gVXDsh7Q}
+
+\bibitem{Collapse} 
+Cresser, James.
+\textit{Observables and Measurements in Quantum Mechanics}.
+\url{https://www.physics.umd.edu/courses/Phys374/fall05/files/DiracNotation.pdf}
+
+\bibitem{Induction} 
+Overbeek, Roy.
+\textit{Tutorial on Mathematical Induction}.
+\url{http://www.few.vu.nl/~rbakhshi/teaching/induction.pdf}
+
+
+\end{thebibliography}
+
+\end{document}

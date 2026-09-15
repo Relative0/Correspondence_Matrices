@@ -1,0 +1,225 @@
+\documentclass[11pt]{article}
+
+% ---------- Encoding & fonts (pdfLaTeX-safe) ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% ---------- Page & typography ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+% ---------- Math & symbols ----------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+
+% ---------- Figures, tables, links ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{csquotes}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,nameinlink]{cleveref}
+
+% ---------- Handy macros for this paper ----------
+% Braket-like pairing without bringing in a full braket package
+\newcommand{\bra}[1]{\langle #1\,|}
+\newcommand{\ket}[1]{|\,#1\rangle}
+\newcommand{\braket}[2]{\langle #1\,|\,#2\rangle}
+\newcommand{\brrket}[2]{\langle #1 \,\Vert\, #2\rangle}  % double bar between operands
+
+% CM / LM shorthands
+\newcommand{\CM}[1]{[{#1}]}
+\newcommand{\LM}[1]{[\mathrm{M}{#1}]}
+
+% XOR glyph you use as "m"
+\newcommand{\xor}{\mathbin{\mathrm{m}}}
+
+% Common operators
+\DeclareMathOperator{\val}{V}
+
+% Slightly more forgiving line breaks in long inline math
+\relpenalty=8000
+\binoppenalty=7000
+
+% ---------- Title ----------
+\title{Ultra--Fast Boolean Evaluation with Correspondence Matrices:\\
+Algorithms, Theory, and Empirical Evaluation}
+\author{%
+% Fill in your details
+Brian Droncheff\\
+\small \texttt{Brian@B-Theory.com}
+}
+\date{} % (Optional) add a date
+
+\begin{document}
+\maketitle
+\sloppy % last resort for avoiding tiny overfulls in draft stage
+
+\begin{abstract}
+We present a compact, matrix--mechanics formulation of propositional logic---Correspondence Matrices (CMs)---together with practical algorithms that evaluate and combine Boolean expressions using only bit--level (binary) operations. The central identity (\Cref{eq:hinge}) turns algebra over expressions into algebra over tiny $2\times2$ binary operators, enabling aggressive fusion and broadcast-only materialization. Benchmarks show large speedups over standard approaches; we summarize setup and headline results in \Cref{sec:eval}. Formal proofs and extended tables appear in \Cref{app:proofs,app:tables}.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+\textbf{Problem.} Evaluating and combining large sets of Boolean expressions underpins hardware verification, logic synthesis, SAT pipelines, and compilers. Traditional engines (symbolic simplification, BDDs, Espresso) are powerful but often memory- or pointer--heavy.
+
+\textbf{Idea.} We recast each binary Boolean operator as a binary $2\times2$ correspondence matrix (CM). Expressions become bra--ket measurements $\brrket{X}{\CM{\Theta}\,Y}$, and composition of expressions reduces to pointwise composition of their operator matrices, so the hot path is bitwise (\(\land,\lor,\xor,\neg\)) and vectorizable.
+
+\textbf{Contributions.}
+(i) A compact operator calculus centered on the operator--composition ``hinge'' identity (\Cref{eq:hinge}) and linearity (\Cref{sec:linearity});
+(ii) a lazy CM compiler that aligns by broadcast and materializes once (\Cref{sec:impl});
+(iii) an empirical study showing large speedups versus BDD and SymPy backends (\Cref{sec:eval}).
+
+\paragraph{Where figures/proofs go.}
+Key identities are stated inline and proved succinctly in \Cref{app:proofs}. Figures illustrating CM transforms (rotation/transpose/negation) and the operator table appear in \Cref{fig:breakdown,app:tables}. Benchmark plots (time vs.\ depth; speedups) are in \Cref{fig:time_vs_depth,fig:speedups}.
+
+\section{Background and Notation}
+\label{sec:background}
+Let $\langle X|=[X,\neg X]$ and $|Y\rangle=[Y,\neg Y]^{\top}$. A CM is a $2\times2$ binary matrix $\CM{\Theta}$ such that
+\[
+X\Theta Y=\brrket{X}{\CM{\Theta}\,Y}.
+\]
+The $16$ binary operators correspond to the $16$ binary $2\times2$ CMs; basis elements are the rank-1 indicators $|1\rangle\!\langle 1|$, $|1\rangle\!\langle 0|$, $|0\rangle\!\langle 1|$, $|0\rangle\!\langle 0|$ (see \Cref{app:tables}). Transformations of operators (negation, swap, literal complements) act as simple matrix transforms (\Cref{fig:breakdown}).
+
+\section{The Correspondence--Matrix Calculus}
+\subsection{Operator--composition (the hinge identity)}
+\label{sec:hinge}
+\begin{equation}
+\label{eq:hinge}
+\langle X \,\Vert\, \CM{\Theta_1} \,\Vert\, Y\rangle \,\Phi\,
+\langle X \,\Vert\, \CM{\Theta_2} \,\Vert\, Y\rangle
+\;=\;
+\langle X \,\Vert\, \CM{\Theta_1}\,\Phi\,\CM{\Theta_2} \,\Vert\, Y\rangle.
+\end{equation}
+Equivalently, $(X\Theta_1Y)\,\Phi\,(X\Theta_2Y) = X\,(\Theta_1\Phi\Theta_2)\,Y$.
+A short proof is given in \Cref{app:hinge-proof}.
+
+\subsection{Transform rules via matrix operations}
+\label{sec:transforms}
+Negation, swapping operands, and literal complements become CM transforms, e.g.
+\[
+\neg\,\brrket{X}{\CM{\Theta}\,Y}=\brrket{X}{\neg\CM{\Theta}\,Y},\quad
+\brrket{Y}{\CM{\Theta}\,X}=\brrket{X}{\CM{\Theta}^{\top}\,Y},
+\]
+and similar rotation/transpose identities used to normalize sub-expressions so that \eqref{eq:hinge} applies (\Cref{fig:breakdown}).
+
+\subsection{Linearity and basis decomposition}
+\label{sec:linearity}
+CMs are linear over XOR:
+\[
+\brrket{X}{(\CM{\Theta_1}\xor\CM{\Theta_2})\,Y}
+=
+\brrket{X}{\CM{\Theta_1}\,Y}\xor\brrket{X}{\CM{\Theta_2}\,Y}.
+\]
+Thus any operator decomposes in the four-element basis:
+\(
+\CM{\Theta}=\Theta_{11}\CM{\wedge}\xor \Theta_{12}\CM{\Uparrow}\xor \Theta_{21}\CM{\Downarrow}\xor \Theta_{22}\CM{\neg\vee}.
+\)
+A compact table appears in \Cref{app:tables}.
+
+\begin{figure}[t]
+  \centering
+  % Placeholder box for the schematic, replace with \includegraphics
+  \fbox{\rule{0pt}{1.45in}\rule{0.88\linewidth}{0pt}}
+  \caption{CM transform effects (transpose/rotation/negation) on the $2\times2$ operator grid; used to normalize operands before applying \eqref{eq:hinge}.}
+  \label{fig:breakdown}
+\end{figure}
+
+\section{From CMs to Logical Measurement Matrices}
+\label{sec:lms}
+We lift to logical measurement matrices (LMs), e.g.\ $[\mathrm{M}_{X\Theta Y}] = \Theta_{ij}\,|X_i\rangle\!\langle Y_j|$, whose positive valuation recovers $\CM{\Theta}$.
+Measurements such as
+\begin{equation}
+\label{eq:lm-meas}
+\langle L_1 \,\Vert\, [\mathrm{M}_{X\Theta Y}] \,\Vert\, L_2\rangle
+=\Theta_{rs}\,(L_1\Leftrightarrow X_r)\wedge(Y_s\Leftrightarrow L_2)
+\end{equation}
+make constraints explicit and motivate the analogy with quantum measurement.
+
+\section{Algorithms and Implementation}
+\label{sec:impl}
+\paragraph{Two evaluation strategies.}
+(A) \emph{Operator fusion at $2\times2$ scale:} normalize sub-expressions then repeatedly apply \eqref{eq:hinge}, composing only $2\times2$ CMs until the final measurement;
+(B) \emph{Block path:} build $4\times4$ (or $2^n\times2^n$) blocks with small modifiers, compose by indices (still bitwise), and measure once at the end.
+Pseudocode and micro-optimizations (broadcast alignment, LRU permutation caches) go here, with proofs deferred to \Cref{app:proofs}.
+
+\paragraph{Lazy CM compiler.}
+Our implementation delays materialization: align by name using size-1 axis insertion and NumPy broadcasting; cache bit-permutation index arrays; materialize the canonical CM once at the end. This minimizes memory traffic on deep trees and keeps inner loops bitwise.
+
+\section{Empirical Evaluation}
+\label{sec:eval}
+\subsection{Setup}
+We generate random Boolean ASTs and compare backends: CM (lazy), SymPy, a tiny ROBDD, optional \texttt{dd.autoref} BDD, Espresso, and a canonical TT$\to$DNF baseline. Correctness is checked by vectorized truth-table evaluation outside timing windows. (Benchmark harness summarized in the README.)
+
+\subsection{Headline results (medians)}
+Insert the plot/table derived from your HTML report:
+\begin{itemize}
+  \item At $n=16$, CM median speedups vs.\ \texttt{dd.autoref} BDD $\approx 79\times$--$334\times$ over depths $2$--$7$.
+  \item At $n=16$, CM is $1.7\times$--$7.4\times$ faster than SymPy for depths $\ge 3$; SymPy slightly ahead at depth $2$.
+\end{itemize}
+
+\begin{figure}[t]
+  \centering
+  \fbox{\rule{0pt}{1.65in}\rule{0.88\linewidth}{0pt}}
+  \caption{Runtime vs.\ expression depth at $n=16$ (medians over $10$ trials) for CM, BDD, SymPy.}
+  \label{fig:time_vs_depth}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \fbox{\rule{0pt}{1.65in}\rule{0.88\linewidth}{0pt}}
+  \caption{Speedups at $n=16$: BDD/CM and SymPy/CM across depths $2$--$7$.}
+  \label{fig:speedups}
+\end{figure}
+
+\paragraph{Correctness summary.}
+CM passed all runs in the sweep shown; ROBDD and BDD?SOP baselines match the ground truth by construction where enabled; Espresso correctness flags pending integration fixes for some settings.
+
+\section{Discussion}
+Why it is fast: \eqref{eq:hinge} fuses work at the $2\times2$ scale; lazy materialization avoids intermediate tables; broadcasting/cached permutations prevent quadratic blowups on deep trees. Other benefits: (i) purely binary arithmetic; (ii) closed, linear operator algebra; (iii) measurement-operator analogy; (iv) SIMD/GPU friendliness.
+
+\section{Conclusion}
+Correspondence Matrices turn Boolean evaluation into small, linear operator algebra plus bitwise kernels, yielding large empirical gains at higher variable counts.
+
+\paragraph{Reproducibility.}
+Include a small code block or link to your CLI invocation for the sweep (e.g., the depth sweep across $n\in\{4,8,16\}$ and $10$ trials).
+
+% =========================
+% ======= APPENDICES ======
+% =========================
+\appendix
+
+\section{Short Proofs and Derivations}
+\label{app:proofs}
+\subsection{Operator--composition (Eq.~\ref{eq:hinge})}
+\label{app:hinge-proof}
+Using ANF, $\brrket{X}{\CM{\Theta}\,Y}=\sum_{i,j} X_i\,\Theta_{ij}\,Y_j$ with XOR as addition.
+Then
+\[
+(X\Theta_1 Y)\,\Phi\,(X\Theta_2 Y)
+=\sum_{i,j} X_i\,(\Theta_1)_{ij}\,Y_j \;\Phi\; \sum_{k,\ell} X_k\,(\Theta_2)_{k\ell}\,Y_\ell,
+\]
+distribute over XOR, use $X_iX_k=\delta_{ik}X_i$ and $Y_jY_\ell=\delta_{j\ell}Y_j$, and note $(\Theta_1)_{ij}\,\Phi\,(\Theta_2)_{ij}=(\Theta_1\Phi\Theta_2)_{ij}$ to obtain \eqref{eq:hinge}.
+
+\subsection{Linearity and basis decomposition}
+Elementwise XOR linearity follows immediately from the binary field structure.
+Basis expansion uses the four rank-1 indicators $|1\rangle\!\langle 1|$, $|1\rangle\!\langle 0|$, $|0\rangle\!\langle 1|$, $|0\rangle\!\langle 0|$.
+
+\section{Operator Tables and Transform Rules}
+\label{app:tables}
+\noindent Placeholder for a compact $2\times2$ operator table and a schematic of transpose/rotation/negation effects. (This is where you can paste a single figure that shows all 16 CMs and their complements, plus the rotation/transpose relationships.)
+
+\section{Additional Experimental Plots}
+\label{app:plots}
+\noindent Suggestions:
+(i) per-depth violin plots of per-trial times,
+(ii) correctness tallies,
+(iii) dd.autoref/ROBDD node counts vs.\ depth,
+(iv) sensitivity to variable ordering (if applicable).
+
+\section{Implementation Notes (Extended)}
+\label{app:impl-notes}
+Details on AST, broadcasting scheme, permutation caches, and backend toggles (concise bullets, with references to code).
+
+\end{document}

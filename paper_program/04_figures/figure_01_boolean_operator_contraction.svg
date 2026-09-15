@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Correspondence-matrix evaluation in bra-ket notation</title>
+  <desc id="desc">Four panels encode X as a bra and Y as a ket, identify the XOR correspondence matrix by the bracketed up-down double arrow, evaluate it through XOR-AND contraction, and show that the XOR matrix is a ninety-degree rotation of XNOR while their entrywise XOR is the tautological Impax matrix.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#3f4650"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0072b2"/>
+    </marker>
+    <style>
+      .title { font: 500 30px Arial, sans-serif; fill: #17191d; }
+      .subtitle { font: 400 17px Arial, sans-serif; fill: #4d535c; }
+      .panel-title { font: 500 21px Arial, sans-serif; fill: #17191d; }
+      .formula { font: 500 21px "Cambria Math", "Times New Roman", serif; fill: #17191d; }
+      .formula-lg { font: 500 27px "Cambria Math", "Times New Roman", serif; fill: #17191d; }
+      .formula-sm { font: 500 17px "Cambria Math", "Times New Roman", serif; fill: #17191d; }
+      .body { font: 400 16px Arial, sans-serif; fill: #30343b; }
+      .small { font: 400 14px Arial, sans-serif; fill: #4d535c; }
+      .panel { stroke: #69717d; stroke-width: 1.4; rx: 13; }
+      .divider { stroke: #b5bac1; stroke-width: 1; }
+      .flow { fill: none; stroke: #3f4650; stroke-width: 2.2; marker-end: url(#arrow); }
+      .rotate { fill: none; stroke: #0072b2; stroke-width: 2; marker-end: url(#arrow-blue); }
+      .cell { stroke: #5f6670; stroke-width: 1.2; }
+      .selected { stroke: #0072b2; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="800" fill="#ffffff"/>
+  <text x="700" y="52" text-anchor="middle" class="title">A correspondence matrix acts as a Boolean operator</text>
+  <text x="700" y="82" text-anchor="middle" class="subtitle">Bra-ket evaluation of XOR (⇕), with AND products and XOR reduction</text>
+
+  <rect class="panel" x="40" y="135" width="270" height="500" fill="#efe7f6"/>
+  <text x="175" y="174" text-anchor="middle" class="panel-title">1. Encode bra and ket</text>
+  <line class="divider" x1="64" y1="193" x2="286" y2="193"/>
+  <text x="175" y="239" text-anchor="middle" class="formula-lg">⟨X| = [ X   ¬X ]</text>
+  <text x="175" y="272" text-anchor="middle" class="small">set X = 1</text>
+  <text x="175" y="315" text-anchor="middle" class="formula-lg">⟨1| = [ 1   0 ]</text>
+  <line class="divider" x1="78" y1="348" x2="272" y2="348"/>
+  <text x="175" y="397" text-anchor="middle" class="formula-lg">|Y⟩ = [ Y   ¬Y ]ᵀ</text>
+  <text x="175" y="430" text-anchor="middle" class="small">set Y = 0</text>
+  <text x="175" y="475" text-anchor="middle" class="formula-lg">|0⟩ = [ 0   1 ]ᵀ</text>
+  <text x="175" y="551" text-anchor="middle" class="body">bra = row state</text>
+  <text x="175" y="580" text-anchor="middle" class="body">ket = column state</text>
+  <text x="175" y="612" text-anchor="middle" class="small">True-first order: (1,0)</text>
+
+  <path class="flow" d="M315 385 L345 385"/>
+
+  <rect class="panel" x="350" y="135" width="270" height="500" fill="#dceef8"/>
+  <text x="485" y="174" text-anchor="middle" class="panel-title">2. Choose the operator</text>
+  <line class="divider" x1="374" y1="193" x2="596" y2="193"/>
+  <text x="485" y="240" text-anchor="middle" class="formula-lg">Θ := ⇕</text>
+  <text x="485" y="282" text-anchor="middle" class="formula-lg">[Θ] = [⇕]</text>
+  <text x="426" y="324" text-anchor="middle" class="small">Y = 1</text>
+  <text x="526" y="324" text-anchor="middle" class="small">Y = 0</text>
+  <text x="382" y="376" text-anchor="middle" class="small">X = 1</text>
+  <text x="382" y="476" text-anchor="middle" class="small">X = 0</text>
+  <rect class="cell" x="406" y="340" width="80" height="80" fill="#ffffff"/>
+  <rect class="cell selected" x="486" y="340" width="80" height="80" fill="#c7e9f7"/>
+  <rect class="cell" x="406" y="420" width="80" height="80" fill="#ffffff"/>
+  <rect class="cell" x="486" y="420" width="80" height="80" fill="#ffffff"/>
+  <text x="446" y="391" text-anchor="middle" class="formula">0</text>
+  <text x="526" y="391" text-anchor="middle" class="formula">1</text>
+  <text x="446" y="471" text-anchor="middle" class="formula">1</text>
+  <text x="526" y="471" text-anchor="middle" class="formula">0</text>
+  <text x="485" y="548" text-anchor="middle" class="body">[⇕] names the XOR CM.</text>
+  <text x="485" y="580" text-anchor="middle" class="small">[Θ] denotes a declared generic CM.</text>
+  <text x="485" y="612" text-anchor="middle" class="small">Blue entry corresponds to (1,0).</text>
+
+  <path class="flow" d="M625 385 L655 385"/>
+
+  <rect class="panel" x="660" y="135" width="360" height="500" fill="#e5f3e6"/>
+  <text x="840" y="174" text-anchor="middle" class="panel-title">3. Apply the operator</text>
+  <line class="divider" x1="684" y1="193" x2="996" y2="193"/>
+  <text x="840" y="248" text-anchor="middle" class="formula-lg">⟨X|[⇕]|Y⟩</text>
+  <text x="840" y="284" text-anchor="middle" class="small">evaluate at X = 1, Y = 0</text>
+  <text x="840" y="335" text-anchor="middle" class="formula-lg">⟨1|[⇕]|0⟩</text>
+
+  <rect x="704" y="372" width="272" height="104" rx="9" fill="#ffffff" stroke="#0072b2" stroke-width="2"/>
+  <text x="840" y="414" text-anchor="middle" class="formula-sm">[1  0] [0  1; 1  0] [0  1]ᵀ</text>
+  <text x="840" y="457" text-anchor="middle" class="formula-lg">= 1</text>
+
+  <text x="840" y="526" text-anchor="middle" class="body">term product: AND (∧)</text>
+  <text x="840" y="557" text-anchor="middle" class="body">term reduction: XOR (⇕)</text>
+  <text x="840" y="590" text-anchor="middle" class="small">XOR–AND contraction over GF(2)</text>
+  <text x="840" y="614" text-anchor="middle" class="small">not ordinary arithmetic multiplication</text>
+
+  <path class="flow" d="M1025 385 L1055 385"/>
+
+  <rect class="panel" x="1060" y="135" width="300" height="500" fill="#fff0d5"/>
+  <text x="1210" y="174" text-anchor="middle" class="panel-title">4. See why ⇕ fits</text>
+  <line class="divider" x1="1084" y1="193" x2="1336" y2="193"/>
+
+  <text x="1128" y="235" text-anchor="middle" class="formula">[⇔]</text>
+  <rect class="cell" x="1090" y="254" width="38" height="38" fill="#ffffff"/>
+  <rect class="cell" x="1128" y="254" width="38" height="38" fill="#ffffff"/>
+  <rect class="cell" x="1090" y="292" width="38" height="38" fill="#ffffff"/>
+  <rect class="cell" x="1128" y="292" width="38" height="38" fill="#ffffff"/>
+  <text x="1109" y="280" text-anchor="middle" class="formula-sm">1</text>
+  <text x="1147" y="280" text-anchor="middle" class="formula-sm">0</text>
+  <text x="1109" y="318" text-anchor="middle" class="formula-sm">0</text>
+  <text x="1147" y="318" text-anchor="middle" class="formula-sm">1</text>
+
+  <path class="rotate" d="M1178 290 C1192 245, 1240 236, 1264 264"/>
+  <text x="1216" y="236" text-anchor="middle" class="small">rotate 90°</text>
+
+  <text x="1290" y="235" text-anchor="middle" class="formula">[⇕]</text>
+  <rect class="cell" x="1252" y="254" width="38" height="38" fill="#ffffff"/>
+  <rect class="cell" x="1290" y="254" width="38" height="38" fill="#c7e9f7"/>
+  <rect class="cell" x="1252" y="292" width="38" height="38" fill="#c7e9f7"/>
+  <rect class="cell" x="1290" y="292" width="38" height="38" fill="#ffffff"/>
+  <text x="1271" y="280" text-anchor="middle" class="formula-sm">0</text>
+  <text x="1309" y="280" text-anchor="middle" class="formula-sm">1</text>
+  <text x="1271" y="318" text-anchor="middle" class="formula-sm">1</text>
+  <text x="1309" y="318" text-anchor="middle" class="formula-sm">0</text>
+
+  <text x="1210" y="371" text-anchor="middle" class="formula-sm">[⇕] = rot<tspan baseline-shift="sub" font-size="12">90°</tspan>([⇔]) = ¬[⇔]</text>
+  <line class="divider" x1="1092" y1="396" x2="1328" y2="396"/>
+
+  <text x="1210" y="438" text-anchor="middle" class="body">Entrywise Boolean superposition:</text>
+  <text x="1102" y="477" text-anchor="start" class="formula-sm">[</text>
+  <g aria-label="Impax operator, a centered overlay of XNOR and XOR">
+    <text x="1114" y="477" text-anchor="middle" class="formula-sm">⇔</text>
+    <text x="1114" y="477" text-anchor="middle" class="formula-sm">⇕</text>
+  </g>
+  <text x="1125" y="477" text-anchor="start" class="formula-sm">] = [⇔] ⇕ [⇕]</text>
+  <text x="1210" y="511" text-anchor="middle" class="formula-sm">= [1  1; 1  1]</text>
+  <text x="1210" y="558" text-anchor="middle" class="small">Impax is tautological:</text>
+  <text x="1137" y="596" text-anchor="start" class="formula-sm">⟨x|[</text>
+  <g aria-label="Impax operator, a centered overlay of XNOR and XOR">
+    <text x="1176" y="596" text-anchor="middle" class="formula-sm">⇔</text>
+    <text x="1176" y="596" text-anchor="middle" class="formula-sm">⇕</text>
+  </g>
+  <text x="1187" y="596" text-anchor="start" class="formula-sm">]|y⟩ = 1,  x,y ∈ 𝔹</text>
+
+  <line x1="40" y1="684" x2="1360" y2="684" stroke="#c4c8ce" stroke-width="1.2"/>
+  <text x="700" y="727" text-anchor="middle" class="body">Notation convention: ⇕ means XOR throughout; [Θ] means the CM of the declared operator Θ.</text>
+  <text x="700" y="759" text-anchor="middle" class="small">The rotation and Impax identities are structural facts about the true-first 2 × 2 operator matrices.</text>
+</svg>

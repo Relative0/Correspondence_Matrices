@@ -1,0 +1,228 @@
+\appendix
+
+\section{Proof details}
+\label{app:proofs}
+
+This appendix collects the typed arguments supporting the concise statements
+in the main text. All scalar sums are XOR reductions and all scalar products
+are conjunctions unless another algebra is named explicitly.
+
+\subsection{Representation and selection}
+
+\begin{proposition}[Unique binary representation]
+The map from a binary Boolean operator $\Theta$ to $\CM{\Theta}$ is a
+bijection between functions $\Bool^2\rightarrow\Bool$ and matrices in
+$\Bool^{2\times2}$ once the row, column, and truth-state order is fixed.
+\end{proposition}
+
+\begin{proof}
+A binary Boolean function is determined by its four values on
+$(1,1),(1,0),(0,1),(0,0)$. These are exactly the four entries of
+$\CM{\Theta}$. Conversely, any four-bit matrix assigns one output to each
+binary input pair and therefore defines one such function. Both sets contain
+$2^4=16$ elements.
+\end{proof}
+
+For completeness, expand the contraction as
+\begin{equation}
+  E_{\CM{\Theta}}(x,y)
+  =\mathop{\XOR}_{r,s\in\{1,0\}}
+    \chi_x(r)\wedge\Theta_{rs}\wedge\chi_y(s),
+  \qquad
+  \chi_z(q):=\begin{cases}1,&q=z,\\0,&q\ne z.\end{cases}
+\end{equation}
+The two one-hot states make
+$\chi_x(r)\wedge\chi_y(s)$ equal to one only at $(r,s)=(x,y)$.
+This proves selection without a cancellation or distributivity assumption
+beyond the declared Boolean algebra. It also explains why OR--AND selection
+would return the same scalar on one-hot states, although OR does not supply the
+same coefficient-space algebra for arbitrary vectors.
+
+\subsection{Coefficient linearity and basis}
+
+For fixed $x,y$, distribute conjunction over XOR:
+\begin{align}
+  E_{A\XOR B}(x,y)
+  &=\mathop{\XOR}_{r,s}
+    \chi_x(r)\wedge(A_{rs}\XOR B_{rs})\wedge\chi_y(s) \\
+  &=E_A(x,y)\XOR E_B(x,y).
+\end{align}
+Thus evaluation is a coordinate projection and hence a linear functional on
+$\GFtwo^{2\times2}$. Let $E_{rs}$ be the matrix with a one only at position
+$(r,s)$. Evaluating
+\begin{equation}
+  \CM{\Theta}=\mathop{\XOR}_{r,s}\Theta_{rs}E_{rs}
+\end{equation}
+at any position selects $\Theta_{rs}$, proving the basis decomposition and
+coefficient extraction. This proof concerns the coefficient matrix. The
+affine truth-state encoding prevents it from implying that every represented
+Boolean function is linear in its logical inputs.
+
+\subsection{Signed operand transformations}
+
+Let $P=\begin{bmatrix}0&1 \\ 1&0\end{bmatrix}$. The row-$x$, column-$y$
+entry of $P\CM{\Theta}$ is the row-$\neg x$, column-$y$ entry of
+$\CM{\Theta}$ and is therefore $(\neg x)\mathbin{\Theta}y$. Similarly,
+right multiplication by $P$ exchanges the column assignment and
+transposition exchanges the two input assignments. With
+$\Theta^\tau(x,y):=\Theta(y,x)$, hence
+\begin{align}
+  \CM{\Theta^\tau} &= \CM{\Theta}^{\mathsf T}, &
+  \CM{\Theta(\neg X,Y)} &= P\CM{\Theta}, \\
+  \CM{\Theta(X,\neg Y)} &= \CM{\Theta}P, &
+  \CM{\Theta(\neg X,\neg Y)} &= P\CM{\Theta}P.
+\end{align}
+Negating every output flips every bit, which is entrywise XOR with the
+all-ones matrix. Products with $P$ are XOR--AND products, but only one entry
+survives in each output position, so they can equivalently be implemented as
+direct permutations.
+
+For XNOR, $\CM{\Leftrightarrow}$ is the identity matrix. Under the explicit
+clockwise convention
+$\operatorname{rot}_{90^\circ}\!\begin{bmatrix}a&b\\c&d\end{bmatrix}
+=\begin{bmatrix}c&a\\d&b\end{bmatrix}$, its ones move to the antidiagonal,
+giving $\CM{\XOR}$. (For this particular symmetric matrix, counterclockwise
+rotation gives the same result.) The two supports are disjoint and cover all four
+positions, so their entrywise XOR is the all-ones $\CM{\impax}$.
+
+\subsection{Operand-aligned fusion}
+
+Let $\Phi$ be any binary Boolean operator and define
+\begin{equation}
+  F_{rs}:=(\Theta_1)_{rs}\mathbin{\Phi}(\Theta_2)_{rs}.
+\end{equation}
+When both inner operators use the same operand frame, selection gives
+\begin{align}
+ &(x\mathbin{\Theta_1}y)\mathbin{\Phi}
+   (x\mathbin{\Theta_2}y) \\
+ &\qquad=(\Theta_1)_{xy}\mathbin{\Phi}(\Theta_2)_{xy}
+ =F_{xy}
+ =\statebra{x}F\stateket{y}.
+\end{align}
+No general distributive law for $\Phi$ over XOR is used. If the original
+operators differ by signed operand order, the preceding transformations first
+translate each one into the target frame; applying the same argument after
+that translation proves fusion after alignment.
+
+For pure structural compilation, proceed by induction on the derivation of
+$\Gamma\vdash e\Downarrow^{\mathsf S}\operatorname{Pair}(R,C,t)$. A primitive
+signed-literal pair is sound by the transformations above. For the unary step,
+complementing all four token bits implements logical negation. For the binary
+step, the induction hypotheses give two sound child pairs in the same typed
+frame, and the preceding entry-selection calculation proves their entrywise
+outer-connective fusion. Every recursive call visits a strict AST child,
+proving termination. This establishes structural soundness without using
+retabulation.
+
+For exact pair retabulation, evaluate the subtree independently at
+$(1,1),(1,0),(0,1),(0,0)$ and store the four observed bits in that order.
+Selection at any assignment returns the stored value by construction. The
+whole-root retabulation is therefore sound. For a hybrid derivation, induct on
+the judgment in \eqref{eq:pair-judgment}. The new base case is an exactly
+retabulated subtree. Every negation or fusion above that base preserves the
+invariant by the same unary and binary arguments used for pure structural
+compilation. Provenance changes the reported construction class, not the
+invariant. The top-level compiler consequently returns only a pure structural
+pair, a whole-root retabulation, a hybrid pair assembled from sound children,
+or the ordinary IR result. The ordinary IR retains responsibility for every
+expression not admitted by a pair judgment.
+
+\subsection{Formula-valued LMs}
+
+Let $B_{ij}(X,Y)=\otbktwo{X_i}{Y_j}$. The upper-left cell of
+\begin{equation}
+  [\mathcal{M}_{X\Theta Y}]
+  =\mathop{\XOR}_{i,j\in\{1,2\}}c_{ij}B_{ij}(X,Y),
+  \qquad c_{ij}:=\Theta_{b_i b_j},\quad b_1=1,\ b_2=0,
+\end{equation}
+is the disjoint-minterm expansion
+\begin{equation}
+  c_{11}XY
+  \XOR c_{12}X\neg Y
+  \XOR c_{21}\neg X Y
+  \XOR c_{22}\neg X\neg Y.
+\end{equation}
+Under the declared position-to-assignment map, this is
+$X\mathbin{\Theta}Y$. Exchanging the $Y$ components gives
+$X\mathbin{\Theta}\neg Y$; exchanging the $X$ components gives
+$\neg X\mathbin{\Theta}Y$; and exchanging both gives the lower-right
+formula. This proves the polarity-orbit form in \eqref{eq:lm-matrix}.
+
+If $v(X)=x$ and $v(Y)=y$, applying $v$ to those four formulas either preserves
+or exchanges the two row and column assignments. It follows that
+\begin{equation}
+  v([\mathcal{M}_{X\Theta Y}])
+  =P^{1-x}\CM{\Theta}P^{1-y}.
+\end{equation}
+The positive case $x=y=1$ yields $\CM{\Theta}$.
+
+For formulas $A,B$,
+\begin{equation}
+  \statebra{A}\stateket{B}
+  =(A\wedge B)\XOR(\neg A\wedge\neg B)
+  =(A\Leftrightarrow B),
+\end{equation}
+because the two conjunctions are disjoint. Substituting the LM basis expansion
+between $\statebra{\mathcal L_1}$ and $\stateket{\mathcal L_2}$ and using this
+identity on both sides of each outer product gives
+\begin{equation}
+  \mathop{\XOR}_{i,j}
+    c_{ij}\wedge(\mathcal L_1\Leftrightarrow X_i)
+    \wedge(Y_j\Leftrightarrow\mathcal L_2).
+\end{equation}
+For each valuation of $A,B,X,Y$, exactly one $i$ satisfies
+$A\Leftrightarrow X_i$ and exactly one $j$ satisfies
+$Y_j\Leftrightarrow B$. If these positions are $i^*,j^*$, the XOR therefore
+selects $c_{i^*j^*}=\Theta_{b_{i^*}b_{j^*}}$. By the definitions of the
+polarity orbit and $b_i$ under this valuation,
+$b_{i^*}=v(A\Leftrightarrow X)$ and
+$b_{j^*}=v(Y\Leftrightarrow B)$. Hence the selected coefficient equals
+$v((A\Leftrightarrow X)\mathbin{\Theta}(Y\Leftrightarrow B))$. This holds for
+every valuation, proving \eqref{eq:logical-pairing-identity}.
+
+Finally, a Boolean valuation is a homomorphism for negation, conjunction, and
+XOR. Moving it through this finite expression term by term proves
+\eqref{eq:valuation-commutes}.
+
+\subsection{ANF conversion is a different map}
+
+For $n$ variables, identify a valuation with its support
+$S\subseteq\{1,\ldots,n\}$ and let $t_S$ be the corresponding truth value.
+If
+\begin{equation}
+  f(x_1,\ldots,x_n)
+  =\mathop{\XOR}_{T\subseteq\{1,\ldots,n\}}
+    \left(a_T\wedge\bigwedge_{i\in T}x_i\right),
+\end{equation}
+then evaluation on support $S$ gives
+\begin{equation}
+  t_S=\mathop{\XOR}_{T\subseteq S}a_T.
+\end{equation}
+Boolean M\"obius inversion gives the converse relation
+\begin{equation}
+  a_T=\mathop{\XOR}_{S\subseteq T}t_S.
+\end{equation}
+Thus ANF coefficients arise by an invertible coordinate transform of the truth
+vector. By contrast, positive valuation maps the formula-valued polarity orbit
+directly to a numeric CM. The two maps have different domains and purposes
+even though both ultimately describe the same Boolean function.
+
+\subsection{Higher-arity size}
+
+An arbitrary function of $n$ Boolean variables has one output for each of
+$2^n$ valuations. Its explicit operator therefore has $2^n$ bits. The same
+data can be placed in an order-$n$ tensor with side length two, a
+length-$2^n$ vector, or, after splitting $2m$ variables into equal row and
+column groups, a $2^m\times2^m$ matrix. These are layout choices with the same
+entry count, not compression results.
+
+\section{Finite verification scope}
+\label{app:finite-checks}
+
+The accompanying checker exhaustively verifies the 16 binary tokens, 16,384
+same-frame fusion cases, 512 signed alignments, 1,048,576 signed
+alignment/fusion cases, the XOR/XNOR/Impax identities, LM positive and general
+valuations, 256 LM coefficient extractions, 16,384 LM valuation/fusion cases,
+and 64 two-variable ANF round trips. Finite enumeration catches convention and
+implementation errors but is not used as a proof of an unbounded theorem or a
+runtime bound.

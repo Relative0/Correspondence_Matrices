@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Formula-valued logical matrices, logical pairing, and valuation</title>
+  <desc id="desc">A formula-valued logical matrix is paired with two logical expressions to produce a Boolean compatibility formula. Applying any Boolean valuation to that formula gives the same bit as first valuing the matrix and operands and then performing the numeric correspondence-matrix contraction. The construction is explicitly nonphysical.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#30343b"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0072b2"/>
+    </marker>
+    <style>
+      .title { font: 500 29px Arial, sans-serif; fill: #17191d; }
+      .subtitle { font: 400 17px Arial, sans-serif; fill: #4d535c; }
+      .step { font: 600 13px Arial, sans-serif; letter-spacing: 1.25px; fill: #686e78; }
+      .node-title { font: 500 22px Arial, sans-serif; fill: #17191d; }
+      .formula-lg { font: 500 23px "Cambria Math", "STIX Two Math", "Times New Roman", serif; fill: #17191d; }
+      .formula { font: 500 19px "Cambria Math", "STIX Two Math", "Times New Roman", serif; fill: #17191d; }
+      .formula-sm { font: 500 16px "Cambria Math", "STIX Two Math", "Times New Roman", serif; fill: #17191d; }
+      .body { font: 400 16px Arial, sans-serif; fill: #30343b; }
+      .small { font: 400 14px Arial, sans-serif; fill: #4d535c; }
+      .edge-label { font: 500 14px Arial, sans-serif; fill: #30343b; }
+      .panel { stroke: #636a75; stroke-width: 1.4; rx: 13; }
+      .divider { stroke: #a8adb5; stroke-width: 1; }
+      .edge { fill: none; stroke: #30343b; stroke-width: 2.2; marker-end: url(#arrow); }
+      .edge-blue { fill: none; stroke: #0072b2; stroke-width: 2.6; marker-end: url(#arrow-blue); }
+      .inner { fill: #ffffff; stroke: #8a9099; stroke-width: 1.2; rx: 8; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="760" fill="#ffffff"/>
+  <text x="700" y="48" text-anchor="middle" class="title">Logical matrices: symbolic pairing commutes with valuation</text>
+  <text x="700" y="78" text-anchor="middle" class="subtitle">The pairing first returns a Boolean formula; any valuation of that formula agrees with numeric CM evaluation.</text>
+
+  <text x="200" y="126" text-anchor="middle" class="step">1 · SYMBOLIC OPERATOR</text>
+  <text x="630" y="126" text-anchor="middle" class="step">2 · LOGICAL PAIRING</text>
+  <text x="1130" y="126" text-anchor="middle" class="step">3 · VALUE EITHER PATH</text>
+
+  <rect class="panel" x="28" y="150" width="344" height="430" fill="#efe7f6"/>
+  <text x="200" y="190" text-anchor="middle" class="node-title">Formula-valued LM</text>
+  <line class="divider" x1="52" y1="207" x2="348" y2="207"/>
+  <text x="200" y="251" text-anchor="middle" class="formula-lg">[𝓜<tspan baseline-shift="sub" font-size="14">X Θ Y</tspan>]</text>
+  <text x="200" y="297" text-anchor="middle" class="formula">= c<tspan baseline-shift="sub" font-size="13">ij</tspan> |X<tspan baseline-shift="sub" font-size="13">i</tspan>⟩⟨Y<tspan baseline-shift="sub" font-size="13">j</tspan>|</text>
+  <text x="200" y="330" text-anchor="middle" class="small">repeated i,j terms are XOR-reduced</text>
+  <line class="divider" x1="66" y1="356" x2="334" y2="356"/>
+  <text x="200" y="394" text-anchor="middle" class="formula">X<tspan baseline-shift="sub" font-size="13">1</tspan>=X, X<tspan baseline-shift="sub" font-size="13">2</tspan>=¬X</text>
+  <text x="200" y="428" text-anchor="middle" class="formula">Y<tspan baseline-shift="sub" font-size="13">1</tspan>=Y, Y<tspan baseline-shift="sub" font-size="13">2</tspan>=¬Y</text>
+  <text x="200" y="478" text-anchor="middle" class="body">entries lie in the Boolean algebra</text>
+  <text x="200" y="504" text-anchor="middle" class="body">of formulas 𝓕</text>
+  <text x="200" y="548" text-anchor="middle" class="small">not yet a numeric CM</text>
+
+  <rect class="panel" x="420" y="150" width="430" height="430" fill="#e5f3e6"/>
+  <text x="635" y="190" text-anchor="middle" class="node-title">Pair with logical expressions</text>
+  <line class="divider" x1="444" y1="207" x2="826" y2="207"/>
+  <text x="635" y="244" text-anchor="middle" class="formula-sm">⟨𝓛<tspan baseline-shift="sub" font-size="11">1</tspan>| = [𝓛<tspan baseline-shift="sub" font-size="11">1</tspan>, ¬𝓛<tspan baseline-shift="sub" font-size="11">1</tspan>]</text>
+  <text x="635" y="274" text-anchor="middle" class="formula-sm">|𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>⟩ = [𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>, ¬𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>]<tspan baseline-shift="super" font-size="11">T</tspan></text>
+
+  <rect class="inner" x="452" y="301" width="366" height="171"/>
+  <text x="635" y="338" text-anchor="middle" class="formula">𝓟 := ⟨𝓛<tspan baseline-shift="sub" font-size="13">1</tspan>|[𝓜<tspan baseline-shift="sub" font-size="13">X Θ Y</tspan>]|𝓛<tspan baseline-shift="sub" font-size="13">2</tspan>⟩</text>
+  <text x="635" y="378" text-anchor="middle" class="formula-sm">= ⇕<tspan baseline-shift="sub" font-size="11">i,j</tspan> c<tspan baseline-shift="sub" font-size="11">ij</tspan> ∧ (𝓛<tspan baseline-shift="sub" font-size="11">1</tspan> ⇔ X<tspan baseline-shift="sub" font-size="11">i</tspan>)</text>
+  <text x="635" y="410" text-anchor="middle" class="formula-sm">∧ (Y<tspan baseline-shift="sub" font-size="11">j</tspan> ⇔ 𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>)</text>
+  <text x="635" y="450" text-anchor="middle" class="formula">𝓟 ∈ 𝓕</text>
+  <text x="635" y="508" text-anchor="middle" class="body">result: an exact Boolean relation formula</text>
+  <text x="635" y="540" text-anchor="middle" class="small">AND forms terms; XOR reduces the indexed terms</text>
+
+  <rect class="panel" x="900" y="150" width="472" height="430" fill="#dceef8"/>
+  <text x="1136" y="190" text-anchor="middle" class="node-title">Valuation commutes</text>
+  <line class="divider" x1="924" y1="207" x2="1348" y2="207"/>
+
+  <text x="1136" y="251" text-anchor="middle" class="formula-lg">v(𝓟)</text>
+  <text x="1136" y="291" text-anchor="middle" class="formula-sm">= v(⟨𝓛<tspan baseline-shift="sub" font-size="11">1</tspan>|[𝓜<tspan baseline-shift="sub" font-size="11">X Θ Y</tspan>]|𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>⟩)</text>
+  <text x="1136" y="334" text-anchor="middle" class="formula-sm">= ⟨v(𝓛<tspan baseline-shift="sub" font-size="11">1</tspan>)|v([𝓜<tspan baseline-shift="sub" font-size="11">X Θ Y</tspan>])|v(𝓛<tspan baseline-shift="sub" font-size="11">2</tspan>)⟩</text>
+  <text x="1136" y="374" text-anchor="middle" class="formula-lg">∈ 𝔹</text>
+
+  <rect class="inner" x="960" y="407" width="352" height="104"/>
+  <text x="1136" y="444" text-anchor="middle" class="small">positive valuation of the LM</text>
+  <text x="1136" y="484" text-anchor="middle" class="formula-lg">v<tspan baseline-shift="sub" font-size="14">T</tspan>([𝓜<tspan baseline-shift="sub" font-size="14">X Θ Y</tspan>]) = [Θ]</text>
+  <text x="1136" y="548" text-anchor="middle" class="small">the valued path is ordinary numeric CM contraction</text>
+
+  <path class="edge" d="M372,365 L420,365"/>
+  <text x="396" y="343" text-anchor="middle" class="edge-label">pair</text>
+  <path class="edge-blue" d="M850,365 L900,365"/>
+  <text x="875" y="343" text-anchor="middle" class="edge-label">value v</text>
+
+  <rect x="28" y="621" width="1344" height="96" rx="11" fill="#fff1d8" stroke="#8b8172" stroke-width="1.2"/>
+  <text x="204" y="655" text-anchor="middle" class="step">INTERPRETATION</text>
+  <text x="700" y="656" text-anchor="middle" class="body">Logical pairing means algebraic relationship extraction: 𝓟 is a formula, and v(𝓟) is its truth value.</text>
+  <text x="700" y="691" text-anchor="middle" class="body">Nonphysical: no amplitudes, Hilbert-space observable, Born probability, quantum collapse, or quantum speedup is asserted.</text>
+</svg>

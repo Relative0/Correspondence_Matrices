@@ -1,0 +1,33 @@
+% Operator notation for the new Correspondence Matrices manuscript.
+% Requires amsmath for bmatrix in the convenience macros below.
+
+\makeatletter
+\newbox\impax@lr
+\newbox\impax@ud
+
+% Optional optical adjustments; keep at zero unless a manuscript font requires
+% a small correction after rendered inspection.
+\newcommand{\impaxHtweak}{0pt}
+\newcommand{\impaxVtweak}{0pt}
+
+\newcommand{\impax@draw}[2]{%
+  \setbox\impax@lr\hbox{$\m@th#1\Leftrightarrow$}%
+  \setbox\impax@ud\hbox{$\m@th#1\Updownarrow$}%
+  \hbox{%
+    \copy\impax@lr
+    \kern-\wd\impax@lr
+    \hbox to\wd\impax@lr{\hss
+      \kern\impaxHtweak
+      \raise\impaxVtweak\box\impax@ud
+    \hss}%
+  }%
+}
+
+\newcommand{\impax}{\mathrel{\mathpalette\impax@draw\relax}}
+\makeatother
+
+\providecommand{\otbktwo}[2]{\left|#1\right\rangle\!\left\langle#2\right|}
+\providecommand{\inbkthree}[3]{\left\langle#1\middle|[#2]\middle|#3\right\rangle}
+\providecommand{\twobytwo}[4]{%
+  \begin{bmatrix}#1 & #2 \\ #3 & #4\end{bmatrix}%
+}

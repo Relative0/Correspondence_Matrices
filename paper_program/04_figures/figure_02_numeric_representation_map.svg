@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-labelledby="title desc">
+  <title id="title">Numeric representation boundaries for correspondence matrices</title>
+  <desc id="desc">A numeric correspondence matrix is vectorized into an ordered truth vector. A Boolean Mobius transform gives algebraic normal form coefficients, while adjoining the complemented truth row gives an STP structure matrix.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#30343b"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0072b2"/>
+    </marker>
+    <style>
+      .title { font: 500 29px Arial, sans-serif; fill: #17191d; }
+      .subtitle { font: 400 17px Arial, sans-serif; fill: #4d535c; }
+      .group { font: 600 13px Arial, sans-serif; letter-spacing: 1.5px; fill: #6b6470; }
+      .node-title { font: 500 24px Arial, sans-serif; fill: #17191d; }
+      .formula { font: 500 20px "Cambria Math", "STIX Two Math", "Times New Roman", serif; fill: #17191d; }
+      .matrix { font: 500 18px "Cambria Math", "STIX Two Math", "Times New Roman", serif; fill: #17191d; }
+      .body { font: 400 16px Arial, sans-serif; fill: #30343b; }
+      .small { font: 400 14px Arial, sans-serif; fill: #4d535c; }
+      .edge-label { font: 500 14px Arial, sans-serif; fill: #30343b; }
+      .node { stroke: #636a75; stroke-width: 1.5; rx: 13; }
+      .external { stroke: #8b8172; stroke-width: 1.5; stroke-dasharray: 6 4; rx: 13; }
+      .edge { fill: none; stroke: #30343b; stroke-width: 2.2; marker-end: url(#arrow); }
+      .edge-blue { fill: none; stroke: #0072b2; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .divider { stroke: #a8adb5; stroke-width: 1; }
+      .bracket { fill: none; stroke: #24272c; stroke-width: 2; }
+      .label-bg { fill: #ffffff; opacity: 0.97; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="600" fill="#ffffff"/>
+  <text x="550" y="42" text-anchor="middle" class="title">Numeric CM and external coordinate representations</text>
+  <text x="550" y="70" text-anchor="middle" class="subtitle">The truth vector is a conversion bridge, not a claim that the objects share a type.</text>
+
+  <text x="345" y="107" text-anchor="middle" class="group">CORRESPONDENCE-MATRIX FRAMEWORK</text>
+  <line x1="24" y1="120" x2="700" y2="120" stroke="#8f8795" stroke-width="1"/>
+  <text x="905" y="107" text-anchor="middle" class="group">EXTERNAL COMPARISONS</text>
+  <line x1="730" y1="120" x2="1076" y2="120" stroke="#8b8172" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <rect class="node" x="28" y="165" width="285" height="310" fill="#dceef8"/>
+  <text x="170" y="205" text-anchor="middle" class="node-title">Numeric CM</text>
+  <line class="divider" x1="52" y1="222" x2="289" y2="222"/>
+  <text x="170" y="259" text-anchor="middle" class="formula">[Θ] ∈ 𝔹<tspan baseline-shift="super" font-size="13">2×2</tspan></text>
+  <path class="bracket" d="M103,286 h-9 v105 h9 M237,286 h9 v105 h-9"/>
+  <text x="135" y="320" text-anchor="middle" class="matrix">Θ<tspan baseline-shift="sub" font-size="13">11</tspan></text>
+  <text x="205" y="320" text-anchor="middle" class="matrix">Θ<tspan baseline-shift="sub" font-size="13">10</tspan></text>
+  <text x="135" y="367" text-anchor="middle" class="matrix">Θ<tspan baseline-shift="sub" font-size="13">01</tspan></text>
+  <text x="205" y="367" text-anchor="middle" class="matrix">Θ<tspan baseline-shift="sub" font-size="13">00</tspan></text>
+  <text x="170" y="423" text-anchor="middle" class="small">Θ<tspan baseline-shift="sub" font-size="11">xy</tspan> := x Θ y,  x,y ∈ {1,0}</text>
+  <text x="170" y="450" text-anchor="middle" class="small">true-first Boolean operator</text>
+
+  <rect class="node" x="390" y="165" width="285" height="310" fill="#e5f3e6"/>
+  <text x="532" y="205" text-anchor="middle" class="node-title">Truth vector</text>
+  <line class="divider" x1="414" y1="222" x2="651" y2="222"/>
+  <text x="532" y="277" text-anchor="middle" class="formula">vec([Θ])</text>
+  <text x="532" y="326" text-anchor="middle" class="formula">= (Θ<tspan baseline-shift="sub" font-size="13">11</tspan>, Θ<tspan baseline-shift="sub" font-size="13">10</tspan>,</text>
+  <text x="532" y="363" text-anchor="middle" class="formula">Θ<tspan baseline-shift="sub" font-size="13">01</tspan>, Θ<tspan baseline-shift="sub" font-size="13">00</tspan>)</text>
+  <text x="532" y="414" text-anchor="middle" class="small">same four ordered truth values</text>
+  <text x="532" y="442" text-anchor="middle" class="small">used only as the conversion bridge</text>
+
+  <rect class="external" x="760" y="132" width="310" height="205" fill="#fff1d8"/>
+  <text x="915" y="171" text-anchor="middle" class="node-title">ANF coefficients</text>
+  <text x="915" y="198" text-anchor="middle" class="small">Boolean-polynomial coordinates</text>
+  <line class="divider" x1="784" y1="215" x2="1046" y2="215"/>
+  <text x="915" y="253" text-anchor="middle" class="formula">a<tspan baseline-shift="sub" font-size="13">Θ</tspan> = (a<tspan baseline-shift="sub" font-size="13">∅</tspan>, a<tspan baseline-shift="sub" font-size="13">X</tspan>, a<tspan baseline-shift="sub" font-size="13">Y</tspan>, a<tspan baseline-shift="sub" font-size="13">XY</tspan>)</text>
+  <text x="915" y="291" text-anchor="middle" class="small">not a CM component</text>
+
+  <rect class="external" x="760" y="365" width="310" height="205" fill="#f8e3df"/>
+  <text x="915" y="404" text-anchor="middle" class="node-title">STP structure matrix</text>
+  <text x="915" y="431" text-anchor="middle" class="small">external delta-column representation</text>
+  <line class="divider" x1="784" y1="448" x2="1046" y2="448"/>
+  <text x="915" y="491" text-anchor="middle" class="formula">M<tspan baseline-shift="sub" font-size="13">Θ</tspan> = [ t ; ¬t ]</text>
+  <text x="915" y="523" text-anchor="middle" class="body">t = vec([Θ]) ∈ 𝔹<tspan baseline-shift="super" font-size="12">1×4</tspan></text>
+  <text x="915" y="552" text-anchor="middle" class="small">not a CM component</text>
+
+  <path class="edge" d="M313,300 L390,300"/>
+  <text x="351" y="282" text-anchor="middle" class="edge-label">vectorize</text>
+  <path class="edge" d="M390,353 L313,353"/>
+  <text x="351" y="377" text-anchor="middle" class="edge-label">reshape</text>
+
+  <path class="edge-blue" d="M675,276 C715,260 728,235 760,228"/>
+  <rect class="label-bg" x="642" y="174" width="112" height="44" rx="4"/>
+  <text x="698" y="190" text-anchor="middle" class="edge-label">Boolean Möbius</text>
+  <text x="698" y="208" text-anchor="middle" class="edge-label">transform</text>
+
+  <path class="edge-blue" d="M675,384 C718,410 728,454 760,470"/>
+  <rect class="label-bg" x="649" y="468" width="103" height="44" rx="4"/>
+  <text x="700" y="484" text-anchor="middle" class="edge-label">adjoin the</text>
+  <text x="700" y="502" text-anchor="middle" class="edge-label">complement row</text>
+</svg>
