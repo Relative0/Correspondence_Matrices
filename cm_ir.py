@@ -288,6 +288,12 @@ def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
 _IR_PHASE_OBSERVER: ContextVar[Any] = ContextVar("cm_ir_phase_observer", default=None)
 
 
+def _begin_ir_compile_diagnostics(diagnostics: Optional[Dict[str, Any]]) -> None:
+    """Start a compile call with no snapshot left over from an earlier call."""
+    if diagnostics is not None:
+        diagnostics.pop("ir_cache_profile_v1", None)
+
+
 def compile_expr_to_cm_ir_persistent(
     expr: Expr,
     diagnostics: Optional[Dict[str, Any]] = None,
@@ -323,6 +329,7 @@ def compile_expr_to_cm_ir_persistent(
       the same class graph on both sides, contradicting one side having and
       the other lacking shared classes.
     """
+    _begin_ir_compile_diagnostics(diagnostics)
     _init_ir_compile_diagnostics(diagnostics)
     _init_ir_persistent_cache_diagnostics(diagnostics)
 
@@ -1304,6 +1311,7 @@ def compile_expr_to_cm_ir_cached(
     share_aware_flatten: bool = True,
     build_memo: bool = True,
 ) -> CMNode:
+    _begin_ir_compile_diagnostics(diagnostics)
     _init_ir_compile_diagnostics(diagnostics)
     cache_key = (expr, bool(share_aware_flatten))
     if reuse_cache:
@@ -2087,6 +2095,12 @@ def materialize_hybrid_no_reinflate(
     (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
     controlled before/after measurements; it does not change result semantics.
     """
+    # These fields describe only the current execution attempt. Clear a prior
+    # packed-engine snapshot before validation, admission, or fallback can fail.
+    if diagnostics is not None:
+        diagnostics.pop("cached_exec_engine_kind", None)
+        diagnostics.pop("cached_exec_engine_live_k", None)
+
     # One admission/basis plan for packed and fallback paths. The fast return
     # skips diagnostic delivery; flat_fast_path=False remains a supported control.
     use_flat = _FLAT_EVAL_DEFAULT if flat_eval is None else bool(flat_eval)

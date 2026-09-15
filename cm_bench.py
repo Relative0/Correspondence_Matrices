@@ -1768,6 +1768,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    flat_eval=config.cm_flat_eval,
                     words_eval=config.cm_words_eval,
                     output_budget=_cm_output_budget(config),
                 )
@@ -1787,6 +1788,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    flat_eval=config.cm_flat_eval,
                     words_eval=config.cm_words_eval,
                     output_budget=_cm_output_budget(config),
                 )
@@ -1830,6 +1832,7 @@ def time_backends_on_expr(
                         fixed={},
                         diagnostics=profile_diag,
                         hybrid_threshold=config.cm_hybrid_threshold,
+                        flat_eval=config.cm_flat_eval,
                         words_eval=config.cm_words_eval,
                         output_budget=_cm_output_budget(config),
                     )
@@ -1989,6 +1992,7 @@ def time_backends_on_expr(
                     fixed={},
                     diagnostics=cm_hybrid_no_reinflate_diag,
                     hybrid_threshold=config.cm_hybrid_threshold,
+                    flat_eval=config.cm_flat_eval,
                     words_eval=config.cm_words_eval,
                     allow_reduced_output=large_n_safe,
                     max_full_output_vars=int(config.cm_max_full_output_vars),
@@ -2035,6 +2039,7 @@ def time_backends_on_expr(
                 fixed={},
                 diagnostics=cm_hybrid_no_reinflate_diag,
                 hybrid_threshold=config.cm_hybrid_threshold,
+                flat_eval=config.cm_flat_eval,
                 words_eval=config.cm_words_eval,
                 allow_reduced_output=True,
                 max_full_output_vars=max_full_output_vars,
@@ -2113,6 +2118,7 @@ def time_backends_on_expr(
                         fixed={},
                         diagnostics=profile_diag,
                         hybrid_threshold=config.cm_hybrid_threshold,
+                        flat_eval=config.cm_flat_eval,
                         words_eval=config.cm_words_eval,
                         allow_reduced_output=True,
                         max_full_output_vars=max_full_output_vars,
