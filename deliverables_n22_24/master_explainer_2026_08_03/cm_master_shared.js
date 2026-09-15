@@ -939,7 +939,8 @@ function currentEvidenceUpdate(audience = "master") {
 
 function latestResultsUpdate() {
   const E = DATA.e25_latest_results;
-  const s = section("results-september-11", `Results reviewed ${E.reviewed}`,
+  const C = E.post_integration_confirmation;
+  const s = section("results-september-16", `Results reviewed ${E.reviewed}`,
     "Current implementations, measured gains and remaining limits",
     "Packed input construction is improved; bounded caches, file streaming and exact scalar counters are implemented. Their benefits depend on the requested output and workload. The latest graphs retain native controls, regressions and resource refusals.");
   s.append(tiles([
@@ -960,10 +961,62 @@ function latestResultsUpdate() {
     ["Single-pass candidate coverage", "7/15", "Counting lifecycle reduced 13.7–25.2% on completed development cases; eight cases still reach resource caps"],
   ]));
   s.append(h("p", { text: E.continuation_disposition }));
+  s.append(tiles([
+    ["Current B2/B4 bare kernel", f(C.symmetric_wrapper.windows.bare_cm_over_cse_flat.geomean, 4), "CM / CSE-flat on Windows; Linux " + f(C.symmetric_wrapper.linux.bare_cm_over_cse_flat.geomean, 4) + "; lower favors CM"],
+    ["Current whole-call wrapper", f(C.symmetric_wrapper.windows.wrapper_cm_over_cse_flat.geomean, 4), "CM wrapper / CSE-flat on Windows; Linux " + f(C.symmetric_wrapper.linux.wrapper_cm_over_cse_flat.geomean, 4) + "; historical 3.0941"],
+    ["Cross-machine exactness", "1,824 rows", "All accepted B2/B4 and corrected-E3 rows matched frozen outputs"],
+  ]));
+  s.append(h("p", { text: "The September 15 confirmation reproduces the bare-kernel advantage on Windows and Linux. The whole-call ratio is less favorable than the historical ratio even though wrapper time improved in absolute terms, because CSE-flat improved more." }));
   s.append(h("p", {}, [h("a", { href: "latest-results.html#evidence-frontiers", text: "New: original feature mappings, independent workloads and restored historical tests" })]));
   s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html#post-integration-confirmation", text: "Read the September 15 confirmation" }),
     h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
-    h("a", { href: "data-downloads.html#september-11", text: "Download the current numerical evidence" }),
+    h("a", { href: "data-downloads.html#september-16-confirmation", text: "Download the confirmation evidence" }),
+  ]));
+  return s;
+}
+
+function postIntegrationConfirmationUpdate() {
+  const C = DATA.e25_latest_results.post_integration_confirmation;
+  const W = C.symmetric_wrapper.windows;
+  const L = C.symmetric_wrapper.linux;
+  const H = C.symmetric_wrapper.historical_accepted_v3;
+  const s = section("post-integration-confirmation", `Measured ${C.measured} · reviewed ${C.published_review}`,
+    "Post-integration wrapper and break-even confirmation",
+    "Original schedules on three independent Windows workers and one disposable Linux CPU host; every accepted output was exact.");
+  s.append(banner("warn", "The whole-call ratio moved unfavorably", [
+    "CM's bare kernel remained about 9% faster than CSE-flat on both current hosts.",
+    "The wrapper ratio rose above the historical result, although the wrapper itself became faster in absolute time; CSE-flat improved more.",
+    "Break-even counts moved across runs and hosts and remain machine-specific planning estimates.",
+  ]));
+  s.append(h("h3", { text: "B2/B4: bare kernel and whole call" }));
+  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "B2/B4 confirmation results" }, [table(["Host / record", "CM bare / CSE-flat", "CM wrapper / CSE-flat", "CM bare", "CM wrapper", "CSE-flat"], [
+    ["Windows · 3-run geometric mean", f(W.bare_cm_over_cse_flat.geomean, 4), f(W.wrapper_cm_over_cse_flat.geomean, 4), f(W.absolute_geomean_us.cm_bare, 3)+" us", f(W.absolute_geomean_us.cm_wrapper, 3)+" us", f(W.absolute_geomean_us.cse_flat, 3)+" us"],
+    ["Linux · 1 run", f(L.bare_cm_over_cse_flat.geomean, 4), f(L.wrapper_cm_over_cse_flat.geomean, 4), f(L.absolute_geomean_us.cm_current, 3)+" us", f(L.absolute_geomean_us.cm_wrapper, 3)+" us", f(L.absolute_geomean_us.cse_flat_current, 3)+" us"],
+    ["Accepted V3 · historical", f(H.cm_current_over_cse_flat_current.geomean, 4), f(H.cm_wrapper_over_cse_flat_current.geomean, 4), "16.907 us", "56.082 us", "18.849 us"],
+  ])]));
+  s.append(h("p", { text: C.symmetric_wrapper.interpretation }));
+
+  const EW = C.corrected_e3.windows;
+  const EL = C.corrected_e3.linux;
+  const windowsRuns = Object.values(EW.runs);
+  const range = (field, nested) => {
+    const values = windowsRuns.map(run => nested ? run[field][nested] : run[field]);
+    return `${f(Math.min(...values), 1)}–${f(Math.max(...values), 1)}`;
+  };
+  s.append(h("h3", { text: "Corrected-E3 and derived break-even" }));
+  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "Corrected-E3 confirmation results" }, [table(["Host", "Blocked CM / CSE", "Round-robin CM / CSE", "Plain-CSE crossover", "CSE-flat crossover"], [
+    ["Windows · 3 runs", f(EW.blocked_cm_over_cse.geomean, 4), f(EW.round_robin_cm_over_cse.geomean, 4), range("break_even_vs_cse", "finite_median")+" calls", range("break_even_vs_cse_flat", "finite_median")+" calls"],
+    ["Linux · 1 run", f(EL.blocked_cm_over_cse, 4), f(EL.round_robin_cm_over_cse, 4), f(EL.break_even_vs_cse.finite_median, 0)+" calls", f(EL.break_even_vs_cse_flat.finite_median, 0)+" calls"],
+  ])]));
+  s.append(h("p", { text: C.corrected_e3.interpretation }));
+  s.append(h("p", { class: "meta", text: `Pinned source ${C.source_commit.slice(0, 12)} · publication manifest SHA-256 ${C.manifest_sha256.slice(0, 12)}…; full identities are in the linked manifest.` }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: C.report_href, text: "Read the full report" }),
+    h("a", { href: C.protocol_href, text: "Reproduction protocol" }),
+    h("a", { href: C.verification_href, text: "Verification JSON" }),
+    h("a", { href: C.manifest_href, text: "Artifact manifest" }),
+    h("a", { href: "data-downloads.html#september-16-confirmation", text: "All raw evidence" }),
   ]));
   return s;
 }
@@ -2266,7 +2319,7 @@ function pageFooter(extra, minimal) {
       `Legacy benchmark evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> (campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>) ` +
       `by <code>cm_master_build_2026_08_03.py</code>, which reads every number from the evidence files listed under each figure. ` +
       `The <a href="feature-model-evidence.html#scope">feature-model follow-up has separate run identities</a>. ` +
-      `No benchmark was re-run and no committed evidence file was modified to produce this site.`,
+      `Site generation reads frozen evidence and does not execute benchmarks; the September 15 confirmation is a separately dated measurement at its pinned source commit.`,
   }));
   foot.append(h("p", {
     html:

@@ -11,13 +11,19 @@ import json
 import re
 from pathlib import Path
 
+
+_post_spec = importlib.util.spec_from_file_location('cm_post_integration_evidence', Path(__file__).with_name('cm_post_integration_evidence.py'))
+_post_module = importlib.util.module_from_spec(_post_spec)
+_post_spec.loader.exec_module(_post_module)
+build_post_integration_evidence = _post_module.build_post_integration_evidence
+
 _next_spec = importlib.util.spec_from_file_location('cm_next_results_evidence', Path(__file__).with_name('cm_next_results_evidence.py'))
 _next_module = importlib.util.module_from_spec(_next_spec)
 _next_spec.loader.exec_module(_next_module)
 append_next_results = _next_module.append_next_results
 
 ROOT = Path(__file__).resolve().parents[2]
-REVIEWED = '2026-09-13'
+REVIEWED = '2026-09-16'
 FAIR_RESULT = Path(__file__).resolve().parent/'results/2026-09-13/fair-feature-model-lifecycle.json'
 FAIR_RESULT_SHA256 = 'f55eb7afc97df25fa1286afea430062f5af161dd19608e157711eca428823842'
 AUDITS = {
@@ -114,6 +120,8 @@ def build_latest_results():
     if fair['status'] != 'accepted_corrected_run' or fair['coverage']['completed_cells'] != fair['coverage']['scheduled_cells']:
         raise ValueError('Fair feature-model website evidence failed review invariants')
     sources, files, manifests = {}, {fair['href']: fair_payload}, {}
+    post_integration, post_integration_files = build_post_integration_evidence()
+    files.update(post_integration_files)
 
     def source(key, audit, relative, role):
         name, expected = AUDITS[audit]
@@ -353,12 +361,13 @@ def build_latest_results():
     disposition = completion['disposition']
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
                     fair_feature_model=fair,
+                    post_integration_confirmation=post_integration,
                     frontiers=frontiers, completion=completion,
                     continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},
                     public_cnf_ids=[c['id'] for c in bucket_fixtures if c['cohort'] == 'public full CNF'],
                     final_bucket_junit_records=verification['attempts'][-1]['junit_tests'],
                     scope='Separate tasks, hosts and timing windows; current defaults are not selected from observed winners.')
-    snapshot = 'results/2026-09-11/current-results.json'
+    snapshot = f'results/{REVIEWED}/current-results.json'
     files[snapshot] = (json.dumps(evidence, indent=2, ensure_ascii=False)+'\n').encode('utf-8')
     return evidence, numbers, files

@@ -25,7 +25,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
 
     def test_current_payload_equals_sealed_sources(self):
         self.assertEqual(self.data['e25_latest_results'], self.evidence)
-        self.assertEqual(self.evidence['reviewed'], '2026-09-13')
+        self.assertEqual(self.evidence['reviewed'], '2026-09-16')
         for key, record in self.numbers.items():
             self.assertEqual(self.data['_numbers'][key]['value'], record['value'], key)
             self.assertEqual(self.data['_numbers'][key]['prov'], record['prov'], key)
@@ -65,6 +65,29 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(payload).hexdigest(), source['sha256'])
             self.assertEqual(len(payload), source['bytes'])
             self.assertIn(source['audit_seal'], self.evidence['audit_seals'].values())
+
+    def test_post_integration_confirmation_is_exact_manifest_driven_and_privacy_reviewed(self):
+        confirmation = self.evidence['post_integration_confirmation']
+        self.assertEqual(confirmation['status'], 'verified_multi_host_confirmation')
+        self.assertEqual(confirmation['source_commit'], '63285d2bd16e16ca48d8a0328b6f6328ea038b35')
+        self.assertEqual(confirmation['manifest']['artifact_count'], 24)
+        self.assertTrue(confirmation['symmetric_wrapper']['windows']['all_exact'])
+        self.assertTrue(confirmation['symmetric_wrapper']['linux']['all_exact'])
+        self.assertAlmostEqual(confirmation['symmetric_wrapper']['windows']['bare_cm_over_cse_flat']['geomean'], 0.907508424013887)
+        self.assertAlmostEqual(confirmation['symmetric_wrapper']['linux']['bare_cm_over_cse_flat']['geomean'], 0.9098481144011911)
+        self.assertGreater(confirmation['symmetric_wrapper']['windows']['wrapper_cm_over_cse_flat']['geomean'],
+                           confirmation['symmetric_wrapper']['historical_accepted_v3']['cm_wrapper_over_cse_flat_current']['geomean'])
+        forbidden = ('C:\\\\', '/root/', 'runpod_pod_id', 'g8y75vqj83fcvt')
+        for record in confirmation['manifest']['artifacts']:
+            payload = (SITE/record['href']).read_bytes()
+            self.assertEqual(len(payload), record['bytes'], record['name'])
+            self.assertEqual(hashlib.sha256(payload).hexdigest(), record['sha256'], record['name'])
+            text = payload.decode('utf-8', errors='ignore')
+            self.assertFalse(any(value in text for value in forbidden), record['name'])
+        latest = (SITE/'latest-results.html').read_text(encoding='utf-8')
+        downloads = (SITE/'data-downloads.html').read_text(encoding='utf-8')
+        self.assertIn('app.append(postIntegrationConfirmationUpdate());', latest)
+        self.assertIn('section("september-16-confirmation"', downloads)
 
     def test_full_site_snapshot_covers_the_same_data_as_every_page(self):
         for name, expected in self.module.site_snapshots(self.data).items():

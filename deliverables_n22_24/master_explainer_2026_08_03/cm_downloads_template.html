@@ -61,25 +61,56 @@ function artifactTable(records, label) {
 app.append(h("header", { class: "page" }, [
   h("p", { class: "eyebrow", text: `Website reviewed · ${DATA._freshness.reviewed}` }),
   h("h1", { text: "Data & downloads" }),
-  h("p", { class: "lede", text: "The September 11 result summaries are included with this site and checked against their sealed research sources. Earlier evidence sets retain their original immutable commit links." }),
-  h("p", { class: "meta", text: `${E.artifact_count} earlier commit-pinned files, plus the current source summaries below · commit ${E.revision}` }),
+  h("p", { class: "lede", text: "Current result summaries and the September 15 multi-host confirmation are included with this site and checked against sealed research sources. Earlier evidence sets retain their original immutable commit links." }),
+  h("p", { class: "meta", text: `${E.artifact_count} earlier commit-pinned files, plus current source summaries and the 24-file confirmation bundle below · commit ${E.revision}` }),
 ]));
 app.append(latestResultsUpdate());
 
 {
   const current = DATA.e25_latest_results;
-  const s = section("september-11", `Current results · ${current.reviewed}`, "Download the exact data behind the latest graphs",
+  const s = section("current-results", `Current results · ${current.reviewed}`, "Download the exact data behind the latest graphs",
     "These files are shipped with the website. Their checksums identify the same source summaries used to build its graphs; new results are never linked to an older commit where they do not exist.");
-  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Complete chart-ready snapshot (all cases and refusals)" })]));
-  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/full-site-data.json", download: "full-site-data.json", text: "All website data, including every earlier study chart and numerical token" })]));
-  s.append(h("p", {}, [h("a", { href: "results/2026-09-11/chart-freshness.json", download: "chart-freshness.json", text: "Chart inventory, measurement dates and source checksums" }), " Older text-source checksums normalize CRLF to LF, as labelled in the inventory. Current downloadable evidence checksums verify the exact file bytes."]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-16/current-results.json", download: "current-results.json", text: "Complete chart-ready snapshot (all cases and refusals)" })]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-16/full-site-data.json", download: "full-site-data.json", text: "All website data, including every earlier study chart and numerical token" })]));
+  s.append(h("p", {}, [h("a", { href: "results/2026-09-16/chart-freshness.json", download: "chart-freshness.json", text: "Chart inventory, measurement dates and source checksums" }), " Older text-source checksums normalize CRLF to LF, as labelled in the inventory. Current downloadable evidence checksums verify the exact file bytes."]));
   const records = Object.entries(current.sources).map(([key, source]) => ({
     name: key+".json", path: source.path, role: source.role, contract: "See the named task and timing boundary in Latest results",
     scope: "Measured "+source.measured, bytes: source.bytes, sha256: source.sha256,
     license: "Research evidence; upstream/project rights remain as documented", privacy: "Selected numerical evidence; no operational cloud bundle",
     view: source.href, raw: source.href,
   }));
-  s.append(artifactTable(records, "September 11 source summaries"));
+  s.append(artifactTable(records, "Current source summaries"));
+  app.append(s);
+}
+
+{
+  const confirmation = DATA.e25_latest_results.post_integration_confirmation;
+  const s = section("september-16-confirmation", `Measured ${confirmation.measured} · reviewed ${confirmation.published_review}`,
+    "Post-integration performance confirmation",
+    "Original B2/B4 and corrected-E3 schedules on three Windows workers and one disposable Linux CPU host. The manifest drives this index and the publication verifier checks every listed byte.");
+  s.append(tiles([
+    ["Artifacts", String(confirmation.manifest.artifact_count), "raw data, analyses, environment records, report, protocol, and verification"],
+    ["Source commit", confirmation.source_commit.slice(0, 12), "immutable code and frozen corpora"],
+    ["Manifest", "SHA-256", confirmation.manifest_sha256.slice(0, 12)+"…; full identity in the manifest"],
+    ["Accepted exact rows", "1,824", "792 + 264 B2/B4; 576 + 192 corrected-E3"],
+  ]));
+  s.append(banner("warn", "What this evidence says", [
+    "The current bare CM kernel advantage reproduced on Windows and Linux.",
+    "The whole-call wrapper ratio is less favorable than the historical ratio even though absolute wrapper time improved.",
+    "Break-even remains a machine-specific planning estimate.",
+  ]));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: confirmation.report_href, text: "Read the report" }),
+    h("a", { href: confirmation.protocol_href, text: "Read the reproduction protocol" }),
+    h("a", { href: confirmation.verification_href, text: "Download verification" }),
+    h("a", { href: confirmation.manifest_href, text: "Download manifest" }),
+  ]));
+  const records = confirmation.manifest.artifacts.map(record => ({
+    name: record.name, path: record.href, role: record.role, contract: record.contract,
+    scope: record.scope, bytes: record.bytes, sha256: record.sha256,
+    license: record.license, privacy: record.privacy, view: record.href, raw: record.href,
+  }));
+  s.append(artifactTable(records, "September 15 confirmation artifacts"));
   app.append(s);
 }
 

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Correspondence Matrices — latest measured results</title>
-<meta name="description" content="Current exact-counting results, including the completed fair Linux feature-model lifecycle comparison, native controls, regressions and source data.">
+<meta name="description" content="Current exact-counting results, including the September 15 Windows and Linux performance confirmation, fair feature-model lifecycle, controls and source data.">
 <meta property="og:title" content="Correspondence Matrices — latest measured results">
-<meta property="og:description" content="The completed September 13 fair feature-model lifecycle comparison and other current measured results.">
+<meta property="og:description" content="The September 15 multi-host CM performance confirmation and other current measured results.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="og.png">
 <style>/*__CM_CSS__*/</style>
@@ -32,7 +32,7 @@ const E = DATA.e25_latest_results;
 const app = document.getElementById("app");
 app.replaceChildren();
 document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· latest results</span>",
-  links: [["index.html", "Knowledge base"], ["#fair-feature-model", "Fair feature model"], ["#bucket-count", "Full-CNF counts"], ["#affine-count", "Affine counts"], ["#streaming", "File output"], ["#native-batch", "Completed batch gate"]] }));
+  links: [["index.html", "Knowledge base"], ["#post-integration-confirmation", "September 15 confirmation"], ["#fair-feature-model", "Fair feature model"], ["#bucket-count", "Full-CNF counts"], ["#affine-count", "Affine counts"], ["#streaming", "File output"], ["#native-batch", "Completed batch gate"]] }));
 app.append(h("header", { class: "page" }, [
   h("p", { class: "eyebrow", text: `Reviewed ${E.reviewed} · each study retains its measurement date` }),
   h("h1", { text: "Latest measured results" }),
@@ -45,6 +45,7 @@ app.append(h("nav", { class: "page latest-jump-links", "aria-label": "Audience g
   h("a", { href: "usecases.html", text: "Application guide" }),
 ]));
 app.append(latestResultsUpdate());
+app.append(postIntegrationConfirmationUpdate());
 {
   const fair = E.fair_feature_model;
   const s = section("fair-feature-model", "Fair Linux feature-model lifecycle", "Every scheduled cell completed",
@@ -71,7 +72,7 @@ app.append(h("div", { class: "page latest-jump-links" }, E.panels.map(p => h("a"
 E.panels.forEach(panel => app.append(latestResultPanel(panel)));
 app.append(section("next-work", "Current disposition", "What remains to be established",
   E.continuation_disposition));
-app.append(h("p", { class: "page" }, [h("a", { href: "results/2026-09-11/current-results.json", download: "current-results.json", text: "Download the complete chart-ready snapshot" })]));
+app.append(h("p", { class: "page" }, [h("a", { href: "results/2026-09-16/current-results.json", download: "current-results.json", text: "Download the complete chart-ready snapshot" })]));
 app.append(pageFooter("Current results reviewed "+E.reviewed));
 }
 </script>

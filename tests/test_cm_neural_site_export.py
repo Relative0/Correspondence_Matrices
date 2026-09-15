@@ -26,7 +26,7 @@ class NeuralSiteExportTests(unittest.TestCase):
             self.assertIn('return "evidence/" + href.slice(6)', page)
             self.assertIn(exporter.MAIN + "index.html", page)
             self.assertIn(exporter.MAIN + "latest-results.html", page)
-            self.assertIn(exporter.MAIN + "data-downloads.html#september-11", page)
+            self.assertIn(exporter.MAIN + "data-downloads.html#september-16-confirmation", page)
             self.assertIn("2026-09-11", page)
             manifest = json.loads((public / "publication-manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(result["target"], exporter.TARGET)
