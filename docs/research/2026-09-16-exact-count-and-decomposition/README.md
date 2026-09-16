@@ -44,3 +44,19 @@ The publication manifest SHA-256 is
 `73d1decbcdf6e1964f75019ddf9092d4456c7632c259eb3444b83acbfb9da24c`.
 Regenerate the package with `scripts/cm_september16_research_export.py`, then
 rebuild the website with its existing `cm_master_build_2026_08_03.py` generator.
+
+## Deployment and integration correction
+
+Publication commit `566702e6` deployed successfully in Pages run `35121605460`.
+Both live pages and all 42 live download files were verified against committed
+checksums. The independent reproducibility run exposed an earlier integration
+regression from `0fa87428`: projection support had been removed from the Python
+and NumPy bucket counters while the projected-count callers remained. Restoring
+both files byte-for-byte from the previously published `e35f352a` fixes that
+regression. The full affected CI test group then passed locally: 248 passed and
+one optional test skipped. Existing exhaustive projection tests cover the fix.
+
+Six legacy chart inputs now explicitly retain LF checkout bytes so their sealed
+hashes also verify in ordinary Windows checkouts. Their committed content and
+the published measurements are unchanged. The application and count-closure
+sealed-evidence verifiers passed after checking canonical source bytes.

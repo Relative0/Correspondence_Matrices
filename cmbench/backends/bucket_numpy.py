@@ -73,10 +73,14 @@ class NumpyBucketCNFCountPlan:
             else:
                 result = np.sum(joint, axis=position, dtype=object)
             result = np.asarray(result, dtype=object).reshape(-1, order='F')
+            if variable in plan._existential:
+                # Existential elimination is Boolean OR, before any sum over
+                # counted variables. Distinct witnesses must not be added.
+                np.minimum(result, 1, out=result)
             del joint
             for i in bucket: del tables[i]
             tables[target] = result
-        return int(prod(tables[i][0] for i in plan._final)) << len(plan._unused - context.keys())
+        return int(prod(tables[i][0] for i in plan._final)) << len((plan._unused & plan._counted) - context.keys())
 
     def exists(self, fixed=None):
         return bool(self.count(fixed))

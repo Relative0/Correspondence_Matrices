@@ -75,13 +75,20 @@ class BucketCNFCountPlan:
 
     def __init__(self, clauses, names, *, order='min_fill', max_width=14,
                  max_cells=1 << 20, max_work=1 << 24, max_order_checks=2_000_000,
-                 max_vars=2048, max_clauses=16384):
+                 max_vars=2048, max_clauses=16384, _existential=()):
         limits = (max_width, max_cells, max_work, max_order_checks, max_vars, max_clauses)
         if any(type(v) is not int or v < 0 for v in limits) or max_width > 20:
             raise ValueError('limits must be nonnegative integers; max_width must be <=20')
         if order not in ('natural', 'min_fill'): raise ValueError('unknown elimination order')
         self.basis = ordered_basis(names)
         if len(self.basis) > max_vars: raise CountPlanLimit('basis width exceeds limit')
+        # Internal support for ProjectedCNFCountPlan: existential variables
+        # must be eliminated before any counted variable. Reversing these
+        # operations can count auxiliary witnesses more than once.
+        self._existential = frozenset(_existential)
+        if any(type(v) is not int or not 0 <= v < len(self.basis) for v in self._existential):
+            raise ValueError('existential variable outside basis')
+        self._counted = frozenset(range(len(self.basis))) - self._existential
         self._positions = {name: i for i, name in enumerate(self.basis)}
         normalized, literal_count = [], 0
         for i, clause in enumerate(clauses):
@@ -110,7 +117,8 @@ class BucketCNFCountPlan:
         if initial_cells > max_cells or work > max_work: raise CountPlanLimit('initial table budget exceeded')
         schedule, width = [], 0
         while graph:
-            if order == 'natural': variable = min(graph)
+            if order == 'natural':
+                variable = min(graph, key=lambda v: (v not in self._existential, v)) if self._existential else min(graph)
             else:
                 scored = []
                 for v, neighbors in graph.items():
@@ -119,8 +127,8 @@ class BucketCNFCountPlan:
                         checks += 1
                         if checks > max_order_checks: raise CountPlanLimit('ordering work exceeds limit')
                         missing += b not in graph[a]
-                    scored.append((missing, len(neighbors), v))
-                variable = min(scored)[2]
+                    scored.append((v not in self._existential, missing, len(neighbors), v))
+                variable = min(scored)[-1]
             bucket = tuple(i for i, scope in pool.items() if variable in scope)
             union = tuple(sorted(set().union(*(set(pool[i]) for i in bucket))))
             width = max(width, len(union))
@@ -220,10 +228,10 @@ class BucketCNFCountPlan:
                         term *= table[index]
                         if not term: break
                     total += term
-                result[row] = total
+                result[row] = int(bool(total)) if variable in self._existential else total
             for i in bucket: del tables[i]
             tables[target] = result
-        return prod(tables[i][0] for i in self._final) << len(self._unused - context.keys())
+        return prod(tables[i][0] for i in self._final) << len((self._unused & self._counted) - context.keys())
 
     def exists(self, fixed=None):
         return bool(self.count(fixed))
