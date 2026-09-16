@@ -30,6 +30,7 @@ blind merge of every historical preservation branch.
 | `codex/cm-site-hash-portability-20260910` | It conflicts with every current site evidence page.  The current focused website verifier passes all 14 tests, so the old normalization patch is superseded. |
 | `codex/cm-sympy-timing-repair-20260915` | It has an add/add conflict with the current claim-cleanup module.  Reconciliation commit `0fa87428` intentionally replaces its timing envelope with the newer result-contract validation. |
 | `codex/cm-original-dirty-preservation-20260908` | Historical preservation content mixes an old fixture deletion, stale site copies, and legacy video packages.  It remains a recoverable local branch, but is not a safe current-code merge. |
+| `codex/cm-main-pytest-profile-recovery-20260916` | Preserved as `7341abf7` from the dirty `main` worktree.  Its merge produced no file changes after Git normalization, proving it duplicates the reconciled profile rather than adding a competing implementation. |
 
 The data-coupled current SymPy tests still require frozen audit inputs that are
 preserved in the local recovery archives.  Their absence from a clean source
@@ -39,6 +40,7 @@ worktree is expected and was not treated as a source regression.
 
 - `python -B -m compileall -q cmbench scripts tests native` passed.
 - `python -B -m pytest -q tests/test_cut_fusion.py tests/test_cm_learning_neural_website.py` passed: 25 tests.
+- `python -B -m pytest -q tests/test_cm_pytest_profiles.py` passed: 4 tests; the Windows profile verifier passed 76 historical replay tests and 9 optional modules.
 - `git diff --check 516b8132..HEAD` passed.
 
 The protected checkout remains on `codex/cm-dirty-preservation-20260914` and
