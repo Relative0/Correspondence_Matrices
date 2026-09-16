@@ -19596,6 +19596,1074 @@
     "protocol_href": "results/2026-09-16/cm-post-integration-confirmation/PUBLIC-PROTOCOL.md",
     "verification_href": "results/2026-09-16/cm-post-integration-confirmation/VERIFICATION.json"
   },
+  "september16_research": {
+    "schema": "cm-september16-research-publication/v1",
+    "reviewed": "2026-09-16",
+    "title": "Exact counting, decomposition studies and a stopped optimization",
+    "cudd": {
+      "benchmark": {
+        "schema_version": 1,
+        "recorded_at_utc": "2026-09-16T15:36:27.625527+00:00",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "cpu": "AMD Ryzen 5 PRO 5650U with Radeon Graphics",
+        "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "dd_version": "0.6.0",
+        "cudd_version": "3.0.0",
+        "extension": "cudd.cpython-312-x86_64-linux-gnu.so",
+        "extension_sha256": "15a3f928608130830fc388e1332655a62da422fc4ee2e5c96f7814f57dee8675",
+        "reference_sha256": "c6d1892c2d2dc51346aa88cbd93c98825fc811a455c00054e0e5840dfd5ec98e",
+        "source_hashes": {
+          "benchmark.py": "4b09625bf00355ffa7243bbda395be6f0de45cb1a9a060ee5e64fde4a4420743",
+          "dd-0.6.0-apa.patch": "335bd9befa2828f77040772e2c33a62d59076d9b9ee4d142cc37e3c898850501",
+          "build/downloads/dd-0.6.0.tar.gz": "4baadadc9b2ebf6136a5b84dc51a43cec5fe91203286cd377e1e093358cdffcd",
+          "build/downloads/cudd-3.0.0.tar.gz": "b8e966b4562c96a03e7fbea239729587d7b395d53cadcc39a7203b49cf7eeb69"
+        },
+        "rounds": 9,
+        "iterations": 200,
+        "contract": "Resident roots; construction excluded; reordering disabled; count-only; no inter-call result cache; support discovery included in native APIs; Python reference counts all manager variables and shifts for wider nvars; methods rotated; Python GC disabled during timing.",
+        "cases": [
+          {
+            "case": "true_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 0,
+            "dag_nodes": 1,
+            "expected_decimal": "340282366920938463463374607431768211456",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  3363.5,
+                  3016.5,
+                  3614.5,
+                  2760.0,
+                  2754.5,
+                  3149.5,
+                  2823.5,
+                  2789.0,
+                  4187.0
+                ],
+                "median_ns": 3016.5,
+                "min_ns": 2754.5
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "float",
+                "samples_ns": [
+                  3624.5,
+                  2227.0,
+                  2250.5,
+                  2219.0,
+                  2252.5,
+                  2269.0,
+                  2261.0,
+                  2218.0,
+                  2219.5
+                ],
+                "median_ns": 2250.5,
+                "min_ns": 2218.0
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  2231.0,
+                  1281.5,
+                  1435.5,
+                  1294.5,
+                  1621.5,
+                  1420.5,
+                  1301.0,
+                  1282.5,
+                  1644.0
+                ],
+                "median_ns": 1420.5,
+                "min_ns": 1281.5
+              }
+            }
+          },
+          {
+            "case": "false_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 0,
+            "dag_nodes": 1,
+            "expected_decimal": "0",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  4316.0,
+                  2373.5,
+                  2489.0,
+                  2320.0,
+                  2325.0,
+                  2259.0,
+                  2422.0,
+                  2445.5,
+                  2296.5
+                ],
+                "median_ns": 2373.5,
+                "min_ns": 2259.0
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "float",
+                "samples_ns": [
+                  3850.0,
+                  2395.0,
+                  2201.5,
+                  2167.5,
+                  2349.5,
+                  2343.5,
+                  2142.0,
+                  2150.5,
+                  2146.0
+                ],
+                "median_ns": 2201.5,
+                "min_ns": 2142.0
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  1191.0,
+                  2179.5,
+                  1732.0,
+                  1285.5,
+                  1118.5,
+                  1134.5,
+                  1134.5,
+                  1135.0,
+                  1245.0
+                ],
+                "median_ns": 1191.0,
+                "min_ns": 1118.5
+              }
+            }
+          },
+          {
+            "case": "sparse_support_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 2,
+            "dag_nodes": 3,
+            "expected_decimal": "85070591730234615865843651857942052864",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  2951.5,
+                  2965.0,
+                  3246.0,
+                  3181.0,
+                  2980.5,
+                  3040.5,
+                  3104.0,
+                  3182.5,
+                  3163.0
+                ],
+                "median_ns": 3104.0,
+                "min_ns": 2951.5
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "float",
+                "samples_ns": [
+                  3157.0,
+                  3106.0,
+                  3127.0,
+                  3087.5,
+                  3001.5,
+                  3096.5,
+                  2955.0,
+                  3187.5,
+                  3345.0
+                ],
+                "median_ns": 3106.0,
+                "min_ns": 2955.0
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  6248.5,
+                  6374.0,
+                  6362.0,
+                  5715.0,
+                  5827.0,
+                  5650.5,
+                  5697.5,
+                  5631.5,
+                  5608.0
+                ],
+                "median_ns": 5715.0,
+                "min_ns": 5608.0
+              }
+            }
+          },
+          {
+            "case": "or_64_padded_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 64,
+            "dag_nodes": 65,
+            "expected_decimal": "340282366920938463444927863358058659840",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  12536.5,
+                  12753.5,
+                  12842.0,
+                  12832.5,
+                  13560.0,
+                  12603.5,
+                  12423.0,
+                  12502.0,
+                  12345.0
+                ],
+                "median_ns": 12603.5,
+                "min_ns": 12345.0
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": false,
+                "result_type": "float",
+                "samples_ns": [
+                  10896.0,
+                  18436.5,
+                  11395.0,
+                  11212.5,
+                  10928.5,
+                  10870.0,
+                  10535.5,
+                  11577.5,
+                  11126.5
+                ],
+                "median_ns": 11126.5,
+                "min_ns": 10535.5
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  109259.5,
+                  132181.5,
+                  119350.0,
+                  111027.0,
+                  116326.0,
+                  109882.5,
+                  108178.5,
+                  118403.0,
+                  113159.5
+                ],
+                "median_ns": 113159.5,
+                "min_ns": 108178.5
+              }
+            }
+          },
+          {
+            "case": "parity_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 128,
+            "dag_nodes": 129,
+            "expected_decimal": "170141183460469231731687303715884105728",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  34826.5,
+                  37111.5,
+                  37636.5,
+                  44962.0,
+                  43762.5,
+                  34968.5,
+                  36256.0,
+                  41750.0,
+                  36584.5
+                ],
+                "median_ns": 37111.5,
+                "min_ns": 34826.5
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "float",
+                "samples_ns": [
+                  23320.5,
+                  29004.0,
+                  24968.0,
+                  24040.0,
+                  23640.5,
+                  23831.5,
+                  27907.5,
+                  25157.5,
+                  24700.0
+                ],
+                "median_ns": 24700.0,
+                "min_ns": 23320.5
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  392241.0,
+                  377985.0,
+                  372476.0,
+                  377437.0,
+                  355598.5,
+                  359752.5,
+                  420242.5,
+                  383295.0,
+                  370120.0
+                ],
+                "median_ns": 377437.0,
+                "min_ns": 355598.5
+              }
+            }
+          },
+          {
+            "case": "threshold_24_of_48_padded_128",
+            "manager_variables": 128,
+            "nvars": 128,
+            "support_size": 48,
+            "dag_nodes": 601,
+            "expected_decimal": "189633663817068932730135100984842518528",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  92580.5,
+                  116790.5,
+                  120838.0,
+                  127938.0,
+                  97663.5,
+                  102259.0,
+                  107052.5,
+                  135062.0,
+                  120261.0
+                ],
+                "median_ns": 116790.5,
+                "min_ns": 92580.5
+              },
+              "existing_double": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "float",
+                "samples_ns": [
+                  28104.0,
+                  36342.0,
+                  28106.5,
+                  51112.5,
+                  29426.5,
+                  42538.0,
+                  34412.0,
+                  30326.0,
+                  43885.5
+                ],
+                "median_ns": 34412.0,
+                "min_ns": 28104.0
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  1095271.0,
+                  1354939.5,
+                  1196413.5,
+                  1371408.0,
+                  1099963.0,
+                  1683548.0,
+                  1188887.0,
+                  1228702.5,
+                  1114632.0
+                ],
+                "median_ns": 1196413.5,
+                "min_ns": 1095271.0
+              }
+            }
+          },
+          {
+            "case": "literal_padded_1100",
+            "manager_variables": 128,
+            "nvars": 1100,
+            "support_size": 1,
+            "dag_nodes": 2,
+            "expected_decimal": "6791492645246929246386757141796333893017469234658722748742598348639065463771209243602696041603780296149289131476923691737519362771617464985577774171400314360942881749703195165891432072082340365383418580263111588256399217886064978276677643016101540190387879866160099492547442002034558061542073937718591829233732574474395276372082688",
+            "methods": {
+              "apa_int": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  5759.0,
+                  5715.5,
+                  8316.0,
+                  5855.0,
+                  5682.5,
+                  5612.5,
+                  5629.5,
+                  5467.5,
+                  5716.5
+                ],
+                "median_ns": 5715.5,
+                "min_ns": 5467.5
+              },
+              "existing_double": {
+                "status": "error",
+                "error": "overflow of integer type double"
+              },
+              "python_exact": {
+                "status": "ok",
+                "exact": true,
+                "result_type": "int",
+                "samples_ns": [
+                  3547.0,
+                  3987.0,
+                  5529.0,
+                  3320.0,
+                  3416.5,
+                  3121.5,
+                  3192.5,
+                  3352.0,
+                  3189.0
+                ],
+                "median_ns": 3352.0,
+                "min_ns": 3121.5
+              }
+            }
+          }
+        ],
+        "publication_note": "Only the local extension path was removed; timings, identities and hashes are unchanged."
+      },
+      "memory": {
+        "status": "passed_differential_check",
+        "runs": [
+          {
+            "measured_calls": 0,
+            "warmup_calls": 2,
+            "definitely_lost_bytes": 903034,
+            "indirectly_lost_bytes": 0,
+            "possibly_lost_bytes": 22893,
+            "error_count": 2181,
+            "definite_leak_records": 2181,
+            "apa_allocation_frames": 0,
+            "combined_lost_bytes": 925927
+          },
+          {
+            "measured_calls": 40000,
+            "warmup_calls": 2,
+            "definitely_lost_bytes": 902829,
+            "indirectly_lost_bytes": 0,
+            "possibly_lost_bytes": 23098,
+            "error_count": 2181,
+            "definite_leak_records": 2181,
+            "apa_allocation_frames": 0,
+            "combined_lost_bytes": 925927
+          }
+        ],
+        "limitation": "The system CPython 3.12 reports interpreter string allocation leaks even at baseline; these are not suppressed. This check requires no growth in combined, definite or indirect lost bytes, no APA allocation frames in the definite-leak reports, and no non-leak errors. It is not a claim that the entire interpreter is Valgrind-clean, and does not inject allocation failures."
+      },
+      "prototype_tests": 57,
+      "regression_tests": 23,
+      "scope": "Local Linux/WSL synthetic resident-root counting; build and extraction excluded. This is a dd/CUDD binding prototype, not a CM-versus-CUDD performance claim or an upstream release."
+    },
+    "decomposition": {
+      "c39": {
+        "study": "c39",
+        "measured": "2026-09-16",
+        "status": "complete",
+        "environment": {
+          "platform": "Windows-10-10.0.19045-SP0",
+          "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+          "thread_environment": {
+            "MKL_NUM_THREADS": null,
+            "OMP_NUM_THREADS": null,
+            "OPENBLAS_NUM_THREADS": null
+          }
+        },
+        "source_result_sha256": "52c26b716d1af25ceade2b5a908adecf6c6f3c9c681a03e2ec184fe649b8824c",
+        "source_result_path": "docs/recognition/runs/c39_gf2_phase_epfl_windows_20260916_001/results.json",
+        "freeze_sha256": "da68866d14b449fc3127aa28f83cfb0c72bfb90ea0ec1f21ca09db47db8355dd",
+        "summary": {
+          "functional": {
+            "controls_exact_best_identity": true,
+            "controls_expected_behavior": true,
+            "public_cases_exact_best_identity": true,
+            "public_cases_exact_reconstruction": true
+          },
+          "primary_median_case_sum_ns": {
+            "c15_exhaustive": 2614027400,
+            "c16_screened": 755173300
+          },
+          "screened_over_exhaustive_speedup": 3.4614934082017994
+        },
+        "redistribution": "Aggregate measurements only; frozen corpus vectors and raw corpus files are not redistributed."
+      },
+      "c40": {
+        "study": "c40",
+        "measured": "2026-09-16",
+        "status": "complete",
+        "environment": {
+          "platform": "Windows-10-10.0.19045-SP0",
+          "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+          "thread_environment": {
+            "MKL_NUM_THREADS": null,
+            "OMP_NUM_THREADS": null,
+            "OPENBLAS_NUM_THREADS": null
+          }
+        },
+        "source_result_sha256": "58363f355a2ad47d96f9c67e4bd4c1c4f5ff78a7a10dd0845be465a5818e4bd4",
+        "source_result_path": "docs/recognition/runs/c40_gf2_development_blind_windows_20260916_001/results.json",
+        "freeze_sha256": "0ab6e0ff13745fa6b2617a2deadb5a010a70fbb4c60dee24be2f201fa07f6a28",
+        "summary": {
+          "functional": {
+            "controls_exact_best_identity": true,
+            "controls_expected_behavior": true,
+            "public_cases_exact_best_identity": true,
+            "public_cases_exact_reconstruction": true
+          },
+          "primary_median_case_sum_ns": {
+            "c15_exhaustive": 2484568300,
+            "c16_screened": 628583300
+          },
+          "screened_over_exhaustive_speedup": 3.9526476443138083,
+          "memory_aggregate": {
+            "c15_exhaustive": {
+              "delta_final_working_set_bytes": {
+                "max_case_median_bytes": 3010560,
+                "median_case_median_bytes": 804864.0,
+                "sum_case_medians_bytes": 19918848
+              },
+              "delta_peak_working_set_bytes": {
+                "max_case_median_bytes": 7065600,
+                "median_case_median_bytes": 1396736.0,
+                "sum_case_medians_bytes": 33587200
+              },
+              "delta_private_usage_bytes": {
+                "max_case_median_bytes": 2859008,
+                "median_case_median_bytes": 374784.0,
+                "sum_case_medians_bytes": 13631488
+              },
+              "delta_sampled_working_set_bytes": {
+                "max_case_median_bytes": 7065600,
+                "median_case_median_bytes": 1392640.0,
+                "sum_case_medians_bytes": 33497088
+              },
+              "tracemalloc_peak_bytes": {
+                "max_case_median_bytes": 2323812,
+                "median_case_median_bytes": 417368.5,
+                "sum_case_medians_bytes": 10052031
+              }
+            },
+            "c16_screened": {
+              "delta_final_working_set_bytes": {
+                "max_case_median_bytes": 1261568,
+                "median_case_median_bytes": 591872.0,
+                "sum_case_medians_bytes": 11956224
+              },
+              "delta_peak_working_set_bytes": {
+                "max_case_median_bytes": 2830336,
+                "median_case_median_bytes": 731136.0,
+                "sum_case_medians_bytes": 19165184
+              },
+              "delta_private_usage_bytes": {
+                "max_case_median_bytes": 880640,
+                "median_case_median_bytes": 286720.0,
+                "sum_case_medians_bytes": 7663616
+              },
+              "delta_sampled_working_set_bytes": {
+                "max_case_median_bytes": 2686976,
+                "median_case_median_bytes": 729088.0,
+                "sum_case_medians_bytes": 18653184
+              },
+              "tracemalloc_peak_bytes": {
+                "max_case_median_bytes": 875994,
+                "median_case_median_bytes": 178829.5,
+                "sum_case_medians_bytes": 4671751
+              }
+            }
+          }
+        },
+        "redistribution": "Aggregate measurements only; frozen corpus vectors and raw corpus files are not redistributed."
+      },
+      "c41": {
+        "study": "c41",
+        "measured": "2026-09-16",
+        "status": "complete",
+        "environment": {
+          "platform": "Windows-10-10.0.19045-SP0",
+          "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]"
+        },
+        "source_result_sha256": "4d78636fb8de7222e3d4b65d326f3f524038060f10a574bac3baaf1a863348d0",
+        "source_result_path": "docs/recognition/runs/c41_gf2_ablation_windows_20260916_001/results.json",
+        "freeze_sha256": "8d31d08ae4b8c9cc095d88b20fe3e5a53d4896362df95310ba8b66453df72f59",
+        "summary": {
+          "all_ablations_valid": true,
+          "interpretation": "Ratios below one mean the ablation was slower than C16. These individually scoped implementation ablations attribute effects only on this frozen host/workload and are not additive causal shares of the C15-to-C16 speedup.",
+          "reference_over_ablation_ratio": {
+            "eager_all_descriptors": 0.28176386106187457,
+            "linear_min_no_dedup_sort": 1.0724789713499758,
+            "no_shared_layout": 0.5770734455493671,
+            "unchecked_partition_admission": 1.0261722962380946
+          },
+          "sum_case_median_analysis_ns": {
+            "c16_reference": 589799300,
+            "eager_all_descriptors": 2093239700,
+            "linear_min_no_dedup_sort": 549940200,
+            "no_shared_layout": 1022052400,
+            "unchecked_partition_admission": 574756600
+          },
+          "validity_by_method": {
+            "c16_reference": true,
+            "eager_all_descriptors": true,
+            "linear_min_no_dedup_sort": true,
+            "no_shared_layout": true,
+            "unchecked_partition_admission": true
+          }
+        },
+        "redistribution": "Aggregate measurements only; frozen corpus vectors and raw corpus files are not redistributed.",
+        "measurement_rows": 500
+      }
+    },
+    "cut_fusion": {
+      "decision": "STOP",
+      "stop_reason": "locked F1/F2 q64 whole-session latency gate failed",
+      "confirmation": {
+        "families": [
+          "F1",
+          "F2"
+        ],
+        "q": 64,
+        "best_fixed_control": "cse",
+        "fixed_control_totals_ns": {
+          "direct": 3944223.6968604205,
+          "r2": 3617377.625160517,
+          "cse": 2583925.5538302776,
+          "cm": 3195186.409067977,
+          "pack_cse": 3287423.944047675,
+          "pack_cm": 3872238.4098966853,
+          "d10_cse": 3236870.112004508,
+          "d10_cm": 3877440.578525113,
+          "fixpoint_cse": 4044403.579639727,
+          "fixpoint_cm": 4708659.775318447,
+          "precompute_full": 184533345.4614149
+        },
+        "component_geomeans_ns": {
+          "control": {
+            "parse_ns": 148083.46792227146,
+            "compile_ns": 158759.38187176333,
+            "bind_ns": 914193.6256042077,
+            "execute_ns": 987484.4188335814,
+            "output_ns": 189063.89103934704,
+            "total_ns": 2583925.5538302776
+          },
+          "candidate": {
+            "parse_ns": 174690.16350302883,
+            "compile_ns": 3179204.741684167,
+            "bind_ns": 931650.3643515323,
+            "execute_ns": 589959.7607176757,
+            "output_ns": 199395.5239324775,
+            "total_ns": 5238760.4274588395
+          }
+        },
+        "speedup": 0.49323224255239706,
+        "required_speedup": 1.1,
+        "per_round": [
+          {
+            "round": 0,
+            "speedup": 0.5260252961454635,
+            "win": false
+          },
+          {
+            "round": 1,
+            "speedup": 0.45706228524578024,
+            "win": false
+          },
+          {
+            "round": 2,
+            "speedup": 0.4330278865355872,
+            "win": false
+          },
+          {
+            "round": 3,
+            "speedup": 0.5047457020259051,
+            "win": false
+          },
+          {
+            "round": 4,
+            "speedup": 0.47238785624133584,
+            "win": false
+          },
+          {
+            "round": 5,
+            "speedup": 0.5233191303422936,
+            "win": false
+          },
+          {
+            "round": 6,
+            "speedup": 0.5144740258015428,
+            "win": false
+          }
+        ],
+        "speedup_pass": false,
+        "every_round_win_pass": false,
+        "pass": false
+      },
+      "timing_integrity": {
+        "development": {
+          "status": "complete",
+          "rows": 8736,
+          "expected_rows": 8736,
+          "receipts": 168,
+          "expected_receipts": 168,
+          "refusals": 0,
+          "all_rows_ok": true,
+          "all_outputs_exact_across_arms": true,
+          "all_receipts_ok_and_clean": true,
+          "max_worker_peak_committed_bytes": 407302144
+        },
+        "locked_confirmation": {
+          "status": "complete",
+          "rows": 13104,
+          "expected_rows": 13104,
+          "receipts": 252,
+          "expected_receipts": 252,
+          "refusals": 0,
+          "all_rows_ok": true,
+          "all_outputs_exact_across_arms": true,
+          "all_receipts_ok_and_clean": true,
+          "max_worker_peak_committed_bytes": 414388224
+        },
+        "exact_request_outputs": 464100
+      }
+    },
+    "boundaries": [
+      "C39 and C40 compare C16 with this repository’s C15 control on one Windows host; they do not establish superiority over external decomposition tools.",
+      "C40 used a separately acquired source family not used to develop C15/C16. This bounded development-blind selection is not an independent implementation.",
+      "ABC’s fixed 4-LUT output does not meet the C16 artifact contract; no C16-versus-ABC speed or quality claim is made.",
+      "C41 reuses C40’s vectors on Windows. Ablation ratios are descriptive and non-additive; strict reconstruction remains required.",
+      "C40/C41 corpus redistribution remains unresolved. Downloads contain project source and aggregate measurements, not frozen corpus vectors or third-party source trees.",
+      "Cut fusion failed its frozen whole-session latency gate and remains opt-in research code; it is not a recommended default."
+    ],
+    "artifacts": [
+      {
+        "path": "PUBLIC-SUMMARY.json",
+        "bytes": 25804,
+        "sha256": "872cc5c6d4570802469dcccbb02b1f0c6dd9b10d52ba1248d6d3ac17b0c90100",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/PUBLIC-SUMMARY.json"
+      },
+      {
+        "path": "REPORT.md",
+        "bytes": 3581,
+        "sha256": "a5cab0470323da4d3ddc7888cbcb5b73717bace5fa38990d98606183a76ac2c9",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/REPORT.md"
+      },
+      {
+        "path": "c39-aggregate.json",
+        "bytes": 1171,
+        "sha256": "3c92aeebaf1756dcf7e395dfc71c5f9d3a8d40ad291e6fde83e9d9783f95883d",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/c39-aggregate.json"
+      },
+      {
+        "path": "c40-aggregate.json",
+        "bytes": 3164,
+        "sha256": "c0cd552135629e4f1a862a7346c77da4dc462aff309116a1b53ec279ff93d92b",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/c40-aggregate.json"
+      },
+      {
+        "path": "c41-aggregate.json",
+        "bytes": 1689,
+        "sha256": "2fe219ede7f2fbaaf217fa8a9e47151df45d7c2989c8b9f0b28fa9ba9609ec76",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/c41-aggregate.json"
+      },
+      {
+        "path": "cudd-benchmark.json",
+        "bytes": 11641,
+        "sha256": "95967ac2dcfc04fdd48930d9af5bd8b6ac80084f128f8cba4a3bab5a2b5e93ad",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/cudd-benchmark.json"
+      },
+      {
+        "path": "cudd-memory-summary.json",
+        "bytes": 1072,
+        "sha256": "a4fe378eae8398106bc25dd9c3bc587953c007214754a1095d18dbb23261c7bf",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/cudd-memory-summary.json"
+      },
+      {
+        "path": "cut-fusion-verification.json",
+        "bytes": 11504,
+        "sha256": "39d86f83fefdd71e6ae5854b07b04ccff195dd755240f3b7a8850c7ac6cca751",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/cut-fusion-verification.json"
+      },
+      {
+        "path": "research-source-and-evidence.zip",
+        "bytes": 108852,
+        "sha256": "e2d866f5c2655e1091ecd482d1a7f0ce59ae498ad5057c1eeb487c504db2b98a",
+        "role": "evidence",
+        "href": "results/2026-09-16/exact-count-and-decomposition/research-source-and-evidence.zip"
+      },
+      {
+        "path": "sources/cmbench/comparative/exact_cudd_count.py",
+        "bytes": 1311,
+        "sha256": "c6d1892c2d2dc51346aa88cbd93c98825fc811a455c00054e0e5840dfd5ec98e",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/comparative/exact_cudd_count.py"
+      },
+      {
+        "path": "sources/cmbench/comparative/sympy_cm_claim_cleanup.py",
+        "bytes": 31811,
+        "sha256": "47ca5daf1d402e7c2c7e30140727699f0a67eb996f30d3688f219e803a666bd5",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/comparative/sympy_cm_claim_cleanup.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/abc_acd_external_baseline.py",
+        "bytes": 8872,
+        "sha256": "0c29b48ea863d4bfb81ea8f7cd2a546cc21ca53871f6dede9ce35d1fdfc7844a",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/abc_acd_external_baseline.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/abc_acd_truth_runner.cpp",
+        "bytes": 3274,
+        "sha256": "dedf9afe60d436b69b18e7b1d77510ec1572dce7b8a83d79eee1d7b20fa7bade",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/abc_acd_truth_runner.cpp"
+      },
+      {
+        "path": "sources/cmbench/recognition/c40_abc_contract_probe.py",
+        "bytes": 8083,
+        "sha256": "968d74e9fd81c139a87c2d5f6843e0abc5a88ea0e05f013b7df52f0d4ecbfc28",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/c40_abc_contract_probe.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/cut_fusion.py",
+        "bytes": 18635,
+        "sha256": "d088a463afa898ec49674034a796db0f4360fcf6c7203b86427d4e435600df19",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/cut_fusion.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/external_gf2_artifact_adapter.py",
+        "bytes": 7009,
+        "sha256": "85c01daf652e0197fe3b3c55d4aa4350d0bf5f7112632f6a2d6371b38e8b9940",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/external_gf2_artifact_adapter.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/gf2_c40_confirmation_benchmark.py",
+        "bytes": 36392,
+        "sha256": "20031de3f19c7ecf221eac57d2bbdac70ba01e3043a582aee67ab9fc045832b2",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/gf2_c40_confirmation_benchmark.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/gf2_c41_ablation_benchmark.py",
+        "bytes": 22920,
+        "sha256": "b12bb1abcc2d4f424e0c18cfc879f904b72a2b4340693a14139bd60cf63b91f8",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/gf2_c41_ablation_benchmark.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/gf2_decomposition.py",
+        "bytes": 34383,
+        "sha256": "cc862dc4f99266aa94be27c7116e62cdfffbdcee59c76d92781e86c52f5bbd37",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/gf2_decomposition.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/gf2_phase_benchmark.py",
+        "bytes": 27252,
+        "sha256": "4f80fd0bf236fc5ae4c6e2a414accd0d3655e0a101db4c4f4a8099aa9cba7168",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/gf2_phase_benchmark.py"
+      },
+      {
+        "path": "sources/cmbench/recognition/gf2_screening_experiment.py",
+        "bytes": 19316,
+        "sha256": "a29f76daaec26b42362e5aed57efeb62da287993f97e6559d3e0c51b6a54cc8b",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/cmbench/recognition/gf2_screening_experiment.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/DD-LICENSE",
+        "bytes": 1540,
+        "sha256": "725af7ce62efc835d01bd3964f6b5d1f4f17e5b266ff0b7cf52dab1ac08f8d3a",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/DD-LICENSE"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/README.md",
+        "bytes": 7890,
+        "sha256": "87adc747bc92790d0c0576363b3d927fe80df88eb5f4dc531c44b1cdbf8d1f3b",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/README.md"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/benchmark.py",
+        "bytes": 6637,
+        "sha256": "4b09625bf00355ffa7243bbda395be6f0de45cb1a9a060ee5e64fde4a4420743",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/benchmark.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/bootstrap.sh",
+        "bytes": 1080,
+        "sha256": "bd660c2321b885cab537115bb76fdc775ba9cfba29a9afb08f7bce5d6081f27f",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/bootstrap.sh"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/build_native.py",
+        "bytes": 1482,
+        "sha256": "f5956d231d9935ec8e6fbb4efd263d519306bd9ad75f9e8ffc0074ac465e4d7f",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/build_native.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/dd-0.6.0-apa.patch",
+        "bytes": 2858,
+        "sha256": "335bd9befa2828f77040772e2c33a62d59076d9b9ee4d142cc37e3c898850501",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/dd-0.6.0-apa.patch"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/fetch_cudd.py",
+        "bytes": 1011,
+        "sha256": "8d9c72efb82224a4b59d66044ab2d9b4ee34a3bd58da2d4b7492653bfe54467b",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/fetch_cudd.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/memory_probe.py",
+        "bytes": 861,
+        "sha256": "d8d99c3e860f6658ae99c4b5940ecbfecfaa58540d48887158983162c26ea13b",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/memory_probe.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/patch_dd.py",
+        "bytes": 3720,
+        "sha256": "e883155cc9cbccbbbd5dae0ecce8298be09220331d844a518c85c9d66704e271",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/patch_dd.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/reference.py",
+        "bytes": 435,
+        "sha256": "72db8a975d213f00b04eb77d71f5f4e3cf47b80ec88d8c0d5c00b68c0978a121",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/reference.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/results/dd-count-support-reorder-tests.log",
+        "bytes": 115,
+        "sha256": "52b0d77f8803556431c48a54af76a987c7fda1811b26ca45ff6da77840603e1c",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/results/dd-count-support-reorder-tests.log"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/results/prototype-tests.log",
+        "bytes": 99,
+        "sha256": "43209e53fb0649f36b59d3f0b2c638e33c2539cc2dbd3176f4d84ff5a64e0a68",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/results/prototype-tests.log"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/results/python-dependencies.txt",
+        "bytes": 168,
+        "sha256": "df68ecfdaf6ce74de38864cd88c3c30deebc002dc1c6a6ddc0bbdfdcbef3d274",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/results/python-dependencies.txt"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/test_count.py",
+        "bytes": 4794,
+        "sha256": "bb3b9ea70eff97414c55f0dab1b1854883b10a2a93fffbec9d6fa8f0126de5ff",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/test_count.py"
+      },
+      {
+        "path": "sources/prototypes/cudd_apa/validate.py",
+        "bytes": 5733,
+        "sha256": "4633d28e19dd65ae7a87ffee18be843aedc138cd48c9945956933bc6eaf118fe",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/prototypes/cudd_apa/validate.py"
+      },
+      {
+        "path": "sources/scripts/cm_sympy_claim_cleanup.py",
+        "bytes": 20669,
+        "sha256": "52ef2a5a888d20a42dcd37d88ff34aba29d30cc38feb21ad82bd911ee95c61bc",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/scripts/cm_sympy_claim_cleanup.py"
+      },
+      {
+        "path": "sources/tests/test_cut_fusion.py",
+        "bytes": 4035,
+        "sha256": "2529463533c14b78f71a798b17e136030b6ed6b97a1e327c7278ad6beb2ab0ae",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/tests/test_cut_fusion.py"
+      },
+      {
+        "path": "sources/tests/test_external_gf2_artifact_adapter.py",
+        "bytes": 3053,
+        "sha256": "7bf57085af02182ebd180f9659d6a7fe5de65f9cc44acd951194b42fc3477f89",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/tests/test_external_gf2_artifact_adapter.py"
+      },
+      {
+        "path": "sources/tests/test_gf2_c41_ablation_benchmark.py",
+        "bytes": 2487,
+        "sha256": "3c1131a2eae6569b909996917c81a9264510e1421e3bbfecc8c17de0322650f7",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/tests/test_gf2_c41_ablation_benchmark.py"
+      },
+      {
+        "path": "sources/tests/test_gf2_decomposition.py",
+        "bytes": 11083,
+        "sha256": "19a649da6eed4a730264839a5fff701bf050342bc11e88c156b20e6ac3fe5aab",
+        "role": "source",
+        "href": "results/2026-09-16/exact-count-and-decomposition/sources/tests/test_gf2_decomposition.py"
+      }
+    ],
+    "manifest_sha256": "73d1decbcdf6e1964f75019ddf9092d4456c7632c259eb3444b83acbfb9da24c",
+    "manifest_href": "results/2026-09-16/exact-count-and-decomposition/PUBLICATION-MANIFEST.json",
+    "report_href": "results/2026-09-16/exact-count-and-decomposition/REPORT.md",
+    "bundle_href": "results/2026-09-16/exact-count-and-decomposition/research-source-and-evidence.zip"
+  },
   "frontiers": {
     "schema": "cm-count-closures-public-results/v1",
     "status": "verified_with_explicit_limitations",

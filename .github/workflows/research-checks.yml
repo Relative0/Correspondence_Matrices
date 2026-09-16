@@ -66,6 +66,12 @@ jobs:
           tests/test_application_fixture_restoration.py tests/test_presentation_capture.py
           tests/test_component_counts.py tests/test_closure_fixture_restoration.py
           tests/test_generated_public_chart_data.py tests/test_cm_pytest_profiles.py
+      - name: Verify September 16 research and source publication
+        run: >-
+          python -B -m pytest -q -p no:cacheprovider
+          tests/test_cm_september16_research_website.py
+          tests/test_gf2_decomposition.py tests/test_external_gf2_artifact_adapter.py
+          tests/test_gf2_c41_ablation_benchmark.py tests/test_cut_fusion.py
       - name: Validate the maintained Windows pytest profile inventory
         run: python -B scripts/cm_windows_pytest_profile.py verify
       - name: Verify sealed application evidence and source identities

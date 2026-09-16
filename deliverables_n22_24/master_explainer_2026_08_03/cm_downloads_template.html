@@ -115,6 +115,27 @@ app.append(latestResultsUpdate());
 }
 
 {
+  const R = DATA.e25_latest_results.september16_research;
+  const s = section("september-16-research", "September 16 research source", "Exact counting and decomposition downloads",
+    "Download the exact-count prototype and benchmark, C39–C41 analysis and adapter code, cut-fusion code, tests, and aggregate results. This explicit allowlist excludes third-party corpus vectors and native binaries. The source ZIP is a repository overlay, not a standalone installation.");
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html#exact-count-and-decomposition", text: "Read the findings" }),
+    h("a", { href: R.report_href, text: "Report and reproduction scope" }),
+    h("a", { href: R.bundle_href, download: "research-source-and-evidence.zip", text: "Download all source and evidence" }),
+    h("a", { href: R.manifest_href, text: "SHA-256 manifest" }),
+  ]));
+  s.append(artifactTable(R.artifacts.map(record => ({
+    name: record.path, path: record.href, role: record.role,
+    contract: "Research source / scoped aggregate evidence", scope: "September 16 measured studies; see report for limits",
+    bytes: record.bytes, sha256: record.sha256,
+    license: "No new license grant; dd patch includes BSD-3-Clause DD-LICENSE",
+    privacy: "Explicit source/evidence allowlist; no corpus vectors or operational credentials",
+    view: record.href, raw: record.href,
+  })), "September 16 Python files and evidence"));
+  app.append(s);
+}
+
+{
   const s = section("scope", "Publication contract", "Pinned evidence, visible boundaries",
     "Every View and Raw link below targets the reviewed commit, not a moving branch. The latest repository is offered separately and may contain newer, unaudited work.");
   s.append(tiles([

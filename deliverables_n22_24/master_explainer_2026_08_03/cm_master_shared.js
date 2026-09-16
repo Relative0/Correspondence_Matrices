@@ -943,6 +943,13 @@ function latestResultsUpdate() {
   const s = section("results-september-16", `Results reviewed ${E.reviewed}`,
     "Current implementations, measured gains and remaining limits",
     "Packed input construction is improved; bounded caches, file streaming and exact scalar counters are implemented. Their benefits depend on the requested output and workload. The latest graphs retain native controls, regressions and resource refusals.");
+  s.append(h("p", {}, [
+    h("strong", { text: "New September 16 research: " }),
+    document.createTextNode("exact integer CUDD counting, C39–C41 decomposition studies, and the stopped cut-fusion experiment. "),
+    h("a", { href: "latest-results.html#exact-count-and-decomposition", text: "Read findings and scope" }),
+    document.createTextNode(" · "),
+    h("a", { href: "data-downloads.html#september-16-research", text: "Download Python files and evidence" }),
+  ]));
   s.append(tiles([
     ["Overlapping CNF · eight queries", T("latest.bucket.current_ms") + " ms", "Exact arrays; Python control {{latest.bucket.before_ms}} ms on the same public printer model and host"],
     ["Affine count · eight queries", T("latest.affine.current_ms") + " ms", "Current indexed Python; original {{latest.affine.before_ms}} ms on the same public 1,800-variable matrix"],
@@ -972,6 +979,56 @@ function latestResultsUpdate() {
     h("a", { href: "latest-results.html#post-integration-confirmation", text: "Read the September 15 confirmation" }),
     h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
     h("a", { href: "data-downloads.html#september-16-confirmation", text: "Download the confirmation evidence" }),
+  ]));
+  return s;
+}
+
+function september16ResearchUpdate() {
+  const R = DATA.e25_latest_results.september16_research;
+  const s = section("exact-count-and-decomposition", "Measured September 16 · research update",
+    "Exact counts, tested mechanisms and a stopped optimization",
+    "These studies answer different questions. The native counting prototype, internal decomposition comparisons and whole-session cut-fusion gate retain their separate timing scopes.");
+  const table = (headers, rows, label) => h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": label }, [
+    h("table", {}, [
+      h("thead", {}, [h("tr", {}, headers.map(text => h("th", { scope: "col", text })))]),
+      h("tbody", {}, rows.map(row => h("tr", {}, row.map(text => h("td", { text }))))),
+    ]),
+  ]);
+  s.append(h("h3", { text: "CUDD: exact integers without floating-point rounding" }));
+  s.append(h("p", { text: "The dd 0.6.0 prototype uses Cudd_ApaCountMinterm and frees the native result in finally. It preserves support-sized default counting, passes 57 prototype and 23 dd regression tests, and handles results beyond the double API’s range. This is a research binding, not an upstream release or a production-default change." }));
+  const labels = {
+    true_128: "True · 128 variables", false_128: "False · 128 variables",
+    sparse_support_128: "Sparse support · padded to 128", or_64_padded_128: "OR of 64 · padded to 128",
+    parity_128: "Parity of 128", threshold_24_of_48_padded_128: "At least 24 of 48 · padded to 128",
+    literal_padded_1100: "Literal · padded to 1,100",
+  };
+  const timing = result => result.status === "ok" ? f(result.median_ns / 1000, 2) : "Overflow";
+  s.append(table(["Resident root", "APA integer (µs)", "Existing double (µs)", "Python exact (µs)", "Double result"],
+    R.cudd.benchmark.cases.map(row => [labels[row.case], timing(row.methods.apa_int), timing(row.methods.existing_double),
+      timing(row.methods.python_exact), row.methods.existing_double.status !== "ok" ? "No result" : row.methods.existing_double.exact ? "Exact here" : "Rounded — not exact"]),
+    "Resident-root exact-count benchmark"));
+  s.append(h("p", { text: "Count-only medians: 9 rounds × 200 calls, same resident roots, reordering disabled, no cross-call count cache. APA was about 9–10× faster than Python traversal on the three larger diagrams, at about 1.1–3.4× double-API latency. Trivial roots favor Python. Construction and extraction are excluded; these are local Linux/WSL synthetic measurements." }));
+  s.append(h("p", { class: "meta", text: "Memory: 40,000 additional calls left combined Valgrind lost bytes unchanged, with no APA allocation frames or non-leak errors. CPython baseline leaks remain visible; this is not a globally leak-free report. Allocation failures were not injected." }));
+  s.append(h("h3", { text: "C39–C41: exact decomposition against the internal control" }));
+  s.append(table(["Study", "Cases / scope", "C16 over C15 speed", "Validation"], [
+    ["C39", "19 public cases · Windows", f(R.decomposition.c39.summary.screened_over_exhaustive_speedup, 4)+"×", "Same selected artifact; exact reconstruction"],
+    ["C40", "20 cases · separately acquired public family", f(R.decomposition.c40.summary.screened_over_exhaustive_speedup, 4)+"×", "Same selected artifact; exact reconstruction"],
+  ], "Internal decomposition confirmation"));
+  s.append(h("p", { text: "Both figures compare sums of per-case median analysis-only times with this repository’s C15 implementation. C40’s summed median process peak-working-set delta was 33,587,200 bytes for C15 and 19,165,184 bytes for C16. These are one-host Windows observations, not an external state-of-the-art or general memory claim." }));
+  const medians = R.decomposition.c41.summary.sum_case_median_analysis_ns;
+  s.append(table(["C41 mechanism lane", "Time / C16", "Scoped interpretation"], [
+    ["Repeat layout", f(medians.no_shared_layout / medians.c16_reference, 4)+"×", "Slower on this frozen workload"],
+    ["Eager admission of all descriptors", f(medians.eager_all_descriptors / medians.c16_reference, 4)+"×", "Slower on this frozen workload"],
+    ["Linear minimum without bulk sorting", f(medians.linear_min_no_dedup_sort / medians.c16_reference, 4)+"×", "Lower observed time; no default change"],
+    ["Omit in-lane strict checks", f(medians.unchecked_partition_admission / medians.c16_reference, 4)+"×", "Diagnostic only; checks remain required"],
+  ], "C41 scoped mechanism ablations"));
+  s.append(h("p", { text: "C41 retained 500 timing rows with zero invalid lanes. It reuses C40 vectors; these ratios are not additive causal shares. ABC’s fixed 4-LUT output does not supply the same exact artifact, so no C16-versus-ABC speed or quality comparison is supported. Corpus redistribution remains unresolved; the downloads contain code and aggregate findings." }));
+  s.append(h("h3", { text: "Cut fusion: stopped at the frozen whole-session gate" }));
+  s.append(h("p", { text: `The locked F1/F2 q64 candidate achieved ${f(R.cut_fusion.confirmation.speedup, 4)}× the CSE control’s speed, below the 1.10× requirement. Execution improved, but recognition and compilation did not repay at measured reuse. All 21,840 timing rows were exact across arms. Natural-panel timing and the relative-memory promotion sweep were not run after STOP; this remains opt-in research code.` }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: R.report_href, text: "Full findings and limitations" }),
+    h("a", { href: R.bundle_href, download: "research-source-and-evidence.zip", text: "Download Python/source bundle" }),
+    h("a", { href: "data-downloads.html#september-16-research", text: "Individual source files and checksums" }),
   ]));
   return s;
 }

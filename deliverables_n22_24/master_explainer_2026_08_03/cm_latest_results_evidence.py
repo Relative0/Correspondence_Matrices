@@ -17,6 +17,11 @@ _post_module = importlib.util.module_from_spec(_post_spec)
 _post_spec.loader.exec_module(_post_module)
 build_post_integration_evidence = _post_module.build_post_integration_evidence
 
+_research_spec = importlib.util.spec_from_file_location('cm_september16_research_evidence', Path(__file__).with_name('cm_september16_research_evidence.py'))
+_research_module = importlib.util.module_from_spec(_research_spec)
+_research_spec.loader.exec_module(_research_module)
+build_research_evidence = _research_module.build_research_evidence
+
 _next_spec = importlib.util.spec_from_file_location('cm_next_results_evidence', Path(__file__).with_name('cm_next_results_evidence.py'))
 _next_module = importlib.util.module_from_spec(_next_spec)
 _next_spec.loader.exec_module(_next_module)
@@ -122,6 +127,8 @@ def build_latest_results():
     sources, files, manifests = {}, {fair['href']: fair_payload}, {}
     post_integration, post_integration_files = build_post_integration_evidence()
     files.update(post_integration_files)
+    research, research_files = build_research_evidence()
+    files.update(research_files)
 
     def source(key, audit, relative, role):
         name, expected = AUDITS[audit]
@@ -362,6 +369,7 @@ def build_latest_results():
     evidence = dict(schema='cm-current-website-results/v1', reviewed=REVIEWED, panels=panels,
                     fair_feature_model=fair,
                     post_integration_confirmation=post_integration,
+                    september16_research=research,
                     frontiers=frontiers, completion=completion,
                     continuation_disposition=disposition,
                     sources=sources, audit_seals={k:v[1] for k,v in AUDITS.items()},
