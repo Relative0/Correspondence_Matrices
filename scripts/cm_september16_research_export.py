@@ -149,6 +149,8 @@ the remaining project source. Third-party tools must be obtained separately.
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as output:
         for name, payload in sorted(payloads.items()):
             info = zipfile.ZipInfo(name, date_time=(2026, 9, 16, 0, 0, 0))
+            # Preserve the published ZIP's origin byte on every build host.
+            info.create_system = 0
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o644 << 16
             output.writestr(info, payload)

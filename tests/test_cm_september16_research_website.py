@@ -50,6 +50,19 @@ def test_evidence_loader_rejects_modified_downloads():
             loader.build_research_evidence()
 
 
+def test_zip_origin_is_independent_of_the_build_host():
+    exporter = load('research_export_portability_test', ROOT / 'scripts/cm_september16_research_export.py')
+
+    class UnixZipInfo(zipfile.ZipInfo):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.create_system = 3
+
+    with mock.patch.object(exporter.zipfile, 'ZipInfo', UnixZipInfo):
+        payloads = exporter.build_publication()
+    assert payloads['research-source-and-evidence.zip'] == (BASE / 'research-source-and-evidence.zip').read_bytes()
+
+
 def test_exact_counts_and_negative_results_remain_visible():
     data = json.loads((BASE / 'PUBLIC-SUMMARY.json').read_text(encoding='utf-8'))
     cases = {row['case']: row for row in data['cudd']['benchmark']['cases']}

@@ -60,3 +60,10 @@ Six legacy chart inputs now explicitly retain LF checkout bytes so their sealed
 hashes also verify in ordinary Windows checkouts. Their committed content and
 the published measurements are unchanged. The application and count-closure
 sealed-evidence verifiers passed after checking canonical source bytes.
+
+The current/archive checker subsequently passed 287 current-source tests and
+121 immutable-snapshot tests. Windows CI passed on `b2a5edb8`. Linux CI exposed
+the ZIP origin-platform metadata default; explicitly preserving the original
+origin byte fixes cross-platform rebuilding without changing published bytes.
+All five publication tests, including a new simulated Unix-origin test, passed
+on both Windows and Ubuntu/WSL after that correction.
