@@ -1,0 +1,395 @@
+{
+  "schema": "cm-findings-cheat-sheet/v1",
+  "reviewed": "2026-09-17",
+  "source_revision": "1145537c9e2274ae7622dad5b68a7d612b27bb7e",
+  "cards": [
+    {
+      "id": "decomposition",
+      "title": "Find the same exact decomposition with less repeated work",
+      "task": "decomposition",
+      "use": "You analyze small Boolean truth vectors and need a canonical factor artifact, not just a yes/no answer.",
+      "mechanism": "Share one matrix layout per partition, rank exact candidate descriptors, then strictly validate and reconstruct only the leading candidates.",
+      "takeaway": "C40's 20-case confirmation gives a 3.95× internal analysis speedup; C39's 19 public cones give 3.46×. Both select the same best artifact as the exhaustive control.",
+      "boundary": "Best means best within the bounded partition set and four artifact families. The implementation admits at most 10 variables. C40 is development-blind in source-family selection, on one host. This is not a comparison with ABC or a new general decomposition theorem; corpus redistribution remains unresolved.",
+      "code": [
+        {
+          "label": "analyze_screened_exact_gf2",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/recognition/gf2_decomposition.py",
+          "path": "cmbench/recognition/gf2_decomposition.py"
+        },
+        {
+          "label": "Exactness examples and tests",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/tests/test_gf2_decomposition.py",
+          "path": "tests/test_gf2_decomposition.py"
+        }
+      ],
+      "evidence": "latest-results.html#exact-count-and-decomposition",
+      "metrics": [
+        {
+          "control": 2484.5683,
+          "candidate": 628.5833,
+          "ratio": 3.9526476443138083,
+          "unit": "ms",
+          "control_label": "C15 exhaustive",
+          "candidate_label": "C16 screened",
+          "metric": "sum of per-case analysis medians",
+          "case": "C40",
+          "scope": "Windows; five balanced rounds; parsing and truth construction excluded",
+          "source_href": "results/2026-09-16/exact-count-and-decomposition/c40-aggregate.json",
+          "selectors": [
+            "summary.primary_median_case_sum_ns.c15_exhaustive",
+            "summary.primary_median_case_sum_ns.c16_screened"
+          ]
+        },
+        {
+          "control": 2614.0274,
+          "candidate": 755.1733,
+          "ratio": 3.4614934082017994,
+          "unit": "ms",
+          "control_label": "C15 exhaustive",
+          "candidate_label": "C16 screened",
+          "metric": "sum of per-case analysis medians",
+          "case": "C39",
+          "scope": "Windows; five balanced rounds; parsing and truth construction excluded",
+          "source_href": "results/2026-09-16/exact-count-and-decomposition/c39-aggregate.json",
+          "selectors": [
+            "summary.primary_median_case_sum_ns.c15_exhaustive",
+            "summary.primary_median_case_sum_ns.c16_screened"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packed-inputs",
+      "title": "Make packed Boolean input construction cheaper",
+      "task": "relation",
+      "use": "You really need the complete Boolean answer vector and spend substantial time building its input masks.",
+      "mechanism": "Construct repeating packed masks efficiently before evaluating the expression. The shared constructor also benefits direct BitSet and common-subexpression elimination (CSE).",
+      "takeaway": "A selected fresh 18-variable confirmation case drops from 14.03 ms to 1.33 ms for cold public packed-CM evaluation.",
+      "boundary": "This is an old/current implementation ablation, not a CM-versus-native claim or an aggregate across all cases. The full output still has 2^n bits; warm gains are smaller and some paths regress.",
+      "code": [
+        {
+          "label": "build_bitset_env and packed evaluators",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/bitset_backend.py",
+          "path": "bitset_backend.py"
+        },
+        {
+          "label": "Mask construction checks",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/tests/test_packed_mask_construction.py",
+          "path": "tests/test_packed_mask_construction.py"
+        }
+      ],
+      "evidence": "latest-results.html#packed-masks",
+      "metrics": [
+        {
+          "control": 14.0337,
+          "candidate": 1.3252,
+          "ratio": 10.589873226682766,
+          "unit": "ms",
+          "metric": "cold_ms",
+          "control_label": "Public packed CM · original",
+          "candidate_label": "Public packed CM · current",
+          "case": "confirmation-n18-s0",
+          "q": 1,
+          "scope": "Windows; fresh synthetic confirmation; all seven backend paths",
+          "source_href": "results/2026-09-11/packed-mask-confirmation.json",
+          "source_sha256": "874ed8956a2e3fef55174a74b0b0b485fe78deffd2de42bef261e9ca0a131ee1",
+          "selectors": [
+            "case=confirmation-n18-s0; q=1; restricted=False; backend=cm_public; baseline",
+            "case=confirmation-n18-s0; q=1; restricted=False; backend=cm_public; candidate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "title": "Reuse positional masks across renamed inputs",
+      "task": "reuse",
+      "use": "Repeated requests share a variable count and order but use different variable names.",
+      "mechanism": "A bounded positional cache can reuse the same masks without treating every renamed basis as a new allocation.",
+      "takeaway": "On the selected renamed-input trace, cold q32 time falls from 30.36 ms with named LRU caching to 1.49 ms with positional caching.",
+      "boundary": "The warm named-LRU result is faster here (0.47 versus 0.58 ms). Memory bounds, eviction and request shape decide whether this helps; no universal cache policy was promoted.",
+      "code": [
+        {
+          "label": "PackedMaskCache",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/backends/packed_mask_cache.py",
+          "path": "cmbench/backends/packed_mask_cache.py"
+        },
+        {
+          "label": "Packed query API guide",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/research/CM_PACKED_QUERY_APIS_2026_09_11.md",
+          "path": "docs/research/CM_PACKED_QUERY_APIS_2026_09_11.md"
+        }
+      ],
+      "evidence": "latest-results.html#bounded-cache",
+      "metrics": [
+        {
+          "control": 30.359639,
+          "candidate": 1.488711,
+          "ratio": 20.393238848910233,
+          "unit": "ms",
+          "metric": "cold_ms",
+          "control_label": "Named LRU cache",
+          "candidate_label": "Bounded positional cache",
+          "case": "confirmation-cache-n18-renamed",
+          "q": 32,
+          "scope": "Linux EPYC 7702P; consumed portability panel; 2 MiB cache / 64 KiB pressure case",
+          "source_href": "results/2026-09-11/cache-confirmation.json",
+          "source_sha256": "2150f40fd698605b169a43e6a0fb34f3dda1568061841a7d303ac0a79ade6329",
+          "selectors": [
+            "case=confirmation-cache-n18-renamed; q=32; method=named_lru",
+            "case=confirmation-cache-n18-renamed; q=32; method=positional"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "streaming",
+      "title": "Deliver a full truth vector without keeping it all resident",
+      "task": "relation",
+      "use": "A file or downstream process needs every output bit, but peak memory and first delivery matter.",
+      "mechanism": "Evaluate and deliver chunks with the same ordering and file obligations as the complete-output control.",
+      "takeaway": "For the selected 24-variable cold file output, 32 KiB chunks take 32.17 ms versus 160.79 ms for complete packed output. A separate memory diagnostic reports 48.37 versus 147.34 MiB process peaks.",
+      "boundary": "Timing and memory were measured on different Linux hosts and must not be combined into one run. This still writes the complete exponential-size answer; small chunks and warm batches can regress. Tune against the real reader and durability contract.",
+      "code": [
+        {
+          "label": "write_packed_stream",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/backends/packed_stream_io.py",
+          "path": "cmbench/backends/packed_stream_io.py"
+        },
+        {
+          "label": "Streaming API and contract",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/research/CM_PACKED_STREAM_IO_2026_09_11.md",
+          "path": "docs/research/CM_PACKED_STREAM_IO_2026_09_11.md"
+        }
+      ],
+      "evidence": "latest-results.html#streaming",
+      "metrics": [
+        {
+          "control": 160.789109,
+          "candidate": 32.173469,
+          "ratio": 4.9975683069798915,
+          "unit": "ms",
+          "metric": "cold_ms",
+          "control_label": "Complete packed output",
+          "candidate_label": "32 KiB chunks",
+          "case": "cloud-stream-n24",
+          "q": 1,
+          "scope": "Linux EPYC 7702P; fresh synthetic n22/n24 outputs; q1/q8",
+          "source_href": "results/2026-09-11/file-and-independent-count.json",
+          "source_sha256": "e26f00ab0b6548d1b04166d05cfe5051b09b19957adc1502a6cab74d096a9e95",
+          "selectors": [
+            "case=cloud-stream-n24; q=1; method=complete",
+            "case=cloud-stream-n24; q=1; method=stream_18"
+          ]
+        },
+        {
+          "control": 147.3359375,
+          "candidate": 48.3671875,
+          "ratio": 3.0461960910999837,
+          "unit": "MiB",
+          "metric": "peak_mib",
+          "control_label": "Complete packed output",
+          "candidate_label": "32 KiB chunks",
+          "case": "file-n24",
+          "q": 1,
+          "scope": "Separate Linux EPYC 7713 memory diagnostic; three fresh children per method",
+          "source_href": "results/2026-09-11/file-memory-corrected.json",
+          "source_sha256": "36fc5f9d3ddb9bd1311709a86c9a9548e5fd1edc946770b54110a268d482eafa",
+          "selectors": [
+            "case=file-n24; method=complete; median_after.VmHWM_KiB / 1024",
+            "case=file-n24; method=stream_18; median_after.VmHWM_KiB / 1024"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "affine",
+      "title": "Count XOR-constrained solutions without enumerating assignments",
+      "task": "count",
+      "use": "Your constraints are affine equations over GF(2), as in coding matrices or parity checks.",
+      "mechanism": "Use elimination and rank to count the solutions; indexed rows reduce repeated work under conditioning.",
+      "takeaway": "On one public 1,800-variable matrix and eight queries, indexed Python takes 28.96 ms versus 103.91 ms for the original Python implementation. Indexed M4RI takes 41.43 ms on the same host and schedule.",
+      "boundary": "This is a structured counting algorithm and implementation result, not a generic CM representation advantage. It does not handle arbitrary nonlinear CNF. One matrix cannot establish a general Python-over-native ranking.",
+      "code": [
+        {
+          "label": "AffineConstraintPlan",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/backends/affine_constraints.py",
+          "path": "cmbench/backends/affine_constraints.py"
+        },
+        {
+          "label": "Exact scalar query APIs",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/research/CM_SCALAR_QUERY_APIS_2026_09_11.md",
+          "path": "docs/research/CM_SCALAR_QUERY_APIS_2026_09_11.md"
+        }
+      ],
+      "evidence": "latest-results.html#affine-count",
+      "metrics": [
+        {
+          "control": 103.910045,
+          "candidate": 28.96155,
+          "ratio": 3.5878620101479375,
+          "unit": "ms",
+          "metric": "cold_ms",
+          "control_label": "Original Python (ablation)",
+          "candidate_label": "Current indexed Python",
+          "case": "n_1800_k_0902_gap_28",
+          "q": 8,
+          "scope": "Linux EPYC 7713; eight public coding matrices and fresh n1024/n2048 controls",
+          "source_href": "results/2026-09-11/affine-final-indexed.json",
+          "source_sha256": "d3cb84e3fa8ca3d5c2a1301c4bfb6cc7426a3ef6d516f1d5f4303896c45ca063",
+          "selectors": [
+            "case=n_1800_k_0902_gap_28; q=8; method=rows_legacy",
+            "case=n_1800_k_0902_gap_28; q=8; method=rows_indexed"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bucket",
+      "title": "Count overlapping CNF factors with exact arrays",
+      "task": "count",
+      "use": "You need exact full-CNF counts for a problem whose elimination width fits a bounded plan.",
+      "mechanism": "Bucket elimination combines local factors. Object-dtype NumPy arrays accelerate the larger factors while preserving Python-integer exactness.",
+      "takeaway": "On the public printer model and eight queries, arrays take 29.76 ms versus 121.17 ms for Python min-fill. Natural-order CUDD takes 4.66 ms on this same case.",
+      "boundary": "This example improves the Python control but loses to natural-order CUDD. Arrays lose on many narrow factors, and high-width plans explicitly refuse. Full assignments and distinct projected assignments require different counting contracts.",
+      "code": [
+        {
+          "label": "NumpyBucketCNFCountPlan",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/backends/bucket_numpy.py",
+          "path": "cmbench/backends/bucket_numpy.py"
+        },
+        {
+          "label": "ProjectedCNFCountPlan",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/backends/projected_counts.py",
+          "path": "cmbench/backends/projected_counts.py"
+        },
+        {
+          "label": "Bounded count API guide",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/research/CM_BUCKET_COUNT_API_2026_09_11.md",
+          "path": "docs/research/CM_BUCKET_COUNT_API_2026_09_11.md"
+        }
+      ],
+      "evidence": "latest-results.html#bucket-count",
+      "metrics": [
+        {
+          "control": 121.169078,
+          "candidate": 29.76176,
+          "ratio": 4.071300823607206,
+          "unit": "ms",
+          "metric": "cold_ms",
+          "control_label": "Python min-fill",
+          "candidate_label": "Exact arrays, min-fill",
+          "case": "model-09",
+          "q": 8,
+          "scope": "Linux EPYC 9654; all 35 final-panel cases; q1/q8; nine paired repetitions",
+          "source_href": "results/2026-09-11/bucket-final-array-analysis.json",
+          "source_sha256": "1dc097cb7555c27d2ba35e71d16bf70888bd1c6a9a228c0f084e8a778b1e0fc8",
+          "selectors": [
+            "case=model-09; q=8; method=bucket_min_fill",
+            "case=model-09; q=8; method=numpy_min_fill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cudd-exact",
+      "title": "Keep large BDD counts exact in Python",
+      "task": "count",
+      "use": "You already hold a CUDD BDD and need an exact integer when floating-point rounding or overflow is unacceptable.",
+      "mechanism": "The dd 0.6.0 prototype calls Cudd_ApaCountMinterm, converts its binary digits to a Python integer, and frees the native allocation in finally.",
+      "takeaway": "On OR-of-64 padded to 128 variables, native APA takes 12.60 µs versus 113.16 µs for Python exact traversal. The existing double call takes 11.13 µs but rounds this result.",
+      "boundary": "A local binding prototype, not an upstream dd release or a new counting algorithm. About 9–10× faster than Python on the three larger tested diagrams; trivial roots favor Python. Construction is excluded. A 1,100-variable padded literal overflows the double control. Allocation-failure injection remains untested.",
+      "code": [
+        {
+          "label": "Build the prototype and reproduce results",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/prototypes/cudd_apa/README.md",
+          "path": "prototypes/cudd_apa/README.md"
+        },
+        {
+          "label": "Exact count patch",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/prototypes/cudd_apa/patch_dd.py",
+          "path": "prototypes/cudd_apa/patch_dd.py"
+        },
+        {
+          "label": "Existing Python exact fallback",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/cmbench/comparative/exact_cudd_count.py",
+          "path": "cmbench/comparative/exact_cudd_count.py"
+        }
+      ],
+      "evidence": "latest-results.html#exact-count-and-decomposition",
+      "metrics": [
+        {
+          "control": 113.1595,
+          "candidate": 12.6035,
+          "ratio": 8.978418693220137,
+          "unit": "µs",
+          "metric": "resident-root count-only median",
+          "case": "or_64_padded_128",
+          "control_label": "Python exact traversal",
+          "candidate_label": "Native APA exact count",
+          "scope": "Linux/WSL; nine rounds of 200 calls; same resident root; reordering disabled",
+          "source_href": "results/2026-09-16/exact-count-and-decomposition/cudd-benchmark.json",
+          "selectors": [
+            "cases[or_64_padded_128].methods.python_exact.median_ns / 1000",
+            "cases[or_64_padded_128].methods.apa_int.median_ns / 1000"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kernel",
+      "title": "Separate a faster kernel from a slower public call",
+      "task": "reuse",
+      "use": "You repeatedly evaluate a prepared full relation and can measure preparation, evaluation and delivery separately.",
+      "mechanism": "CM compilation can reduce kernel work, but public wrappers and preparation can consume the saving. Compare the same evaluator and delivered output.",
+      "takeaway": "The September 15 symmetric replay puts the bare CM/CSE-flat time ratio near 0.91 on both Windows and Linux: about 9% less kernel time. The public wrapper instead costs about 3.7–3.9× the CSE-flat time.",
+      "boundary": "Kernel-only gains are not end-to-end gains. Reuse break-even varies by formula and host; many formulas never amortize preparation versus CSE-flat. The matched biology pilot found no demonstrated CM-specific session advantage.",
+      "code": [
+        {
+          "label": "Prepared flat evaluation and CSE controls",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/bitset_backend.py",
+          "path": "bitset_backend.py"
+        },
+        {
+          "label": "Task and attribution audit",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/audits/2026-09-15-cm-time-attribution-deep-dive/TASK_FINDINGS.md",
+          "path": "docs/audits/2026-09-15-cm-time-attribution-deep-dive/TASK_FINDINGS.md"
+        },
+        {
+          "label": "Matched-session findings",
+          "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/audits/2026-09-15-cm-biology-sessions/PORTFOLIO_DISPOSITION.md",
+          "path": "docs/audits/2026-09-15-cm-biology-sessions/PORTFOLIO_DISPOSITION.md"
+        }
+      ],
+      "evidence": "latest-results.html#post-integration-confirmation",
+      "metrics": []
+    }
+  ],
+  "selection": "Curated useful mechanisms, not a global leaderboard. Numeric examples are selected disclosed cases, not estimates of typical user speedup. Ratios in the cards are control time divided by candidate time unless explicitly labelled otherwise.",
+  "article": {
+    "title": "An exact winner, with less work validating losing candidates",
+    "recommendation": "Best-supported software-note candidate: the bounded C16 decomposition workflow.",
+    "reason": "The output contract is explicit, the selected artifact is preserved, C39/C40 extend the evidence, and C41 tests individual mechanisms. This supports an engineering article about exact software design and measured tradeoffs.",
+    "limits": "The internal exhaustive control is the comparator. ABC's fixed 4-LUT ACD output has a different objective. A task-equivalent external comparison, redistributable replay inputs and a completed prior-art review would strengthen a research submission. Novelty and publication acceptance are not established.",
+    "secondary": "A practical Python/CUDD article is also useful: exact integer counts, rounding examples, safe allocation cleanup and resident-root benchmarks. Credit CUDD's existing arbitrary-precision algorithm; the contribution here is the binding and evaluation.",
+    "evidence": "results/2026-09-16/exact-count-and-decomposition/REPORT.md"
+  },
+  "stops": [
+    {
+      "title": "Cut fusion: keep it experimental",
+      "text": "The frozen q64 whole-session gate measured only 0.493× speedup against CSE, below its 1.10× requirement. Exact outputs alone did not make the optimization worthwhile.",
+      "href": "results/2026-09-16/exact-count-and-decomposition/REPORT.md"
+    },
+    {
+      "title": "Native batching: a completed no-go",
+      "text": "The prospective q96 gate reached about 1.078×, below its frozen 1.10× materiality requirement. No learned router or production default was promoted.",
+      "href": "latest-results.html#native-batch"
+    },
+    {
+      "title": "Do not reuse the historical SymPy headline",
+      "text": "The historical approximately 76× observation timed unlike tasks. Supplied-row evaluation, a full truth table, SAT, counting and expression simplification need separate comparisons.",
+      "href": "https://github.com/Relative0/Correspondence_Matrices/blob/1145537c9e2274ae7622dad5b68a7d612b27bb7e/docs/audits/2026-09-15-cm-time-attribution-deep-dive/TASK_FINDINGS.md"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — findings cheat sheet</title>
+<meta name="description" content="A practical guide to the repository's strongest measured findings: exact decomposition, packed Boolean computation, structured counts, streaming and exact CUDD integers. Code, evidence and limits together.">
+<meta property="og:title" content="CM findings cheat sheet — what can help your computation?">
+<meta property="og:description" content="Eight useful mechanisms, measured examples, code entry points and honest limits.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app"><section class="sec"><h1>Findings cheat sheet</h1><p>What these methods can help you do. <a href="latest-results.html">Browse the measured evidence</a>.</p></section></main>
+<noscript><p>This guide requires JavaScript for its filters and evidence cards. <a href="results/2026-09-17/findings-cheat-sheet.json">Download the complete guide as JSON</a>.</p></noscript>
+<script>
+const IS_SOURCE_TEMPLATE = /(?:^|\/)cm_findings_template\.html$/i.test(location.pathname);
+if (IS_SOURCE_TEMPLATE) location.replace("findings.html");
+const DATA = IS_SOURCE_TEMPLATE ? { _numbers: {} } : /*__CM_DATA__*/null;
+</script>
+<script>/*__CM_LIB__*/</script>
+<script>
+if (!IS_SOURCE_TEMPLATE) {
+const guide = DATA.e26_findings;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({brand:"Correspondence Matrices <span>· findings cheat sheet</span>",links:[
+  ["index.html","Knowledge base"],["layperson.html","Plain-language guide"],["investor.html","Investment evidence"],["expert.html","Technical detail"],
+  ["usecases.html","Application guide"],["#article","Article candidates"],["#boundaries","Lessons from negative results"]
+]}));
+const header = h("header",{class:"page findings-hero"},[
+  h("p",{class:"eyebrow",text:`Evidence guide · reviewed ${guide.reviewed}`}),
+  h("h1",{text:"What can help your computation?"}),
+  h("p",{class:"lede",text:"A cheat sheet of the strongest useful findings in this repository. Start with the answer you need, then compare the mechanism, measured example and cost of using it."}),
+  h("p",{text:guide.selection}),
+  h("p",{class:"findings-links"},[
+    h("a",{href:"#decomposition",text:"Start with the software-note candidate"}),
+    h("a",{href:"data-downloads.html#september-16-research",text:"Download Python sources"}),
+    h("a",{href:"results/2026-09-17/findings-cheat-sheet.json",download:"findings-cheat-sheet.json",text:"Download this guide (JSON)"})
+  ])
+]);
+app.append(header);
+const decision = section("choose-output","Start here","Choose by the answer you need",
+  "The output contract often matters more than the representation name. A scalar count and a complete answer vector are different workloads.");
+const choices = [
+  ["Every assignment's answer","Packed inputs; streaming","#packed-inputs","Output has 2^n bits. Avoid materializing it if the caller only needs a count."],
+  ["An exact number of solutions","Affine, bucket or native BDD counting","#affine","Exploit structure and respect width limits. Distinct projected assignments are a separate contract."],
+  ["A compact, exact factor artifact","Bounded decomposition","#decomposition","The winner is defined within the declared candidate portfolio."],
+  ["Repeated requests on related inputs","Bounded caches; prepared evaluation","#cache","Charge preparation and invalidation; warm kernel wins may not survive a whole session."]
+];
+const dl = h("div",{class:"findings-choice-grid"});
+choices.forEach(([need,label,href,note])=>dl.append(h("div",{},[
+  h("h3",{text:need}),h("a",{href,text:label}),h("p",{text:note})
+])));
+decision.append(dl);app.append(decision);
+const cardsSection=section("findings","Code + evidence + limits","Eight useful findings",
+  "The examples below are not comparable as one league table: hosts, inputs, timing windows and outputs differ. Ratios express the specific control divided by the candidate.");
+const controls=h("div",{class:"findings-filters",role:"group","aria-label":"Filter findings by task"});
+const count=h("p",{role:"status","aria-live":"polite",class:"findings-count",text:"Showing all 8 findings"});
+const grid=h("div",{class:"findings-grid"});
+const entries=[];
+const taskNames={decomposition:"Exact artifacts",relation:"Full answer vectors",count:"Exact counts",reuse:"Repeated queries"};
+guide.cards.forEach(item=>{
+  const article=h("article",{id:item.id,class:"finding-card"});
+  article.append(h("p",{class:"eyebrow",text:taskNames[item.task]}),h("h3",{text:item.title}),
+    h("p",{class:"finding-use",text:item.use}),h("p",{text:item.mechanism}),h("p",{class:"finding-result",text:item.takeaway}));
+  if(item.metrics.length){
+    const table=h("table",{class:"finding-metrics"});
+    table.append(h("caption",{text:"Measured examples · "+[...new Set(item.metrics.map(m=>m.metric === "cold_ms" ? "cold request/session time" : m.metric === "peak_mib" ? "separate process peak memory" : m.metric))].join("; ")}));
+    table.append(h("thead",{},[h("tr",{},["Comparison","Control","Candidate","Ratio"].map(t=>h("th",{scope:"col",text:t})))]));
+    const body=h("tbody");
+    item.metrics.forEach(m=>body.append(h("tr",{},[
+      h("th",{scope:"row",text:`${m.case}: ${m.control_label} → ${m.candidate_label}`}),
+      h("td",{text:`${f(m.control,2)} ${m.unit}`}),h("td",{text:`${f(m.candidate,2)} ${m.unit}`}),
+      h("td",{text:`${f(m.ratio,2)}×${m.unit==='MiB'?' peak ratio':''}`})
+    ])));
+    table.append(body);article.append(h("div",{class:"finding-table-wrap"},[table]));
+    const details=h("details",{class:"finding-scope"},[h("summary",{text:"Timing boundaries and original measurements"})]);
+    item.metrics.forEach(m=>details.append(h("p",{text:`${m.case} · ${m.metric}${m.q?` · ${m.q} queries`:''}. ${m.scope}.`}),h("a",{href:m.source_href,text:"Original measurement data"})));
+    article.append(details);
+  }
+  article.append(h("p",{class:"finding-limit"},[h("strong",{text:"When to be careful. "}),document.createTextNode(item.boundary)]));
+  const links=h("ul",{class:"finding-code"});
+  item.code.forEach(link=>links.append(h("li",{},[h("a",{href:link.href,text:link.label})])));
+  article.append(h("h4",{text:"Try or inspect the code"}),links,h("a",{href:item.evidence,text:"Full study, controls and results →"}));
+  grid.append(article);entries.push({item,article});
+});
+const buttons=[];
+[ ["all","All findings"], ...Object.entries(taskNames) ].forEach(([key,label])=>{
+  const button=h("button",{type:"button","aria-pressed":key==='all'?'true':'false',text:label});
+  button.addEventListener('click',()=>{
+    let visible=0;
+    entries.forEach(({item,article})=>{article.hidden=key!=='all'&&item.task!==key;if(!article.hidden)visible++;});
+    buttons.forEach(([value,el])=>el.setAttribute('aria-pressed',String(value===key)));
+    count.textContent=key==='all'?`Showing all ${visible} findings`:`Showing ${visible} findings: ${label}`;
+  });
+  buttons.push([key,button]);controls.append(button);
+});
+cardsSection.append(controls,count,grid);app.append(cardsSection);
+// A deep link always reveals its target, including after using a filter.
+function revealFinding(hash) {
+  if(entries.some(({item,article})=>'#'+item.id===hash&&article.hidden)){
+    buttons[0][1].click();document.getElementById(hash.slice(1)).scrollIntoView();
+  }
+}
+window.addEventListener('hashchange',()=>revealFinding(location.hash));
+app.addEventListener('click',event=>{
+  const link=event.target.closest('a[href^="#"]');
+  if(link) revealFinding(link.getAttribute('href'));
+});
+const article=section("article","Editorial assessment","The strongest article angle",guide.article.recommendation);
+article.append(h("h3",{text:guide.article.title}),h("p",{text:guide.article.reason}),h("p",{text:guide.article.limits}),
+  h("p",{text:guide.article.secondary}),h("a",{href:guide.article.evidence,text:"Read the evidence and publication limits"}));
+app.append(article);
+const stops=section("boundaries","Useful negative results","Findings that prevent wasted work",
+  "The repository is also useful for learning which comparisons and optimizations did not survive a fair test.");
+guide.stops.forEach(item=>stops.append(h("h3",{text:item.title}),h("p",{text:item.text}),h("a",{href:item.href,text:"Evidence and interpretation"})));
+app.append(stops);
+app.append(h("footer",{class:"page findings-footer"},[
+  h("p",{text:"Next step: choose one method whose input structure and output match your application. Run its correctness examples, then measure your whole request or session against the relevant direct/native control. Keep limits and refusals visible."}),
+  h("a",{href:"data-downloads.html",text:"Evidence and source downloads"})
+]));
+}
+</script>
+</body>
+</html>

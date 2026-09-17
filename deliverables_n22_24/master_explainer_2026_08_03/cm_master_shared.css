@@ -762,3 +762,32 @@ footer p { max-width: none; }
 
 .latest-scroll-hint { display:none; }
 @media (max-width:600px) { .latest-scroll-hint { display:block; font-size:12px; color:var(--text-secondary); } }
+
+/* Practical findings guide; keep cards readable on screen and on paper. */
+.findings-hero { padding-top: 3rem; }
+.findings-links, .findings-filters { display: flex; flex-wrap: wrap; gap: .7rem 1.3rem; }
+.findings-choice-grid, .findings-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.5rem; }
+.findings-choice-grid > div, .finding-card { border: 1px solid var(--line, #c8ccc7); border-radius: .6rem; padding: 1.3rem; min-width: 0; }
+.findings-filters { margin: 1rem 0; }
+.findings-filters button { font: inherit; cursor: pointer; padding: .5rem .85rem; border: 1px solid currentColor; border-radius: 2rem; background: transparent; color: inherit; }
+.findings-filters button[aria-pressed="true"] { background: #1d5445; color: #fff; }
+.findings-filters button:focus-visible { outline: 3px solid #b07316; outline-offset: 3px; }
+.findings-count, .finding-scope { font-size: .88rem; }
+.finding-card[hidden] { display: none; }
+.finding-card { scroll-margin-top: 9rem; }
+.finding-card h3 { margin-top: 0; }
+.finding-use { font-weight: 600; }
+.finding-result { border-left: 3px solid #5a9273; padding-left: .8rem; }
+.finding-table-wrap { overflow-x: auto; }
+.finding-metrics { width: 100%; font-size: .8rem; }
+.finding-metrics caption { text-align: left; padding: .5rem 0; font-size: .8rem; }
+.finding-metrics th, .finding-metrics td { padding: .45rem; }
+.finding-metrics th { white-space: normal; overflow-wrap: anywhere; text-align: left; }
+.finding-metrics th:first-child { min-width: 7rem; }
+.finding-metrics td { white-space: nowrap; }
+.finding-limit { font-size: .92rem; }
+.finding-scope summary { cursor: pointer; padding: .5rem 0; }
+.finding-code { padding-left: 1.1rem; }
+.findings-footer { padding-bottom: 3rem; }
+@media (max-width: 800px) { .findings-choice-grid, .findings-grid { grid-template-columns: 1fr; } }
+@media print { .findings-filters, .findings-count { display: none; } .findings-grid { display:block; } .finding-card { break-inside: avoid; margin-bottom: 1rem; } .finding-card[hidden] { display:block; } }

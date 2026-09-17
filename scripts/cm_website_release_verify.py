@@ -9,6 +9,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_SITE = ROOT/'deliverables_n22_24/master_explainer_2026_08_03'
 sys.path.insert(0, str(SOURCE_SITE))
+from cm_findings_evidence import build_findings, DOWNLOAD as FINDINGS_DOWNLOAD
 from cm_latest_results_evidence import build_latest_results, build_chart_freshness, site_snapshots
 
 PAGES = {
@@ -16,6 +17,7 @@ PAGES = {
     'cm_investor_template.html': 'investor.html', 'cm_expert_template.html': 'expert.html',
     'cm_usecases_template.html': 'usecases.html', 'cm_feature_model_template.html': 'feature-model-evidence.html',
     'cm_learning_neural_template.html': 'learning-neural-evidence.html',
+    'cm_findings_template.html': 'findings.html',
     'cm_downloads_template.html': 'data-downloads.html', 'cm_latest_results_template.html': 'latest-results.html',
 }
 
@@ -33,6 +35,10 @@ def verify(site: Path):
             raise ValueError('Stale headline: '+key)
     if data['_freshness'] != build_chart_freshness(SOURCE_SITE, data):
         raise ValueError('Chart inventory or source identity is stale; rebuild the website')
+    findings = build_findings(data)
+    if data["e26_findings"] != findings:
+        raise ValueError("Stale findings guide")
+    downloads[FINDINGS_DOWNLOAD] = (json.dumps(findings, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
     downloads.update(site_snapshots(data))
     payload = json.dumps(data, separators=(',', ':'), ensure_ascii=False)
     css = (SOURCE_SITE/'cm_master_shared.css').read_text(encoding='utf-8')

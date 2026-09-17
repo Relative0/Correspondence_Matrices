@@ -42,6 +42,7 @@ import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from cm_findings_evidence import build_findings, DOWNLOAD as FINDINGS_DOWNLOAD
 from cm_downloads_evidence import build_downloads_evidence
 from cm_feature_model_evidence import build_feature_model_evidence
 from cm_learning_neural_evidence import build_learning_neural_evidence
@@ -1629,6 +1630,8 @@ for key, record in learning_neural_numbers.items():
 
 D["e24_downloads"] = build_downloads_evidence()
 D["e25_latest_results"], latest_numbers, latest_downloads = build_latest_results()
+D["e26_findings"] = build_findings(D)
+latest_downloads[FINDINGS_DOWNLOAD] = (json.dumps(D["e26_findings"], indent=2, ensure_ascii=False) + "\n").encode("utf-8")
 for key, record in latest_numbers.items():
     num(key, record["value"], record["fmt"], record["prov"])
 
@@ -2123,6 +2126,7 @@ PAGES = [
     ("cm_learning_neural_template.html", "learning-neural-evidence.html"),
     ("cm_downloads_template.html", "data-downloads.html"),
     ("cm_latest_results_template.html", "latest-results.html"),
+    ("cm_findings_template.html", "findings.html"),
 ]
 for index, (audit, path) in enumerate(zip(sym_repeat_audits, P_SYM_REPEAT_AUDITS), 1):
     estimate = audit["statistical_inference"]["headline"]

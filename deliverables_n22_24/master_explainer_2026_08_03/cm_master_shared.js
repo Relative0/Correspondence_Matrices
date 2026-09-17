@@ -709,6 +709,9 @@ function heatGrid(cfg) {
 
 /* ================================================== page furniture */
 function topbar(cfg) {
+  if (!(cfg.links || []).some(([href]) => href === "findings.html")) {
+    cfg = { ...cfg, links: [["findings.html", "Findings cheat sheet"], ...(cfg.links || [])] };
+  }
   if (!(cfg.links || []).some(([href]) => href === "latest-results.html")) {
     cfg = { ...cfg, links: [["latest-results.html", "Latest results"], ...(cfg.links || [])] };
   }
