@@ -93,7 +93,7 @@ const buttons=[];
     let visible=0;
     entries.forEach(({item,article})=>{article.hidden=key!=='all'&&item.task!==key;if(!article.hidden)visible++;});
     buttons.forEach(([value,el])=>el.setAttribute('aria-pressed',String(value===key)));
-    count.textContent=key==='all'?`Showing all ${visible} findings`:`Showing ${visible} findings: ${label}`;
+    count.textContent=key==='all'?`Showing all ${visible} findings`:`Showing ${visible} ${visible === 1 ? "finding" : "findings"}: ${label}`;
   });
   buttons.push([key,button]);controls.append(button);
 });
