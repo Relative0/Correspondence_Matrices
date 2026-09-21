@@ -718,6 +718,9 @@ function topbar(cfg) {
   if (!(cfg.links || []).some(([href]) => href === "late-scan-status.html")) {
     cfg = { ...cfg, links: [["late-scan-status.html", "Late-scan status"], ...(cfg.links || [])] };
   }
+  if (!(cfg.links || []).some(([href]) => href === "p-series-study-guide.html")) {
+    cfg = { ...cfg, links: [["p-series-study-guide.html", "P-series study guide"], ...(cfg.links || [])] };
+  }
   if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
   }

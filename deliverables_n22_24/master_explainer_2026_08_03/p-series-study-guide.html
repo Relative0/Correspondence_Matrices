@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Correspondence Matrices — late-scan research status</title>
-<meta name="description" content="Status of the Python late-scan study: P14 is a NO-GO; P15 passed the sealed-corpus semantic check, while timing remains inconclusive.">
-<meta property="og:title" content="Correspondence Matrices — late-scan research status">
-<meta property="og:description" content="A closed NO-GO, a sealed-corpus semantic pass, and no performance or production claim.">
+<title>Correspondence Matrices — P-series study guide</title>
+<meta name="description" content="A phase-by-phase reader guide to the P1–P15 folding and late-scan studies, including the tested change, measurement boundary, results, and conservative disposition.">
+<meta property="og:title" content="Correspondence Matrices — P-series study guide">
+<meta property="og:description" content="How P1 through P15 changed the mechanism, what each phase tested, and why the evidence did or did not promote it.">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="og.png">
 <style>/* CM master knowledge base — shared stylesheet.
@@ -3209,93 +3209,114 @@ function pageFooter(extra, minimal) {
 </script>
 <script>
 const app = document.getElementById("app");
-document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· late-scan research status</span>",
-  links: [["index.html", "Knowledge base"], ["latest-results.html", "Latest results"], ["#decision", "Current decision"], ["#ledger", "P1–P15 ledger"], ["#redesign", "P15 redesign"], ["#next", "Required next evidence"]] }));
+document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· P-series study guide</span>",
+  links: [["index.html", "Knowledge base"], ["late-scan-status.html", "Late-scan status"], ["#how", "How to read"], ["#studies", "Each study"], ["#rerun", "Rerun record"]] }));
+
+const STUDIES = [
+  ["P1", "Direct sparse ANF baseline", "Profitability-aware folding on frozen natural cones", "Whether natural cones contain folds worth taking", [["Full path / direct", 1.0934, "ratio"]], "NO-GO", "No natural folds were accepted (0 of 28 candidates); the apparent generic-comparator result was abstention and optimizer overhead, not a fold win.", "N2_P1_RESULTS.md"],
+  ["P2", "P1's separate planning route", "Inline source-DAG planning", "Whether eliminating a separately executed rewrite changes the source-inclusive outcome", [["Full path / direct", 1.1124, "ratio"]], "NO-GO", "Natural folds remained zero, so inline planning still added overhead without recovered lowering work.", "N2_P2_RESULTS.md"],
+  ["P3", "P2's eager inline plan", "Demand-driven shallow fold fusion", "Whether only building plans demanded by lowering avoids inactive work", [["Gate-P folds used", 58, "count"], ["Natural folds used", 0, "count"]], "NO-GO", "The constructed Gate-P family exercised 58 folds, but natural cones still accepted none and matching/control cost exceeded saved ANF work.", "N2_P3_RESULTS.md"],
+  ["P4", "P3's demand-driven matching", "Propagated two-support signatures during construction", "Whether a stronger algebraic contraction can make lowering cheaper", [["Lowering-only / direct", 0.5752, "ratio"], ["Construction + lowering / direct", 2.2259, "ratio"]], "MECHANISM PASS — NOT A PRODUCTION RESULT", "The constructed mechanism family shows a real lower-stage contraction, but Python metadata construction dominated the full path.", "N2_P4_RESULTS.md"],
+  ["P5", "P4 object-heavy metadata", "Packed construction metadata and demand arithmetic", "Whether cheaper metadata recovers P4's full-path cost", [["Lowering-only / direct", 0.6544, "ratio"], ["Construction + lowering / direct", 1.2898, "ratio"]], "NO-GO", "Packing removed much of P4's construction tax but still did not cross the direct source-inclusive gate.", "N2_P5_RESULTS.md"],
+  ["P6", "P5 packed external metadata", "Two semantic words stored in each node", "Whether metadata locality is cheaper than P5's representation", [["Lowering-only / direct", 0.6641, "ratio"], ["Construction + lowering / direct", 1.2444, "ratio"]], "NO-GO", "Moving metadata into nodes did not remove the construction cost needed for a direct crossover.", "N2_P6_RESULTS.md"],
+  ["P7", "P6 in-node words", "C-backed 64-bit annotation buffers", "Whether a lower-level annotation representation improves the complete path", [["Full path / direct", 1.3052, "ratio"]], "NO-GO", "The buffer representation was slower than P6's in-node representation at the relevant boundary.", "N2_P7_RESULTS.md"],
+  ["P7B", "P7 annotation for all candidates", "Formula-level probe before annotation", "Whether dispatching annotation selectively is cheaper", [["Dispatch / direct", 1.3396, "ratio"]], "NO-GO", "Probe cost and false-positive annotations outweighed the work avoided; this is the corrected P7 timing interpretation.", "P7B_TIMING_CORRECTION.md and N2_P7B_RESULTS.md"],
+  ["P8", "P7B's probe-based dispatch", "Frozen zero-pass telemetry tree", "Whether a no-traversal policy can preserve decisions without a source scan", [["Decision policy invariance", 1, "gate"], ["Source-inclusive direct crossover", 0, "gate"]], "NO-GO", "Correctness and zero-pass policy invariance held, but the source-inclusive direct gate still did not pass.", "N2_P8_RESULTS.md"],
+  ["P9", "P8 frozen telemetry tree", "Seven frozen counters", "Whether minimal telemetry removes enough P8 overhead", [["Full path / direct", 1.1065, "ratio"]], "NO-GO", "P9 improved over P8 but remained above direct.", "N2_P9_RESULTS.md"],
+  ["P10", "P9 separate minimal telemetry", "Fused minimal telemetry in source construction", "Whether avoiding a separate counter pass changes the direct comparison", [["Full path / direct", 1.0674, "ratio"]], "NO-GO", "Fusing counters helped versus P9, but the confidence interval still included parity.", "N2_P10_RESULTS.md"],
+  ["P11", "P10 generic fused telemetry", "Threshold-specialized telemetry", "Whether threshold-specific work removes the remaining engineering tax", [["Full path / direct", 1.0435, "ratio"]], "ENGINEERING PASS — DIRECT CROSSOVER MISSED", "Specialization improved telemetry but did not establish a direct-baseline win.", "N2_P11_RESULTS.md"],
+  ["P12", "P11 threshold telemetry", "Lazy reuse scan and derived pair statistics", "Whether exactification can be made rare enough to win overall", [["Full path / direct", 1.0199, "ratio"]], "NO-GO", "Most scans were avoided and a workload-weighted crossover appeared, but the preregistered case-balanced endpoint remained above direct.", "N2_P12_RESULTS.md"],
+  ["P13", "P12 derived pair statistics", "Deferred C-backed pair exactification", "Whether deferring pair work removes P12's residual metadata tax", [["Full path / direct", 1.0165, "ratio"]], "NO-GO", "The direct endpoint remained above parity and no clear gain over P12 was established.", "N2_P13_RESULTS.md"],
+  ["P14", "P13 deferred exactification", "Sealed prospective exact-dispatch evaluation", "Whether the exact dispatcher beats direct lowering on sealed synthetic and natural corpora", [["Synthetic E/D", 1.0508, "ratio"], ["Natural E/D", 1.0607, "ratio"], ["Profitable synthetic encodings", 5, "count"], ["Profitable natural encodings", 0, "count"]], "NO-GO", "Five rare synthetic encodings were worth retaining as correctness exposures, but the overall exact dispatcher lost to direct on both corpora.", "P14_EXECUTION_REPORT.md"],
+  ["P15", "P14's clone-based exact observer", "Late exact scan over the owned complete factory arena", "Whether the redesign preserves the decision contract without discarding factory history", [["Fresh semantic cases passing", 490, "count"], ["Accepted timing worker artifacts", 0, "count"]], "SEMANTIC PASS / TIMING INCONCLUSIVE", "The sealed fresh-corpus semantic check passed (384 synthetic and 106 natural). Zero timing artifacts were accepted, so no timing estimand, performance result, or production recommendation exists.", "P15_FINAL_DISPOSITION_20260921.json"],
+];
+
+function statusTone(status) {
+  return status.includes("NO-GO") ? "var(--critical)" : status.includes("SEMANTIC") ? "var(--series-3)" : "var(--warning)";
+}
+function studyChart(study) {
+  const [phase, , , , metrics] = study;
+  const ratios = metrics.filter(m => m[2] === "ratio");
+  if (ratios.length) {
+    return forest(ratios.map(([label, value]) => ({ label, value, group: "current", scope: phase, basis: "Named study boundary; no confidence interval is implied by this compact guide." })), {
+      title: phase + " measured ratio", desc: "Ratio below 1 favours the named phase over direct sparse ANF at the precise boundary in the row label. Parity is 1.00.",
+      xTitle: "phase / direct ratio", arm: phase, domain: [0.45, 2.4], ref: 1, refLabel: "parity 1.00", padL: 245,
+    });
+  }
+  const gate = metrics.some(m => m[2] === "gate");
+  return groupedCols({
+    title: phase + (gate ? " evidence gates" : " retained evidence counts"),
+    desc: gate ? "A gate chart, not a speed chart: 1 means the named gate passed; 0 means it did not." : "Counts retained by the named study. This chart is not a timing comparison.",
+    xTitle: phase + " evidence", yTitle: gate ? "gate status" : "count", max: gate ? 1.2 : undefined,
+    groups: metrics.map(([label, value]) => ({ label: label.replace(" ", "\n"), values: { value }, tip: gate ? (value ? "passed" : "not passed") : String(value) })),
+    series: [{ key: "value", label: gate ? "gate" : "count", color: gate ? S3 : S1 }], labelBars: true,
+    fmtVal: value => gate ? (value ? "pass" : "not passed") : String(value), fmtTick: value => gate ? (value === 1 ? "pass" : value === 0 ? "not passed" : "") : String(Math.round(value)),
+  });
+}
 
 app.append(h("header", { class: "page" }, [
-  h("p", { class: "eyebrow", text: "PYTHON LATE-SCAN STUDY · STATUS REVIEWED 2026-09-21" }),
-  h("h1", { text: "A useful defect finding, not a performance result" }),
-  h("p", { class: "lede", text: "P14 closed as a NO-GO. It exposed where the exact observer path spends time and preserved five promising encoding shapes, but it did not justify a runtime change. P15 passed semantics on its sealed fresh corpus; its timing evidence is inconclusive because no worker timing artifact was accepted. Neither result supports a performance or production claim." }),
-]));
-
-app.append(section("decision", "P14 decision", "NO-GO — do not promote the measured path",
-  "The result is retained because it distinguishes a mechanism from a product claim. The tested observer and cloning route did not deliver a deployable whole-call improvement. The correct conclusion is not that every late scan is futile; it is that this implementation and measurement boundary did not pass."));
-app.append(tiles([
-  ["Current result", "NO-GO", "P14’s tested path is not a promotion candidate."],
-  ["Promising encodings", "5", "Retained as exposed development cases, not as a performance claim."],
-  ["Production change", "None", "The production implementation remains unchanged."],
-  ["P15 semantics", "PASS", "Agreement on the sealed fresh corpus; not a timing result."],
-  ["P15 timing", "Inconclusive", "Zero worker timing artifacts were accepted."],
+  h("p", { class: "eyebrow", text: "P1–P15 FOLDING AND LATE-SCAN READER GUIDE · REVIEWED 2026-09-22" }),
+  h("h1", { text: "What changed in each P-series study — and what the evidence actually says" }),
+  h("p", { class: "lede", text: "This guide makes the research chain reproducible to read: each card names the predecessor, the implementation change, the question tested, the measurement boundary, the evidence graphic, and the disposition. It preserves negative results rather than treating every local speedup as a deployment candidate." }),
 ]));
 
 {
-  const s = section("mechanism", "What P14 isolated", "The cost belongs to observation, not the recipe bypass",
-    "The P14 diagnosis separates two paths. In the recipe-bypass case, E does not clone the observer state; the residual comparison is the ordinary D/F work. In the exact IR route, E clones the root into an observer before the decision. That clone carries the factory history used by the exact decision and is the dominant avoidable overhead found by the diagnostic. Removing history blindly would be a semantic defect, not an optimisation.");
-  s.append(h("div", { class: "callout note" }, [h("b", { text: "Decision semantics are the constraint." }), document.createTextNode(" The observer must see the complete factory arena. A root-only clone can discard dead history and change the decision, even when the root expression itself is unchanged.")]));
+  const s = section("how", "How to read the graphs", "Every chart names its measurement boundary",
+    "Most cards plot a phase/direct ratio: below 1 is faster only for that row's named boundary, while 1.00 is parity. These ratios must not be ranked as though they were one benchmark: lowering-only, construction-plus-lowering, dispatch, synthetic, and natural measurements answer different questions. Count and gate charts are deliberately labelled as non-timing evidence.");
+  s.append(h("div", { class: "boundary-strip" }, [
+    h("h2", { text: "Claim boundaries carried through the guide" }),
+    h("ul", {}, [
+      h("li", { text: "P4's 0.5752 ratio is a lower-stage mechanism result; its complete path was 2.2259, so it is not a production speedup." }),
+      h("li", { text: "P11–P13 improved earlier implementations but missed the preregistered case-balanced direct crossover." }),
+      h("li", { text: "P14 is a NO-GO despite five useful synthetic encoding exposures." }),
+      h("li", { text: "P15 is semantic PASS / timing inconclusive: zero timing artifacts were accepted, so it has no performance or production claim." }),
+    ]),
+  ]));
+  s.append(h("p", {}, [document.createTextNode("For the headline August CM-versus-flattened-CSE result mentioned elsewhere: the same-host B2/B4 V3 repetition at 0.9049 is a distinct, accepted kernel measurement. It is evidence of a roughly 9.5% kernel-time reduction in that contract, not evidence that every later P-series source-inclusive experiment passed.") ]));
   app.append(s);
 }
 
 {
-  const ledger = [
-    ["P1", "Profitability-aware folding on frozen natural cones", "0 of 28 natural candidates folded; 1.0934× direct", "NO-GO", "The apparent win over the generic comparator was abstention/optimizer overhead, not folding."],
-    ["P2", "Inline planning on the original source DAG", "0 natural folds; 1.1124× direct", "NO-GO", "Removing a separate executable rewrite did not make inactive planning pay."],
-    ["P3", "Demand-driven shallow fold fusion", "58 Gate-P folds used; natural folds still 0", "NO-GO", "It removed unused plans, but matching and control overhead still exceeded saved ANF work."],
-    ["P4", "Propagated two-support signatures at construction", "Lowering-only 0.5752× direct; full path 2.2259×", "MECHANISM PASS", "The algebraic contraction is real on the constructed mechanism family; Python metadata construction was too costly."],
-    ["P5", "Packed construction metadata and demand arithmetic", "Lowering 0.6544× direct; full path 1.2898×", "NO-GO", "It removed much of P4’s metadata cost but not enough for the primary endpoint."],
-    ["P6", "Two semantic words stored in each node", "Lowering 0.6641×; full path 1.2444×", "NO-GO", "Changing metadata placement did not reduce construction cost."],
-    ["P7", "C-backed 64-bit annotation buffers", "Full path 1.3052× direct", "NO-GO", "The buffer representation was slower than the in-node representation."],
-    ["P7B", "Formula-level probe before annotation", "Dispatch 1.3396× direct", "NO-GO", "The probe cost and false-positive annotations outweighed avoided work."],
-    ["P8", "Frozen zero-pass telemetry tree", "Correctness and policy invariance passed", "NO-GO", "A no-traversal dispatch policy still did not clear the source-inclusive direct gate."],
-    ["P9", "Minimal frozen-tree telemetry", "1.1065× direct; faster than P8", "NO-GO", "Telemetry was reduced, but the direct crossover remained missed."],
-    ["P10", "Fused minimal telemetry in source construction", "1.0674× direct; faster than P9", "NO-GO", "Fusing counters helped, but the confidence interval still included parity."],
-    ["P11", "Threshold-specialized telemetry", "1.0435× direct; engineering gate passed", "NO-GO", "Specialization improved telemetry but did not establish a direct win."],
-    ["P12", "Lazy reuse scan and derived pair statistics", "1.0199× direct; scans avoided on most cases", "NO-GO", "Exactification became rarer, yet the primary case-balanced endpoint remained above direct."],
-    ["P13", "Deferred C-backed pair exactification", "1.0165× direct; no clear gain over P12", "NO-GO", "Deferring pair work left a residual metadata tax and did not establish improvement."],
-    ["P14", "Sealed prospective exact-dispatch evaluation", "E/D 1.0508× synthetic; 1.0607× natural", "NO-GO", "Five rare encoding cases were valuable, but the overall exact dispatcher lost to direct lowering."],
-    ["P15", "Late exact scan over the owned factory arena", "Semantics PASS on 490 sealed fresh cases; 0 accepted timing artifacts", "SEMANTIC PASS / TIMING INCONCLUSIVE", "The redesign avoids root cloning without dropping factory history, but supplies no timing estimand, performance result, or production recommendation."],
-  ];
-  const s = section("ledger", "P1–P15 research ledger", "What was tried, why it stopped, and what remains reusable",
-    "This is a record of the entire folding and late-scan line, including negative results. A lower ratio favours the named phase over direct sparse ANF. A mechanism result is not a production result, and an engineering improvement over a predecessor is not a direct-baseline crossover.");
-  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "P1 through P15 research ledger" }, [h("table", {}, [
-    h("thead", {}, [h("tr", {}, ["Phase", "What changed", "Observed result", "Disposition", "Why it matters"].map(text => h("th", { scope: "col", text })))]),
-    h("tbody", {}, ledger.map(row => h("tr", {}, row.map(text => h("td", { text }))))),
-  ])]));
-  s.append(h("p", {}, [document.createTextNode("Download the compact, machine-readable ledger: "), h("a", { href: "results/2026-09-20/p1-p15-research-ledger.json", download: "p1-p15-research-ledger.json", text: "P1–P15 research ledger JSON" }), document.createTextNode(". It is a curated index of the audit artifacts, not a replacement for their frozen result bundles.")]));
+  const s = section("studies", "Phase-by-phase study cards", "One graph and one audit explanation for every run",
+    "The cards are ordered by the actual development sequence. “Prior” tells a reader which cost or correctness concern motivated the next modification; “lesson” explains why the next study was still needed or why the line closed.");
+  STUDIES.forEach(study => {
+    const [phase, prior, change, tested, metrics, disposition, lesson, audit] = study;
+    const card = h("article", { class: "card", id: phase.toLowerCase() });
+    card.style.borderTop = "3px solid " + statusTone(disposition);
+    card.append(h("p", { class: "scope", text: phase + " · " + disposition }));
+    card.append(h("h2", { text: change }));
+    card.append(h("p", { class: "caption", text: "Prior: " + prior + ". Tested: " + tested + "." }));
+    card.append(h("div", { class: "figwrap" }, [studyChart(study)]));
+    card.append(h("p", { class: "claim", text: "What the result means: " + lesson }));
+    card.append(h("details", { class: "card-more" }, [
+      h("summary", { text: "Exact compact record" }),
+      h("div", { class: "more-body" }, [
+        h("table", { class: "wrap" }, [
+          h("thead", {}, [h("tr", {}, ["Metric", "Value", "Role"].map(text => h("th", { scope: "col", text })))]),
+          h("tbody", {}, metrics.map(([label, value, kind]) => h("tr", {}, [
+            h("td", { text: label }), h("td", { text: kind === "ratio" ? Number(value).toFixed(4) + "×" : kind === "gate" ? (value ? "pass" : "not passed") : String(value) }),
+            h("td", { text: kind === "ratio" ? "ratio at stated boundary" : kind === "gate" ? "non-timing gate" : "non-timing count" }),
+          ]))),
+        ]),
+        h("p", { class: "prov", text: "Detailed local audit record: " + audit + ". This site identifies it for traceability but does not yet publish the P1–P14 raw audit bundles as downloadable artifacts." }),
+      ]),
+    ]));
+    s.append(card);
+  });
   app.append(s);
 }
 
 {
-  const s = section("redesign", "P15 redesign", "Scan the complete arena late, without constructing an observer",
-    "The frozen non-production implementation replaces the clone-based observer with an exact late scan over the already-owned factory arena. The sealed fresh-corpus semantic check passed, so the decision contract is supported at that boundary. That semantic result is not a measured speedup.");
-  s.append(h("h3", { text: "Five retained exposed encoding variants" }));
-  s.append(h("p", { text: "encoding_variants 21, 22, 23, 30, and 31 were the five profitable P14 cases. They are preserved as named correctness exposures so the redesign cannot silently optimise away the very structures that motivated the work." }));
-  s.append(h("p", { text: "The final disposition records 490 fresh-corpus correctness cases (384 synthetic and 106 natural) and 2,450 memory observations. It accepts no timing worker artifacts: the earlier binding issue was superseded by the frozen 60-second per-compile calibration cap. No recipe-to-ANF or arena-to-ANF timing estimand, interval, crossover, H2/H3 result, or production recommendation is available." }));
-  app.append(s);
-}
-
-{
-  const s = section("next", "Final boundary", "Do not rescue the frozen timing experiment",
-    "The finalized P15 disposition permits only a semantic PASS on the sealed fresh corpus. The timing experiment is inconclusive, not negative or positive: the frozen per-compile calibration cap ended it with zero accepted worker artifacts. Do not extend the cap or rerun this frozen experiment. Any timing follow-up needs a new prospective preregistration and a fresh freeze for a different resource design.");
-  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "Late-scan evidence gates" }, [h("table", {}, [
-    h("thead", {}, [h("tr", {}, ["Gate", "Status", "What it permits"].map(text => h("th", { scope: "col", text })))]),
-    h("tbody", {}, [
-      ["P14 diagnosis", "closed NO-GO", "No production promotion"],
-      ["P15 semantics", "PASS", "Supports the sealed-corpus semantic conclusion only"],
-      ["P15 timing artifacts", "0 accepted", "Permits no timing estimand, confidence interval, or crossover claim"],
-      ["Frozen 60-second calibration cap", "reached", "Do not extend it or rerun this frozen experiment"],
-      ["Production rollout", "not authorized and not supported", "No implementation or production default changes"],
-    ].map(row => h("tr", {}, row.map(text => h("td", { text }))))),
-  ])]));
-  s.append(h("p", { text: "This page therefore belongs beside results and audit, not in the headline performance tiles. It makes the P14 NO-GO and the P15 semantic-only boundary legible without converting either into a performance claim." }));
-  s.append(h("h3", { text: "Source and audit records" }));
-  s.append(h("ul", {}, [
-    h("li", {}, [h("a", { href: "results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json", download: "P15_FINAL_DISPOSITION_20260921.json", text: "P15 final disposition (2026-09-21)" }), document.createTextNode(" — sealed identity, semantic PASS, timing abort boundary, and rollout decision.")]),
-    h("li", {}, [h("a", { href: "results/2026-09-20/p1-p15-research-ledger.json", download: "p1-p15-research-ledger.json", text: "P1–P15 research ledger" }), document.createTextNode(" — compact index retaining the full negative-result history and P14 NO-GO.")]),
+  const s = section("rerun", "Rerun and audit record", "Enough context to understand the protocol, without inventing a public raw bundle",
+    "A reader can now trace every phase's implementation delta, test question, measurement boundary, metric, and conclusion from one place. Internally, the P1–P13 audit package preserves per-phase preregistration, harness, frozen benchmark inputs, and results; P14 preserves its execution report; P15 preserves its code freeze, fresh correctness record, timing-abort record, and final disposition. Those detailed P1–P14 bundles have not yet been reviewed for publication, so this page does not pretend that a compact guide is an independently executable release.");
+  s.append(h("div", { class: "grid2" }, [
+    h("div", { class: "dom" }, [h("h4", { text: "Public records on this site" }), h("p", { class: "t", text: "The compact ledger, this machine-readable guide, and P15's finalized disposition are downloadable and are covered by the release verifier." }), h("p", { class: "why" }, [h("a", { href: "results/2026-09-20/p1-p15-research-ledger.json", download: "p1-p15-research-ledger.json", text: "P1–P15 ledger JSON" }), document.createTextNode(" · "), h("a", { href: "results/2026-09-22/p-series-study-guide.json", download: "p-series-study-guide.json", text: "study guide JSON" }), document.createTextNode(" · "), h("a", { href: "results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json", download: "P15_FINAL_DISPOSITION_20260921.json", text: "P15 final disposition" })])]),
+    h("div", { class: "dom" }, [h("h4", { text: "Before treating this as a rerun package" }), h("p", { class: "t", text: "Publish a reviewed, privacy-safe source bundle for each phase: preregistration, code revision, frozen inputs, command line, environment manifest, raw records, analysis, and a checksum manifest." }), h("p", { class: "why", text: "That future publication work must be separately reviewed; it is not implied by this reader guide." })]),
   ]));
   app.append(s);
 }
 
-app.append(pageFooter("Late-scan status reviewed 2026-09-21 · P14 NO-GO; P15 semantic PASS / timing inconclusive · no performance or production claim"));
+app.append(pageFooter("P-series study guide reviewed 2026-09-22 · P14 NO-GO · P15 semantic PASS / timing inconclusive · no performance or production claim"));
 </script>
 </body>
 </html>

@@ -2127,6 +2127,7 @@ PAGES = [
     ("cm_downloads_template.html", "data-downloads.html"),
     ("cm_latest_results_template.html", "latest-results.html"),
     ("cm_late_scan_status_template.html", "late-scan-status.html"),
+    ("cm_p_series_study_guide_template.html", "p-series-study-guide.html"),
     ("cm_findings_template.html", "findings.html"),
 ]
 for index, (audit, path) in enumerate(zip(sym_repeat_audits, P_SYM_REPEAT_AUDITS), 1):

@@ -184,6 +184,30 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             self.assertIn(required, page)
         self.assertIn('late-scan-status.html', (SITE/'index.html').read_text(encoding='utf-8'))
 
+    def test_p_series_study_guide_is_generated_and_keeps_each_phase_boundary_visible(self):
+        css = (SITE/'cm_master_shared.css').read_text(encoding='utf-8')
+        library = (SITE/'cm_master_shared.js').read_text(encoding='utf-8')
+        data = json.dumps(self.data, separators=(',', ':'), ensure_ascii=False)
+        expected = (SITE/'cm_p_series_study_guide_template.html').read_text(encoding='utf-8').replace(
+            '/*__CM_CSS__*/', css).replace('/*__CM_LIB__*/', library).replace('/*__CM_DATA__*/null', data)
+        page = (SITE/'p-series-study-guide.html').read_text(encoding='utf-8')
+        self.assertEqual(page, expected)
+        for required in ('P1', 'P7B', 'P14', 'P15', 'MECHANISM PASS — NOT A PRODUCTION RESULT',
+                         'SEMANTIC PASS / TIMING INCONCLUSIVE', '0.5752', '2.2259', '1.0508', '1.0607',
+                         '490', 'Accepted timing worker artifacts', 'not a timing comparison', 'p-series-study-guide.json'):
+            self.assertIn(required, page)
+        self.assertIn('p-series-study-guide.html', (SITE/'index.html').read_text(encoding='utf-8'))
+
+    def test_p_series_study_guide_download_is_complete_and_preserves_p14_p15_dispositions(self):
+        guide = json.loads((SITE/'results/2026-09-22/p-series-study-guide.json').read_text(encoding='utf-8'))
+        self.assertEqual(guide['schema'], 'cm-p-series-study-guide/v1')
+        self.assertEqual([study['phase'] for study in guide['studies']],
+                         ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P7B', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15'])
+        self.assertEqual(guide['studies'][-2]['disposition'], 'NO-GO')
+        self.assertEqual(guide['studies'][-1]['disposition'], 'SEMANTIC PASS / TIMING INCONCLUSIVE')
+        self.assertEqual(guide['studies'][-1]['metrics'][0]['value'], 490)
+        self.assertEqual(guide['studies'][-1]['metrics'][1]['value'], 0)
+
     def test_p1_p15_ledger_is_complete_and_keeps_negative_results_visible(self):
         ledger = json.loads((SITE/'results/2026-09-20/p1-p15-research-ledger.json').read_text(encoding='utf-8'))
         self.assertEqual(ledger['schema'], 'cm-p1-p15-research-ledger/v1')
@@ -333,6 +357,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         workflow = (ROOT/'.github/workflows/publish-results-site.yml').read_text(encoding='utf-8')
         self.assertIn('latest-results.html', workflow)
         self.assertIn('late-scan-status.html', workflow)
+        self.assertIn('p-series-study-guide.html', workflow)
         self.assertIn('cp -R "$site_dir/results" _site/results', workflow)
 
 

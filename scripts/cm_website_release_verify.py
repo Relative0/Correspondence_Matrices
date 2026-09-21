@@ -19,6 +19,7 @@ PAGES = {
     'cm_learning_neural_template.html': 'learning-neural-evidence.html',
     'cm_findings_template.html': 'findings.html',
     'cm_late_scan_status_template.html': 'late-scan-status.html',
+    'cm_p_series_study_guide_template.html': 'p-series-study-guide.html',
     'cm_downloads_template.html': 'data-downloads.html', 'cm_latest_results_template.html': 'latest-results.html',
 }
 P15_FINAL_DISPOSITION = 'results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json'
@@ -48,10 +49,21 @@ def verify_late_scan_records(site: Path):
     if (ledger['rows'][-2]['status'] != 'no_go' or
             ledger['rows'][-1]['status'] != 'semantic_pass_timing_inconclusive_no_performance_claim'):
         raise ValueError('P14/P15 dispositions are stale in the research ledger')
+    guide_path = site / 'results/2026-09-22/p-series-study-guide.json'
+    guide = json.loads(guide_path.read_text(encoding='utf-8'))
+    if (guide.get('schema') != 'cm-p-series-study-guide/v1' or
+            [row['phase'] for row in guide.get('studies', [])] !=
+            ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P7B', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15']):
+        raise ValueError('P-series study guide is incomplete')
+    if (guide['studies'][-2]['disposition'] != 'NO-GO' or
+            guide['studies'][-1]['disposition'] != 'SEMANTIC PASS / TIMING INCONCLUSIVE'):
+        raise ValueError('P14/P15 dispositions are stale in the P-series study guide')
     return {
         P15_FINAL_DISPOSITION: {'bytes': len(payload), 'sha256': digest(payload)},
         'results/2026-09-20/p1-p15-research-ledger.json': {
             'bytes': ledger_path.stat().st_size, 'sha256': digest(ledger_path.read_bytes())},
+        'results/2026-09-22/p-series-study-guide.json': {
+            'bytes': guide_path.stat().st_size, 'sha256': digest(guide_path.read_bytes())},
     }
 
 def verify(site: Path):
