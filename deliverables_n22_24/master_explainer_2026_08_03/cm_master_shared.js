@@ -17,6 +17,8 @@ const REPOSITORY_BLOB_ROOT = `https://github.com/Relative0/Correspondence_Matric
 const SITE_SOURCE_ROOT = "deliverables_n22_24/master_explainer_2026_08_03/";
 function hostedEvidenceHref(href) {
   if (typeof href !== "string" || typeof location === "undefined") return href;
+  if (href.startsWith("results/")) return href;
+  if (location.hostname === "relative0.github.io" && location.pathname === "/Correspondence_Matrices/learning-neural-evidence.html" && href.startsWith("../../")) return "neural/evidence/" + href.slice(6);
   if (location.hostname !== "relative0.github.io" || !location.pathname.startsWith("/Correspondence_Matrices/")) return href;
   if (/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(href) || /\.html(?:[?#].*)?$/i.test(href)) return href;
   const resolved = new URL(href, "https://repository.invalid/" + SITE_SOURCE_ROOT);
@@ -31,7 +33,10 @@ const el = (t, a = {}, kids = []) => {
 const h = (t, a = {}, kids = []) => {
   const n = document.createElement(t);
   for (const k in a) {
-    if (k === "html") n.innerHTML = a[k];
+    if (k === "html") {
+      n.innerHTML = a[k];
+      n.querySelectorAll("a[href]").forEach(link => link.setAttribute("href", hostedEvidenceHref(link.getAttribute("href"))));
+    }
     else if (k === "text") n.textContent = a[k];
     else if (t === "a" && k === "href") n.setAttribute(k, hostedEvidenceHref(a[k]));
     else n.setAttribute(k, a[k]);
@@ -177,7 +182,17 @@ function logTicks(lo, hi) {
 
 /* ---------------------------------------------------------------- card */
 function card(o) {
+  const freshness = DATA._freshness?.figures[o.id];
+  if (freshness) {
+    o = { ...o, scope: `${o.scope || ""} · ${freshness.measured ? "measured "+freshness.measured : "definition / authored plan"} · reviewed ${freshness.reviewed}`,
+      caption: (o.caption || "")+" "+freshness.note };
+  }
   const c = h("section", { class: "card", id: o.id });
+  if (freshness) {
+    c.dataset.evidenceReviewed = freshness.reviewed;
+    c.dataset.evidenceMeasured = freshness.measured || "definition";
+    c.dataset.evidenceSha256 = freshness.data_sha256;
+  }
   if (o.scope) c.append(h("p", { class: "scope", text: o.scope }));
   c.append(h(o.h || "h2", { text: o.title }));
   if (o.caption) c.append(h("p", { class: "caption caption-preview", html: P(o.caption) }));
@@ -319,7 +334,7 @@ function forest(rows, opt) {
 
   rows.forEach((r, i) => {
     const cy = padT + i * rowH + rowH / 2;
-    const col = r.group === "current" ? S4 : r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
+    const col = (r.group === "current" || r.group === "repeat") ? S4 : r.group === "pod" ? S3 : r.group === "external" ? S2 : S1;
     g.append(el("text", { x: padL - 12, y: cy + 4, class: "lab", "text-anchor": "end" },
                         [document.createTextNode(r.label)]));
     if (r.lo !== null && r.lo !== undefined) {
@@ -605,6 +620,7 @@ function dotLog(rows, cfg) {
     r.points.forEach(p => {
       if (!(p.v > 0)) return;
       const c = el("circle", { cx: x(p.v), cy, r: 5, fill: p.color, stroke: "var(--surface-1)", "stroke-width": 2 });
+      if (p.evidence) for (const [key, value] of Object.entries(p.evidence)) c.dataset[key] = String(value);
       bindTip(c, `<b>${r.label} · ${p.label}</b><span class="r">${cfg.fmtVal ? cfg.fmtVal(p.v) : us(p.v)}</span>` +
         (p.tip ? `<br><span class="r">${p.tip}</span>` : ""));
       g.append(c);
@@ -693,6 +709,15 @@ function heatGrid(cfg) {
 
 /* ================================================== page furniture */
 function topbar(cfg) {
+  if (!(cfg.links || []).some(([href]) => href === "findings.html")) {
+    cfg = { ...cfg, links: [["findings.html", "Findings cheat sheet"], ...(cfg.links || [])] };
+  }
+  if (!(cfg.links || []).some(([href]) => href === "latest-results.html")) {
+    cfg = { ...cfg, links: [["latest-results.html", "Latest results"], ...(cfg.links || [])] };
+  }
+  if (!(cfg.links || []).some(([href]) => href === "late-scan-status.html")) {
+    cfg = { ...cfg, links: [["late-scan-status.html", "Late-scan status"], ...(cfg.links || [])] };
+  }
   if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
   }
@@ -823,6 +848,7 @@ function featureModelAuditUpdate() {
     "The audit documents {{fm.gaps}} measurement and independence gaps ({{fm.high_gaps}} high priority). Cold/warm timing, version-delta work, memory and serialization are not fully matched. These results do not establish production or domain dominance.",
   ]));
   s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html#bucket-count", text: "September 11: full-CNF count results and graphs" }),
     h("a", { href: "feature-model-evidence.html", text: "Read the results, qualifications and evidence" }),
     h("a", { href: "feature-model-evidence.html#gaps", text: "Review every measurement gap" }),
     h("a", { href: "feature-model-evidence.html#downloads", text: "Reuse the data and audit tools" }),
@@ -832,13 +858,13 @@ function featureModelAuditUpdate() {
 
 function learningNeuralUpdate() {
   const s = section("learning-neural-update", "Learning evidence · reviewed 2026-09-10",
-    "The packed exact core advanced; no learned route is promoted",
-    "C6 found a positive exact-core use case while the broader learning decision remains complete abstention with the exact fallback unchanged.");
+    "The frozen q64 gate completed—and closed the current learned route",
+    "C6 retains a positive exact-core result, while the independently replayed two-host q64 surface is a verified scientific no-go for fitting on the current cohort.");
   s.append(banner("note", "C6 exact-core result", [
     "Against truth-vector exact ANF, cached packed source-ANF measured {{ln.c6.test.median_speedup}} median and {{ln.c6.test.p95_speedup}} p95 speedups on the held-out test split, then {{ln.c6.confirmatory.median_speedup}} median and {{ln.c6.confirmatory.p95_speedup}} p95 on confirmation. All {{ln.c6.dataset_rows}} cases retained exact and canonical accuracy with {{ln.c6.semantic_mismatches}} semantic mismatches. The packed core advanced; the learned hybrid and production routing did not.",
   ]));
-  s.append(banner("note", "Evidence before enthusiasm", [
-    "The strongest new query-ladder surface has gross headroom on two machines, but labels disagree on one case and the fully charged cost vector is missing. A separately frozen source-blind cohort has no timings, labels or fitted models.",
+  s.append(banner("warn", "Completed q64 decision", [
+    "The 72-case source-blind surface completed all 18,432 timed cells with zero cross-host winner disagreements. Only 18 cases had a stable material label, all for native_fused_slots; 54 abstained. Fully charged speedup was {{ln.windows_q64_fully_charged}} on Windows and {{ln.linux_q64_fully_charged}} on Linux, below the 1.10× gate and below the fixed exact path.",
   ]));
   s.append(h("div", { class: "benchmark-downloads" }, [
     h("a", { href: "learning-neural-evidence.html", text: "Explore the full learning timeline" }),
@@ -883,15 +909,15 @@ function currentResearchDisposition(audience = "master") {
     grid.append(card);
   });
   s.append(grid);
-  s.append(banner("warn", "Production behavior remains unchanged", [
-    "No recent disposition enabled a runtime selector, changed a production default or route, or permitted a RunPod request. Negative and stopped results are boundary evidence, not positive performance claims.",
+  s.append(banner("warn", "These September 4/8 gates remain closed", [
+    "These particular studies did not change production behavior or enable a runtime selector. The separate September 11 studies implemented a shared mask-construction improvement and opt-in query APIs; see Latest results. Negative and stopped gates are retained with their original scope.",
   ]));
   return s;
 }
 
 function currentEvidenceUpdate(audience = "master") {
   const c = DATA._content.current_update;
-  const s = section("latest-evidence", "Evidence update · 2026-08-26/27", c.title,
+  const s = section("latest-evidence", "Earlier task-specific evidence · 2026-08-26/27", c.title,
     audience === "layperson" ? c.lay_lede : c.lede);
   const grid = h("div", { class: "evidence-update-grid" });
   c.items.filter(item => item.audiences.includes(audience)).forEach(item => {
@@ -915,6 +941,283 @@ function currentEvidenceUpdate(audience = "master") {
     s.append(d);
   }
   return s;
+}
+
+function latestResultsUpdate() {
+  const E = DATA.e25_latest_results;
+  const C = E.post_integration_confirmation;
+  const s = section("results-september-16", `Results reviewed ${E.reviewed}`,
+    "Current implementations, measured gains and remaining limits",
+    "Packed input construction is improved; bounded caches, file streaming and exact scalar counters are implemented. Their benefits depend on the requested output and workload. The latest graphs retain native controls, regressions and resource refusals.");
+  s.append(h("p", {}, [
+    h("strong", { text: "New September 16 research: " }),
+    document.createTextNode("exact integer CUDD counting, C39–C41 decomposition studies, and the stopped cut-fusion experiment. "),
+    h("a", { href: "latest-results.html#exact-count-and-decomposition", text: "Read findings and scope" }),
+    document.createTextNode(" · "),
+    h("a", { href: "data-downloads.html#september-16-research", text: "Download Python files and evidence" }),
+  ]));
+  s.append(tiles([
+    ["Overlapping CNF · eight queries", T("latest.bucket.current_ms") + " ms", "Exact arrays; Python control {{latest.bucket.before_ms}} ms on the same public printer model and host"],
+    ["Affine count · eight queries", T("latest.affine.current_ms") + " ms", "Current indexed Python; original {{latest.affine.before_ms}} ms on the same public 1,800-variable matrix"],
+    ["Native batch gate", T("latest.batch.speedup"), "q96; below the frozen 1.10× requirement, so no promotion"],
+    ["Count-study verification", T("latest.bucket.outputs"), "Exact cold/warm outputs checked; {{latest.bucket.cells}} scheduled entries include explicit refusals"],
+  ]));
+  s.append(h("p", { text: "These are separate tasks and hosts, not one overall speed ranking. Full-CNF counts include all declared variables and are not projected product counts. Older graphs remain dated to the latest accepted measurement of their particular contract." }));
+  s.append(tiles([
+    ["Verified pipe transfers", T("latest.next.pipe_rows"), "A separate reader checked every complete output or cancelled prefix"],
+    ["Concurrent exact queries", T("latest.next.soak_queries"), "Four threads over {{latest.next.soak_seconds}} seconds; retained-cache payload stayed within its bound"],
+    ["Earlier broad regression replay", T("latest.next.final_passed_tests") + " passed", "Recorded {{latest.next.final_failed_or_error_tests}} historical/platform issues; {{latest.next.new_regressions}} new regressions. Subsequent restored-snapshot closure is reported below."],
+  ]));
+  s.append(tiles([
+    ["Independent count agreement", `${E.completion.independent_count.now_independently_agreed_contexts}/120`, "All fixed admitted contexts; independently implemented agreement is not a proof certificate"],
+    ["Historical snapshot checks", `${E.completion.historical.passed}/${E.completion.historical.total}`, "All original IDs have passing restored snapshots; the broad current-code suite was not rerun"],
+    ["Single-pass candidate coverage", "7/15", "Counting lifecycle reduced 13.7–25.2% on completed development cases; eight cases still reach resource caps"],
+  ]));
+  s.append(h("p", { text: E.continuation_disposition }));
+  s.append(tiles([
+    ["Current B2/B4 bare kernel", f(C.symmetric_wrapper.windows.bare_cm_over_cse_flat.geomean, 4), "CM / CSE-flat on Windows; Linux " + f(C.symmetric_wrapper.linux.bare_cm_over_cse_flat.geomean, 4) + "; lower favors CM"],
+    ["Current whole-call wrapper", f(C.symmetric_wrapper.windows.wrapper_cm_over_cse_flat.geomean, 4), "CM wrapper / CSE-flat on Windows; Linux " + f(C.symmetric_wrapper.linux.wrapper_cm_over_cse_flat.geomean, 4) + "; historical 3.0941"],
+    ["Cross-machine exactness", "1,824 rows", "All accepted B2/B4 and corrected-E3 rows matched frozen outputs"],
+  ]));
+  s.append(h("p", { text: "The September 15 confirmation reproduces the bare-kernel advantage on Windows and Linux. The whole-call ratio is less favorable than the historical ratio even though wrapper time improved in absolute terms, because CSE-flat improved more." }));
+  s.append(h("p", {}, [h("a", { href: "latest-results.html#evidence-frontiers", text: "New: original feature mappings, independent workloads and restored historical tests" })]));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: "latest-results.html#post-integration-confirmation", text: "Read the September 15 confirmation" }),
+    h("a", { href: "latest-results.html", text: "Explore every current case, graph and table" }),
+    h("a", { href: "data-downloads.html#september-16-confirmation", text: "Download the confirmation evidence" }),
+  ]));
+  return s;
+}
+
+function september16ResearchUpdate() {
+  const R = DATA.e25_latest_results.september16_research;
+  const s = section("exact-count-and-decomposition", "Measured September 16 · research update",
+    "Exact counts, tested mechanisms and a stopped optimization",
+    "These studies answer different questions. The native counting prototype, internal decomposition comparisons and whole-session cut-fusion gate retain their separate timing scopes.");
+  const table = (headers, rows, label) => h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": label }, [
+    h("table", {}, [
+      h("thead", {}, [h("tr", {}, headers.map(text => h("th", { scope: "col", text })))]),
+      h("tbody", {}, rows.map(row => h("tr", {}, row.map(text => h("td", { text }))))),
+    ]),
+  ]);
+  s.append(h("h3", { text: "CUDD: exact integers without floating-point rounding" }));
+  s.append(h("p", { text: "The dd 0.6.0 prototype uses Cudd_ApaCountMinterm and frees the native result in finally. It preserves support-sized default counting, passes 57 prototype and 23 dd regression tests, and handles results beyond the double API’s range. This is a research binding, not an upstream release or a production-default change." }));
+  const labels = {
+    true_128: "True · 128 variables", false_128: "False · 128 variables",
+    sparse_support_128: "Sparse support · padded to 128", or_64_padded_128: "OR of 64 · padded to 128",
+    parity_128: "Parity of 128", threshold_24_of_48_padded_128: "At least 24 of 48 · padded to 128",
+    literal_padded_1100: "Literal · padded to 1,100",
+  };
+  const timing = result => result.status === "ok" ? f(result.median_ns / 1000, 2) : "Overflow";
+  s.append(table(["Resident root", "APA integer (µs)", "Existing double (µs)", "Python exact (µs)", "Double result"],
+    R.cudd.benchmark.cases.map(row => [labels[row.case], timing(row.methods.apa_int), timing(row.methods.existing_double),
+      timing(row.methods.python_exact), row.methods.existing_double.status !== "ok" ? "No result" : row.methods.existing_double.exact ? "Exact here" : "Rounded — not exact"]),
+    "Resident-root exact-count benchmark"));
+  s.append(h("p", { text: "Count-only medians: 9 rounds × 200 calls, same resident roots, reordering disabled, no cross-call count cache. APA was about 9–10× faster than Python traversal on the three larger diagrams, at about 1.1–3.4× double-API latency. Trivial roots favor Python. Construction and extraction are excluded; these are local Linux/WSL synthetic measurements." }));
+  s.append(h("p", { class: "meta", text: "Memory: 40,000 additional calls left combined Valgrind lost bytes unchanged, with no APA allocation frames or non-leak errors. CPython baseline leaks remain visible; this is not a globally leak-free report. Allocation failures were not injected." }));
+  s.append(h("h3", { text: "C39–C41: exact decomposition against the internal control" }));
+  s.append(table(["Study", "Cases / scope", "C16 over C15 speed", "Validation"], [
+    ["C39", "19 public cases · Windows", f(R.decomposition.c39.summary.screened_over_exhaustive_speedup, 4)+"×", "Same selected artifact; exact reconstruction"],
+    ["C40", "20 cases · separately acquired public family", f(R.decomposition.c40.summary.screened_over_exhaustive_speedup, 4)+"×", "Same selected artifact; exact reconstruction"],
+  ], "Internal decomposition confirmation"));
+  s.append(h("p", { text: "Both figures compare sums of per-case median analysis-only times with this repository’s C15 implementation. C40’s summed median process peak-working-set delta was 33,587,200 bytes for C15 and 19,165,184 bytes for C16. These are one-host Windows observations, not an external state-of-the-art or general memory claim." }));
+  const medians = R.decomposition.c41.summary.sum_case_median_analysis_ns;
+  s.append(table(["C41 mechanism lane", "Time / C16", "Scoped interpretation"], [
+    ["Repeat layout", f(medians.no_shared_layout / medians.c16_reference, 4)+"×", "Slower on this frozen workload"],
+    ["Eager admission of all descriptors", f(medians.eager_all_descriptors / medians.c16_reference, 4)+"×", "Slower on this frozen workload"],
+    ["Linear minimum without bulk sorting", f(medians.linear_min_no_dedup_sort / medians.c16_reference, 4)+"×", "Lower observed time; no default change"],
+    ["Omit in-lane strict checks", f(medians.unchecked_partition_admission / medians.c16_reference, 4)+"×", "Diagnostic only; checks remain required"],
+  ], "C41 scoped mechanism ablations"));
+  s.append(h("p", { text: "C41 retained 500 timing rows with zero invalid lanes. It reuses C40 vectors; these ratios are not additive causal shares. ABC’s fixed 4-LUT output does not supply the same exact artifact, so no C16-versus-ABC speed or quality comparison is supported. Corpus redistribution remains unresolved; the downloads contain code and aggregate findings." }));
+  s.append(h("h3", { text: "Cut fusion: stopped at the frozen whole-session gate" }));
+  s.append(h("p", { text: `The locked F1/F2 q64 candidate achieved ${f(R.cut_fusion.confirmation.speedup, 4)}× the CSE control’s speed, below the 1.10× requirement. Execution improved, but recognition and compilation did not repay at measured reuse. All 21,840 timing rows were exact across arms. Natural-panel timing and the relative-memory promotion sweep were not run after STOP; this remains opt-in research code.` }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: R.report_href, text: "Full findings and limitations" }),
+    h("a", { href: R.bundle_href, download: "research-source-and-evidence.zip", text: "Download Python/source bundle" }),
+    h("a", { href: "data-downloads.html#september-16-research", text: "Individual source files and checksums" }),
+  ]));
+  return s;
+}
+
+function postIntegrationConfirmationUpdate() {
+  const C = DATA.e25_latest_results.post_integration_confirmation;
+  const W = C.symmetric_wrapper.windows;
+  const L = C.symmetric_wrapper.linux;
+  const H = C.symmetric_wrapper.historical_accepted_v3;
+  const s = section("post-integration-confirmation", `Measured ${C.measured} · reviewed ${C.published_review}`,
+    "Post-integration wrapper and break-even confirmation",
+    "Original schedules on three independent Windows workers and one disposable Linux CPU host; every accepted output was exact.");
+  s.append(banner("warn", "The whole-call ratio moved unfavorably", [
+    "CM's bare kernel remained about 9% faster than CSE-flat on both current hosts.",
+    "The wrapper ratio rose above the historical result, although the wrapper itself became faster in absolute time; CSE-flat improved more.",
+    "Break-even counts moved across runs and hosts and remain machine-specific planning estimates.",
+  ]));
+  s.append(h("h3", { text: "B2/B4: bare kernel and whole call" }));
+  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "B2/B4 confirmation results" }, [table(["Host / record", "CM bare / CSE-flat", "CM wrapper / CSE-flat", "CM bare", "CM wrapper", "CSE-flat"], [
+    ["Windows · 3-run geometric mean", f(W.bare_cm_over_cse_flat.geomean, 4), f(W.wrapper_cm_over_cse_flat.geomean, 4), f(W.absolute_geomean_us.cm_bare, 3)+" us", f(W.absolute_geomean_us.cm_wrapper, 3)+" us", f(W.absolute_geomean_us.cse_flat, 3)+" us"],
+    ["Linux · 1 run", f(L.bare_cm_over_cse_flat.geomean, 4), f(L.wrapper_cm_over_cse_flat.geomean, 4), f(L.absolute_geomean_us.cm_current, 3)+" us", f(L.absolute_geomean_us.cm_wrapper, 3)+" us", f(L.absolute_geomean_us.cse_flat_current, 3)+" us"],
+    ["Accepted V3 · historical", f(H.cm_current_over_cse_flat_current.geomean, 4), f(H.cm_wrapper_over_cse_flat_current.geomean, 4), "16.907 us", "56.082 us", "18.849 us"],
+  ])]));
+  s.append(h("p", { text: C.symmetric_wrapper.interpretation }));
+
+  const EW = C.corrected_e3.windows;
+  const EL = C.corrected_e3.linux;
+  const windowsRuns = Object.values(EW.runs);
+  const range = (field, nested) => {
+    const values = windowsRuns.map(run => nested ? run[field][nested] : run[field]);
+    return `${f(Math.min(...values), 1)}–${f(Math.max(...values), 1)}`;
+  };
+  s.append(h("h3", { text: "Corrected-E3 and derived break-even" }));
+  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "Corrected-E3 confirmation results" }, [table(["Host", "Blocked CM / CSE", "Round-robin CM / CSE", "Plain-CSE crossover", "CSE-flat crossover"], [
+    ["Windows · 3 runs", f(EW.blocked_cm_over_cse.geomean, 4), f(EW.round_robin_cm_over_cse.geomean, 4), range("break_even_vs_cse", "finite_median")+" calls", range("break_even_vs_cse_flat", "finite_median")+" calls"],
+    ["Linux · 1 run", f(EL.blocked_cm_over_cse, 4), f(EL.round_robin_cm_over_cse, 4), f(EL.break_even_vs_cse.finite_median, 0)+" calls", f(EL.break_even_vs_cse_flat.finite_median, 0)+" calls"],
+  ])]));
+  s.append(h("p", { text: C.corrected_e3.interpretation }));
+  s.append(h("p", { class: "meta", text: `Pinned source ${C.source_commit.slice(0, 12)} · publication manifest SHA-256 ${C.manifest_sha256.slice(0, 12)}…; full identities are in the linked manifest.` }));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: C.report_href, text: "Read the full report" }),
+    h("a", { href: C.protocol_href, text: "Reproduction protocol" }),
+    h("a", { href: C.verification_href, text: "Verification JSON" }),
+    h("a", { href: C.manifest_href, text: "Artifact manifest" }),
+    h("a", { href: "data-downloads.html#september-16-confirmation", text: "All raw evidence" }),
+  ]));
+  return s;
+}
+
+function frontierResultsUpdate() {
+  const E = DATA.e25_latest_results;
+  const F = E.frontiers;
+  const C = E.completion;
+  const s = section("evidence-frontiers", `Evidence reviewed ${F.reviewed}`,
+    "What the new evidence establishes", F.disposition);
+  s.append(tiles([
+    ["Concrete-feature contracts", `${F.models.filter(r => r.concrete_feature_equivalence === true).length} of ${F.models.length}`, "Checked against original feature models; unsupported formats remain refused"],
+    ["Historical snapshot checks", `${C.historical.passed}/${C.historical.total}`, "Original assertions passed in restored snapshots; earlier broad-suite results remain retained"],
+    ["Natural consumer sessions", String(F.consumer.natural_sessions_admitted), "Local capture is ready; independently documented use is still required"],
+  ]));
+  s.append(h("h3", { text: "Which variables represent configurations?" }));
+  s.append(h("p", { text: F.mapping_note }));
+  const judgment = value => value === true ? "Equivalent" : value === false ? "Counterexample" : "Refused";
+  s.append(table(["Model", "Original features", "Concrete features", "Unmatched CNF axes", "Original-feature configurations", "Concrete selections"],
+    F.models.map(r => [r.name, r.original_features ?? "—", r.concrete_features ?? "—", r.unmatched_variables?.length ?? "—",
+      judgment(r.original_feature_equivalence), judgment(r.concrete_feature_equivalence)])));
+  s.append(h("p", { text: "Fiasco and uClibc differ when the abstract root is counted. Their concrete-feature selections agree after that explicitly marked root is eliminated. The earlier even-position projection timings keep their original scope; these proofs do not relabel those timings as product counts." }));
+  s.append(h("h3", { text: "Earlier component study: independent workloads" }));
+  s.append(h("p", { text: F.component_study.note }));
+  s.append(table(["Case", "Application family", "Projected variables", "Outcome across scheduled runs"], F.independent_admissions.map(r => {
+    const counts = {};
+    F.component_study.independent.methods.filter(m => m.case === r.id).forEach(m => Object.entries(m.statuses).forEach(([k,v]) => { counts[k] = (counts[k] || 0) + v; }));
+    const outcome = r.status === "refused" ? "Refused: " + r.reason :
+      ["complete", "refused", "timeout", "failed"].filter(k => counts[k]).map(k => `${counts[k]} ${k}`).join("; ");
+    return [r.id, r.family, r.projected_variables?.length ?? "Not declared", outcome];
+  })));
+  s.append(h("h3", { text: "Completed exact counts and independent agreement" }));
+  const O = F.closure_oracle;
+  s.append(h("p", { text: `All ${O.feature_completed} feature and ${O.independent_completed} independent contexts have completed exact counts. Independent counters agree on ${O.feature_cross_checked} of 72 feature and ${O.independent_cross_checked} of 48 independent contexts. ${O.controls_passed} earlier d4 controls passed. The earlier three-method component study checked ${F.component_study.timed_outputs_checked} completed timed outputs; the later four-arm single-pass study checked ${C.component.outputs_checked.toLocaleString()} completed cold/warm outputs.` }));
+  s.append(table(["Case", "Completed contexts", "Independently cross-checked", "Counters"], [...new Set(O.entries.map(r => r.case))].map(id => {
+    const rows = O.entries.filter(r => r.case === id);
+    const name = F.models.find(r => r.id === id)?.name;
+    return [name ? `${name} (${id})` : id, String(rows.length), String(rows.filter(r => r.independently_cross_checked).length), [...new Set(rows.flatMap(r => r.counters))].join(", ")];
+  })));
+  s.append(h("p", { text: O.note }));
+  s.append(h("h3", { text: "Latest component comparison: one clause scan" }));
+  s.append(h("p", { text: C.component.note }));
+  s.append(table(["Case", "Original lifecycle (ms)", "Candidate lifecycle (ms)", "Paired lifecycle reduction", "Paired parent-wall reduction", "Peak RSS ratio"], C.component.case_table.map(r => [
+    F.models.find(m => m.id === r.case)?.name + ` (${r.case})`, r.old_ms.toFixed(2), r.candidate_ms.toFixed(2),
+    r.paired_time_reduction_percent.toFixed(1) + "%", r.parent_wall_reduction_percent < 0.1 ? "<0.1%" : r.parent_wall_reduction_percent.toFixed(1) + "%", r.peak_rss_ratio.toFixed(3) + "×",
+  ])));
+  s.append(h("p", { text: C.component.timing_note }));
+  s.append(h("p", { text: `${C.component.cells} scheduled cells across four arms retain all completed runs and refusals. Clock-enabled candidate runs added ${C.component.clock_overhead_percent.toFixed(1)}% aggregate parent-wall overhead. The candidate remains a development result; production defaults are unchanged.` }));
+  s.append(h("h3", { text: "Historical replay is complete" }));
+  s.append(h("p", { text: `${C.historical.new_local_passes} final local checks passed on ${C.historical.local_runtime}. Preparation, preflight and execution took ${C.historical.local_elapsed_s.toFixed(1)} seconds. ${C.historical.note}` }));
+  s.append(h("h3", { text: "Restored fixtures and corrected source origin" }));
+  s.append(h("p", { text: "The retained EPFL int2float input exactly matches its declared upstream revision. The earlier mismatch came from normalizing line endings on only one side of the comparison. The original file and old audit remain unchanged." }));
+  s.append(h("h3", { text: "What the completed video builds establish" }));
+  s.append(h("p", { text: F.consumer.note }));
+  s.append(h("p", { text: "Earlier fixture-restoration report (retained): " + F.fixtures.note }));
+  s.append(h("p", { text: "Earlier broad regression report (retained, not rerun): " + F.regression.note }));
+  s.append(h("h3", { text: "Is more work needed?" }));
+  s.append(h("p", { text: C.remaining.recommendation }));
+  s.append(h("ul", {}, C.remaining.conditional.map(text => h("li", { text }))));
+  s.append(h("div", { class: "benchmark-downloads" }, [
+    h("a", { href: E.sources["component-historical-closure"].href, download: "component-historical-closure.json", text: "Download the latest component comparison and completed count/test closures" }),
+    h("a", { href: E.sources["count-closures-summary"].href, download: "count-closures-summary.json", text: "Download the earlier mappings, counts, failed attempts and broad regression results" }),
+    h("a", { href: "https://github.com/Relative0/Correspondence_Matrices/blob/main/docs/research/CM_COMPONENT_AND_HISTORICAL_CLOSURE.md", text: "Completed work, evidence limits and conditional next steps" }),
+  ]));
+  s.querySelectorAll(":scope > table").forEach(element => {
+    const wrapper = h("div", { class: "tablewrap" });
+    element.replaceWith(wrapper);
+    wrapper.append(element);
+  });
+  return s;
+}
+
+function latestResultPanel(panel) {
+  const E = DATA.e25_latest_results;
+  const sectionNode = section(panel.id, `Measured ${panel.measured} · ${panel.scope}`, panel.title, panel.contract);
+  const controls = h("div", { class: "latest-controls" });
+  const makeSelect = (suffix, label, options, selected) => {
+    const id = `latest-${panel.id}-${suffix}`;
+    const select = h("select", { id, "aria-label": label });
+    options.forEach(([value, text]) => select.append(h("option", { value: String(value), text })));
+    select.value = String(selected);
+    controls.append(h("label", { for: id }, [document.createTextNode(label), select]));
+    return select;
+  };
+  const cases = [...new Set(panel.rows.map(r => r.case))];
+  const qs = [...new Set(panel.rows.map(r => r.q))].sort((a, b) => a-b);
+  const metricLabels = { cold_ms: "Complete session (ms)", warm_ms: "Prepared query batch (ms)", peak_mib: "Process peak (MiB)",
+    reader_first_ms: "First reader chunk returned (ms)", rss_upper_mib: "Producer + reader peak upper bound (MiB)",
+    call_ms: "Measured call (ms)", initial_inclusive_ms: "Call plus initial plan construction (ms)" };
+  const caseSelect = makeSelect("case", "Case", cases.map(x => [x, panel.case_labels?.[x] ? `${panel.case_labels[x]} (${x})` : x]), panel.default_case);
+  const querySelect = makeSelect("queries", "Queries", qs.map(x => [x, String(x)]), panel.default_q);
+  const metricSelect = makeSelect("metric", "Measurement", panel.metrics.map(x => [x, metricLabels[x]]), panel.metrics[0]);
+  const chart = h("div", { class: "latest-result-chart", "aria-live": "polite" });
+  function render() {
+    const metric = metricSelect.value;
+    const selected = panel.rows.filter(r => r.case === caseSelect.value && r.q === Number(querySelect.value));
+    const measured = selected.filter(r => r.status === "complete" && Number.isFinite(r[metric]));
+    const unit = metric.endsWith("_mib") ? "MiB" : "ms";
+    const id = `fig-latest-${panel.id}`;
+    document.getElementById(id+"-analysis")?.remove();
+    if (!selected.length) {
+      chart.replaceChildren(h("p", { text: "This query count was not scheduled for this case; no value is inferred." }));
+      return;
+    }
+    const svg = measured.length ? dotLog(measured.map(r => ({ label: r.label,
+      points: [{ v: r[metric], color: r.method.includes("legacy") || r.method.endsWith("baseline") ? S3 : S1,
+        label: metricLabels[metric], tip: r.selector,
+        evidence: { case: r.case, q: r.q, method: r.method, metric, value: r[metric], source: r.source } }],
+      right: f(r[metric], 3),
+    })), { padL: 265, width: 880, title: `${panel.title}: ${metricLabels[metric]}; lower is better`,
+      xTitle: `${unit}, logarithmic axis · lower is better`, fmtVal: v => f(v, 6)+" "+unit }) : null;
+    const dataTable = table(["Method", "Measurement", "Status"], selected.map(r => [r.label,
+      r.status === "complete" && Number.isFinite(r[metric]) ? f(r[metric], 6)+" "+unit : "Not measured",
+      r.status === "complete" ? "Exact output verified" : (r.status === "refused" ? "Refused: " : "Incomplete: ")+r.reason]));
+    dataTable.querySelectorAll("tbody tr").forEach((tr, i) => {
+      const r = selected[i]; tr.dataset.case = r.case; tr.dataset.method = r.method;
+      tr.dataset.q = String(r.q); tr.dataset.metric = metric; tr.dataset.status = r.status;
+      if (r.status === "complete" && Number.isFinite(r[metric])) tr.dataset.value = String(r[metric]);
+    });
+    const element = card({ id, scope: `${panel.scope} · ${caseSelect.value} · q${querySelect.value}`,
+      title: `${metricLabels[metric]} · lower is better`, caption: panel.note, svg, table: dataTable,
+      prov: [...new Set(selected.map(r => E.sources[r.source].path+" :: "+r.selector))],
+      note: "Every point and table cell uses the same source record. Not measured and refused entries have no plotted value. Original implementations appear only as explicitly labelled ablation controls." });
+    const plotRegion = element.querySelector(".figwrap");
+    if (plotRegion) {
+      plotRegion.setAttribute("tabindex", "0"); plotRegion.setAttribute("role", "region");
+      plotRegion.setAttribute("aria-label", "Scrollable graph; exact values are also in Table view");
+    }
+    element.dataset.reviewed = E.reviewed; element.dataset.resultPanel = panel.id;
+    chart.replaceChildren(element);
+  }
+  [caseSelect, querySelect, metricSelect].forEach(control => control.addEventListener("change", render));
+  sectionNode.append(controls,
+    h("p", { class: "latest-scroll-hint", text: "Scroll the graph sideways to see all points, or open Table view for the exact values." }), chart); render();
+  const sourceKeys = [...new Set(panel.rows.map(r => r.source))];
+  sectionNode.append(h("div", { class: "benchmark-downloads" }, sourceKeys.map(key =>
+    h("a", { href: E.sources[key].href, text: "Source summary · "+key, download: key+".json" }))));
+  return sectionNode;
 }
 
 function opportunityMap(items) {
@@ -1391,8 +1694,8 @@ FIG.flatForest = () => {
   const m = d.materiality;
   return card({
     id: "fig-flat",
-    scope: "Accepted B1/E3, EPFL and pod evidence plus current B2/B4 V3 · bare CM kernel ÷ sharing-aware CSE-flat kernel",
-    title: "Current B2/B4 bare CM/CSE-flat ratio is 0.8906; below 1 favors CM",
+    scope: "Accepted B1/E3, EPFL and pod evidence plus the August 25 B2/B4 V3 primary study · bare CM kernel ÷ sharing-aware CSE-flat kernel",
+    title: "B2/B4 bare CM/CSE-flat: primary study and all three later repetitions",
     caption: `B1/E3 and EPFL remain parity evidence for their workloads. The later, exactly counterbalanced ` +
       `B2/B4 V3 study (${T("symv3.formulas")} formulas, ${T("symv3.rows")} timing rows) measured ${T("symv3.bare.overall")} ` +
       `[${T("symv3.bare.overall.lo")}, ${T("symv3.bare.overall.hi")}] overall and ` +
@@ -1401,7 +1704,7 @@ FIG.flatForest = () => {
       `${T("symv3.repeat.max")} (run geomean ${T("symv3.repeat.geomean")}), showing that the formula-only ` +
       `interval does not measure run-level variation. This remains a modest bare-program structural win on ` +
       `B2/B4, not a universal CM advantage. The historical B1/E3 point (${T("flat.local")}) is retained as a distinct workload, not used as the headline.`,
-    legend: [[S4, "current B2/B4 V3"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
+    legend: [[S4, "B2/B4 V3 primary and repetitions"], [S1, "B1 local synthetic"], [S2, "external EPFL circuits"], [S3, "older Linux pods (EPYC)"]],
     svg: forest(d.rows, {
       domain: pad(d.rows.flatMap(r => [r.value, r.lo, r.hi]).concat([1.0]), 0.01), ref: 1.0,
       xTitle: "bare CM kernel ÷ CSE-flat kernel (geometric mean; below 1 favors CM)",
@@ -1991,11 +2294,9 @@ FIG.frontierMap = () => {
   const items = DATA._content.frontier.items;
   return card({
     id: "fig-frontier-map",
-    scope: "10 open questions · grouped by evidence state, not ranked by optimism",
-    title: "The frontier is mostly measurement work, with two formal gaps and one unmapped boundary",
-    caption: "Four questions already have partial or negative evidence; three cheap measurements are explicitly " +
-      "next; two capabilities exist without demonstrated practical value; one boundary has not been explored. " +
-      "That is a sharper research programme than a generic list of future work.",
+    scope: "Research questions reviewed September 11 · grouped by evidence state",
+    title: "Completed implementations shift the next work to consumer and contract validation",
+    caption: "Packed setup, scalar counts, bounded caches and file streaming are now implemented and measured. Remaining claims need real request traces or a newly admitted contract; earlier failed gates remain closed.",
     visual: frontierLanes(items),
     table: table(["question", "evidence state", "downside case"],
       items.map(it => [it.visual_label || it.title, it.status.replace(/-/g, " "), P(it.downside)]), "wrap"),
@@ -2009,10 +2310,8 @@ FIG.roadmap = () => {
   return card({
     id: "fig-roadmap",
     scope: "publication roadmap · priority order and qualitative effort category",
-    title: "The first four decisions are low-cost measurements; formal proof comes last",
-    caption: "The order is deliberate: measure whether reuse exists, find where setup time goes, validate routing, " +
-      "and study cache behaviour before funding heavier workload implementations or formal equivalence work. " +
-      "The graph encodes authored effort categories, not benchmark timings.",
+    title: "Next steps start with consumer evidence and reuse of completed implementations",
+    caption: "The graph shows authored effort categories, not measured performance. Current work starts with actual consumers and request lifetimes; completed experiments are not queued for another identical rerun.",
     svg: hBars(rows.map(r => ({
       label: r.priority + " · " + r.experiment, value: r.cost_level, color: r.cost_level === 1 ? S1 : r.cost_level === 2 ? S2 : S3,
       tip: `${r.decision} · ${r.what_it_settles}`,
@@ -2083,7 +2382,7 @@ function pageFooter(extra, minimal) {
       `Legacy benchmark evidence revision <code>${M.evidence_revision.slice(0, 7)}</code> (campaign revision <code>${M.campaign_revision.slice(0, 7)}</code>) ` +
       `by <code>cm_master_build_2026_08_03.py</code>, which reads every number from the evidence files listed under each figure. ` +
       `The <a href="feature-model-evidence.html#scope">feature-model follow-up has separate run identities</a>. ` +
-      `No benchmark was re-run and no committed evidence file was modified to produce this site.`,
+      `Site generation reads frozen evidence and does not execute benchmarks; the September 15 confirmation is a separately dated measurement at its pinned source commit.`,
   }));
   foot.append(h("p", {
     html:

@@ -1,0 +1,53 @@
+{
+  "schema": "p15-py0-final-disposition/v1",
+  "status": "TIMING_INCONCLUSIVE_NO_PERFORMANCE_CLAIM",
+  "recorded_utc": "2026-09-21T00:00:00+07:00",
+  "scope": "non-production P15 late-scan prospective evaluation",
+  "frozen_identity": {
+    "code_freeze": "P15_CODE_FREEZE_V4.json",
+    "code_freeze_sha256": "064be7ecb03438b03958f2358c9d16cffadeaeb5275dd3a86c7917800b87a7ca",
+    "execution_freeze": "P15_EXECUTION_FREEZE.json",
+    "execution_freeze_sha256": "166ad6240f805afbd4d0beab0772ce92e153cb4dbb0dfb6dc39689238b8872f8"
+  },
+  "valid_non_timing_evidence": {
+    "fresh_correctness": {
+      "path": "fresh_correctness_results.json",
+      "sha256": "6d040be97a7e902a4bbc744a58c5ca6e260afa435131f0a6aaf3f15c74bac0ee",
+      "status": "PASS",
+      "cases": 490,
+      "synthetic_cases": 384,
+      "natural_cases": 106,
+      "selected_synthetic": 10,
+      "selected_natural": 0
+    },
+    "memory": {
+      "path": "p15_memory_results.json",
+      "sha256": "b3aff355abf0ee427cbfb8491add91735b1968f2be7ecb2cf1ec859736107bfe",
+      "observations": 2450
+    }
+  },
+  "timing": {
+    "accepted_worker_artifacts": 0,
+    "v3_abort": {
+      "path": "P15_TIMING_ABORT_20260920.json",
+      "sha256": "7c1be51cd0c682463c2736838ea3fdcefbb14df20962f429a72d666bdf3e6ddf",
+      "cause": "untyped 64-bit Windows memory-query binding"
+    },
+    "v4_abort": {
+      "path": "P15_TIMING_ABORT_V4_20260920.json",
+      "sha256": "fc7ee448c463b89944d248b07c97642c64b690c160ea87afc2e81fa3f29eca16",
+      "cause": "frozen 60-second per-compile calibration cap"
+    },
+    "interpretation": "No recipe-to-ANF or arena-to-ANF timing estimand, confidence interval, crossover claim, H2/H3 result, or production recommendation is available."
+  },
+  "decision": {
+    "p15_semantics": "PASS on the sealed fresh corpus",
+    "p15_timing": "INCONCLUSIVE",
+    "production_rollout": "NOT AUTHORIZED AND NOT SUPPORTED",
+    "follow_up": "Do not extend the observed cap or rerun this frozen experiment. A different resource design requires a new prospective preregistration and fresh freeze."
+  },
+  "related_host_drift_record": {
+    "path": "P15_PREEXECUTION_HOST_DRIFT_20260920.json",
+    "sha256": "7bb0e1e0ebe09fe46060866922a17697bc37993e8982e861713f6a09611964bc"
+  }
+}

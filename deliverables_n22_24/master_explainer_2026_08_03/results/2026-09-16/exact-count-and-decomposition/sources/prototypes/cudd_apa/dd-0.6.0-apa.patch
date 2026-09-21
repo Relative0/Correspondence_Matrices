@@ -1,0 +1,85 @@
+--- a/dd/cudd.pyx
++++ b/dd/cudd.pyx
+@@ -16,6 +16,7 @@
+ #
+ import collections.abc as _abc
+ import logging
++import operator as _operator
+ import pickle
+ import pprint
+ import sys
+@@ -27,6 +28,7 @@
+ from cpython cimport bool as python_bool
+ from cpython.mem cimport PyMem_Malloc, PyMem_Free
+ cimport libc.stdint as stdint
++from libc.limits cimport CHAR_BIT, INT_MAX
+ from libc.stdio cimport FILE, fdopen, fopen, fclose
+ from libcpp cimport bool
+ 
+@@ -173,6 +175,12 @@
+         DdGen *gen)
+     int Cudd_GenFree(
+         DdGen *gen)
++    # Arbitrary-precision model counting (local prototype).
++    ctypedef stdint.uint32_t DdApaDigit
++    ctypedef DdApaDigit *DdApaNumber
++    DdApaNumber Cudd_ApaCountMinterm(
++        const DdManager *dd, DdNode *f, int nvars, int *digits)
++    void Cudd_FreeApaNumber(DdApaNumber number)
+     double Cudd_CountMinterm(
+         DdManager *dd, DdNode *f, int nvars)
+     # refs
+@@ -1559,6 +1567,53 @@
+                 _Cardinality |
+                 None=None
+             ) -> _Cardinality:
++        """Return the exact integer number of models of node `u`.
++
++        If `nvars` is omitted, count over `support(u)`. Otherwise it must
++        be an integer at least as large as the support, and may exceed
++        the number of variables declared in this manager.
++        """
++        cdef DdApaNumber number = NULL
++        cdef int digits = 0
++        cdef int i
++        cdef int width
++        cdef object result = 0
++        if u.manager != self.manager:
++            raise ValueError(
++                '`u.manager != self.manager`')
++        n = len(self.support(u))
++        if nvars is None:
++            nvars = n
++        else:
++            nvars = _operator.index(nvars)
++        if nvars < n:
++            raise ValueError(nvars, n)
++        # CUDD computes nvars + 1 in a signed C int.
++        if nvars >= INT_MAX:
++            raise OverflowError('nvars must be less than INT_MAX')
++        width = nvars
++        number = Cudd_ApaCountMinterm(
++            self.manager, u.node, width, &digits)
++        if number == NULL:
++            raise MemoryError('CUDD APA model count failed')
++        try:
++            # CUDD stores the most significant digit first. Folding directly
++            # avoids float rounding and Python's decimal-string digit limit.
++            for i in range(digits):
++                result = (result << (sizeof(DdApaDigit) * CHAR_BIT)) | number[i]
++            return result
++        finally:
++            # This is CUDD-owned memory, not a Python allocator buffer.
++            Cudd_FreeApaNumber(number)
++
++    def count_double(
++            self,
++            u:
++                Function,
++            nvars:
++                _Cardinality |
++                None=None
++            ) -> _Cardinality:
+         """Return number of models of node `u`.
+ 
+         @param nvars:

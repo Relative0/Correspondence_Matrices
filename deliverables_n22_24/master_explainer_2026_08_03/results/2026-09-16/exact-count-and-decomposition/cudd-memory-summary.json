@@ -1,0 +1,28 @@
+{
+  "status": "passed_differential_check",
+  "runs": [
+    {
+      "measured_calls": 0,
+      "warmup_calls": 2,
+      "definitely_lost_bytes": 903034,
+      "indirectly_lost_bytes": 0,
+      "possibly_lost_bytes": 22893,
+      "error_count": 2181,
+      "definite_leak_records": 2181,
+      "apa_allocation_frames": 0,
+      "combined_lost_bytes": 925927
+    },
+    {
+      "measured_calls": 40000,
+      "warmup_calls": 2,
+      "definitely_lost_bytes": 902829,
+      "indirectly_lost_bytes": 0,
+      "possibly_lost_bytes": 23098,
+      "error_count": 2181,
+      "definite_leak_records": 2181,
+      "apa_allocation_frames": 0,
+      "combined_lost_bytes": 925927
+    }
+  ],
+  "limitation": "The system CPython 3.12 reports interpreter string allocation leaks even at baseline; these are not suppressed. This check requires no growth in combined, definite or indirect lost bytes, no APA allocation frames in the definite-leak reports, and no non-leak errors. It is not a claim that the entire interpreter is Valgrind-clean, and does not inject allocation failures."
+}

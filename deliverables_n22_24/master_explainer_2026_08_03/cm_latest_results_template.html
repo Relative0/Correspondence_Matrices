@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Correspondence Matrices — latest measured results</title>
+<meta name="description" content="Current exact-counting results, including the September 15 Windows and Linux performance confirmation, fair feature-model lifecycle, controls and source data.">
+<meta property="og:title" content="Correspondence Matrices — latest measured results">
+<meta property="og:description" content="The September 15 multi-host CM performance confirmation and other current measured results.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="og.png">
+<style>/*__CM_CSS__*/</style>
+</head>
+<body>
+<main id="app">
+  <section class="sec">
+    <h1>Latest measured results</h1>
+    <p>This source template is populated by the site builder. <a href="latest-results.html">Open the generated page</a>.</p>
+  </section>
+</main>
+<script>
+const IS_SOURCE_TEMPLATE = /(?:^|\/)cm_latest_results_template\.html$/i.test(location.pathname);
+if (IS_SOURCE_TEMPLATE) location.replace("latest-results.html");
+const DATA = IS_SOURCE_TEMPLATE ? { _numbers: {} } : /*__CM_DATA__*/null;
+</script>
+<script>
+/*__CM_LIB__*/
+</script>
+<script>
+if (!IS_SOURCE_TEMPLATE) {
+const E = DATA.e25_latest_results;
+const app = document.getElementById("app");
+app.replaceChildren();
+document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· latest results</span>",
+  links: [["index.html", "Knowledge base"], ["#post-integration-confirmation", "September 15 confirmation"], ["#fair-feature-model", "Fair feature model"], ["#bucket-count", "Full-CNF counts"], ["#affine-count", "Affine counts"], ["#streaming", "File output"], ["#native-batch", "Completed batch gate"]] }));
+app.append(h("header", { class: "page" }, [
+  h("p", { class: "eyebrow", text: `Reviewed ${E.reviewed} · each study retains its measurement date` }),
+  h("h1", { text: "Latest measured results" }),
+  h("p", { class: "lede", text: "Explore each workload, query count and timing boundary. Every point, table value and download comes from the same checked result source. Refusals and unfavorable comparisons stay visible." }),
+]));
+app.append(h("nav", { class: "page latest-jump-links", "aria-label": "Audience guides" }, [
+  h("a", { href: "layperson.html", text: "Plain-language guide" }),
+  h("a", { href: "investor.html", text: "Investment evidence" }),
+  h("a", { href: "expert.html", text: "Technical detail" }),
+  h("a", { href: "usecases.html", text: "Application guide" }),
+]));
+app.append(latestResultsUpdate());
+app.append(september16ResearchUpdate());
+app.append(postIntegrationConfirmationUpdate());
+{
+  const fair = E.fair_feature_model;
+  const s = section("fair-feature-model", "Fair Linux feature-model lifecycle", "Every scheduled cell completed",
+    "The corrected run completed 1,050 of 1,050 cells with 2,100 fresh workers across 42 slices. All cold, warm and reloaded outputs matched an independent exhaustive oracle; 166 distinct saved structures were independently replayed.");
+  s.append(tiles([
+    ["Completed cells", commas(fair.coverage.completed_cells) + " / " + commas(fair.coverage.scheduled_cells), "accepted corrected run"],
+    ["Fresh workers", commas(fair.coverage.fresh_workers), "all diagnostic logs empty"],
+    ["Study time", f(fair.duration.accepted_study_minutes, 2) + " min", "354.70 seconds"],
+    ["Estimated cloud cost", "$" + f(fair.cost_and_cleanup.conservative_estimated_total_usd, 5), "all owned pods deleted"],
+  ]));
+  s.append(h("p", { text: fair.ratio_definition }));
+  s.append(h("div", { class: "evidence-table-scroll", tabindex: "0", role: "region", "aria-label": "Fair lifecycle ratios" }, [
+    h("table", {}, [
+      h("thead", {}, [h("tr", {}, ["Baseline", "Cold", "Warm", "Reload", "Full lifecycle"].map(text => h("th", { scope: "col", text })))]),
+      h("tbody", {}, fair.equal_history_geomeans.map(row => h("tr", {}, [row.label, f(row.cold_first_output, 4), f(row.warm_recomputation, 4), f(row.fresh_reload, 4), f(row.build_save_reload_cleanup, 4)].map(text => h("td", { text }))))),
+    ]),
+  ]));
+  s.append(h("p", { text: "CM was 1.36× faster than structural CSE warm, while CSE was 1.26× faster cold and reload was approximately equal. Direct CNF and CUDD were faster warm; CM beat CUDD on charged cold, reload and full lifecycle work. The sparse exposed cohort does not justify a production-default change." }));
+  s.append(h("p", {}, [h("a", { href: "feature-model-evidence.html#fair-lifecycle", text: "Read the scope and limitations" }), document.createTextNode(" · "), h("a", { href: fair.href, download: "fair-feature-model-lifecycle.json", text: "Download evidence JSON" })]));
+  app.append(s);
+}
+app.append(frontierResultsUpdate());
+app.append(h("div", { class: "page latest-jump-links" }, E.panels.map(p => h("a", { href: "#"+p.id, text: p.title }))));
+E.panels.forEach(panel => app.append(latestResultPanel(panel)));
+app.append(section("next-work", "Current disposition", "What remains to be established",
+  E.continuation_disposition));
+app.append(h("p", { class: "page" }, [h("a", { href: "results/2026-09-16/current-results.json", download: "current-results.json", text: "Download the complete chart-ready snapshot" })]));
+app.append(pageFooter("Current results reviewed "+E.reviewed));
+}
+</script>
+</body>
+</html>
