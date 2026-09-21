@@ -18,11 +18,41 @@ PAGES = {
     'cm_usecases_template.html': 'usecases.html', 'cm_feature_model_template.html': 'feature-model-evidence.html',
     'cm_learning_neural_template.html': 'learning-neural-evidence.html',
     'cm_findings_template.html': 'findings.html',
+    'cm_late_scan_status_template.html': 'late-scan-status.html',
     'cm_downloads_template.html': 'data-downloads.html', 'cm_latest_results_template.html': 'latest-results.html',
 }
+P15_FINAL_DISPOSITION = 'results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json'
+P15_FINAL_DISPOSITION_SHA256 = '747b5241ecb15d55d34a6339e9a7c2be160c592b1b883a2823f17b8c0a75bbf8'
 
 def digest(payload):
     return hashlib.sha256(payload).hexdigest()
+
+def verify_late_scan_records(site: Path):
+    """Keep the published P15 conclusion bound to its finalized audit record."""
+    final_path = site / P15_FINAL_DISPOSITION
+    payload = final_path.read_bytes()
+    if digest(payload) != P15_FINAL_DISPOSITION_SHA256:
+        raise ValueError('Stale or changed P15 final disposition')
+    final = json.loads(payload)
+    if (final['status'] != 'TIMING_INCONCLUSIVE_NO_PERFORMANCE_CLAIM' or
+            final['decision']['p15_semantics'] != 'PASS on the sealed fresh corpus' or
+            final['decision']['p15_timing'] != 'INCONCLUSIVE' or
+            final['decision']['production_rollout'] != 'NOT AUTHORIZED AND NOT SUPPORTED' or
+            final['timing']['accepted_worker_artifacts'] != 0):
+        raise ValueError('P15 final disposition does not preserve its claim boundary')
+    ledger_path = site / 'results/2026-09-20/p1-p15-research-ledger.json'
+    ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
+    if ([row['phase'] for row in ledger['rows']] !=
+            ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P7B', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15']):
+        raise ValueError('P1–P15 research ledger is incomplete')
+    if (ledger['rows'][-2]['status'] != 'no_go' or
+            ledger['rows'][-1]['status'] != 'semantic_pass_timing_inconclusive_no_performance_claim'):
+        raise ValueError('P14/P15 dispositions are stale in the research ledger')
+    return {
+        P15_FINAL_DISPOSITION: {'bytes': len(payload), 'sha256': digest(payload)},
+        'results/2026-09-20/p1-p15-research-ledger.json': {
+            'bytes': ledger_path.stat().st_size, 'sha256': digest(ledger_path.read_bytes())},
+    }
 
 def verify(site: Path):
     site = site.resolve()
@@ -53,6 +83,7 @@ def verify(site: Path):
         actual = (site/relative).read_bytes()
         if actual != expected: raise ValueError('Stale result download: '+relative)
         files[relative] = {'bytes':len(actual),'sha256':digest(actual)}
+    files.update(verify_late_scan_records(site))
     if (site/'neural').is_dir():
         manifest=json.loads((site/'neural/publication-manifest.json').read_text(encoding='utf-8'))
         for relative, record in manifest['files'].items():

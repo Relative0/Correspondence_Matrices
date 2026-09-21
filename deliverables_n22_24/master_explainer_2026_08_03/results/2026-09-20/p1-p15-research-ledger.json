@@ -1,0 +1,29 @@
+{
+  "schema": "cm-p1-p15-research-ledger/v1",
+  "reviewed": "2026-09-21",
+  "scope": "Curated index of the P1–P15 folding and late-scan audit artifacts. Ratios below 1 favour the named phase over direct sparse ANF; P15 is a semantic PASS with timing inconclusive, not a performance or production-promotion claim.",
+  "artifact_roots": [
+    "N2_P1_RESULTS.md through N2_P13_RESULTS.md",
+    "P7B_TIMING_CORRECTION.md and N2_P7B_RESULTS.md",
+    "P14_EXECUTION_REPORT.md",
+    "P15_CODE_FREEZE_V4.json, fresh_correctness_results.json, P15_TIMING_ABORT_V4_20260920.json, and P15_FINAL_DISPOSITION_20260921.json"
+  ],
+  "rows": [
+    {"phase":"P1","status":"no_go","finding":"Natural cones accepted zero of 28 fold candidates; P1/direct was 1.0934."},
+    {"phase":"P2","status":"no_go","finding":"Inline source-DAG planning accepted zero natural folds; P2/direct was 1.1124."},
+    {"phase":"P3","status":"no_go","finding":"Demand-driven fusion used 58 Gate-P folds but did not beat direct; natural folds remained zero."},
+    {"phase":"P4","status":"mechanism_pass_not_production_result","finding":"Propagated signatures reached 0.5752 lowering-only versus direct, while construction plus lowering was 2.2259."},
+    {"phase":"P5","status":"no_go","finding":"Packed metadata reduced P4 construction cost but the full path was 1.2898 versus direct."},
+    {"phase":"P6","status":"no_go","finding":"In-node semantic words left the full path at 1.2444 versus direct."},
+    {"phase":"P7","status":"no_go","finding":"C-backed 64-bit buffers made the full path 1.3052 versus direct."},
+    {"phase":"P7B","status":"no_go","finding":"A formula-level dispatch probe cost too much; dispatch/direct was 1.3396."},
+    {"phase":"P8","status":"no_go","finding":"Frozen zero-pass dispatch preserved decisions but did not pass the source-inclusive direct gate."},
+    {"phase":"P9","status":"no_go","finding":"Minimal telemetry improved P8 but remained 1.1065 versus direct."},
+    {"phase":"P10","status":"no_go","finding":"Fused telemetry improved P9 but remained 1.0674 versus direct."},
+    {"phase":"P11","status":"engineering_pass_direct_crossover_missed","finding":"Threshold specialization improved telemetry but remained 1.0435 versus direct."},
+    {"phase":"P12","status":"no_go","finding":"Lazy exactification avoided most scans but remained 1.0199 versus direct."},
+    {"phase":"P13","status":"no_go","finding":"Deferred pair exactification was 1.0165 versus direct and was not clearly better than P12."},
+    {"phase":"P14","status":"no_go","finding":"Exact dispatch lost to direct on both sealed corpora despite five high-value encoding cases."},
+    {"phase":"P15","status":"semantic_pass_timing_inconclusive_no_performance_claim","finding":"Late arena scan passed semantics on the sealed fresh corpus (490 cases); zero worker timing artifacts were accepted, so no timing, performance, or production claim is available."}
+  ]
+}

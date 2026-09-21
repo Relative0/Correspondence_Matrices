@@ -170,6 +170,40 @@ class LatestResultsWebsiteTests(unittest.TestCase):
             actual = (SITE/page).read_text(encoding='utf-8')
             self.assertEqual(hashlib.sha256(actual.encode()).hexdigest(), hashlib.sha256(expected.encode()).hexdigest(), page)
 
+    def test_late_scan_status_is_generated_and_preserves_the_final_p15_boundary(self):
+        css = (SITE/'cm_master_shared.css').read_text(encoding='utf-8')
+        library = (SITE/'cm_master_shared.js').read_text(encoding='utf-8')
+        data = json.dumps(self.data, separators=(',', ':'), ensure_ascii=False)
+        expected = (SITE/'cm_late_scan_status_template.html').read_text(encoding='utf-8').replace(
+            '/*__CM_CSS__*/', css).replace('/*__CM_LIB__*/', library).replace('/*__CM_DATA__*/null', data)
+        page = (SITE/'late-scan-status.html').read_text(encoding='utf-8')
+        self.assertEqual(page, expected)
+        for required in ('NO-GO', 'Production change', 'None', 'P15 semantics', 'PASS',
+                         'P15 timing', 'Inconclusive', '0 accepted', 'not a measured speedup',
+                         'no performance or production claim', 'P15_FINAL_DISPOSITION_20260921.json'):
+            self.assertIn(required, page)
+        self.assertIn('late-scan-status.html', (SITE/'index.html').read_text(encoding='utf-8'))
+
+    def test_p1_p15_ledger_is_complete_and_keeps_negative_results_visible(self):
+        ledger = json.loads((SITE/'results/2026-09-20/p1-p15-research-ledger.json').read_text(encoding='utf-8'))
+        self.assertEqual(ledger['schema'], 'cm-p1-p15-research-ledger/v1')
+        self.assertEqual([row['phase'] for row in ledger['rows']],
+                         ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P7B', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15'])
+        self.assertEqual(ledger['reviewed'], '2026-09-21')
+        self.assertEqual(ledger['rows'][-1]['status'], 'semantic_pass_timing_inconclusive_no_performance_claim')
+        self.assertIn('P15_FINAL_DISPOSITION_20260921.json', ledger['artifact_roots'][-1])
+        page = (SITE/'late-scan-status.html').read_text(encoding='utf-8')
+        self.assertIn('P1–P15 research ledger', page)
+        self.assertIn('p1-p15-research-ledger.json', page)
+
+    def test_final_p15_disposition_preserves_the_semantic_only_claim_boundary(self):
+        record = json.loads((SITE/'results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json').read_text(encoding='utf-8'))
+        self.assertEqual(record['status'], 'TIMING_INCONCLUSIVE_NO_PERFORMANCE_CLAIM')
+        self.assertEqual(record['decision']['p15_semantics'], 'PASS on the sealed fresh corpus')
+        self.assertEqual(record['decision']['p15_timing'], 'INCONCLUSIVE')
+        self.assertEqual(record['timing']['accepted_worker_artifacts'], 0)
+        self.assertEqual(record['decision']['production_rollout'], 'NOT AUTHORIZED AND NOT SUPPORTED')
+
     def test_frontier_contracts_do_not_relabel_old_timings_or_promote_unverified_counts(self):
         frontier = self.evidence['frontiers']
         self.assertEqual(sum(m['concrete_feature_equivalence'] is True for m in frontier['models']), 9)
@@ -298,6 +332,7 @@ class LatestResultsWebsiteTests(unittest.TestCase):
         self.assertEqual(run.returncode, 0, run.stderr)
         workflow = (ROOT/'.github/workflows/publish-results-site.yml').read_text(encoding='utf-8')
         self.assertIn('latest-results.html', workflow)
+        self.assertIn('late-scan-status.html', workflow)
         self.assertIn('cp -R "$site_dir/results" _site/results', workflow)
 
 

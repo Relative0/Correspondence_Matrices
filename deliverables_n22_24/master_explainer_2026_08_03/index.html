@@ -1529,6 +1529,9 @@ function topbar(cfg) {
   if (!(cfg.links || []).some(([href]) => href === "latest-results.html")) {
     cfg = { ...cfg, links: [["latest-results.html", "Latest results"], ...(cfg.links || [])] };
   }
+  if (!(cfg.links || []).some(([href]) => href === "late-scan-status.html")) {
+    cfg = { ...cfg, links: [["late-scan-status.html", "Late-scan status"], ...(cfg.links || [])] };
+  }
   if (!(cfg.links || []).some(([, label]) => label === "Results & audit")) {
     cfg = { ...cfg, links: [...(cfg.links || []), ["feature-model-evidence.html", "Results & audit"]] };
   }
@@ -3253,6 +3256,7 @@ app.append(h("header", { class: "page" }, [
     ["layperson.html", "Simple One-Pager", "A plain-language introduction and decision guide."],
     ["usecases.html", "CM Use Cases", "How CM might help in hardware, AI, biology, quantum-support logic, computing, security, and other fields."],
     ["feature-model-evidence.html", "Results & audit", "Real feature-model results, independent correctness checks, measurement gaps, and reusable evidence."],
+    ["late-scan-status.html", "Late-scan research status", "A closed Python NO-GO, a semantics-preserving redesign, and the gates still required before any timing claim."],
   ].forEach(([href, title, description]) => nav.append(h("a", { href }, [
     h("b", { text: title }), h("span", { text: description }),
   ])));
