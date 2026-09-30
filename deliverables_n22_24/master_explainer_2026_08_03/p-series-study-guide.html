@@ -3210,7 +3210,7 @@ function pageFooter(extra, minimal) {
 <script>
 const app = document.getElementById("app");
 document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· P-series study guide</span>",
-  links: [["index.html", "Knowledge base"], ["late-scan-status.html", "Late-scan status"], ["#how", "How to read"], ["#studies", "Each study"], ["#structured-factorization", "Factorization"], ["#rerun", "Rerun record"]] }));
+  links: [["index.html", "Knowledge base"], ["late-scan-status.html", "Late-scan status"], ["#how", "How to read"], ["#studies", "Each study"], ["#research-register", "All recent trials"], ["#structured-factorization", "Factorization"], ["#rerun", "Rerun record"]] }));
 
 const STUDIES = [
   ["P1", "Direct sparse ANF baseline", "Profitability-aware folding on frozen natural cones", "Whether natural cones contain folds worth taking", [["Full path / direct", 1.0934, "ratio"]], "NO-GO", "No natural folds were accepted (0 of 28 candidates); the apparent generic-comparator result was abstention and optimizer overhead, not a fold win.", "N2_P1_RESULTS.md"],
@@ -3298,11 +3298,22 @@ app.append(h("header", { class: "page" }, [
             h("td", { text: kind === "ratio" ? "ratio at stated boundary" : kind === "gate" ? "non-timing gate" : "non-timing count" }),
           ]))),
         ]),
-        h("p", { class: "prov", text: "Detailed local audit record: " + audit + ". This site identifies it for traceability but does not yet publish the P1–P14 raw audit bundles as downloadable artifacts." }),
+        h("p", { class: "prov", text: "Detailed local audit record: " + audit + ". The cross-track experiment register now links downloadable P1–P15 source and evidence snapshots; historical runtime-identity limitations remain explicit." }),
       ]),
     ]));
     s.append(card);
   });
+  app.append(s);
+}
+
+{
+  const s = section("research-register", "All recent trials: completed work and remaining gates", "Cross-track register updated 30 September 2026",
+    "The P-series is one research line. Gate A v4/v5 qualification, the September 26 compiler studies, September 28 T3 experiments and structured factorization have separate protocols and conclusions.");
+  s.append(h("div", { class: "boundary-strip" }, [
+    h("h2", { text: "Check the register before acting on an old next-step prompt" }),
+    h("p", { text: "P1–P14 completed without a general direct-baseline crossover; P15 accepted no timing artifacts. Gate A v5 has tested repair code but no performance pilot. The separate compiler natural v5 study ran: 70 complete cases favored direct packed and one calibration failure remains. T3 correctness passed, but a broad best-comparator runtime advantage was not established." }),
+    h("p", {}, [h("a", { href: "results/2026-09-30/research-register/index.html", text: "Open the experiment register and downloadable evidence" })]),
+  ]));
   app.append(s);
 }
 
@@ -3336,16 +3347,16 @@ app.append(h("header", { class: "page" }, [
 }
 
 {
-  const s = section("rerun", "Rerun and audit record", "Enough context to understand the protocol, without inventing a public raw bundle",
-    "A reader can now trace every phase's implementation delta, test question, measurement boundary, metric, and conclusion from one place. Internally, the P1–P13 audit package preserves per-phase preregistration, harness, frozen benchmark inputs, and results; P14 preserves its execution report; P15 preserves its code freeze, fresh correctness record, timing-abort record, and final disposition. Those detailed P1–P14 bundles have not yet been reviewed for publication, so this page does not pretend that a compact guide is an independently executable release.");
+  const s = section("rerun", "Rerun and audit record", "Public evidence snapshots, with historical limitations retained",
+    "The September 30 cross-track register publishes P1–P13 source/results and audit evidence, P14 frozen trials and P15 closed-trial artifacts. Historical prompts remain as provenance. Read the dated register first: some proposed next steps were later executed, while blocked qualifications and unmeasured secondary cells remain explicitly unresolved.");
   s.append(h("div", { class: "grid2" }, [
     h("div", { class: "dom" }, [h("h4", { text: "Public records on this site" }), h("p", { class: "t", text: "The compact ledger, this machine-readable guide, and P15's finalized disposition are downloadable and are covered by the release verifier." }), h("p", { class: "why" }, [h("a", { href: "results/2026-09-20/p1-p15-research-ledger.json", download: "p1-p15-research-ledger.json", text: "P1–P15 ledger JSON" }), document.createTextNode(" · "), h("a", { href: "results/2026-09-22/p-series-study-guide.json", download: "p-series-study-guide.json", text: "study guide JSON" }), document.createTextNode(" · "), h("a", { href: "results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json", download: "P15_FINAL_DISPOSITION_20260921.json", text: "P15 final disposition" })])]),
-    h("div", { class: "dom" }, [h("h4", { text: "Before treating this as a rerun package" }), h("p", { class: "t", text: "Publish a reviewed, privacy-safe source bundle for each phase: preregistration, code revision, frozen inputs, command line, environment manifest, raw records, analysis, and a checksum manifest." }), h("p", { class: "why", text: "That future publication work must be separately reviewed; it is not implied by this reader guide." })]),
+    h("div", { class: "dom" }, [h("h4", { text: "Before reproducing a trial" }), h("p", { class: "t", text: "Use the linked publication snapshots and manifests in a separate directory. Do not overwrite or resume frozen runs, change old calibration limits, or reinterpret unavailable timing as a performance result." }), h("p", { class: "why", text: "The register records source/runtime gaps and distribution omissions. A changed algorithm or resource design requires a new protocol and identity." })]),
   ]));
   app.append(s);
 }
 
-app.append(pageFooter("P-series study guide reviewed 2026-09-22 · P14 NO-GO · P15 semantic PASS / timing inconclusive · no performance or production claim"));
+app.append(pageFooter("P-series guide and cross-track register reviewed 2026-09-30 · P14 NO-GO · P15 semantic PASS / timing inconclusive · no performance or production claim"));
 </script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+# Failures and continuations
+
+This log distinguishes observed failures from successful retries. Where the original command ran through the tool console, the following is a summary, not a purported full raw transcript.
+
+1. Windows `from dd import cudd` failed: the installed Windows `dd` has no compiled CUDD extension. Installed dd 0.6.0 in a separate task-local WSL CPython 3.12 environment; preserved dependency lock and wheels. Windows `dd` was not replaced.
+2. Sandboxed WSL inventory returned `E_ACCESSDENIED`. The same scoped operation succeeded through approved elevated tool execution. No permission settings were changed.
+3. First C1 integration reached the cut-conversion stage and failed because the new adapter treated `partitioned_bits`'s `(bits,p,q)` tuple as the arranged truth integer. Fixed the new adapter. Retained `runs/coordinate_integration/` as the failed attempt; success is `coordinate_integration_v2/` and final one-command replay. No old source/results were rewritten.
+4. First corpus extraction was manually interrupted after adder/bar/div progress because its new parser rebuilt a whole-driver set per node and reparsed the design per output. It produced no completed corpus result. Hoisted the driver set and reused the parsed graph without changing the already frozen inclusion/split/cut protocol. Complete rerun accounts for every output; all admitted functions pass independent extraction comparison.
+5. First CUDD exhaustive adapter validation produced empty-substitution warnings and manager-shutdown reference assertions from recursive Python closure cycles. Broke the local recursive closure cycles, ordered root/manager release and skipped empty substitutions. The repaired complete run in `infrastructure_validation_linux_v2.log` passes without those messages. All source generations remain distinguished by hashes in lifecycle records.
+6. Original baseline/theory/external-oracle replays succeeded. No new Runpod run, interrupted cloud experiment, or inferred cloud result is claimed.
+7. The final Linux one-command replay stopped at the frozen baseline legacy-adapter import because NumPy was absent. This exposes an undeclared dependency in the old package's standard-library-only description. Preserved `runs/final_correctness_linux/` and its FAIL receipt. Added NumPy 2.3.2 (the Windows project's version) to the isolated Linux lock and bundled wheels; the complete retry uses `runs/final_correctness_linux_v2/`. Frozen package code and documentation remain unchanged; this delivery corrects the dependency instructions.
+
+Frozen old scientific results remain unchanged. Local infrastructure smoke generations are not pooled into scientific performance estimates; final acceptance records identify the final source version.

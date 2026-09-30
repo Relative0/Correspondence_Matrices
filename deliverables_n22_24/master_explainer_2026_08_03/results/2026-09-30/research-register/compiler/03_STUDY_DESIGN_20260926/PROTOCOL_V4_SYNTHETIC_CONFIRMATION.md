@@ -1,0 +1,32 @@
+# Protocol v4: signed pair compiler, synthetic primary cell
+
+Design fixed on 26 September 2026, before evaluating the held-out seeds below. This is a disclosed, narrower successor to the archived 15 September protocol v3. The original v3 requires an ABC-compatible executable and a natural circuit corpus for its full circuit result. The natural EPFL files have since been located, but no ABC executable is installed on this host. This v4 result addresses **only the unchanged v3 synthetic primary question**. It cannot establish natural-circuit admission, circuit competitiveness, or journal readiness.
+
+The non-confirmatory pilot used eight disjoint seeds (`202609270000` through `202609270007`) and ten repetitions per case. Its timing and variability were inspected before this design was fixed. It suggested an unfavorable CM effect. The primary cell, success thresholds, and baseline remain the v3 ones; the pilot seeds are excluded from confirmation. The exact pilot rows and cache policy are in `PILOT_RESULTS.json`.
+
+## Corpus and comparator
+
+- Primary cases: 64 independently generated seeds `202610010000` through `202610010063`, fixed in `primary_cell_pilot.py` before any held-out timing. Formula is the unit of inference.
+- Each expression has 205 primitive row/column operators and 204 binary combination operators. Exactly 204 of 410 primitive input occurrences are independently selected for negation; each primitive has an independently sampled operand swap. Primitive and combination operators draw uniformly from AND, OR, XOR, implication and equivalence. The 205 primitive leaves are recursively split at the midpoint to make a balanced tree. Every AST node is freshly allocated. The resulting counts are exactly `N=U=1023`, with live support `x0,x1`, no fixed variables, and signed/permuted stratum B.
+- Source commit and unchanged source snapshot are the same as the September 26 contract release. Each case is committed to the run manifest by seed, full AST serialization hash, `N`, `U`, height, source token and root outcome before measurement. No formula may be excluded after the timing begins.
+- CM arm: `compile_expr_to_cm_pair_token(..., strategy="pure_structural")`. Direct arm: `build_bitset_env(["x0","x1"])` and identity-memoized `eval_expr_bitset` on the identical expression. Both return the same four-bit token. Four token queries use the same `cm_token_value` function and are checked for correctness outside the timed producer phase.
+
+## Correctness and timing
+
+The correctness gate independently evaluates all four Boolean assignments by recursive scalar AST interpretation, then compares both arm tokens and all four common token queries. Every CM case must return `pure_structural` with zero local retabulations and no fallback. Any disagreement, exception, timeout or non-pure outcome is retained and defeats primary success pending diagnosis.
+
+Run cases sequentially, one fresh Python process per formula. Import and AST construction are outside the timed producer calls; their elapsed times and cache state are recorded separately. One untimed warm-up of each arm precedes measurement. Before each measured CM invocation, clear `cm_compose` and `cm_normalize` memoization. Before each direct invocation, clear the bitset environment cache; building the environment is **inside** the direct timed call. Import-time CM lookup tables remain resident. This post-import, cache-reset comparison is narrower than a full fresh-start one-shot cost; neither arm receives an undeclared query credit.
+
+For each of 30 paired repetitions per formula, randomize arm order with recorded seed `202610020099 XOR formula_seed`. Estimate the per-call time from three throwaway calls, set the initial loop count to `ceil(100 ms / estimate)`, and run one throwaway trial block. If that block is below 100 ms, increase the count once to `ceil(150 ms / trial per-call time)`; cap at 1,000. The calibration block must reach 100 ms or the case fails before measurement. Each inner call is timed separately, with cache reset outside its timer. The repetition endpoint is total timed nanoseconds divided by loop count. Processes run sequentially; no recursion-limit change. A case process has a 60-second timeout. Retain append-only per-repetition records, calibration, order, failures and environment metadata.
+
+Peak memory is measured in separate fresh processes for each formula and arm with Windows `GetProcessMemoryInfo`, after importing both arm modules and constructing the same AST. Record before/after working set and peak working set. Use absolute process peak working set for the primary memory gate, acknowledging that common interpreter/import memory can dominate small differences. Also record process private committed bytes as diagnostic. The arm/case memory process has a 60-second timeout. No memory result is inferred from `tracemalloc` alone.
+
+## Frozen decision rule
+
+For each formula, take the median of its 30 repetition times per arm and form `direct/CM`. The primary point estimate is the median of 64 formula ratios. A 10,000-draw hierarchical percentile bootstrap (Python `random.Random(202610020001)`) samples 64 formulas with replacement, then 30 paired repetition indices within each sampled formula, recomputes both arm medians and the median formula ratio. Use the 2.5th and 97.5th percentiles with the archived linear interpolation rule. The memory statistic is the median across formulas of `CM_peak/direct_peak - 1`.
+
+Primary success requires **all** of: zero correctness disagreements, median time ratio at least 1.20, the 95% interval entirely above 1.00, and median peak-memory increase no greater than 10%. Report absolute nanoseconds and bytes. A failure or parity result is reported as such. Secondary generated sizes, prepared reuse, ROBDD/AIG, natural prevalence and dense outputs remain outside this v4 claim and cannot rescue the primary result. No multiple-testing correction is needed for this sole primary test.
+
+## Run freeze and interpretation
+
+Before the first held-out timing, `FREEZE.json` records hashes of this plan, scripts, corpus, configuration, source manifest, environment, and empty append-only result files. The original v3 protocol remains preserved in the September 26 source snapshot. Any material change after freeze requires a new numbered protocol and fresh held-out seeds. This run produces a bounded synthetic methods result, even if every gate passes; the original natural/AIG study remains separate.
