@@ -3210,7 +3210,7 @@ function pageFooter(extra, minimal) {
 <script>
 const app = document.getElementById("app");
 document.body.prepend(topbar({ brand: "Correspondence Matrices <span>· P-series study guide</span>",
-  links: [["index.html", "Knowledge base"], ["late-scan-status.html", "Late-scan status"], ["#how", "How to read"], ["#studies", "Each study"], ["#rerun", "Rerun record"]] }));
+  links: [["index.html", "Knowledge base"], ["late-scan-status.html", "Late-scan status"], ["#how", "How to read"], ["#studies", "Each study"], ["#structured-factorization", "Factorization"], ["#rerun", "Rerun record"]] }));
 
 const STUDIES = [
   ["P1", "Direct sparse ANF baseline", "Profitability-aware folding on frozen natural cones", "Whether natural cones contain folds worth taking", [["Full path / direct", 1.0934, "ratio"]], "NO-GO", "No natural folds were accepted (0 of 28 candidates); the apparent generic-comparator result was abstention and optimizer overhead, not a fold win.", "N2_P1_RESULTS.md"],
@@ -3303,6 +3303,35 @@ app.append(h("header", { class: "page" }, [
     ]));
     s.append(card);
   });
+  app.append(s);
+}
+
+{
+  const s = section("structured-factorization", "Related research: structured factorization", "Phase 5B, live PySDD moves, audits and prospective integration",
+    "This separate research track studies certified factor exposure and complete exact factorization. Its measurements have their own protocols and are not P1–P15 lowering results.");
+  const base = "results/2026-09-30/structured-factorization/";
+  s.append(h("div", { class: "boundary-strip" }, [
+    h("h2", { text: "Tooling and mechanism GO; complete-time improvement not established" }),
+    h("p", { text: "PySDD 1.0.6 supports local moves on a referenced compiled SDD. The repaired prospective campaign completed 756 exact Linux trials: live search cost about 18% of matched fresh search, and four held-out instances gained direct factor exposure. The selected L1/B2 complete-time ratio was 1.03798, with one-sided upper ratio 1.14154, so the registered algorithmic gate remained NO-GO." }),
+  ]));
+  const records = [
+    ["Phase 5B", "The original M5/B3 complete-time ratio was 2.212. Its algorithmic NO-GO and mathematical-note scope remain preserved.", "phase5b/PHASE5B_MASTER_REPORT.md"],
+    ["Live-vtree tooling probe", "Supported swaps, rotations, inverse restoration and exactness checks without recompiling the CNF for each candidate.", "tooling-probe/REPORT.md"],
+    ["First integration", "756 Linux trials established cheaper matched search, but selected L2/B3 complete time was 1.0382.", "first-integration/CAMPAIGN_REPORT.md"],
+    ["Independent audit", "The first dataset had no factor-exposure headroom. The audit confirmed the saved results and identified harness and hostile-check gaps.", "harness-audit/AUDIT_REPORT.md"],
+    ["Repaired prospective campaign", "New inputs followed harness repairs and capped-worker/larger-SDD checks. Full code, frozen protocol, receipts, raw rows and the preserved scale timeout are available.", "prospective-campaign/CAMPAIGN_REPORT.md"],
+  ];
+  s.append(h("div", { class: "grid2" }, records.map(([title, body, path]) => h("div", { class: "dom" }, [
+    h("h3", { text: title }), h("p", { class: "t", text: body }),
+    h("p", {}, [h("a", { href: base + path, text: "Read the report" })]),
+  ]))));
+  s.append(h("p", {}, [
+    h("a", { href: base + "index.html", text: "Browse the organized evidence archive" }),
+    document.createTextNode(" · "),
+    h("a", { href: base + "artifact-manifest.json", text: "SHA-256 artifact manifest" }),
+    document.createTextNode(" · "),
+    h("a", { href: base + "prospective-campaign/heldout_results.jsonl", text: "Revised held-out raw rows" }),
+  ]));
   app.append(s);
 }
 

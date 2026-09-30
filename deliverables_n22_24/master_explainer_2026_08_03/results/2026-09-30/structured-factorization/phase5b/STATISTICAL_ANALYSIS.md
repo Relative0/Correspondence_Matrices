@@ -1,0 +1,13 @@
+# Statistical analysis
+
+Primary decision for this fixed pilot: **algorithmic NO-GO**. All 2,100 required trial cells exist and their source/protocol/manifest fingerprints agree across splits. All completed outputs are correct; 0 failed/censored rows are recorded. Analysis verifies that the validation file and analysis code match the pre-held-out selection receipt.
+
+The sole primary comparison is M5/B3. Median-of-three times are paired by instance; their geometric ratio is 2.211513. The 10,000-draw percentile bootstrap (seed 2026092907) is [2.008170, 2.427554]. M5 wins on 0, loses on 30, ties on 0 of 30 held-out instances. Runtime GO required ratio <=0.90, upper interval <1, zero correctness disagreements and no excess failures. Other methods/family strata are exploratory; no multiple-comparison winner is substituted for M5.
+
+Residual rescue required all three registered conditions: >=25% median paired SAT-call reduction, >=10% median paired SAT-wall reduction, and >=0.005 seconds median absolute SAT saving, with no excess failures. M5 values are respectively **-0.9308035714285714**, **-1.5713347709770238**, and **-0.0006111500842962414 seconds** (fractions for reductions). Probe calls/time are included. These conditions **fail**. A call reduction alone is not a speedup, and the rescue never changes the named runtime primary.
+
+For baseline-zero work, both-zero is no improvement and method-positive is negative infinity. Censored/error pairs count as negative infinity for rescue and are not dropped. Timeout/error primary penalty is PAR2=30 seconds per trial before the median. The 15-second watchdog measures full process lifetime; successful algorithm runtime excludes startup/parsing. Raw process time is also saved. Failure counts retain all repetitions even if a median could otherwise hide one timeout.
+
+Intervals are conditional descriptive resampling of this fixed 30-instance mixture. Related generator structures and only three timing repetitions do not justify an independent industrial-population inference. Machine load and OS temporary-file costs are uncontrolled. Reported medians, means, IQRs, paired effects and complete raw data are more informative here than an isolated significance label. No extrapolation to larger n, production workload, energy use or wall-time savings is warranted.
+
+No parameter was tuned from train, validation or held-out measurements; coefficients and search budget were fixed beforehand. Validation only selects B2 versus B3. The held-out outcome is not used to revise any objective. A changed method needs a new protocol and campaign, not reuse of this held-out set for confirmatory claims.

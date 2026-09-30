@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structured factorization — evidence archive</title>
+<meta name="description" content="Phase 5B, live PySDD vtree moves, integration audits, and two frozen exact-factorization campaigns with source, raw results, and checksums.">
+<style>
+:root { color-scheme: light dark; font: 16px/1.6 system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { max-width: 1040px; margin: auto; padding: 2rem 1.2rem 5rem; }
+a { color: #2066b1; }
+@media (prefers-color-scheme: dark) { a { color: #82b7ff; } }
+h1, h2, h3 { line-height: 1.22; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: .4rem; }
+.lead { font-size: 1.13rem; max-width: 78ch; }
+.boundary { border-left: .3rem solid #a87300; padding: .5rem 1rem; background: color-mix(in srgb, #a87300 8%, transparent); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+article { border: 1px solid #8886; border-radius: .6rem; padding: 1rem 1.1rem; }
+article h3 { margin: .2rem 0; }
+.status { font-weight: 700; }
+ul { padding-left: 1.4rem; }
+li { margin: .35rem 0; }
+code { overflow-wrap: anywhere; }
+small { opacity: .8; }
+</style>
+</head>
+<body>
+<p><a href="../../../p-series-study-guide.html#structured-factorization">← P-series guide companion section</a></p>
+<header>
+  <p>Research evidence · 30 September 2026</p>
+  <h1>Structured factorization</h1>
+  <p class="lead">The original Phase 5B package, a supported live-vtree tooling
+  method, an independent audit, and two separately frozen integration
+  campaigns are preserved here with code and raw records.</p>
+</header>
+<p class="boundary"><strong>Claim boundary.</strong> This is a separate line
+from P1–P15. Its search-stage gains are not complete-factorization gains.
+Both frozen integration campaigns remained algorithmic NO-GOs. The synthetic
+instances do not establish industrial performance or publication-ready novelty.</p>
+
+<h2>Evidence chain</h2>
+<div class="cards">
+  <article>
+    <h3>1. Phase 5B</h3>
+    <p class="status">Mathematical note survives; algorithmic NO-GO.</p>
+    <p>The recompilation-based M5 search had a held-out complete-time ratio
+    of 2.212 against B3. This is the original frozen outcome.</p>
+    <p><a href="phase5b/PHASE5B_MASTER_REPORT.md">Master report</a> ·
+    <a href="phase5b/BENCHMARK_PROTOCOL.md">Protocol</a> ·
+    <a href="phase5b/STRUCTURED_FACTORIZATION_PHASE5B_2026-09-29.zip">Complete Phase 5B ZIP</a></p>
+  </article>
+  <article>
+    <h3>2. Live-vtree tooling probe</h3>
+    <p class="status">Tooling GO, not an algorithmic claim.</p>
+    <p>A referenced PySDD 1.0.6 root survived local swaps and rotations
+    without rebuilding the CNF for each candidate. Exactness and inverse
+    checks accompany the implementation.</p>
+    <p><a href="tooling-probe/REPORT.md">Report and method</a> ·
+    <a href="tooling-probe/correctness.json">Correctness record</a> ·
+    <a href="tooling-probe/timing_summary.json">Timing summary</a></p>
+  </article>
+  <article>
+    <h3>3. First integration</h3>
+    <p class="status">Mechanism GO; algorithmic NO-GO.</p>
+    <p>Fresh/live decisions matched in 756 Linux trials. The
+    validation-selected L2/B3 held-out complete-time ratio was 1.0382,
+    with no extra factor exposure on that dataset.</p>
+    <p><a href="first-integration/CAMPAIGN_REPORT.md">Campaign report</a> ·
+    <a href="first-integration/CAMPAIGN_PROTOCOL.md">Frozen protocol</a> ·
+    <a href="first-integration/campaign_analysis.json">Analysis</a> ·
+    <a href="first-integration/heldout_results.jsonl">Held-out rows</a></p>
+  </article>
+  <article>
+    <h3>4. Independent audit</h3>
+    <p class="status">Numerical result confirmed; exposure test inadequate.</p>
+    <p>B3 already exposed the finest partition on all 36 first-campaign
+    inputs. The audit identified harness and hostile-check gaps before a
+    new campaign was designed.</p>
+    <p><a href="harness-audit/AUDIT_REPORT.md">Audit report</a> ·
+    <a href="harness-audit/audit_results.json">Machine-readable checks</a></p>
+  </article>
+  <article>
+    <h3>5. Repaired, prospective campaign</h3>
+    <p class="status">Mechanism GO; algorithmic NO-GO.</p>
+    <p>All 756 new Linux rows passed exactness checks. Live search cost
+    about 18% of matched fresh search, and four held-out cases gained direct
+    factor exposure. Selected L1/B2 complete time was 1.03798, with
+    one-sided upper ratio 1.14154.</p>
+    <p><a href="prospective-campaign/CAMPAIGN_REPORT.md">Campaign report</a> ·
+    <a href="prospective-campaign/CAMPAIGN_PROTOCOL.md">Frozen protocol</a> ·
+    <a href="prospective-campaign/campaign_freeze.json">Freeze receipt</a> ·
+    <a href="prospective-campaign/campaign_analysis.json">Analysis</a></p>
+  </article>
+</div>
+
+<h2>Reproducibility and raw evidence</h2>
+<p>The five folders retain the source, requirements, inputs, logs, exactness
+checks, raw rows, selection receipts, and analysis associated with each
+stage. The revised campaign also retains its capped-worker Linux preflight,
+larger-SDD walks and the separate n=32, 50-step watchdog timeout.</p>
+<ul>
+  <li><a href="prospective-campaign/validation_results.jsonl">Revised validation rows</a> and
+      <a href="prospective-campaign/heldout_results.jsonl">revised held-out rows</a></li>
+  <li><a href="prospective-campaign/linux_preflight_results.json">Capped-worker preflight</a>,
+      <a href="prospective-campaign/linux_scale_results.json">larger-SDD checks</a>, and
+      <a href="prospective-campaign/linux_scale_timeout_32x50.json">preserved timeout</a></li>
+  <li><a href="README.md">Package guide</a> and
+      <a href="artifact-manifest.json">SHA-256 artifact manifest</a></li>
+  <li><a href="https://github.com/Relative0/Correspondence_Matrices/tree/main/deliverables_n22_24/master_explainer_2026_08_03/results/2026-09-30/structured-factorization">Browse all files on GitHub</a></li>
+</ul>
+<footer><small>Original frozen files were copied, not rewritten. The original
+Phase 5B ZIP includes its continuity archive and broader context manuscripts
+as historical supporting material.</small></footer>
+</body>
+</html>

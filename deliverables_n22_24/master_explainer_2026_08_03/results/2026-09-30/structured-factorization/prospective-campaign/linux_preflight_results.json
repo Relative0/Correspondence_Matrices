@@ -1,0 +1,328 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-29T20:19:56.115182+00:00",
+  "purpose": "developmental Linux preflight only",
+  "formal_campaign_inputs_executed": 0,
+  "source_hashes": {
+    "requirements-lock.txt": "822164e5c16feb3c6e369aae79dde45a419f2a3dd9380e5ea01f6298e2411fa8",
+    "bounded_trial.py": "4fd3adc327380af6fcb043930cef287288d3be0cda146d2eb62bbc41047f50d0",
+    "trial_worker.py": "222bd126f2414f84a572ffee66324056a41eb768c4b48970a1d6aa7a0d55f87a",
+    "resource_guard.py": "502f6b669d012d8439e463a4e7df288b7a0d77b84edd91720c3e9665c9000883",
+    "integrated_pipeline.py": "93fd458ca9791abf783786296c90b96bc7775ab671b2dd93b4dcc8ecdb560acd",
+    "live_moves.py": "2e60dee0cbfdad1b3e7c532cd411cb1f6ea121d4ad3c7270526bf49a6056e67e",
+    "stress_worker.py": "a931b5f0c12aaf0b645d48f2bb7eb3936e6b8617574ed63d6cc47927548f1fd3",
+    "dev_fixtures.py": "7372b3ecfa891f4ce119215972bcddbaf6dc388f8ba5d5a66a83decdced1c75d",
+    "exact_miter.py": "8b77697c7a7cee27ae11e885a8dd0206c2adae80a9a378b3d1d331fbd5172c27",
+    "campaign_inputs.py": "5786ec6e03f9cfb06453f186dd4a65f2e54063d4e22cba959f90beff5db592f8",
+    "campaign_integrity.py": "ce0a018559a3a6ad7b2edcd5955079d342a2e1240e82fa93c43843b0e373f467",
+    "campaign_runner.py": "7b1b146fa3642c5869c01307b83a8dd6f15bf8d374110304ed34b6e49066a99c",
+    "check_harness.py": "7300fe04a52a59ee69a849d0a481e1ab1515fe0ebe1b3e92b527fb261dcee392",
+    "check_integration.py": "d004f4e298e33649966280f62cc5b39ad1f2ec0056e138c634fc8722456ca763",
+    "check_stress.py": "76ff0f32a928e3691a940bb6fc17772f72cc060a8e4fc15cb22b8735365172f2",
+    "linux_preflight.py": "f390977bc2496b0a89c74033276a05ae5c0deaf2e779c8d81c705aacb8eaae0f",
+    "linux_scale_probe.py": "dbe5270db68162a16814d1679f052547ddde32fef7263cb68e101a8f33765c65",
+    "reference/benchmark.py": "b377a3a8def9ddbcf426a5a5549313546160ff4faf55a8b57cde5ccdaad1d2b0",
+    "reference/hybrid_core.py": "c162c115fc8c97e82f5eaa6d05429ebf5b07a7ea61dc68e060875182b54c0abc"
+  },
+  "environment": {
+    "python": "3.11.16 (main, Sep 19 2026, 01:04:43) [GCC 14.2.0]",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+    "machine": "x86_64",
+    "cgroup_memory_max": "4294967296",
+    "packages": {
+      "PySDD": "1.0.6",
+      "python-sat": "1.9.dev15",
+      "psutil": "7.2.2"
+    },
+    "worker_rlimit_as_bytes": 2147483648
+  },
+  "stages": {
+    "actual_worker_allocation_negative_control": {
+      "status": "PASS",
+      "cap_bytes": 268435456,
+      "observed_limit_bytes": 268435456,
+      "returncode": 1,
+      "memory_error": true
+    },
+    "actual_capped_workers": {
+      "B3": {
+        "method": "B3",
+        "status": "ok",
+        "process_wall_ns": 269851167,
+        "effective_cap_bytes": 2147483648,
+        "direct_partition": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "exact_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "sat_calls": 5,
+        "sdd_size": 8,
+        "cnf_compilations": 1,
+        "search_stage_ns": 2031084,
+        "exact_stage_ns": 29164947,
+        "peak_memory_bytes": 30838784
+      },
+      "F1": {
+        "method": "F1",
+        "status": "ok",
+        "process_wall_ns": 328242700,
+        "effective_cap_bytes": 2147483648,
+        "direct_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "exact_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "sat_calls": 2,
+        "sdd_size": 8,
+        "cnf_compilations": 13,
+        "search_stage_ns": 16953103,
+        "exact_stage_ns": 34231557,
+        "peak_memory_bytes": 31531008
+      },
+      "L1": {
+        "method": "L1",
+        "status": "ok",
+        "process_wall_ns": 299564112,
+        "effective_cap_bytes": 2147483648,
+        "direct_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "exact_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "sat_calls": 2,
+        "sdd_size": 8,
+        "cnf_compilations": 1,
+        "search_stage_ns": 3586574,
+        "exact_stage_ns": 32838789,
+        "peak_memory_bytes": 30949376
+      },
+      "F2": {
+        "method": "F2",
+        "status": "ok",
+        "process_wall_ns": 304672321,
+        "effective_cap_bytes": 2147483648,
+        "direct_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "exact_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "sat_calls": 2,
+        "sdd_size": 8,
+        "cnf_compilations": 13,
+        "search_stage_ns": 14523405,
+        "exact_stage_ns": 32192621,
+        "peak_memory_bytes": 31064064
+      },
+      "L2": {
+        "method": "L2",
+        "status": "ok",
+        "process_wall_ns": 297893053,
+        "effective_cap_bytes": 2147483648,
+        "direct_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "exact_partition": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6
+          ]
+        ],
+        "sat_calls": 2,
+        "sdd_size": 8,
+        "cnf_compilations": 1,
+        "search_stage_ns": 3001236,
+        "exact_stage_ns": 33803030,
+        "peak_memory_bytes": 30928896
+      }
+    },
+    "actual_worker_failure_paths": {
+      "watchdog_status": "timeout",
+      "signal_status": "native_crash",
+      "signal_returncode": -11
+    },
+    "larger_sdd_walks": [
+      {
+        "status": "PASS",
+        "n": 20,
+        "steps": 100,
+        "counts": {
+          "forward_successes": 94,
+          "immediate_undos": 32,
+          "limited_failures": 26,
+          "limited_successes": 0,
+          "later_limit_failures": 6,
+          "long_sequence_restorations": 62,
+          "fresh_structure_checks": 12,
+          "sat_miter_checks": 215,
+          "extra_root_miter_checks": 215
+        },
+        "effective_cap_bytes": 2147483648,
+        "max_rss_bytes": 144916480,
+        "max_peak_wset_bytes": 144916480,
+        "baseline_live_size": 718,
+        "ending_live_size": 718,
+        "forward_ms": 66.57759,
+        "immediate_undo_ms": 11.344042,
+        "long_restore_ms": 32.752524,
+        "seconds": 3.7051268459999847,
+        "campaign_inputs_executed": 0,
+        "wall_seconds": 4.060786370000642
+      },
+      {
+        "status": "PASS",
+        "n": 24,
+        "steps": 80,
+        "counts": {
+          "forward_successes": 75,
+          "immediate_undos": 25,
+          "limited_failures": 21,
+          "limited_successes": 0,
+          "later_limit_failures": 5,
+          "long_sequence_restorations": 50,
+          "fresh_structure_checks": 9,
+          "sat_miter_checks": 172,
+          "extra_root_miter_checks": 172
+        },
+        "effective_cap_bytes": 2147483648,
+        "max_rss_bytes": 226078720,
+        "max_peak_wset_bytes": 226078720,
+        "baseline_live_size": 907,
+        "ending_live_size": 907,
+        "forward_ms": 60.454822,
+        "immediate_undo_ms": 9.334308,
+        "long_restore_ms": 25.097884,
+        "seconds": 7.820189582998864,
+        "campaign_inputs_executed": 0,
+        "wall_seconds": 8.211253564999424
+      }
+    ]
+  },
+  "wall_seconds": 14.343189680999785
+}

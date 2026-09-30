@@ -51,6 +51,9 @@ jobs:
       - name: Reject stale graphs, pages and source downloads
         run: python3 scripts/cm_website_release_verify.py --site _site --output _site/website-release-manifest.json
 
+      - name: Verify structured factorization archive and frozen results
+        run: python3 scripts/verify_structured_factorization_release.py --site _site
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
