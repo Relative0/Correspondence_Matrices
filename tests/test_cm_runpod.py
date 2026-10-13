@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from cm_expr_serde import expr_from_json, expr_to_json
 from cm_exprlib import And, Var
@@ -14,6 +15,21 @@ from cm_runpod_protocol import CMRemoteRequest, CMRemoteResponse
 
 
 class CMRunPodTests(unittest.TestCase):
+    def test_offline_flag_skips_default_credential_files(self) -> None:
+        for value in ("1", "true", "YES", "on"):
+            with self.subTest(value=value), patch("cm_runpod_config._parse_env_file", side_effect=AssertionError("credential file read")):
+                cfg = load_runpod_config({"CM_RUNPOD_DISABLE_ENV_FILES": value})
+            self.assertFalse(cfg.is_lifecycle_configured)
+            self.assertFalse(cfg.is_worker_configured)
+
+    def test_offline_flag_preserves_explicit_fixture_paths_and_env_precedence(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            fixture = Path(td) / "fixture.env"
+            fixture.write_text("RUNPOD_API_KEY=fake-file-key\nRUNPOD_POD_ID=fake-pod\n")
+            cfg = load_runpod_config({"CM_RUNPOD_DISABLE_ENV_FILES": "1", "RUNPOD_API_KEY": "fake-env-key"}, env_paths=[fixture])
+        self.assertEqual(cfg.api_key, "fake-env-key")
+        self.assertEqual(cfg.pod_id, "fake-pod")
+
     def test_config_loading_from_env(self) -> None:
         cfg = load_runpod_config(
             {
