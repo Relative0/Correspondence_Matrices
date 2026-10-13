@@ -160,6 +160,17 @@ E.sets.forEach(group => {
   app.append(s);
 });
 
+
+/* October 14 verified development pilots; preserve historical confirmation boundaries. */
+{
+  const p = section("october-cpu-pilots", "October 14 update", "CPU pilots completed — crossover thresholds remain open",
+    "Windows and local WSL each completed 112 valid synthetic trial cells with matching outputs and verified resource cleanup.");
+  p.append(h("p", {text: "Shared-DAG compiler/cache phases improved on the positive fixture; the unshared control has higher current phase costs. Width-22 residual preparation/query phases were cheaper, but imports, validation and scheduling dominate many whole-request times."}));
+  p.append(h("p", {text: "These packed fixtures have four active source variables and four influential restriction contexts repeated across q64. They do not establish universal backend thresholds or a general CM speedup. The WSL oracle and active-axis ordering differ from the Windows pilot; platforms are not pooled."}));
+  p.append(h("a", {href: "results/2026-10-14/cpu-pilots/index.html", text: "Read verified trial results, phase tables, source downloads and qualifications"}));
+  app.append(p);
+}
+
 app.append(h("footer", { class: "footer" }, [
   h("p", { text: `Earlier commit-pinned download index reviewed ${E.reviewed} at ${E.revision}.` }),
   h("p", {}, [h("a", { href: "index.html", text: "Return to the knowledge base" })]),

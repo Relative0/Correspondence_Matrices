@@ -1469,6 +1469,14 @@ def get_eval_grid(n: int) -> np.ndarray:
     return A
 
 
+def _symbolic_truth_vector(values, n_rows: int) -> np.ndarray:
+    """Expand scalar symbolic constants only for truth-table validation."""
+    result = np.asarray(values, dtype=np.uint8)
+    if result.ndim == 0:
+        return np.full(n_rows, result.item(), dtype=np.uint8)
+    return result.reshape(-1)
+
+
 def cm_matrix_to_tt(M_cm: np.ndarray, R: List[str], C: List[str], n_vars: int) -> np.ndarray:
     """Project padded CM matrix back to TT over x0..x{n-1} in eval_expr_tt order."""
     vars_all = list(R) + list(C)
@@ -2140,6 +2148,8 @@ def time_backends_on_expr(
     bdd_time = None
     bdd_nodes = None
     robdd_ok = None
+    custom_tt_robdd_input_ok = None
+    custom_tt_robdd_validation_time = None
     if build_tt and (not config.no_robdd):
         if verbose:
             print(f"[n={n}] ROBDD (Python) from TT ...")
@@ -2199,12 +2209,40 @@ def time_backends_on_expr(
                 dfs(root)
                 return len(seen) + 2
 
+            def truth_table(self, root):
+                # Expand terminal slabs in MSB-first order, including skipped
+                # variables eliminated by reduction. This evaluates the BDD,
+                # independently of the table supplied to its constructor.
+                values = np.empty(1 << self.n, dtype=np.uint8)
+                stack = [(root, 0, 0, values.size)]
+                while stack:
+                    u, depth, start, length = stack.pop()
+                    if u in (self.f, self.t):
+                        values[start : start + length] = int(u == self.t)
+                        continue
+                    var, low, high = self.nodes[u]
+                    half = length // 2
+                    if var == depth:
+                        stack.append((high, depth + 1, start + half, half))
+                        stack.append((low, depth + 1, start, half))
+                    else:
+                        stack.append((u, depth + 1, start + half, half))
+                        stack.append((u, depth + 1, start, half))
+                return values
+
         bdd_mgr = BDDTT(n)
         t1 = time.perf_counter()
         root = bdd_mgr.build(tt)
         bdd_time = time.perf_counter() - t1
         bdd_nodes = bdd_mgr.size(root)
-        robdd_ok = True
+        t_validation = time.perf_counter()
+        bdd_values = bdd_mgr.truth_table(root)
+        custom_tt_robdd_input_ok = bool(np.array_equal(bdd_values, tt))
+        # Do not reuse tt or a caller-supplied reference: both may originate
+        # from the CM path whose source translation this flag must check.
+        source_values = eval_expr_tt(expr, n).astype(np.uint8).reshape(-1)
+        robdd_ok = bool(np.array_equal(bdd_values, source_values))
+        custom_tt_robdd_validation_time = time.perf_counter() - t_validation
 
     dd_time = None
     dd_nodes = None
@@ -2369,7 +2407,7 @@ def time_backends_on_expr(
                 xs = [sp.symbols(f"x{i}") for i in range(n)]
                 f = sp.lambdify(xs, simp, "numpy")
                 A = get_eval_grid(n)
-                tt_sympy = np.array(f(*[A[:, i] for i in range(n)])).astype(np.uint8).reshape(-1)
+                tt_sympy = _symbolic_truth_vector(f(*[A[:, i] for i in range(n)]), 1 << n)
                 sympy_ok = bool(np.array_equal(tt_ref if tt_ref is not None else tt, tt_sympy))
         except Exception:
             sympy_time = None
@@ -2436,7 +2474,7 @@ def time_backends_on_expr(
                 sop_expr = sp.sympify(sop_str, evaluate=False)
                 f2 = sp.lambdify(xs, sop_expr, "numpy")
                 A = get_eval_grid(n)
-                tt_sop = np.array(f2(*[A[:, i] for i in range(n)])).astype(np.uint8).reshape(-1)
+                tt_sop = _symbolic_truth_vector(f2(*[A[:, i] for i in range(n)]), 1 << n)
                 bdd_sop_ok = bool(np.array_equal(tt_ref if tt_ref is not None else tt, tt_sop))
         except Exception:
             bdd_sop_time = None
@@ -2785,6 +2823,9 @@ def time_backends_on_expr(
         "custom_tt_robdd_time_s": bdd_time,
         "custom_tt_robdd_nodes": bdd_nodes,
         "custom_tt_robdd_ok": robdd_ok,
+        "custom_tt_robdd_input_ok": custom_tt_robdd_input_ok,
+        "custom_tt_robdd_validation_time_s": custom_tt_robdd_validation_time,
+        "custom_tt_robdd_validation_method": "full_source_eval_expr_tt" if build_tt and not config.no_robdd else "not_run",
         "dd_time_s": dd_time,
         "dd_nodes": dd_nodes,
         **robdd_dd_result,
@@ -3071,6 +3112,7 @@ def run_bench(
             dd_nodes_median=("dd_nodes", safe_median),
             custom_tt_robdd_time_s_median=("custom_tt_robdd_time_s", safe_median),
             custom_tt_robdd_nodes_median=("custom_tt_robdd_nodes", safe_median),
+            custom_tt_robdd_validation_time_s_median=("custom_tt_robdd_validation_time_s", safe_median),
             robdd_node_count_median=("robdd_node_count", safe_median),
             robdd_best_time_s_median=("robdd_best_time_s", safe_median),
             robdd_fastest_build_time_s_median=("robdd_fastest_build_time_s", safe_median),
@@ -3314,6 +3356,8 @@ def run_bench(
             numba_ok_all=("numba_ok", safe_all),
             sympy_ok_all=("sympy_ok", safe_all),
             custom_tt_robdd_ok_all=("custom_tt_robdd_ok", safe_all),
+            custom_tt_robdd_input_ok_all=("custom_tt_robdd_input_ok", safe_all),
+            custom_tt_robdd_validation_method=("custom_tt_robdd_validation_method", safe_first),
             robdd_ok_all=("robdd_ok", safe_all),
             robdd_backend=("robdd_backend", safe_first),
             robdd_backend_module=("robdd_backend_module", safe_first),

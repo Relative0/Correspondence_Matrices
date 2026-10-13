@@ -4,7 +4,8 @@ import atexit
 import math
 import os
 import threading
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, wait
+from contextlib import ExitStack
 from multiprocessing import shared_memory
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -66,13 +67,33 @@ atexit.register(shutdown_parallel_pools)
 
 
 def count_expr_nodes(expr: Expr) -> int:
-    if isinstance(expr, Var):
-        return 1
-    if isinstance(expr, Not):
-        return 1 + count_expr_nodes(expr.a)
-    if isinstance(expr, _BIN_NODES):
-        return 1 + count_expr_nodes(expr.a) + count_expr_nodes(expr.b)
-    raise TypeError(expr)
+    """Count unfolded occurrences using an identity-memoized DAG traversal."""
+    counts = {}
+    active = set()
+    stack = [(expr, False)]
+    while stack:
+        node, ready = stack.pop()
+        key = id(node)
+        if key in counts:
+            continue
+        if isinstance(node, Var):
+            children = ()
+        elif isinstance(node, Not):
+            children = (node.a,)
+        elif isinstance(node, _BIN_NODES):
+            children = (node.a, node.b)
+        else:
+            raise TypeError(type(node))
+        if ready:
+            counts[key] = 1 + sum(counts[id(c)] for c in children)
+            active.remove(key)
+        else:
+            if key in active:
+                raise ValueError("node counting requires an acyclic expression")
+            active.add(key)
+            stack.append((node, True))
+            stack.extend((c, False) for c in reversed(children))
+    return counts[id(expr)]
 
 
 def _combine_chunk_worker(op: str, left: np.ndarray, right: np.ndarray) -> np.ndarray:
@@ -119,19 +140,18 @@ def _combine_chunk_worker_shared(
     end_elem: int,
 ) -> int:
     dtype = np.dtype(dtype_str)
-    left_shm = shared_memory.SharedMemory(name=left_name)
-    right_shm = shared_memory.SharedMemory(name=right_name)
-    out_shm = shared_memory.SharedMemory(name=out_name)
-    try:
+    with ExitStack() as cleanup:
+        left_shm = shared_memory.SharedMemory(name=left_name)
+        cleanup.callback(left_shm.close)
+        right_shm = shared_memory.SharedMemory(name=right_name)
+        cleanup.callback(right_shm.close)
+        out_shm = shared_memory.SharedMemory(name=out_name)
+        cleanup.callback(out_shm.close)
         left = np.ndarray((n_elems,), dtype=dtype, buffer=left_shm.buf)
         right = np.ndarray((n_elems,), dtype=dtype, buffer=right_shm.buf)
         out = np.ndarray((n_elems,), dtype=dtype, buffer=out_shm.buf)
         _apply_op_inplace(out[start_elem:end_elem], left[start_elem:end_elem], right[start_elem:end_elem], op)
         return end_elem - start_elem
-    finally:
-        left_shm.close()
-        right_shm.close()
-        out_shm.close()
 
 
 def _combine_parallel_shared(
@@ -150,42 +170,45 @@ def _combine_parallel_shared(
     if right.size != n_elems:
         raise ValueError("shared parallel combine requires equal-sized arrays")
     nbytes = int(n_elems * dtype.itemsize)
-    left_shm = shared_memory.SharedMemory(create=True, size=nbytes)
-    right_shm = shared_memory.SharedMemory(create=True, size=nbytes)
-    out_shm = shared_memory.SharedMemory(create=True, size=nbytes)
-    try:
+    with ExitStack() as cleanup:
+        buffers = []
+        for _ in range(3):
+            shm = shared_memory.SharedMemory(create=True, size=nbytes)
+            cleanup.callback(shm.unlink)
+            cleanup.callback(shm.close)
+            buffers.append(shm)
+        left_shm, right_shm, out_shm = buffers
         left_flat = np.ndarray((n_elems,), dtype=dtype, buffer=left_shm.buf)
         right_flat = np.ndarray((n_elems,), dtype=dtype, buffer=right_shm.buf)
         out_flat = np.ndarray((n_elems,), dtype=dtype, buffer=out_shm.buf)
         np.copyto(left_flat.reshape(out_shape), left.astype(bool, copy=False))
         np.copyto(right_flat.reshape(out_shape), right.astype(bool, copy=False))
         futures = []
-        for start, end in chunk_ranges:
-            futures.append(
-                executor.submit(
-                    _combine_chunk_worker_shared,
-                    op,
-                    left_shm.name,
-                    right_shm.name,
-                    out_shm.name,
-                    dtype.str,
-                    n_elems,
-                    start,
-                    end,
+        try:
+            for start, end in chunk_ranges:
+                futures.append(
+                    executor.submit(
+                        _combine_chunk_worker_shared,
+                        op,
+                        left_shm.name,
+                        right_shm.name,
+                        out_shm.name,
+                        dtype.str,
+                        n_elems,
+                        start,
+                        end,
+                    )
                 )
-            )
-        _bump(diagnostics, "worker_tasks_spawned", len(futures))
-        _bump(diagnostics, "combine_chunk_tasks", len(futures))
-        for fut in futures:
-            fut.result()
-        return out_flat.reshape(out_shape).copy()
-    finally:
-        left_shm.close()
-        right_shm.close()
-        out_shm.close()
-        left_shm.unlink()
-        right_shm.unlink()
-        out_shm.unlink()
+            _bump(diagnostics, "worker_tasks_spawned", len(futures))
+            _bump(diagnostics, "combine_chunk_tasks", len(futures))
+            for fut in futures:
+                fut.result()
+            return out_flat.reshape(out_shape).copy()
+        finally:
+            # Pending workers must settle before owner buffers are released.
+            for fut in futures:
+                fut.cancel()
+            wait(futures)
 
 
 def compile_expr_to_cm_parallel(

@@ -73,7 +73,8 @@ def eval_expr_bitset(
     Variables absent from ``env`` must be supplied by ``fixed``.  A fixed true
     variable receives the full assignment mask and a fixed false variable the
     zero mask, giving this direct packed arm the same substitution contract as
-    the CM evaluators.
+    the CM evaluators. Fixed bindings override ``env`` bindings while retaining
+    the environment's assignment width.
     """
     n_vars = len(env)
     n_rows = 1 << n_vars
@@ -93,10 +94,10 @@ def eval_expr_bitset(
 
         if isinstance(e, Var):
             name = f"x{e.i}"
-            if name in env:
-                result = env[name]
-            elif name in fixed_map:
+            if name in fixed_map:
                 result = full_mask if int(bool(fixed_map[name])) else 0
+            elif name in env:
+                result = env[name]
             else:
                 raise KeyError(f"missing live/fixed value for variable {name!r}")
         elif isinstance(e, Not):

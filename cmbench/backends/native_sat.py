@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 import re
-import subprocess
+from cmbench.backends.solver_process import (
+    DEFAULT_SOLVER_MEMORY_BYTES, read_solver_input, run_solver, validate_solver_limits)
 
 
 STATUS = re.compile(r"^s (SATISFIABLE|UNSATISFIABLE)$", re.MULTILINE)
@@ -25,6 +26,7 @@ class NativeSatResult:
     command: tuple[str, ...]
     stdout: str
     stderr: str
+    resources: dict = field(default_factory=dict)
 
 
 def parse_xor_dimacs(text: str, *, max_bytes: int = 16 << 20,
@@ -72,26 +74,16 @@ def _satisfies(instance: XorCNF, assignment: tuple[bool, ...]) -> bool:
 
 def run_cryptominisat(path: str | Path, *, executable: str | Path = "cryptominisat5",
                       timeout_seconds: float = 60.0, threads: int = 1,
-                      max_output_bytes: int = 1 << 20) -> NativeSatResult:
-    source = Path(path).resolve()
-    if not source.is_file() or source.is_symlink():
-        raise ValueError("native SAT input missing or linked")
-    instance = parse_xor_dimacs(source.read_text(encoding="utf-8"))
-    if not isinstance(threads, int) or not 1 <= threads <= 256:
+                      max_output_bytes: int = 1 << 20,
+                      max_memory_bytes: int = DEFAULT_SOLVER_MEMORY_BYTES) -> NativeSatResult:
+    validate_solver_limits(timeout_seconds, max_output_bytes, max_memory_bytes)
+    source, text = read_solver_input(path)
+    instance = parse_xor_dimacs(text)
+    if type(threads) is not int or not 1 <= threads <= 256:
         raise ValueError("invalid CryptoMiniSat thread count")
-    if not 0 < timeout_seconds <= 900:
-        raise ValueError("invalid CryptoMiniSat timeout")
     command = (str(executable), "--verb", "0", "--threads", str(threads), str(source))
-    try:
-        completed = subprocess.run(
-            command, check=False, capture_output=True, text=True, encoding="utf-8",
-            errors="replace", timeout=timeout_seconds,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise TimeoutError("CryptoMiniSat deadline exceeded") from exc
-    output_bytes = len(completed.stdout.encode("utf-8")) + len(completed.stderr.encode("utf-8"))
-    if output_bytes > max_output_bytes:
-        raise ValueError("CryptoMiniSat diagnostic output exceeds limit")
+    completed = run_solver(command, timeout_seconds=timeout_seconds,
+        max_output_bytes=max_output_bytes, max_memory_bytes=max_memory_bytes)
     statuses = STATUS.findall(completed.stdout)
     if len(statuses) != 1:
         raise ValueError("CryptoMiniSat output lacks one status")
@@ -102,16 +94,34 @@ def run_cryptominisat(path: str | Path, *, executable: str | Path = "cryptominis
     assignment = None
     if status == "SATISFIABLE":
         values: dict[int, bool] = {}
+        saw_witness = terminated = False
         for line in completed.stdout.splitlines():
             if not line.startswith("v "):
                 continue
-            for token in line[2:].split():
+            tokens = line[2:].split()
+            if not tokens or terminated:
+                raise ValueError("CryptoMiniSat witness has data after terminator or an empty line")
+            saw_witness = True
+            # CryptoMiniSat wraps long models onto multiple v lines, placing
+            # one zero terminator at the end of the complete token stream.
+            for position, token in enumerate(tokens):
+                if token == '0':
+                    if position != len(tokens) - 1:
+                        raise ValueError("CryptoMiniSat witness has data after terminator")
+                    terminated = True
+                    continue
                 literal = int(token)
-                if literal:
-                    values[abs(literal)] = literal > 0
+                index = abs(literal)
+                if not 1 <= index <= instance.variables:
+                    raise ValueError("CryptoMiniSat witness variable outside input range")
+                if index in values and values[index] != (literal > 0):
+                    raise ValueError("CryptoMiniSat witness has contradictory literals")
+                values[index] = literal > 0
+        if saw_witness and not terminated:
+            raise ValueError("CryptoMiniSat witness is unterminated")
         if set(values) != set(range(1, instance.variables + 1)):
             raise ValueError("CryptoMiniSat witness is incomplete")
         assignment = tuple(values[index] for index in range(1, instance.variables + 1))
         if not _satisfies(instance, assignment):
             raise ValueError("CryptoMiniSat witness does not satisfy input")
-    return NativeSatResult(status, assignment, command, completed.stdout, completed.stderr)
+    return NativeSatResult(status, assignment, command, completed.stdout, completed.stderr, completed.resources)

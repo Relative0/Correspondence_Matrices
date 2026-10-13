@@ -209,6 +209,7 @@ def execute(request):
         "wall_ns": wall_ns, "cpu_ns": cpu_ns,
         "native_stdout_sha256": digest_bytes(native.stdout.encode()) if native else None,
         "native_stderr_sha256": digest_bytes(native.stderr.encode()) if native else None,
+        "native_resources": native.resources if native else None,
     }
     try:
         import resource
