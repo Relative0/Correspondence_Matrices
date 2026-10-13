@@ -151,18 +151,29 @@ class CofactorStep:
 
 
 @dataclass(frozen=True)
+class AxisSwapStep:
+    """Exchange adjacent residual axes by swapping their 01 and 10 bit blocks."""
+
+    stride: int
+    lower_mask: int
+
+
+@dataclass(frozen=True)
 class PackedCofactorPlan:
     """Precomputed exact packed-bit extraction schedule for one restriction."""
 
     n_vars: int
     remaining: tuple[str, ...]
     steps: tuple[CofactorStep, ...]
+    axis_swaps: tuple[AxisSwapStep, ...] = ()
 
     @property
     def plan_bytes_estimate(self) -> int:
         # Deterministic payload estimate, not Python allocator accounting.
-        return sum(24 + max(1, (step.chunk_mask.bit_length() + 7) // 8)
-                   for step in self.steps)
+        return (sum(24 + max(1, (step.chunk_mask.bit_length() + 7) // 8)
+                    for step in self.steps)
+                + sum(8 + max(1, (step.lower_mask.bit_length() + 7) // 8)
+                      for step in self.axis_swaps))
 
 
 def compile_packed_cofactor_plan(
@@ -170,13 +181,14 @@ def compile_packed_cofactor_plan(
     fixed: Mapping[str, int],
     remaining: Sequence[str],
 ) -> PackedCofactorPlan:
-    """Compile a restriction into ascending-axis packed cofactor steps."""
+    """Compile ascending-axis cofactors followed by the requested residual order."""
     _require(type(n_vars) is int and 1 <= n_vars <= 63, "invalid cofactor width")
     remaining_tuple = tuple(remaining)
     remaining_indices = tuple(int(name[1:]) for name in remaining_tuple)
     fixed_indices = {int(name[1:]): value for name, value in fixed.items()}
     _require(
         remaining_tuple
+        and len(set(remaining_indices)) == len(remaining_indices)
         and all(type(value) is int and value in (0, 1)
                 for value in fixed_indices.values())
         and set(remaining_indices).isdisjoint(fixed_indices)
@@ -198,10 +210,27 @@ def compile_packed_cofactor_plan(
         current_width -= 1
         removed += 1
     _require(current_width == len(remaining_tuple), "cofactor residual width")
+    current_axes = sorted(remaining_indices)
+    residual_rows = 1 << current_width
+    axis_swaps: list[AxisSwapStep] = []
+    for target, axis in enumerate(remaining_indices):
+        position = current_axes.index(axis)
+        while position > target:
+            left = position - 1
+            stride = 1 << (current_width - 2 - left)
+            lower_mask = ((1 << stride) - 1) << stride
+            period = stride << 2
+            while period < residual_rows:
+                lower_mask |= lower_mask << period
+                period <<= 1
+            axis_swaps.append(AxisSwapStep(stride, lower_mask))
+            current_axes[left], current_axes[position] = current_axes[position], current_axes[left]
+            position -= 1
     return PackedCofactorPlan(
         n_vars=n_vars,
         remaining=remaining_tuple,
         steps=tuple(steps),
+        axis_swaps=tuple(axis_swaps),
     )
 
 
@@ -222,5 +251,9 @@ def project_packed_truth(bits: int, plan: PackedCofactorPlan) -> int:
             source >>= source_advance
             destination_shift += step.stride
         value = result
+    for swap in plan.axis_swaps:
+        # 00/11 blocks stay in place. Toggle differing bits in the 01/10 pair.
+        delta = (value ^ (value >> swap.stride)) & swap.lower_mask
+        value ^= delta ^ (delta << swap.stride)
     residual_rows = 1 << len(plan.remaining)
     return value & ((1 << residual_rows) - 1)

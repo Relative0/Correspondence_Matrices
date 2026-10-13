@@ -313,7 +313,9 @@ def test_admission_once_for_fallback_and_refuses_before_evaluator(fast):
         ir.materialize_hybrid_no_reinflate(node, ("x0","x1"), hybrid_threshold=0,
             flat_eval=True, flat_fast_path=fast)
         assert decide.call_count == 1
-    estimate = estimate_explicit_output(2,"packed_bitset",operation_slots=ir._cm_node_count(node))
+    # Exercise the audited public estimate, including retained support
+    # payload beyond the former flat-slot-only heuristic.
+    estimate = ir.estimate_cm_output(node, 2, "packed_bitset", hybrid_threshold=20)
     for field, limit in [("max_output_bytes",estimate.output_bytes),
                          ("max_temporary_bytes",estimate.temporary_bytes)]:
         for delta in [-1,0,1]:

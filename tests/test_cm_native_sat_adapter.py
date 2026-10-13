@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from subprocess import CompletedProcess
+from cmbench.backends.solver_process import SolverProcessResult
 
 import pytest
 
@@ -15,9 +15,9 @@ def test_xor_dimacs_parser_and_cryptominisat_witness(tmp_path: Path, monkeypatch
     assert instance.xor_clauses == ((1, 2),)
 
     def completed(command, **_kwargs):
-        return CompletedProcess(command, 10, "s SATISFIABLE\nv 1 -2 0\n", "")
+        return SolverProcessResult(10, "s SATISFIABLE\nv 1 -2 0\n", "", {})
 
-    monkeypatch.setattr("cmbench.backends.native_sat.subprocess.run", completed)
+    monkeypatch.setattr("cmbench.backends.native_sat.run_solver", completed)
     result = run_cryptominisat(source, executable="/opt/pinned/cryptominisat5")
     assert result.status == "SATISFIABLE"
     assert result.assignment == (True, False)
@@ -29,9 +29,9 @@ def test_cryptominisat_adapter_rejects_bad_witness_and_header(tmp_path: Path, mo
     source.write_text("p cnf 2 2\nx 1 2 0\n1 0\n", encoding="utf-8")
 
     def bad_witness(command, **_kwargs):
-        return CompletedProcess(command, 10, "s SATISFIABLE\nv 1 2 0\n", "")
+        return SolverProcessResult(10, "s SATISFIABLE\nv 1 2 0\n", "", {})
 
-    monkeypatch.setattr("cmbench.backends.native_sat.subprocess.run", bad_witness)
+    monkeypatch.setattr("cmbench.backends.native_sat.run_solver", bad_witness)
     with pytest.raises(ValueError, match="does not satisfy"):
         run_cryptominisat(source)
     with pytest.raises(ValueError, match="incomplete"):

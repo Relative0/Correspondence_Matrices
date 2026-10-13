@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from collections.abc import Mapping, Sequence
 import ctypes
 import hashlib
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,7 @@ class NativeSlotArena:
     root: int
     _workspaces: dict[int, tuple[np.ndarray, np.ndarray]] = field(
         default_factory=dict, init=False, repr=False)
+    _evaluation_lock: Any = field(default_factory=threading.RLock, init=False, repr=False, compare=False)
 
     @property
     def node_count(self) -> int:
@@ -89,6 +91,15 @@ class NativeSlotArena:
         return bindings
 
     def evaluate(self, bindings: np.ndarray, live_count: int) -> int:
+        """Serialize same-arena calls through native execution and result copy.
+
+        Separate arenas retain independent locks/scratch. Callers must not
+        mutate bindings or program arrays during evaluation.
+        """
+        with self._evaluation_lock:
+            return self._evaluate_locked(bindings, live_count)
+
+    def _evaluate_locked(self, bindings: np.ndarray, live_count: int) -> int:
         _require(
             isinstance(bindings, np.ndarray)
             and bindings.dtype == np.int16
@@ -98,6 +109,8 @@ class NativeSlotArena:
             and 1 <= live_count < 31,
             "invalid native slot evaluation",
         )
+        # C consumes adjacent native int16 values, not NumPy view strides.
+        bindings = np.require(bindings, requirements=["C", "A"])
         word_count = max(1, ((1 << live_count) + 63) // 64)
         buffers = self._workspaces.get(word_count)
         if buffers is None:
@@ -138,6 +151,7 @@ class NativeMultiRootArena:
     variable_count: int
     _workspaces: dict[int, tuple[np.ndarray, np.ndarray]] = field(
         default_factory=dict, init=False, repr=False)
+    _evaluation_lock: Any = field(default_factory=threading.RLock, init=False, repr=False, compare=False)
 
     @property
     def node_count(self) -> int:
@@ -176,6 +190,15 @@ class NativeMultiRootArena:
         return proxy.prepare_bindings(fixed, remaining)
 
     def evaluate(self, bindings: np.ndarray, live_count: int) -> tuple[int, ...]:
+        """Serialize same-arena calls through native execution and result copy.
+
+        Parallel evaluation uses separate arenas; caller-owned arrays must
+        remain unchanged during a call.
+        """
+        with self._evaluation_lock:
+            return self._evaluate_locked(bindings, live_count)
+
+    def _evaluate_locked(self, bindings: np.ndarray, live_count: int) -> tuple[int, ...]:
         _require(
             isinstance(bindings, np.ndarray)
             and bindings.dtype == np.int16
@@ -185,6 +208,7 @@ class NativeMultiRootArena:
             and 1 <= live_count < 31,
             "invalid native multi-root evaluation",
         )
+        bindings = np.require(bindings, requirements=["C", "A"])
         word_count = max(1, ((1 << live_count) + 63) // 64)
         buffers = self._workspaces.get(word_count)
         if buffers is None:

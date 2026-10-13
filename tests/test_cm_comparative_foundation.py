@@ -11,7 +11,7 @@ import tempfile
 import unittest
 
 from cm_exprlib import And, Eqv, Imp, Not, Or, Var, Xor
-from cm_ir import compile_expr_to_cm_ir
+from cm_ir import CompilationAdmissionError, compile_expr_to_cm_ir
 from cmbench.comparative import contracts
 from cmbench.comparative.arms import execute_arm, scalar_relation, semantic_sha256
 from cmbench.comparative.evidence import append_record, publish_json, read_ledger, reconcile, resume_cells
@@ -182,8 +182,15 @@ class ComparativeStructuralTests(unittest.TestCase):
         stats = expression_stats(expr, unfolded_limit=1000)
         self.assertTrue(stats["unfolded_capped"])
         self.assertIsNone(stats["unfolded_occurrences"])
-        first = compile_expr_to_cm_ir(expr)
-        second = compile_expr_to_cm_ir(expr)
+        with self.assertRaises(CompilationAdmissionError):
+            compile_expr_to_cm_ir(expr)
+        # Exact signature checks use an admitted DAG; the oversized graph
+        # separately verifies refusal instead of weakening the work bound.
+        admitted = Var(0)
+        for _ in range(8):
+            admitted = And(admitted, admitted)
+        first = compile_expr_to_cm_ir(admitted)
+        second = compile_expr_to_cm_ir(admitted)
         self.assertEqual(cm_dag_signature(first), cm_dag_signature(second))
         self.assertEqual(cm_ir_stats(first)["cm_ir_signature_sha256"], cm_ir_stats(second)["cm_ir_signature_sha256"])
 

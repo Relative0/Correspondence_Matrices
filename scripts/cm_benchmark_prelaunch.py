@@ -314,6 +314,7 @@ def prepare(out: Path) -> dict:
         "cmbench/__init__.py", "cmbench/campaign_prelaunch.py", "cmbench/output_budget.py",
         "cmbench/backends/__init__.py", "cmbench/backends/affine_constraints.py",
         "cmbench/backends/native_count.py", "cmbench/backends/native_sat.py", "cmbench/backends/projected_count.py", "cmbench/biology_bnet.py",
+        "cmbench/backends/solver_process.py", "cmbench/comparative/linux_supervisor.py",
         "cmbench/backends/bitset_engine.py", "cmbench/backends/bitset_utils.py",
         "cmbench/backends/packed_mask_cache.py", "cmbench/backends/packed_queries.py",
         "cmbench/backends/packed_stream_io.py", "cmbench/comparative/__init__.py",
