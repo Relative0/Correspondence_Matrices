@@ -151,29 +151,53 @@ def find_owned(snapshot, state):
     if len(matches) > 1:
         raise RuntimeError("multiple same-name Pods; refusing cleanup")
     identity = Path(state["output"]) / "POD-IDENTITY.json"
-    if identity.exists() and matches and matches != {load(identity)["pod_id"]}:
+    identity_exists = identity.exists()
+    pinned = load(identity)["pod_id"] if identity_exists else None
+    if identity_exists and (not isinstance(pinned, str) or not re.fullmatch(r"[a-z0-9]{8,40}", pinned)):
+        raise RuntimeError("invalid owned Pod identity; refusing cleanup")
+    candidates = matches | ({pinned} if pinned is not None else set())
+    if any(row.get("id") in candidates and row.get("name") != state["name"]
+           for rows in snapshot.values() for row in rows):
+        raise RuntimeError("owned Pod name conflict; refusing cleanup")
+    if pinned is not None and matches and matches != {pinned}:
         raise RuntimeError("owned Pod identity mismatch; refusing cleanup")
     return sorted(matches)
 
 
 def cleanup(client, state, role):
     attempts = []
-    matches = find_owned(inventories(client), state)
-    for pod_id in matches:
-        if not re.fullmatch(r"[a-z0-9]{8,40}", pod_id):
-            raise RuntimeError("unsafe Pod ID")
-        for endpoint in (V1, V2):
-            response = client.delete(endpoint + "/pods/" + pod_id, timeout=20, allow_redirects=False)
-            attempts.append({"api": endpoint, "http_status": response.status_code})
-            if response.status_code in {200, 202, 204, 404}:
-                break
-    for _ in range(5):
+    snapshot = {}
+    try:
         snapshot = inventories(client)
-        if not find_owned(snapshot, state):
-            break
-        time.sleep(3)
+        matches = find_owned(snapshot, state)
+        for pod_id in matches:
+            if not re.fullmatch(r"[a-z0-9]{8,40}", pod_id):
+                raise RuntimeError("unsafe Pod ID")
+            for endpoint in (V1, V2):
+                try:
+                    response = client.delete(endpoint + "/pods/" + pod_id, timeout=20, allow_redirects=False)
+                except requests.RequestException as exc:
+                    attempts.append({"api": endpoint, "error_type": type(exc).__name__})
+                    continue
+                attempts.append({"api": endpoint, "http_status": response.status_code})
+                # One endpoint's 404 does not prove absence in the other API.
+                if response.status_code in {200, 202, 204}:
+                    break
+        for _ in range(5):
+            snapshot = inventories(client)
+            if not find_owned(snapshot, state):
+                break
+            time.sleep(3)
+        absent = not find_owned(snapshot, state)
+    except (requests.RequestException, RuntimeError, ValueError) as exc:
+        append(Path(state["output"]) / "cleanup-events.jsonl", {
+            "checked_utc": now(), "role": role, "attempts": attempts,
+            "owned_pod_absent": False, "inventories": snapshot,
+            "observation_error_type": type(exc).__name__,
+        })
+        raise
     result = {"checked_utc": now(), "role": role, "attempts": attempts,
-              "owned_pod_absent": not find_owned(snapshot, state), "inventories": snapshot}
+              "owned_pod_absent": absent, "inventories": snapshot}
     append(Path(state["output"]) / "cleanup-events.jsonl", result)
     return result
 
