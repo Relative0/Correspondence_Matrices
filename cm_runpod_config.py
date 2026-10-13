@@ -54,10 +54,14 @@ def load_runpod_config(
     env_paths: Sequence[Path] | None = None,
 ) -> CMRunPodConfig:
     merged: dict[str, str] = {}
-    paths = default_env_paths() if env_paths is None else list(env_paths)
+    process_env = dict(os.environ if env is None else env)
+    # Offline callers must be able to suppress automatic credential-file reads.
+    # Explicit paths remain available for reviewed fixtures and scoped callers.
+    disable_files = _bool_env(process_env, "CM_RUNPOD_DISABLE_ENV_FILES", False)
+    paths = ([] if disable_files else default_env_paths()) if env_paths is None else list(env_paths)
     for path in paths:
         merged.update(_parse_env_file(path))
-    merged.update(dict(os.environ if env is None else env))
+    merged.update(process_env)
     return CMRunPodConfig(
         base_url=_strip_slash(merged.get("CM_RUNPOD_BASE_URL", "")),
         pod_id=merged.get("RUNPOD_POD_ID", ""),

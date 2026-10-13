@@ -1,0 +1,147 @@
+{
+  "schema": "cm-october-benchmark-summary/v1",
+  "reviewed": "2026-10-13",
+  "publication_scope": "Curated results and source hash receipts. Raw operational records remain local; this download is not a full reproduction archive.",
+  "direct_cm_cse": {
+    "status": "completed_no_confirmed_improvement",
+    "host": "Local WSL2 Ubuntu 24.04",
+    "case": "One admitted 74181 ALU case, 14 inputs and four outputs",
+    "cells": 24,
+    "oracle_output_checks": 258,
+    "prepared_queries": 180,
+    "metric": "Fully charged supervisor process wall time; warmups and validation excluded",
+    "ratio_direction": "CM/CSE; lower favors CM",
+    "analyses": [
+      {
+        "kind": "cold",
+        "pairs": 7,
+        "ratio_cm_over_cse": 0.9677582380902595,
+        "paired_bootstrap_95_interval": [
+          0.8562396564091099,
+          1.4058017126423703
+        ],
+        "cm_improvement": false,
+        "cse_median_ms": 1761.24618,
+        "cm_median_ms": 1704.4605
+      },
+      {
+        "kind": "prepared",
+        "pairs": 3,
+        "ratio_cm_over_cse": 1.0099728942112587,
+        "paired_bootstrap_95_interval": [
+          0.8025208276320096,
+          1.098317256721973
+        ],
+        "cm_improvement": false,
+        "cse_median_ms": 1930.80159,
+        "cm_median_ms": 1950.05727
+      }
+    ],
+    "qualification": "Approved telemetry-only successor after the original validation stopped on unavailable optional process I/O. Same oracle, arms and paired schedule; not a newly untouched holdout or unamended original run. Optional I/O remains unavailable. Admission covers accessible recorded history; 225 inaccessible historical paths remain a limitation. Both intervals cross 1: no confirmed improvement, inferiority or equivalence."
+  },
+  "bucket_cudd": {
+    "status": "completed_amended_single_case_confirmation",
+    "host": "Local WSL2 Ubuntu 24.04",
+    "case": "counting-exact-0a59550d01e7faaf; 24 variables, 63 clauses; exact unrestricted count 70",
+    "cells": 22,
+    "prepared_queries": 180,
+    "metric": "Fully charged supervisor process wall time; warmups excluded",
+    "ratio_direction": "CUDD/Bucket; higher favors Bucket",
+    "analyses": [
+      {
+        "kind": "cold",
+        "pairs": 7,
+        "ratio_cudd_over_bucket": 1.9690169279454068,
+        "paired_bootstrap_95_interval": [
+          1.8090186022467694,
+          2.3266244557908187
+        ],
+        "confirmation_improvement_for_bucket": true,
+        "cudd_median_ms": 461.71665,
+        "bucket_median_ms": 234.49095
+      },
+      {
+        "kind": "prepared",
+        "pairs": 3,
+        "ratio_cudd_over_bucket": 1.993348957474649,
+        "paired_bootstrap_95_interval": [
+          1.850315954236034,
+          2.335673446701336
+        ],
+        "confirmation_improvement_for_bucket": true,
+        "cudd_median_ms": 429.82155,
+        "bucket_median_ms": 215.62785
+      }
+    ],
+    "qualification": "Prepared deadline corrected from 90 to 60 seconds after cold execution, before any prepared cell began. Six unstarted prepared cells ran in a second service; cold cells were not rerun. Bucket is an exact-count backend, and this result does not establish a CM IR advantage. CUDD answered prepared queries faster after its longer setup. No broad, projected-count or RunPod confirmation claim."
+  },
+  "exploratory": {
+    "status": "completed_non_confirmatory",
+    "measured_utc": "2026-10-12 17:19–17:21",
+    "host": "RunPod CPU, 2 vCPU/4 GB",
+    "cells": 44,
+    "prepared_queries": 360,
+    "qualification": "Two regression inputs: onehot BLIF and s27 CNF. No writable delegated cgroup child, so the strict kernel memory requirement was unmet. Supervisor wall had an approximately 125 ms common floor. Worker phases are diagnostics: CM IR was slower than CSE; Bucket preparation was faster than CUDD, while CUDD prepared queries were faster. Owned Pod deletion and empty inventories were recorded; actual billing was not queried.",
+    "diagnostic_worker_total_ms": [
+      {
+        "arm": "Onehot CSE",
+        "cold": 9.612,
+        "prepared": 15.07
+      },
+      {
+        "arm": "Onehot CM IR",
+        "cold": 17.798,
+        "prepared": 22.354
+      },
+      {
+        "arm": "s27 CUDD",
+        "cold": 73.649,
+        "prepared": 73.718
+      },
+      {
+        "arm": "s27 Bucket",
+        "cold": 5.049,
+        "prepared": 10.239
+      }
+    ]
+  },
+  "remaining": "These schedules are complete. Broader workload and host qualification, projected-count confirmation, and the 201 native CUDD tests excluded from the separate hardening integration remain outside this publication.",
+  "source_receipts": [
+    {
+      "source": "work/dot-autonomous-testing/20261013-cm-ir-cse-freeze/telemetry-successor-v3/INDEPENDENT_VERIFICATION.json",
+      "sha256": "5bb8f429ca83675ee06c0c6537758547bdb8d9ffec73b88fe73fcfee89ee21ca"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-cm-ir-cse-freeze/telemetry-successor-v3/EXECUTION_SHA256SUMS.json",
+      "sha256": "e484d6111c8a542907d1df9e631160a5e6b186d25f9d9731d503c5d5f607fafc"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-cm-ir-cse-freeze/telemetry-successor-v3/CHECKPOINT.txt",
+      "sha256": "05d561bf1d4416e6d2fcb233409b61468c042cb27a9663d63b6bcbfc13e9df87"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-strict-confirmation/STRICT_SUMMARY-FINAL.json",
+      "sha256": "bbff38049fd5ee962bbfadbf193a4529503b9ca1456cf915919362e568f17b32"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-strict-confirmation/STRICT_VERIFICATION.json",
+      "sha256": "700f565faadba4b7d148c03c42ddd5d905be3692ce45b5e7a4ff790e97467f54"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-strict-confirmation/AMENDMENT.json",
+      "sha256": "4b311f52bd6c9a0d98d713973e97309345f811eed22cfdaa90fe2beffd16cb47"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-exploratory-performance/CHECKPOINT.md",
+      "sha256": "89891a5e48523bf4e7297e76b0705d347645d76c2d0546006ec76cfc830a2fa7"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-exploratory-performance/VERIFICATION.json",
+      "sha256": "81476acfad57508430a0c35ca16a0398a416c73e30a5dc741aababf69b20168a"
+    },
+    {
+      "source": "work/dot-autonomous-testing/20261013-exploratory-performance/evidence/summary.json",
+      "sha256": "976dd998cd6bb480067e40a8db182c13ffcc4977dc3604661b85b3c4f0aceda6"
+    }
+  ]
+}

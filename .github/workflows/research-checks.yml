@@ -80,3 +80,35 @@ jobs:
         run: python -B scripts/verify_cm_count_closures_release.py
       - name: Verify current code and the immutable extracted snapshot
         run: python -B scripts/cm_research_check.py --report tmp/research-ci-check.json
+
+  website-release-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out reviewed repository contents
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+      - name: Prepare the Pages payload for validation
+        shell: bash
+        run: |
+          mkdir -p _site
+          site_dir="deliverables_n22_24/master_explainer_2026_08_03"
+          for page in index layperson investor expert usecases feature-model-evidence learning-neural-evidence data-downloads latest-results late-scan-status p-series-study-guide findings; do
+            cp "$site_dir/$page.html" _site/
+          done
+          cp -R "$site_dir/results" _site/results
+          cp "$site_dir/og.png" _site/
+          python -B scripts/cm_neural_site_export.py --output build/neural-pages-export --target https://relative0.github.io/Correspondence_Matrices/neural/
+          cp -R build/neural-pages-export/_site _site/neural
+          touch _site/.nojekyll
+      - name: Reject stale graphs, pages and source downloads
+        run: python -B scripts/cm_website_release_verify.py --site _site --output _site/website-release-manifest.json
+      - name: Verify structured factorization archive and frozen results
+        run: python -B scripts/verify_structured_factorization_release.py --site _site
+      - name: Verify cross-track experiment register and archived evidence
+        run: python -B scripts/verify_research_register_release.py --site _site

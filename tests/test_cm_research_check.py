@@ -136,7 +136,10 @@ class ResearchCheckTests(unittest.TestCase):
         self.assertIn("windows-2025", workflow)
         self.assertIn("core.longpaths", workflow)
         self.assertIn("--only-binary=:all:", workflow)
-        self.assertEqual(len(re.findall(r"uses: actions/[\w-]+@[0-9a-f]{40}\b", workflow)), 3)
+        actions = re.findall(r"uses: actions/[\w-]+@[^\s]+", workflow)
+        self.assertGreaterEqual(len(actions), 3)
+        for action in actions:
+            self.assertRegex(action, r"^uses: actions/[\w-]+@[0-9a-f]{40}$")
         for forbidden in ("pull_request_target:", "workflow_run:", "secrets.", "write-all", "contents: write",
                           "git push", "runpod.io", "deploy-pages", "upload-artifact"):
             self.assertNotIn(forbidden, workflow)
