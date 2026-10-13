@@ -107,7 +107,7 @@ jobs:
           cp -R build/neural-pages-export/_site _site/neural
           touch _site/.nojekyll
       - name: Reject stale graphs, pages and source downloads
-        run: python -B scripts/cm_website_release_verify.py --site _site --output tmp/website-release-manifest.json
+        run: python -B scripts/cm_website_release_verify.py --site _site --output _site/website-release-manifest.json
       - name: Verify structured factorization archive and frozen results
         run: python -B scripts/verify_structured_factorization_release.py --site _site
       - name: Verify cross-track experiment register and archived evidence
