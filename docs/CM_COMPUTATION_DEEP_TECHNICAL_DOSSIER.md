@@ -5,6 +5,8 @@
 **Observed HEAD:** `17d0a1403c9e642a1ed5854db13f685e83fe57c3` (`17d0a14`, “Freeze P7 W5 and record first IR shard,” 2026-09-01)  
 **Purpose:** technical continuity for the mathematical CM implementation, exact backends, decomposition research, performance experiments, and prospective routing work.
 
+**Continuation reviewed 2026-10-03:** Sections 1–40 retain the 2026-09-02 reconstruction and its later scoped corrections. Their uses of “current” are historical to that inspected state. Section 41 records later accepted public-site evidence through 2026-09-21 and the separately frozen structural T3 computation delivered 2026-09-28. It does not reinterpret old benchmark ratios as measurements of newer code.
+
 This document distinguishes seven evidence qualities throughout: **REPRODUCED**, **DIRECT SOURCE EVIDENCE**, **DERIVED FROM RESULTS**, **DOCUMENTATION CLAIM**, **HISTORICAL**, **INFERRED**, and **UNRESOLVED**. “Current” means the executable working-tree state inspected on 2026-09-02. “Frozen” means the behavior represented by a source snapshot or hash-bound experiment artifact, which can differ from current code.
 
 ---
@@ -22,8 +24,8 @@ The current exact execution frontier is workload-dependent:
 | Frozen C36, 64 restrictions, support 11–16 | Flattened CSE was best fixed at 125.454 ms aggregate | **HISTORICAL** — frozen C36 result/report |
 | Current memoized C36 rerun, same task | Compiled full-truth projection is best fixed at 119.956 ms; CSE is 122.812 ms | **REPRODUCED / DERIVED FROM RESULTS** — memoized run artifact |
 | Current memoized C36 per-case choice at q64 | Four multiply-low-cone cases choose projection; the other 14 choose direct AST; raw oracle 83.846 ms | **DERIVED FROM RESULTS** |
-| C16 exact decomposition on its Windows cohort | Screen-then-materialize is 3.55× faster than exhaustive materialization and returns the byte-identical best artifact | **DERIVED FROM RESULTS** — C16 result/report |
-| C21 global-best bounded partition table | Cheap ranking/proposal cannot avoid completion under the frozen “enumerate all exact candidates, return deterministic global best” contract | **DERIVED FROM RESULTS**, formulation-specific |
+| C16 exact decomposition on its Windows cohort | The screened implementation is 3.55× faster than its C15-style exhaustive control and returns the byte-identical canonical best artifact within the enumerated portfolio | **DERIVED FROM RESULTS** — C16 result/report; no comparison with external implementations |
+| C21 canonical-best bounded partition table | The tested ranking/proposal methods did not reduce completion work because each retained the same complete descriptor evaluation | **DERIVED FROM RESULTS**, implementation- and formulation-specific |
 
 The most consequential current code change is a per-call identity memo in `eval_expr_bitset`. Before it, recursive evaluation followed every incoming reference to a shared expression node and therefore performed work proportional to the tree unfolding (U), not unique DAG nodes (N). The current evaluator computes each object identity once per call. **DIRECT SOURCE EVIDENCE:** `bitset_backend.py:60-98`; regression: `tests/test_bitset_backend.py:25-44`. This fix is present in the working tree but not committed at the observed HEAD.
 
@@ -31,7 +33,7 @@ The memoized C36 rerun changes the routing landscape but is not a clean cryptogr
 
 A cheap structural feature, (D=U/N), cleanly separated the four pathological multiply cases in C36 development at a manually chosen threshold (D>10). A later session-only EPFL diagnostic reported a 1.1774× improvement over the best of two included fixed baselines. It is promising, but it is not C37: no durable artifacts, source hashes, frozen protocol, complete fixed-baseline set, or independent verifier were saved. The same EPFL project corpus had already influenced development. **HISTORICAL**, not presently reproducible.
 
-No learned model has earned production authority. Exact checks remain mandatory, no C36 or diagnostic policy was promoted, and several neural/ranking programs are negative under their measured contracts. Packed source ANF and C16 screening are real exact algorithmic advances; the main current opportunity is a formally frozen, prospective routing experiment whose selection cost and fallback are charged.
+No learned model has earned production authority. Exact checks remain mandatory, no C36 or diagnostic policy was promoted, and several neural/ranking programs are negative under their measured contracts. Packed source ANF is an exact algorithmic advance, while C16 is a measured exact implementation advance over C15; the main current opportunity is a formally frozen, prospective routing experiment whose selection cost and fallback are charged.
 
 ---
 
@@ -89,7 +91,7 @@ The reconstruction used targeted inventory, call-site/import tracing, symbol-lev
 | Exact decomposition/screens | `gf2_decomposition.py` | `test_gf2_decomposition.py` | C15/C16/C21 | High |
 | Neural C5 | `natural_variable_cut_experiment.py`, model modules | neural tests in Torch environment | C5 artifacts/report | High for recorded cohort; low for generalization |
 | C6 exact ANF | `source_anf_hybrid.py` | ANF tests | C6 artifacts/report | High |
-| C21 ranking conclusion | comparative/decomposition table experiment | comparative tests | C21 artifacts/report | High under frozen global-best contract |
+| C21 ranking conclusion | comparative/decomposition table experiment | comparative tests | C21 artifacts/report | High for the tested completion procedure and cohort |
 | C34–C36 | corresponding comparative modules | C34–C36 tests | reports/results and memoized run | High, except rerun transitive-source provenance |
 | Structural router | no durable module/artifact found | none | session observations only | Low / historical |
 | Verification | `contracts.py`, verifier scripts | tamper and replay tests | independent-verification JSON | High for enumerated checks |
@@ -198,7 +200,7 @@ The implementation’s equivalence checks establish equality of Boolean output u
 | Compiled truth projection | Build complete truth once, then gather restricted subtables | Large setup, cheap repeated queries |
 | ANF | Algebraic normal form over Boolean quotient ring | Coefficients indexed by monomial variable subset |
 | Exact artifact | Deterministic, validated decomposition document that reconstructs the original truth | Correctness plus schema/digest, not merely a hint |
-| Screen | Cheap descriptor generation/necessary-condition pass before artifact materialization | In C16 it does not discard descriptors that the exhaustive implementation would accept |
+| Screen | Exact descriptor construction before strict artifact admission and complete reconstruction | In C16 a descriptor already contains its factor payload and is canonically hashed; the screen does not discard descriptors that the exhaustive implementation would accept |
 | Oracle | Post-hoc minimum among measured eligible methods | Unattainable unless a selector predicts it prospectively |
 | Delivery | One exact timed result document for a query | Includes relation/count/SAT/witness construction in C36 query timing |
 
@@ -319,7 +321,7 @@ A Python integer is also used as a coefficient bitset: coefficient bit (m\in[0,2
 
 ### 9.8 Exact decomposition artifacts
 
-Artifacts are canonical JSON documents containing schema, kind, truth digest, partition, factor-bit cost, and kind-specific payload. Loading validates shape/ranges/digest and reconstructs the original truth. A `GF2CandidateDescriptor` is deliberately inert until materialized; C16 exploits that separation.
+Artifacts are canonical JSON documents containing schema, kind, truth digest, partition, factor-bit cost, and kind-specific payload. Loading validates shape/ranges/digest and reconstructs the original truth. A `GF2CandidateDescriptor` already contains the kind-specific payload and is canonically hashed for deduplication and order, but it remains unaccepted until strict artifact validation and full truth reconstruction. C16 exploits that narrower separation.
 
 ### 9.9 Compiled projection state
 
@@ -396,7 +398,7 @@ It performs one topological DAG pass, builds exact polynomial coefficients, and 
 
 **Entry:** `gf2_decomposition.py:536-614`.
 
-This is an analyzer, not merely a truth evaluator. Exhaustive mode materializes/reconstructs every artifact; screened mode computes cheap descriptors for every bounded candidate, globally sorts, materializes only the best four, and reconstructs. Four artifact kinds are supported: XOR components, GF(2) rank factors, cofactor blocks, and Kronecker structure.
+This is an analyzer, not merely a truth evaluator. Exhaustive mode separately constructs, admits, and reconstructs every artifact. Screened mode shares one partition layout across the rank, cofactor, and Kronecker constructors, constructs and hashes every exact descriptor, globally sorts them, and admits/reconstructs only a bounded leading set. The default budget is four descriptors; a budget of one is sufficient to preserve the selected winner, while four retains additional diagnostic candidates. The XOR candidate is handled separately, so the default can return at most five artifacts. Four artifact kinds are supported: XOR components, GF(2) rank factors, cofactor blocks, and Kronecker structure.
 
 ### 10.9 Compiled truth projection
 
@@ -597,20 +599,22 @@ Artifact load/materialize performs strict schema validation, deterministic diges
 
 ### 14.3 C15 exhaustive algorithm
 
-For each partition, C15 lays out the truth matrix, constructs every valid artifact, hashes/serializes it, reconstructs it, and then chooses the deterministic minimum. This repeats expensive layout and proof work even when a cheap descriptor is clearly inferior.
+For each partition, C15 invokes the rank, cofactor, and Kronecker constructors separately. Each constructor repeats the partition layout; every valid artifact then receives canonical document construction, strict admission, and complete reconstruction before the deterministic minimum is selected.
 
-### 14.4 C16 screen-then-materialize algorithm
+### 14.4 C16 descriptor-first admission algorithm
 
 `screen_partition` lays out once and emits inert `GF2CandidateDescriptor`s for rank, cofactor, and Kronecker candidates. The analyzer:
 
 1. screens every frozen partition;
 2. deduplicates descriptors by digest;
 3. orders the complete descriptor set by the same deterministic key;
-4. materializes only the leading four;
-5. reconstructs every materialized finalist;
+4. materializes and strictly admits only a bounded leading set (four in C16);
+5. performs the analyzer’s outer reconstruction check on every admitted finalist;
 6. returns the best exact artifact.
 
-The screen is not a heuristic predictor. Within these four implemented artifact constructors, descriptor generation computes the same candidacy conditions required to build an artifact; it postpones payload construction, hashing, and reconstruction. The validation cohort showed byte-identical best artifacts. **DIRECT SOURCE EVIDENCE:** descriptor class `gf2_decomposition.py:329-355`; screen functions `358-442`; screened analyzer `565-614`.
+The screen is not a heuristic predictor. Within the three partition-based constructors, descriptor generation computes the exact candidacy conditions and retains the complete kind-specific payload. Every descriptor is hashed during deduplication and deterministic ordering. The deferred work is strict artifact admission, document copying/validation, and complete reconstruction. XOR-component analysis is separate.
+
+The winner-preservation argument does not depend on the constant four. Let the complete ordered descriptor sequence be \(d_1,\ldots,d_m\), using the same key as the exhaustive analyzer, and let \(x\) be the optional XOR artifact. When \(m>0\), any materialization budget \(K\ge1\) includes \(d_1\), the minimum partition-derived candidate. Comparing that candidate with \(x\) therefore yields the same canonical minimum as exhaustive analysis. When \(m=0\), the result is determined by \(x\) alone. Four is a retention and diagnostics setting, not a theoretical minimum. The validation cohort showed byte-identical selected artifacts, and the focused test suite now exhaustively checks the budget-one claim for every truth table with two or three variables. **DIRECT SOURCE EVIDENCE:** descriptor class `gf2_decomposition.py:329-355`; screen functions `358-442`; screened analyzer `565-614`; regression `tests/test_gf2_decomposition.py`.
 
 ### 14.5 Necessary/sufficient status
 
@@ -631,13 +635,13 @@ On 40 Yosys cases plus 12 controls (360 rows):
 | Aggregate whole task | 18.7726433 s | 5.2950435 s | 3.5453× |
 | p95 whole-task comparison | — | — | 3.4777× |
 
-All selected artifacts were byte-identical. One small case regressed (minimum speedup 0.8928×), showing fixed overhead. A corrected Linux v2 confirmation reported roughly 3.18× analysis/whole and 3.118× p95. The first Linux attempt failed import bootstrap and is historical setup failure, not algorithm failure. **DERIVED FROM RESULTS:** C16 result JSON, report, and `docs/recognition/c16_linux_confirmation/` verification artifacts.
+All selected artifacts were byte-identical to the project’s C15 exhaustive control. One small case regressed (minimum speedup 0.8928×), showing fixed overhead. A corrected Linux v2 confirmation reported roughly 3.18× analysis/whole and 3.118× p95. The first Linux attempt failed import bootstrap and is historical setup failure, not algorithm failure. These are internal baseline comparisons, not measurements against published or public state-of-the-art decomposition systems. **DERIVED FROM RESULTS:** C16 result JSON, report, and `docs/recognition/c16_linux_confirmation/` verification artifacts.
 
 ---
 
 ## 15. C21 and the partition-ranking conclusion
 
-C21 asked whether a cheap method could select partitions or decomposition paths profitably under the task-matched global-best artifact contract. It used 96 LogikBench cones at support 3–6, seven methods, five balanced single-query rounds, exact artifact validation, and the same deterministic global-best target.
+C21 asked whether a cheap method could select partitions or decomposition paths profitably under the task-matched canonical-best artifact contract. It used 96 LogikBench cones at support 3–6, seven methods, five balanced single-query rounds, exact artifact validation, and the same deterministic target within the declared candidate portfolio.
 
 Key aggregate speedups over exhaustive C15 were about 3.0× for all screened variants:
 
@@ -647,13 +651,13 @@ Key aggregate speedups over exhaustive C15 were about 3.0× for all screened var
 | Compiled screened | 3.0006× | 1.0042× |
 | Screen-first baseline | 2.9881× | 1.0000× reference |
 
-Truth-ANF priority added only about 2.7%; source-interaction proposals abstained on all cases. Fresh BDD construction/cleanup was unfavorable. The per-case oracle had only 1.059× headroom over the best fixed method before paying a selector. **DERIVED FROM RESULTS:** `learning_milestone_c21_task_matched_gf2_method_table_results.json` and its milestone report.
+Truth-ANF priority was 1.27% slower than the screened baseline. Source-interaction proposals abstained on all cases and were 2.78% slower. Fresh BDD construction/cleanup was unfavorable. The post-hoc per-case oracle over the seven tested methods had 1.059× headroom over the best tested fixed method before paying a selector. **DERIVED FROM RESULTS:** `learning_milestone_c21_task_matched_gf2_method_table_results.json`. The frozen milestone report’s “about 2.7%” statement conflates the source-interaction overhead with the Truth-ANF result and is retained only as historical evidence.
 
 The scientific conclusion is conditional:
 
-> Under a contract that must enumerate the bounded candidate set, evaluate every exact descriptor, and return the globally ordered best artifact, merely ranking which partition to try first does not reduce completion work.
+> In the tested completion procedure, each proposal method still evaluated the same complete descriptor set and returned the same canonically ordered best artifact, so changing partition order did not remove descriptor work and proposal generation added overhead.
 
-This is not a theorem against guidance. A materially different contract could revive ranking if it allows any-correct/first-witness output, branch-and-bound with a sound lower-bound certificate, top-(k) output, or incremental queries where early work is reused. C21 rules out “rank first, then still perform identical complete global-best work,” not learned search universally.
+This is not a theorem that exact canonical-best selection inherently requires complete descriptor evaluation. A materially different exact algorithm could prune with a sound lower bound or dominance certificate; a different output contract could allow any-correct/first-witness or top-(k) output; and incremental queries could reuse early work. C21 shows that “rank first, then still perform identical complete work” did not help on this implementation and cohort, not that guidance or exact pruning is impossible.
 
 ---
 
@@ -1079,12 +1083,12 @@ The table compresses a large artifact history while preserving the question/resu
 | E1 | BDD order selection | Best-of-(k)/learned ordering not economically successful | Negative for fresh-build lifecycle |
 | E2 | Exact SAT guidance | Learned tree ~1.042× best fixed; second-machine gate failed | No promotion |
 | C12–C14 | Adaptive dispatcher/sentinels/task guard | Safety/dispatch mechanics tested | Infrastructure, not broad speedup proof |
-| C15, 2026-08-30 | Exact CM/GF(2) artifact enumeration | Correct deterministic artifact pipeline, but repeated proof/materialization cost | Superseded in performance by C16 |
-| C16, 2026-08-30/31 | Can exact screens defer artifact work? | 3.55× Windows, ~3.18× corrected Linux; byte-identical best | Strong exact advance |
+| C15, 2026-08-30 | Exact CM/GF(2) artifact enumeration | Correct deterministic artifact pipeline, but repeated layout and artifact admission/reconstruction cost | Superseded in performance by C16 |
+| C16, 2026-08-30/31 | Can exact descriptors defer artifact admission/reconstruction? | 3.55× Windows, ~3.18× corrected Linux versus the project’s C15 control; byte-identical selected artifact | Strong internal implementation advance |
 | C17 | Task dispatcher | Dispatch contract added | Foundation for later comparative work |
 | C18 | Transfer to 73 VTR cones | Independent-source transfer measured | Corpus now exposed to development |
 | C19/C20 | Cheap policy on 96 LogikBench cones and VTR tail | Screened exact policy assessed | Led to comprehensive C21 table |
-| C21, 2026-08-31 | Seven task-matched methods, global best | All screened paths ~3× C15; routing headroom only 1.059× | Ranking not useful under frozen completion contract |
+| C21, 2026-08-31 | Seven task-matched methods, canonical best in the declared portfolio | All screened paths ~3× C15; tested-method oracle headroom only 1.059× | Ranking did not help when the implementation retained complete descriptor evaluation |
 | C22 | Interface boundary | Prepared exact interface/lifecycle formalized | Basis for C24+ |
 | C23 | 48 fresh Yosys functions support 3–6 | Fresh transfer and Linux comparison | Identities/source now exposed |
 | C24–C26 | Boundary, resident session, fused verified context | Lifecycle costs and reuse measured | Narrow, timing-sensitive policy evidence |
@@ -1287,9 +1291,9 @@ The EPFL row is **HISTORICAL** and incomplete; it cannot be pooled with formal C
 |---|---|---|
 | C5 | verified learned cut path vs exact ANF | learned 6.3–9.2× slower; limited recall |
 | C6 | cached packed ANF vs fresh truth | 1.313× test median, 1.637× confirmation median; exact core |
-| C16 Windows | screened vs exhaustive exact artifact analysis | 3.5501× analysis, 3.5453× whole; byte-identical best |
-| C16 Linux v2 | screened vs exhaustive | ~3.18× aggregate, 3.118× p95 |
-| C21 | best screened variants vs exhaustive | ~3.0×; router oracle only 1.059× |
+| C16 Windows | descriptor-first vs project C15 exact artifact analysis | 3.5501× analysis, 3.5453× whole; byte-identical selected artifact |
+| C16 Linux v2 | descriptor-first vs project C15 control | ~3.18× aggregate, 3.118× p95 |
+| C21 | best tested screened variants vs project C15 control | ~3.0×; post-hoc oracle over seven methods only 1.059× |
 
 ---
 
@@ -1319,8 +1323,8 @@ Define:
 | CM IR | (T_{IR}(N,rewrites)+T_{lower}(I_{CM})+QO(I_{CM}B(R_q))) | rewrite reduction vs compiler cost |
 | Compiled projection | (O(NB(S))+T_{indices}+\sum_qO(R_q/w)) | full support/setup, query count, reduced size |
 | Packed source ANF | (O(N)+\sum products T_{zeta}(k)), bounded | monomial/product density, cache reuse |
-| Exhaustive decomposition | (P(T_{layout}+T_{screen}+T_{materialize}+T_{hash}+T_{reconstruct})) | partitions, matrix shape, artifact count |
-| C16 screened decomposition | (P(T_{layout}+T_{descriptor})+K T_{materialize/proof}) | partitions/descriptors, (K=4) finalists |
+| C15-style exhaustive decomposition | \(P(3T_{layout}+T_{candidate})+A(T_{admit}+T_{reconstruct})\) | partitions, matrix shape, accepted artifact count \(A\) |
+| C16 screened decomposition | \(P(T_{layout}+T_{descriptor}+T_{digest})+K(T_{admit}+T_{reconstruct})\) | partitions/descriptors; default \(K=4\), while \(K\ge1\) preserves the winner |
 
 Here (B(S)) is not simply (S): Python big integers and NumPy word arrays have different constants, allocation, and cache behavior. Formulas are qualitative implementation models, not fitted performance laws.
 
@@ -1331,7 +1335,7 @@ Here (B(S)) is not simply (S): Python big integers and NumPy word arrays have di
 - Higher (Q): CSE/CM preparation amortizes; projection wins only after full-truth setup is repaid.
 - Larger (k): full truth doubles per variable, making projection setup increasingly expensive even though query gathers may remain cheap.
 - Sparse/reused ANF products: packed ANF wins; dense products hit budget/fallback.
-- Decomposition with expensive proof payloads: descriptor screening wins by postponing materialization, even though all partitions are still examined.
+- Decomposition with repeated layouts and artifact validation: descriptor screening wins by sharing layout work and postponing strict admission/reconstruction, even though all partitions and descriptor payloads are still examined.
 
 ### 30.3 Structural router model
 
@@ -1415,7 +1419,7 @@ No C36 RSS/peak allocation result exists. Output-budget estimates are admission 
 | Restricted source traversal | every direct query | next direct query | Memoization/incremental restriction can reuse subgraphs; fixed assignments differ |
 | ANF products | repeated DAG products | across sessions/cases | Existing capacity cache is local/bounded; persistent keys need source/version control |
 | Partition layout | C15 each artifact constructor | other constructor for same partition | C16 already fixes within a screen; cross-analysis persistence remains possible |
-| Cofactor pattern extraction | screen descriptor | artifact materialization/reconstruction | Descriptor could retain certified payload, trading memory/hash cost |
+| Descriptor document/digest | constructed for deduplication, sorting, and materialization | later phase of the same analysis | Cache the canonical document/digest if profiling shows repeated construction matters; descriptors already retain the complete kind-specific payload |
 | Truth reconstruction | artifact materialization | load/independent verification | Trust-boundary duplication is intentional; do not remove without equivalent proof |
 | Canonical serialization | each query semantic row | aggregate oracle/check | Retain canonical bytes/digest if contract permits; current timing includes per-row bytes |
 | Backend setup across eight blocks | every fresh session | next block | Needed to measure setup and order effects; not duplication under fresh-session contract |
@@ -1435,7 +1439,7 @@ Potential reuse is not a speedup claim. Several duplicated paths are deliberatel
 | Wide restrictions 11–16, q64 fixed policy | Compiled truth projection | Memoized C36 local run, narrowly ahead of CSE by 1.0238× |
 | Wide C36 low-expansion families at q64 | Direct restricted AST per-case | Development cohort only; not safe universal fixed because high-expansion tail is severe |
 | Wide C36 high-expansion multiply-low-cone | Compiled projection | Four development cases; family/structural selection not prospectively confirmed |
-| Exact bounded GF(2) global-best decomposition | C16 screen-then-materialize, typically with a cheap truth/CSE input | All partitions still screened; four implemented artifact kinds |
+| Exact bounded GF(2) canonical-best decomposition within the declared portfolio | C16 descriptor-first admission, typically with a cheap truth/CSE input | All partitions and descriptor payloads still evaluated; four artifact kinds; default retains four partition finalists although one preserves the winner |
 | Source-available sparse ANF at support ≤10 | Packed source ANF core | Budget/density dependent; hybrid default gate missed narrowly |
 | Extremely shared complete-truth DAG | Any DAG-aware path; current direct memo is simplest | Restricted direct helper remains non-DAG-aware |
 | Production routing | No validated dynamic router | Best fixed backend remains the defensible policy per frozen workload |
@@ -1453,7 +1457,7 @@ The memoized C36 fixed margin between projection and CSE is only about 2.38%, sm
 | Direct-answer or decomposition GNN as trusted output | C–C3 | Weak natural transfer; exact controls stronger | Only with new representation/data/task; exact validation still required |
 | Equivariant variable cut model as profitable path | C5 | Limited acceptance and 6.3–9.2× economic loss | Perhaps if proposal ends expensive search and feature cost is much lower |
 | Retrieval as exact/general solution | C | Poor EPFL transfer | A larger indexed library changes task, but cannot certify unseen truth alone |
-| Rank partitions then perform same global completion | C21 | Ordering does not remove work; only 1.059× oracle headroom | Yes: first-witness/branch-bound/certified early stop |
+| Rank partitions then perform the same complete descriptor evaluation | C21 | Ordering did not remove work; the oracle over seven tested methods had 1.059× headroom | Yes: sound branch-and-bound/dominance, first-witness output, or reusable incremental state |
 | Universal CM IR fastest backend | C34–C36 | Behind direct/CSE/projection on these tasks | CM-specific workloads, reuse, or better lowering may revive regimes, not universality |
 | Train a router on C34 one-shot decomposition | C34 | Oracle headroom ~1.0035× before selector | No, not on same formulation/margin |
 | Transparent full-truth projection as competitive small-width q64 method | C35 | CM 3.3748× faster | Optimized compiled projection did revive it in C36 |
@@ -1465,7 +1469,7 @@ The memoized C36 fixed margin between projection and CSE is only about 2.38%, sm
 ### 34.2 Exact advances that should not be re-litigated as failed learning
 
 - C6 packed ANF core is exact and measurably faster on its cohort.
-- C16 screening is exact for its artifact constructors and produces byte-identical global-best output with ~3× improvement.
+- C16 screening preserves the byte-identical canonical best output of the project’s C15 implementation for its declared artifact portfolio, with about a threefold internal speedup on the measured cohorts.
 - C33 shows bounded asynchronous shadow mechanics can be near-neutral at sampled load; it does not validate a learned decision.
 - Direct Expr memoization fixes a genuine DAG execution defect irrespective of routing results.
 
@@ -1491,7 +1495,7 @@ Native CUDD/ABC, ZDDs, incremental SAT/BDD, cross-root compilation, native packe
 - Memoized complete truth holds every node bigint until return; peak memory is unmeasured.
 - Projection builds 64 `uint32` index arrays and converts packed truth to bytes/vector and back.
 - CM IR compiler overhead and object allocation dominate where rewrites do not shrink work.
-- Decomposition still screens every declared partition and materializes four finalists.
+- Decomposition still evaluates every declared partition and complete descriptor payload. The default strictly admits/reconstructs four partition finalists plus an optional separately handled XOR artifact; one partition finalist is sufficient to preserve the winner.
 - Automatic big-int/word threshold is conservative and not dynamically calibrated.
 - Cross-case/cross-root reuse is limited.
 
@@ -1518,7 +1522,7 @@ Native CUDD/ABC, ZDDs, incremental SAT/BDD, cross-root compilation, native packe
 
 | Type | Question | Evidence needed |
 |---|---|---|
-| Mathematical | Are there sound lower bounds that allow global-best decomposition branch-and-bound to stop before all descriptors? | Proof plus exhaustive small-domain validation |
+| Mathematical | Are there sound lower bounds that allow canonical-best decomposition within the declared portfolio to stop before all descriptors? | Proof plus exhaustive small-domain validation |
 | Mathematical | Are current rank/cofactor/Kronecker screens complete for a useful broader decomposition class? | Formal class definition and completeness proof |
 | Algorithmic | Does memoizing `_eval_ast_restricted` erase the (U/N) router headroom? | Frozen A/B implementation on development only, then refreeze C37 |
 | Algorithmic | Is (U/N) still predictive after adding (k,Q,R_q), operator mix, and compiled instruction count? | Prospective multi-source paired data |
@@ -1775,10 +1779,66 @@ deliverables_n22_24/CM_gap_epfl_corpus_2026_08_03.jsonl
 4. The EPFL router diagnostic suggests transfer but has no durable artifact and omitted two fixed arms. It is not C37.
 5. CM IR is a compiler DAG, not the mathematical CM itself, and current output equivalence does not prove a universal canonical CM form.
 6. C6 is an exact packed-ANF algorithmic milestone, not evidence of neural improvement.
-7. C21’s ranking negative is specific to deterministic global-best completion, not a blanket result against guidance with sound early termination.
+7. C21’s ranking negative is specific to the tested deterministic completion procedure, which retained complete descriptor evaluation; it is not a blanket result against guidance or exact pruning with sound early termination.
 8. C34–C36 sources/artifacts were untracked at the audited HEAD, so commit attribution requires additional archival work.
 
 ### 40.5 Continuity conclusion
 
-The project’s strongest established advances are exact: DAG-aware packed evaluation, packed source ANF in its favorable regime, and C16 screen-before-materialize decomposition. The main current research hypothesis is also structural rather than neural: expression expansion can predict whether low-setup restriction or precompiled truth projection is economically preferable. That hypothesis is technically plausible and has encouraging development/session evidence, but it remains unconfirmed until evaluator versions, transitive provenance, untouched data, complete baselines, exact charging, and independent verification are frozen prospectively.
+The project’s strongest established internal advances are exact: DAG-aware packed evaluation, packed source ANF in its favorable regime, and C16 descriptor-first artifact admission. C16 is an implementation improvement over C15; current evidence does not establish a new Boolean-decomposition algorithm or superiority over published systems. The main current research hypothesis is also structural rather than neural: expression expansion can predict whether low-setup restriction or precompiled truth projection is economically preferable. That hypothesis is technically plausible and has encouraging development/session evidence, but it remains unconfirmed until evaluator versions, transitive provenance, untouched data, complete baselines, exact charging, and independent verification are frozen prospectively.
 
+---
+
+## 41. Dated continuation: accepted website evidence and structural Phase 2
+
+### 41.1 Scope and evidence priority
+
+This section was reviewed on 2026-10-03 from the locally generated public website, its checked data snapshot, and separately frozen result packages. It is a **continuation**, not a retroactive rerun of Sections 1–40. For a named experiment, use the later accepted report and its frozen source identity where it explicitly supersedes an earlier measurement. Do not transfer a ratio across a changed input family, method, host, output contract, timing window, or code version.
+
+The locally generated website pages under `deliverables_n22_24/master_explainer_2026_08_03/` were built on 2026-09-20, with `late-scan-status.html` refreshed on 2026-09-21. `results/2026-09-16/full-site-data.json` contains the current chart-data snapshot reviewed on 2026-09-16; its `e26_findings` guide was reviewed on 2026-09-17. The site is an editorial synthesis. The underlying reports, protocols, admissions and raw rows control numerical claims. The September 28 T3 package below is a separate structural program, not a website CM-versus-CSE benchmark.
+
+### 41.2 September 15 post-integration complete-relation confirmation
+
+**DERIVED FROM RESULTS — frozen post-integration confirmation.** The symmetric B2/B4 and corrected-E3 schedules were repeated against source commit `63285d2bd16e16ca48d8a0328b6f6328ea038b35` on Windows and a disposable Linux CPU host. The accepted rows had exact packed-output identity: 792 Windows B2/B4, 264 Linux B2/B4, 576 Windows E3 and 192 Linux E3. See `deliverables_n22_24/master_explainer_2026_08_03/results/2026-09-16/cm-post-integration-confirmation/PUBLIC-REPORT.md` and its protocol.
+
+| Matched B2/B4 endpoint | Windows three-run geometric mean | Linux one run | Interpretation |
+| --- | ---: | ---: | --- |
+| Bare CM / CSE-flat | 0.9075 | 0.9098 | About 9% less kernel time in this workload |
+| Public CM wrapper / CSE-flat | 3.8786 | 3.6618 | The whole call remained slower |
+
+The historical accepted V3 comparison was 0.8906 bare and 3.0941 wrapper on its then-current implementation. The later wrapper ratio worsened while its absolute time improved, because the comparator improved more. E3 remained approximately at CM/CSE-flat kernel parity, with a CM advantage against plain CSE. Preparation break-even estimates were volatile across hosts and formulas; they are planning diagnostics, not stable universal thresholds. This continuation reinforces the central distinction between bare kernel, wrapper and full request lifecycle. It does not turn the earlier B2/B4 result into a timing claim for an arbitrary future checkout.
+
+### 41.3 September 11–17 task-specific execution findings
+
+**DERIVED FROM RESULTS — distinct output and lifecycle contracts.** The site’s latest-results panels added selected, matched examples of implementation and task-level improvements. The principal source is `results/2026-09-16/full-site-data.json`; the editorial result/limit pairing is in `results/2026-09-17/findings-cheat-sheet.json`. Each panel retains its own host, date, raw rows and refusal states.
+
+- **Complete relation and delivery:** A shared packed-mask constructor reduced one selected fresh 18-variable cold public CM call from 14.03 to 1.33 ms; direct BitSet and CSE benefit too. Positional mask caching reduced one renamed-input cold q32 trace from 30.36 to 1.49 ms versus named-LRU, but the named cache was faster warm. Chunked 24-variable cold file delivery took 32.17 ms at 32 KiB chunks versus 160.79 ms for the complete packed-output control, while a *separate-host* fresh-process diagnostic measured 48.37 versus 147.34 MiB process peaks. The full output is still exponential; chunk size, reader behavior and durability obligations can change the result. The separate pipe-consumer study checked delivered bytes and cancellation boundaries, not durable file semantics.
+- **Exact scalar counts:** Independent-component, factorized OR/XOR/mixed, affine GF(2), bounded bucket, and CUDD methods were evaluated as scalar counting tasks, not complete-relation extraction. Indexed Python affine counting took 28.96 ms versus 103.91 ms for its earlier Python control on one public 1,800-variable q8 matrix; indexed M4RI took 41.43 ms on that host. Exact object-dtype NumPy bucket counting took 29.76 ms versus 121.17 ms for Python min-fill on one q8 public printer CNF, while natural-order CUDD took 4.66 ms. Width/resource refusals are explicit. Neither example supports a generic CM or Python-over-native claim.
+- **Exact CUDD integer binding:** A local `dd` 0.6.0 prototype used `Cudd_ApaCountMinterm` and converted the APA digits to a Python integer, freeing the allocation in `finally`. On three larger already-resident diagrams it was about 9–10 times faster than Python exact traversal; trivial roots favored Python. The floating-point API rounded or overflowed selected exact counts. Construction was excluded; this is a binding/implementation result, not a new counting algorithm or an upstream release. See `results/2026-09-16/exact-count-and-decomposition/REPORT.md`.
+- **Full versus projected counts:** Additional whole CNFs and feature-model contexts were tested under separate full-assignment and distinct projected-assignment contracts. A fair Linux feature-model lifecycle completed 1,050/1,050 cells with 2,100 fresh workers and checked cold, warm and reloaded outputs against an independent exhaustive oracle. CM was 1.36 times faster than structural CSE warm, while CSE was 1.26 times faster cold; direct CNF and CUDD were faster warm. Natural-order CUDD was faster on tested independent-auxiliary and adjacent-exclusion projection families; some bucket variants refused high-width hidden-star projection. Additional public-CNF timeouts and missing independent-oracle cells were preserved, not ranked as completed comparisons. The earlier application-derived component-count candidate improved lifecycle time on seven completed development cases but covered only seven of 15 combined cases; defaults stayed unchanged.
+- **Preparation persistence:** A checked inert JSON reload paid file read, SHA-256, validation and recompilation. It did not beat fresh compilation in the measured four-input, 1/32/256-request study. This is not compiled-plan persistence. A long-lived caller still needs an actual retained-plan lifetime and charged invalidation/rebuild policy.
+
+The website’s `findings.html` and `latest-results.html` are the reader-facing route to all panels. The file `docs/research/CM_WEBSITE_BENCHMARK_ATLAS_FOR_CATALANT_2026-10-03.md` is a concise text index for upload; the site data and individual studies remain the numerical sources.
+
+### 41.4 Exact decomposition C39–C41 and promotion limits
+
+**DERIVED FROM RESULTS — internal analysis endpoint.** Later public-corpus C39 and development-blind-source-family C40 confirmations measured C16/C15-style internal analysis speedups of 3.4615 times over 19 cases and 3.9526 times over 20 cases. Selected exact artifacts were identical to the exhaustive project control and reconstructed the input truth vectors. The C40 sum of median peak-working-set deltas was 33,587,200 bytes for C15 and 19,165,184 bytes for C16 on Windows; it is an observation, not a general memory bound. C41 ablations found repeating layouts at 1.7329 times and eager admission at 3.5491 times the reference cost; those are separate diagnostic lanes and not additive shares. See `deliverables_n22_24/master_explainer_2026_08_03/results/2026-09-16/exact-count-and-decomposition/REPORT.md` and `docs/research/c16_c21_exact_decomposition_software_note_2026_09_16/`.
+
+The bound remains the declared partition set, four artifact kinds and at most 10 input variables. One leading partition descriptor preserves the selected winner against the separate XOR candidate; the default retains four partition finalists for diagnostics. All declared partitions and complete descriptor payloads are still evaluated. An external ABC ACD capability has a different output contract, so no external speed or artifact-quality ranking follows. The September 16 software note is a **working manuscript, not submitted or published**. Its novelty statement is an exact implementation advance over the project’s C15 control, not a new general decomposition theorem.
+
+### 41.5 Learning, native batching and late-scan disposition
+
+**DERIVED FROM RESULTS — no default promotion.** The later verified two-host q64 selector gate abstained: 54 of 72 cases lacked a stable material winner; the sole material winner was already covered by the best fixed exact arm; fully charged routing was slower than that fixed arm on both hosts. Bounded cut fusion completed exact timing rows but its locked q64 whole-session speed was 0.4932 times its CSE control, below a 1.10-times requirement. The native q96 batch gate reached about 1.078 times, below its frozen 1.10-times materiality threshold. None justified a learned router or production default.
+
+The Python late-scan P1–P15 line is summarized in `deliverables_n22_24/master_explainer_2026_08_03/late-scan-status.html`, `results/2026-09-20/p1-p15-research-ledger.json`, and `results/2026-09-21/P15_FINAL_DISPOSITION_20260921.json`. P14 closed **NO-GO**: its exact observer/cloning route did not produce a deployable whole-call gain, although it isolated observer-state cloning as an overhead and retained five exposed encoding cases. P15 replaced the clone-based observer with a late scan of the already-owned complete factory arena. It passed semantic agreement on 490 sealed fresh cases (384 synthetic, 106 natural) and recorded 2,450 memory observations. It accepted **zero timing worker artifacts** after the frozen calibration cap; therefore it supports no latency estimate, speedup, break-even, H2/H3 finding or rollout recommendation. The production implementation was not changed. The P15 result is correctness-only, neither a positive nor a negative timing outcome.
+
+### 41.6 Separate September 28 structural T3 computation
+
+**FROZEN SEPARATE RESEARCH LINE — not a CM backend timing comparison.** `t3_phase2_computation_20260928/` supplies a Phase 2 computation handoff for coordinate-aware profile-moment persistence under a fixed-cut, supplied-factor GF(2) contract and a cumulative budget of distinct-coordinate destructive updates. The state retains low-degree coordinate moments and metadata while discarding references to the original factors; after each legal restriction prefix it returns an exact residual count of ones. The supplied proof states the general contract; finite computation is a cross-check, not its replacement. See `t3_phase2_computation_20260928/theory/T3_PROFILE_MOMENT_PERSISTENCE.md`, `HANDOFF_TO_MASTER.md`, `COMPUTATION_LEDGER.md`, frozen protocol and manifests.
+
+The handoff reports 7,445,928 exact campaign counts and 70,662 updates against its oracle, with 16,752 passing main trials and 400 preregistered dense allocation-cap exclusions. All 9,712 successful initial payload checks and 34,582 update-work checks matched their formulas. Of 133 realized dense case/depth pairs, 32 met the original row-anchored mathematical inequality; nine of those failed to beat actual raw-factor serialized bytes after metadata, and 22 failed to beat ideal raw-factor payload bits when the full T3 file was charged. Sparse/orientation-adaptive layouts improved some bounded incidence, but on the admitted natural timing designs compiled packed binary had lower full-lifecycle design medians throughout. The optimized native CUDD online phase was also faster at every natural design median, although T3 construction could be cheaper than compiling CUDD. The natural corpus contains 20 independent EPFL source designs in two families and tests support at most 12, with fixed cuts. These results support correctness and a qualified bounded structural/storage account; they do not establish broad runtime superiority, high-support scaling, optimal decomposition, firstness or publication approval. The source package says to return the result to a further convergence/priority gate before manuscript promotion.
+
+### 41.7 Practical reading and unresolved decisions
+
+For client-facing explanation, lead with the **output contract and lifecycle**. CM has a useful structural representation and several exact internal or task-specific advances, but no demonstrated universal end-to-end speed lead or deployed workflow benefit. Complete output, scalar counts, projected counts, structural artifacts, and dynamic restrictions have different comparators. A positive internal phase can coexist with a slower public call. Exactness, source identity, refusal handling and candid negative results are part of the contribution.
+
+The current record does not authorize or demonstrate a production router, a universal native default, a general peak-memory guarantee, a neural predictor, or broad commercial reuse economics. The T3 line is a separately frozen mathematical/computational study with an unresolved novelty and publication decision. Future claims require a prospective task and source freeze, independent exact oracle, matched optimized incumbents, charged setup/updates/delivery, process and memory accounting where relevant, and an untouched confirmation cohort. No additional performance number is inferred from the existence of the website or this dossier update.

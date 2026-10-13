@@ -6,7 +6,7 @@ from pathlib import Path
 
 from cm_exprlib import And, Or, Var, Xor
 from cmbench.recognition.gf2_decomposition import (
-    ExactGF2Artifact, analyze_exact_gf2, analyze_screened_exact_gf2,
+    ExactGF2Artifact, GF2PhaseRecorder, analyze_exact_gf2, analyze_screened_exact_gf2,
     cofactor_artifacts, gf2_rank_factor, kronecker_artifacts, rank_artifact,
     screen_partition, truth_sha256, xor_component_artifact,
 )
@@ -159,16 +159,28 @@ class ExactGF2DecompositionTests(unittest.TestCase):
             kwargs = ({"row_partitions": control["row_partitions"]}
                       if control["row_partitions"] else {"max_partitions": 32})
             exhaustive = analyze_exact_gf2(control["bits"], control["n_vars"], **kwargs)
-            screened = analyze_screened_exact_gf2(
-                control["bits"], control["n_vars"], materialize_budget=4, **kwargs
-            )
-            self.assertEqual(
-                screened.best.to_dict() if screened.best else None,
-                exhaustive.best.to_dict() if exhaustive.best else None,
-            )
-            self.assertTrue(all(candidate.reconstruct() == control["bits"]
-                                for candidate in screened.candidates))
-            self.assertLessEqual(screened.artifacts_materialized, 5)  # XOR plus four descriptors.
+            for budget in (1, 4):
+                screened = analyze_screened_exact_gf2(
+                    control["bits"], control["n_vars"], materialize_budget=budget, **kwargs
+                )
+                self.assertEqual(
+                    screened.best.to_dict() if screened.best else None,
+                    exhaustive.best.to_dict() if exhaustive.best else None,
+                )
+                self.assertTrue(all(candidate.reconstruct() == control["bits"]
+                                    for candidate in screened.candidates))
+                self.assertLessEqual(screened.artifacts_materialized, budget + 1)
+
+    def test_single_descriptor_budget_preserves_every_small_truth_table(self):
+        for n_vars in (2, 3):
+            for bits in range(1 << (1 << n_vars)):
+                exhaustive = analyze_exact_gf2(bits, n_vars)
+                screened = analyze_screened_exact_gf2(bits, n_vars, materialize_budget=1)
+                self.assertEqual(
+                    screened.best.to_dict() if screened.best else None,
+                    exhaustive.best.to_dict() if exhaustive.best else None,
+                )
+                self.assertLessEqual(screened.artifacts_materialized, 2)
 
     def test_partition_screen_is_not_an_accepted_artifact(self):
         bits = reference_bits(Xor(And(Var(0), Var(1)), Or(Var(2), Var(3))), 4)
@@ -179,6 +191,35 @@ class ExactGF2DecompositionTests(unittest.TestCase):
                             for item in descriptors))
         with self.assertRaises(ValueError):
             analyze_screened_exact_gf2(bits, 4, materialize_budget=0)
+
+    def test_phase_recorder_is_opt_in_and_preserves_exact_selection(self):
+        bits = reference_bits(Xor(And(Var(0), Var(1)), Or(Var(2), Var(3))), 4)
+        baseline = analyze_screened_exact_gf2(bits, 4, materialize_budget=1)
+        screened_recorder = GF2PhaseRecorder()
+        screened = analyze_screened_exact_gf2(
+            bits, 4, materialize_budget=1, phase_recorder=screened_recorder
+        )
+        self.assertEqual(
+            screened.best.to_dict() if screened.best else None,
+            baseline.best.to_dict() if baseline.best else None,
+        )
+        screened_phases = {row["name"] for row in screened_recorder.snapshot()["phases"]}
+        self.assertTrue({"screened.partition_layout", "screened.rank_descriptor",
+                         "screened.descriptor_deduplication",
+                         "screened.strict_artifact_admission",
+                         "screened.outer_reconstruction"} <= screened_phases)
+        self.assertTrue(screened_recorder.snapshot()["non_additive"])
+
+        exhaustive_recorder = GF2PhaseRecorder()
+        exhaustive = analyze_exact_gf2(bits, 4, phase_recorder=exhaustive_recorder)
+        self.assertEqual(
+            exhaustive.best.to_dict() if exhaustive.best else None,
+            baseline.best.to_dict() if baseline.best else None,
+        )
+        exhaustive_phases = {row["name"] for row in exhaustive_recorder.snapshot()["phases"]}
+        self.assertTrue({"exhaustive.rank_constructor", "exhaustive.cofactor_constructor",
+                         "exhaustive.kronecker_constructor",
+                         "exhaustive.outer_reconstruction"} <= exhaustive_phases)
 
 
 if __name__ == "__main__":

@@ -270,6 +270,7 @@ def summarize(measurements: list[dict[str, Any]], functional: list[dict[str, Any
 
 def render_report(result: dict[str, Any]) -> str:
     summary = result["summary"]
+    materialize_budget = result["config"]["materialize_budget"]
     lines = [
         "# CRSE C16 exact-screened CM/GF(2) tail",
         "",
@@ -280,9 +281,12 @@ def render_report(result: dict[str, Any]) -> str:
         "## Exact-safe change",
         "",
         "All bounded partitions still receive the same exact rank, cofactor, and Kronecker screen. "
-        "The screen shares one matrix layout per partition and admits nothing. Only the four best "
-        "descriptors receive artifact hashes and complete truth reconstruction. Advice-off runs the "
-        "original exhaustive materializer.",
+        "The screen shares one matrix layout per partition and admits nothing. Every descriptor "
+        "already contains its factor payload and receives a canonical digest for deduplication and "
+        f"ordering. Only the leading {materialize_budget} descriptors receive strict artifact "
+        "admission and complete truth reconstruction. One leading descriptor is sufficient to "
+        "preserve the selected winner; the larger budget retains diagnostic finalists. The XOR "
+        "candidate is handled separately. Advice-off runs the original exhaustive materializer.",
         "",
         "The screened best artifact matched the exhaustive best artifact identity on all 40 Yosys "
         "cases and all 12 structured/dense controls. Every materialized proposal reconstructed the "

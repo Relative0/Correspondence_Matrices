@@ -83,7 +83,7 @@ def record_sha256(record: Mapping[str, Any]) -> str:
 
 def limits_record(limits: linux_supervisor.Limits) -> dict[str, Any]:
     limits.validate()
-    return {
+    record = {
         "timeout_seconds": limits.timeout_seconds,
         "rss_stop_bytes": limits.rss_stop_bytes,
         "processes": limits.processes,
@@ -92,6 +92,12 @@ def limits_record(limits: linux_supervisor.Limits) -> dict[str, Any]:
         "stderr_bytes": limits.stderr_bytes,
         "sample_seconds": limits.sample_seconds,
     }
+    # Preserve legacy default identities, but never erase configured policy.
+    if limits.cgroup_memory_bytes is not None:
+        record["cgroup_memory_bytes"] = limits.cgroup_memory_bytes
+    if limits.cgroup_cpu_max is not None:
+        record["cgroup_cpu_max"] = list(limits.cgroup_cpu_max)
+    return record
 
 
 def limits_from_record(record: Mapping[str, Any]) -> linux_supervisor.Limits:
@@ -99,8 +105,13 @@ def limits_from_record(record: Mapping[str, Any]) -> linux_supervisor.Limits:
         "timeout_seconds", "rss_stop_bytes", "processes", "input_bytes",
         "stdout_bytes", "stderr_bytes", "sample_seconds",
     }
-    require(isinstance(record, Mapping) and set(record) == expected, "resource limit fields")
-    value = linux_supervisor.Limits(**dict(record))
+    optional = {"cgroup_memory_bytes", "cgroup_cpu_max"}
+    require(isinstance(record, Mapping) and expected <= set(record) <= expected | optional, "resource limit fields")
+    fields = dict(record)
+    if "cgroup_cpu_max" in fields:
+        require(isinstance(fields["cgroup_cpu_max"], (tuple, list)), "CPU limit fields")
+        fields["cgroup_cpu_max"] = tuple(fields["cgroup_cpu_max"])
+    value = linux_supervisor.Limits(**fields)
     value.validate()
     return value
 

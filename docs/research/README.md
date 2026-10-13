@@ -17,6 +17,10 @@ commits with zero qualifying transitions. These are pre-synthesis source regions
 synthesized cones; no Yosys, timing, RunPod follow-up, or speed claim is warranted.
 
 Latest exact-execution and comparison decision:
+[the C16/C21 exact-decomposition software note and benchmark appendix](c16_c21_exact_decomposition_software_note_2026_09_16/README.md)
+correct the descriptor/materialization claims, prove that one partition finalist
+preserves the selected C15 winner, and classify the result as an internal exact
+implementation improvement rather than a new general decomposition algorithm.
 [C38 Linux/GCC replication](CM_C38_LINUX_GCC_NATIVE_REPLICATION_2026_09_03.md), the
 [four-lane local functional admission](CM_FOUR_LANE_COMPARISON_HARNESS_FUNCTIONAL_ADMISSION_2026_09_03.md),
 and the cross-machine q1/q4/q16/q64 architecture ladder now summarized on the expert

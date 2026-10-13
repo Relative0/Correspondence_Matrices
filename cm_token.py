@@ -39,6 +39,21 @@ TOK: Dict[str, int] = {
 }
 
 
+def cm_token_value(t: int, row_value: int, column_value: int) -> int:
+    """Query a completed true-first token through the shared LUT endpoint.
+
+    This function is representation-neutral after token production: CM and
+    direct packed evaluators must call the same query when they produce the
+    same four-bit word.
+    """
+    row = int(row_value)
+    column = int(column_value)
+    if row not in (0, 1) or column not in (0, 1):
+        raise ValueError("token query values must each be 0 or 1")
+    shift = (row << 1) | column
+    return (int(t) >> shift) & 1
+
+
 def cm_not(t: int) -> int:
     return (~int(t)) & MASK
 
@@ -47,6 +62,50 @@ def cm_transpose(t: int) -> int:
     """Swap (12) <-> (21), i.e., bits 2 <-> 1."""
     t = int(t) & MASK
     return (t & 0b1001) | ((t & 0b0010) << 1) | ((t & 0b0100) >> 1)
+
+
+def cm_swap_rows(t: int) -> int:
+    """Swap the positive/negative states of the row operand."""
+    t = int(t) & MASK
+    return (((t & 0b0011) << 2) | ((t & 0b1100) >> 2)) & MASK
+
+
+def cm_swap_columns(t: int) -> int:
+    """Swap the positive/negative states of the column operand."""
+    t = int(t) & MASK
+    b11 = (t >> 3) & 1
+    b10 = (t >> 2) & 1
+    b01 = (t >> 1) & 1
+    b00 = t & 1
+    return ((b10 << 3) | (b11 << 2) | (b00 << 1) | b01) & MASK
+
+
+def cm_align_signed_operands(
+    t: int,
+    *,
+    swapped: bool = False,
+    negate_first: bool = False,
+    negate_second: bool = False,
+) -> int:
+    """Express a token over a fixed ``(row, column)`` operand frame.
+
+    ``t`` initially represents ``f(first, second)``. With ``swapped=False``,
+    the source operands are the row and column operands respectively. With
+    ``swapped=True``, the source operands are column then row. Negation flags
+    describe the source operands before they are aligned to the target frame.
+    """
+    aligned = cm_transpose(t) if swapped else (int(t) & MASK)
+    if swapped:
+        if negate_first:
+            aligned = cm_swap_columns(aligned)
+        if negate_second:
+            aligned = cm_swap_rows(aligned)
+    else:
+        if negate_first:
+            aligned = cm_swap_rows(aligned)
+        if negate_second:
+            aligned = cm_swap_columns(aligned)
+    return aligned
 
 
 def cm_rot90(t: int) -> int:
@@ -127,8 +186,12 @@ def cm_compose(t1: int, t2: int, op: str) -> int:
 __all__ = [
     "TOK",
     "MASK",
+    "cm_token_value",
     "cm_not",
     "cm_transpose",
+    "cm_swap_rows",
+    "cm_swap_columns",
+    "cm_align_signed_operands",
     "cm_rot90",
     "cm_rot180",
     "cm_rot270",

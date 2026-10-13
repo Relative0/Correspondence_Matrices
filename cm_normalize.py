@@ -32,6 +32,7 @@ def canonical_layout(vars_all: List[str], mode: str = "balanced") -> Tuple[List[
 
 @lru_cache(maxsize=256)
 def _rows_perm_index(perm: Tuple[int, ...]) -> np.ndarray:
+    """Gather source rows from target indices; perm maps source axes to target axes."""
     r = len(perm)
     if r <= 1:
         return np.arange(1<<r, dtype=np.uint32)
@@ -39,13 +40,14 @@ def _rows_perm_index(perm: Tuple[int, ...]) -> np.ndarray:
     idx = np.arange(R, dtype=np.uint32)
     new_idx = np.zeros_like(idx)
     for old_bit in range(r):
-        bit = (idx >> (r-1-old_bit)) & 1
         newpos = perm[old_bit]
-        new_idx |= bit << (r-1-newpos)
+        bit = (idx >> (r-1-newpos)) & 1
+        new_idx |= bit << (r-1-old_bit)
     return new_idx
 
 @lru_cache(maxsize=256)
 def _cols_perm_index(perm: Tuple[int, ...]) -> np.ndarray:
+    """Gather source columns from target indices; perm maps source axes to target axes."""
     c = len(perm)
     if c <= 1:
         return np.arange(1<<c, dtype=np.uint32)
@@ -53,9 +55,9 @@ def _cols_perm_index(perm: Tuple[int, ...]) -> np.ndarray:
     idx = np.arange(C, dtype=np.uint32)
     new_idx = np.zeros_like(idx)
     for old_bit in range(c):
-        bit = (idx >> (c-1-old_bit)) & 1
         newpos = perm[old_bit]
-        new_idx |= bit << (c-1-newpos)
+        bit = (idx >> (c-1-newpos)) & 1
+        new_idx |= bit << (c-1-old_bit)
     return new_idx
 
 @lru_cache(maxsize=512)

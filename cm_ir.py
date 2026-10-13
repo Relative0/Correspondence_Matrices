@@ -3,9 +3,10 @@ from __future__ import annotations
 from collections import OrderedDict
 from contextlib import contextmanager
 from functools import wraps
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import lru_cache
 import hashlib
+import sys
 import time
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -22,6 +23,7 @@ from cmbench.output_budget import (
     DEFAULT_OUTPUT_BUDGET,
     OutputBudget,
     OutputBudgetDecision,
+    OutputEstimate,
     OutputStatus,
     decide_output_budget,
     estimate_explicit_output,
@@ -76,9 +78,9 @@ def _init_ir_persistent_cache_diagnostics(diag: Optional[Dict[str, Any]]) -> Non
 
 
 _COMPILED_IR_CACHE_MAXSIZE = 4096
-# Keyed by (expr, share_aware_flatten) so ablation compiles cannot alias the
+# Keyed by (ordered DAG records, share_aware_flatten) so ablation compiles cannot alias the
 # default-canonicalization entries.
-_COMPILED_IR_CACHE: "OrderedDict[Tuple[Expr, bool], CMNode]" = OrderedDict()
+_COMPILED_IR_CACHE: "OrderedDict[Tuple[Tuple[object, ...], bool], CMNode]" = OrderedDict()
 
 
 def clear_cm_ir_compile_cache() -> None:
@@ -159,12 +161,53 @@ def _expr_var_name(expr: Any) -> str:
         return str(i)
 
 
-def _structural_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
+_STRUCTURAL_HASH_MAX_DEPTH = 256
+_STRUCTURAL_HASH_MAX_NODES = 100_000
+_STRUCTURAL_HASH_MAX_PARTS = 1 << 20
+
+
+def _check_hash_graph(expr: Expr) -> None:
+    """Bound recursive hashing and reject cycles without unfolding shared nodes."""
+    heights: Dict[int, int] = {}
+    active = set()
+    stack = [(expr, False)]
+    while stack:
+        node, ready = stack.pop()
+        key = id(node)
+        if key in heights:
+            continue
+        if isinstance(node, Var):
+            children = ()
+        elif isinstance(node, Not):
+            children = (node.a,)
+        elif isinstance(node, (And, Or, Xor, Imp, Eqv)):
+            children = (node.a, node.b)
+        else:
+            raise TypeError(type(node))
+        if ready:
+            height = 1 + max((heights[id(c)] for c in children), default=0)
+            if height > _STRUCTURAL_HASH_MAX_DEPTH:
+                raise ValueError("structural hash depth limit exceeded")
+            heights[key] = height
+            active.remove(key)
+        else:
+            if key in active:
+                raise ValueError("structural hash requires an acyclic expression")
+            if len(heights) + len(active) >= _STRUCTURAL_HASH_MAX_NODES:
+                raise ValueError("structural hash node limit exceeded")
+            active.add(key)
+            stack.append((node, True))
+            stack.extend((c, False) for c in reversed(children))
+
+
+def _structural_digest(e: Expr, memo: Dict[int, bytes], work: Optional[List[int]] = None) -> bytes:
     """blake2b structural digest for one Expr node, memoized by ``id(e)``.
 
     ``memo`` must keep every hashed Expr alive for its lifetime (callers pass a dict
     scoped to a single hash/compile call, during which the Expr tree is referenced).
     """
+    if work is None:
+        work = [_STRUCTURAL_HASH_MAX_PARTS]
     cached = memo.get(id(e))
     if cached is not None:
         return cached
@@ -175,7 +218,7 @@ def _structural_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
         d = h.digest()
     elif isinstance(e, Not):
         h.update(b"NOT:")
-        h.update(_structural_digest(e.a, memo))
+        h.update(_structural_digest(e.a, memo, work))
         d = h.digest()
     elif isinstance(e, (And, Or, Xor)):
         if isinstance(e, And):
@@ -188,24 +231,49 @@ def _structural_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
             tag = b"XOR:"
             cls = Xor
 
-        # Flatten associative ops, then sort child digests for commutativity.
-        stack: List[Expr] = [e]
-        parts: List[bytes] = []
+        # Traverse each associative DAG node once, preserving edge multiplicity.
+        stack = [(e, False)]
+        seen = set()
+        order = []
         while stack:
-            z = stack.pop()
+            z, ready = stack.pop()
+            if id(z) in seen:
+                continue
+            if ready:
+                seen.add(id(z))
+                order.append(z)
+                continue
+            stack.append((z, True))
             if isinstance(z, cls):
-                stack.append(z.b)
-                stack.append(z.a)
+                stack.extend(((z.b, False), (z.a, False)))
+        weights = {id(e): 1}
+        boundaries = []
+        expanded_parts = 0
+        for z in reversed(order):
+            count = weights[id(z)]
+            if isinstance(z, cls):
+                for child in (z.a, z.b):
+                    weights[id(child)] = weights.get(id(child), 0) + count
             else:
-                parts.append(_structural_digest(z, memo))
-        parts.sort()
+                expanded_parts += count
+                if expanded_parts > work[0]:
+                    raise ValueError("structural hash work limit exceeded")
+                boundaries.append((z, count))
+        work[0] -= expanded_parts
+        parts: Dict[bytes, int] = {}
+        for z, count in boundaries:
+            digest = _structural_digest(z, memo, work)
+            parts[digest] = parts.get(digest, 0) + count
         h.update(tag)
-        for p in parts:
-            h.update(p)
+        for p, count in sorted(parts.items()):
+            while count:
+                chunk = min(count, 4096)
+                h.update(p * chunk)
+                count -= chunk
         d = h.digest()
     elif isinstance(e, Eqv):
-        a = _structural_digest(e.a, memo)
-        b = _structural_digest(e.b, memo)
+        a = _structural_digest(e.a, memo, work)
+        b = _structural_digest(e.b, memo, work)
         if b < a:
             a, b = b, a
         h.update(b"EQV:")
@@ -214,8 +282,8 @@ def _structural_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
         d = h.digest()
     elif isinstance(e, Imp):
         h.update(b"IMP:")
-        h.update(_structural_digest(e.a, memo))
-        h.update(_structural_digest(e.b, memo))
+        h.update(_structural_digest(e.a, memo, work))
+        h.update(_structural_digest(e.b, memo, work))
         d = h.digest()
     else:
         raise TypeError(e)
@@ -228,8 +296,117 @@ def expr_structural_hash(expr: Expr) -> str:
 
     This hash canonicalizes associative+commutative nodes (AND/OR/XOR) by flattening and sorting
     child hashes, and canonicalizes EQV by sorting its two children. IMP preserves order.
+    Legacy identifiers are preserved. Inputs exceeding 256 nodes in a path,
+    100,000 distinct nodes, or 1,048,576 flattened operand occurrences across
+    digest computations raise ValueError rather than consume unbounded work.
     """
+    _check_hash_graph(expr)
     return _structural_digest(expr, {}).hex()
+
+
+_COMPILE_MAX_DEPTH = 256
+_COMPILE_MAX_NODES = 100_000
+_COMPILE_MAX_STRUCTURAL_WORK = 1 << 20
+
+
+class CompilationAdmissionError(ValueError):
+    """An expression exceeds the current compiler's structural capacity."""
+
+    status = OutputStatus.REFUSED
+
+
+def _expr_postorder(expr: Expr) -> List[Expr]:
+    """Identity-aware, cycle-checked order; never hashes recursive Expr values."""
+    order: List[Expr] = []
+    done = set()
+    active = set()
+    stack = [(expr, False)]
+    while stack:
+        node, ready = stack.pop()
+        key = id(node)
+        if key in done:
+            continue
+        if isinstance(node, Var):
+            children = ()
+        elif isinstance(node, Not):
+            children = (node.a,)
+        elif isinstance(node, (And, Or, Xor, Imp, Eqv)):
+            children = (node.a, node.b)
+        else:
+            raise TypeError(type(node))
+        if ready:
+            active.remove(key)
+            done.add(key)
+            order.append(node)
+        else:
+            if key in active:
+                raise CompilationAdmissionError("refusing CM compilation: expression must be acyclic")
+            if len(done) + len(active) >= _COMPILE_MAX_NODES:
+                raise CompilationAdmissionError("refusing CM compilation: distinct node limit exceeded")
+            active.add(key)
+            stack.append((node, True))
+            stack.extend((c, False) for c in reversed(children))
+    return order
+
+
+def _check_compile_graph(expr: Expr, diagnostics: Optional[Dict[str, Any]] = None) -> List[Expr]:
+    """Bound depth and unfolded structural work before cache lookup/building.
+
+    The sum of unfolded subtree sizes bounds repeated nested-key comparisons
+    and the intentionally unmemoized legacy traversal. It is a conservative
+    structural admission measure, not a time or process-memory guarantee.
+    """
+    if diagnostics is not None:
+        diagnostics["ir_compile_admission_status"] = OutputStatus.REFUSED.value
+        for name in ("ir_compile_admission_nodes", "ir_compile_admission_depth", "ir_compile_admission_structural_work"):
+            diagnostics.pop(name, None)
+    order = _expr_postorder(expr)
+    heights: Dict[int, int] = {}
+    sizes: Dict[int, int] = {}
+    work = 0
+    for node in order:
+        children = () if isinstance(node, Var) else ((node.a,) if isinstance(node, Not) else (node.a, node.b))
+        height = 1 + max((heights[id(c)] for c in children), default=0)
+        if height > _COMPILE_MAX_DEPTH:
+            raise CompilationAdmissionError(f"refusing CM compilation: depth limit exceeded ({_COMPILE_MAX_DEPTH} nodes)")
+        size = 1 + sum(sizes[id(c)] for c in children)
+        work += size
+        if work > _COMPILE_MAX_STRUCTURAL_WORK:
+            raise CompilationAdmissionError("refusing CM compilation: structural work limit exceeded")
+        heights[id(node)] = height
+        sizes[id(node)] = size
+    if diagnostics is not None:
+        diagnostics["ir_compile_admission_status"] = OutputStatus.OK.value
+        diagnostics["ir_compile_admission_nodes"] = len(order)
+        diagnostics["ir_compile_admission_depth"] = heights[id(expr)]
+        diagnostics["ir_compile_admission_structural_work"] = work
+    return order
+
+
+def _ordered_expr_cache_key(expr: Expr, order: Sequence[Expr]) -> Tuple[object, ...]:
+    """Exact ordered structure, independent of physical DAG sharing.
+
+    Flat records use child integer UIDs; equal ordered Expr values produce
+    equal records without a digest collision assumption or recursive hashing.
+    Var is retained as a scalar leaf to preserve its dataclass equality.
+    """
+    intern: Dict[Tuple[object, ...], int] = {}
+    uids: Dict[int, int] = {}
+    records: List[Tuple[object, ...]] = []
+    for node in order:
+        if isinstance(node, Var):
+            record = (type(node), node)
+        elif isinstance(node, Not):
+            record = (type(node), uids[id(node.a)])
+        else:
+            record = (type(node), uids[id(node.a)], uids[id(node.b)])
+        uid = intern.get(record)
+        if uid is None:
+            uid = len(records)
+            intern[record] = uid
+            records.append(record)
+        uids[id(node)] = uid
+    return tuple(records), uids[id(expr)]
 
 
 def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
@@ -255,31 +432,47 @@ def _persistent_digest(e: Expr, memo: Dict[int, bytes]) -> bytes:
     cached = memo.get(id(e))
     if cached is not None:
         return cached
-    h = hashlib.blake2b(digest_size=16)
-    if isinstance(e, Var):
-        h.update(b"VAR:")
-        h.update(_expr_var_name(e).encode("utf-8"))
-    elif isinstance(e, Not):
-        h.update(b"NOT:")
-        h.update(_persistent_digest(e.a, memo))
-    elif isinstance(e, Imp):
-        h.update(b"IMP:")
-        h.update(_persistent_digest(e.a, memo))
-        h.update(_persistent_digest(e.b, memo))
-    elif isinstance(e, (And, Or, Xor, Eqv)):
-        tag = {And: b"AND2:", Or: b"OR2:", Xor: b"XOR2:", Eqv: b"EQV2:"}[type(e)]
-        a = _persistent_digest(e.a, memo)
-        b = _persistent_digest(e.b, memo)
-        if b < a:
-            a, b = b, a
-        h.update(tag)
-        h.update(a)
-        h.update(b)
-    else:
-        raise TypeError(e)
-    d = h.digest()
-    memo[id(e)] = d
-    return d
+    # Stop at already digested subgraphs, preserving related-expression cache
+    # reuse without re-walking every descendant for each subtree cache key.
+    stack = [(e, False)]
+    active = set()
+    while stack:
+        node, ready = stack.pop()
+        key = id(node)
+        if key in memo:
+            continue
+        if not ready:
+            if key in active:
+                raise CompilationAdmissionError("refusing CM compilation: expression must be acyclic")
+            if len(active) + len(memo) >= _COMPILE_MAX_NODES:
+                raise CompilationAdmissionError("refusing CM compilation: digest node limit exceeded")
+            active.add(key)
+            stack.append((node, True))
+            if isinstance(node, Not):
+                stack.append((node.a, False))
+            elif isinstance(node, (And, Or, Xor, Imp, Eqv)):
+                stack.extend(((node.b, False), (node.a, False)))
+            elif not isinstance(node, Var):
+                raise TypeError(type(node))
+            continue
+        h = hashlib.blake2b(digest_size=16)
+        if isinstance(node, Var):
+            h.update(b"VAR:")
+            h.update(_expr_var_name(node).encode("utf-8"))
+        elif isinstance(node, Not):
+            h.update(b"NOT:")
+            h.update(memo[id(node.a)])
+        else:
+            a, b = memo[id(node.a)], memo[id(node.b)]
+            tag = {And: b"AND2:", Or: b"OR2:", Xor: b"XOR2:", Eqv: b"EQV2:", Imp: b"IMP:"}[type(node)]
+            if not isinstance(node, Imp) and b < a:
+                a, b = b, a
+            h.update(tag)
+            h.update(a)
+            h.update(b)
+        memo[key] = h.digest()
+        active.remove(key)
+    return memo[id(e)]
 
 
 def compile_expr_to_cm_ir_persistent(
@@ -319,6 +512,7 @@ def compile_expr_to_cm_ir_persistent(
     """
     _init_ir_compile_diagnostics(diagnostics)
     _init_ir_persistent_cache_diagnostics(diagnostics)
+    _check_compile_graph(expr, diagnostics)
 
     def cache_get(key: str) -> Optional[CMNode]:
         cached = _PERSISTENT_IR_CACHE.get(key)
@@ -1128,6 +1322,8 @@ class CMIRBuilder:
             # recursing through build): reuse the outermost call's state.
             return self._build_rec(expr, state)
 
+        _check_compile_graph(expr, self.diagnostics)
+
         # The structural UID memo below subsumes object-identity memoization on
         # the default sharing-aware path.  Keeping both maps repeated every
         # lookup/store and retained an extra (expr, node) tuple per visited
@@ -1223,6 +1419,12 @@ def compile_expr_to_cm_ir(
     its required structural UID memo. ``build_memo`` controls the id-keyed
     memo only on the non-sharing-aware path. Pass both False to reproduce the
     fully legacy behavior for ablation.
+
+    All modes refuse cycles, paths longer than 256 nodes, more than 100,000
+    distinct objects, or more than 1,048,576 total unfolded subtree occurrences
+    with CompilationAdmissionError before cache lookup or building. This
+    conservative capacity guard also protects legacy nested IR-key operations;
+    it is not a process-memory or execution-time guarantee.
     """
     if persistent_cache:
         return compile_expr_to_cm_ir_persistent(
@@ -1244,7 +1446,8 @@ def compile_expr_to_cm_ir_cached(
     build_memo: bool = True,
 ) -> CMNode:
     _init_ir_compile_diagnostics(diagnostics)
-    cache_key = (expr, bool(share_aware_flatten))
+    order = _check_compile_graph(expr, diagnostics)
+    cache_key = (_ordered_expr_cache_key(expr, order), bool(share_aware_flatten)) if reuse_cache else None
     if reuse_cache:
         if diagnostics is not None:
             diagnostics["ir_compile_cache_hit"] = 0
@@ -1864,6 +2067,66 @@ def _effective_output_budget(
     )
 
 
+def estimate_cm_output(
+    node: CMNode,
+    variable_count: int,
+    representation: str,
+    *,
+    fixed: Optional[Dict[str, int]] = None,
+    materialize_mode: str = "partial_hybrid",
+    hybrid_threshold: int = 7,
+) -> OutputEstimate:
+    """Support-aware payload admission; excludes RSS, metadata and processes.
+
+    NumPy memo payload is summed once per distinct compiled node. Packed
+    payload uses CPython integer limbs, slot-sized operands, mask storage and
+    byte/word construction scratch. Hybrid estimates additionally include
+    every potential collapsed node, a deliberately conservative allowance.
+    Caller reserves enter through decide_output_budget, never a fitted margin.
+    """
+    slots = _cm_node_count(node)
+    legacy = estimate_explicit_output(variable_count, representation, operation_slots=slots)
+    if materialize_mode not in {"numpy", "hybrid", "partial_hybrid"}:
+        raise ValueError(f"Unknown materialize_mode: {materialize_mode}")
+    if hybrid_threshold < 0:
+        raise ValueError("hybrid_threshold must be >= 0")
+    fixed_map = fixed or {}
+    if sum(v not in fixed_map for v in node.vars) > variable_count:
+        raise ValueError("output basis width is smaller than live node support")
+
+    def packed_payload(k: int, operations: int) -> int:
+        bits = 1 << k
+        packed = (bits + 7) // 8
+        integer = sys.getsizeof(0) + sys.int_info.sizeof_digit * (
+            (bits + sys.int_info.bits_per_digit - 1) // sys.int_info.bits_per_digit)
+        # Integer operands/masks and byte-backed word masks can coexist.
+        # Four construction/operator scratch buffers; not a metadata reserve.
+        return (operations + k + 4) * integer + (k + 4) * max(8, packed)
+
+    if representation == "packed_bitset":
+        temporary = max(legacy.temporary_bytes, packed_payload(variable_count, slots))
+        return replace(legacy, temporary_bytes=temporary, estimation_method="cm_support_payload_v1")
+    seen = set()
+    pending = [node]
+    retained = 0
+    hybrid_payload = 0
+    while pending:
+        current = pending.pop()
+        if id(current) in seen:
+            continue
+        seen.add(id(current))
+        k = sum(v not in fixed_map for v in current.vars)
+        if k > variable_count:
+            raise ValueError("output basis width is smaller than live node support")
+        retained += 1 << k
+        if materialize_mode != "numpy" and k <= hybrid_threshold:
+            hybrid_payload += packed_payload(k, slots)
+        pending.extend(current.args)
+    temporary = max(legacy.temporary_bytes, retained + 2 * legacy.output_bytes + hybrid_payload)
+    return replace(legacy, temporary_bytes=temporary, retained_array_bytes=retained,
+        estimation_method="cm_support_payload_v1")
+
+
 def _record_output_budget_diagnostics(
     diagnostics: Optional[Dict[str, Any]],
     decision: OutputBudgetDecision,
@@ -1879,6 +2142,10 @@ def _record_output_budget_diagnostics(
     )
     diagnostics["output_budget_output_vars"] = int(decision.estimate.variable_count)
     diagnostics["output_budget_reason"] = decision.reason
+    diagnostics["output_budget_estimation_method"] = decision.estimate.estimation_method
+    diagnostics["output_budget_retained_array_bytes"] = decision.estimate.retained_array_bytes
+    diagnostics["output_budget_reserve_bytes"] = decision.estimate.reserve_bytes
+    diagnostics["output_budget_estimation_scope"] = "payload_plus_selected_reserve_not_rss"
     if not decision.allowed:
         # A diagnostics object may span several calls. A refused call produced
         # no artifact, even when an earlier call using that object succeeded.
@@ -1894,6 +2161,17 @@ def _record_output_budget_diagnostics(
         )
         diagnostics.pop("cached_exec_engine_kind", None)
         diagnostics.pop("cached_exec_engine_live_k", None)
+
+
+def _validate_output_basis(node: CMNode, target_vars: Sequence[str], fixed: Optional[Dict[str, int]]) -> None:
+    """Validate the ambient basis before budget estimation or evaluation."""
+    if any(not isinstance(v, str) for v in target_vars):
+        raise ValueError("output basis must contain variable names")
+    if len(set(target_vars)) != len(target_vars):
+        raise ValueError("output basis contains duplicate variables")
+    missing = set(node.vars).difference(fixed or {}).difference(target_vars)
+    if missing:
+        raise ValueError(f"output basis omits unfixed variables: {sorted(missing)}")
 
 
 def materialize_cm(
@@ -1912,6 +2190,7 @@ def materialize_cm(
     # Stable, benchmark-friendly final-output diagnostics (representation_code=0 for dense CM matrix).
     _init_final_output_diagnostics(diagnostics)
     target_vars = tuple(list(R) + list(C))
+    _validate_output_basis(node, target_vars, fixed)
     budget = _effective_output_budget(
         output_budget,
         max_full_output_vars=max_full_output_vars,
@@ -1919,10 +2198,13 @@ def materialize_cm(
     )
     decision = decide_output_budget(
         budget,
-        estimate_explicit_output(
+        estimate_cm_output(
+            node,
             len(target_vars),
             "dense_bool",
-            operation_slots=_cm_node_count(node),
+            fixed=fixed,
+            materialize_mode=materialize_mode,
+            hybrid_threshold=hybrid_threshold,
         ),
         artifact_name="full dense CM output",
     )
@@ -2024,6 +2306,7 @@ def materialize_hybrid_no_reinflate(
     (never a 2D dense CM matrix). ``flat_fast_path=False`` retains the generic wrapper for
     controlled before/after measurements; it does not change result semantics.
     """
+    _validate_output_basis(node, vars_all, fixed)
     # Diagnostics-off fast path for the opt-in flat kernel.  Once C1a reduced the
     # evaluator to a few microseconds, the generic profiling/diagnostic plumbing became
     # a co-equal fixed cost.  Keep the complete instrumented path below as the reference.
@@ -2051,20 +2334,23 @@ def materialize_hybrid_no_reinflate(
             if len(fast_live_vars) <= hybrid_threshold
             else "truth_table_uint8"
         )
-        fast_operation_slots = _cm_node_count(node)
         fast_decision = require_output_budget(
             decide_output_budget(
                 fast_budget,
-                estimate_explicit_output(
+                estimate_cm_output(
+                    node,
                     fast_n,
                     fast_representation,
-                    operation_slots=fast_operation_slots,
+                    fixed=fixed,
+                    hybrid_threshold=hybrid_threshold,
                 ),
-                reduced_estimate=estimate_explicit_output(
+                reduced_estimate=estimate_cm_output(
+                    node,
                     len(fast_live_vars),
                     fast_representation,
-                    operation_slots=fast_operation_slots,
-                ),
+                    fixed=fixed,
+                    hybrid_threshold=hybrid_threshold,
+                ) if fast_budget is not None and fast_budget.allow_reduced_output else None,
                 artifact_name="full no-reinflate output",
                 reduced_artifact_name="reduced no-reinflate output",
             )
@@ -2123,19 +2409,22 @@ def materialize_hybrid_no_reinflate(
     representation = (
         "packed_bitset" if live_k <= hybrid_threshold else "truth_table_uint8"
     )
-    operation_slots = _cm_node_count(node)
     decision = decide_output_budget(
         budget,
-        estimate_explicit_output(
+        estimate_cm_output(
+            node,
             n,
             representation,
-            operation_slots=operation_slots,
+            fixed=fixed,
+            hybrid_threshold=hybrid_threshold,
         ),
-        reduced_estimate=estimate_explicit_output(
+        reduced_estimate=estimate_cm_output(
+            node,
             live_k,
             representation,
-            operation_slots=operation_slots,
-        ),
+            fixed=fixed,
+            hybrid_threshold=hybrid_threshold,
+        ) if budget is not None and budget.allow_reduced_output else None,
         artifact_name="full no-reinflate output",
         reduced_artifact_name="reduced no-reinflate output",
     )

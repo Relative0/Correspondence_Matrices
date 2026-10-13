@@ -19,14 +19,19 @@ def _build_bitset_env_cached(vars_key: Tuple[str, ...]) -> Mapping[str, int]:
     n_rows = 1 << n_vars
     env: Dict[str, int] = {}
     if n_vars > 10:
-        # The pure-Python block loop below is O(2^n) bigint shifts per variable and
-        # becomes a first-touch cliff (~130 ms at n=16, ~1.5 s at n=18). Vectorize:
-        # bit k of a variable's mask is that variable's value in assignment row k.
-        rows = np.arange(n_rows, dtype=np.uint32)
+        # Assignment columns are periodic. Emit their packed bytes directly,
+        # avoiding one uint32 per row and the unpacked shift/pack temporaries.
+        # Low-order axes repeat within a byte; higher axes have whole-byte runs.
+        n_bytes = n_rows // 8
         for v, name in enumerate(vars_key):
-            bits = ((rows >> (n_vars - 1 - v)) & 1).astype(np.uint8)
-            packed = np.packbits(bits, bitorder="little")
-            env[name] = int.from_bytes(packed.tobytes(), "little")
+            shift = n_vars - 1 - v
+            if shift < 3:
+                packed = (b"\xaa", b"\xcc", b"\xf0")[shift] * n_bytes
+            else:
+                block_bytes = 1 << (shift - 3)
+                period = b"\x00" * block_bytes + b"\xff" * block_bytes
+                packed = period * (n_bytes // (2 * block_bytes))
+            env[name] = int.from_bytes(packed, "little")
     else:
         for v, name in enumerate(vars_key):
             block = 1 << (n_vars - 1 - v)
@@ -57,13 +62,24 @@ def build_bitset_env(vars: Sequence[str]) -> Mapping[str, int]:
     return _build_bitset_env_cached(tuple(vars))
 
 
-def eval_expr_bitset(expr: Expr, env: Mapping[str, int]) -> int:
-    """Evaluate an expression DAG to a packed truth-table bitset with width 2^n."""
-    if not env:
-        return 0
+def eval_expr_bitset(
+    expr: Expr,
+    env: Mapping[str, int],
+    *,
+    fixed: Optional[Mapping[str, int]] = None,
+) -> int:
+    """Evaluate an expression DAG to a packed truth-table bitset with width 2^n.
+
+    Variables absent from ``env`` must be supplied by ``fixed``.  A fixed true
+    variable receives the full assignment mask and a fixed false variable the
+    zero mask, giving this direct packed arm the same substitution contract as
+    the CM evaluators. Fixed bindings override ``env`` bindings while retaining
+    the environment's assignment width.
+    """
     n_vars = len(env)
     n_rows = 1 << n_vars
     full_mask = (1 << n_rows) - 1
+    fixed_map = fixed or {}
     # Expr v2 preserves shared subexpressions.  Cache by identity so evaluating a
     # DAG costs O(unique nodes), rather than O(tree unfolding), without paying the
     # recursive structural-hash cost of using frozen dataclass values as keys.
@@ -77,7 +93,13 @@ def eval_expr_bitset(expr: Expr, env: Mapping[str, int]) -> int:
             pass
 
         if isinstance(e, Var):
-            result = env[f"x{e.i}"]
+            name = f"x{e.i}"
+            if name in fixed_map:
+                result = full_mask if int(bool(fixed_map[name])) else 0
+            elif name in env:
+                result = env[name]
+            else:
+                raise KeyError(f"missing live/fixed value for variable {name!r}")
         elif isinstance(e, Not):
             result = (~rec(e.a)) & full_mask
         elif isinstance(e, And):

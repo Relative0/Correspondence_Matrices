@@ -34,7 +34,7 @@ class WebsiteUpdatePassTests(unittest.TestCase):
         self.assertEqual(plotted[1]["value"], self.numbers["flat.local"]["value"])
         self.assertGreater(plotted[1]["value"], 1.0)
         template = (SITE / "cm_master_template.html").read_text(encoding="utf-8")
-        self.assertIn('P("{{symv3.bare.overall}}")', template)
+        self.assertIn('P("{{symv3.repeat.latest}}")', template)
         self.assertNotIn("DATA.e2_kernel_vs_cse_flat.rows[1].value", template)
 
     def test_c16_local_and_linux_values_are_evidence_bound(self):

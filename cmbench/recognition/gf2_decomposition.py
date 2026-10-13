@@ -11,9 +11,10 @@ import hashlib
 import itertools
 import json
 import math
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable, TypeVar
 
 from .natural_decomposition import interaction_components, partitioned_bits
 from .proved_rules import canonical
@@ -21,6 +22,44 @@ from .proved_rules import canonical
 SCHEMA = "crse-exact-cm-gf2-artifact/v1"
 MAX_VARS = 10
 KINDS = ("xor_components", "gf2_rank", "cofactor_blocks", "kronecker")
+
+_T = TypeVar("_T")
+
+
+@dataclass
+class GF2PhaseRecorder:
+    """Optional wall-clock recorder for the two exact analysis procedures.
+
+    The recorder is deliberately opt-in so production analysis takes no timing
+    branches.  Each phase is a directly measured scope; phase totals are not
+    additive when a phase calls another recorded phase.
+    """
+
+    elapsed_ns: dict[str, int] = field(default_factory=dict)
+    calls: dict[str, int] = field(default_factory=dict)
+
+    def measure(self, phase: str, operation: Callable[[], _T]) -> _T:
+        started = time.perf_counter_ns()
+        try:
+            return operation()
+        finally:
+            self.elapsed_ns[phase] = self.elapsed_ns.get(phase, 0) + (time.perf_counter_ns() - started)
+            self.calls[phase] = self.calls.get(phase, 0) + 1
+
+    def snapshot(self) -> dict[str, Any]:
+        return {
+            "schema": "crse-exact-cm-gf2-phase-timing/v1",
+            "phases": [
+                {"name": phase, "elapsed_ns": self.elapsed_ns[phase], "calls": self.calls[phase]}
+                for phase in sorted(self.elapsed_ns)
+            ],
+            "non_additive": True,
+        }
+
+
+def _measured(recorder: GF2PhaseRecorder | None, phase: str,
+              operation: Callable[[], _T]) -> _T:
+    return operation() if recorder is None else recorder.measure(phase, operation)
 
 
 def truth_sha256(bits: int, n_vars: int) -> str:
@@ -328,11 +367,12 @@ def _artifact(kind: str, bits: int, n_vars: int, factor_bits: int, payload: dict
 
 @dataclass(frozen=True)
 class GF2CandidateDescriptor:
-    """An unmaterialized exact candidate found by a cheap partition screen.
+    """An unmaterialized exact candidate found by a partition screen.
 
-    A descriptor is never an accepted artifact.  Materialization runs the same
-    strict hash, shape, and complete truth-reconstruction checks as the original
-    exhaustive analyzer.
+    The descriptor already holds the kind-specific factor payload, and its
+    digest is computed during deduplication and ordering.  It is never an
+    accepted artifact.  Materialization runs the same strict shape, digest, and
+    complete truth-reconstruction checks as the original exhaustive analyzer.
     """
 
     kind: str
@@ -429,16 +469,30 @@ def _kronecker_descriptors(arranged: int, row_count: int, column_count: int,
 
 
 def screen_partition(bits: int, n_vars: int,
-                     row_variables: Iterable[int]) -> tuple[GF2CandidateDescriptor, ...]:
+                     row_variables: Iterable[int], *,
+                     phase_recorder: GF2PhaseRecorder | None = None
+                     ) -> tuple[GF2CandidateDescriptor, ...]:
     """Screen one partition once without admitting or reconstructing artifacts."""
     _validate_bits(bits, n_vars)
     row, _column = _partition(row_variables, n_vars)
-    arranged, row_count, column_count = partitioned_bits(bits, n_vars, row)
+    arranged, row_count, column_count = _measured(
+        phase_recorder, "screened.partition_layout",
+        lambda: partitioned_bits(bits, n_vars, row),
+    )
     rows, columns = 1 << row_count, 1 << column_count
-    rank = _rank_descriptor(arranged, rows, columns, row)
+    rank = _measured(
+        phase_recorder, "screened.rank_descriptor",
+        lambda: _rank_descriptor(arranged, rows, columns, row),
+    )
     result = ([] if rank is None else [rank])
-    result.extend(_cofactor_descriptors(arranged, rows, columns, row))
-    result.extend(_kronecker_descriptors(arranged, row_count, column_count, row))
+    result.extend(_measured(
+        phase_recorder, "screened.cofactor_descriptors",
+        lambda: _cofactor_descriptors(arranged, rows, columns, row),
+    ))
+    result.extend(_measured(
+        phase_recorder, "screened.kronecker_descriptors",
+        lambda: _kronecker_descriptors(arranged, row_count, column_count, row),
+    ))
     return tuple(result)
 
 
@@ -504,7 +558,7 @@ class ExactGF2Analysis:
     @property
     def best(self) -> ExactGF2Artifact | None:
         return min(self.candidates, key=lambda item: (item.document["factor_bits"], item.kind,
-                   item.document["row_variables"])) if self.candidates else None
+                   item.document["row_variables"], item.digest)) if self.candidates else None
 
     @property
     def kinds(self) -> tuple[str, ...]:
@@ -535,29 +589,51 @@ def candidate_partitions(bits: int, n_vars: int, max_partitions: int = 64) -> tu
 
 def analyze_exact_gf2(bits: int, n_vars: int, *,
                       row_partitions: Iterable[Iterable[int]] | None = None,
-                      max_partitions: int = 64) -> ExactGF2Analysis:
+                      max_partitions: int = 64,
+                      phase_recorder: GF2PhaseRecorder | None = None) -> ExactGF2Analysis:
+    """Run the legacy all-artifact control, optionally recording coarse phases.
+
+    Its rank, cofactor, and Kronecker constructor timings each include their
+    own matrix layout and strict artifact admission, matching the C15 control.
+    """
     _validate_bits(bits, n_vars)
-    partitions = (candidate_partitions(bits, n_vars, max_partitions) if row_partitions is None
-                  else tuple(tuple(row) for row in row_partitions))
+    partitions = _measured(
+        phase_recorder, "exhaustive.partition_enumeration",
+        lambda: (candidate_partitions(bits, n_vars, max_partitions) if row_partitions is None
+                 else tuple(tuple(row) for row in row_partitions)),
+    )
     if not partitions:
         raise ValueError("GF(2) analyzer requires at least one partition")
     candidates = []
-    xor = xor_component_artifact(bits, n_vars)
+    xor = _measured(phase_recorder, "exhaustive.xor_artifact",
+                    lambda: xor_component_artifact(bits, n_vars))
     if xor is not None:
         candidates.append(xor)
     seen = {candidate.digest for candidate in candidates}
     for row in partitions:
-        for candidate in ((rank_artifact(bits, n_vars, row),)
-                          + cofactor_artifacts(bits, n_vars, row)
-                          + kronecker_artifacts(bits, n_vars, row)):
+        rank = _measured(phase_recorder, "exhaustive.rank_constructor",
+                         lambda: rank_artifact(bits, n_vars, row))
+        cofactors = _measured(phase_recorder, "exhaustive.cofactor_constructor",
+                              lambda: cofactor_artifacts(bits, n_vars, row))
+        kroneckers = _measured(phase_recorder, "exhaustive.kronecker_constructor",
+                               lambda: kronecker_artifacts(bits, n_vars, row))
+        for candidate in ((rank,) + cofactors + kroneckers):
             if candidate is not None and candidate.digest not in seen:
-                if candidate.reconstruct() != bits:
+                reconstructed = _measured(
+                    phase_recorder, "exhaustive.outer_reconstruction",
+                    candidate.reconstruct,
+                )
+                if reconstructed != bits:
                     raise RuntimeError("GF(2) candidate escaped exact reconstruction")
                 candidates.append(candidate)
                 seen.add(candidate.digest)
-    candidates.sort(key=lambda item: (item.document["factor_bits"], item.kind,
-                                      item.document["row_variables"], item.digest))
-    return ExactGF2Analysis(n_vars, truth_sha256(bits, n_vars), len(partitions), tuple(candidates),
+    _measured(phase_recorder, "exhaustive.final_sort", lambda: candidates.sort(
+        key=lambda item: (item.document["factor_bits"], item.kind,
+                          item.document["row_variables"], item.digest)
+    ))
+    source_sha256 = _measured(phase_recorder, "exhaustive.source_sha256",
+                              lambda: truth_sha256(bits, n_vars))
+    return ExactGF2Analysis(n_vars, source_sha256, len(partitions), tuple(candidates),
                             descriptors_screened=len(candidates),
                             artifacts_materialized=len(candidates))
 
@@ -565,50 +641,75 @@ def analyze_exact_gf2(bits: int, n_vars: int, *,
 def analyze_screened_exact_gf2(bits: int, n_vars: int, *,
                                row_partitions: Iterable[Iterable[int]] | None = None,
                                max_partitions: int = 64,
-                               materialize_budget: int = 4) -> ExactGF2Analysis:
-    """Find the exhaustive best candidate while materializing only a bounded tail.
+                               materialize_budget: int = 4,
+                               phase_recorder: GF2PhaseRecorder | None = None) -> ExactGF2Analysis:
+    """Find the exhaustive analyzer's best candidate with bounded admission.
 
     Every partition is screened using the same exact rank, cofactor, and
     Kronecker conditions as :func:`analyze_exact_gf2`.  Screening shares one
-    matrix layout per partition and creates no accepted artifact.  Descriptors
-    are ordered by the exhaustive analyzer's complete deterministic key, after
-    which only the best bounded set receives hashes and full reconstruction.
-    Therefore the returned best candidate is identical to the exhaustive best;
-    the reduced candidate tuple is not an enumeration of every valid artifact.
+    matrix layout per partition and creates no accepted artifact.  Each
+    descriptor already contains its factor payload and receives a canonical
+    digest for deduplication and ordering.  Only the leading bounded set then
+    undergoes strict artifact admission and complete reconstruction.  Because
+    the descriptor order is the exhaustive analyzer's complete selection key
+    and the XOR candidate is considered separately, any budget of at least one
+    preserves the exhaustive analyzer's best candidate.  Larger budgets retain
+    additional diagnostic candidates; the returned tuple is not an enumeration
+    of every valid artifact.
     """
     _validate_bits(bits, n_vars)
     if type(materialize_budget) is not int or not 1 <= materialize_budget <= 64:
         raise ValueError("invalid GF(2) materialization budget")
-    partitions = (candidate_partitions(bits, n_vars, max_partitions) if row_partitions is None
-                  else tuple(tuple(row) for row in row_partitions))
+    partitions = _measured(
+        phase_recorder, "screened.partition_enumeration",
+        lambda: (candidate_partitions(bits, n_vars, max_partitions) if row_partitions is None
+                 else tuple(tuple(row) for row in row_partitions)),
+    )
     if not partitions:
         raise ValueError("GF(2) analyzer requires at least one partition")
 
     candidates = []
-    xor = xor_component_artifact(bits, n_vars)
+    xor = _measured(phase_recorder, "screened.xor_artifact",
+                    lambda: xor_component_artifact(bits, n_vars))
     if xor is not None:
         candidates.append(xor)
 
-    descriptors = [descriptor for row in partitions
-                   for descriptor in screen_partition(bits, n_vars, row)]
+    descriptors = [descriptor for row in partitions for descriptor in
+                   screen_partition(bits, n_vars, row, phase_recorder=phase_recorder)]
     unique: dict[str, GF2CandidateDescriptor] = {}
-    for descriptor in descriptors:
-        unique.setdefault(descriptor.digest(bits, n_vars), descriptor)
-    ordered = sorted(unique.values(), key=lambda item: item.sort_key(bits, n_vars))
-    candidates.extend(descriptor.materialize(bits, n_vars)
-                      for descriptor in ordered[:materialize_budget])
+    def deduplicate() -> None:
+        for descriptor in descriptors:
+            unique.setdefault(descriptor.digest(bits, n_vars), descriptor)
+    _measured(phase_recorder, "screened.descriptor_deduplication", deduplicate)
+    ordered = _measured(
+        phase_recorder, "screened.descriptor_ordering",
+        lambda: sorted(unique.values(), key=lambda item: item.sort_key(bits, n_vars)),
+    )
+    admitted = _measured(
+        phase_recorder, "screened.strict_artifact_admission",
+        lambda: [descriptor.materialize(bits, n_vars) for descriptor in ordered[:materialize_budget]],
+    )
+    candidates.extend(admitted)
 
     seen = set()
     exact = []
     for candidate in candidates:
         if candidate.digest in seen:
             continue
-        if candidate.reconstruct() != bits:
+        reconstructed = _measured(
+            phase_recorder, "screened.outer_reconstruction",
+            candidate.reconstruct,
+        )
+        if reconstructed != bits:
             raise RuntimeError("screened GF(2) candidate escaped exact reconstruction")
         seen.add(candidate.digest)
         exact.append(candidate)
-    exact.sort(key=lambda item: (item.document["factor_bits"], item.kind,
-                                 item.document["row_variables"], item.digest))
-    return ExactGF2Analysis(n_vars, truth_sha256(bits, n_vars), len(partitions), tuple(exact),
+    _measured(phase_recorder, "screened.final_sort", lambda: exact.sort(
+        key=lambda item: (item.document["factor_bits"], item.kind,
+                          item.document["row_variables"], item.digest)
+    ))
+    source_sha256 = _measured(phase_recorder, "screened.source_sha256",
+                              lambda: truth_sha256(bits, n_vars))
+    return ExactGF2Analysis(n_vars, source_sha256, len(partitions), tuple(exact),
                             descriptors_screened=len(unique),
                             artifacts_materialized=len(exact))

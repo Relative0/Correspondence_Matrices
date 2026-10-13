@@ -41,14 +41,22 @@ class OutputBudget:
 
     ``max_output_vars`` retains the legacy variable-count guard while callers
     migrate to byte limits. Byte limits are representation-aware.
+    ``working_memory_reserve_bytes`` is added once to the temporary estimate
+    and counts against ``max_temporary_bytes`` when that limit is supplied.
+    These are estimated admission limits, not enforced process-memory limits.
     """
 
     max_output_bytes: int | None = None
     max_temporary_bytes: int | None = None
     max_output_vars: int | None = None
     allow_reduced_output: bool = False
+    # Caller-selected allowance for unmodelled metadata, caches or workspace.
+    # This is an estimated admission reserve, not an enforced RSS allocation.
+    working_memory_reserve_bytes: int = 0
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "working_memory_reserve_bytes", _nonnegative_integer(
+            self.working_memory_reserve_bytes, "working_memory_reserve_bytes"))
         for name in ("max_output_bytes", "max_temporary_bytes", "max_output_vars"):
             value = getattr(self, name)
             if value is not None:
@@ -92,6 +100,9 @@ class OutputEstimate:
     elements: int
     output_bytes: int
     temporary_bytes: int
+    estimation_method: str = "legacy_payload_heuristic"
+    retained_array_bytes: int = 0
+    reserve_bytes: int = 0
 
 
 @dataclass(frozen=True)
@@ -163,6 +174,18 @@ def decide_output_budget(
 
     if budget is None:
         return OutputBudgetDecision(OutputStatus.OK, full_estimate)
+
+    def with_reserve(estimate: OutputEstimate) -> OutputEstimate:
+        previous = _nonnegative_integer(estimate.reserve_bytes, "reserve_bytes")
+        base = _nonnegative_integer(estimate.temporary_bytes - previous, "base temporary_bytes")
+        reserve = max(previous, budget.working_memory_reserve_bytes)
+        if reserve == previous:
+            return estimate
+        return replace(estimate, temporary_bytes=base + reserve, reserve_bytes=reserve)
+
+    full_estimate = with_reserve(full_estimate)
+    if reduced_estimate is not None:
+        reduced_estimate = with_reserve(reduced_estimate)
 
     full_reason = _limit_reason(budget, full_estimate, artifact_name)
     if full_reason is None:
