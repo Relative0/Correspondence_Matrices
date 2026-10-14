@@ -9,9 +9,11 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_SITE = ROOT/'deliverables_n22_24/master_explainer_2026_08_03'
 sys.path.insert(0, str(SOURCE_SITE))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from cm_findings_evidence import build_findings, DOWNLOAD as FINDINGS_DOWNLOAD
 from cm_latest_results_evidence import build_latest_results, build_chart_freshness, site_snapshots
 from cm_october_pilot_publication_verify import verify as verify_october_pilots
+from cm_packed_crossover_publication_verify import verify as verify_packed_crossover
 
 PAGES = {
     'cm_master_template.html': 'index.html', 'cm_layperson_template.html': 'layperson.html',
@@ -98,6 +100,7 @@ def verify(site: Path):
         files[relative] = {'bytes':len(actual),'sha256':digest(actual)}
     files.update(verify_late_scan_records(site))
     files.update(verify_october_pilots(site)["files"])
+    files.update(verify_packed_crossover(site)["files"])
     if (site/'neural').is_dir():
         manifest=json.loads((site/'neural/publication-manifest.json').read_text(encoding='utf-8'))
         for relative, record in manifest['files'].items():
